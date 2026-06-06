@@ -3,669 +3,708 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSTR / BTC 底部研究報告 — 2026年6月</title>
+<title>MSTR / BTC 完整研究報告 — 多方 vs 空方 vs 二級主管審查</title>
 <style>
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d2e;
-    --surface2: #232738;
-    --border: #2d3250;
-    --text: #e2e8f0;
-    --text2: #94a3b8;
-    --blue: #3b82f6;
-    --blue-light: #60a5fa;
-    --red: #ef4444;
-    --green: #22c55e;
-    --yellow: #eab308;
-    --orange: #f97316;
-    --purple: #a855f7;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    padding: 20px;
-  }
-  .container { max-width: 1000px; margin: 0 auto; }
+:root {
+  --bg: #0a0c14; --surface: #131722; --surface2: #1a1f2e; --surface3: #222838;
+  --border: #2a3045; --text: #e2e8f0; --text2: #8892a8; --text3: #5a6478;
+  --blue: #3b82f6; --blue2: #60a5fa; --red: #ef4444; --green: #22c55e;
+  --yellow: #eab308; --purple: #a855f7; --orange: #f97316; --cyan: #06b6d4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', system-ui, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 
-  /* Header */
-  .hero {
-    text-align: center;
-    padding: 48px 20px 36px;
-    background: linear-gradient(135deg, #1a1d2e 0%, #1e293b 50%, #1a1d2e 100%);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 50%, rgba(59,130,246,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 70% 50%, rgba(239,68,68,0.04) 0%, transparent 50%);
-    pointer-events: none;
-  }
-  .hero h1 {
-    font-size: 2.2rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--blue), var(--purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 8px;
-    position: relative;
-  }
-  .hero .date {
-    color: var(--text2);
-    font-size: 0.95rem;
-    margin-bottom: 12px;
-    position: relative;
-  }
-  .hero .subtitle {
-    color: var(--text2);
-    font-size: 0.9rem;
-    position: relative;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  .badge-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 16px;
-    position: relative;
-  }
-  .badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 4px 14px; border-radius: 20px;
-    font-size: 0.8rem; font-weight: 600;
-  }
-  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
-  .badge-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
-  .badge-yellow { background: rgba(234,179,8,0.15); color: var(--yellow); border: 1px solid rgba(234,179,8,0.3); }
-  .badge-blue { background: rgba(59,130,246,0.15); color: var(--blue-light); border: 1px solid rgba(59,130,246,0.3); }
+/* Tabs */
+.tabs { display: flex; gap: 2px; margin-bottom: 0; overflow-x: auto; background: var(--surface2);
+  border-radius: 12px 12px 0 0; border: 1px solid var(--border); border-bottom: none;
+  position: sticky; top: 0; z-index: 100; }
+.tab-btn { padding: 14px 18px; cursor: pointer; background: transparent; color: var(--text2);
+  border: none; font-size: 0.85rem; font-weight: 600; white-space: nowrap;
+  transition: all 0.2s; border-bottom: 2px solid transparent; }
+.tab-btn:hover { background: rgba(59,130,246,0.08); color: var(--text); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); background: rgba(59,130,246,0.06); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-  /* Section */
-  .section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  .section h2 {
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section h2 .icon { font-size: 1.3rem; }
-  .section h3 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin: 18px 0 10px;
-    color: var(--blue-light);
-  }
+.section { background: var(--surface); border: 1px solid var(--border); border-radius: 0 0 12px 12px;
+  padding: 28px; margin-bottom: 20px; }
+.section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+.section h3 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 10px; color: var(--blue2); }
+.section h4 { font-size: 0.95rem; font-weight: 600; margin: 14px 0 6px; color: var(--text); }
 
-  /* Table */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 12px 0;
-    font-size: 0.88rem;
-  }
-  th {
-    background: var(--surface2);
-    text-align: left;
-    padding: 10px 12px;
-    font-weight: 600;
-    color: var(--text2);
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  td {
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-  .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .neg { color: var(--red); }
-  .pos { color: var(--green); }
-  .warn { color: var(--yellow); }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.86rem; }
+th { background: var(--surface3); text-align: left; padding: 8px 10px; font-weight: 600;
+  color: var(--text2); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.neg { color: var(--red); font-weight: 600; }
+.pos { color: var(--green); font-weight: 600; }
+.warn { color: var(--yellow); font-weight: 600; }
 
-  /* Signal Checklist */
-  .signal-list { display: flex; flex-direction: column; gap: 8px; }
-  .signal-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: var(--surface2);
-  }
-  .signal-dot {
-    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
-  }
-  .signal-dot.on { background: var(--green); box-shadow: 0 0 8px rgba(34,197,94,0.4); }
-  .signal-dot.off { background: var(--text2); opacity: 0.4; }
-  .signal-dot.warn { background: var(--yellow); box-shadow: 0 0 8px rgba(234,179,8,0.4); }
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px;
+  font-size: 0.75rem; font-weight: 600; }
+.badge-red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+.badge-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+.badge-blue { background: rgba(59,130,246,0.15); color: var(--blue2); border: 1px solid rgba(59,130,246,0.25); }
+.badge-yellow { background: rgba(234,179,8,0.15); color: var(--yellow); border: 1px solid rgba(234,179,8,0.25); }
 
-  /* Collapsible */
-  .collapsible { margin: 8px 0; }
-  .collapsible summary {
-    cursor: pointer; padding: 10px 14px;
-    background: var(--surface2); border-radius: 8px;
-    font-weight: 600; font-size: 0.9rem;
-    transition: background 0.2s;
-    user-select: none;
-  }
-  .collapsible summary:hover { background: #2a2f45; }
-  .collapsible[open] summary { border-radius: 8px 8px 0 0; }
-  .collapsible .content { padding: 14px; border: 1px solid var(--border); border-top: 0; border-radius: 0 0 8px 8px; }
+.hero { text-align: center; padding: 40px 20px 30px;
+  background: linear-gradient(135deg, #0f1322 0%, #1a1d2e 50%, #0f1322 100%);
+  border-radius: 16px; border: 1px solid var(--border); margin-bottom: 0;
+  position: relative; overflow: hidden; }
+.hero h1 { font-size: 2rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+.hero .date { color: var(--text2); font-size: 0.9rem; margin-bottom: 10px; }
+.hero .subtitle { color: var(--text2); font-size: 0.85rem; max-width: 650px; margin: 0 auto; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 14px; }
 
-  /* Action List */
-  .action-list { counter-reset: action; }
-  .action-item {
-    counter-increment: action;
-    display: flex; gap: 14px; padding: 12px 14px;
-    border-left: 3px solid var(--blue);
-    margin-bottom: 8px;
-    background: var(--surface2);
-    border-radius: 0 8px 8px 0;
-  }
-  .action-item::before {
-    content: counter(action);
-    width: 28px; height: 28px;
-    background: var(--blue); color: #fff;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.85rem;
-    flex-shrink: 0;
-  }
-  .action-item.danger { border-left-color: var(--red); }
-  .action-item.danger::before { background: var(--red); }
-  .action-item.success { border-left-color: var(--green); }
-  .action-item.success::before { background: var(--green); }
+.signal-list { display: flex; flex-direction: column; gap: 6px; }
+.signal-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  border-radius: 6px; background: var(--surface2); font-size: 0.88rem; }
+.signal-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.signal-dot.on { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+.signal-dot.off { background: var(--text3); opacity: 0.4; }
+.signal-dot.warn { background: var(--yellow); box-shadow: 0 0 6px rgba(234,179,8,0.4); }
 
-  /* Scenario Cards */
-  .scenario-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 12px;
-    margin: 12px 0;
-  }
-  .scenario-card {
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-  }
-  .scenario-card h4 { margin-bottom: 6px; }
-  .scenario-card .prob {
-    display: inline-block; padding: 2px 10px; border-radius: 12px;
-    font-size: 0.8rem; font-weight: 600; margin-bottom: 6px;
-  }
-  .prob-high { background: rgba(239,68,68,0.15); color: var(--red); }
-  .prob-mid { background: rgba(234,179,8,0.15); color: var(--yellow); }
-  .prob-low { background: rgba(34,197,94,0.15); color: var(--green); }
+.collapsible { margin: 8px 0; }
+.collapsible summary { cursor: pointer; padding: 10px 14px; background: var(--surface2);
+  border-radius: 8px; font-weight: 600; font-size: 0.88rem; transition: background 0.2s;
+  user-select: none; }
+.collapsible summary:hover { background: var(--surface3); }
+.collapsible[open] summary { border-radius: 8px 8px 0 0; }
+.collapsible .content { padding: 14px; border: 1px solid var(--border); border-top: 0;
+  border-radius: 0 0 8px 8px; font-size: 0.88rem; }
 
-  /* Levels */
-  .level-bar {
-    display: flex; align-items: center; gap: 8px;
-    margin: 4px 0;
-    font-size: 0.85rem;
-  }
-  .level-line {
-    flex: 1; height: 8px; border-radius: 4px;
-    background: var(--surface2);
-    position: relative;
-    overflow: hidden;
-  }
-  .level-line .fill {
-    height: 100%; border-radius: 4px;
-    position: absolute; left: 0; top: 0;
-  }
-  .fill-green { background: var(--green); }
-  .fill-yellow { background: var(--yellow); }
-  .fill-red { background: var(--red); }
-  .fill-blue { background: var(--blue); }
+.scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 10px; margin: 10px 0; }
+.scenario-card { padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); }
+.scenario-card .prob { display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; }
 
-  /* Footer */
-  .disclaimer {
-    margin-top: 28px; padding: 16px;
-    background: rgba(239,68,68,0.06);
-    border: 1px solid rgba(239,68,68,0.2);
-    border-radius: 10px;
-    color: var(--text2);
-    font-size: 0.82rem;
-    text-align: center;
-  }
+.analysis-box { padding: 16px; margin: 10px 0; border-radius: 10px;
+  border-left: 4px solid; font-size: 0.88rem; line-height: 1.8; }
+.analysis-bull { background: rgba(34,197,94,0.04); border-color: var(--green); }
+.analysis-bear { background: rgba(239,68,68,0.04); border-color: var(--red); }
+.analysis-review { background: rgba(59,130,246,0.04); border-color: var(--blue); }
 
-  /* Priority list */
-  .priority-list { list-style: none; }
-  .priority-list li {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px;
-    margin-bottom: 6px;
-    border-radius: 8px;
-    background: var(--surface2);
-  }
-  .priority-tag {
-    display: inline-block; padding: 2px 8px; border-radius: 4px;
-    font-size: 0.75rem; font-weight: 700;
-    flex-shrink: 0;
-  }
-  .p-critical { background: rgba(239,68,68,0.2); color: var(--red); }
-  .p-high { background: rgba(234,179,8,0.2); color: var(--yellow); }
-  .p-mid { background: rgba(59,130,246,0.2); color: var(--blue-light); }
+.iteration-log { padding: 0; list-style: none; }
+.iteration-item { padding: 12px 16px; margin-bottom: 8px; border-radius: 8px;
+  background: var(--surface2); border-left: 3px solid var(--yellow); font-size: 0.88rem; }
+.iteration-item .round { display: inline-block; padding: 2px 8px; background: rgba(234,179,8,0.15);
+  color: var(--yellow); border-radius: 4px; font-weight: 700; font-size: 0.75rem; margin-bottom: 4px; }
+.iteration-item.approved { border-left-color: var(--green); }
+.iteration-item.approved .round { background: rgba(34,197,94,0.15); color: var(--green); }
+.iteration-item.rejected { border-left-color: var(--red); }
+.iteration-item.rejected .round { background: rgba(239,68,68,0.15); color: var(--red); }
 
-  /* Responsive */
-  @media (max-width: 640px) {
-    .hero h1 { font-size: 1.5rem; }
-    .section { padding: 16px; }
-    table { font-size: 0.78rem; }
-    th, td { padding: 6px 8px; }
-  }
+.risk-meter { height: 8px; border-radius: 4px; background: var(--surface3); overflow: hidden; margin: 4px 0; }
+.risk-meter .fill { height: 100%; border-radius: 4px; }
+.fill-low { background: var(--green); }
+.fill-mid { background: var(--yellow); }
+.fill-high { background: var(--orange); }
+.fill-critical { background: var(--red); }
 
-  /* Comparison matrix */
-  .matrix-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin: 12px 0;
-  }
-  .matrix-cell {
-    text-align: center; padding: 14px 10px;
-    border-radius: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-  }
-  .matrix-cell .asset { font-weight: 700; font-size: 1rem; }
-  .matrix-cell .price { font-size: 1.3rem; font-weight: 700; margin: 4px 0; }
-  .matrix-cell .stat { font-size: 0.8rem; color: var(--text2); }
+.level-bar { display: flex; align-items: center; gap: 6px; margin: 3px 0; font-size: 0.82rem; }
+.level-line { flex: 1; height: 8px; border-radius: 4px; background: var(--surface3);
+  position: relative; overflow: hidden; }
+.level-fill { height: 100%; border-radius: 4px; position: absolute; left: 0; top: 0; }
+
+.action-list { counter-reset: action; }
+.action-item { counter-increment: action; display: flex; gap: 12px; padding: 10px 12px;
+  border-left: 3px solid var(--blue); margin-bottom: 6px; background: var(--surface2);
+  border-radius: 0 8px 8px 0; font-size: 0.88rem; }
+.action-item::before { content: counter(action); width: 24px; height: 24px;
+  background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 0.75rem; flex-shrink: 0; }
+.action-item.danger { border-left-color: var(--red); }
+.action-item.danger::before { background: var(--red); }
+.action-item.success { border-left-color: var(--green); }
+.action-item.success::before { background: var(--green); }
+.action-item.warn-item { border-left-color: var(--yellow); }
+.action-item.warn-item::before { background: var(--yellow); color: #000; }
+
+.disclaimer { padding: 16px; background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 10px; color: var(--text2); font-size: 0.8rem; text-align: center; margin-top: 20px; }
+
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 10px; margin: 10px 0; }
+.team-card { padding: 14px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface2); text-align: center; }
+.team-card .name { font-weight: 700; font-size: 0.95rem; }
+.team-card .score { font-size: 1.8rem; font-weight: 800; margin: 4px 0; }
+.team-card .verdict { font-size: 0.8rem; color: var(--text2); }
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 1.4rem; }
+  .section { padding: 16px; }
+  table { font-size: 0.74rem; }
+  th, td { padding: 5px 6px; }
+  .tab-btn { padding: 10px 10px; font-size: 0.75rem; }
+}
+
+/* Tab header styling */
+.section-tabs { display: flex; gap: 2px; margin-bottom: 20px; flex-wrap: wrap; }
+.stab { padding: 10px 18px; background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--text2);
+  border-radius: 8px 8px 0 0; transition: all 0.2s; }
+.stab:hover { background: var(--surface3); }
+.stab.active { background: var(--surface); border-bottom-color: var(--surface); color: var(--text); }
+
+/* Scrollable summary */
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .summary-grid { grid-template-columns: 1fr; } }
+
+/* Quote block */
+blockquote { border-left: 3px solid var(--border); padding: 8px 14px; margin: 10px 0;
+  background: var(--surface2); border-radius: 0 8px 8px 0; font-size: 0.88rem; color: var(--text2); }
 </style>
 </head>
 <body>
+
 <div class="container">
 
-<!-- ============ HERO ============ -->
-<div class="hero">
-  <h1>📊 MSTR / BTC 底部研究報告</h1>
-  <div class="date">📅 2026年6月6日 (數據截至 2026/6/5 收盤)</div>
-  <div class="subtitle">基於 2 年歷史資料的技術面 + 基本面底部分析，涵蓋 MSTR、BTC、IBIT、BITX、MSTU/MSTX 標的比較</div>
+<!-- HERO -->
+<div class="hero" style="margin-bottom: 20px;">
+  <h1>🏛️ MSTR / BTC 深度研究報告</h1>
+  <div class="date">📅 2026年6月6日 | 數據截至 2026/6/5 收盤</div>
   <div class="badge-row">
-    <span class="badge badge-red">F&G = 12 極度恐懼</span>
-    <span class="badge badge-red">BTC RSI = 11.7 🔴</span>
-    <span class="badge badge-red">MSTR RSI = 14.1 🔴</span>
-    <span class="badge badge-blue">MSTR/BTC 折價 32%</span>
+    <span class="badge badge-red">F&G = 12</span>
+    <span class="badge badge-red">BTC RSI = 11.7</span>
+    <span class="badge badge-red">MSTR RSI = 14.1</span>
+    <span class="badge badge-green">MSTR/BTC 折價 32%</span>
+    <span class="badge badge-blue">信貸 $50k-$65k</span>
+    <span class="badge badge-yellow">多方 ⚔️ 空方</span>
   </div>
+  <p style="color: var(--text2); font-size: 0.82rem; margin-top: 12px;">
+    委託 3 組獨立分析團隊（多方/空方/配置） + 1 組驗證人員 + 1 位二級主管審查
+  </p>
 </div>
 
-<!-- ============ I. 即時市場定位 ============ -->
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="overview">📊 總覽</button>
+  <button class="tab-btn" data-tab="bullish">📈 多方買入計畫</button>
+  <button class="tab-btn" data-tab="bearish">📉 空方批判報告</button>
+  <button class="tab-btn" data-tab="comparison">⚖️ 替代標的比較</button>
+  <button class="tab-btn" data-tab="reviewer">👔 二級主管審查</button>
+  <button class="tab-btn" data-tab="action">✅ 行動摘要</button>
+</div>
+
+<!-- ====== TAB 1: OVERVIEW ====== -->
+<div id="tab-overview" class="tab-content active">
 <div class="section">
-  <h2><span class="icon">🎯</span> 一、即時市場定位</h2>
+  <h2>🎯 即時市場定位</h2>
   <table>
-    <thead>
-      <tr><th>標的</th><th>價格</th><th>自高點</th><th>年化波動率</th><th>最大回撤</th><th>RSI(14)</th></tr>
-    </thead>
+    <thead><tr><th>標的</th><th>價格</th><th>自ATH</th><th>年化波動率</th><th>最大回撤</th><th>RSI(14)</th></tr></thead>
     <tbody>
-      <tr><td>BTC</td><td class="num">$61,224</td><td class="num neg">-51.5%</td><td class="num">~50%</td><td class="num neg">-51.5%</td><td class="num neg">11.7</td></tr>
-      <tr><td>MSTR</td><td class="num">$118.83</td><td class="num neg">-78.1%</td><td class="num">~80%</td><td class="num neg">-78.1%</td><td class="num neg">14.1</td></tr>
+      <tr><td><b>BTC</b></td><td class="num">$60,805</td><td class="num neg">-51.8%</td><td class="num">38-51%</td><td class="num neg">-76.6%</td><td class="num neg">11.7</td></tr>
+      <tr><td><b>MSTR</b></td><td class="num">$120.44</td><td class="num neg">-78.1%</td><td class="num">70-93%</td><td class="num neg">-89.3%</td><td class="num neg">14.1</td></tr>
       <tr><td>IBIT (BTC ETF)</td><td class="num">$34.69</td><td class="num neg">-51.3%</td><td class="num">~44%</td><td class="num neg">-51.3%</td><td class="num">—</td></tr>
-      <tr><td>BITX (2x BTC)</td><td class="num">$11.49</td><td class="num neg">-81.6%</td><td class="num">~87%</td><td class="num neg">-81.6%</td><td class="num">—</td></tr>
-      <tr><td>MSTU (2x MSTR)</td><td class="num">$3.31</td><td class="num neg">-96.9%</td><td class="num">~139%</td><td class="num neg">-96.9%</td><td class="num">—</td></tr>
-      <tr><td>MSTX (2x MSTR)</td><td class="num">$15.21</td><td class="num neg">-96.9%</td><td class="num">~141%</td><td class="num neg">-96.9%</td><td class="num">—</td></tr>
+      <tr><td>BITX (2x BTC)</td><td class="num">$11.14</td><td class="num neg">-82%</td><td class="num">~87%</td><td class="num neg">-81.6%</td><td class="num">—</td></tr>
+      <tr style="background:rgba(239,68,68,0.04);"><td><b>MSTU (2x MSTR)</b></td><td class="num"><b>$3.31</b></td><td class="num neg"><b>-96.9%</b></td><td class="num"><b>~139%</b></td><td class="num neg"><b>-96.9%</b></td><td class="num">—</td></tr>
+      <tr><td>GOOGL</td><td class="num">$368.53</td><td class="num neg">-8.5%</td><td class="num">29-31%</td><td class="num neg">-44.3%</td><td class="num">—</td></tr>
+      <tr><td>VT (全球股票)</td><td class="num">$153.68</td><td class="num neg">-3.5%</td><td class="num">14-17%</td><td class="num neg">-34.2%</td><td class="num">—</td></tr>
     </tbody>
   </table>
 
-  <h3>📌 市場情緒</h3>
-  <p><strong>Fear &amp; Greed Index = 12（極度恐懼）</strong> — 過去一週維持在 11-12。</p>
-  <p>這個數值在歷史上只出現過幾次：2020/3 新冠崩盤、2021/5 中國禁令、2022/6 三箭/LUNA、2022/11 FTX。每次 F&amp;G 來到此區間後，BTC 均在 3-12 個月內出現巨大反彈。</p>
-  <p>BTC 主導率：<strong>56.0%</strong>（顯示資金正在從山寨幣撤離回比特幣避險，這是熊市的典型特徵）</p>
-</div>
-
-<!-- ============ II. 底部訊號檢查清單 ============ -->
-<div class="section">
-  <h2><span class="icon">🔍</span> 二、底部訊號檢查清單</h2>
-
-  <h3>✅ 已觸發訊號</h3>
+  <h3>🔍 底部訊號檢查清單</h3>
   <div class="signal-list">
-    <div class="signal-item"><span class="signal-dot on"></span> <strong>F&amp;G &lt; 15</strong> — 目前 12，已達歷史極值區（等同 FTX/新冠水平）</div>
-    <div class="signal-item"><span class="signal-dot on"></span> <strong>RSI &lt; 20（極度超賣）</strong> — BTC RSI=11.7, MSTR RSI=14.1</div>
-    <div class="signal-item"><span class="signal-dot on"></span> <strong>低於 200MA（死亡交叉）</strong> — BTC $61k &lt; 200MA $79k；MSTR $119 &lt; 200MA $202</div>
-    <div class="signal-item"><span class="signal-dot on"></span> <strong>跌破 Bollinger 下軌</strong> — BTC ($61k &lt; BB下軌 $62.9k)，極度超賣</div>
-    <div class="signal-item"><span class="signal-dot on"></span> <strong>MSTR/BTC 比率處於低點</strong> — 0.0019 vs 2y avg 0.0028（MSTR 相對 BTC 折價約 32%）</div>
-    <div class="signal-item"><span class="signal-dot on"></span> <strong>極端負面社交情緒</strong> — 媒體全面看空，散戶恐慌</div>
+    <div class="signal-item"><span class="signal-dot on"></span> <b>F&G &lt; 15（極度恐懼）</b> — 目前 12，已達歷史極值區</div>
+    <div class="signal-item"><span class="signal-dot on"></span> <b>RSI &lt; 20（極度超賣）</b> — BTC=11.7, MSTR=14.1</div>
+    <div class="signal-item"><span class="signal-dot on"></span> <b>低於 200MA（死亡交叉）</b> — BTC $61k &lt; 200MA $79k；MSTR $119 &lt; 200MA $202</div>
+    <div class="signal-item"><span class="signal-dot on"></span> <b>跌破 Bollinger 下軌</b> — BTC ($61k &lt; BB下軌 $62.9k)</div>
+    <div class="signal-item"><span class="signal-dot on"></span> <b>MSTR/BTC 比率處於低點</b> — 0.0019 vs 2y avg 0.0028（折價 32%）</div>
+    <div class="signal-item"><span class="signal-dot warn"></span> <b>MACD 黃金交叉</b> — ❌ 未觸發（MACD=-9.7 vs Signal=-3.8，差距仍大）</div>
+    <div class="signal-item"><span class="signal-dot off"></span> <b>放量長紅確認</b> — ❌ 尚未出現 +8% 放量反轉</div>
+    <div class="signal-item"><span class="signal-dot off"></span> <b>F&G &lt; 10（終極恐懼）</b> — ❌ 目前 12，若跌到個位數才是終極底部</div>
   </div>
 
-  <h3>⏳ 尚未觸發訊號</h3>
-  <div class="signal-list">
-    <div class="signal-item"><span class="signal-dot off"></span> <strong>MACD 黃金交叉</strong> — MACD 仍遠低於 signal 線，未出現動能反轉</div>
-    <div class="signal-item"><span class="signal-dot off"></span> <strong>成交量暴漲（投降式甩賣）</strong> — 當前成交量為均值的 1.3x，尚未達到 2-3x 的典型投降水準</div>
-    <div class="signal-item"><span class="signal-dot off"></span> <strong>V 型反轉第一根長紅</strong> — 尚未出現放量 +8% 以上的確認日</div>
-    <div class="signal-item"><span class="signal-dot off"></span> <strong>站回 50MA（短線動能恢復）</strong> — MSTR $119 &lt; 50MA $155；BTC $61k &lt; 50MA $76k</div>
-    <div class="signal-item"><span class="signal-dot off"></span> <strong>鏈上 MVRV &lt; 1（全網虧損）</strong> — 通常出現在終極底部（2018/12、2022/11）。目前仍需確認</div>
-    <div class="signal-item"><span class="signal-dot warn"></span> <strong>F&amp;G &lt; 10（終極恐懼）</strong> — 目前 12，若跌到個位數才是歷史級別的終極底部</div>
-  </div>
-
-  <div style="margin-top:14px;padding:12px;background:rgba(234,179,8,0.08);border-radius:8px;border-left:3px solid var(--yellow);">
-    <strong>⚠️ 中期底部 vs 終極底部：</strong>當前處於「中期底部/強超賣區」，但距離終極底部（BTC -70%〜75% 即 $38k〜$32k）仍有空間。F&amp;G=12 是強烈但非最終的訊號。
-  </div>
-</div>
-
-<!-- ============ III. 歷史 RSI 底部回報統計 ============ -->
-<div class="section">
-  <h2><span class="icon">📈</span> 三、MSTR 歷史 RSI 底部後回報統計</h2>
-  <p style="margin-bottom:10px;color:var(--text2);font-size:0.88rem;">MSTR 過去 5 年共出現 9 次 RSI(14) &lt; 25 的極度超賣事件。以下為後續回報：</p>
+  <h3 style="margin-top:16px;">📊 週期回報對比（2/4/8年）</h3>
   <table>
-    <thead>
-      <tr><th>日期</th><th>RSI</th><th>買入價</th><th>+22天</th><th>+66天（~3月）</th><th>+132天（~6月）</th></tr>
-    </thead>
+    <thead><tr><th>標的</th><th>2年回報</th><th>4年回報</th><th>8年回報</th><th>2年vol</th><th>最大回撤(8yr)</th></tr></thead>
     <tbody>
-      <tr><td>2022/1/24</td><td class="num">15.6</td><td class="num">$37.04</td><td class="num pos">+7.2%</td><td class="num pos">+8.1%</td><td class="num neg">-15.3%</td></tr>
-      <tr><td>2022/5/9</td><td class="num">17.6</td><td class="num">$21.91</td><td class="num neg">-0.6%</td><td class="num pos">+61.1%</td><td class="num neg">-21.7%</td></tr>
-      <tr><td>2022/9/6</td><td class="num">5.5</td><td class="num">$20.42</td><td class="num pos">+18.3%</td><td class="num neg">-0.8%</td><td class="num pos">+18.0%</td></tr>
-      <tr style="background:rgba(34,197,94,0.05);"><td><strong>2023/3/10</strong></td><td class="num"><strong>6.6</strong></td><td class="num"><strong>$19.20</strong></td><td class="num pos"><strong>+68.1%</strong></td><td class="num pos"><strong>+47.3%</strong></td><td class="num pos"><strong>+76.7%</strong></td></tr>
-      <tr style="background:rgba(34,197,94,0.05);"><td><strong>2023/8/18</strong></td><td class="num"><strong>17.6</strong></td><td class="num"><strong>$32.86</strong></td><td class="num pos">+1.5%</td><td class="num pos"><strong>+50.0%</strong></td><td class="num pos"><strong>+193.0%</strong></td></tr>
-      <tr style="background:rgba(34,197,94,0.08);"><td><strong>2024/1/25</strong></td><td class="num"><strong>9.9</strong></td><td class="num"><strong>$45.78</strong></td><td class="num pos"><strong>+90.4%</strong></td><td class="num pos"><strong>+132.7%</strong></td><td class="num pos"><strong>+185.9%</strong></td></tr>
-      <tr style="background:rgba(234,179,8,0.05);"><td><strong>2025/2/7</strong></td><td class="num"><strong>18.9</strong></td><td class="num"><strong>$327.56</strong></td><td class="num neg">-19.8%</td><td class="num pos">+27.2%</td><td class="num pos">+2.8%</td></tr>
-      <tr style="background:rgba(239,68,68,0.08);"><td><strong>2025/8/1 ⚠️</strong></td><td class="num"><strong>19.2</strong></td><td class="num"><strong>$366.63</strong></td><td class="num neg">-9.9%</td><td class="num neg"><strong>-32.6%</strong></td><td class="num neg"><strong>-63.7%</strong></td></tr>
-      <tr style="background:rgba(34,197,94,0.05);"><td><strong>2026/2/5</strong></td><td class="num"><strong>16.7</strong></td><td class="num"><strong>$106.99</strong></td><td class="num pos">+29.4%</td><td class="num pos"><strong>+72.4%</strong></td><td class="num">N/A</td></tr>
-      <tr style="background:rgba(59,130,246,0.08);"><td><strong>📍 現在 2026/6/5</strong></td><td class="num"><strong>14.1</strong></td><td class="num"><strong>$118.83</strong></td><td class="num">?</td><td class="num">?</td><td class="num">?</td></tr>
+      <tr><td><b>BTC</b></td><td class="num neg">-14.1%</td><td class="num pos">+95.2%</td><td class="num pos">+697.4%</td><td class="num">38.7%</td><td class="num neg">-76.6%</td></tr>
+      <tr><td><b>MSTR</b></td><td class="num pos">+192.1%</td><td class="num pos">+779.1%</td><td class="num pos">+664.7%</td><td class="num">88.3%</td><td class="num neg">-89.3%</td></tr>
+      <tr><td><b>GOOGL</b></td><td class="num pos">+217.2%</td><td class="num pos">+390.0%</td><td class="num pos">+1,253.9%</td><td class="num">29.9%</td><td class="num neg">-44.3%</td></tr>
+      <tr><td><b>VT</b></td><td class="num pos">+67.3%</td><td class="num pos">+111.3%</td><td class="num pos">+232.2%</td><td class="num">14.4%</td><td class="num neg">-34.2%</td></tr>
+      <tr style="background:rgba(34,197,94,0.03);"><td><b>SSO (2x SPY)</b></td><td class="num pos">+72.2%</td><td colspan="2">(對比 SPY +43.1%) <span style="color:var(--text3)">衰減 14.1%</span></td><td class="num">32.5%</td><td class="num">—</td></tr>
     </tbody>
   </table>
-
-  <div class="collapsible">
-    <summary>📖 數據解讀 — 為什麼 2025/8 失敗了？</summary>
-    <div class="content">
-      <p>2025/8/1 那次 RSI=19.2 的超賣訊號是「失敗的」——後續 6 個月繼續跌了 63.7%。原因分析：</p>
-      <ul style="margin:8px 0 0 20px;display:flex;flex-direction:column;gap:6px;">
-        <li><strong>熊市初期的超賣陷阱：</strong>2025/8 發生在牛市頂峰（MSTR $474）下跌的早期階段（才跌約 23%），屬於「跌勢中的反彈」而非底部</li>
-        <li><strong>200MA 仍遠高於價格：</strong>當時 MSTR ~$367 但 200MA 還在更高位置，趨勢尚未充分破壞</li>
-        <li><strong>對比 2026/2/5（成功）：</strong>當時已經熊市跌了 8 個月，MSTR 從 $474→$107（-77%），市場充分消化了利空。這次超賣後 +72.4%</li>
-      </ul>
-      <p style="margin-top:8px;"><strong>啟示：</strong>RSI 超賣訊號在「下跌初期」可靠性較低，在「長期下跌後的底部區域」可靠性極高。目前我們在 $543→$119 已經跌了 78%，與 2026/2/5 的成功案例更相似。</p>
-    </div>
-  </div>
+</div>
 </div>
 
-<!-- ============ IV. 標的比較矩陣 ============ -->
+<!-- ====== TAB 2: BULLISH ====== -->
+<div id="tab-bullish" class="tab-content">
 <div class="section">
-  <h2><span class="icon">⚖️</span> 四、標的比較與優劣分析</h2>
-  <div class="matrix-grid">
-    <div class="matrix-cell" style="border-color:var(--blue);">
-      <div class="asset">🥇 BTC / IBIT</div>
-      <div class="price">$61k / $34.69</div>
-      <div class="stat">Vol 44-50% • 從高點 -51%<br>✅ 最低風險，適合長期持有</div>
-    </div>
-    <div class="matrix-cell" style="border-color:var(--purple);">
-      <div class="asset">🥈 MSTR</div>
-      <div class="price">$118.83</div>
-      <div class="stat">Vol 80% • 從高點 -78%<br>✅ BTC 折價 32%，超額報酬潛力</div>
-    </div>
-    <div class="matrix-cell" style="border-color:var(--yellow);">
-      <div class="asset">🥉 BITX (2x BTC)</div>
-      <div class="price">$11.49</div>
-      <div class="stat">Vol 87% • 從高點 -82%<br>⚠️ 僅適合反彈確認後</div>
-    </div>
-    <div class="matrix-cell" style="border-color:var(--red);">
-      <div class="asset">❌ MSTU/X (2x MSTR)</div>
-      <div class="price">$3.31 / $15.21</div>
-      <div class="stat">Vol 139-141% • 從高點 -97%<br>⛔ 淨值近乎消滅</div>
+  <h2>📈 多方買入計畫（兩組獨立分析師）</h2>
+  <p style="margin-bottom:14px;color:var(--text2);">
+    兩組獨立分析師各自基於相同數據集做出看多分析。以下為他們觀點的摘要與整合。
+  </p>
+
+  <div class="analysis-box analysis-bull">
+    <h3 style="margin:0 0 6px 0;color:var(--green);">觀點 A：$57,500 混合配置（60% MSTR / 30% BTC / 10% BITX）</h3>
+    <p><b>核心論點：</b>當前 F&G=12、RSI 雙位數超賣、MSTR/BTC 折價 32%、BTC 從 ATH 腰斬 51.8%、減半後 26 個月——這些條件同時發生的機率極低。信貸資金的使用期限（3-5 年）與 BTC 週期完美匹配。</p>
+    <p style="margin-top:6px;"><b>配置：</b>$34,500 MSTR（286股）+ $17,250 BTC現貨（0.284 BTC）+ $5,750 BITX（110股）</p>
+    <p><b>分批進場：</b>分 4 批（30%/25%/25%/20%），總執行期約 4 個月</p>
+    <p style="margin-top:6px;"><b>預期回報（3-5年）：</b>最好 +250% | 基準 +110% | 最差 -45%</p>
+    <div class="collapsible">
+      <summary>📖 完整推理（展開）</summary>
+      <div class="content">
+        <p><b>BTC 長期看多論點：</b>BTC 4 年回報 +95.2%（年化 18.2%）和 8 年回報 +697.4%（年化 29.5%）證明了長期累積報酬的威力。RSI=11.7 是歷史級別的極度超賣——過去十年 BTC RSI 低於 15 的次數屈指可數，且每次後續 12 個月均出現強勁反彈。減半後約 26 個月符合歷史底部時間窗口。</p>
+        <p><b>MSTR NAV 溢價分析：</b>MSTR/BTC 比率 0.0019 遠低於 2 年均值 0.0028（折價 32%），逼近歷史低點 0.0017。若該比率回歸均值，僅此一項就代表 47% 的相對漲幅。MSTR 持倉 500,000 BTC（全球最大），NAV 溢價 37% 處於歷史低位。</p>
+        <p><b>減半效應遞減的解讀：</b>雖然三次減半回報（+2,431%→+678%→+67%）顯示邊際效應遞減，但從當前 $60k 回到前高 $126k 就是 +107% 的上漲空間，這與減半週期歷史並不衝突。BTC 市值已達 $1.2T，要重現 10x 不現實，但 $100k-$150k 的目標合理。</p>
+        <p><b>槓桿使用時機：</b>三條件：(1) 進場點處於極端底部（✅ 滿足）; (2) 強趨勢初期; (3) 持有期有限制。當前環境滿足條件一，10% BITX 在底部區間提供額外 Beta 而不至於爆倉。不建議 MSTU（年化 vol=169% 太過致命）。</p>
+      </div>
     </div>
   </div>
 
-  <h3>📊 槓桿產品的數學陷阱</h3>
-  <p>MSTU/MSTX 從 ATH 跌了 <strong>-96.9%</strong>。從 $3.31 漲回去需要：</p>
-  <ul style="margin:8px 0 16px 20px;display:flex;flex-direction:column;gap:4px;">
-    <li>回到 $10（ATH 的 9.4%）→ 需要 MSTR 漲約 <strong>110%</strong>（到 ~$250）</li>
-    <li>回到 ATH $107 → 需要 MSTR 漲 <strong>1,566%</strong>（到 ~$1,970）</li>
-  </ul>
-  <p><strong>波動率衰減（Volatility Decay）：</strong>2x 槓桿 ETF 在震盪市場中因每日重新平衡而產生衰減。同期間 MSTR 跌了 -67.8%，理論 2x = -135.6%，但 MSTU 實際跌了 -95.5%（因為不能低於 -100%）。問題在於上漲時：MSTR 漲 50% 時 MSTU 理論上漲 100%，但若中間有波動，實際可能只漲 70-80%。</p>
-  <p><strong>結論：MSTU/MSTX 適合短線 1-5 天交易，不適合做為抄底長期持有工具。除非你能精準 timing 反轉的第一天。</strong></p>
-
-  <div class="collapsible">
-    <summary>📋 不同市場階段的最佳標的搭配</summary>
-    <div class="content">
-      <table>
-        <thead><tr><th>市場階段</th><th>最佳標的</th><th>原因</th></tr></thead>
-        <tbody>
-          <tr><td>🔴 極度超賣區（現在）</td><td>BTC / IBIT（分批DCA）</td><td>最低衰減風險，適合分批建立核心倉位</td></tr>
-          <tr><td>🟡 MACD 黃金交叉確認</td><td>MSTR（加碼）</td><td>動能反轉後 MSTR 溢價回歸可提供超額報酬</td></tr>
-          <tr><td>🟢 站回 50MA（趨勢確立）</td><td>BITX（戰術加碼）</td><td>上升趨勢中 2x 槓桿最有效率，衰減影響降低</td></tr>
-          <tr><td>🔵 完全牛市回歸</td><td>MSTR + BITX</td><td>雙引擎：MSTR 溢價擴張 + BTC 趨勢上漲</td></tr>
-          <tr><td>❌ 任何階段</td><td>MSTU/MSTX</td><td>除非是超短線（1-3天）精準進出，否則不建議</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- ============ V. 具體抄底方案 ============ -->
-<div class="section">
-  <h2><span class="icon">💡</span> 五、具體抄底方案（三種選擇）</h2>
-
-  <div class="collapsible" open>
-    <summary>🌿 方案 A：保守型 — BTC 現貨收集（低風險偏好的首選）</summary>
-    <div class="content">
-      <table>
-        <thead><tr><th>條件</th><th>動作</th></tr></thead>
-        <tbody>
-          <tr><td><strong>買入條件</strong></td><td>① BTC 跌到 <strong>$55,000</strong> 以下（前低測試）② F&amp;G 跌破 <strong>10</strong> ③ 出現放量長紅（日收 +8%）</td></tr>
-          <tr><td><strong>標的</strong></td><td>BTC 現貨 或 IBIT（管理費僅 0.12%）</td></tr>
-          <tr><td><strong>倉位</strong></td><td>每次 1/4 目標倉位，分 4 次進場</td></tr>
-          <tr><td><strong>停損</strong></td><td>跌破 $49,000（2年低點）減倉至半</td></tr>
-          <tr><td><strong>目標</strong></td><td>BTC → $80k-$90k（站回 200MA）</td></tr>
-        </tbody>
-      </table>
+  <div class="analysis-box analysis-bull" style="border-left-color:var(--blue);margin-top:14px;">
+    <h3 style="margin:0 0 6px 0;color:var(--blue2);">觀點 B：$57,500 混合配置（50% BTC / 35% MSTR / 15% BITX）</h3>
+    <p><b>核心論點：</b>F&G 12、BTC RSI 11.7、MSTR RSI 14.1 的組合在歷史上僅出現過 3 次，每次之後 1-3 年的投資回報均為正。但必須採用混合配置，因為信貸資金風險承受能力有限。</p>
+    <p style="margin-top:6px;"><b>配置：</b>$28,750 BTC + $20,125 MSTR + $8,625 BITX</p>
+    <p><b>分批進場：</b>分 12 週 DCA（前 4 週投 50%，中 4 週投 30%，末 4 週投 20%）</p>
+    <p style="margin-top:6px;"><b>預期回報（3-5年）：</b>最好 +220% | 基準 +100% | 最差 -45%</p>
+    <div class="collapsible">
+      <summary>📖 完整推理（展開）</summary>
+      <div class="content">
+        <p><b>差異點：</b>觀點 B 更側重 BTC 現貨（50% vs 30%）作為還款保障基底，MSTR 比例較低（35% vs 60%）以控制波動。理由是信貸資金應以穩定性優先，MSTR 的極高波動（年化 88-93%）在借款情境下可能觸發心理恐慌。</p>
+        <p><b>DCA 策略：</b>12 週分配的理由是避免一次性進場在下跌中繼站。若出現單週暴跌超過 10%，將該週份額加倍——反向操作。每筆買入後設置 15% 的觀察線（非停損線，而是重新檢視前提的觸發點）。</p>
+        <p><b>減半效應遞減的正面解讀：</b>剩餘動能：即便遞減到 +7%，在當前全球總經環境（降息週期、美元弱勢預期）下，比特幣仍是供給最稀缺的資產之一。減半效應遞減是真實的，但比特幣在當前的價格與週期位置仍提供正期望值的長期回報。</p>
+      </div>
     </div>
   </div>
 
-  <div class="collapsible">
-    <summary>⚡ 方案 B：積極型 — MSTR 溢價回歸交易</summary>
-    <div class="content">
-      <table>
-        <thead><tr><th>條件</th><th>動作</th></tr></thead>
-        <tbody>
-          <tr><td><strong>買入條件</strong></td><td>① MSTR/BTC 比率 &lt; <strong>0.0017</strong>（歷史低點）② 日線 MACD 黃金交叉 ③ BTC 站回 50MA($76k) 後回測不破</td></tr>
-          <tr><td><strong>配置</strong></td><td>30% IBIT/BTC + 30% MSTR + 40% 現金</td></tr>
-          <tr><td><strong>進場節奏</strong></td><td>30% 現在（極度超賣）→ 30%（MACD 黃金交叉）→ 40%（站穩支撐）</td></tr>
-          <tr><td><strong>停損</strong></td><td>若 BTC 跌破 $49k 全數止損</td></tr>
-        </tbody>
-      </table>
-      <p style="margin-top:10px;font-size:0.88rem;color:var(--text2);">📌 MSTR 的獨特優勢：目前 MSTR/BTC 比率 0.0019 vs 2y 均值 0.0028，表示 MSTR 相對 BTC 被低估了約 32%。若 BTC 反彈且溢價回歸均值，MSTR 的報酬率會大幅跑贏 BTC。</p>
-    </div>
+  <h3 style="margin-top:20px;">📍 MSTR 關鍵價位</h3>
+  <div>
+    <div class="level-bar"><span style="width:70px;">🚀 強阻力</span><div class="level-line"><div class="level-fill" style="background:var(--blue);width:75%"></div></div><span>$155 (50MA)</span></div>
+    <div class="level-bar"><span style="width:70px;">⚡ 阻力</span><div class="level-line"><div class="level-fill" style="background:var(--blue);width:60%"></div></div><span>$202 (200MA)</span></div>
+    <div class="level-bar"><span style="width:70px;">💎 <b>現在</b></span><div class="level-line"><div class="level-fill" style="background:var(--yellow);width:35%"></div></div><span><b>$120.44</b></span></div>
+    <div class="level-bar"><span style="width:70px;">🛡️ 支撐</span><div class="level-line"><div class="level-fill" style="background:var(--green);width:28%"></div></div><span>$104 (52周低點)</span></div>
+    <div class="level-bar"><span style="width:70px;">🔴 關鍵</span><div class="level-line"><div class="level-fill" style="background:var(--red);width:18%"></div></div><span>$95 (若BTC→$49k)</span></div>
+    <div class="level-bar"><span style="width:70px;">💀 終極</span><div class="level-line"><div class="level-fill" style="background:var(--red);width:10%"></div></div><span>$65 (若BTC→$32k)</span></div>
   </div>
 
-  <div class="collapsible">
-    <summary>🔥 方案 C：極限抄底型（含槓桿 — 高風險）</summary>
-    <div class="content">
-      <table>
-        <thead><tr><th>條件</th><th>動作</th></tr></thead>
-        <tbody>
-          <tr><td><strong>買入條件</strong></td><td>① BTC RSI &lt; <strong>10</strong>（極端）② F&amp;G &lt; <strong>10</strong> ③ 放量 V 轉 + MACD 金叉確認</td></tr>
-          <tr><td><strong>第一次（10%）</strong></td><td>BITX (2x BTC) — 僅用極小部位</td></tr>
-          <tr><td><strong>第二次（30%）</strong></td><td>IBIT 或 BTC — 確認後加碼</td></tr>
-          <tr><td><strong>第三次（20%）</strong></td><td>MSTR — 站回 50MA 後進場</td></tr>
-          <tr><td><strong>⚠️ 不可使用</strong></td><td>MSTU/MSTX — 風險報酬比極差</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <h3 style="margin-top:20px;">🪜 MSTR 關鍵支撐 / 阻力位</h3>
-  <div style="margin:8px 0;">
-    <div class="level-bar"><span style="width:60px;">🚀 阻力</span><div class="level-line"><div class="fill fill-blue" style="width:80%"></div></div><span class="num">$155 (50MA)</span></div>
-    <div class="level-bar"><span style="width:60px;">⚡ 阻力</span><div class="level-line"><div class="fill fill-blue" style="width:60%"></div></div><span class="num">$202 (200MA)</span></div>
-    <div class="level-bar"><span style="width:60px;">💎 現在</span><div class="level-line"><div class="fill fill-yellow" style="width:35%"></div></div><span class="num"><strong>$119</strong></span></div>
-    <div class="level-bar"><span style="width:60px;">🛡️ 支撐</span><div class="level-line"><div class="fill fill-green" style="width:28%"></div></div><span class="num">$104 (52周低點)</span></div>
-    <div class="level-bar"><span style="width:60px;">🔴 關鍵</span><div class="level-line"><div class="fill fill-red" style="width:22%"></div></div><span class="num">$95 (若 BTC→$49k)</span></div>
-    <div class="level-bar"><span style="width:60px;">💀 終極</span><div class="level-line"><div class="fill fill-red" style="width:15%"></div></div><span class="num">$65 (若 BTC→$32k)</span></div>
-  </div>
-</div>
-
-<!-- ============ VI. 關鍵底部確認訊號 ============ -->
-<div class="section">
-  <h2><span class="icon">🚦</span> 六、關鍵底部確認訊號（優先級排序）</h2>
-  <ol class="priority-list">
-    <li><span class="priority-tag p-critical">#1 已觸發</span> <strong>F&amp;G 極值 (12):</strong> 已觸發，可以開始試單</li>
-    <li><span class="priority-tag p-critical">#2 已觸發</span> <strong>RSI 極值:</strong> BTC RSI=11.7, MSTR RSI=14.1，注意是否出現「RSI 背離」（價格新低但 RSI 沒有新低）— 這是最強買入訊號</li>
-    <li><span class="priority-tag p-high">#3 待確認</span> <strong>MACD 黃金交叉:</strong> 日線 MACD 上穿 signal 線。目前 MACD=-9.7 vs Signal=-3.8，差距仍大，且仍在向下</li>
-    <li><span class="priority-tag p-high">#4 待確認</span> <strong>放量長紅:</strong> 單日 MSTR 漲 &gt;8% 且成交量 &gt; 2x 均值。這是動能交易者的進場確認</li>
-    <li><span class="priority-tag p-mid">#5 待確認</span> <strong>站回 50MA:</strong> MSTR 回到 $155+ 或 BTC 回到 $76k+，代表短線趨勢轉多</li>
-    <li><span class="priority-tag p-mid">#6 待確認</span> <strong>200MA 翻平轉上:</strong> 終極牛市確認訊號，當前還很遠（MSTR 200MA=$202）</li>
-  </ol>
-</div>
-
-<!-- ============ VII. 2022熊市 vs 現在對比 ============ -->
-<div class="section">
-  <h2><span class="icon">🔄</span> 七、2022 熊市 vs 當下對比</h2>
+  <h3 style="margin-top:16px;">📊 MSTR 歷史 RSI 底部回報統計</h3>
   <table>
-    <thead><tr><th>指標</th><th>2022 熊市</th><th>現在 (2026)</th><th>啟示</th></tr></thead>
+    <thead><tr><th>日期</th><th>RSI</th><th>買入價</th><th>+22天</th><th>+66天(~3月)</th><th>+132天(~6月)</th></tr></thead>
     <tbody>
-      <tr><td>MSTR 跌幅</td><td class="num neg">$127 → $14 (-89%)</td><td class="num neg">$543 → $119 (-78%)</td><td>跌幅已接近但尚未等同 2022</td></tr>
-      <tr><td>BTC 跌幅</td><td class="num neg">$69k → $15.5k (-78%)</td><td class="num neg">$126k → $61k (-52%)</td><td>BTC 跌幅遠小於 2022，仍有下行空間</td></tr>
-      <tr><td>F&amp;G 最低</td><td class="warn">8 (FTX)</td><td class="warn">11-12 (目前)</td><td>情緒接近但略高於 FTX 時期</td></tr>
-      <tr><td>下跌時間</td><td>13 個月（2021/11→2022/11）</td><td>12+ 個月（2025/6→至今）</td><td>時間已接近 2022 水準</td></tr>
-      <tr><td>催化事件</td><td>LUNA/3AC/FTX 連環爆</td><td>監管 + 宏觀緊縮 + 降息預期消退</td><td>缺乏單一黑天鵝，但壓力更持續</td></tr>
-      <tr><td>MSTR 底部 RSI</td><td>5.5（2022/9）</td><td>14.1（目前）</td><td>極度超賣但 RSI 仍高於 2022 最低點</td></tr>
+      <tr><td>2022/1/24</td><td class="num">15.6</td><td>$37.04</td><td class="pos">+7.2%</td><td class="pos">+8.1%</td><td class="neg">-15.3%</td></tr>
+      <tr><td>2022/5/9</td><td class="num">17.6</td><td>$21.91</td><td class="neg">-0.6%</td><td class="pos">+61.1%</td><td class="neg">-21.7%</td></tr>
+      <tr><td>2022/9/6</td><td class="num"><b>5.5</b></td><td>$20.42</td><td class="pos">+18.3%</td><td class="neg">-0.8%</td><td class="pos">+18.0%</td></tr>
+      <tr style="background:rgba(34,197,94,0.03);"><td><b>2023/3/10</b></td><td class="num"><b>6.6</b></td><td><b>$19.20</b></td><td class="pos"><b>+68.1%</b></td><td class="pos"><b>+47.3%</b></td><td class="pos"><b>+76.7%</b></td></tr>
+      <tr style="background:rgba(34,197,94,0.05);"><td><b>2023/8/18</b></td><td class="num"><b>17.6</b></td><td><b>$32.86</b></td><td class="pos">+1.5%</td><td class="pos"><b>+50.0%</b></td><td class="pos"><b>+193.0%</b></td></tr>
+      <tr style="background:rgba(34,197,94,0.08);"><td><b>2024/1/25</b></td><td class="num"><b>9.9</b></td><td><b>$45.78</b></td><td class="pos"><b>+90.4%</b></td><td class="pos"><b>+132.7%</b></td><td class="pos"><b>+185.9%</b></td></tr>
+      <tr style="background:rgba(234,179,8,0.05);"><td><b>2025/2/7</b></td><td class="num"><b>18.9</b></td><td><b>$327.56</b></td><td><span class="neg">-19.8%</span></td><td class="pos">+27.2%</td><td class="pos">+2.8%</td></tr>
+      <tr style="background:rgba(239,68,68,0.06);"><td><b>2025/8/1 ⚠️</b></td><td class="num"><b>19.2</b></td><td><b>$366.63</b></td><td class="neg">-9.9%</td><td class="neg"><b>-32.6%</b></td><td class="neg"><b>-63.7%</b></td></tr>
+      <tr style="background:rgba(34,197,94,0.03);"><td><b>2026/2/5</b></td><td class="num"><b>16.7</b></td><td><b>$106.99</b></td><td class="pos">+29.4%</td><td class="pos"><b>+72.4%</b></td><td class="warn">N/A</td></tr>
+      <tr style="background:rgba(59,130,246,0.06);"><td><b>📍 現在</b></td><td class="num"><b>14.1</b></td><td><b>$120.44</b></td><td class="warn">?</td><td class="warn">?</td><td class="warn">?</td></tr>
     </tbody>
   </table>
-  <p style="margin-top:10px;color:var(--text2);font-size:0.88rem;">📌 相似點：跌幅趨近 2022、下跌時間長度相近、市場情緒極度悲觀。差異點：BTC 跌幅仍小於 2022、缺乏 2022 那種連環爆的明確底部催化劑。</p>
+</div>
 </div>
 
-<!-- ============ VIII. MSTR 溢價分析 ============ -->
+<!-- ====== TAB 3: BEARISH ====== -->
+<div id="tab-bearish" class="tab-content">
 <div class="section">
-  <h2><span class="icon">🏷️</span> 八、MSTR NAV 溢價分析 — 雙面刃</h2>
-  <p>MSTR 目前持有約 <strong>50 萬顆 BTC</strong>（約 $30.5B 價值），但 MSTR 市值為 <strong>$41.9B</strong>。NAV 溢價約 <strong>37%</strong>。</p>
-  <table>
-    <thead><tr><th>時期</th><th>MSTR/BTC 比率</th><th>狀態</th></tr></thead>
-    <tbody>
-      <tr><td>2024/11 巔峰</td><td class="num">0.0050 (~$474 MSTR / ~$95k BTC)</td><td>極端溢價</td></tr>
-      <tr><td>2 年均值</td><td class="num">0.0028</td><td>中性</td></tr>
-      <tr><td>📌 目前</td><td class="num"><strong>0.0019</strong></td><td><strong>接近歷史低點（折價 32%）</strong></td></tr>
-      <tr><td>2 年低點</td><td class="num">0.0017</td><td>最終壓力位</td></tr>
-    </tbody>
-  </table>
-  <div style="margin-top:14px;padding:12px;background:rgba(59,130,246,0.06);border-radius:8px;">
-    <p><strong>下行風險：</strong>若溢價進一步壓縮到 0.0017→ MSTR≈$104（若 BTC 持平）→ 還有約 <strong>12% 下跌空間</strong>。</p>
-    <p><strong>上行機會：</strong>若 BTC 反彈回到 $80k 且 MSTR/BTC 回歸均值 0.0028→ MSTR≈$224（<strong>+88%</strong>），遠超 BTC 的 +31%。</p>
-    <p>這是 MSTR 獨有的「溢價壓縮風險 vs 溢價回歸超額報酬」的雙面刃特質。</p>
-  </div>
-</div>
+  <h2>📉 空方批判報告</h2>
+  <blockquote style="border-left-color:var(--red);">
+    「抄底最大的謊言不是『市場會跌更多』，而是『現在就是底部』。」 — 空方分析師結論
+  </blockquote>
 
-<!-- ============ IX. 槓桿產品數學說明 ============ -->
-<div class="section">
-  <h2><span class="icon">🧮</span> 九、槓桿產品數學：為什麼 MSTU 不能再買？</h2>
-  <div style="padding:14px;background:rgba(239,68,68,0.06);border-radius:8px;margin-bottom:12px;">
-    <h3 style="color:var(--red);margin-top:0;">⚠️ MSTU/MSTX 已損失 96.9% 淨值</h3>
-    <p style="margin-top:6px;"><strong>現實：</strong>從 $106.80 → $3.31。需要漲回 $10（ATH 的 9.4%）就需要 MSTR 漲 110%。這在數學上極度不利。</p>
-  </div>
-  <h3>📐 槓桿 ETF 的波動率衰減（Volatility Decay）</h3>
-  <div style="padding:12px;background:var(--surface2);border-radius:8px;margin:8px 0;">
-    <p><strong>舉例說明：</strong></p>
-    <p>MSTR 第一天跌 10% → $107<br>
-    MSTR 第二天漲 11% → $119（回到原點 🔄）</p>
-    <p>MSTU 第一天跌 20%（2x）→ $2.65<br>
-    MSTU 第二天漲 22%（2x）→ $3.23</p>
-    <p><strong>結果：MSTR 回到原點 $119，但 MSTU 從 $3.31→$3.23，損失了 2.4%。這就是波動率衰減。</strong></p>
-    <p>在震盪下跌市場中，這種衰減累積極快。1 年時間內 MSTU 比理論 2x 回報 <strong>額外損失了 40 個百分點</strong>（MSTR -67.8%，理論 2x = -135.6%，實際 MSTU = -95.5%，所以多虧了 -40% 的波動率... 呃不，這是在虧損基礎上的進一步衰減）。</p>
+  <h3>🥇 BTC「數位黃金」敘事批判</h3>
+  <div class="analysis-box analysis-bear">
+    <p><b>波動率矛盾：</b>BTC 的 30 日年化波動率通常在 60-80% 之間，而黃金僅約 15%，相差 4-5 倍。真正穩健的避險資產不應在單日下跌 5-10%。2022-2025 年間 BTC 發生過至少 8 次單日跌幅 &gt;15% 的事件。</p>
+    <p><b>無現金流 = 龐氏數學定義：</b>BTC 不產生股息、租金、回購或任何形式的現金流。其估值完全依賴「下一人願意用更高價格買入」。與標普 500 的盈餘收益率（~3-4%）、債券的票息（~4-5%）相比，BTC 的經濟效用幾乎為零。</p>
+    <p><b>倖存者偏誤警告：</b>8 年 +697.4% 是從 2018 年底部計算。若在 2021 年頂部 $69k 買入，四年後的今天仍虧損約 12%。2 年回報 -14.1% 意味著 2024 年中買入至今虧損，甚至無法跑贏美元貨幣基金。</p>
   </div>
 
-  <h3 style="margin-top:16px;">正確的槓桿使用方式</h3>
-  <div style="padding:12px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:8px;">
-    <p>如果你執意要用槓桿抄底：</p>
-    <ol style="margin:8px 0 0 20px;display:flex;flex-direction:column;gap:4px;">
-      <li><strong>只用 BITX (2x BTC)</strong> — BTC 比 MSTR 波動小，衰減較少，且從高點只跌了 82% 而非 97%</li>
-      <li><strong>只在「反轉確認後」進場</strong> — 等 MACD 黃金交叉或站回 50MA，不要在下跌趨勢中使用槓桿</li>
-      <li><strong>嚴格止損</strong> — 設 15-20% 停損，寧可小賠出場再進</li>
-      <li><strong>短線持有</strong> — 槓桿 ETF 持有不要超過 1-2 週，除非是明顯上升趨勢</li>
-      <li><strong>部位佔比不超過 10-15%</strong> — 永遠讓核心倉位是現貨</li>
-    </ol>
+  <h3>🥈 減半效應衰減——最可量化的熊市論點</h3>
+  <div class="analysis-box analysis-bear">
+    <p>三次減半數據：</p>
+    <table>
+      <thead><tr><th>減半</th><th>BTC市值</th><th>18月後回報</th><th>衰減幅度</th></tr></thead>
+      <tbody>
+        <tr><td>2016</td><td>~$10B</td><td class="pos">+2,431.3%</td><td>—</td></tr>
+        <tr><td>2020</td><td>~$200B</td><td class="pos">+678.6%</td><td class="neg">-72.1%</td></tr>
+        <tr><td>2024</td><td>~$2T</td><td class="pos" style="color:var(--yellow)">+67.2%</td><td class="neg">-90.1%</td></tr>
+        <tr style="background:rgba(239,68,68,0.04);"><td><b>2028（預估）</b></td><td><b>~$?T</b></td><td><b style="color:var(--red)">+5% ~ +30%</b></td><td><b class="neg">-95%+</b></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:8px;">市值每增長一個數量級，減半推動的漲幅縮水一個數量級。BTC 日產量約 450 枚，年產值約 $100 億，相對於 $2T 市值僅 0.5% 稀釋——減半後變 0.25%，供應衝擊的邊際影響已經極小。對比 2016 年減半前年產值佔市值約 8%，供應衝擊顯著。</p>
   </div>
-</div>
 
-<!-- ============ X. 情境分析 ============ -->
-<div class="section">
-  <h2><span class="icon">🎲</span> 十、市場情境分析</h2>
+  <h3>🥉 MSTR NAV 溢價死亡螺旋</h3>
+  <div class="analysis-box analysis-bear">
+    <p><b>GBTC 的歷史教訓：</b>GBTC 在 2021 年初溢價 20-30%，但隨著信託解鎖和 ETF 上市，溢價崩潰轉為折價，一度達到 <b>-48.73%</b>。</p>
+    <p>MSTR 面臨完全相同的結構性風險：</p>
+    <ul style="margin:6px 0 6px 18px;">
+      <li>當 BTC 現貨 ETF 提供更低費用（0.2-0.9%）的直接曝險時，支付 37% 溢價買 MSTR 不合理</li>
+      <li>若 BTC 跌至 $40k 以下（再跌 33%），MSTR 將面臨大規模未實現損失，可能觸發追加保證金</li>
+      <li>Saylor 持續發行可轉債與 ATM 增發，每年股權稀釋約 3-5%，長期壓低每股內在價值</li>
+    </ul>
+  </div>
+
+  <h3>⚔️ 槓桿 ETF 結構性劣勢</h3>
+  <div class="analysis-box analysis-bear">
+    <p><b>波動率衰減公式：</b>年化衰減率 ≈ -L(L-1)σ²/2</p>
+    <p><b>代入 BTC 數據：</b>BTC 年化波動率 50%（保守值），L=2：-2×1×0.5²/2 = <b>-25%/年</b>。3 年累積：約 -58%。若波動率 65%：-42%/年，3 年累積約 -81%。</p>
+    <p>這意味著即使 BTC 價格在 3 年後回到原點，BITX 持有者的價值將損失 <b>58-81%</b>。</p>
+    <p><b>實證數據：</b>SSO（2x SPY）5 年衰減 39.3%，QLD（2x QQQ）5 年衰減 50.4%。而 BTC 波動率是 SPY 的 3-4 倍，衰減只會更嚴重。</p>
+  </div>
+
+  <h3>🏦 借貸投資風險分析</h3>
+  <div class="analysis-box analysis-bear">
+    <p>信貸 $50k-$65k 的實際壓力測試：</p>
+    <table>
+      <thead><tr><th>項目</th><th>數值</th></tr></thead>
+      <tbody>
+        <tr><td>月還款（3年期 $65k，利率3%）</td><td class="num">~$1,890/月</td></tr>
+        <tr><td>BTC 跌至 $40k（-33%）</td><td class="num neg">本金虧損 $21.5k</td></tr>
+        <tr><td>被迫賣出風險</td><td>失業/醫療等緊急狀況下可能低點拋售</td></tr>
+        <tr><td>利率風險</td><td>若央行升息 2%，利息成本增加 67%</td></tr>
+        <tr><td>心理壓力</td><td>槓桿放大的情緒影響 = 非理性決策</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>📊 標的風險評級</h3>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="name" style="color:var(--red)">BTC</div>
+      <div style="font-size:0.75rem;color:var(--text2);">整體風險評級</div>
+      <div class="score" style="color:var(--orange)">極高</div>
+      <div class="verdict">無內在價值 9/10<br>監管風險 7/10<br>流動性依賴 8/10</div>
+      <div class="risk-meter"><div class="fill fill-high" style="width:75%"></div></div>
+    </div>
+    <div class="team-card">
+      <div class="name" style="color:var(--red)">MSTR</div>
+      <div style="font-size:0.75rem;color:var(--text2);">整體風險評級</div>
+      <div class="score" style="color:var(--red)">極高+</div>
+      <div class="verdict">NAV溢價壓縮 9/10<br>股權稀釋 7/10<br>債務風險 8/10</div>
+      <div class="risk-meter"><div class="fill fill-critical" style="width:90%"></div></div>
+    </div>
+    <div class="team-card">
+      <div class="name" style="color:var(--red)">BITX (2x BTC)</div>
+      <div style="font-size:0.75rem;color:var(--text2);">整體風險評級</div>
+      <div class="score" style="color:var(--red)">具毀滅性</div>
+      <div class="verdict">波動率衰減 9/10<br>轉倉成本 6/10<br>長期持有必虧 10/10</div>
+      <div class="risk-meter"><div class="fill fill-critical" style="width:95%"></div></div>
+    </div>
+    <div class="team-card">
+      <div class="name" style="color:var(--red)">MSTU (2x MSTR)</div>
+      <div style="font-size:0.75rem;color:var(--text2);">整體風險評級</div>
+      <div class="score" style="color:var(--red)">接近賭博</div>
+      <div class="verdict">雙重槓桿 10/10<br>已跌96.9%仍可歸零<br>不建議任何持有</div>
+      <div class="risk-meter"><div class="fill fill-critical" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <h3>🎲 3-5年情境概率分布（空方觀點）</h3>
   <div class="scenario-grid">
     <div class="scenario-card">
-      <span class="prob prob-mid">機率 50%</span>
-      <h4>🟡 區間震盪築底</h4>
-      <p style="font-size:0.85rem;color:var(--text2);">BTC $55k-$70k 來回震盪 2-3 個月，逐步消化賣壓後緩步回升</p>
-      <p style="font-size:0.85rem;margin-top:6px;"><strong>對策：</strong>每跌 $5k 買一次 BTC 現貨，不猜底，用 DCA 攤平</p>
+      <span class="prob" style="background:rgba(239,68,68,0.15);color:var(--red);">概率 30%</span>
+      <h4 style="margin:4px 0;">🔴 BTC跌破$35k 深度熊市</h4>
+      <p style="font-size:0.82rem;color:var(--text2);">聯準會維持高利率、經濟衰退、減半效應消失、MSTR NAV溢價轉折價</p>
+      <p style="font-size:0.82rem;">BTC $25-35k, MSTR $50-70, BITX $5-10</p>
     </div>
     <div class="scenario-card">
-      <span class="prob prob-high" style="background:rgba(239,68,68,0.15);color:var(--red);">機率 25%</span>
-      <h4>🔴 繼續破底</h4>
-      <p style="font-size:0.85rem;color:var(--text2);">BTC 跌破 $50k 測試 $40k-$49k。可能由宏觀衰退或監管衝擊引發</p>
-      <p style="font-size:0.85rem;margin-top:6px;"><strong>對策：</strong>保留 40% 以上現金。BTC 破 $49k 才大舉進場</p>
+      <span class="prob" style="background:rgba(234,179,8,0.15);color:var(--yellow);">概率 40%</span>
+      <h4 style="margin:4px 0;">🟡 橫盤 $45k-$75k 無趨勢</h4>
+      <p style="font-size:0.82rem;color:var(--text2);">BTC寬區間震盪，減半效應不足以推動突破，持有成本持續侵蝕</p>
+      <p style="font-size:0.82rem;">MSTR $80-150, BITX 3年後僅剩40-55%</p>
     </div>
     <div class="scenario-card">
-      <span class="prob prob-low">機率 15%</span>
-      <h4>🔵 V 型反轉</h4>
-      <p style="font-size:0.85rem;color:var(--text2);">突然的重大利多（ETF 全面開放、監管明確化、大國採用）推升 BTC 快速突破 $80k</p>
-      <p style="font-size:0.85rem;margin-top:6px;"><strong>對策：</strong>若已建倉則持有；若空手則等回測支撐不破再追</p>
+      <span class="prob" style="background:rgba(34,197,94,0.15);color:var(--green);">概率 20%</span>
+      <h4 style="margin:4px 0;">🟢 溫和牛市 $80k-$100k</h4>
+      <p style="font-size:0.82rem;color:var(--text2);">聯準會降息、ETF資金持續流入。但漲幅遠小於歷史週期</p>
+      <p style="font-size:0.82rem;">MSTR $150-250, BITX落後理論2x</p>
     </div>
     <div class="scenario-card">
-      <span class="prob prob-mid" style="background:rgba(234,179,8,0.15);color:var(--yellow);">機率 10%</span>
-      <h4>⚪ 黑天鵝</h4>
-      <p style="font-size:0.85rem;color:var(--text2);">不可預測事件（交易所倒閉、全球金融危機、MSTR 清算風險）</p>
-      <p style="font-size:0.85rem;margin-top:6px;"><strong>對策：</strong>永遠不要 all-in。分散配置，不把所有雞蛋放在 crypto 籃子</p>
+      <span class="prob" style="background:rgba(59,130,246,0.15);color:var(--blue2);">概率 10%</span>
+      <h4 style="margin:4px 0;">🔵 超級牛市 突破ATH $126k+</h4>
+      <p style="font-size:0.82rem;color:var(--text2);">需要極端流動性寬鬆或地緣政治動盪。發生概率極低</p>
+      <p style="font-size:0.82rem;">槓桿ETF衰減仍會拖累實際回報</p>
     </div>
   </div>
-</div>
 
-<!-- ============ XI. 一頁行動清單 ============ -->
-<div class="section">
-  <h2><span class="icon">✅</span> 十一、一頁行動清單</h2>
+  <h3 style="margin-top:16px;">⏳ 空方建議的等待條件</h3>
   <div class="action-list">
-    <div class="action-item">即日起，<strong>BTC 現貨或 IBIT</strong> 開始 DCA，每跌 $5k 加一次。先買 20% 目標倉位</div>
-    <div class="action-item warn">觀察 MACD 日線黃金交叉——在 MACD 金叉前，不要全倉殺入，保持耐心</div>
-    <div class="action-item">等 F&amp;G &lt; <strong>10</strong> 或 BTC &lt; <strong>$55,000</strong> — 極值出現時加碼至 50%</div>
-    <div class="action-item">MSTR/BTC 收斂到 0.0017 — 此位置 MSTR≈$104（若 BTC 持平），是極佳的 MSTR 專屬買點</div>
-    <div class="action-item danger"><strong>遠離 MSTU/MSTX</strong> — 除非你做的是 1-2 天超短線且設好嚴格停損</div>
-    <div class="action-item success">永遠保留 <strong>40%+ 現金</strong> — 熊市下的最大優勢是還有子彈。不要 FOMO</div>
+    <div class="action-item warn-item">BTC 觸及 200 週均線（~$47k）且成交量極度萎縮，才是代表性熊市底部特徵</div>
+    <div class="action-item warn-item">MSTR NAV 溢價壓縮至 10% 以下或轉為折價，消除溢價壓縮的額外下行風險</div>
+    <div class="action-item warn-item">聯準會明確轉向降息週期（降息至少 1-2 碼），因為 BTC 漲勢高度依賴流動性</div>
+    <div class="action-item danger">若一定要買：僅用 BTC 現貨（自託管），槓桿產品持有不超過 1-4 週，設 -10% 止損</div>
+    <div class="action-item danger">避免所有 2x+ 產品用於超過數日的持有。日結算的數學必然導致長期價值流失</div>
   </div>
 </div>
+</div>
 
-<!-- ============ XII. GitHub 免費用戶須知 ============ -->
+<!-- ====== TAB 4: COMPARISON ====== -->
+<div id="tab-comparison" class="tab-content">
 <div class="section">
-  <h2><span class="icon">📦</span> 十二、GitHub 免費用戶須知</h2>
+  <h2>⚖️ 替代標的比較：BTC vs GOOGL vs VT vs 槓桿</h2>
+
+  <h3>📊 純標的回報比較</h3>
   <table>
-    <thead><tr><th>項目</th><th>免費方案限制</th><th>實際感受</th></tr></thead>
+    <thead><tr><th>標的</th><th>2年回報</th><th>4年回報</th><th>8年回報</th><th>年化波動率</th><th>最大回撤</th></tr></thead>
     <tbody>
-      <tr><td>📁 Repo 數量</td><td><strong>無上限</strong>（無限 public/private）</td><td>✅ 完全不用擔心</td></tr>
-      <tr><td>💾 儲存空間</td><td>軟限 1GB / repo，硬限 100GB</td><td>✅ HTML 報告才幾 KB，突破 1GB 前 GH 會先寄信提醒</td></tr>
-      <tr><td>📄 單檔大小</td><td>警告 >50MB，硬限 >100MB</td><td>✅ HTML+圖表極小</td></tr>
-      <tr><td>🌐 GitHub Pages</td><td>✅ <strong>免費！</strong> Public repo <strong>無限流量</strong>。<br>每小時 10 次 build，上限 1GB</td><td>✅ 純靜態網頁完美適用。比多數免費 hosting 還穩定</td></tr>
-      <tr><td>🤝 協作者</td><td>Public repo 無限 collaborator</td><td>✅ 沒問題</td></tr>
-      <tr><td>⚡ Actions</td><td>每月 2,000 分鐘免費</td><td>✅ 靜態頁面不太需要</td></tr>
+      <tr><td><b>BTC</b></td><td class="num neg">-14.1%</td><td class="num pos">+95.2%</td><td class="num pos">+697.4%</td><td class="num">38-51%</td><td class="num neg">-76.6%</td></tr>
+      <tr><td><b>GOOGL</b></td><td class="num pos">+217.2%</td><td class="num pos">+390.0%</td><td class="num pos">+1,253.9%</td><td class="num">29-31%</td><td class="num neg">-44.3%</td></tr>
+      <tr><td><b>VT</b></td><td class="num pos">+67.3%</td><td class="num pos">+111.3%</td><td class="num pos">+232.2%</td><td class="num">14-17%</td><td class="num neg">-34.2%</td></tr>
+      <tr><td><b>MSTR</b></td><td class="num pos">+192.1%</td><td class="num pos">+779.1%</td><td class="num pos">+664.7%</td><td class="num">70-93%</td><td class="num neg">-89.3%</td></tr>
     </tbody>
   </table>
-  <div style="margin-top:14px;padding:12px;background:rgba(34,197,94,0.06);border-radius:8px;border-left:3px solid var(--green);">
-    <strong>結論：</strong>放一個 HTML 分析報告，用到天荒地老也用不到 GitHub 的任何硬上限。完全不用擔心儲存空間或 repo 上線的問題。GitHub Pages 對個人靜態網站來說是最穩定、最省錢的方案之一。
+
+  <h3>🗡️ 槓桿版本比較</h3>
+  <table>
+    <thead><tr><th>產品</th><th>標的</th><th>槓桿</th><th>AUM</th><th>年化vol</th><th>費用率</th><th>清算風險</th></tr></thead>
+    <tbody>
+      <tr><td><b>BITX</b></td><td>BTC</td><td>2x每日</td><td>$1.03B</td><td>~87%</td><td>1.0-1.5%</td><td>低（大發行商）</td></tr>
+      <tr><td><b>GOOX</b></td><td>GOOGL</td><td>2x每日</td><td><b>$46M ⚠️</b></td><td>~58%</td><td>~1.0%</td><td>中（T-Rex規模小）</td></tr>
+      <tr><td><b>SSO</b></td><td>SPY</td><td>2x每日</td><td>$8.4B</td><td>~24%</td><td>0.95%</td><td>低</td></tr>
+      <tr><td><b>QLD</b></td><td>QQQ</td><td>2x每日</td><td>$14.5B</td><td>~33%</td><td>0.95%</td><td>低</td></tr>
+      <tr><td><b>MSTU</b></td><td>MSTR</td><td>2x每日</td><td>$530M</td><td><b>~169%</b></td><td>~1.0%</td><td>中（已跌97%）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🔬 槓桿衰減實證</h3>
+  <table>
+    <thead><tr><th>產品</th><th>期間</th><th>標的回報</th><th>槓桿回報</th><th>理論2x</th><th>衰減</th></tr></thead>
+    <tbody>
+      <tr><td>SSO</td><td>1年</td><td class="pos">+25.8%</td><td class="pos">+47.4%</td><td class="pos">+51.6%</td><td class="warn">-4.2%</td></tr>
+      <tr><td>SSO</td><td>3年</td><td class="pos">+81.7%</td><td class="pos">+155.8%</td><td class="pos">+163.4%</td><td class="warn">-7.6%</td></tr>
+      <tr><td>SSO</td><td>5年</td><td class="pos">+88.2%</td><td class="pos">+137.1%</td><td class="pos">+176.3%</td><td class="neg"><b>-39.3%</b></td></tr>
+      <tr><td>QLD</td><td>1年</td><td class="pos">+35.0%</td><td class="pos">+67.9%</td><td class="pos">+70.0%</td><td class="warn">-2.1%</td></tr>
+      <tr><td>QLD</td><td>3年</td><td class="pos">+103.8%</td><td class="pos">+207.5%</td><td class="pos">+207.7%</td><td class="warn">-0.1%</td></tr>
+      <tr><td>QLD</td><td>5年</td><td class="pos">+118.3%</td><td class="pos">+186.2%</td><td class="pos">+236.5%</td><td class="neg"><b>-50.4%</b></td></tr>
+      <tr style="background:rgba(34,197,94,0.03);"><td><b>GOOX</b></td><td><b>1年</b></td><td class="pos"><b>+119.8%</b></td><td class="pos"><b>+285.2%</b></td><td class="pos"><b>+239.6%</b></td><td class="pos" style="color:var(--cyan)"><b>+45.5% 超越!</b></td></tr>
+      <tr style="background:rgba(239,68,68,0.03);"><td><b>MSTU</b></td><td><b>全期</b></td><td class="neg"><b>-9.2%</b></td><td class="neg"><b>-86.6%</b></td><td class="neg"><b>-18.4%</b></td><td class="neg"><b>-68.2% ⚠️</b></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px;color:var(--text2);font-size:0.82rem;">
+    🔑 GOOX 在 GOOGL 強趨勢中超越理論 2x 回報！這說明強趨勢環境可抵消波動率衰減。反之，MSTU/MSTX 在震盪/下跌市場中遭受毀滅級衰減。
+  </p>
+
+  <h3>📋 配置方案比較</h3>
+  <table>
+    <thead><tr><th>方案</th><th>配置</th><th>預期3年回報</th><th>預期5年回報</th><th>預估最大回撤</th><th>夏普比(估)</th></tr></thead>
+    <tbody>
+      <tr><td>A</td><td>100% BTC現貨</td><td>+60~120%</td><td>+100~250%</td><td>~50%</td><td>0.4~0.6</td></tr>
+      <tr><td>B</td><td>100% GOOGL</td><td>+30~80%</td><td>+60~150%</td><td>~30%</td><td>0.6~0.8</td></tr>
+      <tr><td>C</td><td>100% VT</td><td>+20~40%</td><td>+35~80%</td><td>~25%</td><td>0.5~0.7</td></tr>
+      <tr><td>D</td><td>50% BTC + 50% GOOGL</td><td>+45~100%</td><td>+80~200%</td><td>~35%</td><td>0.5~0.7</td></tr>
+      <tr style="background:rgba(59,130,246,0.03);"><td><b>E</b></td><td><b>60% MSTR+30% BTC+10% BITX</b></td><td><b>+80~180%</b></td><td><b>+120~350%</b></td><td><b>~55%</b></td><td><b>0.5~0.7</b></td></tr>
+      <tr><td>F</td><td>60% BTC + 20% BITX + 20% GOOGL</td><td>+70~160%</td><td>+110~280%</td><td>~45%</td><td>0.5~0.7</td></tr>
+      <tr style="background:rgba(34,197,94,0.03);"><td><b>G</b></td><td><b>50% BTC+35% MSTR+15% BITX</b></td><td><b>+60~150%</b></td><td><b>+100~220%</b></td><td><b>~45%</b></td><td><b>0.5~0.7</b></td></tr>
+    </tbody>
+  </table>
+
+  <h3>💰 借貸成本分析</h3>
+  <div class="analysis-box" style="border-left-color:var(--yellow);">
+    <p>台灣信貸利率假設 2-4%：</p>
+    <ul style="margin:6px 0 6px 18px;">
+      <li>$50k 每月利息 = $125 (@3%)，全年 $1,500</li>
+      <li>$65k 每月還款（3年）≈ $1,890-$1,920</li>
+      <li>若報酬率 &gt; 利率：借貸投資產生正槓桿效果</li>
+      <li>若報酬率 &lt; 利率：借貸投資產生負槓桿 + 利息雙重損失</li>
+    </ul>
+    <p><b>方案 A 的借貸槓桿效果：</b>若 BTC 3 年內 +100%，扣除 3 年利息 $4,500，淨回報約 +95%。若 BTC 跌 -33%，虧損 $21.5k + 利息 = 總損失 $26k（-40%）</p>
+  </div>
+
+  <h3 style="margin-top:16px;">🏆 最佳風險調整後選擇</h3>
+  <div class="analysis-box analysis-review">
+    <p><b>若追求最高絕對報酬且能承受波動：BTC + MSTR 混合（方案 E 或 G）</b></p>
+    <p><b>若追求風險調整後最佳（夏普比最高）：VT 或 GOOGL</b></p>
+    <p>VT 的波動率僅 14-17%，最大回撤僅 -34.2%，但 8 年 +232.2% 遠低於 BTC 的 +697.4%。</p>
+    <p>關鍵差異在於：VT 不需要 timing，隨時可以買入並長期持有。而 BTC/MSTR 需要精準的週期 timing——當前是否真的是底部，極度恐懼是否意味著機會還是陷阱，這正是本報告正反雙方爭論的核心。</p>
   </div>
 </div>
+</div>
 
-<!-- ============ DISCLAIMER ============ -->
+<!-- ====== TAB 5: REVIEWER ====== -->
+<div id="tab-reviewer" class="tab-content">
+<div class="section">
+  <h2>👔 二級主管審查紀錄</h2>
+  <blockquote style="border-left-color:var(--blue);">
+    「你對『不嚴謹的邏輯』容忍度為零。引用具體的審查意見而非籠統評論。」 — 審查主席要求
+  </blockquote>
+
+  <h3>📋 團隊評分</h3>
+  <div class="team-grid">
+    <div class="team-card" style="border-color:var(--green);">
+      <div class="name">📈 多方分析</div>
+      <div class="score" style="color:var(--green)">7.8/10</div>
+      <div class="verdict">數據準確，分析全面。但低估了NAV溢價進一步壓縮的風險和橫盤市場的槓桿衰減</div>
+    </div>
+    <div class="team-card" style="border-color:var(--red);">
+      <div class="name">📉 空方分析</div>
+      <div class="score" style="color:var(--green)">8.5/10</div>
+      <div class="verdict">最全面最有深度的分析。波動率衰減的數學推導、GBTC案例和概率分布非常出色</div>
+    </div>
+    <div class="team-card" style="border-color:var(--blue);">
+      <div class="name">⚖️ 替代標的</div>
+      <div class="score" style="color:var(--yellow)">6.5/10</div>
+      <div class="verdict">數據充足但缺乏深入的風險調整後比較（Sharpe比率全面計算）和情境分析</div>
+    </div>
+    <div class="team-card" style="border-color:var(--yellow);">
+      <div class="name">🔍 驗證組</div>
+      <div class="score" style="color:var(--text2)">待補</div>
+      <div class="verdict">由於技術限制（離線環境），驗證組未能完整執行事實查核程序</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px;">🚩 主席標記的紅旗</h3>
+  <div class="analysis-box" style="border-left-color:var(--red);">
+    <ol style="margin:0 0 0 18px;">
+      <li><b>借貸投資的現金流壓力被低估：</b>多方分析師假設了「3-5年持有期與BTC週期完美匹配」，但未充分考慮如果3年後BTC仍在低位，貸款到期需要展期的風險。月還款$1,900在股市下跌期間會放大心理壓力。</li>
+      <li><b>MSTR NAV溢價從300%壓縮至37%——但為何不能繼續壓縮？</b>空方分析師正確指出了GBTC -48.73%折價的歷史。多方分析師聲稱「接近歷史低點提供了安全邊際」，但MSTR/BTC比率0.0017仍高於純淨值（即MSTR/BTC比率應為NAV的1.37倍），若溢價歸零還需跌27%。</li>
+      <li><b>「這次不一樣」的雙向風險：</b>多頭說「ETF機構資金流入改變了遊戲規則」，空頭說「減半效應遞減無法逆轉」。兩者可能同時成立——機構資金流入可能只是減緩下跌而非推動暴漲。</li>
+      <li><b>替代標的分析中GOOGL/GOOX的流動性風險被低估：</b>GOOX AUM僅$46M。若需要大額進出場，可能面臨顯著的買賣價差和流動性不足。</li>
+    </ol>
+  </div>
+
+  <h3 style="margin-top:20px;">🔄 審查迭代紀錄（模擬）</h3>
+  <ul class="iteration-log">
+    <li class="iteration-item rejected">
+      <span class="round">Round 1</span>
+      <p><b>主席意見（2026/6/6 上午）：</b></p>
+      <p>「多方分析：你們對MSTR NAV溢價風險的討論不夠充分。37%的溢價不是『安全邊際』——它是需要被風險調整的負面因素。請補充：如果溢價歸零，在BTC持平的情況下，MSTR需要再跌多少？另外，你們的9次RSI底部統計中，7次正回報的統計顯著性如何？2025/8的失敗案例和2026/2/5的成功案例差異是什麼？請在1小時內回覆。」</p>
+      <p><b>空方分析：通過初步審查。但請補充如果BTC橫盤3年，BITX的波動率衰減精確數學計算。</b></p>
+    </li>
+    <li class="iteration-item">
+      <span class="round">Round 1 回覆</span>
+      <p><b>多方分析師：</b></p>
+      <p>「針對溢價歸零情境：若BTC持平於$60k，MSTR NAV溢價從37%→0%，MSTR股價需從$120.44→$87.74（跌27%）。但這個情境假設了市場完全忽略MSTR作為企業營運主體（軟體業務年營收約$5億）和BTC持倉槓桿的選擇權價值。在我們覆蓋的歷史數據中，MSTR/BTC比率從未低於0.0017（對應約$102 @ BTC=$60k，即溢價約15%），因此溢價完全歸零並非基準情境。</p>
+      <p>關於RSI統計的2025/8失敗案例：核心差異在於事件發生時的市場位置。2025/8（RSI=19.2）發生在BTC從ATH下跌僅約25%時，屬於熊市初期；而2026/2/5（RSI=16.7）發生在BTC已跌45%且持續了8個月後。當前（RSI=14.1）發生在跌52%、持續12個月後，與2026/2/5的成功案例更相似。」</p>
+    </li>
+    <li class="iteration-item rejected">
+      <span class="round">Round 2</span>
+      <p><b>主席意見：</b></p>
+      <p>「多方分析師，你的『MSTR溢價從未歸零』論點有倖存者偏誤風險——樣本期間（2020至今）BTC處於超級週期上升階段，MSTR策略尚未經歷真正的加密寒冬（持續3年以上的熊市）。在一個像2014-2015或2018-2019那樣長期底部的環境中，溢價歸零的風險是真實的。</p>
+      <p>要求：請在最終推薦中加入『若MSTR溢價跌破15%』的應對方案。」</p>
+    </li>
+    <li class="iteration-item">
+      <span class="round">Round 2 回覆</span>
+      <p><b>多方分析師：</b></p>
+      <p>「同意。已加入應對機制：若MSTR/BTC比率跌破0.0017（當前溢價從37%降至約15%），將觸發MSTR部位減半，資金轉入BTC現貨。此閾值設在歷史低點附近，提供了客觀的停損參考點。」</p>
+    </li>
+    <li class="iteration-item approved">
+      <span class="round">Round 3 — 最終批准</span>
+      <p><b>主席裁示：</b></p>
+      <p>「所有團隊的報告經過兩輪修改後達到可接受標準。以下是最終綜合判斷：</p>
+      <p><b>批准條件：</b>✅ 有條件批准 (Conditional Approval)</p>
+      <p><b>最終決定：</b></p>
+      <p>我認為$50k-$65k的信貸資金可以投入，但必須遵守以下條件：</p>
+      <ol style="margin:6px 0 6px 18px;">
+        <li><b>不得使用槓桿產品（BITX/MSTU/MSTX）</b>——波動率衰減的數學在信貸情境下不可接受。特別在當前估值環境，若BTC橫盤2-3年，槓桿ETF的價值侵蝕可能導致借款投資變成「負和遊戲」。</li>
+        <li><b>核心配置：70% BTC現貨 + 30% MSTR</b>——這比60/30/10混合更保守。BTC現貨作為還款保障基底，MSTR作為超額報酬引擎。捨棄BITX的理由是：信貸資金不需要也不應該承擔額外的槓桿衰減風險。</li>
+        <li><b>分8週DCA進場</b>——而非4週。當前RSI極低不代表不會再跌。2022年BTC從$30k跌到$16k（再跌47%）就是在F&G=12之後發生。更長的DCA窗口提供了更好的價格平均效果。</li>
+        <li><b>設定MSTR溢價止損</b>——若MSTR/BTC比率跌破0.0017（溢價約15%），將MSTR部位轉移至BTC現貨。</li>
+        <li><b>總部位上限：</b>此信貸投資佔總資產不得超過30%（即總資產應在$170k-$215k以上）。若無其他資產，則只能投入$25k-$30k。</li>
+      </ol>
+      <p style="margin-top:8px;"><b>主席總結：</b></p>
+      <p>當前市場確實提供了罕見的底部指標疊加（F&G=12、RSI=11.7/14.1、MSTR大折價），這在數據上支持戰術性進場。但減半效應遞減是真實的結構性逆風，不應期待2020-2021級別的超級回報。</p>
+      <p><b>3-5年預期回報：基準 +60-100%，樂觀 +120-180%，悲觀 -30-50%。</b></p>
+      <p>這是一筆期望值為正的投資（正EV），但僅限於有足夠財務緩衝、3-5年內不需要動用這筆資金的投資人。若月還款$1,900會造成生活壓力，則不應該執行。」</p>
+    </li>
+  </ul>
+
+  <h3 style="margin-top:20px;">📜 最終批准方案</h3>
+  <div class="analysis-box analysis-review">
+    <h4 style="margin:0 0 8px 0;">✅ 批准 — 有條件通過</h4>
+    <table>
+      <thead><tr><th>項目</th><th>內容</th></tr></thead>
+      <tbody>
+        <tr><td><b>標的</b></td><td>70% BTC現貨 + 30% MSTR</td></tr>
+        <tr><td><b>總金額</b></td><td>$50k-$65k（佔總資產≤30%）</td></tr>
+        <tr><td><b>進場方式</b></td><td>分8週 DCA（每週約 $6,250-$8,125）</td></tr>
+        <tr><td><b>禁用產品</b></td><td>BITX、MSTU、MSTX 等所有槓桿ETF</td></tr>
+        <tr><td><b>溢價止損</b></td><td>MSTR/BTC比率 < 0.0017 → MSTR轉BTC</td></tr>
+        <tr><td><b>預期3-5年回報</b></td><td>基準 +60-100% | 樂觀 +120-180% | 悲觀 -30-50%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ====== TAB 6: ACTION ====== -->
+<div id="tab-action" class="tab-content">
+<div class="section">
+  <h2>✅ 行動摘要與最終建議</h2>
+
+  <h3>⚡ 一頁行動清單</h3>
+  <div class="action-list">
+    <div class="action-item">核心配置：<b>70% BTC現貨 + 30% MSTR</b>，捨棄 BITX/MSTU 等槓桿產品</div>
+    <div class="action-item">分 <b>8 週 DCA</b> 進場，不在 RSI=11.7 的極端超賣位 all-in</div>
+    <div class="action-item success">F&G=12 和 RSI 極值是歷史級別的買入信號，但不等於立即反彈</div>
+    <div class="action-item warn-item">設立 MSTR/BTC 比率 < 0.0017 的溢價止損線</div>
+    <div class="action-item danger">嚴禁使用借貸資金購買槓桿ETF（雙重槓桿 = 死亡三角）</div>
+    <div class="action-item danger">保留 <b>至少 3-6 個月生活費</b>的現金儲備，不得因信貸還款壓力被迫底部賣出</div>
+    <div class="action-item">每月 $1,900 還款應視為強制儲蓄（若 BTC 長期上漲則資產增長 + 債務減少 = 雙重紅利）</div>
+    <div class="action-item">目標持有 <b>3-5 年</b>，不因短期波動（-20% to -40%）而恐慌出場</div>
+  </div>
+
+  <h3 style="margin-top:20px;">📊 決策樹</h3>
+  <div style="padding:16px;background:var(--surface2);border-radius:10px;font-size:0.88rem;">
+<pre style="font-family:inherit;color:var(--text2);line-height:1.8;">
+❓ 你的總資產 &gt; $170k（信貸佔比 ≤30%）？
+  ├── ✅ YES → 進入下一題
+  └── ❌ NO → 降低投入至 $25k-$30k 或放棄方案
+
+❓ 月還款 $1,900 是否會影響生活品質？
+  ├── ✅ NO → 可以執行
+  └── ❌ YES → 延長貸款期限或降低金額
+
+❓ 你能否承受 BTC 再跌 50% 到 $30k？
+  ├── ✅ YES → 現在可以開始 DCA
+  └── ❌ NO → 只買 BTC 現貨（不買 MSTR），或等 BTC 跌破 $50k
+
+❓ 你相信 3-5 年後 BTC 會高於現在？
+  ├── ✅ YES → 70% BTC + 30% MSTR 配置
+  └── ❌ NO → 不需要做這個投資
+</pre>
+  </div>
+
+  <div class="summary-grid" style="margin-top:20px;">
+    <div class="analysis-box analysis-bull" style="margin:0;">
+      <h3 style="margin:0 0 8px 0;color:var(--green);">多頭總結</h3>
+      <p style="font-size:0.88rem;">三組底部訊號已亮燈、MSTR折價32%、減半後26個月處於歷史底部窗口。信貸資金3-5年持有期完美匹配BTC週期。混合配置提供合理的風險報酬比。</p>
+      <p style="margin-top:6px;font-size:0.82rem;color:var(--text2);">✓ 觀點 A: $57.5k → 60/30/10 (MSTR/BTC/BITX)<br>✓ 觀點 B: $57.5k → 50/35/15 (BTC/MSTR/BITX)</p>
+    </div>
+    <div class="analysis-box analysis-bear" style="margin:0;">
+      <h3 style="margin:0 0 8px 0;color:var(--red);">空頭總結</h3>
+      <p style="font-size:0.88rem;">減半效應已幾近消失、MSTR 37%溢價是定時炸彈、槓桿ETF長期持有必虧。借貸投資的心理壓力和被迫賣出風險是真實且被低估的。</p>
+      <p style="margin-top:6px;font-size:0.82rem;color:var(--text2);">⚠️ 等待條件：BTC觸200WMA($47k)、溢價壓至10%以下、聯準會降息確認</p>
+    </div>
+  </div>
+
+  <div class="analysis-box analysis-review" style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;color:var(--blue2);">🏛️ 最終裁決（二級主席）</h3>
+    <p style="font-weight:700;">✅ 有條件批准 — 70% BTC現貨 + 30% MSTR，分8週DCA，禁用槓桿產品</p>
+    <p style="margin-top:6px;font-size:0.88rem;">預期 3-5 年回報：基準 +60-100% | 樂觀 +120-180% | 悲觀 -30-50%</p>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
 <div class="disclaimer">
-  ⚠️ <strong>免責聲明：</strong>本報告僅供研究參考，不構成任何投資建議。加密貨幣與槓桿 ETF 屬於高風險投資，可能導致本金全部損失。所有投資決策應基於您自身的風險承受能力與專業判斷。過往績效不保證未來回報。
-  <br><br>
-  📊 數據來源：Yahoo Finance、CoinGecko、Alternative.me（F&amp;G Index）<br>
-  🤖 報告產生：Claude Code (Opus 4.8) — 2026年6月6日
-  <br><br>
-  <a href="https://github.com/HsinTiger/mstr-btc-bottom-report" style="color:var(--blue-light);">🔗 GitHub Repo</a>
+  ⚠️ <b>免責聲明：</b>本報告由 AI 生成，僅供研究參考，不構成任何投資建議。所有數據來源於 Yahoo Finance、CoinGecko、Alternative.me。報告中包含的多方與空方觀點由不同 AI 代理基於相同數據集獨立生成，不代表任何客觀事實。加密貨幣與槓桿交易屬於高風險投資，可能導致本金全部損失。過往績效不保證未來回報。借貸投資可能放大虧損。本報告的審查紀錄為模擬流程，非真實投資委員會決策。請諮詢合格的財務顧問後再做投資決策。<br><br>
+  📊 數據截至 2026/6/5 收盤 | 生成工具：Claude Code (Opus 4.8) + Multi-Agent Workflow<br>
+  🔗 <a href="https://github.com/HsinTiger/mstr-btc-bottom-report" style="color:var(--blue2);">GitHub Repo</a>
 </div>
 
 </div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
