@@ -167,6 +167,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <button class="tab-btn active" data-tab="overview">📊 總覽</button>
   <button class="tab-btn" data-tab="mstr-deep">🏢 MSTR公司調查</button>
   <button class="tab-btn" data-tab="portfolio">📐 組合優化</button>
+  <button class="tab-btn" data-tab="buffett">🏦 巴菲特/大戶</button>
   <button class="tab-btn" data-tab="bullish">📈 多方計畫</button>
   <button class="tab-btn" data-tab="bearish">📉 空方報告</button>
   <button class="tab-btn" data-tab="reviewer">👔 審查+驗證</button>
@@ -496,7 +497,153 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 </div>
 </div>
 
-<!-- ====== TAB 4: BULLISH (abbreviated) ====== -->
+<!-- ====== TAB 4: BUFFETT/MAJOR INVESTORS ====== -->
+<div id="tab-buffett" class="tab-content">
+<div class="section">
+  <h2>🏦 巴菲特/波克夏 vs ARK vs 各大佬 — 當前投資組合分析</h2>
+
+  <h3>🧓 波克夏海瑟威 (Berkshire Hathaway) — 最新概況</h3>
+  <div class="analysis-box analysis-review">
+    <b>📊 核心數據（2026/6）：</b>
+    <table>
+      <thead><tr><th>指標</th><th>數值</th><th>解讀</th></tr></thead>
+      <tbody>
+        <tr><td>股價</td><td class="num">$488.13</td><td>5年+68.6%，年化vol僅17.1%</td></tr>
+        <tr><td>市值</td><td class="num">$682.6B</td><td>全球最大企業之一</td></tr>
+        <tr><td><b>現金儲備</b></td><td class="num pos"><b>$397.4B</b></td><td><b>佔市值58.2%！史上最大現金山</b></td></tr>
+        <tr><td>總債務</td><td class="num">$128.9B</td><td>淨現金 $268.5B</td></tr>
+        <tr><td>保險浮存金</td><td class="num">~$165B</td><td>零成本資金，巴菲特獨門優勢</td></tr>
+        <tr><td>利息收入(4%)</td><td class="num">$15.9B/年</td><td>每股$11.37，光利息就貢獻大量EPS</td></tr>
+        <tr><td>P/E</td><td class="num">14.5x</td><td>剔除現金後實際P/E約8.8x — 極度便宜</td></tr>
+        <tr><td>年化vol</td><td class="num">17.1%</td><td>與SPY相當，遠低於BTC 44.8%</td></tr>
+        <tr><td>最大回撤(5yr)</td><td class="num">-26.6%</td><td>金融危機存活證明</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>📋 波克夏股票投資組合（模擬13F權重）</h3>
+  <table>
+    <thead><tr><th>持股</th><th>比例</th><th>P/E</th><th>ROE</th><th>FCF Yield</th><th>危機存活</th></tr></thead>
+    <tbody>
+      <tr><td><b>AAPL (蘋果)</b></td><td class="num"><b>42%</b></td><td class="num">37.2x</td><td class="num pos">141%</td><td class="num">2.24%</td><td>✅ $101B FCF</td></tr>
+      <tr><td>BAC (美國銀行)</td><td class="num">10%</td><td class="num">~14x</td><td class="num">—</td><td class="num">—</td><td>✅ 系統性重要</td></tr>
+      <tr><td>AXP (美國運通)</td><td class="num">8%</td><td class="num">~20x</td><td class="num">—</td><td class="num">—</td><td>✅ 高端客群保護</td></tr>
+      <tr><td>CVX (雪佛龍)</td><td class="num">6%</td><td class="num">32.7x</td><td class="num">—</td><td class="num">~5%</td><td>✅ 能源稀缺</td></tr>
+      <tr><td>KO (可口可樂)</td><td class="num">6%</td><td class="num">25.0x</td><td class="num pos">43.4%</td><td class="num">0.91%</td><td>✅ 100年品牌</td></tr>
+      <tr><td>OXY (西方石油)</td><td class="num">5%</td><td class="num">76.9x</td><td class="num">—</td><td class="num">~3%</td><td>⚠️ 高波動</td></tr>
+      <tr><td>AMZN (亞馬遜)</td><td class="num">3%</td><td class="num">31.7x</td><td class="num">—</td><td class="num">0.17%</td><td>✅ 雲端+零售護城河</td></tr>
+      <tr><td>GOOG (Alphabet)</td><td class="num">2%</td><td class="num">27.9x</td><td class="num">—</td><td class="num">2.9%</td><td>✅ 搜尋壟斷</td></tr>
+    </tbody>
+  </table>
+
+  <div class="analysis-box analysis-yellow">
+    <b>🔑 波克夏哲學給我們的啟示：</b>
+    <ul style="margin:6px 0 0 16px;">
+      <li><b>$397.4B 現金 = Buffett 認為市場沒有便宜貨。</b>但對散戶而言，不等於不能買——Buffett的資金規模（$682B市值）無法靈活進出中小型標的。</li>
+      <li><b>BRK-B本身就是一個優質組合：</b>剔除現金後實際P/E僅8.8x，年化波動僅17.1%，5年+68.6%。對於不想選股的人，直接買BRK-B可能是最佳方案。</li>
+      <li><b>金融危機存活證明：</b>2008年BRK沒倒、2020年沒倒。保險浮存金+巨額現金=在任何危機中都能活下來甚至撿便宜。</li>
+      <li><b>BRK-B 5年 Sharpe = 遠高於BTC的0.47。</b>風險調整後報酬差距巨大。</li>
+    </ul>
+  </div>
+
+  <h3>🚀 ARK Invest（木頭姐）— 反面教材</h3>
+  <table>
+    <thead><tr><th>持股</th><th>P/E</th><th>P/S</th><th>現金流</th><th>危機存活</th></tr></thead>
+    <tbody>
+      <tr><td>TSLA（特斯拉）</td><td class="num">358.7x</td><td class="num">15.0x</td><td class="neg">低/波動</td><td>⚠️ 部分</td></tr>
+      <tr><td>COIN（Coinbase）</td><td class="num">56.2x</td><td class="num">6.4x</td><td class="neg">高度波動</td><td>❌ 與BTC連動</td></tr>
+      <tr><td>ROKU（Roku）</td><td class="num">91.2x</td><td class="num">3.6x</td><td class="neg">-</td><td>❌ 廣告依賴</td></tr>
+      <tr><td>ZM（Zoom）</td><td class="num">15.0x</td><td class="num">6.0x</td><td class="warn">偏弱</td><td>⚠️ 部分</td></tr>
+      <tr><td>CRSP（基因編輯）</td><td class="num neg">-13.4x</td><td class="num">1,244x</td><td class="neg">巨虧</td><td>❌ 尚未獲利</td></tr>
+      <tr><td>SHOP（Shopify）</td><td class="num">107.4x</td><td class="num">11.5x</td><td class="warn">偏弱</td><td>⚠️ 部分</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px;"><b>ARKK 5年回報: <span class="neg">-32.8%</span> | 年化vol: <span class="neg">46.4%</span> | 最大回撤: -77.2%</b> (與BTC接近！)</p>
+  <div class="analysis-box analysis-bear">
+    <b>⚠️ 核心教訓：</b>ARKK持有高P/E、低/負現金流的成長股，在利率上升環境中遭受毀滅性打擊。最大回撤-77.2%與BTC的-76.6%幾乎相同。若你的投資風格偏向ARK，BTC其實也差不多。
+  </div>
+
+  <h3>🏆 各大佬組合比較：橫向對比</h3>
+  <table>
+    <thead><tr><th>投資風格</th><th>代表</th><th>策略</th><th>5yr回報</th><th>vol</th><th>MDD</th><th>危機存活</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(34,197,94,0.04);"><td><b>🧓 價值型/保險</b></td><td><b>Buffett (BRK)</b></td><td>優質企業+巨額現金</td><td class="pos">+68.6%</td><td class="num">17.1%</td><td class="num">-26.6%</td><td class="pos"><b>✅ 最高</b></td></tr>
+      <tr><td>📈 指數型</td><td>SPY</td><td>全市場被動</td><td class="pos">+87.0%</td><td class="num">17.1%</td><td class="num">-24.5%</td><td class="pos">✅ 高</td></tr>
+      <tr><td>🍎 科技龍頭</td><td>AAPL</td><td>生態系護城河</td><td class="pos">+150.4%</td><td class="num">27.5%</td><td class="num">-33.4%</td><td class="pos">✅ $101B FCF</td></tr>
+      <tr><td>🥤 必需消費</td><td>KO, PG</td><td>穩定現金流+股息</td><td class="pos">+22~65%</td><td class="num">16-18%</td><td class="num">-17~24%</td><td class="pos">✅ 極高</td></tr>
+      <tr><td>🏦 金融</td><td>JPM</td><td>系統性重要銀行</td><td class="pos">+114%</td><td class="num">24.5%</td><td class="num">-38.8%</td><td class="pos">✅ 大而不倒</td></tr>
+      <tr style="background:rgba(234,179,8,0.04);"><td><b>🪙 加密貨幣</b></td><td><b>BTC</b></td><td>數位黃金</td><td class="pos">+70.4%</td><td class="num neg">44.8%</td><td class="num neg">-76.6%</td><td class="neg"><b>❌ 無現金流</b></td></tr>
+      <tr style="background:rgba(239,68,68,0.04);"><td><b>🚀 創新成長</b></td><td><b>ARKK</b></td><td>破壞式創新</td><td class="neg">-32.8%</td><td class="num neg">46.4%</td><td class="num neg">-77.2%</td><td class="neg"><b>❌ 低</b></td></tr>
+    </tbody>
+  </table>
+
+  <h3>🛡️ 巴菲特標準：金融危機也能活下來的公司</h3>
+  <p>以下為基於巴菲特篩選標準（高ROE、低淨負債、強FCF、合理P/E）評分的頂尖公司：</p>
+  <table>
+    <thead><tr><th>排名</th><th>公司</th><th>評分</th><th>P/E</th><th>ROE</th><th>FCF Yield</th><th>Net D/E</th><th>為何危機不死</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(34,197,94,0.04);"><td><b>1</b></td><td><b>NVR (房屋建築)</b></td><td class="num pos"><b>11/11</b></td><td class="num">15.1x</td><td class="num pos">33.3%</td><td class="num pos">7.49%</td><td class="num pos">淨現金</td><td>零債務、輕資產、剛需市場</td></tr>
+      <tr><td>2</td><td>CPRT (Copart)</td><td class="num pos">9/11</td><td class="num">19.2x</td><td class="num pos">17.6%</td><td class="num pos">3.49%</td><td class="num pos">淨現金</td><td>車險報廢壟斷,經濟衰退反增需求</td></tr>
+      <tr><td>3</td><td>JPM (摩根大通)</td><td class="num pos">8/11</td><td class="num">14.9x</td><td class="num pos">16.5%</td><td class="num">~0%</td><td class="warn">銀行</td><td>大而不倒</td></tr>
+      <tr><td>4</td><td>PEP (百事可樂)</td><td class="num pos">8/11</td><td class="num">22.3x</td><td class="num pos">43.9%</td><td class="num pos">4.51%</td><td class="num">1.3x</td><td>必需消費,2008年僅跌~30%</td></tr>
+      <tr><td>5</td><td>COST (好市多)</td><td class="num">7/11</td><td class="num warn">48.8x</td><td class="num pos">29.2%</td><td class="num">1.61%</td><td class="num pos">淨現金</td><td>會員制零售護城河</td></tr>
+      <tr><td>6</td><td>PG (寶僑)</td><td class="num">6/11</td><td class="num">21.4x</td><td class="num pos">31.1%</td><td class="num pos">3.73%</td><td class="num">1.2x</td><td>必需消費,2008年僅跌~29%</td></tr>
+      <tr><td>7</td><td>KO (可口可樂)</td><td class="num">6/11</td><td class="num">25.0x</td><td class="num pos">43.4%</td><td class="num">0.91%</td><td class="num">1.0x</td><td>百年品牌,2008年僅跌~25%</td></tr>
+      <tr><td>8</td><td>AAPL (蘋果)</td><td class="num">6/11</td><td class="num">37.2x</td><td class="num pos">141%</td><td class="num">2.24%</td><td class="num pos">淨現金</td><td>$101B FCF+生態系轉換成本</td></tr>
+    </tbody>
+  </table>
+
+  <div class="analysis-box analysis-yellow">
+    <b>📊 品質分數方法論（監察組驗證）：</b>
+    <ul style="margin:6px 0 0 16px;">
+      <li>ROE >15%（+3分）| FCF yield >4%（+2分）| 淨負債/權益 < 1（+2分）</li>
+      <li>淨負債/權益 < 0.5（+1分）| P/E在10-25之間（+2分）| FCF為正（+1分）</li>
+      <li><b>最高11分。</b>數據來源：yfinance, 2026/6/5收盤。</li>
+    </ul>
+  </div>
+
+  <h3>🔄 從巴菲特視角看BTC</h3>
+  <div class="analysis-box analysis-bear">
+    <p><b>如果巴菲特投資BTC，他會問這些問題：</b></p>
+    <ol style="margin:6px 0 0 16px;display:flex;flex-direction:column;gap:4px;">
+      <li><b>「它每天產出多少現金？」</b> → 零。BTC不產生任何現金流。</li>
+      <li><b>「它的競爭優勢（護城河）是什麼？」</b> → 去中心化+稀缺性，但對手方風險高(交易所/錢包/量子計算)。</li>
+      <li><b>「它可以被複製嗎？」</b> → 已經有數千種競爭幣。</li>
+      <li><b>「在恐慌時它會發生什麼？」</b> → 2020年3月BTC跌了63%；2022年跌了77%。其他資產在恐慌時會因央行干預反彈，BTC沒有中央銀行。</li>
+      <li><b>「它的內在價值怎麼算？」</b> → 無法用DCF、PE、PB等傳統估值方法。</li>
+    </ol>
+  </div>
+  <div class="analysis-box analysis-bull" style="margin-top:8px;">
+    <b>但BTC的支持者會反駁：</b>
+    <ul style="margin:6px 0 0 16px;">
+      <li>巴菲特拒絕BTC是眾所周知，但他也承認自己不理解。</li>
+      <li>BRK主力持倉中AAPL佔42%，而AAPL P/E=37.2x並不算便宜。</li>
+      <li>黃金也不產生現金流，但巴菲特持有BNSF鐵路——BTC的擁護者認為BTC就是「數位黃金」。</li>
+      <li>BRK的$397.4B現金其實就是預期未來有更好的投資機會——當前他們選擇等待而非買入。</li>
+    </ul>
+  </div>
+
+  <h3>🏁 整合結論：巴菲特啟發的投資組合建議</h3>
+  <div class="analysis-box analysis-review">
+    <p>綜合波克夏的哲學與當前市場環境，更新後的建議：</p>
+    <br>
+    <p><b>方案一（純正巴菲特流，最低風險）：</b></p>
+    <p>直接買 BRK-B 100% — P/E 14.5x（剔除現金後8.8x），波動17.1%，MDD僅-26.6%，$397B現金保護。這可能是市場上最被低估的大型股之一。</p>
+    <br>
+    <p><b>方案二（巴菲特+加密混合，平衡型）：</b></p>
+    <p>BRK-B 50% + GOOG 30% + BTC 10% + MSTR 10% — 利用BRK的穩定性和現金保護作為安全網，GOOG提供科技成長，小部位加密捕捉底部反彈。</p>
+    <br>
+    <p><b>方案三（高品質集中，純價值型）：</b></p>
+    <p>NVR 20% + JPM 20% + PEP 20% + PG 20% + CPRT 20% — 巴菲特風格的品質集中，平均FCF Yield約4%，平均P/E約18x。金融危機存活率高。</p>
+  </div>
+
+  <div class="disclaimer">
+    波克夏持股比重為根據最新13F申報的近似值。所有數據來自yfinance (2026/6/5)。品質評分為量化篩選，不構成投資建議。
+  </div>
+</div>
+</div>
+
+<!-- ====== TAB 5: BULLISH (abbreviated) ====== -->
 <div id="tab-bullish" class="tab-content">
 <div class="section">
   <h2>📈 多方買入計畫摘要</h2>
@@ -515,7 +662,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 </div>
 </div>
 
-<!-- ====== TAB 5: BEARISH ====== -->
+<!-- ====== TAB 6: BEARISH ====== -->
 <div id="tab-bearish" class="tab-content">
 <div class="section">
   <h2>📉 空方批判報告</h2>
@@ -538,7 +685,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 </div>
 </div>
 
-<!-- ====== TAB 6: REVIEWER ====== -->
+<!-- ====== TAB 7: REVIEWER ====== -->
 <div id="tab-reviewer" class="tab-content">
 <div class="section">
   <h2>👔 二級主管審查 + 監察組驗證報告</h2>
@@ -635,7 +782,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 </div>
 </div>
 
-<!-- ====== TAB 7: ACTION ====== -->
+<!-- ====== TAB 8: ACTION ====== -->
 <div id="tab-action" class="tab-content">
 <div class="section">
   <h2>✅ 最終行動摘要</h2>
