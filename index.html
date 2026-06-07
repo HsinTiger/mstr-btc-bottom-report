@@ -209,6 +209,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <button class="tab-btn" data-tab="debate">⚖️ 多空+驗證</button>
   <button class="tab-btn" data-tab="video">📺 影片批判</button>
   <button class="tab-btn" data-tab="action">✅ 行動計畫</button>
+  <button class="tab-btn" data-tab="allin">🎲 拼一波(All-in)</button>
 </div>
 
 <!-- ============ TAB 1: OVERVIEW / CONCLUSION ============ -->
@@ -1017,6 +1018,86 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 </div>
 </div>
 
+<!-- ============ TAB: ALL-IN MSTR ============ -->
+<div id="tab-allin" class="tab-content">
+<div class="section">
+  <h2>🎲 拼一波：All-in MSTR + Sell-Put 接貨</h2>
+  <div class="analysis-box analysis-purple">
+    <b>這是「如果你就是要 all-in」的執行頁，不是本報告主推（主推見 💼規劃v4）。</b>
+    你在賭：<b>BTC 未來 3 年內還有一輪大週期（下次減半 2028/4），MSTR 用「槓桿＋含币量成長」把它放大成 2–4 倍</b>。這在基準/牛市情境做得到（MSTR 基準 $180–400≈1.4–3x、牛市 $500–1200≈4–9x），但它是<b>雙峰結果</b>：對了翻幾倍，錯了或時機不對 -60% 並卡很久。用「高賠率投機」的心態管理，不是「投資」。
+  </div>
+
+  <h3>🧠 心態鐵則</h3>
+  <ul style="margin:6px 0 0 16px;font-size:0.88rem;">
+    <li><b>錢分對口袋</b>：押注的是「3 年歸零也不影響生活」的錢。生活費 6–12 個月＋所有貸款月付，<b>隔離在賭注之外</b>。這是你唯一真正的風控。</li>
+    <li><b>接受 -40~-50% 是常態</b>，不是出場訊號。會在腰斬時砍的人，這策略對你是負期望值。</li>
+    <li><b>零槓桿</b>：不碰 BITX/MSTU/MSTX（波動衰減）；賣 put <b>全程現金擔保、永不裸賣</b>。</li>
+    <li><b>進場前先定出場</b>（見下方），拼一波最大的敵人是「賺 2x 又坐回去」。</li>
+  </ul>
+
+  <h3>✅ 優點 / ⚠️ 你真正在冒的風險</h3>
+  <table>
+    <thead><tr><th>✅ 優點</th><th>⚠️ 風險</th></tr></thead>
+    <tbody>
+      <tr><td>EV 最高（all-in≈+162%、牛+480%）</td><td><b>集中度</b>：單一公司＋單一論點，錯時無保護</td></tr>
+      <tr><td>現在 ≈0.85-0.9x mNAV＝折價買 BTC</td><td><b>反身性已啟動</b>：6/1 首度賣幣付特別股股息→折價擴大迴圈</td></tr>
+      <tr><td>含币量結構性墊高你的「底」</td><td><b>BTC 已在 MSTR 成本之下</b>(~$66-76k vs ~$60k)，股息持續抽血</td></tr>
+      <tr><td>超高 IV＝賣 put 收租特別肥</td><td><b>週期時機</b>：可能先熬 1-1.5 年熊段才等到牛</td></tr>
+      <tr><td>單一部位，管理簡單</td><td><b>極端尾部</b>：深熊+融資關閉→可能 -70%↓（機率低非零）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🎯 Sell-Put 接貨：核心觀念</h3>
+  <p style="font-size:0.88rem;"><b>現金擔保賣權(CSP)＝你被付錢去掛限價單接貨。</b>賣履約價 K 的 put、收權利金 P、鎖住 K×100 現金。沒跌到 K：白賺 P，下月再賣；跌破 K（被指派）：用 K 買 100 股，<b>實際成本 K−P</b>（比掛限價單還低）。對想長期接貨的你，<b>被指派是好事</b>。你賺 theta＋短 vega → <b>要在 IV 高時賣</b>。</p>
+  <div class="analysis-box analysis-yellow">
+    <b>關鍵取捨：</b>CSP 在「震盪/下跌/慢慢接」最強；<b>但若主升段就在眼前，CSP 會讓你踏空</b>。解法＝<b>混合：先買 1/3–1/2 現股（保住上行），其餘用 CSP 接</b>。現在 MVRV 0.41＝還沒深底、偏震盪 → CSP 適合當下。
+  </div>
+
+  <h3>⚙️ 實戰參數</h3>
+  <table>
+    <tbody>
+      <tr><td><b>履約價</b></td><td>買進區 $98–116，或 delta 0.25–0.35（想接到貨選高、想多收租選低）</td></tr>
+      <tr><td><b>天期</b></td><td>30–45 DTE（theta 效率最佳）</td></tr>
+      <tr><td><b>階梯</b></td><td>同時掛 2 個價位（如 -10% 與 -20%）分批</td></tr>
+      <tr><td><b>IV 時機</b></td><td>查 IV Rank，高檔才賣肥 put；IV 低就直接買現股</td></tr>
+      <tr><td><b>口數上限（最重要）</b></td><td>所有未平倉 put 的「履約價×100×口數」<b>≤ 你配給 MSTR 的現金</b> → 全被指派也付得出＝不爆倉</td></tr>
+      <tr><td><b>時間分散</b></td><td>建倉拆成 6–12 個月</td></tr>
+    </tbody>
+  </table>
+
+  <h3>🧮 Sell-Put 接貨試算器（輸入你的即時報價）</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;background:var(--surface2);padding:14px;border-radius:10px;">
+    <label style="font-size:0.74rem;color:var(--text2);">MSTR 現價 $<input id="c_spot" type="number" value="130" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">總預算 $<input id="c_budget" type="number" value="130000" step="1000" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">先買現股 %<input id="c_base" type="number" value="40" step="5" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">Put#1 履約 $<input id="c_k1" type="number" value="115" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">Put#1 權利金 $<input id="c_p1" type="number" value="8" step="0.5" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">Put#2 履約 $<input id="c_k2" type="number" value="100" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">Put#2 權利金 $<input id="c_p2" type="number" value="5" step="0.5" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+    <label style="font-size:0.74rem;color:var(--text2);">天期 DTE<input id="c_dte" type="number" value="35" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
+  </div>
+  <div id="calcOut" style="margin-top:12px;"></div>
+  <p style="font-size:0.74rem;color:var(--text3);margin-top:6px;">權利金隨即時 IV 變動很大，下單前用券商鏈表確認。情境 A/B 是互斥路徑（漲 vs 跌）；CSP 的本質＝在震盪/下跌中划算（情境B），在直線上漲中吃虧（情境A）。</p>
+
+  <h3>🚫 接到貨之後：別賣 covered call</h3>
+  <p style="font-size:0.88rem;">「賣 put 接貨→賣 call 收租」(the wheel) <b>對 2-4x 論點是毒藥</b>——MSTR 可能一個月從 $130 噴到 $300，你若賣了 $180 call 就被卡死、錯過主升段。<b>核心信念股不要賣 call</b>（頂多拿小部分衛星倉賣很價外的 call）。你要的是最大上行，不是小確幸權利金。</p>
+
+  <h3>🏁 出場計畫 + 論點失效（進場前定好）</h3>
+  <ul style="margin:6px 0 0 16px;font-size:0.88rem;">
+    <li><b>分批了結</b>：2x 賣 1/4（拿回本金=之後無本玩）、3x 再賣 1/4、剩 1/2 掛移動停利（從高點回撤 30% 出）。</li>
+    <li><b>論點失效就走</b>（非因跌、因故事變了）：① mNAV 折價持續擴大＋<b>連續/加速賣幣</b>；② 償付/再融資危機；③ BTC 破前低且鏈上結構轉壞無回穩。</li>
+    <li><b>加碼訊號</b>：BTC <b>MVRV-Z 轉負</b>（真深底）→ 動用 CSP 鎖住的現金加大接貨。</li>
+  </ul>
+
+  <h3>🇹🇼 台灣實務小註（非稅務建議）</h3>
+  <p style="font-size:0.84rem;color:var(--text2);">賣選擇權要用有選擇權權限的美股券商（IBKR/Firstrade 等）；複委託多半不能賣選擇權。權利金與價差屬<b>海外所得</b>，過門檻牽涉最低稅負制，自行記錄、必要時問會計師。MSTR 不配息，無股息扣繳。</p>
+
+  <div class="disclaimer">
+    ⚠️ 不構成投資建議。All-in 單一槓桿型標的可能大幅虧損甚至（極端情境）接近歸零；賣選擇權在崩跌中會被指派接刀，下檔與持股相當（僅多權利金緩衝）。試算器數字為示意，請以即時報價為準。資料截至 2026/6/8。
+  </div>
+</div>
+</div>
+
 </div>
 <script>
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1028,6 +1109,49 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
+
+/* ===== All-in MSTR sell-put accumulator calculator ===== */
+(function(){
+  var ids=['c_spot','c_budget','c_base','c_k1','c_p1','c_k2','c_p2','c_dte'];
+  function g(id){var el=document.getElementById(id);return el?(parseFloat(el.value)||0):0;}
+  function m(n){return '$'+Math.round(n).toLocaleString();}
+  function calc(){
+    var out=document.getElementById('calcOut'); if(!out)return;
+    var spot=g('c_spot'),budget=g('c_budget'),basePct=g('c_base'),k1=g('c_k1'),p1=g('c_p1'),k2=g('c_k2'),p2=g('c_p2'),dte=g('c_dte')||35;
+    if(spot<=0||budget<=0){out.innerHTML='<p style="color:var(--text3)">請輸入現價與預算</p>';return;}
+    var baseShares=Math.floor((budget*basePct/100)/spot), baseCost=baseShares*spot;
+    var remain=Math.max(0,budget-baseCost), half=remain/2;
+    var n1=k1>0?Math.floor(half/(k1*100)):0, n2=k2>0?Math.floor(half/(k2*100)):0;
+    var prem1=n1*p1*100, prem2=n2*p2*100, totalPrem=prem1+prem2;
+    var lock1=n1*k1*100, lock2=n2*k2*100, totalLock=lock1+lock2;
+    var eff1=k1-p1, eff2=k2-p2;
+    var y1=k1>0?p1/k1*100:0, y1a=y1*365/dte, y2=k2>0?p2/k2*100:0, y2a=y2*365/dte;
+    var totalShares=baseShares+(n1+n2)*100;
+    var costB=baseCost+n1*eff1*100+n2*eff2*100, avgB=totalShares>0?costB/totalShares:0;
+    var allInShares=Math.floor(budget/spot);
+    var up='';[2,3,4].forEach(function(x){
+      var you=baseShares*spot*x+totalPrem+remain, ai=allInShares*spot*x, gap=ai-you;
+      up+='<tr><td>'+x+'x ($'+Math.round(spot*x)+')</td><td class="num">'+m(you)+'</td><td class="num">'+m(ai)+'</td><td class="num neg">'+m(gap)+'</td></tr>';
+    });
+    var dn='';[1,2,3].forEach(function(x){
+      var v=totalShares*spot*x, r=costB>0?(v/costB-1)*100:0;
+      dn+='<tr><td>回到 '+x+'x ($'+Math.round(spot*x)+')</td><td class="num">'+m(v)+'</td><td class="num '+(r>=0?'pos':'neg')+'">'+(r>=0?'+':'')+r.toFixed(0)+'%</td></tr>';
+    });
+    out.innerHTML=
+      '<table><tbody><tr><td><b>① 底倉現股</b></td><td class="num">'+baseShares+' 股 @ '+m(spot)+' = '+m(baseCost)+'</td></tr><tr><td><b>剩餘可賣 put 現金</b></td><td class="num">'+m(remain)+'</td></tr></tbody></table>'+
+      '<table><thead><tr><th>賣 put</th><th>口數</th><th>收權利金</th><th>鎖現金</th><th>被指派成本</th><th>未指派報酬(年化)</th></tr></thead><tbody>'+
+      '<tr><td>$'+k1+' put</td><td class="num">'+n1+'</td><td class="num pos">'+m(prem1)+'</td><td class="num">'+m(lock1)+'</td><td class="num">'+m(eff1)+'</td><td class="num">'+y1.toFixed(1)+'% ('+y1a.toFixed(0)+'%)</td></tr>'+
+      '<tr><td>$'+k2+' put</td><td class="num">'+n2+'</td><td class="num pos">'+m(prem2)+'</td><td class="num">'+m(lock2)+'</td><td class="num">'+m(eff2)+'</td><td class="num">'+y2.toFixed(1)+'% ('+y2a.toFixed(0)+'%)</td></tr>'+
+      '<tr style="background:rgba(34,197,94,0.05)"><td><b>合計</b></td><td class="num"><b>'+(n1+n2)+'</b></td><td class="num pos"><b>'+m(totalPrem)+'</b></td><td class="num"><b>'+m(totalLock)+'</b></td><td colspan="2"></td></tr></tbody></table>'+
+      '<div class="analysis-box analysis-bear" style="margin:8px 0"><b>情境 A — 上漲（put 沒接到貨，你只有底倉+現金+權利金）：踏空風險</b>'+
+      '<table><thead><tr><th>MSTR 漲到</th><th>你的總值</th><th>若當初全買現股</th><th>踏空成本</th></tr></thead><tbody>'+up+'</tbody></table></div>'+
+      '<div class="analysis-box analysis-bull" style="margin:8px 0"><b>情境 B — 下跌全接到貨（你變成 all-in）：'+totalShares+' 股，平均成本 '+m(avgB)+'</b>'+
+      '<table><thead><tr><th>之後 MSTR 到</th><th>市值</th><th>報酬(對投入)</th></tr></thead><tbody>'+dn+'</tbody></table></div>'+
+      '<p style="font-size:0.76rem;color:var(--text3)">預算使用：底倉 '+m(baseCost)+' + put 鎖定 '+m(totalLock)+' = '+m(baseCost+totalLock)+' / '+m(budget)+'（'+((baseCost+totalLock)/budget*100).toFixed(0)+'%），其餘為緩衝。口數上限規則確保全被指派也付得出＝不爆倉。</p>';
+  }
+  ids.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calc);});
+  calc();
+})();
 </script>
 </body>
 </html>
