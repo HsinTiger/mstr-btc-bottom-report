@@ -189,7 +189,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <div class="sub">All-in MSTR → AI 價值鏈 → MSTR vs BMNR → 新增「LEAP 槓桿實測 + BTC 熊市規律」</div>
   <div class="date">📅 2026/6/9 · v6 · 新增 LEAP call 兩方案量化(CBOE實鏈表) + 比特幣四輪熊市觸底/反彈規律</div>
   <div class="badge-row">
-    <span class="badge badge-purple">🎰 新：100% LEAP≠乾淨2x（翻倍只+132%）</span>
+    <span class="badge badge-purple">🎰 LEAP：深價內=股票替代(carry 7%)，價平最糟(28%)</span>
     <span class="badge badge-purple">📉 新：底部多「磨盤緩漲」非暴力V轉</span>
     <span class="badge badge-yellow">LEAP回本門檻+42% / IV Percentile 98%偏貴</span>
     <span class="badge badge-green">MSTR mNAV 0.80x / BMNR ~1.0x（6/8實查）</span>
@@ -524,12 +524,41 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <h2>🎰 用 MSTR LEAP Call 放大槓桿 — 你的兩個方案實測</h2>
   <p style="font-size:0.82rem;color:var(--text2);">錨點（CBOE 即時，2026/6/9）：MSTR <b>$127.5</b>；<b>2027/12/17 到期</b>、價平 <b>$125 call 權利金 $56.03</b>、<b>IV 88%</b>、delta 0.73、theta -$0.035/天/股。下方所有數字用 Black-Scholes＋真實鏈表算出，腳本可重現。</p>
 
-  <div class="analysis-box analysis-purple" style="font-size:0.92rem;">
-    <b>三句話結論：</b><br>
-    1️⃣ <b>方案1（100% 價平 LEAP）≠ 乾淨 2x。</b>它是 <b>2.28x 名目／1.67x 彈性</b>，但你付了 43% 現價的權利金（其中 <b>95.5% 是時間價值</b>），<b>到期需漲 +42% 才回本</b>；MSTR 持平 → <b>-96%</b>；翻倍 → 只 <b>+132%</b>（實際槓桿僅 1.32x）。<br>
-    2️⃣ <b>方案2（50%call/25%M/25%B）翻倍時 +109%，幾乎等於純現貨；但持平 -48%（現貨是 0%）。</b>你為「翻倍時多一點點」付出「持平/下跌慘很多」。<b>對「只賭翻倍」的論點，選擇權其實沒效率。</b><br>
-    3️⃣ <b>若真要用 LEAP 賭翻倍，改用「深價內 ITM」（如 $100 call），別買價平。</b>回本門檻降到 +30%、時間價值只 58%、翻倍報酬一樣（+136%），行為更像「乾淨槓桿股」。<br>
-    ⚠️ <b>時機警示：</b>現在 MSTR IV ~88%、<b>IV Percentile ~98%</b>（過去一年 98% 的日子比現在便宜）→ <b>現在買長天期 call 在波動率上是歷史級貴的時點</b>，有 vega 逆風。
+  <div class="analysis-box analysis-review" style="font-size:0.93rem;">
+    <b>🙏 先修正我上一版講得太武斷的地方 —— 你的直覺其實是對的。</b><br>
+    你想用 LEAP 拿「類似持有現股的 2 倍曝險、又避開耗損」，這個策略<b>真的存在，叫「股票替代（stock replacement）」，而且可行</b>。
+    問題<b>不在 LEAP，在「價平(ATM)」這個履約價</b>——它剛好是<b>所有履約價裡時間價值最高、衰減最重</b>的那一個。我上一版用價平去代表「LEAP」，對你不公平。<br>
+    <b>真相是一條光譜（見下方實鏈表）：</b>履約價越深價內，behavior 越像現股、衰減越低；越靠近價平，槓桿越高但衰減越兇。
+  </div>
+  <div class="analysis-box analysis-yellow" style="font-size:0.92rem;">
+    <b>但有一個你避不開的硬限制：MSTR 的 IV 高達 88%，所以「高槓桿」和「低衰減」不可兼得。</b><br>
+    • 想要<b>低衰減（像現股）</b>：深價內 $50 call → 年化持有成本只 <b>~7%</b>（跟融資利率差不多！）、持平只虧 15%，<b>但只有 ~1.4x</b>。<br>
+    • 想要<b>真正 2x</b>：必須逼近價平 → 年化成本衝到 <b>~28%</b>、持平虧 96%。<br>
+    👉 對 MSTR 來說，<b>「2x 又免耗損」不存在</b>；你只能在「1.4x 低成本」與「2x 高成本」之間選。最佳平衡點通常在 <b>delta 0.85–0.90（$70–90 call）：~1.6–1.8x、年化成本 11–17%</b>。
+  </div>
+</div>
+
+<!-- 成本光譜 -->
+<div class="section">
+  <h3>📐 履約價光譜：每個 strike 的「真實持有成本」（CBOE 實鏈表 2026/6/9，spot $127.49）</h3>
+  <p style="font-size:0.84rem;color:var(--text2);"><b>「年化持有成本」= 若 MSTR 一年原地不動，這個槓桿讓你損失幾 %。</b>這才是公平的「時間耗損」衡量——拿它去比「融資 2x≈6–7%/年」「MSTU 2x ETF≈79%/年波動衰減」。</p>
+  <table>
+    <thead><tr><th>履約價</th><th>權利金</th><th>時間價值%</th><th>delta<br>(像現股?)</th><th>名目槓桿</th><th>回本門檻</th><th>持平@到期</th><th class="num">年化持有成本</th><th>定位</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(34,197,94,0.07)"><td><b>$50 深價內</b></td><td class="num">$91.1</td><td class="num pos">15%</td><td class="num">0.93</td><td class="num">1.40x</td><td class="num pos">+11%</td><td class="num">-15%</td><td class="num pos"><b>7.0%</b></td><td class="pos">最像現股，≈融資成本</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td><b>$70 價內</b></td><td class="num">$79.7</td><td class="num pos">28%</td><td class="num">0.88</td><td class="num">1.60x</td><td class="num">+17%</td><td class="num">-28%</td><td class="num pos"><b>11.4%</b></td><td class="pos">低衰減槓桿</td></tr>
+      <tr style="background:rgba(168,85,247,0.08)"><td><b>$85 價內 ⭐</b></td><td class="num">$72.3</td><td class="num">41%</td><td class="num">0.84</td><td class="num">1.76x</td><td class="num">+23%</td><td class="num">-41%</td><td class="num warn"><b>15.3%</b></td><td class="warn">最佳平衡(近2x、可承受)</td></tr>
+      <tr><td>$100 價內</td><td class="num">$65.6</td><td class="num">58%</td><td class="num">0.80</td><td class="num">1.94x</td><td class="num">+30%</td><td class="num neg">-58%</td><td class="num warn">19.6%</td><td>接近2x、成本明顯</td></tr>
+      <tr style="background:rgba(239,68,68,0.06)"><td><b>$125 價平 (你的原案)</b></td><td class="num">$56.0</td><td class="num neg">96%</td><td class="num">0.74</td><td class="num">2.28x</td><td class="num neg">+42%</td><td class="num neg">-96%</td><td class="num neg"><b>27.6%</b></td><td class="neg">槓桿最高但衰減最重</td></tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-bull">
+    <b>所以「全都是時間價值」只對「價平」成立（內含值≈0 是定義使然）。深價內完全不是：</b>
+    $50 call 有 $77.5 內含值、只有 15% 時間價值、delta 0.93——<b>它幾乎就是「借錢買的 MSTR」，年化成本 7% ≈ 券商融資</b>，而且還比融資多一個好處：<b>最大虧損鎖死在權利金、永遠不會被margin call強制平倉</b>。這正是你要的「像持有現股的槓桿」。
+  </div>
+  <div class="analysis-box analysis-bear">
+    <b>為什麼價平是最糟的選擇？</b>價平權利金幾乎全是「一個價平賣權的價值」——也就是<b>下跌保險</b>。但你是<b>看漲、要槓桿</b>的人，根本不需要這麼貴的下跌保險。
+    往價內移＝把「時間價值（保險）」換成「內含值（真正的股票曝險）」。<b>你付的錢從「買保險」變成「買股票」，這才是你要的。</b>
   </div>
 </div>
 
@@ -684,8 +713,9 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <h3>🎯 我的最終建議</h3>
   <div class="analysis-box analysis-review">
     <ol style="margin:0 0 0 18px;font-size:0.9rem;line-height:1.9;">
-      <li><b>方案1（100% 價平 LEAP）：不建議。</b>它把「波動拖累」換成「更硬的條件單」——18 個月內 MSTR 不漲 +42% 你就虧、持平虧 96%、下跌歸零，而且現在 IV Percentile 98%＝買在波動率最貴的時候。集中度＋歸零＋vega 三重疊加。</li>
-      <li><b>方案2（50/25/25）：可以，但把那 50% 的「價平」換成「深價內 ITM」。</b>用 $100（或更低）的 ITM LEAP：回本門檻 +30%（非 +42%）、時間價值只 58%（非 95%）、翻倍報酬一樣 +136%、delta 0.80 更像槓桿股、theta 流血少很多。</li>
+      <li><b>「價平」不建議，但「深價內 LEAP」正是你要的股票替代——這個方向我支持。</b>100% 壓<u>價平</u>才是問題（+42% 才回本、持平 -96%、IV Percentile 98% 買貴）。改用 <b>深價內（$50–70，delta 0.88–0.93）</b>：年化成本只 7–11%≈融資、持平只虧 15–28%、最大虧損鎖死、不會被 margin call。這就是「像現股的低耗損槓桿」。</li>
+      <li><b>想要更接近 2x，就接受成本：選 delta 0.85（$85 call）當平衡點</b>——約 1.76x、年化 15%、回本 +23%。要硬上 2x 才用價平，但要清楚那是 ~28%/年的高碳水部位。</li>
+      <li><b>方案2（50/25/25）可行，但把那 50% 的「價平」換成「深價內」。</b>翻倍報酬幾乎一樣，但持平/小跌時不會像價平那樣腰斬。</li>
       <li><b>口數上限鐵則：</b>選擇權部位「就算全歸零也不影響生活」。LEAP 的 50% 要是你輸得起的錢。</li>
       <li><b>分批 + 看 IV：</b>別一次買滿。IV 從 88% 回落時再加碼長天期 call（vega 順風）；IV 飆高時改買現貨。</li>
       <li><b>提早翻倍就分批了結</b>（賺回剩餘時間價值），別執著抱到期；論點若轉成「反身性加速賣幣」則果斷出場。</li>
