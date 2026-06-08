@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSTR × AI龍頭 — 2-4年進攻配置決策報告 v5 (新增 MSTR vs BMNR)</title>
+<title>MSTR × AI龍頭 — 2-4年進攻配置決策報告 v6 (LEAP槓桿+BTC熊市規律)</title>
 <style>
 :root {
   --bg: #0a0c14; --surface: #131722; --surface2: #1a1f2e; --surface3: #222838;
@@ -185,21 +185,22 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 <div class="container">
 
 <div class="hero">
-  <h1>🏛️ MSTR × AI龍頭 — 2~4年進攻配置 v5</h1>
-  <div class="sub">從「100% All-in MSTR」→「MSTR + AI 價值鏈」→ 新增「MSTR vs BMNR 數位財庫比例配置」</div>
-  <div class="date">📅 2026/6/8 · v5 · 新增 BTC財庫(MSTR) vs ETH財庫(BMNR) 比例決策 + 糾正第三方 agent 錯誤</div>
+  <h1>🏛️ MSTR × AI龍頭 — 2~4年進攻配置 v6</h1>
+  <div class="sub">All-in MSTR → AI 價值鏈 → MSTR vs BMNR → 新增「LEAP 槓桿實測 + BTC 熊市規律」</div>
+  <div class="date">📅 2026/6/9 · v6 · 新增 LEAP call 兩方案量化(CBOE實鏈表) + 比特幣四輪熊市觸底/反彈規律</div>
   <div class="badge-row">
-    <span class="badge badge-purple">🆚 新分頁：MSTR vs BMNR 怎麼分</span>
-    <span class="badge badge-red">F&amp;G=12 極度恐懼</span>
-    <span class="badge badge-red">BTC -51% / 站上200週均線</span>
-    <span class="badge badge-yellow">MSTR 6/1 首度賣幣＝反身性啟動</span>
-    <span class="badge badge-green">結論：別 75/25 壓 MSTR，傾向 ~55/45 且分三段式</span>
+    <span class="badge badge-purple">🎰 新：100% LEAP≠乾淨2x（翻倍只+132%）</span>
+    <span class="badge badge-purple">📉 新：底部多「磨盤緩漲」非暴力V轉</span>
+    <span class="badge badge-yellow">LEAP回本門檻+42% / IV Percentile 98%偏貴</span>
+    <span class="badge badge-green">MSTR mNAV 0.80x / BMNR ~1.0x（6/8實查）</span>
   </div>
 </div>
 
 <div class="tabs">
   <button class="tab-btn active" data-tab="overview">🎯 結論先看</button>
   <button class="tab-btn" data-tab="bmnr">🆚 MSTR vs BMNR ★新</button>
+  <button class="tab-btn" data-tab="leaps">🎰 LEAP槓桿 ★新</button>
+  <button class="tab-btn" data-tab="btccycle">📉 BTC熊市規律 ★新</button>
   <button class="tab-btn" data-tab="plan">💼 規劃v4</button>
   <button class="tab-btn" data-tab="workflow">🔬 Workflow</button>
   <button class="tab-btn" data-tab="berkshire">🏦 波克夏實證</button>
@@ -512,6 +513,248 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <div class="disclaimer">
     ⚠️ 不構成投資建議。MSTR/BMNR 皆為高波動槓桿型加密財庫個股，普通股可能 -70%↑ 甚至（極端情境）逼近歸零。BMNR 多項 2026 數字無法以公開來源核實到所引精度，請於下單前自行用券商/官方 IR 覆核。事實型數據查證、展望型為推估。資料截至 2026/6/8。
   </div>
+</div>
+
+</div>
+
+<!-- ============ TAB: LEAP 槓桿 ============ -->
+<div id="tab-leaps" class="tab-content">
+
+<div class="section">
+  <h2>🎰 用 MSTR LEAP Call 放大槓桿 — 你的兩個方案實測</h2>
+  <p style="font-size:0.82rem;color:var(--text2);">錨點（CBOE 即時，2026/6/9）：MSTR <b>$127.5</b>；<b>2027/12/17 到期</b>、價平 <b>$125 call 權利金 $56.03</b>、<b>IV 88%</b>、delta 0.73、theta -$0.035/天/股。下方所有數字用 Black-Scholes＋真實鏈表算出，腳本可重現。</p>
+
+  <div class="analysis-box analysis-purple" style="font-size:0.92rem;">
+    <b>三句話結論：</b><br>
+    1️⃣ <b>方案1（100% 價平 LEAP）≠ 乾淨 2x。</b>它是 <b>2.28x 名目／1.67x 彈性</b>，但你付了 43% 現價的權利金（其中 <b>95.5% 是時間價值</b>），<b>到期需漲 +42% 才回本</b>；MSTR 持平 → <b>-96%</b>；翻倍 → 只 <b>+132%</b>（實際槓桿僅 1.32x）。<br>
+    2️⃣ <b>方案2（50%call/25%M/25%B）翻倍時 +109%，幾乎等於純現貨；但持平 -48%（現貨是 0%）。</b>你為「翻倍時多一點點」付出「持平/下跌慘很多」。<b>對「只賭翻倍」的論點，選擇權其實沒效率。</b><br>
+    3️⃣ <b>若真要用 LEAP 賭翻倍，改用「深價內 ITM」（如 $100 call），別買價平。</b>回本門檻降到 +30%、時間價值只 58%、翻倍報酬一樣（+136%），行為更像「乾淨槓桿股」。<br>
+    ⚠️ <b>時機警示：</b>現在 MSTR IV ~88%、<b>IV Percentile ~98%</b>（過去一年 98% 的日子比現在便宜）→ <b>現在買長天期 call 在波動率上是歷史級貴的時點</b>，有 vega 逆風。
+  </div>
+</div>
+
+<!-- 方案1 -->
+<div class="section">
+  <h3>① 方案1拆解：100% 資金壓 價平 Dec-2027 LEAP</h3>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">名目槓桿(現價/權利金)</div><div class="value" style="font-size:1.4rem;">2.28x</div><div class="note">每$1控制$2.28股票</div></div>
+    <div class="kpi"><div class="label">彈性(delta調整,當下)</div><div class="value warn" style="font-size:1.4rem;">1.67x</div><div class="note">這才是真實放大率</div></div>
+    <div class="kpi"><div class="label">到期回本門檻</div><div class="value neg" style="font-size:1.4rem;">+42%</div><div class="note">需站上 $181</div></div>
+    <div class="kpi"><div class="label">時間價值占權利金</div><div class="value neg" style="font-size:1.4rem;">95.5%</div><div class="note">$53.5 / $56 會歸零</div></div>
+  </div>
+  <h4>到期損益（vs 純現貨 vs 名目2x ETF）</h4>
+  <table>
+    <thead><tr><th>MSTR 到期價</th><th>漲跌</th><th class="num">100% 現貨</th><th class="num">100% LEAP</th><th class="num">名目2x ETF*</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,0.05)"><td>$76</td><td class="neg">-40%</td><td class="num neg">-40%</td><td class="num neg">-100%</td><td class="num neg">-80%</td></tr>
+      <tr style="background:rgba(239,68,68,0.05)"><td>$102</td><td class="neg">-20%</td><td class="num neg">-20%</td><td class="num neg">-100%</td><td class="num neg">-40%</td></tr>
+      <tr style="background:rgba(234,179,8,0.06)"><td>$128（持平）</td><td>0%</td><td class="num">0%</td><td class="num neg"><b>-96%</b></td><td class="num">0%</td></tr>
+      <tr><td>$153</td><td class="pos">+20%</td><td class="num pos">+20%</td><td class="num neg">-50%</td><td class="num pos">+40%</td></tr>
+      <tr><td>$181（回本）</td><td class="pos">+42%</td><td class="num pos">+42%</td><td class="num">0%</td><td class="num pos">+84%</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td>$255（翻倍）</td><td class="pos">+100%</td><td class="num pos">+100%</td><td class="num pos"><b>+132%</b></td><td class="num pos">+200%</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td>$382（3倍）</td><td class="pos">+200%</td><td class="num pos">+200%</td><td class="num pos">+360%</td><td class="num pos">+400%</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td>$510（4倍）</td><td class="pos">+300%</td><td class="num pos">+300%</td><td class="num pos">+587%</td><td class="num pos">+600%</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.74rem;color:var(--text3);">*名目2x為「無耗損」理論值僅供參照；真實 MSTU/MSTX 有嚴重波動衰減（見 ④）。</p>
+  <div class="analysis-box analysis-bear">
+    <b>反直覺重點：在「剛好翻倍」這件事上，LEAP 的實際槓桿只有 1.32x（+132% vs 現貨 +100%）</b>，不是你想的 2x。
+    因為你先付了 43% 權利金。凸性（convexity）要到 <b>3 倍（+360%）、4 倍（+587%）</b>才真正發威。<br>
+    👉 <b>選擇權獎勵的是「大漲、快漲」，不是「剛好翻倍」。</b>賭「只翻倍」用選擇權＝花大錢買一個你用不太到的凸性。
+  </div>
+  <h4>不同漲幅下的「實際槓桿」（持有到期）</h4>
+  <table>
+    <thead><tr><th>MSTR</th><th class="num">現貨報酬</th><th class="num">LEAP報酬</th><th class="num">實際槓桿</th></tr></thead>
+    <tbody>
+      <tr><td>+20%</td><td class="num pos">+20%</td><td class="num neg">-50%</td><td class="num neg">虧（門檻內）</td></tr>
+      <tr><td>+50%</td><td class="num pos">+50%</td><td class="num pos">+18%</td><td class="num warn">0.36x</td></tr>
+      <tr><td>+100%(翻倍)</td><td class="num pos">+100%</td><td class="num pos">+132%</td><td class="num">1.32x</td></tr>
+      <tr><td>+150%</td><td class="num pos">+150%</td><td class="num pos">+246%</td><td class="num">1.64x</td></tr>
+      <tr><td>+200%(3倍)</td><td class="num pos">+200%</td><td class="num pos">+360%</td><td class="num pos">1.80x</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 時間價值耗損 -->
+<div class="section">
+  <h3>② 你問的核心：到底承擔多少「時間價值耗損」？</h3>
+  <p style="font-size:0.88rem;">價平 $125 call 權利金 $56 = <b>內含價值 $2.5 + 時間價值 $53.5</b>。這 <b>$53.5（95.5%）就是你要承擔的時間價值</b>——MSTR 若到期沒漲，它全部歸零。</p>
+  <h4>時間價值衰減路徑（假設 MSTR 一直待在 $127.5 不動）</h4>
+  <table>
+    <thead><tr><th>距到期</th><th class="num">Call 價值</th><th class="num">累計虧損(對$56)</th><th>白話</th></tr></thead>
+    <tbody>
+      <tr><td>18 個月（現在）</td><td class="num">$56</td><td class="num">-1%</td><td>剛買</td></tr>
+      <tr><td>12 個月</td><td class="num">$46</td><td class="num neg">-18%</td><td>第一年燒掉約 1/5</td></tr>
+      <tr><td>9 個月</td><td class="num">$40</td><td class="num neg">-28%</td><td>加速中</td></tr>
+      <tr><td>6 個月</td><td class="num">$33</td><td class="num neg">-41%</td><td>theta 咬人</td></tr>
+      <tr><td>3 個月</td><td class="num">$24</td><td class="num neg">-57%</td><td>急速崩</td></tr>
+      <tr><td>1 個月</td><td class="num">$14</td><td class="num neg">-75%</td><td>—</td></tr>
+      <tr style="background:rgba(239,68,68,0.06)"><td>到期</td><td class="num">$2.5</td><td class="num neg"><b>-96%</b></td><td>幾乎全損</td></tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-yellow">
+    <b>量化回答：</b><br>
+    • <b>方案1（100% 價平 LEAP）：</b>若 MSTR 18 個月後持平，你<b>燒掉 96% 的本金</b>。時間價值衰減「非線性」——第一年只掉 ~18%，最後半年掉最兇。<br>
+    • <b>方案2（50% 在這張 call）：</b>$10萬中放 8 口 call（$44,824），其中 <b>時間價值 = $42,824 = 全組合的 42.8%</b>。也就是 <b>~43% 的總資產是「會隨時間蒸發、要靠漲幅賺回來」的部分</b>；另外 50% 現貨不受 theta 影響。
+  </div>
+</div>
+
+<!-- 方案2 -->
+<div class="section">
+  <h3>③ 方案2：50% LEAP + 25% MSTR現貨 + 25% BMNR現貨（$10萬示範）</h3>
+  <p style="font-size:0.84rem;color:var(--text2);">建倉：8 口 $125 call（$44,824，控 800 股名目 ~$102k）＋ MSTR 196 股（$25k）＋ BMNR 1,572 股（$25k）。BMNR 倍數設為比 MSTR 略高（更深折扣、更高 beta）。</p>
+  <table>
+    <thead><tr><th>情境</th><th class="num">MSTR</th><th class="num">BMNR</th><th class="num">方案2</th><th class="num">100%LEAP</th><th class="num">100%MSTR現貨</th><th class="num">55/45現貨</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,0.05)"><td>深熊</td><td class="num neg">-50%</td><td class="num neg">-60%</td><td class="num neg"><b>-78%</b></td><td class="num neg">-100%</td><td class="num neg">-50%</td><td class="num neg">-54%</td></tr>
+      <tr style="background:rgba(239,68,68,0.04)"><td>熊</td><td class="num neg">-20%</td><td class="num neg">-30%</td><td class="num neg">-62%</td><td class="num neg">-100%</td><td class="num neg">-20%</td><td class="num neg">-24%</td></tr>
+      <tr style="background:rgba(234,179,8,0.06)"><td><b>持平</b></td><td class="num">0%</td><td class="num">0%</td><td class="num neg"><b>-48%</b></td><td class="num neg">-96%</td><td class="num">0%</td><td class="num">0%</td></tr>
+      <tr><td>小漲</td><td class="num pos">+30%</td><td class="num pos">+40%</td><td class="num neg">-1%</td><td class="num neg">-27%</td><td class="num pos">+30%</td><td class="num pos">+32%</td></tr>
+      <tr><td>漲</td><td class="num pos">+50%</td><td class="num pos">+60%</td><td class="num pos">+30%</td><td class="num pos">+18%</td><td class="num pos">+50%</td><td class="num pos">+54%</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td><b>翻倍</b></td><td class="num pos">+100%</td><td class="num pos">+120%</td><td class="num pos"><b>+109%</b></td><td class="num pos">+132%</td><td class="num pos">+100%</td><td class="num pos">+109%</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td>登月</td><td class="num pos">+200%</td><td class="num pos">+250%</td><td class="num pos">+268%</td><td class="num pos">+360%</td><td class="num pos">+200%</td><td class="num pos">+222%</td></tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-bear">
+    <b>致命的對照：在「翻倍」那行，方案2 (+109%) ≈ 100%MSTR現貨 (+100%) ≈ 55/45現貨 (+109%)。</b>
+    你費盡心思加了 50% 槓桿選擇權，<b>翻倍時的報酬卻跟乾脆全買現貨差不多</b>——但「持平」那行方案2 是 <b>-48%</b>，現貨是 <b>0%</b>。
+    <b>你用「持平/小跌大幅落後」換到了「翻倍時幾乎沒有額外好處」。</b>方案2 只有在「登月(3倍)」才明顯贏現貨。
+  </div>
+  <h4>但若「翻倍提早發生」並中途賣掉（賺回剩餘時間價值）</h4>
+  <table>
+    <thead><tr><th>翻倍($255)發生在</th><th class="num">Call 價值</th><th class="num">報酬</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(34,197,94,0.05)"><td>立刻（剩18個月，IV持平）</td><td class="num">$161</td><td class="num pos"><b>+188%</b></td></tr>
+      <tr><td>剩 12 個月（IV回落75%）</td><td class="num">$146</td><td class="num pos">+160%</td></tr>
+      <tr><td>剩 6 個月（IV 65%）</td><td class="num">$135</td><td class="num pos">+140%</td></tr>
+      <tr><td>等到期（只剩內含值）</td><td class="num">$130</td><td class="num pos">+132%</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--text2);">→ <b>選擇權獎勵「快」。</b>翻倍若在前期就發生、且你願意賣，能多賺剩餘時間價值（最多 +188% vs 到期 +132%）。但這要求你看對方向「又看對時機」。拖到後期才漲，凸性優勢被 theta 吃掉。</p>
+</div>
+
+<!-- LEAP vs ETF -->
+<div class="section">
+  <h3>④ LEAP vs 2x 每日重設 ETF（MSTU／MSTX）—— 你「避開再平衡成本」對嗎？</h3>
+  <div class="analysis-box analysis-bull"><b>✅ 你的直覺正確：LEAP 完全沒有每日重設的波動拖累。</b>但代價是換成「前置 IV/時間價值 + 回本門檻 + vega 風險」。</div>
+  <h4>MSTU／MSTX 真實波動衰減證據（agent 查證）</h4>
+  <table>
+    <thead><tr><th>區間</th><th>MSTR 實際</th><th>2x「理論」</th><th>ETF 實際</th><th>結論</th></tr></thead>
+    <tbody>
+      <tr><td>2024底大漲單月</td><td class="pos">—</td><td class="num">+153%</td><td class="num">MSTU+148% / MSTX+135%</td><td class="warn">落後理論最多18個百分點</td></tr>
+      <tr style="background:rgba(239,68,68,0.05)"><td>某一年期(震盪+跌)</td><td class="num neg">-55%</td><td class="num">~-90%</td><td class="num neg"><b>MSTU -91% / MSTX -92%</b></td><td class="neg">跌勢忠實放大</td></tr>
+      <tr style="background:rgba(239,68,68,0.05)"><td>某 YTD</td><td class="num pos">+16.6%</td><td class="num">~+33%</td><td class="num neg"><b>MSTU -4% / MSTX -26%</b></td><td class="neg">標的漲 ETF 卻虧＝路徑依賴</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--text2);">機制：每日重設＝「漲後追買、跌後殺賣」，在 MSTR ~90% 年化波動下，<b>即使一年原地踏步，2x ETF 中位數約 -79%</b>（Elm Wealth 模型）；加上 swap 容量不足被迫用短天期選擇權拼湊、費用率 1%+。<b>長期持有期望值嚴重偏負。</b></p>
+  <table>
+    <thead><tr><th>面向</th><th>ATM LEAP Call</th><th>2x 每日 ETF</th></tr></thead>
+    <tbody>
+      <tr><td>每日再平衡損耗</td><td class="pos">無 ✓</td><td class="neg">有（核心耗損）</td></tr>
+      <tr><td>主要風險</td><td>theta + vega + 歸零</td><td>波動拖累 + 追蹤失敗</td></tr>
+      <tr><td>回本門檻</td><td class="neg">+42%（先付保費）</td><td class="pos">無（小漲即放大）</td></tr>
+      <tr><td>到期</td><td class="neg">有，需展期</td><td class="pos">無</td></tr>
+      <tr><td>誰勝</td><td>大漲、快漲、震盪後上攻</td><td>平滑單向快漲、短持有</td></tr>
+      <tr><td>兩者皆輸</td><td colspan="2" class="warn">長期橫盤——ETF 被波動拖死、LEAP 被 theta 拖死</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 機率與建議 -->
+<div class="section">
+  <h3>⑤ MSTR 18 個月翻倍機率 + 最終建議 <span class="tag e">分析師估算</span></h3>
+  <p style="font-size:0.88rem;">恆等式：<b>MSTR 股價 = (每股BTC) × (BTC價) × (mNAV)</b>。要翻倍，三者乘積須翻倍。<b>關鍵壞消息：折價(0.80x)下「每股BTC增積引擎已熄火」</b>（公司門檻 ~1.22x 才增積；現在反而賣幣付息→每股BTC可能不增反減）。所以翻倍幾乎全靠 <b>BTC漲價 + mNAV重評</b>。</p>
+  <table>
+    <thead><tr><th>達成 $255 的路徑</th><th>BTC 價</th><th>需要 mNAV</th><th>評註</th></tr></thead>
+    <tbody>
+      <tr><td>A 純靠BTC、折價不變</td><td class="num">~$126k</td><td class="num">0.80x</td><td>BTC須翻倍</td></tr>
+      <tr style="background:rgba(34,197,94,0.04)"><td><b>B 最現實：均衡</b></td><td class="num">~$80k</td><td class="num">1.26x</td><td class="pos">BTC+27% + 折價收斂</td></tr>
+      <tr style="background:rgba(34,197,94,0.04)"><td><b>D BTC大牛+輕收斂</b></td><td class="num">~$100k</td><td class="num">~1.0x</td><td class="pos">BTC+59% + 回平價</td></tr>
+      <tr><td>C 純靠重評</td><td class="num">~$70k</td><td class="num">1.44x</td><td>信心完全回歸</td></tr>
+    </tbody>
+  </table>
+  <div class="kpi-grid" style="margin-top:10px;">
+    <div class="kpi"><div class="label">牛市翻倍機率</div><div class="value pos">55–70%</div><div class="note">BTC $150-200k+信心回歸</div></div>
+    <div class="kpi"><div class="label">基準翻倍機率</div><div class="value warn">35–45%</div><div class="note">BTC $90-110k+mNAV 1.0-1.2x</div></div>
+    <div class="kpi"><div class="label">熊市翻倍機率</div><div class="value neg">5–15%</div><div class="note">BTC橫盤/破$50k</div></div>
+    <div class="kpi"><div class="label">分析師目標中位數</div><div class="value" style="font-size:1.3rem;">$322.5</div><div class="note">區間$185-705；Mizuho下調$265</div></div>
+  </div>
+  <p style="font-size:0.8rem;color:var(--text2);">綜合粗估 18 個月翻倍機率 <b>~35-45%</b>。最大非線性風險＝<b>反身性折價自我強化</b>（折價→不能增積→賣幣→信心↓→折價更深）。注意：翻倍門檻 $255 vs 到期回本門檻 $181，意思是<b>「股票翻倍」與「你的 ATM call 能賺」之間還有距離——股票要漲超過 +42% 你才開始賺，漲到 +100% 才 +132%。</b></p>
+
+  <h3>🎯 我的最終建議</h3>
+  <div class="analysis-box analysis-review">
+    <ol style="margin:0 0 0 18px;font-size:0.9rem;line-height:1.9;">
+      <li><b>方案1（100% 價平 LEAP）：不建議。</b>它把「波動拖累」換成「更硬的條件單」——18 個月內 MSTR 不漲 +42% 你就虧、持平虧 96%、下跌歸零，而且現在 IV Percentile 98%＝買在波動率最貴的時候。集中度＋歸零＋vega 三重疊加。</li>
+      <li><b>方案2（50/25/25）：可以，但把那 50% 的「價平」換成「深價內 ITM」。</b>用 $100（或更低）的 ITM LEAP：回本門檻 +30%（非 +42%）、時間價值只 58%（非 95%）、翻倍報酬一樣 +136%、delta 0.80 更像槓桿股、theta 流血少很多。</li>
+      <li><b>口數上限鐵則：</b>選擇權部位「就算全歸零也不影響生活」。LEAP 的 50% 要是你輸得起的錢。</li>
+      <li><b>分批 + 看 IV：</b>別一次買滿。IV 從 88% 回落時再加碼長天期 call（vega 順風）；IV 飆高時改買現貨。</li>
+      <li><b>提早翻倍就分批了結</b>（賺回剩餘時間價值），別執著抱到期；論點若轉成「反身性加速賣幣」則果斷出場。</li>
+      <li><b>更穩的替代：</b>若你要的其實是「槓桿但別歸零」，深價內 LEAP（delta 0.8+）或「現貨 + 少量 OTM call 當彩券」比「100% 價平」健康得多。</li>
+    </ol>
+  </div>
+  <div class="disclaimer">⚠️ 不構成投資建議。選擇權可能 100% 歸零，且時間價值與 IV 變動會在股價未跌時就侵蝕價值。數字以 Black-Scholes＋CBOE 2026/6/9 鏈表計算，下單前以券商即時報價為準。台股投資人需用有選擇權權限的美股券商（IBKR 等），複委託多半不能買長天期選擇權；權利金損益屬海外所得。</div>
+</div>
+
+</div>
+
+<!-- ============ TAB: BTC 熊市規律 ============ -->
+<div id="tab-btccycle" class="tab-content">
+
+<div class="section">
+  <h2>📉 比特幣熊市規律 — 跌多久觸底？反彈是暴力還是磨盤？</h2>
+  <div class="analysis-box analysis-purple" style="font-size:0.93rem;">
+    <b>兩個答案先講：</b><br>
+    ⏱️ <b>觸底時間：</b>除 2011 年（早期小市場、~5 個月閃崩）外，過去三輪熊市都是<b>「從高點跌約 12–14 個月見底」</b>，跌幅 <b>-77% ~ -86%</b>，且一輪比一輪淺（-94%→-86%→-84%→-77%）。從高點到收復前高約 <b>2–3 年</b>。<br>
+    🐌 <b>反彈型態：暴力 V 轉直接創高的機率「低」。</b>歷史規律是——<b>「底部」本身常是一根暴力的恐慌插針（capitulation），但底部之後的「復甦」幾乎都是磨盤式的緩慢再累積（reaccumulation），盤好幾個月到一年才啟動主升段。</b>唯一一次像樣的「暴力反彈」（2019 上半年 +330%）<b>後來失敗、回測破底</b>。所以賭「觸底就暴力噴出創高」歷史上是輸家側。
+  </div>
+</div>
+
+<div class="section">
+  <h3>📊 四輪熊市對照</h3>
+  <table>
+    <thead><tr><th>週期</th><th>高點</th><th>低點</th><th>跌幅</th><th>高→底時間</th><th>收復前高</th><th>底部後型態</th></tr></thead>
+    <tbody>
+      <tr><td>2011</td><td>~$32（6月）</td><td>~$2（11月）</td><td class="num neg">-93%</td><td class="num">~5 個月</td><td>~1.5–2 年</td><td>快速但小市場</td></tr>
+      <tr><td>2013–15</td><td>~$1,150（13/12）</td><td>~$170（15/1）</td><td class="num neg">-86%</td><td class="num">~13–14 個月</td><td>~3 年</td><td class="warn">磨盤一整年才動</td></tr>
+      <tr><td>2017–18</td><td>~$19,800（17/12）</td><td>~$3,200（18/12）</td><td class="num neg">-84%</td><td class="num">~12 個月</td><td>~3 年</td><td class="warn">先暴力彈+330%→失敗回測</td></tr>
+      <tr><td>2021–22</td><td>~$69,000（21/11）</td><td>~$15,500（22/11）</td><td class="num neg">-77%</td><td class="num">~12 個月</td><td>~2.3 年（24/3）</td><td class="warn">磨盤一年→ETF後加速</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--text2);">通用節奏（rule of thumb）：<b>約 1 年拋物線上漲 → 約 1 年急跌 → 約 2 年復甦/再累積</b>，整體 ~4 年一輪（對齊減半）。下次減半 ~2028/4。</p>
+</div>
+
+<div class="section">
+  <h3>🐌 vs 💥 「暴力反彈」還是「磨盤緩漲」？逐輪拆解</h3>
+  <div class="team-grid">
+    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">2015 底（$170）</div><div class="role">磨盤緩漲 🐌</div><ul><li>沒有 V 轉，整個 2015 在 $200–300 橫盤</li><li>主升段拖到 2016–17 才來</li></ul></div>
+    <div class="team-card" style="border-color:rgba(168,85,247,0.4)"><div class="name">2018 底（$3.2k）</div><div class="role">假暴力 💥→失敗</div><ul><li>2019 上半年暴彈到 ~$13.8k（+330%）</li><li>但隨即回落、2020/3 再崩到 ~$3.8k 雙底</li><li>真突破等到 2020 下半年</li></ul></div>
+    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">2022 底（$15.5k）</div><div class="role">磨盤緩漲 🐌</div><ul><li>2023 整年在 $25–31k 震盪爬</li><li>2024 ETF 過關才加速噴</li></ul></div>
+  </div>
+  <div class="analysis-box analysis-yellow" style="margin-top:8px;">
+    <b>結論（機率判斷）：底部後「磨盤緩漲」機率明顯高於「暴力 V 轉創高」。</b>
+    暴力的部分通常出現在 ① 觸底前的恐慌插針、② 週期<b>後段</b>的拋物線噴出（減半後）；而剛觸底的前幾個月到一年，歷史上多是無聊的再累積區間。
+    把「暴力反彈」當基準預期、且用會過期的工具去賭它，是歷史上反覆懲罰人的做法。
+  </div>
+</div>
+
+<div class="section">
+  <h3>🧭 對照當下 + 對你 LEAP/配置的意義</h3>
+  <table>
+    <thead><tr><th>項目</th><th>現況</th><th>歷史對照</th></tr></thead>
+    <tbody>
+      <tr><td>距前高跌幅</td><td class="num warn">-50%（$126k→$63k）</td><td>歷次底在 -77%~-86%；本輪若延續「一輪比一輪淺」可能 -55~-65%</td></tr>
+      <tr><td>鏈上位置</td><td>MVRV-Z ~0.41、貼 200 週均線</td><td class="warn">=公允價、非深底；真底常 MVRV 轉負</td></tr>
+      <tr><td>時間</td><td>距高點約數個月</td><td class="warn">歷次需 ~12–14 個月見底 → 時間上可能未到</td></tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-bear">
+    <b>把三個分頁串起來：</b><br>
+    • 若歷史重演＝「底部後磨盤緩漲數月到一年」，那麼 <b>你的 Dec-2027 LEAP 最怕的就是這個</b>——緩漲很可能在到期前清不過 +42% 的回本門檻，theta 一路流血（見「🎰 LEAP槓桿」②）。<b>選擇權需要「快」，但歷史說底部後通常「慢」。</b><br>
+    • 緩慢磨盤的環境，<b>最適合的是現貨分批 DCA（沒有到期、沒有時間價值）</b>，而不是壓長天期 call。<br>
+    • 真正的「暴力上行」歷史上多在減半後（~2028）才來——若你的論點是這個，<b>到期日要拉到 2028 之後</b>，Dec-2027 可能太早。<br>
+    • 反過來說，若你堅信「這次提早、且會快」，才適合 LEAP；否則「現貨為主＋少量深價內 LEAP」更貼合歷史節奏。
+  </div>
+  <div class="disclaimer">⚠️ 歷史規律不保證重演；每輪市場結構（ETF、機構、減半效應遞減）都在變。樣本僅 3–4 輪，統計意義有限。不構成投資建議。資料：OANDA/Glassnode/TradeThatSwing 等歷史價格交叉比對，2026/6/9。</div>
 </div>
 
 </div>
