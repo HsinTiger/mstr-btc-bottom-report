@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSTR × AI龍頭 — 2-4年進攻配置決策報告 v6 (LEAP槓桿+BTC熊市規律)</title>
+<title>MSTR / BMNR 囤現股決策 v7 — 大戶供需 + 誠實打臉版</title>
 <style>
 :root {
   --bg: #0a0c14; --surface: #131722; --surface2: #1a1f2e; --surface3: #222838;
@@ -185,1573 +185,196 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 <div class="container">
 
 <div class="hero">
-  <h1>🏛️ MSTR × AI龍頭 — 2~4年進攻配置 v6</h1>
-  <div class="sub">All-in MSTR → AI 價值鏈 → MSTR vs BMNR → 新增「LEAP 槓桿實測 + BTC 熊市規律」</div>
-  <div class="date">📅 2026/6/9 · v6 · 新增 LEAP call 兩方案量化(CBOE實鏈表) + 比特幣四輪熊市觸底/反彈規律</div>
+  <h1>₿ MSTR / BMNR 囤現股決策 — 大戶在收？還是基本面壞了？</h1>
+  <div class="sub">全力聚焦：用本業收入/低息資金分批囤 MSTR、BMNR 現股（捨棄期權與槓桿ETF）</div>
+  <div class="date">📅 2026/6/9 · v7 · 砍掉舊內容，只留現在的重點 · 含大戶/供需實查 + 誠實打臉版</div>
   <div class="badge-row">
-    <span class="badge badge-purple">🛒 LEAP下單單：主推 Dec-2028 $100 call（掛$77.75）</span>
-    <span class="badge badge-purple">📉 新：底部多「磨盤緩漲」非暴力V轉</span>
-    <span class="badge badge-yellow">LEAP回本門檻+42% / IV Percentile 98%偏貴</span>
-    <span class="badge badge-green">MSTR mNAV 0.80x / BMNR ~1.0x（6/8實查）</span>
+    <span class="badge badge-red">⚠️ 結論：現在不是「全押抄底」的時點</span>
+    <span class="badge badge-yellow">大戶在收、但ETF在逃＝僵局</span>
+    <span class="badge badge-red">BTC ETF -$4.4B/13天 · ETH ETF -$401M/17天(史上最差)</span>
+    <span class="badge badge-green">不會歸零（鏈上是收籌碼不是死亡螺旋）</span>
   </div>
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" data-tab="overview">🎯 結論先看</button>
-  <button class="tab-btn" data-tab="bmnr">🆚 MSTR vs BMNR ★新</button>
-  <button class="tab-btn" data-tab="leaps">🎰 LEAP槓桿 ★新</button>
-  <button class="tab-btn" data-tab="leapbuy">🛒 LEAP下單單 ★新</button>
-  <button class="tab-btn" data-tab="btccycle">📉 BTC熊市規律 ★新</button>
-  <button class="tab-btn" data-tab="plan">💼 規劃v4</button>
-  <button class="tab-btn" data-tab="workflow">🔬 Workflow</button>
-  <button class="tab-btn" data-tab="berkshire">🏦 波克夏實證</button>
-  <button class="tab-btn" data-tab="google">🔷 Google估值</button>
-  <button class="tab-btn" data-tab="btcmstr">₿ BTC/MSTR抄底</button>
-  <button class="tab-btn" data-tab="allocation">📐 配置方案</button>
-  <button class="tab-btn" data-tab="pairing">🔀 MSTR配對</button>
-  <button class="tab-btn" data-tab="debate">⚖️ 多空+驗證</button>
-  <button class="tab-btn" data-tab="video">📺 影片批判</button>
-  <button class="tab-btn" data-tab="action">✅ 行動計畫</button>
-  <button class="tab-btn" data-tab="allin">🎲 拼一波(All-in)</button>
+  <button class="tab-btn active" data-tab="verdict">🎯 結論決策</button>
+  <button class="tab-btn" data-tab="whale">🐋 大戶與供需</button>
+  <button class="tab-btn" data-tab="slap">🔨 誠實打臉</button>
+  <button class="tab-btn" data-tab="ratio">🆚 MSTR vs BMNR</button>
+  <button class="tab-btn" data-tab="cycle">📉 熊市規律</button>
 </div>
 
-<!-- ============ TAB 1: OVERVIEW / CONCLUSION ============ -->
-<div id="tab-overview" class="tab-content active">
+<!-- ===== 結論決策 ===== -->
+<div id="tab-verdict" class="tab-content active">
 <div class="section">
-  <h2>🎯 一句話結論</h2>
-  <div class="analysis-box analysis-purple" style="font-size:0.95rem;">
-    你原本的「100% 信念式 All-in MSTR」<b>方向沒錯（現在確實在抄底區），但集中度太危險</b>。最強力的新證據是：
-    <b style="color:var(--purple)">波克夏（全球最會配置現金流的機構）在 2026 Q1 把 Alphabet 加倉 3 倍、變成第 7 大持股，同時對 BTC/MSTR 持股為零</b>。
-    這直接驗證了你對 GOOG 的直覺。但 GOOG 已在 5 年估值帶頂部，不是便宜貨。
-    BTC/MSTR 在抄底區但「還沒洗乾淨」（MVRV 僅 0.41），且 MSTR 6/1 剛打破「永不賣幣」首度賣 BTC。
-    <br><br>
-    👉 <b>v4 建議：把進攻拆成「加密 + AI 價值鏈 + 子彈」三層（完整論證見「💼 規劃v4」分頁）：</b>
+  <h2>🎯 給你的誠實結論（不迎合版）</h2>
+  <div class="analysis-box analysis-bear" style="font-size:0.96rem;">
+    <b>你的「方法」對，但「時機假設」我必須打臉。</b><br>
+    ✅ <b>用本業收入分批囤現股，方向正確</b>——現股沒有期權的時間耗損與滑點、沒有 2x ETF 的波動衰減、不會被斷頭，時間真的站在你這邊。<br>
+    ❌ <b>但「現在就是底、該全力（甚至借錢）抄」這個假設，數據不支持。</b>鏈上顯示這是<b>「大戶收籌碼 vs ETF 出逃」的僵局</b>，不是「底部已確認、要噴」。邊際買盤（ETF）正在離場，價格被卡住。<br>
+    ❌ <b>而且你挑的 MSTR/BMNR 是「反身性最強、beta 最高」的工具，偏偏挑在反身性風險點燃、邊際買盤撤退的時候。</b>它們可能比 BTC/ETH 本身跌更多。
   </div>
-
-  <div class="analysis-box analysis-yellow" style="font-size:0.92rem;">
-    <b>🆕 v5 新增（你這次的問題）：「不要 100% MSTR，要在 MSTR / BMNR 之間做比例」</b><br>
-    重點先講：MSTR（BTC財庫）與 BMNR（ETH財庫，Tom Lee）<b>本質是「同一個槓桿加密注」，不是互相分散</b>——熊市一起腰斬。
-    在這個前提下，<b>我不建議你提的 75/25 壓 MSTR</b>（把最重的注壓在「反身性已啟動、底層不生息」的那一家），
-    純普通股則傾向 <b>~55% MSTR / 45% BMNR</b>；更聰明的是用「現貨/ETF＋普通股＋特別股」三段式，別全壓普通股。
-    完整論證、兩方案評比、以及<b>第三方 agent 給你的多項錯誤數據糾正</b>，見 👉「🆚 MSTR vs BMNR」分頁。
-  </div>
-
-  <h3>📊 建議配置（2~4年進攻部位）</h3>
-  <div class="alloc-bar">
-    <div class="alloc-seg" style="width:28%;background:var(--blue);">GOOG 28%</div>
-    <div class="alloc-seg" style="width:21%;background:var(--orange);">BTC 21%</div>
-    <div class="alloc-seg" style="width:18%;background:var(--purple);">MSTR 18%</div>
-    <div class="alloc-seg" style="width:13%;background:var(--green);">AVGO 13%</div>
-    <div class="alloc-seg" style="width:8%;background:var(--cyan);">TSMC 8%</div>
-    <div class="alloc-seg" style="width:12%;background:var(--text3);">現金 12%</div>
-  </div>
-  <div class="alloc-legend">
-    <span><i class="dot" style="background:var(--blue)"></i>GOOG 28% — 最高信念核心（波克夏×3＋最便宜LLM＋現金流）</span>
-    <span><i class="dot" style="background:var(--orange)"></i>BTC現貨 21% — 乾淨比特幣，$48-56k階梯</span>
-    <span><i class="dot" style="background:var(--purple)"></i>MSTR 18% — 槓桿BTC（砍半以避反身性），$98-116</span>
-    <span><i class="dot" style="background:var(--green)"></i>AVGO 13% — 最佳「比GOOG更好」的AI成長（PEG 0.54）</span>
-    <span><i class="dot" style="background:var(--cyan)"></i>TSMC 8% — AI代工王，因家鄉集中而小量</span>
-    <span><i class="dot" style="background:var(--text3)"></i>現金 12% — BTC更深一洗＋AVGO崩跌的子彈</span>
-  </div>
-
-  <div class="kpi-grid" style="margin-top:14px;">
-    <div class="kpi"><div class="label">機率加權預期報酬</div><div class="value pos">+74%</div><div class="note">2~4年情境加權（非保證）</div></div>
-    <div class="kpi"><div class="label">熊市情境</div><div class="value neg">-28%</div><div class="note">機率約30%，可承受</div></div>
-    <div class="kpi"><div class="label">牛市情境</div><div class="value pos">+203%</div><div class="note">機率約25%</div></div>
-    <div class="kpi"><div class="label">加密/AI股/現金</div><div class="value warn" style="font-size:1.2rem;">39/49/12</div><div class="note">夠進攻、留子彈</div></div>
-  </div>
-
-  <h3>🆚 為什麼不直接 100% MSTR？（誠實版）</h3>
-  <table>
-    <thead><tr><th>方案</th><th>預期報酬</th><th>熊市</th><th>致命風險</th><th>評語</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(239,68,68,0.04);"><td><b>100% MSTR（你的原案）</b></td><td class="num pos">+162%</td><td class="num neg">-55%↓</td><td>溢價崩 + 特別股股息逼售幣 + 單一公司</td><td class="neg">EV最高但尾部風險失控</td></tr>
-      <tr style="background:rgba(168,85,247,0.06);"><td><b>✅ v4 六資產（建議）</b></td><td class="num pos">+74%</td><td class="num neg">-28%</td><td>跨加密/AI價值鏈/現金分散</td><td class="pos">進攻且活得下來</td></tr>
-      <tr><td>信念進攻（MSTR重）</td><td class="num pos">+106%</td><td class="num neg">-37%</td><td>仍偏壓MSTR</td><td class="warn">想賭大可選</td></tr>
-      <tr><td>均衡進攻（GOOG重）</td><td class="num pos">+75%</td><td class="num neg">-27%</td><td>—</td><td>偏保守</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.8rem;color:var(--text2);">→ 100% MSTR 期望值確實最高，但 6/1 那筆「首度賣幣」把它的反身性風險（溢價↓→增發失靈→被迫賣幣→溢價更↓）正式啟動了。把一部分換成<b>現貨BTC（去掉溢價風險）</b>＋<b>GOOG（完全不同的報酬引擎）</b>，是用很小的期望值代價，換掉一個會讓你「在最低點被迫離場」的尾部風險。</p>
-
-  <h3>📍 即時市場定位（已查證）</h3>
-  <table>
-    <thead><tr><th>標的</th><th>價格</th><th>距ATH</th><th>關鍵估值/訊號</th><th>2~4年定位</th></tr></thead>
-    <tbody>
-      <tr><td><b>BTC</b></td><td class="num">~$61,900</td><td class="num neg">-51%</td><td>站上200週均線、F&amp;G=12、RSI~17、但MVRV 0.41（非深底）</td><td class="warn">抄底區，分批</td></tr>
-      <tr><td><b>MSTR</b></td><td class="num">~$127.5</td><td class="num neg">-73%</td><td>持843,706 BTC、mNAV≈0.89x(近平價/微折價)、6/1首度賣幣</td><td class="warn">$95-120為合理區</td></tr>
-      <tr><td><b>GOOG</b></td><td class="num">~$365.8</td><td class="num neg">-9%</td><td>前瞻P/E 29.5（5年帶頂）、雲端+63%、目標中位$430</td><td class="pos">優質貴，分批</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3);">價格為 2026/6/5-6 查證值（Yahoo Finance / Fortune / stockanalysis 交叉比對）。MSTR 距ATH以 ~$474 計。</p>
-</div>
-</div>
-
-<!-- ============ TAB: MSTR vs BMNR ============ -->
-<div id="tab-bmnr" class="tab-content">
-
-<div class="section">
-  <h2>🆚 MSTR vs BMNR — BTC財庫 vs ETH財庫，比例怎麼分</h2>
-
-  <div class="analysis-box analysis-purple" style="font-size:0.95rem;">
-    <b>一句話結論</b>：MSTR 和 BMNR <b>不是「分散」，是同一個「槓桿加密注」的兩種口味</b>（BTC vs ETH）。加密熊市它們會一起腰斬，50/50 不會救你。
-    在這個前提下：<br>
-    ① <b>不要你提的 75/25 壓 MSTR</b>——那是把最重的注壓在「反身性已啟動、底層不生息」的那一家。<br>
-    ② 若<b>只買普通股</b>：傾向 <b>~55% MSTR / 45% BMNR</b>（MSTR 拿治理＋流動性＋乾淨 BTC 敘事；BMNR 拿質押自償＋ETH 選擇權）。<br>
-    ③ <b>更聰明：三段式</b>——現貨/ETF 拿乾淨 beta、普通股拿槓桿選擇權、特別股(STRC/BMNP)拿低波動配息；別把全部籌碼壓在兩家公司的普通股上。<br>
-    ④ 整包「MSTR+BMNR」要關進你「3 年歸零也不影響生活」的進攻額度內（呼應「🎲 拼一波」分頁的心態鐵則）。
-  </div>
-
   <div class="kpi-grid">
-    <div class="kpi"><div class="label">兩者本質</div><div class="value warn" style="font-size:1.15rem;">同一注</div><div class="note">槓桿加密財庫，高相關</div></div>
-    <div class="kpi"><div class="label">關鍵差異</div><div class="value" style="font-size:1.15rem;">生息 vs 不生息</div><div class="note">ETH可質押／BTC零產出</div></div>
-    <div class="kpi"><div class="label">純普通股建議</div><div class="value pos" style="font-size:1.3rem;">≈55 / 45</div><div class="note">MSTR / BMNR</div></div>
-    <div class="kpi"><div class="label">mNAV（6/8 實查）</div><div class="value" style="font-size:1.2rem;">0.80x / 1.0x</div><div class="note">MSTR折價 / BMNR平價 <span class="tag v">查證</span></div></div>
-  </div>
-</div>
-
-<!-- 即時查證 -->
-<div class="section">
-  <h3>📡 即時查證數據（2026/6/8 腳本抓取，附來源）</h3>
-  <p style="font-size:0.84rem;color:var(--text2);">你要求「動用腳本查 Yahoo / DAT 官方數據、並判斷相較歷史是否便宜」。以下為實抓結果，原始快照存於 repo 的 <code>data-snapshot-2026-06-08.md</code>（可重現）。</p>
-  <table>
-    <thead><tr><th>標的</th><th>現價</th><th>52週高 / 距高</th><th>持倉 / NAV</th><th>mNAV</th><th>相較歷史</th></tr></thead>
-    <tbody>
-      <tr><td><b>MSTR</b></td><td class="num">$120.44</td><td class="num">$457 / <span class="neg">-74%</span></td><td>843,706 BTC（全網4.0%）<br>BTC NAV ~$53.3B；市值 $42.35B</td><td class="num"><b>~0.80x</b></td><td class="pos">歷史級便宜（常態1.5–3x溢價→現8折），但折價反映特別股壓頂</td></tr>
-      <tr><td><b>BMNR</b></td><td class="num">$15.90</td><td class="num">$161 / <span class="neg">-90%</span></td><td>5.42M ETH（全網4.49%）、質押4.72M(87%)<br>ETH NAV ~$9.1B；市值 $9.06B</td><td class="num"><b>~1.0x</b></td><td class="warn">溢價已洩到平價（曾&gt;2x），便宜但無折價墊</td></tr>
-      <tr><td><b>BTC</b></td><td class="num">$63,160</td><td class="num">$126k / <span class="neg">-50%</span></td><td>貼200週均線</td><td class="num">—</td><td class="warn">MVRV~0.41=公允價、非深底</td></tr>
-      <tr><td><b>ETH</b></td><td class="num">$1,685</td><td class="num">$4,954 / <span class="neg">-66%</span></td><td>ETH/BTC 0.027（多年低）</td><td class="num">—</td><td class="pos">跌更兇、相對BTC在歷史低位</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bull" style="margin-top:8px;">
-    <b>「便宜了嗎？」一句話：是，兩家的「溢價泡沫」都洩光了——MSTR 甚至折價到 0.80x（≈8 折買 BTC），BMNR 回到平價。</b>
-    但「便宜」分兩種：MSTR 的折價是<b>市場對它「特別股壓頂＋被迫賣幣」的風險定價</b>（便宜有便宜的理由）；BMNR 沒有折價墊但有<b>質押自償</b>撐著。
-    底層上 <b>ETH(-66%) 比 BTC(-50%) 摔更深、ETH/BTC 在多年低位</b>——若你賭加密整體回升，ETH 的反彈空間理論上更大（但執行風險也更高）。
-  </div>
-</div>
-
-<!-- 核心洞見 -->
-<div class="section">
-  <h3>🧠 核心洞見：唯一真正的結構差異 = 底層資產會不會「生息」</h3>
-  <p style="font-size:0.9rem;">這是第三方 agent 唯一講對、而且很重要的點，值得放大：</p>
-  <div class="team-grid">
-    <div class="team-card" style="border-color:rgba(249,115,22,0.4)">
-      <div class="name">₿ MSTR＝不生息的數位金</div>
-      <div class="role">底層 BTC 是「零產出」資產</div>
-      <ul>
-        <li>BTC 不產生任何法幣現金流</li>
-        <li>軟體本業基本只打平</li>
-        <li>要付特別股股息（<b>~$1B+/年</b>，STRC 11.5%是大頭 <span class="tag v">6/8查證</span>）只能靠：<b>溢價時增發</b> 或 <b>賣 BTC</b></li>
-        <li>→ mNAV 跌破 1、增發失靈時，被迫賣幣＝<b>反身性死亡螺旋</b>的入口。6/1 已首度賣幣 <span class="tag c">待覆核</span></li>
-      </ul>
-    </div>
-    <div class="team-card" style="border-color:rgba(34,197,94,0.4)">
-      <div class="name">Ξ BMNR＝生息的結算層基礎設施</div>
-      <div class="role">底層 ETH 可 PoS 質押</div>
-      <ul>
-        <li>ETH 質押原生殖利率 ~2.7–3.3%/年 <span class="tag v">機制屬實</span></li>
-        <li>大部分持倉質押 → 產生原生 ETH 現金流</li>
-        <li>這筆收益可<b>覆蓋特別股(BMNP 9.5%)股息數倍</b> → 理論上熊市不必賣幣就能自償 <span class="tag e">推估</span></li>
-        <li>→ 反身性壓力顯著低於 MSTR</li>
-      </ul>
-    </div>
-  </div>
-  <div class="analysis-box analysis-yellow" style="margin-top:10px;">
-    <b>但別把「生息」捧過頭：</b>質押 ~3% 的殖利率，對照加密 ±50–80% 的年波動，是<b>「續命墊」不是「報酬引擎」</b>。
-    它讓 BMNR 在長熊裡比 MSTR 多撐幾口氣，但它<b>救不了你普通股 -70% 的腰斬</b>。報酬還是來自 ETH 漲不漲。
-  </div>
-</div>
-
-<!-- 對照表 -->
-<div class="section">
-  <h3>📊 硬碰硬對照（已標註查證信心）</h3>
-  <table>
-    <thead><tr><th>維度</th><th>MSTR（BTC 財庫）</th><th>BMNR（ETH 財庫）</th><th>誰較強</th></tr></thead>
-    <tbody>
-      <tr><td><b>底層資產</b></td><td>843,706 BTC（全網4.0%）<span class="tag v">查證</span>，數位黃金、不生息</td><td>5.42M ETH（全網4.49%）<span class="tag v">查證</span>，質押4.72M(87%)、可生息</td><td class="warn">看你信 BTC 還 ETH</td></tr>
-      <tr><td><b>原生現金流</b></td><td class="neg">無（本業打平）</td><td class="pos">質押 ~3%/年 ≈ <b>$238M/年</b> <span class="tag v">查證</span></td><td class="pos">BMNR ✓</td></tr>
-      <tr><td><b>傳統債務 / 債務牆</b></td><td>可轉債 ~$7–8B、加權票息僅 0.42%（年息~$35M）；最近大筆到期 <b>$1.01B 2028/9</b>、非「2027 $10B牆」 <span class="tag v">查證</span></td><td>幾乎零傳統債務</td><td class="pos">BMNR 略勝（MSTR 利息壓力其實很小）</td></tr>
-      <tr><td><b>剛性年支出</b></td><td class="neg"><b>特別股股息 ~$1B+/年</b>（STRC 11.5%、104.9M股是大頭）→ 靠增發或賣幣 <span class="tag v">查證</span></td><td class="pos">BMNP 9.5%≈$30M/年，質押收益覆蓋 ~8x <span class="tag v">查證</span></td><td class="pos">BMNR ✓✓</td></tr>
-      <tr><td><b>資本紀律 / 稀釋</b></td><td class="pos">以「BTC Yield/每股含币量」為門檻，增發克制</td><td class="neg">ATM 暴力稀釋、傳出 500 億股授權 <span class="tag c">待查</span></td><td class="pos">MSTR ✓✓</td></tr>
-      <tr><td><b>公司治理 / 審計</b></td><td class="pos">成熟、合規、S&amp;P 候選</td><td class="neg">年輕、傳出內控「重大缺陷」 <span class="tag c">待查</span></td><td class="pos">MSTR ✓✓</td></tr>
-      <tr><td><b>流動性 / 成熟度</b></td><td class="pos">極高、機構標配、選擇權鏈深</td><td>中等、股價波動更大、泡沫修正風險高</td><td class="pos">MSTR ✓</td></tr>
-      <tr><td><b>mNAV（市值÷幣NAV）</b></td><td><b>~0.80x（折價）</b> <span class="tag v">6/8實查</span></td><td><b>~1.0x（平價）</b> <span class="tag v">6/8實查</span></td><td class="warn">MSTR 反而更便宜（但折價有理由）</td></tr>
-      <tr><td><b>反身性風險</b></td><td class="neg">高且已啟動（$1B+股息壓力＋折價增發失靈→賣幣）</td><td class="pos">低（質押自償，$238M&gt;$30M）</td><td class="pos">BMNR ✓✓</td></tr>
-      <tr><td><b>美國「兜底」</b></td><td colspan="2" class="neg">兩家都不會被政府救（見下方）</td><td>—</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.8rem;color:var(--text2);">綜評：<b>資產負債表＋續命力 → BMNR 較健康</b>；<b>資本紀律＋治理＋流動性 → MSTR 明顯較完善</b>。所以不是「BMNR 全面更好」，而是各有一個致命優點。</p>
-</div>
-
-<!-- 糾錯 -->
-<div class="section">
-  <h3>🛠️ 糾正第三方 agent 給你的數據錯誤（你說「他很多資訊是錯的」）</h3>
-  <table>
-    <thead><tr><th>他的說法</th><th>實際（本報告交叉查證）</th><th>判定</th></tr></thead>
-    <tbody>
-      <tr><td>MSTR 可轉債「$67.5B」</td><td>實查約 <b>$7–8B</b>（他把「67.5 億」誤當 $67.5B，差約 10 倍）</td><td><span class="vbadge vbadge-fail">✗ 量級錯</span></td></tr>
-      <tr><td>「2027/2 有 $10B 可轉債到期債務牆」</td><td>可轉債加權票息僅 <b>0.42%</b>（年息~$35M可忽略）；最近較大到期是 <b>$1.01B、2028/9</b>，<b>不是 $10B 大牆</b></td><td><span class="vbadge vbadge-fail">✗ 規模/時點錯</span></td></tr>
-      <tr style="background:rgba(234,179,8,0.06)"><td>剛性年支出「$1.7B」</td><td><b>他反而比較接近！</b>實查特別股股息 <b>~$1B+/年</b>（STRC 11.5%×104.9M股是大頭）。是<b>我這份報告舊版的 $750–800M 太低、已過時</b>，本次上修</td><td><span class="vbadge vbadge-warn">⚠ 他略高但方向對</span></td></tr>
-      <tr><td>BTC 均價「$75,699」</td><td>各家口徑分歧（~$66k–74k）；不論哪個，現價 ~$63k 都<b>略低於成本（套牢約 5–13%）</b>，沒他講得那麼深</td><td><span class="vbadge vbadge-warn">⚠ 偏高/待校</span></td></tr>
-      <tr style="background:rgba(34,197,94,0.06)"><td>「BMNR 持 5.42M 枚 ETH ＝ 4.49%」</td><td><b>這數字其實對！</b>官方 PR 證實 5,416,901 ETH = 全網 4.49%。他只在某處把「百萬」誤打成「萬」(5.42萬≈0.04%)，數值本身正確</td><td><span class="vbadge vbadge-pass">✓ 數值正確</span></td></tr>
-      <tr><td>6 月即時數字（賣 32 枚、儲備 $8.71億、mNAV 0.78x）</td><td>本次實查校正：<b>MSTR mNAV ~0.80x、BMNR ~1.0x</b>（非 0.78/0.92）。「5/11 買 535 BTC」可查到；「賣 32 枚、$8.71億」未能以公開來源核實</td><td><span class="vbadge vbadge-na">部分校正/部分待核</span></td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.8rem;color:var(--text2);">他<b>講對的核心</b>：①「生息 vs 不生息」的結構差異；②美國不會兜底；③ 50/50 是雙重槓桿不是分散；④歷史上反身性飛輪會逆轉。這些下面採用。</p>
-</div>
-
-<!-- 你的四個延伸問題 -->
-<div class="section">
-  <h3>❓ 你的延伸問題，快問快答</h3>
-
-  <details class="collapsible" open><summary>機構為何瘋搶 STRC？是不是真信仰 BTC？</summary>
-  <div class="content">
-    <b>不是信仰，是「波動性剝離」套利。</b>STRC（浮動利率永續特別股，~$100 面值、月配）把 BTC 的波動切兩段：
-    <b>普通股股東吃下所有下行波動</b>，<b>STRC 股東靠「彈性利率＋ATM 收縮」把價格錨在 ~$100</b>，用「貨幣市場基金般的低波動」體驗去領「垃圾債級的雙位數配息」。
-    在「收益荒」時代對養老金/保險/家辦很香——但這香味來自<b>普通股股東墊背</b>。配息率他講 11.5%，<span class="tag c">確切利率待查</span>，但「機制是套利、不是信仰」這點正確。
-  </div></details>
-
-  <details class="collapsible"><summary>BTC 適合當「數位信貸」底層資產嗎？</summary>
-  <div class="content">
-    一半對一半錯。<b>流動性面：對</b>——BTC 24h 全球深度市場，要變現付息幾秒到位，避免傳統私募信貸「閘門鎖死數年」的硬傷。
-    <b>生息面：錯</b>——BTC 零產出，配息只能靠「增發新錢付舊息（反身性 carry）」或「賣幣」。
-    所以「BTC 當數位信貸底層」這敘事<b>只在 BTC 永遠漲的假設下成立</b>；長熊一來就退化成「資產跌→信用risk升→特別股折價→融資關閉→賣幣→再跌」的逆飛輪。ETH 因可質押，這條鏈的續命力天生較強。
-  </div></details>
-
-  <details class="collapsible"><summary>美國加密友好政策是假的？會替 MSTR 兜底嗎？</summary>
-  <div class="content">
-    <b>政策是真的，但「兜底」是假的。</b>友好政策的本質是「市場准入／合規開放」(ETF、可發 STRC)，不是「主權信用擔保」。
-    MSTR 條款白紙黑字：不是銀行存款、無 FDIC、無政府擔保；S&amp;P 長期給它<b>垃圾級(B-)</b>。
-    它對實體經濟/就業/銀行系統的系統性關聯≈零 → <b>不夠格 Too Big To Fail</b>。真出事就是「股東歸零、債權人重組分 BTC」，破產法庭安靜完成。
-    別指望任何政治力量替一檔高槓桿加密個股埋單。<b>這點 agent 講對了。</b>（BMNR 同理，且更小、更沒人救。）
-  </div></details>
-
-  <details class="collapsible"><summary>BTC 會被「BTC 2.0」取代嗎？該擔心什麼？</summary>
-  <div class="content">
-    <b>純技術型「BTC 2.0」幾乎不可能取代它</b>——BTC 的護城河不是 TPS，是「無預挖創世＋全球中立、非主權」的社會共識，新幣再強都帶創始團隊/分配/監管烙印。
-    真正威脅是<b>「生息財庫」對「不生息財庫」的財庫替代</b>：長熊裡 ETH 財庫(BMNR)靠質押躺著續命，BTC 財庫(MSTR)得賣幣——資本效率差距會分流主權財庫資金。
-    擁護者最不願面對的盲點：<b>BTC 本位無法獨立運作信用創造（零產出→通縮螺旋）</b>。MSTR 的整套金融工程，本質仍寄生在「借便宜法幣→買稀缺資產」上——一旦法幣不再擴張或 BTC 不再指數成長，套利就難以為繼。
-  </div></details>
-</div>
-
-<!-- 歷史三鏡子 -->
-<div class="section">
-  <h3>🪞 歷史三面鏡子：反身性飛輪的結局 <span class="tag e">類比、非預言</span></h3>
-  <div class="scenario-grid">
-    <div class="scenario-card" style="border-color:rgba(239,68,68,0.4)">
-      <span class="prob" style="background:rgba(239,68,68,0.15);color:var(--red)">失敗 ①</span>
-      <div class="name">1720 密西西比泡沫 / John Law</div>
-      <p style="font-size:0.82rem;color:var(--text2)">印鈔放貸炒自家股、強行 peg 股價，底層海外利潤兌現不了→要求換黃金→飛輪逆轉、貨幣信用全毀。<b>對應 MSTR：底層不生息、頂層卻承諾剛性法幣配息。</b></p>
-    </div>
-    <div class="scenario-card" style="border-color:rgba(239,68,68,0.4)">
-      <span class="prob" style="background:rgba(239,68,68,0.15);color:var(--red)">失敗 ②</span>
-      <div class="name">1929 高盛交易公司 (GSTC)</div>
-      <p style="font-size:0.82rem;color:var(--text2)">閉鎖型信託多層套娃、牛市溢價遠超 NAV；大蕭條一來剛性負債放大跌勢，$104→$1.75，溢價變巨折價。<b>對應：溢價套利信託，折價時 ATM 停擺、負債卻翻倍。</b></p>
-    </div>
-    <div class="scenario-card" style="border-color:rgba(34,197,94,0.4)">
-      <span class="prob" style="background:rgba(34,197,94,0.15);color:var(--green)">成功 ③</span>
-      <div class="name">1960s Teledyne 併購潮</div>
-      <p style="font-size:0.82rem;color:var(--text2)">用高估值股票當「併購貨幣」，在泡沫破前換成「低估值、高現金流」實體企業，軟著陸成實業巨頭。<b>對應：MSTR/BMNR 若要活，終究得把帳面幣轉成有法幣產能的資產（ETH 質押已是半步）。</b></p>
-    </div>
-  </div>
-</div>
-
-<!-- 情境機率 -->
-<div class="section">
-  <h3>🎲 2~4 年情境機率 <span class="tag e">分析師推估、非預測</span></h3>
-  <table>
-    <thead><tr><th>情境</th><th>觸發</th><th>MSTR 結局</th><th>BMNR 結局</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(234,179,8,0.05)"><td><b>橫盤慢死<br>機率 ~45%</b></td><td>BTC/ETH 長期低檔橫盤、折價持續</td><td class="neg">增發停擺→持續賣幣付息→股價長期被壓、極端時債權人接管</td><td class="warn">靠質押自償硬撐，但普通股仍長期破發、被稀釋</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td><b>飛輪重啟<br>機率 ~30%</b></td><td>宏觀放水、BTC 重回升軌</td><td class="pos">mNAV 溢價回升、彈性最暴力（龍頭＋深流動性）→ 反彈幅度可能 &gt; BMNR</td><td class="pos">ETH 生態爆發＋質押規模化，跟漲</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td><b>系統性踩踏<br>機率 ~25%</b></td><td>加密深崩、MSCI 剔除恐慌 <span class="tag c">機率待查</span></td><td class="neg">被動基金強拋、暫停股息、可轉債垃圾化 → -80%↓</td><td class="neg">泡沫估值修正更猛，普通股可 -80%↓（質押救不了股價）</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.8rem;color:var(--text2);">注意：三情境裡 MSTR 與 BMNR <b>多半同向</b>，這就是「不是分散」的證據。BMNR 的優勢主要體現在「橫盤慢死」情境的<b>續命力</b>，不是在崩盤時保護你。</p>
-</div>
-
-<!-- 最終配置 -->
-<div class="section">
-  <h3>🎯 最終配置建議：你的兩個方案評比 + 我的版本</h3>
-
-  <h4>你提的兩案</h4>
-  <table>
-    <thead><tr><th>方案</th><th>意義</th><th>問題</th></tr></thead>
-    <tbody>
-      <tr><td><b>A. 50 MSTR / 50 BMNR</b></td><td>BTC＋ETH 雙龍頭、重視熊市續命</td><td class="warn">把它當「分散」是錯覺；要承受 Tom Lee 的暴力稀釋＋內控瑕疵</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td><b>B. 75 MSTR / 25 BMNR</b></td><td>極致壓 BTC 槓桿＋龍頭彈性</td><td class="neg">把最重的注壓在「反身性已啟動、底層不生息、現價低於持倉成本」的那家 → 我不建議</td></tr>
-    </tbody>
-  </table>
-
-  <h4>✅ 我的建議（純普通股版）：~55 MSTR / 45 BMNR</h4>
-  <div class="alloc-bar">
-    <div class="alloc-seg" style="width:55%;background:var(--purple);">MSTR 55%</div>
-    <div class="alloc-seg" style="width:45%;background:var(--green);">BMNR 45%</div>
-  </div>
-  <div class="alloc-legend">
-    <span><i class="dot" style="background:var(--purple)"></i>MSTR 55% — 治理/紀律/流動性最好＋最乾淨的 BTC 主權敘事，牛市彈性最暴力</span>
-    <span><i class="dot" style="background:var(--green)"></i>BMNR 45% — 質押自償的續命力＋ETH 結算層選擇權，平衡 MSTR 的反身性</span>
-  </div>
-  <p style="font-size:0.84rem;color:var(--text2);margin-top:6px;">為什麼略偏 MSTR 而非 50/50：BMNR 的<b>治理/稀釋/內控風險</b>是「隱形炸彈」，不該給它過半權重；但 MSTR 的<b>反身性已啟動（$1B+ 股息壓力）</b>，也不該像你原案壓到 75%。55/45 同時尊重「MSTR 較成熟」與「BMNR 較能續命」兩個事實。<br><b>6/8 實查再添一個天平砝碼</b>：MSTR mNAV 0.80x（≈8 折買 BTC）比 BMNR 1.0x（平價）<b>多了約 20% 的折價安全墊</b>——這個「便宜」正好補償它較高的反身性風險，讓 55/45 的小幅偏向 MSTR 更站得住腳。但別忘了折價會擴大，所以仍要階梯建倉、不重壓。</p>
-
-  <h4>⭐ 更聰明的版本（三段式，強烈建議）</h4>
-  <p style="font-size:0.84rem;">把「數位財庫」這格再拆三層，別全壓普通股——因為買普通股＝在加密風險之上，<b>多疊一層公司的融資/治理/稀釋風險</b>：</p>
-  <div class="alloc-bar">
-    <div class="alloc-seg" style="width:45%;background:var(--orange);">現貨/ETF 45%</div>
-    <div class="alloc-seg" style="width:35%;background:var(--purple);">普通股 35%</div>
-    <div class="alloc-seg" style="width:20%;background:var(--cyan);">特別股 20%</div>
-  </div>
-  <div class="alloc-legend">
-    <span><i class="dot" style="background:var(--orange)"></i>現貨/ETF 45%（BTC 為主＋少量 ETH）— 乾淨 beta、沒有公司倒閉風險</span>
-    <span><i class="dot" style="background:var(--purple)"></i>普通股 35%（其中 ~55/45 分 MSTR/BMNR）— 拿槓桿與溢價選擇權</span>
-    <span><i class="dot" style="background:var(--cyan)"></i>特別股 20%（STRC / BMNP）— 雙位數配息、波動遠低於普通股</span>
-  </div>
-  <p style="font-size:0.84rem;color:var(--text2);margin-top:6px;">這樣你<b>同時持有「會生息的 ETH 曝險、乾淨的 BTC 曝險、雙位數法幣配息、以及兩家的槓桿選擇權」</b>，而不是把全部身家綁在兩家寄生於法幣信用的囤幣公司普通股上。當任一家融資窗口關閉被迫賣幣時，現貨與特別股就是你的緩衝墊。</p>
-
-  <div class="analysis-box analysis-bear" style="margin-top:12px;">
-    <b>進場/續抱紀律（沿用「拼一波」分頁）</b>：① 整包 MSTR+BMNR 用「歸零也不影響生活」的錢；② mNAV 在折價＝相對歷史便宜，但折價會擴大，分 6–12 個月階梯建倉；③ <b>論點失效就走</b>（非因跌、因故事變）：折價持續擴大＋加速賣幣／暫停股息／內控爆雷／鏈上結構轉壞無回穩。
-  </div>
-
-  <div class="disclaimer">
-    ⚠️ 不構成投資建議。MSTR/BMNR 皆為高波動槓桿型加密財庫個股，普通股可能 -70%↑ 甚至（極端情境）逼近歸零。BMNR 多項 2026 數字無法以公開來源核實到所引精度，請於下單前自行用券商/官方 IR 覆核。事實型數據查證、展望型為推估。資料截至 2026/6/8。
-  </div>
-</div>
-
-</div>
-
-<!-- ============ TAB: LEAP 槓桿 ============ -->
-<div id="tab-leaps" class="tab-content">
-
-<div class="section">
-  <h2>🎰 用 MSTR LEAP Call 放大槓桿 — 你的兩個方案實測</h2>
-  <p style="font-size:0.82rem;color:var(--text2);">錨點（CBOE 即時，2026/6/9）：MSTR <b>$127.5</b>；<b>2027/12/17 到期</b>、價平 <b>$125 call 權利金 $56.03</b>、<b>IV 88%</b>、delta 0.73、theta -$0.035/天/股。下方所有數字用 Black-Scholes＋真實鏈表算出，腳本可重現。</p>
-
-  <div class="analysis-box analysis-review" style="font-size:0.93rem;">
-    <b>🙏 先修正我上一版講得太武斷的地方 —— 你的直覺其實是對的。</b><br>
-    你想用 LEAP 拿「類似持有現股的 2 倍曝險、又避開耗損」，這個策略<b>真的存在，叫「股票替代（stock replacement）」，而且可行</b>。
-    問題<b>不在 LEAP，在「價平(ATM)」這個履約價</b>——它剛好是<b>所有履約價裡時間價值最高、衰減最重</b>的那一個。我上一版用價平去代表「LEAP」，對你不公平。<br>
-    <b>真相是一條光譜（見下方實鏈表）：</b>履約價越深價內，behavior 越像現股、衰減越低；越靠近價平，槓桿越高但衰減越兇。
-  </div>
-  <div class="analysis-box analysis-yellow" style="font-size:0.92rem;">
-    <b>但有一個你避不開的硬限制：MSTR 的 IV 高達 88%，所以「高槓桿」和「低衰減」不可兼得。</b><br>
-    • 想要<b>低衰減（像現股）</b>：深價內 $50 call → 年化持有成本只 <b>~7%</b>（跟融資利率差不多！）、持平只虧 15%，<b>但只有 ~1.4x</b>。<br>
-    • 想要<b>真正 2x</b>：必須逼近價平 → 年化成本衝到 <b>~28%</b>、持平虧 96%。<br>
-    👉 對 MSTR 來說，<b>「2x 又免耗損」不存在</b>；你只能在「1.4x 低成本」與「2x 高成本」之間選。最佳平衡點通常在 <b>delta 0.85–0.90（$70–90 call）：~1.6–1.8x、年化成本 11–17%</b>。
-  </div>
-</div>
-
-<!-- 成本光譜 -->
-<div class="section">
-  <h3>📐 履約價光譜：每個 strike 的「真實持有成本」（CBOE 實鏈表 2026/6/9，spot $127.49）</h3>
-  <p style="font-size:0.84rem;color:var(--text2);"><b>「年化持有成本」= 若 MSTR 一年原地不動，這個槓桿讓你損失幾 %。</b>這才是公平的「時間耗損」衡量——拿它去比「融資 2x≈6–7%/年」「MSTU 2x ETF≈79%/年波動衰減」。</p>
-  <table>
-    <thead><tr><th>履約價</th><th>權利金</th><th>時間價值%</th><th>delta<br>(像現股?)</th><th>名目槓桿</th><th>回本門檻</th><th>持平@到期</th><th class="num">年化持有成本</th><th>定位</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.07)"><td><b>$50 深價內</b></td><td class="num">$91.1</td><td class="num pos">15%</td><td class="num">0.93</td><td class="num">1.40x</td><td class="num pos">+11%</td><td class="num">-15%</td><td class="num pos"><b>7.0%</b></td><td class="pos">最像現股，≈融資成本</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td><b>$70 價內</b></td><td class="num">$79.7</td><td class="num pos">28%</td><td class="num">0.88</td><td class="num">1.60x</td><td class="num">+17%</td><td class="num">-28%</td><td class="num pos"><b>11.4%</b></td><td class="pos">低衰減槓桿</td></tr>
-      <tr style="background:rgba(168,85,247,0.08)"><td><b>$85 價內 ⭐</b></td><td class="num">$72.3</td><td class="num">41%</td><td class="num">0.84</td><td class="num">1.76x</td><td class="num">+23%</td><td class="num">-41%</td><td class="num warn"><b>15.3%</b></td><td class="warn">最佳平衡(近2x、可承受)</td></tr>
-      <tr><td>$100 價內</td><td class="num">$65.6</td><td class="num">58%</td><td class="num">0.80</td><td class="num">1.94x</td><td class="num">+30%</td><td class="num neg">-58%</td><td class="num warn">19.6%</td><td>接近2x、成本明顯</td></tr>
-      <tr style="background:rgba(239,68,68,0.06)"><td><b>$125 價平 (你的原案)</b></td><td class="num">$56.0</td><td class="num neg">96%</td><td class="num">0.74</td><td class="num">2.28x</td><td class="num neg">+42%</td><td class="num neg">-96%</td><td class="num neg"><b>27.6%</b></td><td class="neg">槓桿最高但衰減最重</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bull">
-    <b>所以「全都是時間價值」只對「價平」成立（內含值≈0 是定義使然）。深價內完全不是：</b>
-    $50 call 有 $77.5 內含值、只有 15% 時間價值、delta 0.93——<b>它幾乎就是「借錢買的 MSTR」，年化成本 7% ≈ 券商融資</b>，而且還比融資多一個好處：<b>最大虧損鎖死在權利金、永遠不會被margin call強制平倉</b>。這正是你要的「像持有現股的槓桿」。
-  </div>
-  <div class="analysis-box analysis-bear">
-    <b>為什麼價平是最糟的選擇？</b>價平權利金幾乎全是「一個價平賣權的價值」——也就是<b>下跌保險</b>。但你是<b>看漲、要槓桿</b>的人，根本不需要這麼貴的下跌保險。
-    往價內移＝把「時間價值（保險）」換成「內含值（真正的股票曝險）」。<b>你付的錢從「買保險」變成「買股票」，這才是你要的。</b>
-  </div>
-</div>
-
-<!-- 資料新鮮度 + 融資換算 -->
-<div class="section">
-  <h3>🛰️ 先回答你三件事：資料來源、融資怎麼算、不用ETF/期權怎麼開槓桿</h3>
-
-  <h4>① 我抓的是「最新」嗎？</h4>
-  <p style="font-size:0.86rem;">我抓的是 <b>CBOE 公開鏈表（delayed quotes）</b>——盤中約 <b>15 分鐘延遲</b>，收盤後是<b>當日收盤值</b>，<b>不是即時逐筆</b>。最近一次快照：MSTR ~<b>$127.2</b>（2026/6/9）。
-  方向、IV、價差結構都可信，但<b>實際下單一定要用你券商的即時鏈表</b>（權利金幾秒就會跳動）。我無法接你的券商即時報價。</p>
-
-  <h4>② 「年化持有成本（融資率）」怎麼換算的？</h4>
-  <div class="analysis-box analysis-review" style="font-size:0.88rem;">
-    公式：<b>年化成本 = (時間價值 ÷ 現價) ÷ 年數</b>。意思是「若 MSTR 一年原地不動，這個槓桿讓你損失幾 % 的曝險」。<br>
-    <b>實例（$50 深價內 call）：</b>權利金 $90.5、內含值 $77.5 → 時間價值 = $13.0；現價 $127.2、到期 1.52 年。<br>
-    → (13.0 ÷ 127.2) ÷ 1.52 = 10.2% ÷ 1.52 ≈ <b>7%/年</b>。<br>
-    <span style="color:var(--text2)">這筆「成本」其實包含兩塊：(a) <b>槓桿的融資成本</b>（你延後到到期才付履約價 K，等於跟市場借錢）＋ (b) <b>一個內含的下跌保險</b>（價內賣權）。深價內時 (b) 很小，所以 ≈ 純融資；價平時幾乎全是 (b) 保險，這就是為什麼價平那麼貴。</span>
-  </div>
-  <table>
-    <thead><tr><th>開 2x 槓桿的方式</th><th class="num">年化成本</th><th>強制平倉(margin call)?</th><th>到期?</th><th>最大虧損</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.05)"><td>深價內 LEAP（$50-70）</td><td class="num pos">~7-11%</td><td class="pos">否（鎖死）</td><td class="warn">有,需展期</td><td>權利金</td></tr>
-      <tr><td>券商融資買現股（IBKR等）</td><td class="num">~6-7%*</td><td class="neg">會（崩盤被斷頭）</td><td class="pos">無</td><td>可超過本金</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td>2x 每日重設 ETF（MSTU/MSTX）</td><td class="num neg">~79%**</td><td class="pos">否</td><td class="pos">無</td><td>近乎歸零</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.74rem;color:var(--text3);">*MSTR 為高波動股，券商常加收較高保證金要求，實際可動用槓桿可能 &lt; 2x。**ETF 為「若標的橫盤」的波動衰減估計值，非利率。</p>
-
-  <h4>③ 不要 2x ETF、也不要期權，要開槓桿該買什麼？</h4>
-  <div class="analysis-box analysis-yellow" style="font-size:0.9rem;">
-    扣掉這兩者，「乾淨開槓桿」其實只剩兩條路，而且<b>最該先想清楚的是：你可能根本不用額外開槓桿。</b><br><br>
-    <b>🥇 最重要的觀念：MSTR / BMNR 本身就是槓桿。</b>MSTR 用可轉債＋特別股去持有 BTC，本身對 BTC 就有 <b>~1.5-2x 的 beta</b>——而且這個槓桿<b>不用你付融資、沒有到期、不會被斷頭</b>（成本由公司資本結構承擔）。所以「想要槓桿加密曝險」＝直接持有 MSTR/BMNR 現股就有了。<b>再在上面疊 2x，是「槓桿之上加槓桿」，崩盤時會非常慘。</b><br><br>
-    <b>🥈 若真要在 MSTR 之上再開槓桿：券商融資（margin）</b>是唯一「非 ETF、非期權」的乾淨選擇。成本 ~6-7%、線性、無時間價值。<b>但代價是 margin call</b>——MSTR 動輒單日 ±10%，崩盤時你會在最低點被強制平倉（這正是槓桿玩家最常陣亡的方式）。緩解：只開 1.3-1.5x（不要 2x）、留足現金緩衝。<br><br>
-    <b>結論：</b>想要「像現股、不會斷頭、定義好最大虧損」→ <b>深價內 LEAP 反而是最好的『無斷頭槓桿』</b>（只是要克服價差，見下）。想要最便宜的利率且能承受斷頭風險 → 低倍數 margin。<b>單純想要槓桿加密 → 直接持有 MSTR/BMNR 別再疊。</b>單一股票期貨在台/美散戶基本拿不到，box spread 屬期權範疇，皆略過。
-  </div>
-</div>
-
-<!-- 深價內實戰：流動性與滑點 -->
-<div class="section">
-  <h3>🎯 ④ 真要買深價內 call：怎麼買便宜、流動性好、不被賺價差</h3>
-  <div class="analysis-box analysis-bear" style="font-size:0.92rem;">
-    <b>殘酷現實：MSTR 深價內 LEAP 的買賣價差高達 7-11%，而且很多深價內履約價「零成交量」。</b>
-    你來回各付一次價差 ≈ <b>一次就吃掉約 8%</b>——而深價內 call 的「持有成本」一年才 ~7%。
-    <b>也就是：跨一次價差 ≈ 白付一整年的融資。價差(滑點)才是你最大的隱藏成本，比 carry 還兇。</b>
-  </div>
-  <h4>實鏈表流動性對照（CBOE 2026/6/9）</h4>
-  <table>
-    <thead><tr><th>到期 / 履約價</th><th class="num">買價</th><th class="num">賣價</th><th class="num">價差%</th><th class="num">未平倉(OI)</th><th class="num">當日量</th><th>評</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(239,68,68,0.05)"><td>Dec-2027 $50</td><td class="num">86.55</td><td class="num">94.50</td><td class="num neg">8.8%</td><td class="num neg">76</td><td class="num neg">0</td><td class="neg">深價內＝寬價差、沒量</td></tr>
-      <tr><td>Dec-2027 $100</td><td class="num">63.40</td><td class="num">68.00</td><td class="num warn">7.0%</td><td class="num">413</td><td class="num">10</td><td>整數價較好</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td><b>Jan-2028 $100</b></td><td class="num">65.35</td><td class="num">69.10</td><td class="num warn">5.6%</td><td class="num pos">846</td><td class="num pos">20</td><td class="pos">最佳：量大、價差較窄</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td><b>Jan-2028 $130</b></td><td class="num">54.40</td><td class="num">57.85</td><td class="num">6.1%</td><td class="num pos">779</td><td class="num pos">52</td><td class="pos">流動性最佳區</td></tr>
-      <tr><td>Jan-2028 $50</td><td class="num">88.65</td><td class="num">94.95</td><td class="num neg">6.9%</td><td class="num">372</td><td class="num neg">0</td><td class="warn">深價內仍沒量</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.8rem;color:var(--text2);">兩個規律：<b>① 整數履約價（$100/$120/$130）流動性最好；② Jan-2028 比 Dec-2027 更活</b>（OI 普遍 2-4 倍）。深價內（$50-70）雖然 carry 低，但價差寬、零成交——<b>實際成交困難、滑點吃光省下的 carry</b>。</p>
-  <h4>✅ 下單防被坑檢查清單</h4>
-  <ol style="margin:6px 0 0 18px;font-size:0.88rem;line-height:1.85;">
-    <li><b>永遠用限價單(limit)，掛在 mid（中價）或更好；絕不下市價單(market)。</b>寬價差下市價單＝直接送錢給造市商。</li>
-    <li><b>選流動的履約價＆到期</b>：整數價、OI 數百以上、有當日量、優先 <b>Jan-2028</b>。為了流動性，<b>寧可選 $100-120 而不是硬追 $50 深價內</b>——省下的 carry 會被滑點吃掉。</li>
-    <li><b>美股盤中交易</b>（台灣晚上 21:30–04:00 / 夏令 21:30–04:00），<b>避開開盤、收盤前後 10 分鐘</b>（價差最寬）。</li>
-    <li><b>用券商的「理論價(theo)/中價」當錨</b>；造市商模型多在 mid 附近，掛 mid 限價常能成交，不急就等。</li>
-    <li><b>分批建倉</b>（2-3 筆），別一次掃完整個 size。</li>
-    <li><b>看 IV 再買</b>：現在 IV Percentile ~98% 偏貴，IV 回落時買長天期更划算（vega 順風）。</li>
-    <li><b>BMNR 期權流動性更差</b>（公司更小），深價內 LEAP 的價差/滑點問題會更嚴重，BMNR 那 25% 建議<b>直接買現股</b>，別碰它的期權。</li>
-  </ol>
-  <div class="analysis-box analysis-review" style="margin-top:8px;">
-    <b>一句話：</b>對 MSTR，「深價內 LEAP」理論上是最好的無斷頭槓桿，但<b>它的真實敵人不是 theta，是價差/滑點</b>。若你不確定能用限價單在 mid 附近成交，那「<b>低倍數 margin 買現股</b>」或「<b>乾脆多買點 MSTR 現股（它本身已是槓桿）</b>」對你可能更實際、更省成本。
-  </div>
-</div>
-
-<!-- 方案1 -->
-<div class="section">
-  <h3>① 方案1拆解：100% 資金壓 價平 Dec-2027 LEAP</h3>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">名目槓桿(現價/權利金)</div><div class="value" style="font-size:1.4rem;">2.28x</div><div class="note">每$1控制$2.28股票</div></div>
-    <div class="kpi"><div class="label">彈性(delta調整,當下)</div><div class="value warn" style="font-size:1.4rem;">1.67x</div><div class="note">這才是真實放大率</div></div>
-    <div class="kpi"><div class="label">到期回本門檻</div><div class="value neg" style="font-size:1.4rem;">+42%</div><div class="note">需站上 $181</div></div>
-    <div class="kpi"><div class="label">時間價值占權利金</div><div class="value neg" style="font-size:1.4rem;">95.5%</div><div class="note">$53.5 / $56 會歸零</div></div>
-  </div>
-  <h4>到期損益（vs 純現貨 vs 名目2x ETF）</h4>
-  <table>
-    <thead><tr><th>MSTR 到期價</th><th>漲跌</th><th class="num">100% 現貨</th><th class="num">100% LEAP</th><th class="num">名目2x ETF*</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(239,68,68,0.05)"><td>$76</td><td class="neg">-40%</td><td class="num neg">-40%</td><td class="num neg">-100%</td><td class="num neg">-80%</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td>$102</td><td class="neg">-20%</td><td class="num neg">-20%</td><td class="num neg">-100%</td><td class="num neg">-40%</td></tr>
-      <tr style="background:rgba(234,179,8,0.06)"><td>$128（持平）</td><td>0%</td><td class="num">0%</td><td class="num neg"><b>-96%</b></td><td class="num">0%</td></tr>
-      <tr><td>$153</td><td class="pos">+20%</td><td class="num pos">+20%</td><td class="num neg">-50%</td><td class="num pos">+40%</td></tr>
-      <tr><td>$181（回本）</td><td class="pos">+42%</td><td class="num pos">+42%</td><td class="num">0%</td><td class="num pos">+84%</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td>$255（翻倍）</td><td class="pos">+100%</td><td class="num pos">+100%</td><td class="num pos"><b>+132%</b></td><td class="num pos">+200%</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td>$382（3倍）</td><td class="pos">+200%</td><td class="num pos">+200%</td><td class="num pos">+360%</td><td class="num pos">+400%</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td>$510（4倍）</td><td class="pos">+300%</td><td class="num pos">+300%</td><td class="num pos">+587%</td><td class="num pos">+600%</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.74rem;color:var(--text3);">*名目2x為「無耗損」理論值僅供參照；真實 MSTU/MSTX 有嚴重波動衰減（見 ④）。</p>
-  <div class="analysis-box analysis-bear">
-    <b>反直覺重點：在「剛好翻倍」這件事上，LEAP 的實際槓桿只有 1.32x（+132% vs 現貨 +100%）</b>，不是你想的 2x。
-    因為你先付了 43% 權利金。凸性（convexity）要到 <b>3 倍（+360%）、4 倍（+587%）</b>才真正發威。<br>
-    👉 <b>選擇權獎勵的是「大漲、快漲」，不是「剛好翻倍」。</b>賭「只翻倍」用選擇權＝花大錢買一個你用不太到的凸性。
-  </div>
-  <h4>不同漲幅下的「實際槓桿」（持有到期）</h4>
-  <table>
-    <thead><tr><th>MSTR</th><th class="num">現貨報酬</th><th class="num">LEAP報酬</th><th class="num">實際槓桿</th></tr></thead>
-    <tbody>
-      <tr><td>+20%</td><td class="num pos">+20%</td><td class="num neg">-50%</td><td class="num neg">虧（門檻內）</td></tr>
-      <tr><td>+50%</td><td class="num pos">+50%</td><td class="num pos">+18%</td><td class="num warn">0.36x</td></tr>
-      <tr><td>+100%(翻倍)</td><td class="num pos">+100%</td><td class="num pos">+132%</td><td class="num">1.32x</td></tr>
-      <tr><td>+150%</td><td class="num pos">+150%</td><td class="num pos">+246%</td><td class="num">1.64x</td></tr>
-      <tr><td>+200%(3倍)</td><td class="num pos">+200%</td><td class="num pos">+360%</td><td class="num pos">1.80x</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- 時間價值耗損 -->
-<div class="section">
-  <h3>② 你問的核心：到底承擔多少「時間價值耗損」？</h3>
-  <p style="font-size:0.88rem;">價平 $125 call 權利金 $56 = <b>內含價值 $2.5 + 時間價值 $53.5</b>。這 <b>$53.5（95.5%）就是你要承擔的時間價值</b>——MSTR 若到期沒漲，它全部歸零。</p>
-  <h4>時間價值衰減路徑（假設 MSTR 一直待在 $127.5 不動）</h4>
-  <table>
-    <thead><tr><th>距到期</th><th class="num">Call 價值</th><th class="num">累計虧損(對$56)</th><th>白話</th></tr></thead>
-    <tbody>
-      <tr><td>18 個月（現在）</td><td class="num">$56</td><td class="num">-1%</td><td>剛買</td></tr>
-      <tr><td>12 個月</td><td class="num">$46</td><td class="num neg">-18%</td><td>第一年燒掉約 1/5</td></tr>
-      <tr><td>9 個月</td><td class="num">$40</td><td class="num neg">-28%</td><td>加速中</td></tr>
-      <tr><td>6 個月</td><td class="num">$33</td><td class="num neg">-41%</td><td>theta 咬人</td></tr>
-      <tr><td>3 個月</td><td class="num">$24</td><td class="num neg">-57%</td><td>急速崩</td></tr>
-      <tr><td>1 個月</td><td class="num">$14</td><td class="num neg">-75%</td><td>—</td></tr>
-      <tr style="background:rgba(239,68,68,0.06)"><td>到期</td><td class="num">$2.5</td><td class="num neg"><b>-96%</b></td><td>幾乎全損</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-yellow">
-    <b>量化回答：</b><br>
-    • <b>方案1（100% 價平 LEAP）：</b>若 MSTR 18 個月後持平，你<b>燒掉 96% 的本金</b>。時間價值衰減「非線性」——第一年只掉 ~18%，最後半年掉最兇。<br>
-    • <b>方案2（50% 在這張 call）：</b>$10萬中放 8 口 call（$44,824），其中 <b>時間價值 = $42,824 = 全組合的 42.8%</b>。也就是 <b>~43% 的總資產是「會隨時間蒸發、要靠漲幅賺回來」的部分</b>；另外 50% 現貨不受 theta 影響。
-  </div>
-</div>
-
-<!-- 方案2 -->
-<div class="section">
-  <h3>③ 方案2：50% LEAP + 25% MSTR現貨 + 25% BMNR現貨（$10萬示範）</h3>
-  <p style="font-size:0.84rem;color:var(--text2);">建倉：8 口 $125 call（$44,824，控 800 股名目 ~$102k）＋ MSTR 196 股（$25k）＋ BMNR 1,572 股（$25k）。BMNR 倍數設為比 MSTR 略高（更深折扣、更高 beta）。</p>
-  <table>
-    <thead><tr><th>情境</th><th class="num">MSTR</th><th class="num">BMNR</th><th class="num">方案2</th><th class="num">100%LEAP</th><th class="num">100%MSTR現貨</th><th class="num">55/45現貨</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(239,68,68,0.05)"><td>深熊</td><td class="num neg">-50%</td><td class="num neg">-60%</td><td class="num neg"><b>-78%</b></td><td class="num neg">-100%</td><td class="num neg">-50%</td><td class="num neg">-54%</td></tr>
-      <tr style="background:rgba(239,68,68,0.04)"><td>熊</td><td class="num neg">-20%</td><td class="num neg">-30%</td><td class="num neg">-62%</td><td class="num neg">-100%</td><td class="num neg">-20%</td><td class="num neg">-24%</td></tr>
-      <tr style="background:rgba(234,179,8,0.06)"><td><b>持平</b></td><td class="num">0%</td><td class="num">0%</td><td class="num neg"><b>-48%</b></td><td class="num neg">-96%</td><td class="num">0%</td><td class="num">0%</td></tr>
-      <tr><td>小漲</td><td class="num pos">+30%</td><td class="num pos">+40%</td><td class="num neg">-1%</td><td class="num neg">-27%</td><td class="num pos">+30%</td><td class="num pos">+32%</td></tr>
-      <tr><td>漲</td><td class="num pos">+50%</td><td class="num pos">+60%</td><td class="num pos">+30%</td><td class="num pos">+18%</td><td class="num pos">+50%</td><td class="num pos">+54%</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td><b>翻倍</b></td><td class="num pos">+100%</td><td class="num pos">+120%</td><td class="num pos"><b>+109%</b></td><td class="num pos">+132%</td><td class="num pos">+100%</td><td class="num pos">+109%</td></tr>
-      <tr style="background:rgba(34,197,94,0.05)"><td>登月</td><td class="num pos">+200%</td><td class="num pos">+250%</td><td class="num pos">+268%</td><td class="num pos">+360%</td><td class="num pos">+200%</td><td class="num pos">+222%</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bear">
-    <b>致命的對照：在「翻倍」那行，方案2 (+109%) ≈ 100%MSTR現貨 (+100%) ≈ 55/45現貨 (+109%)。</b>
-    你費盡心思加了 50% 槓桿選擇權，<b>翻倍時的報酬卻跟乾脆全買現貨差不多</b>——但「持平」那行方案2 是 <b>-48%</b>，現貨是 <b>0%</b>。
-    <b>你用「持平/小跌大幅落後」換到了「翻倍時幾乎沒有額外好處」。</b>方案2 只有在「登月(3倍)」才明顯贏現貨。
-  </div>
-  <h4>但若「翻倍提早發生」並中途賣掉（賺回剩餘時間價值）</h4>
-  <table>
-    <thead><tr><th>翻倍($255)發生在</th><th class="num">Call 價值</th><th class="num">報酬</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.05)"><td>立刻（剩18個月，IV持平）</td><td class="num">$161</td><td class="num pos"><b>+188%</b></td></tr>
-      <tr><td>剩 12 個月（IV回落75%）</td><td class="num">$146</td><td class="num pos">+160%</td></tr>
-      <tr><td>剩 6 個月（IV 65%）</td><td class="num">$135</td><td class="num pos">+140%</td></tr>
-      <tr><td>等到期（只剩內含值）</td><td class="num">$130</td><td class="num pos">+132%</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">→ <b>選擇權獎勵「快」。</b>翻倍若在前期就發生、且你願意賣，能多賺剩餘時間價值（最多 +188% vs 到期 +132%）。但這要求你看對方向「又看對時機」。拖到後期才漲，凸性優勢被 theta 吃掉。</p>
-</div>
-
-<!-- LEAP vs ETF -->
-<div class="section">
-  <h3>④ LEAP vs 2x 每日重設 ETF（MSTU／MSTX）—— 你「避開再平衡成本」對嗎？</h3>
-  <div class="analysis-box analysis-bull"><b>✅ 你的直覺正確：LEAP 完全沒有每日重設的波動拖累。</b>但代價是換成「前置 IV/時間價值 + 回本門檻 + vega 風險」。</div>
-  <h4>MSTU／MSTX 真實波動衰減證據（agent 查證）</h4>
-  <table>
-    <thead><tr><th>區間</th><th>MSTR 實際</th><th>2x「理論」</th><th>ETF 實際</th><th>結論</th></tr></thead>
-    <tbody>
-      <tr><td>2024底大漲單月</td><td class="pos">—</td><td class="num">+153%</td><td class="num">MSTU+148% / MSTX+135%</td><td class="warn">落後理論最多18個百分點</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td>某一年期(震盪+跌)</td><td class="num neg">-55%</td><td class="num">~-90%</td><td class="num neg"><b>MSTU -91% / MSTX -92%</b></td><td class="neg">跌勢忠實放大</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td>某 YTD</td><td class="num pos">+16.6%</td><td class="num">~+33%</td><td class="num neg"><b>MSTU -4% / MSTX -26%</b></td><td class="neg">標的漲 ETF 卻虧＝路徑依賴</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">機制：每日重設＝「漲後追買、跌後殺賣」，在 MSTR ~90% 年化波動下，<b>即使一年原地踏步，2x ETF 中位數約 -79%</b>（Elm Wealth 模型）；加上 swap 容量不足被迫用短天期選擇權拼湊、費用率 1%+。<b>長期持有期望值嚴重偏負。</b></p>
-  <table>
-    <thead><tr><th>面向</th><th>ATM LEAP Call</th><th>2x 每日 ETF</th></tr></thead>
-    <tbody>
-      <tr><td>每日再平衡損耗</td><td class="pos">無 ✓</td><td class="neg">有（核心耗損）</td></tr>
-      <tr><td>主要風險</td><td>theta + vega + 歸零</td><td>波動拖累 + 追蹤失敗</td></tr>
-      <tr><td>回本門檻</td><td class="neg">+42%（先付保費）</td><td class="pos">無（小漲即放大）</td></tr>
-      <tr><td>到期</td><td class="neg">有，需展期</td><td class="pos">無</td></tr>
-      <tr><td>誰勝</td><td>大漲、快漲、震盪後上攻</td><td>平滑單向快漲、短持有</td></tr>
-      <tr><td>兩者皆輸</td><td colspan="2" class="warn">長期橫盤——ETF 被波動拖死、LEAP 被 theta 拖死</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- 機率與建議 -->
-<div class="section">
-  <h3>⑤ MSTR 18 個月翻倍機率 + 最終建議 <span class="tag e">分析師估算</span></h3>
-  <p style="font-size:0.88rem;">恆等式：<b>MSTR 股價 = (每股BTC) × (BTC價) × (mNAV)</b>。要翻倍，三者乘積須翻倍。<b>關鍵壞消息：折價(0.80x)下「每股BTC增積引擎已熄火」</b>（公司門檻 ~1.22x 才增積；現在反而賣幣付息→每股BTC可能不增反減）。所以翻倍幾乎全靠 <b>BTC漲價 + mNAV重評</b>。</p>
-  <table>
-    <thead><tr><th>達成 $255 的路徑</th><th>BTC 價</th><th>需要 mNAV</th><th>評註</th></tr></thead>
-    <tbody>
-      <tr><td>A 純靠BTC、折價不變</td><td class="num">~$126k</td><td class="num">0.80x</td><td>BTC須翻倍</td></tr>
-      <tr style="background:rgba(34,197,94,0.04)"><td><b>B 最現實：均衡</b></td><td class="num">~$80k</td><td class="num">1.26x</td><td class="pos">BTC+27% + 折價收斂</td></tr>
-      <tr style="background:rgba(34,197,94,0.04)"><td><b>D BTC大牛+輕收斂</b></td><td class="num">~$100k</td><td class="num">~1.0x</td><td class="pos">BTC+59% + 回平價</td></tr>
-      <tr><td>C 純靠重評</td><td class="num">~$70k</td><td class="num">1.44x</td><td>信心完全回歸</td></tr>
-    </tbody>
-  </table>
-  <div class="kpi-grid" style="margin-top:10px;">
-    <div class="kpi"><div class="label">牛市翻倍機率</div><div class="value pos">55–70%</div><div class="note">BTC $150-200k+信心回歸</div></div>
-    <div class="kpi"><div class="label">基準翻倍機率</div><div class="value warn">35–45%</div><div class="note">BTC $90-110k+mNAV 1.0-1.2x</div></div>
-    <div class="kpi"><div class="label">熊市翻倍機率</div><div class="value neg">5–15%</div><div class="note">BTC橫盤/破$50k</div></div>
-    <div class="kpi"><div class="label">分析師目標中位數</div><div class="value" style="font-size:1.3rem;">$322.5</div><div class="note">區間$185-705；Mizuho下調$265</div></div>
-  </div>
-  <p style="font-size:0.8rem;color:var(--text2);">綜合粗估 18 個月翻倍機率 <b>~35-45%</b>。最大非線性風險＝<b>反身性折價自我強化</b>（折價→不能增積→賣幣→信心↓→折價更深）。注意：翻倍門檻 $255 vs 到期回本門檻 $181，意思是<b>「股票翻倍」與「你的 ATM call 能賺」之間還有距離——股票要漲超過 +42% 你才開始賺，漲到 +100% 才 +132%。</b></p>
-
-  <h3>🎯 我的最終建議</h3>
-  <div class="analysis-box analysis-review">
-    <ol style="margin:0 0 0 18px;font-size:0.9rem;line-height:1.9;">
-      <li><b>「價平」不建議，但「深價內 LEAP」正是你要的股票替代——這個方向我支持。</b>100% 壓<u>價平</u>才是問題（+42% 才回本、持平 -96%、IV Percentile 98% 買貴）。改用 <b>深價內（$50–70，delta 0.88–0.93）</b>：年化成本只 7–11%≈融資、持平只虧 15–28%、最大虧損鎖死、不會被 margin call。這就是「像現股的低耗損槓桿」。</li>
-      <li><b>想要更接近 2x，就接受成本：選 delta 0.85（$85 call）當平衡點</b>——約 1.76x、年化 15%、回本 +23%。要硬上 2x 才用價平，但要清楚那是 ~28%/年的高碳水部位。</li>
-      <li><b>方案2（50/25/25）可行，但把那 50% 的「價平」換成「深價內」。</b>翻倍報酬幾乎一樣，但持平/小跌時不會像價平那樣腰斬。</li>
-      <li><b>口數上限鐵則：</b>選擇權部位「就算全歸零也不影響生活」。LEAP 的 50% 要是你輸得起的錢。</li>
-      <li><b>分批 + 看 IV：</b>別一次買滿。IV 從 88% 回落時再加碼長天期 call（vega 順風）；IV 飆高時改買現貨。</li>
-      <li><b>提早翻倍就分批了結</b>（賺回剩餘時間價值），別執著抱到期；論點若轉成「反身性加速賣幣」則果斷出場。</li>
-      <li><b>更穩的替代：</b>若你要的其實是「槓桿但別歸零」，深價內 LEAP（delta 0.8+）或「現貨 + 少量 OTM call 當彩券」比「100% 價平」健康得多。</li>
-    </ol>
-  </div>
-  <div class="disclaimer">⚠️ 不構成投資建議。選擇權可能 100% 歸零，且時間價值與 IV 變動會在股價未跌時就侵蝕價值。數字以 Black-Scholes＋CBOE 2026/6/9 鏈表計算，下單前以券商即時報價為準。台股投資人需用有選擇權權限的美股券商（IBKR 等），複委託多半不能買長天期選擇權；權利金損益屬海外所得。</div>
-</div>
-
-</div>
-
-<!-- ============ TAB: LEAP 下單單 ============ -->
-<div id="tab-leapbuy" class="tab-content">
-
-<div class="section">
-  <h2>🛒 LEAP 下單單 — 相對現價可考慮的具體合約</h2>
-  <p style="font-size:0.82rem;color:var(--text2);">即時錨點：MSTR <b>$127.2</b>（CBOE 延遲報價，2026/6/9）。<b>下單前務必用券商即時鏈表覆核權利金/IV。</b>所有「掛單價」= 抓取當下的 mid（中價），實際請以你下單當下的 mid 為準。</p>
-  <div class="analysis-box analysis-purple" style="font-size:0.92rem;">
-    <b>選擇邏輯（承前兩頁）：</b>不選價平（耗損最重）、不選 $50 深價內（價差 9%＋零成交、買不到）。
-    只在<b>「夠價內(delta 0.78-0.84，像現股)＋整數履約價＋OI 數百以上＋價差可控」</b>的交集裡挑。
-    <b>到期優先 Dec-2028</b>——因為「📉 BTC熊市規律」顯示暴力上行通常在 <b>2028/4 減半之後</b>，Dec-2027/Jan-2028 會在行情加速前就到期。
+    <div class="kpi"><div class="label">會歸零嗎？</div><div class="value pos" style="font-size:1.3rem;">不會</div><div class="note">鏈上是收籌碼非死亡螺旋</div></div>
+    <div class="kpi"><div class="label">現在是底嗎？</div><div class="value neg" style="font-size:1.3rem;">大概不是</div><div class="note">MVRV未到投降、ETF在逃</div></div>
+    <div class="kpi"><div class="label">基本面變了嗎？</div><div class="value warn" style="font-size:1.2rem;">部分變了</div><div class="note">財庫反身性+ETF順週期</div></div>
+    <div class="kpi"><div class="label">該怎麼做</div><div class="value" style="font-size:1.2rem;">小額DCA</div><div class="note">借錢子彈先留著</div></div>
   </div>
 </div>
 
 <div class="section">
-  <h3>🎯 三個可考慮的合約（按目標分）</h3>
+  <h3>🛠️ 行動方案（現在 → 之後）</h3>
   <table>
-    <thead><tr><th>—</th><th>🥇 主推<br>低耗損·貼合減半</th><th>🥈 流動性最佳<br>省premium</th><th>🥉 進攻<br>更高槓桿</th></tr></thead>
+    <thead><tr><th>項目</th><th>我的建議</th><th>為什麼</th></tr></thead>
     <tbody>
-      <tr><td><b>到期日</b></td><td><b>2028/12/15</b></td><td>2028/1/21</td><td>2028/1/21</td></tr>
-      <tr><td><b>行權價(Call)</b></td><td><b>$100</b></td><td>$100</td><td>$120</td></tr>
-      <tr><td><b>掛單價(限價,mid)</b></td><td class="pos"><b>$77.75</b></td><td class="pos">$67.20</td><td class="pos">$59.65</td></tr>
-      <tr><td>可接受上限</td><td>$78.80</td><td>$68.10</td><td>$60.50</td></tr>
-      <tr><td>每口成本</td><td>~$7,775</td><td>~$6,720</td><td>~$5,965</td></tr>
-      <tr><td>delta(像現股?)</td><td class="pos">0.84</td><td>0.81</td><td>0.76</td></tr>
-      <tr><td>名目槓桿</td><td>1.64x</td><td>1.89x</td><td class="warn">2.13x</td></tr>
-      <tr><td>回本門檻(到期)</td><td>$178 (+40%)</td><td class="pos">$167 (+31%)</td><td class="warn">$180 (+41%)</td></tr>
-      <tr><td><b>年化持有成本</b></td><td class="pos"><b>15.8%</b></td><td>19.4%</td><td class="warn">25.5%</td></tr>
-      <tr><td>報酬@翻倍(到期)</td><td>+99%</td><td class="pos">+130%</td><td>+125%</td></tr>
-      <tr><td>未平倉OI / 價差</td><td>599 / 7.5%</td><td class="pos">846 / 5.6%</td><td>370 / 6.7%</td></tr>
-      <tr><td>定位</td><td class="pos">最像現股、減半後最大窗口</td><td>最好成交、回本最低</td><td class="warn">最接近2x、但耗損高、到期早</td></tr>
+      <tr><td><b>工具</b></td><td class="pos">現股為主（MSTR/BMNR）</td><td>無 theta、無滑點、無斷頭，時間站你這邊（你的判斷對）</td></tr>
+      <tr><td><b>資金來源</b></td><td class="warn">本業收入定期定額；<b>低息貸款先別動</b></td><td>僵局可能再磨數月～跌更深；借錢買最反身的資產＝利息+回撤雙重壓力</td></tr>
+      <tr><td><b>現在投入比例</b></td><td>總子彈的 <b>30–40%</b>，分批</td><td>承認「你不知道底在哪」＝分批才理性</td></tr>
+      <tr><td><b>剩餘子彈</b></td><td>等「觸發訊號」再加（含貸款）</td><td>見下方三個訊號，任一出現才加碼</td></tr>
+      <tr><td><b>MSTR : BMNR</b></td><td class="pos">現在偏 <b>~65 : 35</b></td><td>ETH 需求比 BTC 更弱（ETF出逃更兇）+ BMNR 稀釋風險 → BMNR 當較小衛星</td></tr>
     </tbody>
   </table>
-  <p style="font-size:0.78rem;color:var(--text3);">IV 均 ~89-91%（偏貴，IV Percentile ~98%）→ 建議分批、IV 回落再加碼。「報酬@翻倍」為「到期時 MSTR 剛好 $254」的內含值報酬；若翻倍提早發生並中途賣出，可再多賺剩餘時間價值。</p>
-</div>
-
-<div class="section">
-  <h3>📝 主推合約的「掛單範本」（複製到券商）</h3>
-  <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;">商品(Symbol)   : MSTR  2028-12-15  Call  $100
-動作(Action)   : Buy to Open（買進開倉）
-數量(Qty)      : N 口   ← N = 你配給LEAP的預算 ÷ $7,775（無條件捨去）
-訂單類型(Type) : Limit（限價）   ← 絕不用 Market（市價）
-限價(Limit)    : $77.75（mid）；未成交可每次 +$0.25 微調，上限 $78.80
-效期(TIF)      : Day（當日）；分批時可用 GTC
-下單時段        : 美股盤中（台灣 21:30–04:00），避開開盤/收盤前後10分鐘
-預估總成本      : N × $7,775（+ 少量手續費）</pre>
-  <h4>口數試算</h4>
-  <table>
-    <thead><tr><th>你配給 LEAP 的錢</th><th class="num">主推$100(每口$7,775)</th><th class="num">控制名目曝險</th></tr></thead>
-    <tbody>
-      <tr><td>$10,000</td><td class="num">1 口</td><td class="num">~$12,720（1.64x）</td></tr>
-      <tr><td>$30,000</td><td class="num">3 口</td><td class="num">~$38,000</td></tr>
-      <tr><td>$50,000</td><td class="num">6 口</td><td class="num">~$76,000</td></tr>
-      <tr><td>$80,000</td><td class="num">10 口</td><td class="num">~$127,000</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <h3>✅ 執行紀律 + 出場</h3>
-  <ol style="margin:6px 0 0 18px;font-size:0.88rem;line-height:1.85;">
-    <li><b>只用限價單掛 mid</b>；寬價差下市價單＝直接送錢給造市商。掛 mid 不成交就等，或每次只 +$0.25。</li>
-    <li><b>分 2–3 批建倉</b>，別一次掃完；IV 從 ~90% 回落時再加碼（vega 順風）。</li>
-    <li><b>這筆 LEAP 的錢＝你輸得起的錢。</b>到期前若 MSTR 沒漲過回本門檻，會虧大部分權利金。</li>
-    <li><b>提早翻倍就分批了結</b>（賣出可多賺剩餘時間價值），別執著抱到期歸零邊緣。</li>
-    <li><b>展期(roll)</b>：到期前 3–4 個月，若論點仍在但還沒漲到位，可往更遠到期/更高履約價滾動。</li>
-    <li><b>論點失效就走</b>：MSTR 反身性加速賣幣／特別股停息／BTC 破前低且鏈上轉壞。</li>
-    <li><b>BMNR 不要用這招</b>：期權流動性太差，要 BMNR 曝險就買現股。</li>
-  </ol>
-  <div class="disclaimer">⚠️ 不構成投資建議，僅為研究示意。選擇權可能 100% 歸零；數字為 CBOE 延遲報價＋Black-Scholes 計算，下單前以券商即時鏈表為準。台灣需用有期權權限的美股券商（IBKR 等），複委託多半不能買長天期選擇權；權利金損益屬海外所得。資料 2026/6/9。</div>
-</div>
-
-</div>
-
-<!-- ============ TAB: BTC 熊市規律 ============ -->
-<div id="tab-btccycle" class="tab-content">
-
-<div class="section">
-  <h2>📉 比特幣熊市規律 — 跌多久觸底？反彈是暴力還是磨盤？</h2>
-  <div class="analysis-box analysis-purple" style="font-size:0.93rem;">
-    <b>兩個答案先講：</b><br>
-    ⏱️ <b>觸底時間：</b>除 2011 年（早期小市場、~5 個月閃崩）外，過去三輪熊市都是<b>「從高點跌約 12–14 個月見底」</b>，跌幅 <b>-77% ~ -86%</b>，且一輪比一輪淺（-94%→-86%→-84%→-77%）。從高點到收復前高約 <b>2–3 年</b>。<br>
-    🐌 <b>反彈型態：暴力 V 轉直接創高的機率「低」。</b>歷史規律是——<b>「底部」本身常是一根暴力的恐慌插針（capitulation），但底部之後的「復甦」幾乎都是磨盤式的緩慢再累積（reaccumulation），盤好幾個月到一年才啟動主升段。</b>唯一一次像樣的「暴力反彈」（2019 上半年 +330%）<b>後來失敗、回測破底</b>。所以賭「觸底就暴力噴出創高」歷史上是輸家側。
-  </div>
-</div>
-
-<div class="section">
-  <h3>📊 四輪熊市對照</h3>
-  <table>
-    <thead><tr><th>週期</th><th>高點</th><th>低點</th><th>跌幅</th><th>高→底時間</th><th>收復前高</th><th>底部後型態</th></tr></thead>
-    <tbody>
-      <tr><td>2011</td><td>~$32（6月）</td><td>~$2（11月）</td><td class="num neg">-93%</td><td class="num">~5 個月</td><td>~1.5–2 年</td><td>快速但小市場</td></tr>
-      <tr><td>2013–15</td><td>~$1,150（13/12）</td><td>~$170（15/1）</td><td class="num neg">-86%</td><td class="num">~13–14 個月</td><td>~3 年</td><td class="warn">磨盤一整年才動</td></tr>
-      <tr><td>2017–18</td><td>~$19,800（17/12）</td><td>~$3,200（18/12）</td><td class="num neg">-84%</td><td class="num">~12 個月</td><td>~3 年</td><td class="warn">先暴力彈+330%→失敗回測</td></tr>
-      <tr><td>2021–22</td><td>~$69,000（21/11）</td><td>~$15,500（22/11）</td><td class="num neg">-77%</td><td class="num">~12 個月</td><td>~2.3 年（24/3）</td><td class="warn">磨盤一年→ETF後加速</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">通用節奏（rule of thumb）：<b>約 1 年拋物線上漲 → 約 1 年急跌 → 約 2 年復甦/再累積</b>，整體 ~4 年一輪（對齊減半）。下次減半 ~2028/4。</p>
-</div>
-
-<div class="section">
-  <h3>🐌 vs 💥 「暴力反彈」還是「磨盤緩漲」？逐輪拆解</h3>
-  <div class="team-grid">
-    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">2015 底（$170）</div><div class="role">磨盤緩漲 🐌</div><ul><li>沒有 V 轉，整個 2015 在 $200–300 橫盤</li><li>主升段拖到 2016–17 才來</li></ul></div>
-    <div class="team-card" style="border-color:rgba(168,85,247,0.4)"><div class="name">2018 底（$3.2k）</div><div class="role">假暴力 💥→失敗</div><ul><li>2019 上半年暴彈到 ~$13.8k（+330%）</li><li>但隨即回落、2020/3 再崩到 ~$3.8k 雙底</li><li>真突破等到 2020 下半年</li></ul></div>
-    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">2022 底（$15.5k）</div><div class="role">磨盤緩漲 🐌</div><ul><li>2023 整年在 $25–31k 震盪爬</li><li>2024 ETF 過關才加速噴</li></ul></div>
-  </div>
-  <div class="analysis-box analysis-yellow" style="margin-top:8px;">
-    <b>結論（機率判斷）：底部後「磨盤緩漲」機率明顯高於「暴力 V 轉創高」。</b>
-    暴力的部分通常出現在 ① 觸底前的恐慌插針、② 週期<b>後段</b>的拋物線噴出（減半後）；而剛觸底的前幾個月到一年，歷史上多是無聊的再累積區間。
-    把「暴力反彈」當基準預期、且用會過期的工具去賭它，是歷史上反覆懲罰人的做法。
-  </div>
-</div>
-
-<div class="section">
-  <h3>🧭 對照當下 + 對你 LEAP/配置的意義</h3>
-  <table>
-    <thead><tr><th>項目</th><th>現況</th><th>歷史對照</th></tr></thead>
-    <tbody>
-      <tr><td>距前高跌幅</td><td class="num warn">-50%（$126k→$63k）</td><td>歷次底在 -77%~-86%；本輪若延續「一輪比一輪淺」可能 -55~-65%</td></tr>
-      <tr><td>鏈上位置</td><td>MVRV-Z ~0.41、貼 200 週均線</td><td class="warn">=公允價、非深底；真底常 MVRV 轉負</td></tr>
-      <tr><td>時間</td><td>距高點約數個月</td><td class="warn">歷次需 ~12–14 個月見底 → 時間上可能未到</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bear">
-    <b>把三個分頁串起來：</b><br>
-    • 若歷史重演＝「底部後磨盤緩漲數月到一年」，那麼 <b>你的 Dec-2027 LEAP 最怕的就是這個</b>——緩漲很可能在到期前清不過 +42% 的回本門檻，theta 一路流血（見「🎰 LEAP槓桿」②）。<b>選擇權需要「快」，但歷史說底部後通常「慢」。</b><br>
-    • 緩慢磨盤的環境，<b>最適合的是現貨分批 DCA（沒有到期、沒有時間價值）</b>，而不是壓長天期 call。<br>
-    • 真正的「暴力上行」歷史上多在減半後（~2028）才來——若你的論點是這個，<b>到期日要拉到 2028 之後</b>，Dec-2027 可能太早。<br>
-    • 反過來說，若你堅信「這次提早、且會快」，才適合 LEAP；否則「現貨為主＋少量深價內 LEAP」更貼合歷史節奏。
-  </div>
-  <div class="disclaimer">⚠️ 歷史規律不保證重演；每輪市場結構（ETF、機構、減半效應遞減）都在變。樣本僅 3–4 輪，統計意義有限。不構成投資建議。資料：OANDA/Glassnode/TradeThatSwing 等歷史價格交叉比對，2026/6/9。</div>
-</div>
-
-</div>
-
-<!-- ============ TAB 1.5: PLAN v4 ============ -->
-<div id="tab-plan" class="tab-content">
-<div class="section">
-  <h2>💼 投資規劃 v4 — 完整論證</h2>
-  <p style="color:var(--text2);">把整段研究（波克夏實證、GOOG估值、BTC/MSTR抄底、影片批判、台美配對、LLM估值、AI電力/太空DC）收斂成一個可執行計劃。以下是「為什麼這樣配」的完整推理鏈。</p>
-
-  <h3>① 目標與約束</h3>
-  <table>
-    <tbody>
-      <tr><td style="width:120px;"><b>期限</b></td><td>2-4 年長線</td></tr>
-      <tr><td><b>風險屬性</b></td><td>進攻部位、可大膽、能承受中途 -30~-40%</td></tr>
-      <tr><td><b>偏好</b></td><td>符合未來趨勢（AI 為主軸）</td></tr>
-      <tr><td><b>起點</b></td><td>原本想 100% 信念式 All-in MSTR</td></tr>
-    </tbody>
-  </table>
-
-  <h3>② 六條核心原則（從整段研究推導）</h3>
-  <div class="flow">
-    <div class="flow-step key"><div class="flow-marker"><div class="flow-num">1</div><div class="flow-line"></div></div><div class="flow-body"><div class="t">別 100% MSTR</div><div class="d">6/1 首度賣幣＝反身性風險（折價→賣幣→更折價）已啟動 → 把加密拆成「現貨 BTC + MSTR」。</div></div></div>
-    <div class="flow-step key"><div class="flow-marker"><div class="flow-num">2</div><div class="flow-line"></div></div><div class="flow-body"><div class="t">別把高 beta AI 疊一起</div><div class="d">MSTR + NVDA + TSMC 全壓＝同一注（risk-off 一起暴跌）→ 用低相關的 GOOG 當核心，AVGO/TSMC 只當衛星。</div></div></div>
-    <div class="flow-step key"><div class="flow-marker"><div class="flow-num">3</div><div class="flow-line"></div></div><div class="flow-body"><div class="t">GOOG 是最高信念持股</div><div class="d">三重驗證：波克夏 Q1 加倉 ×3＋零加密、三家 LLM 裡<b>市場給的模型估值最低</b>（Gemini 幾乎免費附在 Alphabet ~28x P/E 裡）、$64B FCF＋低波動＋免費的太空運算選擇權(Project Suncatcher)。</div></div></div>
-    <div class="flow-step"><div class="flow-marker"><div class="flow-num">4</div><div class="flow-line"></div></div><div class="flow-body"><div class="t">抄底區但非深底</div><div class="d">MVRV 僅 0.41、現價仍高於已實現價 → 階梯進場、留子彈，別一次梭哈。</div></div></div>
-    <div class="flow-step"><div class="flow-marker"><div class="flow-num">5</div><div class="flow-line"></div></div><div class="flow-body"><div class="t">純現貨、零槓桿 ETF</div><div class="d">BITX/MSTU/MSTX 的波動衰減會在 2-4 年長抱中吃掉你。</div></div></div>
-    <div class="flow-step"><div class="flow-marker"><div class="flow-num">6</div></div><div class="flow-body"><div class="t">台灣人對 TSMC 要意識家鄉集中</div><div class="d">你的薪水/台股/房已重壓台灣與地緣風險 → TSMC 雖好也要 size down。</div></div></div>
-  </div>
-
-  <h3>③ 最終配置 v4</h3>
-  <div class="alloc-bar">
-    <div class="alloc-seg" style="width:28%;background:var(--blue);">GOOG 28</div>
-    <div class="alloc-seg" style="width:21%;background:var(--orange);">BTC 21</div>
-    <div class="alloc-seg" style="width:18%;background:var(--purple);">MSTR 18</div>
-    <div class="alloc-seg" style="width:13%;background:var(--green);">AVGO 13</div>
-    <div class="alloc-seg" style="width:8%;background:var(--cyan);">TSMC 8</div>
-    <div class="alloc-seg" style="width:12%;background:var(--text3);">現金 12</div>
-  </div>
-  <table>
-    <thead><tr><th>標的</th><th>權重</th><th>角色</th><th>進場區</th><th>一句話理由</th></tr></thead>
-    <tbody>
-      <tr><td><b>🔷 GOOG</b></td><td class="num">28%</td><td>核心錨</td><td>~$330-368 逢回</td><td>最高信念：波克夏背書＋最便宜LLM＋現金流＋低相關</td></tr>
-      <tr><td><b>₿ BTC現貨</b></td><td class="num">21%</td><td>乾淨加密</td><td>$48-56k 階梯</td><td>無溢價/股息/被迫賣幣的公司風險</td></tr>
-      <tr><td><b>🟣 MSTR</b></td><td class="num">18%</td><td>槓桿加密</td><td>$98-116</td><td>放大BTC上檔，但砍半以尊重反身性尾部</td></tr>
-      <tr><td><b>🟢 AVGO</b></td><td class="num">13%</td><td>AI成長衛星</td><td>崩跌後分批</td><td>成長調整後最佳（PEG0.54、$73B backlog、FCF46%）</td></tr>
-      <tr><td><b>🇹🇼 TSMC</b></td><td class="num">8%</td><td>AI代工衛星</td><td>分批(TSM/2330)</td><td>成長+價值勝GOOG，但家鄉折讓→小量</td></tr>
-      <tr><td><b>💵 現金</b></td><td class="num">12%</td><td>子彈</td><td>—</td><td>BTC $41-54k深洗＋AVGO崩跌加碼專款</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">結構：<b>加密 39%（BTC21+MSTR18）｜AI股 49%（GOOG28+AVGO13+TSMC8）｜現金 12%</b>。誠實話：真正「分散」的是 GOOG＋現金（約40%）；AVGO/TSMC 是你<b>刻意加碼未來趨勢</b>的高beta衛星，會跟著risk-on走——這是進攻取向的選擇，不是避險。</p>
-
-  <h3>④ 為什麼是這六檔（連結各分頁論證）</h3>
-  <div class="analysis-box analysis-review">
-    <ul style="margin:0 0 0 16px;">
-      <li><b>GOOG（核心）</b>：見「🔷Google估值」「🏦波克夏實證」。LLM 三雄裡市場給它的模型估值最低（Gemini 藏在 Alphabet ~28x P/E 裡順手買到），而它分發最廣、自有 TPU 成本最低。</li>
-      <li><b>BTC + MSTR（加密）</b>：見「₿BTC/MSTR抄底」「📺影片批判」。抄底區 $48-56k（CVDD~48k/已實現價~54k/MVRV買點~56k），MSTR 持 843,706 BTC 但 6/1 已被迫賣幣 → 拆半配現貨。</li>
-      <li><b>AVGO + TSMC（AI衛星）</b>：見「🔀MSTR配對」。AVGO 是「比 GOOG 更好」的成長標的；TSMC 是台股最強 AI 代工，但對台灣投資人要控量。</li>
-      <li><b>刻意沒放</b>：NVDA（beta2.2，會把組合變成一起暴跌）；CEG（今年-18%、催化劑delay到2031，AI電力寧用 GEV）；VT（成長太低，不符進攻）。</li>
-    </ul>
-  </div>
-
-  <h3>⑤ 情境期望值（2-4年，推估非預測）</h3>
-  <table>
-    <thead><tr><th>情境</th><th>機率</th><th>GOOG</th><th>BTC</th><th>MSTR</th><th>AVGO</th><th>TSMC</th><th>組合</th></tr></thead>
-    <tbody>
-      <tr><td>🔴 熊市</td><td class="num">30%</td><td class="num neg">-15%</td><td class="num neg">-40%</td><td class="num neg">-55%</td><td class="num neg">-30%</td><td class="num neg">-25%</td><td class="num neg"><b>-28%</b></td></tr>
-      <tr style="background:rgba(34,197,94,0.04);"><td>🟢 基準</td><td class="num">45%</td><td class="num pos">+45%</td><td class="num pos">+110%</td><td class="num pos">+130%</td><td class="num pos">+60%</td><td class="num pos">+50%</td><td class="num pos"><b>+71%</b></td></tr>
-      <tr><td>🚀 牛市</td><td class="num">25%</td><td class="num pos">+85%</td><td class="num pos">+320%</td><td class="num pos">+480%</td><td class="num pos">+130%</td><td class="num pos">+100%</td><td class="num pos"><b>+203%</b></td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">🎲 機率加權 ≈ <b>+74%</b>（2-4年）。熊市 -28% 可承受、牛市 +203% 保留暴賺空間。對照原案 100% MSTR：EV +162% 但熊市 -55%＋尾部失控。單一資產報酬為推估。</p>
-
-  <h3>⑥ 進場執行（階梯）</h3>
-  <div class="action-list">
-    <div class="action-item"><b>BTC（21%）</b>：在 $54-62k 起分批、主力擺 $48-56k，保留約 ⅓ 給 $41-50k 深洗。現價 ~$62k(200週線)只是首測。</div>
-    <div class="action-item"><b>MSTR（18%）</b>：$98-116 進；&gt;$140 別追、&lt;$90 先停手等止穩（別接反身性下跌的刀）。</div>
-    <div class="action-item"><b>GOOG（28%）</b>：估值帶頂 → 逢回 ~$330-355 分批，當複利長抱、別追 ATH。</div>
-    <div class="action-item"><b>AVGO（13%）</b>：剛崩約 -20% → 分 3-4 批承接，別一次接。</div>
-    <div class="action-item"><b>TSMC（8%）</b>：小量分批（美股 TSM 或台股 2330），有意識控制家鄉集中。</div>
-    <div class="action-item success"><b>現金（12%）</b>：專款子彈，只在 BTC 深洗或 AI 股急殺時動用。</div>
-  </div>
-
-  <h3>⑦ 風控與季度檢查點</h3>
-  <table>
-    <thead><tr><th>標的</th><th>每季要盯</th><th>惡化訊號＝減碼/暫停</th></tr></thead>
-    <tbody>
-      <tr><td>MSTR</td><td>mNAV是否＜1擴大、是否再賣幣、特別股股息覆蓋</td><td class="neg">折價持續擴大+連續賣幣</td></tr>
-      <tr><td>GOOG</td><td>$180B capex 的 ROI、Cloud 成長、反壟斷上訴</td><td class="neg">Cloud 失速 + FCF 持續被吃</td></tr>
-      <tr><td>AVGO</td><td>AI backlog、客戶集中（Google可能自研）</td><td class="neg">backlog 下修</td></tr>
-      <tr><td>TSMC</td><td>地緣、先進製程 ramp、AI 需求</td><td class="neg">地緣升溫</td></tr>
-      <tr><td>BTC</td><td>MVRV 是否轉負（真深底＝加碼訊號）</td><td class="pos">轉負反而動用子彈</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">🚫 禁：槓桿 ETF（BITX/MSTU/MSTX）。若用借貸資金：留 ≥6 個月生活費＋還款現金，避免底部被迫賣出。中途 -30~-40% 是基準劇情，不是出場訊號。</p>
-
-  <h3>⑧ 兩個微調旋鈕</h3>
-  <table>
-    <thead><tr><th>傾向</th><th>配置</th><th>差異</th></tr></thead>
-    <tbody>
-      <tr><td>🔥 更猛（壓信念）</td><td>GOOG22 / BTC20 / MSTR28 / AVGO12 / TSMC8 / 現金10</td><td>EV↑約+95%、熊市↓約-34%；前提你能在MSTR再腰斬時不砍</td></tr>
-      <tr><td>🛡️ 更穩（加AI電力）</td><td>GOOG33 / BTC16 / MSTR12 / AVGO12 / TSMC7 / GEV5 / 現金15</td><td>加 GEV（AI電力鏟子、誰贏都賺，比CEG好）當真分散；EV↓約+60%、熊市↓約-22%</td></tr>
-    </tbody>
-  </table>
-
-  <h3>⑨ 相對 v3 改了什麼</h3>
-  <table>
-    <thead><tr><th></th><th>v3（槓鈴）</th><th>v4（六資產）</th></tr></thead>
-    <tbody>
-      <tr><td>配置</td><td>GOOG40 / BTC25 / MSTR25 / 現金10</td><td>GOOG28 / BTC21 / MSTR18 / AVGO13 / TSMC8 / 現金12</td></tr>
-      <tr><td>核心</td><td>單一 GOOG 錨</td><td>升級成「AI 價值鏈」：模型(GOOG)＋ASIC(AVGO)＋代工(TSMC)</td></tr>
-      <tr><td>加密曝險</td><td>50%</td><td>降到 39%（保留進攻但讓空間給AI股）</td></tr>
-      <tr><td>現金</td><td>10%</td><td>12%（MVRV未轉負，多留子彈）</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.82rem;color:var(--text2);">理由：你在研究中問了 TSMC/AVGO，且數據顯示 AVGO 成長調整後勝 GOOG、TSMC 成長/價值也勝 GOOG。把單一 GOOG 升級成 AI 價值鏈三檔，更貼合你「符合未來趨勢」的偏好，同時用 GOOG 的低相關＋12% 現金維持存活力。</p>
-
-  <div class="disclaimer">本規劃由 AI 生成、僅供研究參考，不構成投資建議。情境機率與報酬為推估、非預測。事實型數據經多來源查證見各分頁。加密與股票投資可能虧損本金。資料截至 2026/6/7。</div>
-</div>
-</div>
-
-<!-- ============ TAB 2: WORKFLOW ============ -->
-<div id="tab-workflow" class="tab-content">
-<div class="section">
-  <h2>🔬 這份報告怎麼做出來的（Workflow 拆解）</h2>
-  <p style="color:var(--text2);">你要的不是一個黑箱答案，而是可檢驗的流程。以下是這次「agent team」的實際工作管線——延續前一版（v2）做到一半的計劃，補上<b>真實官方數據</b>與<b>Google 深度估值</b>。</p>
-
-  <div class="flow">
-    <div class="flow-step done"><div class="flow-marker"><div class="flow-num">0</div><div class="flow-line"></div></div>
-      <div class="flow-body"><div class="t">理解既有計劃（v2）</div><div class="d">讀完前一版 8 分頁報告：總覽/MSTR深掘/組合優化/巴菲特/多空/審查/行動。發現弱點：① 波克夏持股是「模擬13F」非真實；② Google 只有薄薄一行；③ 多項數據需重新查證。</div></div></div>
-
-    <div class="flow-step key"><div class="flow-marker"><div class="flow-num">1</div><div class="flow-line"></div></div>
-      <div class="flow-body"><div class="t">派出 3 組研究 agent（並行）</div><div class="d">同時下三個明確任務、要求每個數字附來源＋信心標籤（[VERIFIED]/[ESTIMATE]）。見下方團隊卡。</div></div></div>
-
-    <div class="flow-step key"><div class="flow-marker"><div class="flow-num">2</div><div class="flow-line"></div></div>
-      <div class="flow-body"><div class="t">資料驗證與糾錯（監察）</div><div class="d">交叉比對 SEC 13F/10-Q、Yahoo、Fortune、CNBC、bitbo、alternative.me。<b>糾正 v2 的 4 個錯誤</b>（MSTR持幣量、RSI、mNAV、價格）。見「多空+驗證」分頁。</div></div></div>
-
-    <div class="flow-step"><div class="flow-marker"><div class="flow-num">3</div><div class="flow-line"></div></div>
-      <div class="flow-body"><div class="t">歷史估值 + 前瞻預期</div><div class="d">GOOG：5/10年估值帶、Q1'26與FY2025財報、2026-2028共識成長、分析師目標、DCF分歧。BTC/MSTR：週期位置、抄底區間、2-4年三情境。</div></div></div>
-
-    <div class="flow-step"><div class="flow-marker"><div class="flow-num">4</div><div class="flow-line"></div></div>
-      <div class="flow-body"><div class="t">配置決策（綜合）</div><div class="d">把「波克夏訊號＋GOOG估值＋BTC抄底＋你的進攻偏好」做成 4 套配置＋情境期望值，選出槓鈴式為主推。</div></div></div>
-
-    <div class="flow-step done"><div class="flow-marker"><div class="flow-num">5</div></div>
-      <div class="flow-body"><div class="t">HTML 呈現</div><div class="d">就是你正在看的這份 v3。</div></div></div>
-  </div>
-
-  <h3>👥 研究團隊（本次 agent）</h3>
-  <div class="team-grid">
-    <div class="team-card" style="border-color:var(--purple);">
-      <div class="name">🏦 波克夏分析師</div>
-      <div class="role">查最新 13F + 10-Q + Alphabet 動向</div>
-      <ul><li>Q1'26 真實持股表</li><li>$397B 現金山</li><li>GOOGL 加倉3倍的時間軸</li><li>確認零加密曝險</li></ul>
-    </div>
-    <div class="team-card" style="border-color:var(--blue);">
-      <div class="name">🔷 Alphabet 分析師</div>
-      <div class="role">歷史估值 + 前瞻成長 + 風險</div>
-      <ul><li>5/10年估值帶定位</li><li>雲端/Gemini/Waymo</li><li>2026-28共識與目標價</li><li>反壟斷與資本支出風險</li></ul>
-    </div>
-    <div class="team-card" style="border-color:var(--orange);">
-      <div class="name">₿ BTC/MSTR 分析師</div>
-      <div class="role">抄底訊號 + 週期 + 反身性風險</div>
-      <ul><li>200週均線/MVRV/F&amp;G</li><li>MSTR 843,706 BTC 與債務</li><li>6/1首度賣幣事件</li><li>2-4年三情境價格</li></ul>
-    </div>
-    <div class="team-card" style="border-color:var(--green);">
-      <div class="name">🪑 主席（綜合）</div>
-      <div class="role">挑戰邏輯、選配置</div>
-      <ul><li>糾正資料偏誤</li><li>權衡進攻 vs 存活</li><li>產出最終配置</li></ul>
-    </div>
-  </div>
-
-  <div class="analysis-box analysis-review">
-    <b>方法論誠實聲明：</b>機率與情境報酬是<b>分析師判斷的推估</b>，非預測，更非保證。所有「事實型」數字（價格、財報、持股、估值倍數）均經 2+ 來源查證並標註；所有「展望型」數字（目標價、2-4年情境）標為估計。資料截至 2026/6/5-6，市場瞬息萬變。
-  </div>
-</div>
-</div>
-
-<!-- ============ TAB 3: BERKSHIRE ============ -->
-<div id="tab-berkshire" class="tab-content">
-<div class="section">
-  <h2>🏦 波克夏實證 — 為什麼這是 GOOG 最強背書</h2>
-  <div class="analysis-box analysis-purple">
-    <b>核心發現：</b>2026 Q1（Greg Abel 接任 CEO 的第一季），波克夏做了三件事——
-    <b>① 把 Alphabet 加倉約 +225%（≈3倍）變成第 7 大持股</b>；
-    ② 砍掉 15-16 檔小部位（持股數 39→26）；
-    ③ 現金堆到歷史新高 <b>$397.4B</b>。
-    對一個「找不到便宜貨就抱現金」出了名的機構，<b>願意把 Alphabet 加到 ~$16-17B，等於用行動說：這是少數值得大買的優質現金流資產。</b>而 BTC/MSTR 持股＝0。
-  </div>
-
-  <h3>📋 波克夏 Q1 2026 真實 13F 前十大持股 <span class="tag v">VERIFIED</span></h3>
-  <table>
-    <thead><tr><th>#</th><th>持股</th><th>股數</th><th>市值</th><th>佔比</th><th>Q1動向</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td><b>AAPL</b> 蘋果</td><td class="num">227.9M</td><td class="num">$57.8B</td><td class="num">22.0%</td><td><span class="vbadge vbadge-na">持平（停止減持）</span></td></tr>
-      <tr><td>2</td><td>AXP 美國運通</td><td class="num">151.6M</td><td class="num">$45.9B</td><td class="num">17.4%</td><td>—</td></tr>
-      <tr><td>3</td><td>KO 可口可樂</td><td class="num">400.0M</td><td class="num">$30.4B</td><td class="num">11.6%</td><td>—</td></tr>
-      <tr><td>4</td><td>BAC 美國銀行</td><td class="num">513.6M</td><td class="num">$25.0B</td><td class="num">9.5%</td><td><span class="vbadge vbadge-warn">微減 -0.7%</span></td></tr>
-      <tr><td>5</td><td>CVX 雪佛龍</td><td class="num">84.4M</td><td class="num">$17.5B</td><td class="num">6.6%</td><td><span class="vbadge vbadge-fail">大減 -35%</span></td></tr>
-      <tr><td>6</td><td>OXY 西方石油</td><td class="num">264.9M</td><td class="num">$17.2B</td><td class="num">6.6%</td><td>—</td></tr>
-      <tr style="background:rgba(168,85,247,0.10);"><td><b>7</b></td><td><b>🔷 GOOGL Alphabet</b></td><td class="num"><b>54.2M</b></td><td class="num"><b>$15.6B</b></td><td class="num"><b>5.9%</b></td><td><span class="vbadge vbadge-pass">加倉 +225% ★</span></td></tr>
-      <tr><td>8</td><td>CB 安達保險</td><td class="num">34.2M</td><td class="num">$11.2B</td><td class="num">4.2%</td><td>—</td></tr>
-      <tr><td>9</td><td>MCO 穆迪</td><td class="num">24.7M</td><td class="num">$10.8B</td><td class="num">4.1%</td><td>—</td></tr>
-      <tr><td>10</td><td>KHC 卡夫亨氏</td><td class="num">325.6M</td><td class="num">$7.3B</td><td class="num">2.8%</td><td>—</td></tr>
-      <tr style="background:rgba(168,85,247,0.05);"><td>—</td><td>＋GOOG (C股)</td><td class="num">3.59M</td><td class="num">~$1.0B</td><td class="num">~0.4%</td><td>新增</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3);">合計 Alphabet（A+C 股）≈ 57.8M 股 ≈ <b>$16-17B、約佔組合 6.3%</b>。來源：SEC 13F (CIK 0001067983)、13f.info、GiantSight、CNBC、Fortune 交叉比對。排名11-26的小部位未逐一鎖定（建議需要時拉 EDGAR 原始表）。</p>
-
-  <h3>🕰️ Alphabet 建倉時間軸 — 這不是一時興起</h3>
-  <table>
-    <thead><tr><th>時點</th><th>事件</th><th>持股</th><th>意義</th></tr></thead>
-    <tbody>
-      <tr><td>2025 Q3</td><td>首度建倉（Buffett 仍任 CEO）</td><td class="num">~17.85M 股 / ~$4.3B</td><td>很可能是 Combs/Weschler 出手</td></tr>
-      <tr style="background:rgba(168,85,247,0.08);"><td><b>2026 Q1</b></td><td><b>Abel 接任後加倉 ~3倍</b></td><td class="num"><b>~57.8M 股 / ~$16-17B</b></td><td><b>Abel 第一季的招牌動作</b></td></tr>
-      <tr><td>2026/6/1</td><td>傳參與 Alphabet $80B 增發之私募 <span class="tag e">待證實</span></td><td class="num">~$10B（報導）</td><td>若屬實＝直接金援其AI建設</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-yellow">
-    <b>⚠️ 一個待證實但極具份量的細節：</b>Alphabet 6/1 宣布 $80B 增發，多個來源提到結構中含「~$10B 波克夏私募」。此點來自新聞片段、<b>尚未經原始文件逐條確認</b>，但若屬實，代表波克夏不只在二級市場買，還直接參與一級市場金援——對「GOOG 是優質現金流資產」是更強的背書。請以財報/13D-G 申報為準。
-  </div>
-
-  <h3>💰 波克夏的「現金 vs 出手」訊號</h3>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">13F 股票組合</div><div class="value">$263B</div><div class="note">由Q4'25 ~$275B 縮減</div></div>
-    <div class="kpi"><div class="label">現金+短債（新高）</div><div class="value pos">$397B</div><div class="note">含 $339B 美國國庫券</div></div>
-    <div class="kpi"><div class="label">持股檔數</div><div class="value">26</div><div class="note">由 39 大幅集中</div></div>
-    <div class="kpi"><div class="label">加密曝險</div><div class="value neg">$0</div><div class="note">BTC/MSTR 完全沒有</div></div>
-  </div>
-  <p style="font-size:0.85rem;">解讀：<b>波克夏整體仍是「淨賣家」、抱著史上最多現金等待</b>——意味它認為「整體市場不便宜」。但在這種極度挑剔的狀態下，它<b>偏偏選擇大買 Alphabet</b>，這個「相對訊號」比任何分析師目標價都有力。同時它砍能源（CVX -35%）、清掉一堆金融/消費小部位（Visa、Mastercard、UNH、Amazon、Domino's…）。</p>
-
-  <h3>🧭 這對「你」的兩個啟示</h3>
-  <div class="analysis-box analysis-review">
-    <b>啟示 1（支持買 GOOG）：</b>連最保守、最看重現金流與護城河的波克夏都把 Alphabet 當成「值得在貴的市場裡大買」的標的。你對 GOOG 的興趣不是錯覺，是與頂級資金同向。<br><br>
-    <b>啟示 2（提醒 MSTR 的本質）：</b>波克夏對 BTC/MSTR 是<b>結構性迴避</b>（無現金流、無法估值、恐慌時無央行托底）。這不代表 MSTR 不能買——而是提醒你：MSTR 屬於「高賠率投機」而非「巴菲特式投資」，<b>它該用「賭注大小」來管理，不該 All-in</b>。
-  </div>
-  <div class="disclaimer">波克夏持股為 Q1 2026 13F（截至 2026/3/31，5/15 申報）查證值。13F 僅涵蓋美股多頭部位，不含日本商社等海外持股（資產負債表上股票公允值約 $288B）。本頁不構成投資建議。</div>
-</div>
-</div>
-
-<!-- ============ TAB 4: GOOGLE ============ -->
-<div id="tab-google" class="tab-content">
-<div class="section">
-  <h2>🔷 Google / Alphabet 估值 — 歷史 × 前瞻</h2>
-  <div class="analysis-box analysis-review">
-    <b>一句話定性：</b>這是一檔<b>「基本面極好、但價格站在 5 年估值帶頂部」的優質複利股</b>。基本面（雲端 +63%、搜尋韌性、AI 正在幫忙而非吃掉搜尋）和反壟斷（已大幅去風險）都站在多方；但你是在<b>偏貴的價位</b>進場，且自由現金流被史詩級資本支出暫時壓扁。2-4年報酬的關鍵不在「公司好不好」（好），而在「$180B+/年的 AI 資本支出能不能夠快賺回成本，在估值收斂前把 FCF 撐回來」。
-  </div>
-
-  <h3>📈 歷史估值定位：現在貴不貴？（vs 自身歷史）</h3>
-  <table>
-    <thead><tr><th>倍數</th><th>現在(6/26)</th><th>FY24</th><th>FY22低</th><th>5年帶</th><th>判讀</th></tr></thead>
-    <tbody>
-      <tr><td>本益比 P/E (TTM)</td><td class="num warn">28.1</td><td class="num">23.2</td><td class="num">19.1</td><td>~17→29</td><td class="warn">近頂</td></tr>
-      <tr><td>前瞻 P/E</td><td class="num warn">29.5</td><td class="num">22.1</td><td class="num">17.9</td><td>—</td><td class="neg">帶頂；且＞TTM(盈餘品質旗標)</td></tr>
-      <tr><td>PEG</td><td class="num neg">1.83</td><td class="num">1.34</td><td class="num">1.03</td><td>—</td><td class="neg">5年最貴</td></tr>
-      <tr><td>EV/EBITDA</td><td class="num neg">27.7</td><td class="num">17.7</td><td class="num">12.0</td><td>~18中樞</td><td class="neg">遠高於中樞</td></tr>
-      <tr><td>P/S</td><td class="num neg">10.6</td><td class="num">6.6</td><td class="num">4.1</td><td>—</td><td class="neg">5年最高</td></tr>
-      <tr><td>P/FCF</td><td class="num neg">69.8</td><td class="num">31.9</td><td class="num">19.1</td><td>—</td><td class="warn">資本支出扭曲，非泡沫但貴</td></tr>
-    </tbody>
-  </table>
-  <div class="band"><div class="band-marker" data-label="你在這(P/E 28)" style="left:88%;"></div></div>
-  <div class="band-labels"><span>便宜 (FY22 ~17x)</span><span>5年均 ~24x</span><span>貴 (~29x)</span></div>
-  <p style="font-size:0.8rem;color:var(--text2);margin-top:14px;">
-    ⚠️ 兩個重要註腳：①<b>前瞻P/E(29.5) ＞ 歷史P/E(28.1)</b> 很反常——因為 TTM 每股盈餘被 Q1'26 約 <b>$28.7B 的 Anthropic/SpaceX 非現金未實現利得</b>灌水，真實營運P/E更高。②<b>10年均P/E約27.4</b>，所以用「十年尺度」看只是略貴；用「五年尺度」看是明顯貴。2022 的 ~17x 是把它當「AI 受害者」，現在 ~28x 是市場改判它是「AI 贏家」的重評價。
-  </p>
-
-  <h3>💵 財報實況 <span class="tag v">VERIFIED</span></h3>
-  <table>
-    <thead><tr><th>項目</th><th>Q1 2026</th><th>YoY</th><th>FY2025</th><th>YoY</th></tr></thead>
-    <tbody>
-      <tr><td>總營收</td><td class="num">$109.9B</td><td class="num pos">+22%</td><td class="num">$402.8B</td><td class="num pos">+15%</td></tr>
-      <tr><td>搜尋及其他</td><td class="num">$60.4B</td><td class="num pos">+19%</td><td>(含於Services)</td><td>—</td></tr>
-      <tr style="background:rgba(34,197,94,0.05);"><td><b>Google 雲端</b></td><td class="num">$20.0B</td><td class="num pos"><b>+63%</b></td><td class="num">$58.7B</td><td class="num pos"><b>+36%</b></td></tr>
-      <tr><td>雲端營業利益</td><td class="num">$6.6B</td><td class="num">~33%利潤率</td><td class="num">$13.9B</td><td class="num pos">轉強</td></tr>
-      <tr><td>淨利</td><td class="num">$62.6B</td><td class="num pos">+81%*</td><td class="num">$132.2B</td><td class="num pos">+32%</td></tr>
-      <tr><td>每股盈餘(稀釋)</td><td class="num">$5.11</td><td class="num pos">+82%*</td><td class="num">$10.81</td><td>—</td></tr>
-      <tr><td>營業現金流</td><td>—</td><td>—</td><td class="num">$164.7B</td><td>—</td></tr>
-      <tr><td>資本支出</td><td class="num neg">$35.7B</td><td>—</td><td class="num neg">$91.4B</td><td class="num neg">+74%</td></tr>
-      <tr><td>自由現金流</td><td>—</td><td>—</td><td class="num">~$73B</td><td>~持平</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3);">*Q1'26 淨利約一半（~$28.7B）來自 Anthropic/SpaceX 持股的非現金未實現利得，會波動、可逆轉，<b>不是營運盈餘</b>。雲端在手訂單(backlog) ~$460B（約 4 倍年化雲端營收），給多年能見度。</p>
-
-  <h3>🔮 前瞻共識 <span class="tag c">CONSENSUS</span></h3>
-  <table>
-    <thead><tr><th>年度</th><th>營收</th><th>成長</th><th>EPS</th><th>備註</th></tr></thead>
-    <tbody>
-      <tr><td>2025(實)</td><td class="num">$402.8B</td><td class="num">+15%</td><td class="num">$10.81</td><td>—</td></tr>
-      <tr><td><b>2026E</b></td><td class="num">~$487B</td><td class="num pos">+21%</td><td class="num">~$14.22</td><td>EPS含一次性投資利得</td></tr>
-      <tr><td><b>2027E</b></td><td class="num">~$577B</td><td class="num pos">+19%</td><td class="num warn">低-中個位數成長</td><td>折舊上升壓盈餘</td></tr>
-      <tr><td><b>2028E</b></td><td class="num">~$682B</td><td class="num pos">+18%</td><td class="num">高個位數</td><td>—</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text2);">營收（較乾淨的訊號）2026-28 年複合 ~18-21%。EPS 線因一次性利得＋資本支出折舊而較雜訊；2027/28 營運EPS 共識較軟，分析師對「折舊何時咬到盈餘」看法分歧。</p>
-
-  <h3>🎯 分析師目標價（~63 位，評級「強力買進」）<span class="tag c">CONSENSUS</span></h3>
-  <div class="tgt-wrap">
-    <div class="tgt-line">
-      <div class="tgt-pin" style="left:14%;"><div class="bar" style="background:var(--red)"></div><div class="lbl neg">低 $340<br>(-8%)</div></div>
-      <div class="tgt-pin" style="left:33%;"><div class="bar" style="background:var(--text)"></div><div class="lbl">現價 ~$366</div></div>
-      <div class="tgt-pin" style="left:60%;"><div class="bar" style="background:var(--blue)"></div><div class="lbl" style="color:var(--blue2)">中位 $430<br>(+17%)</div></div>
-      <div class="tgt-pin" style="left:92%;"><div class="bar" style="background:var(--green)"></div><div class="lbl pos">高 $515<br>(+40%)</div></div>
-    </div>
-  </div>
-  <p style="font-size:0.8rem;color:var(--text2);">→ 街上很多頭，但<b>上檔屬「溫和」而非「深度低估」</b>：中位僅 +17%。對「進攻部位」而言，GOOG 的角色是<b>穩定的高品質報酬引擎＋波克夏背書</b>，不是會翻倍的飆股。真正的爆發力來自牛市情境（$515，+40%）——需 AI 資本支出明確見效。</p>
-
-  <h3>🚀 成長引擎 vs ⚠️ 風險（兩面看）</h3>
-  <div class="scenario-grid">
-    <div class="scenario-card" style="border-color:var(--green);">
-      <b class="pos">🚀 多方引擎</b>
-      <ul style="margin:6px 0 0 16px;font-size:0.82rem;">
-        <li><b>雲端</b>：+63%、利潤率~33%、backlog $460B</li>
-        <li><b>Gemini</b>：~9億 MAU、3.5億付費AI訂閱、網頁份額6%→27%</li>
-        <li><b>AI 幫搜尋</b>：搜尋仍 +19%，查詢量創新高</li>
-        <li><b>Waymo</b>：~50萬趟/週、估值~$110-126B（市場幾乎沒給價）</li>
-        <li><b>YouTube</b>：年營收 >$60B</li>
-      </ul>
-    </div>
-    <div class="scenario-card" style="border-color:var(--red);">
-      <b class="neg">⚠️ 主要風險</b>
-      <ul style="margin:6px 0 0 16px;font-size:0.82rem;">
-        <li><b>資本支出/ROI（最大）</b>：2026 capex $180-190B(≈2倍)、2027更高，FCF被壓，6/1增發$80B</li>
-        <li><b>估值</b>：5年帶頂，安全邊際薄，成長不如預期就殺估值</li>
-        <li><b>盈餘品質</b>：投資利得灌水、會反轉</li>
-        <li><b>反壟斷</b>：已大幅去風險（保住Chrome/Android，僅行為救濟），但上訴2027+仍有尾部</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="analysis-box analysis-yellow">
-    <b>🏁 GOOG 之於你的配置：</b>它是這個進攻組合裡的<b>「壓艙石兼成長」</b>——波動(~31%)和最大回撤(~-45%)遠低於 BTC/MSTR，與 BTC 相關性只有 0.28，且報酬引擎完全不同（AI/雲端/廣告現金流 vs 比特幣價格）。它不會讓你暴富，但會讓你在 BTC 熊市時<b>還有東西在賺錢、不會被迫全部砍在地板</b>。這正是你「對強現金流企業有興趣」的正確直覺。
-  </div>
-  <div class="disclaimer">GOOG/GOOGL 數據截至 2026/6/5-6，來源：SEC 8-K/10-K、stockanalysis.com、macrotrends、simplywall.st、analyst notes 交叉比對。目標價與2027/28 EPS 為共識/估計值。不構成投資建議。</div>
-</div>
-</div>
-
-<!-- ============ TAB 5: BTC / MSTR ============ -->
-<div id="tab-btcmstr" class="tab-content">
-<div class="section">
-  <h2>₿ BTC / MSTR 抄底分析（已糾正 v2 錯誤）</h2>
-  <div class="analysis-box analysis-yellow">
-    <b>結論：是抄底區，但「還沒洗乾淨」。</b>動能與情緒面（F&amp;G=12、RSI~17、站上200週均線）都喊capitulation；<b>但鏈上估值（MVRV Z 僅 ~0.41＝公允價，非深底；現價仍高於已實現價 ~$54k）說明底部可能還沒完全到位</b>。策略：<b>分批進場、保留子彈給更深一洗</b>。
-  </div>
-
-  <h3>🔍 BTC 底部訊號儀表板 <span class="tag v">已查證</span></h3>
+  <h3>🚦 「加碼/動用貸款」的觸發訊號（任一）</h3>
   <div class="signal-list">
-    <div class="signal-item"><span class="signal-dot on"></span> <b>恐懼貪婪指數 = 12</b>（極度恐懼，一週前還52）<span class="vbadge vbadge-pass">✓ alternative.me</span></div>
-    <div class="signal-item"><span class="signal-dot on"></span> <b>站上 200 週均線</b>（~$61.5k，BTC 正貼著這條線）— 歷次週期底的經典支撐 <span class="vbadge vbadge-pass">✓</span></div>
-    <div class="signal-item"><span class="signal-dot on"></span> <b>日線 RSI ~17</b>（深度超賣）<span class="vbadge vbadge-warn">⚠ v2寫11.7是錯的</span></div>
-    <div class="signal-item"><span class="signal-dot warn"></span> <b>跌破 200 日均線</b>（~$69-80k）— 現價遠低於它（中期偏空）<span class="vbadge vbadge-warn">⚠ 來源分歧</span></div>
-    <div class="signal-item"><span class="signal-dot off"></span> <b>MVRV Z-Score = 0.41</b> — <b>公允價，非深底</b>（真底通常為負值）<span class="vbadge vbadge-fail">✗ 非極端便宜</span></div>
-    <div class="signal-item"><span class="signal-dot off"></span> <b>現價 ＞ 已實現價(~$54k)</b> — 真底通常現價跌破已實現價 <span class="vbadge vbadge-fail">✗ 未到位</span></div>
+    <div class="signal-item"><span class="signal-dot off"></span><b>邊際買盤回來：</b>BTC/ETH 現貨 ETF 連續 2–4 週淨流入轉正（現在是史上級流出）</div>
+    <div class="signal-item"><span class="signal-dot off"></span><b>真投降出現：</b>MVRV-Z 轉負 / BTC 跌破已實現價(~$54k) / 進入 $40–50k 區</div>
+    <div class="signal-item"><span class="signal-dot off"></span><b>反身性解除：</b>MSTR 停止賣幣付息、mNAV 折價收斂回 1.0x 以上；BMNR 停止暴力增發</div>
   </div>
-
-  <h3>📅 BTC 週期位置</h3>
-  <p style="font-size:0.85rem;">第 4 次減半在 <b>2024/4</b>，目前約減半後 26 個月。歷史上減半後 12-18 個月見頂——對應 <b>2025/10 的 ATH $126,198</b>（教科書級頂部）。所以 2026/6 落在<b>「見頂後下行 / 早熊重置」</b>階段，正是底部「開始形成」的時期，但「形成中」≠「今天就是底」。2022 前例：BTC 在 200 週均線下方待了約 16 個月。</p>
-
-  <h3>🏢 MSTR / Strategy 公司實況（重大糾正）</h3>
-  <table>
-    <thead><tr><th>項目</th><th>v2 報告</th><th>查證值</th><th>狀態</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(239,68,68,0.05);"><td><b>BTC 持倉</b></td><td class="num">~500,000</td><td class="num"><b>843,706 BTC</b></td><td><span class="vbadge vbadge-fail">✗ v2 嚴重低估</span></td></tr>
-      <tr><td>平均成本</td><td>—</td><td class="num">~$66,385 /幣</td><td><span class="vbadge vbadge-warn">⚠ 略高於現價(套牢~7%)</span></td></tr>
-      <tr><td>BTC NAV(現價)</td><td>—</td><td class="num">~$52.2B</td><td><span class="vbadge vbadge-pass">✓</span></td></tr>
-      <tr style="background:rgba(239,68,68,0.05);"><td><b>mNAV</b></td><td class="num">+31.5%</td><td class="num"><b>~0.85-1.0x（近平價/微折價）</b></td><td><span class="vbadge vbadge-fail">✗ 非溢價；市值基準約0.89x，11月曾0.97x</span></td></tr>
-      <tr><td>可轉債</td><td>~$4.15B</td><td class="num">~$6.7B（展延到2032）</td><td><span class="vbadge vbadge-pass">✓ 無2026到期牆</span></td></tr>
-      <tr><td>特別股股息</td><td>未提</td><td class="num">~$750-800M/年</td><td><span class="vbadge vbadge-warn">⚠ STRK/STRF/STRD/STRC/STRE</span></td></tr>
-    </tbody>
-  </table>
-
-  <div class="analysis-box analysis-bear">
-    <b>🚨 v2 完全沒抓到的新風險（決定 MSTR 配置的關鍵）：</b>
-    <b>2026/6/1，Strategy 賣了 32 顆 BTC（~$200萬）來支付特別股股息——這是 2022 年以來首度賣幣，打破「永不賣」誓言。</b>量極小，但<b>訊號重大</b>：當 mNAV 溢價壓縮、增發股票變得稀釋又不划算時，~$750-800M/年的特別股股息開始逼它賣幣。這啟動了一個反身性迴圈：
-    <pre>溢價↓ → 增發失靈 → 付不出股息 → 被迫賣幣 → 顯露壓力 → 溢價更↓</pre>
-    <b>緩解因素：</b>可轉債都長天期（到2032）、無2026到期牆、BTC NAV(~$52B)遠大於可轉債(~$6.7B)。所以<b>2026 不是破產/強制清算風險</b>——除非 BTC 跌到 ~$30k 且特別股融資持續關閉。近期真正的風險是<b>「股票溢價崩跌」</b>，不是倒閉。
-  </div>
-
-  <h3>🎯 抄底進場區間（分批階梯）</h3>
-  <h4>BTC 累積階梯</h4>
-  <table>
-    <thead><tr><th>區間</th><th>價位</th><th>邏輯</th><th>信心</th></tr></thead>
-    <tbody>
-      <tr><td>首道支撐(現在)</td><td class="num">$61-62k</td><td>200週均線，歷次底守此</td><td class="warn">強，但僅首測</td></tr>
-      <tr style="background:rgba(34,197,94,0.05);"><td><b>核心累積</b></td><td class="num"><b>$54-58k</b></td><td>已實現價~$54k＋300週均線匯流</td><td class="pos">高（長持者成本帶）</td></tr>
-      <tr><td>洗盤/超跌</td><td class="num">$41-50k</td><td>2022類比(0.68×200週均線)</td><td>低機率、最高賠率</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.8rem;color:var(--text2);">→ 在 <b>$54-62k 分批</b>，保留約 ⅓ 子彈給可能的 $41-50k 一洗。別在 200 週均線「首次觸碰」就all-in——2022 證明這條線會變成「活門」。</p>
-  <h4>MSTR 價值區（相對 BTC NAV）</h4>
-  <table>
-    <thead><tr><th>區間</th><th>MSTR 價</th><th>邏輯</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.05);"><td><b>合理-便宜</b></td><td class="num"><b>~$95-120</b></td><td>約 0.7-0.9x mNAV，等於折價買BTC曝險＋含币量選擇權</td></tr>
-      <tr style="background:rgba(239,68,68,0.05);"><td>危險</td><td class="num">&lt;~$90</td><td>折價持續擴大、反身性崩跌+被迫賣幣風險主導（GBTC曾-48%）</td></tr>
-      <tr><td>別追高</td><td class="num">&gt;~$140</td><td>mNAV重新升回~1.0x以上但BTC沒跟上</td></tr>
-    </tbody>
-  </table>
-
-  <h3>🔮 BTC / MSTR 2~4年三情境 <span class="tag e">分析師推估</span></h3>
-  <table>
-    <thead><tr><th>情境</th><th>機率</th><th>BTC</th><th>MSTR</th><th>理由</th></tr></thead>
-    <tbody>
-      <tr><td>🔴 熊市</td><td class="num">30%</td><td class="num neg">$30-55k</td><td class="num neg">$50-110</td><td>四年週期成立、深熊如2022、ETF續流出、MSTR溢價轉折價+賣幣</td></tr>
-      <tr style="background:rgba(34,197,94,0.04);"><td>🟢 基準</td><td class="num">45%</td><td class="num pos">$90-160k</td><td class="num pos">$180-400</td><td>2026築底、邁向2028減半新週期、ETF回流、mNAV回1.3-1.8x</td></tr>
-      <tr><td>🚀 牛市</td><td class="num">25%</td><td class="num pos">$200-350k+</td><td class="num pos">$500-1200+</td><td>「資金流週期」取代減半週期、主權/機構採用、流動性擴張、MSTR槓桿放大</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-purple">
-    <b>MSTR 的本質＝「槓桿 + 溢價放大」的 BTC 看漲選擇權。</b>基準/牛市它跑贏 BTC；熊市它跑輸很多（溢價崩疊加 BTC 下跌）。所以 <b>MSTR 該用「部位大小」管理不對稱風險，不該 All-in</b>——這也是為什麼建議把加密曝險拆成「現貨BTC + MSTR」各半。
-  </div>
-  <div class="disclaimer">BTC/MSTR 數據截至 2026/6/5-6，來源：alternative.me、Fortune、Yahoo、bitbo、coinglass、lookintobitcoin、strategy.com、techtimes 交叉比對。情境機率為分析師判斷，非預測。加密投資可能全部損失。</div>
+  <p style="font-size:0.82rem;color:var(--text2);margin-top:8px;">＊三個都還沒亮（目前皆 off）。這不是叫你別買，是叫你<b>別把貸款子彈在僵局裡一次打光</b>。小額 DCA 照走，子彈留給更好的價格或更明確的買盤回歸。</p>
+  <div class="disclaimer">不構成投資建議。加密與相關個股可能大幅虧損。數據為 2026/6 公開來源交叉比對，市場瞬息萬變。舊版完整報告（GOOG/AI價值鏈/期權等）保留在本 repo 的 git 歷史。</div>
 </div>
 </div>
 
-<!-- ============ TAB 6: ALLOCATION ============ -->
-<div id="tab-allocation" class="tab-content">
+<!-- ===== 大戶與供需 ===== -->
+<div id="tab-whale" class="tab-content">
 <div class="section">
-  <h2>📐 配置方案 — 4 套進攻組合 × 情境期望值</h2>
-  <p style="color:var(--text2);"><span class="badge badge-purple">⬆️ 最終整合版見「💼 規劃v4」</span> 本頁為 v3 推導過程。前提：這是你的<b>進攻部位</b>（可大膽）、<b>2-4年</b>、能承受高波動。四套都把「加密曝險」拆成現貨BTC＋MSTR以分散MSTR的個別風險，並留現金當更深一洗的子彈。</p>
-
-  <h3>方案比較</h3>
+  <h2>🐋 大戶在做什麼？真正的供需到底如何</h2>
+  <div class="analysis-box analysis-yellow" style="font-size:0.93rem;">
+    <b>一句話：這是「強手收籌碼 vs 邊際買盤(ETF)出逃」的拉鋸。</b>大戶確實在累積、交易所幣量被抽乾到多年低點（供給收縮，<b>利多</b>）；
+    但決定價格的<b>邊際買盤——現貨 ETF——正在史上級流出（利空）</b>。所以「鯨魚狂買、價格卻不動」＝買盤被賣壓吸收。<b>僵局，不是發車。</b>
+  </div>
+  <h3>供給面（收縮 = 利多）</h3>
   <table>
-    <thead><tr><th>方案</th><th>GOOG</th><th>BTC</th><th>MSTR</th><th>現金</th><th>加密曝險</th><th>熊(30%)</th><th>基準(45%)</th><th>牛(25%)</th><th>加權EV</th></tr></thead>
+    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
     <tbody>
-      <tr><td>均衡進攻</td><td class="num">50%</td><td class="num">20%</td><td class="num">20%</td><td class="num">10%</td><td class="num">40%</td><td class="num neg">-27%</td><td class="num pos">+71%</td><td class="num pos">+203%</td><td class="num pos">+75%</td></tr>
-      <tr style="background:rgba(168,85,247,0.10);"><td><b>✅ 槓鈴進攻(主推)</b></td><td class="num"><b>40%</b></td><td class="num"><b>25%</b></td><td class="num"><b>25%</b></td><td class="num"><b>10%</b></td><td class="num">50%</td><td class="num neg">-30%</td><td class="num pos">+78%</td><td class="num pos">+234%</td><td class="num pos"><b>+85%</b></td></tr>
-      <tr><td>信念進攻(MSTR重)</td><td class="num">25%</td><td class="num">20%</td><td class="num">45%</td><td class="num">10%</td><td class="num">65%</td><td class="num neg">-37%</td><td class="num pos">+92%</td><td class="num pos">+302%</td><td class="num pos">+106%</td></tr>
-      <tr style="background:rgba(239,68,68,0.05);"><td>原案 100% MSTR</td><td class="num">0%</td><td class="num">0%</td><td class="num">100%</td><td class="num">0%</td><td class="num">100%</td><td class="num neg">-55%↓</td><td class="num pos">+130%</td><td class="num pos">+480%</td><td class="num pos">+162%</td></tr>
+      <tr><td>大戶累積</td><td class="pos">30天 +270,000 BTC（2013以來最大）；90天 +91,000</td><td class="pos">巨鯨累積達 10 週高；4天 +$322M</td><td class="pos">強手在低位收</td></tr>
+      <tr><td>交易所存量</td><td class="pos">2.21M（9年低、僅5.88%供給）</td><td>30% 已質押鎖倉（~37M ETH）</td><td class="pos">可賣的幣變少</td></tr>
+      <tr><td>長期持有者(LTH)</td><td class="pos">佔比升至 78.3%（原 74.1%）</td><td>—</td><td class="pos">籌碼從弱手轉強手</td></tr>
     </tbody>
   </table>
-  <p style="font-size:0.78rem;color:var(--text3);">情境報酬假設（單資產，2-4年）：GOOG 熊-15%/基+45%/牛+85%；BTC 熊-40%/基+110%/牛+320%；MSTR 熊-55%/基+130%/牛+480%；現金 ~+2-4%。皆為推估、非預測。</p>
-
-  <h3>🏆 主推：槓鈴式進攻</h3>
-  <div class="alloc-bar">
-    <div class="alloc-seg" style="width:40%;background:var(--blue);">GOOG 40%</div>
-    <div class="alloc-seg" style="width:25%;background:var(--orange);">BTC 25%</div>
-    <div class="alloc-seg" style="width:25%;background:var(--purple);">MSTR 25%</div>
-    <div class="alloc-seg" style="width:10%;background:var(--text3);">現金 10%</div>
-  </div>
-  <div class="scenario-grid" style="margin-top:12px;">
-    <div class="scenario-card" style="border-color:var(--blue);">
-      <span class="prob badge-blue">壓艙石</span>
-      <div style="font-weight:700;">GOOG 40%</div>
-      <div style="font-size:0.82rem;color:var(--text2);">波克夏背書的優質現金流；與BTC相關僅0.28；熊市時還在賺錢，不會被迫全砍。</div>
-    </div>
-    <div class="scenario-card" style="border-color:var(--orange);">
-      <span class="prob badge-yellow">乾淨曝險</span>
-      <div style="font-weight:700;">BTC 現貨 25%</div>
-      <div style="font-size:0.82rem;color:var(--text2);">純比特幣，沒有溢價/股息/被迫賣幣的公司風險。$54-62k分批。</div>
-    </div>
-    <div class="scenario-card" style="border-color:var(--purple);">
-      <span class="prob badge-purple">槓桿賭注</span>
-      <div style="font-weight:700;">MSTR 25%</div>
-      <div style="font-size:0.82rem;color:var(--text2);">放大BTC上檔（持843k幣）；保留你的信念，但用部位大小控制反身性尾部風險。$95-120進。</div>
-    </div>
-    <div class="scenario-card" style="border-color:var(--text3);">
-      <span class="prob" style="background:var(--surface3);color:var(--text2)">子彈</span>
-      <div style="font-weight:700;">現金 10%</div>
-      <div style="font-size:0.82rem;color:var(--text2);">專款專用：只在 BTC $41-54k 更深一洗時加碼，或MSTR跌破$90反而不買、等止穩。</div>
-    </div>
-  </div>
-
-  <div class="analysis-box analysis-review">
-    <b>為什麼是「槓鈴」而非「全壓一邊」？</b>你的兩個直覺其實是<b>兩種完全不同的賭注</b>：MSTR＝「比特幣會再起一個大週期」的高賠率投機；GOOG＝「AI/雲端現金流複利」的優質成長。它們的報酬引擎、相關性、崩盤原因都不同。槓鈴＝兩端都押、放棄中庸，<b>用 GOOG 那端的穩定買到「在加密深熊裡不被消滅」的保險，同時用 BTC+MSTR 那端保留暴賺的可能</b>。代價只是把期望值從 100% MSTR 的 +162% 降到 +85%——但把熊市從 -55%（且有尾部歸零風險）壓到 -30%（可控）。
-  </div>
-
-  <h3>🎚️ 想更大膽？兩個微調旋鈕</h3>
-  <ul style="margin:6px 0 0 18px;font-size:0.86rem;">
-    <li><b>想更壓 MSTR 信念</b> → 走「信念進攻」(GOOG25/BTC20/MSTR45/現金10)，EV +106%，但熊市 -37%、且更吃 MSTR 反身性風險。前提：你能眼睜睜看它再腰斬一次不砍。</li>
-    <li><b>想更穩</b> → 走「均衡進攻」(GOOG50/BTC20/MSTR20/現金10)，EV +75%、熊市 -27%。更靠近波克夏的傾向。</li>
-    <li><b>BTC vs MSTR 的比例</b>：越擔心 MSTR 的特別股股息/溢價問題，就把 MSTR 那份越多挪去現貨 BTC。最保守可做 BTC 35% / MSTR 15%。</li>
-  </ul>
-
-  <h3>📉 相關性與分散（為何要有 GOOG）</h3>
+  <h3>需求面（邊際買盤撤退 = 利空，且這才是定價的關鍵）</h3>
   <table>
-    <thead><tr><th>相關係數</th><th>MSTR</th><th>BTC</th><th>GOOG</th></tr></thead>
+    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
     <tbody>
-      <tr><td><b>MSTR</b></td><td class="num">1.00</td><td class="num warn">0.73</td><td class="num pos">0.36</td></tr>
-      <tr><td><b>BTC</b></td><td class="num warn">0.73</td><td class="num">1.00</td><td class="num pos">0.28</td></tr>
-      <tr><td><b>GOOG</b></td><td class="num pos">0.36</td><td class="num pos">0.28</td><td class="num">1.00</td></tr>
+      <tr style="background:rgba(239,68,68,0.05)"><td>現貨 ETF 資金流</td><td class="neg">13天淨流出 -$4.4B；IBIT 一家 -$3.3B</td><td class="neg">17天淨流出 -$401M（<b>史上最差</b>）</td><td class="neg">機構正在離場</td></tr>
+      <tr><td>ETF 規模</td><td class="neg">$104B → $83B（-20%）</td><td>—</td><td class="warn">但累計仍 +$55B（沒崩盤式贖回）</td></tr>
+      <tr style="background:rgba(239,68,68,0.05)"><td>價格</td><td class="warn">~$63k，鯨魚狂買仍卡住</td><td class="neg">$1,505，2023初以來新低</td><td class="neg">賣壓正好吸收買盤</td></tr>
     </tbody>
   </table>
-  <p style="font-size:0.8rem;color:var(--text2);">MSTR-BTC 高度相關(0.73)＝它倆本質同一個賭注，一起配置分散效果有限（這也是為何不必「BTC+MSTR」加到過重）。<b>GOOG 與 BTC 僅 0.28</b>＝真正的分散來源。這在數學上支持「加一塊 GOOG」。</p>
-  <div class="disclaimer">情境期望值為示意推估，假設不含強制去槓桿事件；MSTR 在熊市若發生償付危機，跌幅可能超出表列。過往績效不保證未來。不構成投資建議。</div>
+  <div class="analysis-box analysis-bear" style="margin-top:8px;">
+    <b>關鍵判讀：ETH 明顯比 BTC 弱。</b>ETH 的 ETF 流出（17天）比 BTC（13天）更長、被點名是「ETH 專屬的機構輪出」，價格已破 2023 初低點。
+    → 這直接削弱「BMNR 因 ETH 跌更深所以反彈更猛」的論點：<b>現在 ETH 是「需求更差」的一方，不只是「跌更多」。</b>所以 BMNR 權重該縮、不是加。
+  </div>
+  <p style="font-size:0.78rem;color:var(--text3)">來源：spotedcrypto / CryptoQuant（鏈上）、bitcoinfoundation / techtimes / crypto.news（ETF 流）、farside（ETF）。數字隨時間更新，以即時鏈上站為準。</p>
 </div>
 </div>
 
-<!-- ============ TAB 6.5: MSTR PAIRING ============ -->
-<div id="tab-pairing" class="tab-content">
+<!-- ===== 誠實打臉 ===== -->
+<div id="tab-slap" class="tab-content">
 <div class="section">
-  <h2>🔀 MSTR 配對標的 — 台股3 + 美股3（有比 GOOG 更好的嗎？）</h2>
-  <p style="color:var(--text2);">用 agent team 並行篩選台股與美股，套用驗證規範（每個數字帶信心標籤）。先回答你問的 TSMC，再給 6 檔，最後給配對與比例建議。資料 2026/6/5-6。</p>
+  <h2>🔨 誠實打臉：現在該抄底嗎？基本面變了嗎？會歸零嗎？</h2>
 
-  <h3>先回答 TSMC：「沒積極擴廠」這個前提，數據上不成立</h3>
-  <div class="analysis-box analysis-yellow">
-    <b>查證結果 [VERIFIED]：</b>TSMC 2026 資本支出指引 <b>~$56B（區間高端 $52-56B）</b>，較 2025 實際 <b>$40.9B 成長 +30~37%</b>——這是<b>加速，不是收手</b>。
-    <br>你看到的「沒積極擴廠」只在<b>狹義上</b>成立：海外<b>成熟製程</b>（日本熊本2廠、德國德勒斯登）因<b>車用需求疲弱</b>而放緩/延後；但同時<b>亞利桑那 + 台灣先進製程(N2/A14) + CoWoS 先進封裝在加速</b>。
-    <br>👉 本質是「<b>把錢從車用搬到 AI</b>」的結構轉移，不是停止擴廠。這其實<b>更看多</b>（資本紀律＋集中押 AI）。
-  </div>
-  <div class="analysis-box analysis-review">
-    <b>那 TSMC 到底好不好？很好——而且某些面向「贏 GOOG」：</b>
-    <ul style="margin:6px 0 0 16px;">
-      <li>成長更猛：FY2025 營收 <b>+35.9%</b>、Q1'26 毛利率 <b>66.2%</b>、HPC/AI 佔營收 <b>61%</b>、FY26 EPS 共識 <b>+48%</b>（GOOG 約 +15%/+16%）。</li>
-      <li>估值反而更便宜：前瞻 P/E <b>~22-27</b>、PEG <b>~1.3</b>（GOOG 前瞻 29.5、PEG 1.83）。</li>
-      <li>是「成長＋價值」都優於 GOOG 的 AI 純度標的。</li>
-    </ul>
-    <b style="color:var(--yellow)">但兩個但書（這決定你該不該用它配 MSTR）：</b>
-    <ul style="margin:6px 0 0 16px;">
-      <li><b>不能分散 MSTR 風險</b>：beta 1.26、BTC 與 Nasdaq 相關 ~0.88，risk-off 時和 MSTR 一起跌（只是跌得溫和、且有真現金流可回。）</li>
-      <li><b>對台灣投資人＝家鄉重壓</b>：你的人力資本＋在地資產（薪水、台股、房）已經高度押在台灣／台積／地緣風險上。再把投資組合 all-in TSMC＝<b>同一個風險疊三層</b>。這是你買 TSMC 最該意識到的點，跟它好不好無關。</li>
-    </ul>
-  </div>
-
-  <h3>🇹🇼 台股 3 檔（未來趨勢 × 現金流）</h3>
-  <table>
-    <thead><tr><th>標的</th><th>趨勢</th><th>價/市值</th><th>前瞻P/E</th><th>殖利率</th><th>營收成長</th><th>FCF</th><th>配MSTR定位</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.04);"><td><b>TSMC 2330</b></td><td>AI晶圓代工</td><td class="num">NT$2,385 / ~$1.94T</td><td class="num">~22-27</td><td class="num">0.6%</td><td class="num pos">+35.9%</td><td class="num pos">$33B+ 強</td><td>最強品質錨，但不分散+家鄉重壓</td></tr>
-      <tr><td><b>Delta 2308</b></td><td>AI電源/散熱</td><td class="num">NT$2,300 / 5.97T</td><td class="num warn">49</td><td class="num">0.5%</td><td class="num pos">+31.8%</td><td class="num pos">最佳成長型FCF</td><td>AI基建鏟子，但P/E 85貴</td></tr>
-      <tr><td><b>Hon Hai 2317</b></td><td>AI伺服器</td><td class="num">NT$284.5 / 3.99T</td><td class="num pos">15.3</td><td class="num pos">2.53%</td><td class="num pos">+19.5%</td><td class="num warn">正但波動</td><td>最便宜+高息，但毛利薄</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3);">剔除：Quanta 2382（AI伺服器爆量但 <b>2024-25 FCF 為負</b>，營運資金陷阱）、Alchip 3661（2025 營收 <b>-40%</b>，太lumpy）、MediaTek 2454（EPS 衰退 -4%）。全部 [VERIFIED via stockanalysis]。</p>
-
-  <h3>🇺🇸 美股 3 檔 vs GOOG（直接對標）</h3>
-  <table>
-    <thead><tr><th>標的</th><th>趨勢</th><th>價/市值</th><th>前瞻P/E</th><th>PEG</th><th>FCF</th><th>3年營收成長</th><th>Beta</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.04);"><td><b>AVGO</b> 博通</td><td>AI客製晶片/網路</td><td class="num">$385.73 / $1.83T</td><td class="num">24.6</td><td class="num pos">0.54</td><td class="num pos">$32.8B</td><td class="num pos">+50.9%</td><td class="num">1.43</td></tr>
-      <tr><td><b>NVDA</b> 輝達</td><td>AI算力壟斷</td><td class="num">$205.10 / $4.97T</td><td class="num">20.6</td><td class="num pos">0.46</td><td class="num pos">$119B</td><td class="num pos">+45.5%</td><td class="num neg">2.20</td></tr>
-      <tr><td><b>CEG</b> 星座能源</td><td>AI電力/核能</td><td class="num">$254.83 / $91B</td><td class="num">21.7</td><td class="num">1.16</td><td class="num warn">低($1.1B)*</td><td class="num">+12.0%</td><td class="num pos">1.09</td></tr>
-      <tr style="background:rgba(59,130,246,0.05);"><td><b>GOOG</b>（對照）</td><td>AI/雲/搜尋</td><td class="num">$368.53 / $4.50T</td><td class="num warn">29.5</td><td class="num warn">1.83</td><td class="num pos">$64.4B</td><td class="num">+19.2%</td><td class="num pos">1.24</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3);">*CEG FCF 低是因 Calpine 併購+資本支出，公司指引 2028-29 回升至 $11.5-13B [VERIFIED as guidance]。AVGO 價格為 6/4 暴跌 -12.6%、6/5 再 -7.9% 後（財報beat但AI指引不及預期）。NVDA FCF $119B 為全列最大。</p>
-
-  <h3>🧭 關鍵體悟：先決定「這個配對要做什麼工作」</h3>
-  <div class="scenario-grid">
-    <div class="scenario-card" style="border-color:var(--green);">
-      <b class="pos">工作A：當 MSTR 的壓艙石</b>
-      <div style="font-size:0.82rem;color:var(--text2);">要低相關、穩、不同引擎。<br>→ <b>CEG</b>（AI電力≠AI晶片，beta 1.09，真分散）<br>→ <b>GOOG</b>（低波動 mega-tech，巨額FCF）</div>
-    </div>
-    <div class="scenario-card" style="border-color:var(--purple);">
-      <b style="color:var(--purple)">工作B：當第二個進攻型趨勢賭注</b>
-      <div style="font-size:0.82rem;color:var(--text2);">要最大未來趨勢上檔。<br>→ <b>AVGO</b>（成長/估值/AI趨勢/FCF都贏GOOG）<br>→ <b>NVDA</b>（最猛但beta 2.2）<br>→ <b>TSMC</b>（台股最強解）</div>
-    </div>
-  </div>
-  <div class="analysis-box analysis-bear">
-    <b>⚠️ 2026 的殘酷現實：</b>今年 BTC 與股市相關性飆到 <b>0.75-0.96</b>（歷史約 0.4）。意思是<b>現在「用股票避險 MSTR」幾乎失效</b>——沒有任何股票是 MSTR 的真對沖。所以重點不是「哪檔能對沖」，而是「<b>我願意長抱 2-4 年的好生意是哪個</b>」。同時也提醒：<b>MSTR 5:5 配另一檔高 beta 的 AI 股（NVDA/AVGO/TSMC）＝你其實只押了一注</b>（100% 風險資產、一起暴跌）。
-  </div>
-
-  <h3>🎯 配對與比例建議</h3>
-  <table>
-    <thead><tr><th>比例（錨:MSTR）</th><th>性格</th><th>建議錨</th><th>理由</th></tr></thead>
-    <tbody>
-      <tr><td><b>5 : 5</b></td><td>錨要能「抑制」一半的MSTR波動</td><td class="pos"><b>CEG</b> 或 <b>GOOG</b></td><td>要最穩、低相關那一半。CEG(beta1.09)抑制最佳；GOOG是巨額FCF的mega-tech替代。<b>別用NVDA</b>（beta2.2＝波動疊波動）。</td></tr>
-      <tr><td><b>2.5 : 7.5</b></td><td>錨只是小倉「壓艙+趨勢加力器」</td><td style="color:var(--purple)"><b>AVGO</b>（或 NVDA）</td><td>只有25%，可承受高beta換最大AI趨勢上檔。AVGO的FCF(占營收46%)比NVDA多一點壓艙。NVDA是最進攻版。</td></tr>
-    </tbody>
-  </table>
-
-  <div class="analysis-box analysis-purple">
-    <b>🏁 一句話總結：</b>
-    <ul style="margin:6px 0 0 16px;">
-      <li><b>「比 GOOG 更好」的單一答案＝ AVGO</b>——成長、成長調整後估值(PEG 0.54 vs 1.83)、AI趨勢純度、FCF 利潤率都贏 GOOG，且剛崩跌入場更便宜。</li>
-      <li><b>TSMC 是台股最強解</b>，成長+價值也贏 GOOG；但對台灣的你＝家鄉風險再疊一層，要有意識地控制部位（或寧可用美股分散地緣/匯率）。</li>
-      <li><b>若配對的目的是「平衡」MSTR 而非「加碼」</b>：CEG（不同引擎=真分散）＞ GOOG（低波動穩健）＞ 半導體三雄。</li>
-      <li><b>NVDA</b>：最猛、FCF最大，但 5:5 會把整個組合變成「一起暴跌」的單一風險。留給 2.5:7.5 的加力器角色。</li>
-    </ul>
-    <b>給你的直球：</b>你是進攻、要未來趨勢。我會這樣分——<b>想要「兩個引擎」就 5:5 配 MSTR×CEG（或 GOOG）</b>；<b>想壓信念就 2.5:7.5 用 AVGO 當 25% 加力器</b>。<b>不建議</b> MSTR 5:5 再配 NVDA/TSMC——那不是配置，是同一注 ×2。
-  </div>
-
-  <div class="disclaimer">
-    驗證註記：個股對 BTC 的「乾淨相關係數」查不到，相關性評分為 [ESTIMATE]（由 beta＋全市場 BTC-股市相關性推得）。AVGO 價格在 6/4 暴跌後波動大；FY27/28 EPS 多為 [CONSENSUS]。台股價格為 6/5 收盤、部分當日下跌 2-5%。完整來源見 agent 研究紀錄。不構成投資建議。
-  </div>
-</div>
-</div>
-
-<!-- ============ TAB 7: DEBATE + VERIFICATION ============ -->
-<div id="tab-debate" class="tab-content">
-<div class="section">
-  <h2>⚖️ 多空辯論 + 監察驗證</h2>
-
-  <h3>📈 多方 vs 📉 空方（針對你的決策）</h3>
+  <h3>❓ 會一路跌到歸零嗎？ → <span class="pos">不會（這點你可以放心）</span></h3>
   <div class="analysis-box analysis-bull">
-    <b>📈 多方（為什麼現在敢進攻）：</b>
-    <ul style="margin:6px 0 0 16px;">
-      <li>BTC F&amp;G=12、RSI~17、站上200週均線＝歷史級買點窗口。</li>
-      <li>週期位置：減半後26個月、已見頂下行，正是底部「形成期」。</li>
-      <li>MSTR 持 843k BTC（比想像多69%），基準/牛市槓桿放大驚人。</li>
-      <li>GOOG 雲端+63%、AI在幫搜尋、反壟斷去風險，且<b>波克夏加倉3倍背書</b>。</li>
-      <li>你是進攻部位、2-4年，承受得住波動＝適合在恐懼中布局。</li>
-    </ul>
-  </div>
-  <div class="analysis-box analysis-bear">
-    <b>📉 空方（為什麼別 All-in、要留子彈）：</b>
-    <ul style="margin:6px 0 0 16px;">
-      <li>MVRV 0.41＝還沒到深底；現價仍高於已實現價，2022曾在200週線下待16個月。</li>
-      <li><b>MSTR 6/1 首度賣幣</b>＝反身性風險（溢價崩→賣幣）正式啟動。</li>
-      <li>減半效應遞減（+2431%→+679%→+67%），2028可能更弱。</li>
-      <li>GOOG 在5年估值帶頂、FCF被$180B+資本支出壓扁、6/1還增發$80B，安全邊際薄。</li>
-      <li>MSTR 特別股股息 ~$750-800M/年是持續抽血。</li>
-    </ul>
+    歸零需要「需求消失 + 持有者投降」。但鏈上是<b>相反</b>：交易所幣被抽到 9 年低、LTH 升到 78%、鯨魚 30 天收 27 萬枚、ETH 30% 質押鎖倉。
+    <b>這是「強手承接弱手」的累積行為，不是死亡螺旋。</b>BTC 的網路效應、ETF 制度化、主權/機構持有，都讓「歸零」不是基準情境。
+    ETH 競爭較多、風險高於 BTC，但「歸零」同樣不是合理預期。
   </div>
 
-  <h3>🔍 監察組：本次糾正了 v2 的哪些錯誤</h3>
+  <h3>❓ 現在就是底、該全力抄嗎？ → <span class="neg">數據說：大概還沒到，別全押</span></h3>
   <table>
-    <thead><tr><th>項目</th><th>v2 宣稱</th><th>查證實際</th><th>判定</th></tr></thead>
+    <thead><tr><th>檢驗</th><th>現況</th><th>判定</th></tr></thead>
     <tbody>
-      <tr><td>MSTR BTC 持倉</td><td>~500,000</td><td><b>843,706</b></td><td><span class="vbadge vbadge-fail">✗ 嚴重低估69%</span></td></tr>
-      <tr><td>BTC 日線 RSI</td><td>11.7</td><td>~17</td><td><span class="vbadge vbadge-fail">✗ 過低</span></td></tr>
-      <tr><td>MSTR mNAV</td><td>+31.5%</td><td>~0.85-1.0x(近平價/微折價)</td><td><span class="vbadge vbadge-fail">✗ 非溢價，已壓縮/曾折價</span></td></tr>
-      <tr><td>BTC 價格</td><td>$60,805</td><td>~$61,900</td><td><span class="vbadge vbadge-warn">⚠ 略低</span></td></tr>
-      <tr><td>MSTR 價格</td><td>$120.44</td><td>~$127.5(瞬間低點)</td><td><span class="vbadge vbadge-warn">⚠ 取到低點</span></td></tr>
-      <tr><td>波克夏持股</td><td>模擬13F</td><td>真實 Q1'26 13F</td><td><span class="vbadge vbadge-pass">✓ 已用實證取代</span></td></tr>
-      <tr><td>波克夏 GOOG 佔比</td><td>2%</td><td><b>~6.3%（Top-7，加倉3倍）</b></td><td><span class="vbadge vbadge-pass">✓ 重大更新</span></td></tr>
-      <tr><td>F&amp;G=12</td><td>12</td><td>12</td><td><span class="vbadge vbadge-pass">✓ 正確</span></td></tr>
-      <tr><td>MSTR 6/1 賣幣</td><td>未提及</td><td>首度賣32 BTC</td><td><span class="vbadge vbadge-pass">✓ 新增關鍵風險</span></td></tr>
+      <tr><td>邊際買盤(ETF)</td><td>BTC/ETH 雙雙史上級流出</td><td><span class="vbadge vbadge-fail">✗ 買盤在逃</span></td></tr>
+      <tr><td>MVRV-Z（估值溫度）</td><td>~1.2–1.8，真底常在負值(~-0.4)</td><td><span class="vbadge vbadge-fail">✗ 未到投降</span></td></tr>
+      <tr><td>跌幅</td><td>BTC -50%；歷次底 -77~-86%</td><td><span class="vbadge vbadge-warn">⚠ 可能還有空間</span></td></tr>
+      <tr><td>時間</td><td>距高點約 7–8 個月；歷次 ~12–14 月見底（Cowen 估 Q4 2026）</td><td><span class="vbadge vbadge-warn">⚠ 時間未到</span></td></tr>
+      <tr><td>大戶累積</td><td>強勁</td><td><span class="vbadge vbadge-pass">✓ 唯一明確利多</span></td></tr>
     </tbody>
   </table>
+  <p style="font-size:0.84rem;color:var(--text2)">→ <b>五項裡四項偏「還沒到底」。</b>大戶在收是真的，但「收」可以收很久（磨盤），不等於「馬上漲」。把它當「不會歸零」的證據，不要當「立刻抄底發車」的訊號。</p>
 
-  <h3>👔 主席最終裁示</h3>
-  <div class="analysis-box analysis-review">
-    <p>1. <b>採用實證取代模擬</b>：波克夏 GOOGL 加倉3倍是本次最重要的新事實，直接強化「配置 GOOG」的理由。</p>
-    <p>2. <b>否決 100% MSTR</b>：不是因為看空 BTC，而是 6/1 賣幣事件讓 MSTR 的「溢價崩→被迫賣幣」尾部風險不再是理論。集中持有單一有反身性風險的公司，違反「進攻但要活下來」原則。</p>
-    <p>3. <b>核准槓鈴式</b>：GOOG 40 / BTC 25 / MSTR 25 / 現金 10，分批進場，保留子彈。允許依個人膽識在「信念進攻」與「均衡進攻」間微調。</p>
-  </div>
-  <blockquote>「進攻不等於 All-in。最會進攻的人，是那個在牌局裡活得最久、子彈最多的人。」</blockquote>
-</div>
-</div>
-
-<!-- ============ TAB 7.5: VIDEO CRITIQUE ============ -->
-<div id="tab-video" class="tab-content">
-<div class="section">
-  <h2>📺 網紅觀點批判 — 加密招財猫 兩部抄底影片</h2>
-  <p style="color:var(--text2);">用工具轉出兩部影片字幕並逐字分析。原則：<b>挑戰，不附和</b>。他是少數「有方法、夠誠實」的散戶博主，所以該肯定的肯定，但他的框架有結構性盲點。兩片是上下集：</p>
-
+  <h3>❓ 基本面變了嗎？ → <span class="warn">是，有幾個「這次不一樣」是真的</span></h3>
   <div class="team-grid">
-    <div class="team-card" style="border-color:var(--orange);">
-      <div class="name">📹 影片A（6/5）</div>
-      <div class="role">「比特幣底部在哪？4大鏈上指標揭示終極鐵底」</div>
-      <ul><li>4指標定 BTC 底：$48-56.6k</li><li>DCA 4×25%，留25%等$40k</li><li>十月底無論價格買滿</li><li>還要買 ETH + Circle</li></ul>
-    </div>
-    <div class="team-card" style="border-color:var(--purple);">
-      <div class="name">📹 影片B（6/6）</div>
-      <div class="role">「微策略，干它！抄底！為什麼我建議6月就買」</div>
-      <ul><li>含币量框架：MSTR價=mNAV×BTC價×含币量</li><li>含币量4個月+12.7%</li><li>mNAV 0.89x、買 $98-116（4×25%）</li><li>純現貨、零槓桿</li></ul>
-    </div>
+    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">① 財庫反身性（新風險）</div><ul><li>MSTR/BMNR 及一堆模仿者高位用槓桿囤幣</li><li>磨跌時變<b>強制賣方</b>（MSTR 賣 BTC 付 $1B+ 股息；BMNR 增發）</li><li>會讓<b>財庫股跌得比幣兇</b>，還在最差時點加供給</li></ul></div>
+    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">② ETF＝順週期邊際買盤</div><ul><li>機構追高、也會殺低（現在在殺低）</li><li>放大雙向波動；它現在主導定價</li><li>「散戶慢慢進、價格穩漲」的舊劇本被改寫</li></ul></div>
+    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">③ 週期振幅收斂</div><ul><li>連看多方(Bitwise)都說「四年週期已死、漲幅會收斂」</li><li>「從這輕鬆 2–3 倍」的假設可能過時</li><li>看空方(Cowen)：週期還在、底約 Q4 2026</li></ul></div>
   </div>
 
-  <h3>✅ 該肯定的（為什麼他不是純喊單）</h3>
-  <div class="analysis-box analysis-bull">
-    <ul style="margin:0 0 0 16px;">
-      <li><b>多指標三角定位</b>：用 MVRV-Z、已實現價、CVDD、Pi Cycle、200週均線交叉驗證，比單一訊號嚴謹。</li>
-      <li><b>含币量(sats/share)框架是真材實料</b>：MSTR價 = mNAV × BTC價 × (持幣/股數) 代數正確，且「含币量」是多數人忽略的關鍵變數。</li>
-      <li><b>紀律</b>：分批 DCA、留 25% 現金等更深一洗、<b>反覆強調純現貨零槓桿</b>、「$6萬和$5萬的BTC其實差別不大」（不過度擇時）。</li>
-      <li><b>誠實</b>：開頭就說「很可能會錯、別當投資依據」；承認 MVRV-Z 只有 0.34（＝<b>他自己也認為還沒到底</b>）。</li>
-    </ul>
+  <h3>🩸 對 MSTR/BMNR 的直接含義（最該被打臉的地方）</h3>
+  <div class="analysis-box analysis-bear">
+    你想「囤最會漲的」，於是選了 <b>beta 最高、反身性最強</b>的 MSTR/BMNR。但在「邊際買盤撤退 + 反身性點燃」的此刻，這正是它們<b>最危險</b>的時候：<br>
+    • MSTR mNAV 0.80x、BMNR ~1.0x，恐慌時 <b>mNAV 可再殺到 0.5x</b>（封閉式結構歷史常態）——就算 BTC 不再跌，<b>折價擴大也能讓股價再 -30%</b>。<br>
+    • 若 BTC 磨到 $45–50k，MSTR（$1B+ 股息抽血、被迫賣幣）可能比 BTC 再多跌 30–50%；BMNR（ETH 更弱 + 稀釋）類似或更糟。<br>
+    <b>結論：你欣賞的「內建槓桿」，在這個時點是雙面刃的刀刃那面。所以「借錢、現在、全押 MSTR/BMNR」是我會明確勸阻的組合。分批用收入囤、子彈留給訊號——可以；借錢梭哈——不行。</b>
   </div>
-
-  <h3>⚔️ 我的挑戰（7個破綻）</h3>
-  <table>
-    <thead><tr><th>#</th><th>破綻</th><th>為什麼站不住</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td><b>「4大指標」其實是近親</b></td><td>MVRV-Z、已實現價、CVDD 全部源自<b>同一組鏈上成本基礎數據</b>，只是不同變換。難怪都擠在$48-56k——這是建構出來的，不是4個獨立確認。真正方法不同的只有「三段跌幅」那個（也最弱）。</td></tr>
-      <tr><td>2</td><td><b>三段下跌＝套圖/數字命理</b></td><td>拿2026硬套2022（n=1）、把第三段起點「隨意挑」$82.8k、「跌幅收窄」是事後歸納，卻給它和鏈上指標<b>同等權重</b>。</td></tr>
-      <tr><td>3</td><td><b>把計算外包給 ChatGPT/Gemini，報出 $56,600 的假精確</b></td><td>MVRV-Z→價格的換算依賴每日變動的 realized cap 與供給假設；報到「四位數」是假精確。LLM 會從含糊提示產出自信數字——這是包裝成嚴謹的紅旗。</td></tr>
-      <tr><td>4</td><td><b>信念錨定</b></td><td>「BTC是數字黃金、不會死、其餘都是噪音」是<b>信仰不是分析</b>。他全程只問「在哪買」，從不問「該不該買 / 萬一論點錯了」。</td></tr>
-      <tr style="background:rgba(239,68,68,0.06);"><td><b>5</b></td><td><b>★跨兩片的最大矛盾</b></td><td>影片B的MSTR多頭論<b>完全靠「賽勒一直買→含币量上升」</b>；影片A卻把「微策略金融遊戲玩崩」當噪音揮掉。但<b>6/1 首度被迫賣幣（付特別股股息）正是這台引擎反轉的早期訊號</b>——他兩邊都想要。含币量若停漲/反轉，「底部抬升、提早買」的核心就鬆動。</td></tr>
-      <tr><td>6</td><td><b>隱藏的擇時賭注</b></td><td>「最後25%十月底無論價格都買」——十月哪來的？一個沒有理由的死線，反而把他想避免的擇時又加了回去。</td></tr>
-      <tr><td>7</td><td><b>範圍蔓延到 ETH + Circle</b></td><td>把同一個賭注的更高 beta 版本（ETH 結構性弱於BTC、Circle 是高倍數、利率/監管敏感的新股）一句話打包進來、完全沒分析。<b>整個組合 0 現金流資產。</b></td></tr>
-    </tbody>
-  </table>
-
-  <h3>🔧 誠實：他修正了我報告裡的一個數字</h3>
-  <div class="analysis-box analysis-yellow">
-    本報告 v3 一度寫 MSTR mNAV ≈ <s>1.1-1.3x（溢價）</s>。用查證的硬數據重算（843,706 BTC × ~$61.9k = BTC NAV ~$52B；MSTR 市值 ~$44-48B）：
-    <b>市值基準 mNAV ≈ 0.85-0.92x（折價）、含負債的 EV 基準 ≈ ~1.0x（平價）</b>。
-    他每天追蹤、報的 <b>0.89x 更接近現況</b>，我的舊估計是早幾個月（MSTR 更高價時）的殘留。已更正。
-    <br><br>
-    <b>但這把雙面刃：</b>MSTR 現在「不貴、約等於 BTC 帳面值」確實是<b>買 MSTR 的一個加分</b>（等於打折買BTC曝險）；可是折價存在<b>正是因為市場在定價他忽略的風險</b>——折價會「擴大」。GBTC 當年從溢價一路走到 <b>-48% 折價</b>。所以「打折買BTC」只有在折價收斂時是免費午餐；若反身性惡化（賣幣→恐慌→折價擴大），你BTC漲了照樣虧。
-  </div>
-
-  <h3>🎯 他的點位 vs 我的整合（我採納他更好的BTC鏈上位）</h3>
-  <table>
-    <thead><tr><th>標的</th><th>他的抄底階梯</th><th>我的整合看法</th></tr></thead>
-    <tbody>
-      <tr><td><b>BTC</b></td><td>$56k / $53.8k / $52.5k / $48k 各25%，留25%等$40k</td><td class="pos">採納——他的鏈上位（CVDD~$48k鐵底、已實現價~$54k、MVRV-Z買點~$56k）比我初稿的$54-62k更扎實。<b>現價$61-62k(200週線)只是「首測」，大概率會破。</b>強累積區下修到 <b>$48-56k</b>。</td></tr>
-      <tr><td><b>MSTR</b></td><td>$114-116 / 110-112 / 106-108 / 98-100 各25%</td><td>大致認同區間（$94-116），但<b>別100%壓MSTR</b>；他的「提高目標價$4-6、提早買」是FOMO式合理化，反身性風險下不該追早。</td></tr>
-      <tr><td><b>配置</b></td><td>100% 加密（BTC+MSTR+ETH+Circle）、0 現金流</td><td class="neg">這是最大分歧。他整個世界都在加密泡泡裡——<b>沒有「萬一比特幣錯2-4年」的答案</b>。那個洞正是 GOOG 要補的。</td></tr>
-    </tbody>
-  </table>
-
-  <h3>🏁 結論：借他的「進場」，但別買他的「配置」</h3>
-  <div class="analysis-box analysis-purple">
-    加密招財猫<b>磨利了你的「進場點位與紀律」</b>（BTC $48-56k 分批、留現金、純現貨——全部採納），但<b>動不了你的「資產配置」</b>。他的盲點是結構性的：他能想像「BTC跌到$40k」，卻無法想像「BTC錯了2-4年」；他名下每一個標的（BTC/MSTR/ETH/Circle）都是<b>同一注</b>。
-    <br><br>
-    這恰恰反證了 v3 的核心：<b>用他的方法進場加密那一半（BTC25+MSTR25），但保留他結構上看不見的 GOOG——一個非相關、有現金流、連波克夏都在大買的錨。</b>當他在「全網恐慌我貪婪」時，你也貪婪——只是你還留了一張在加密寒冬裡仍會賺錢的牌。
-  </div>
-  <div class="disclaimer">影片字幕經 yt-dlp 轉出後人工分析。對影片觀點的評述為批判性分析，非針對個人。引用之點位為影片作者個人計劃，非本報告建議。</div>
 </div>
 </div>
 
-<!-- ============ TAB 8: ACTION ============ -->
-<div id="tab-action" class="tab-content">
+<!-- ===== MSTR vs BMNR ===== -->
+<div id="tab-ratio" class="tab-content">
 <div class="section">
-  <h2>✅ 行動計畫</h2>
-  <div class="action-list">
-    <div class="action-item success"><b>採用 v4 六資產：GOOG 28 / BTC現貨 21 / MSTR 18 / AVGO 13 / TSMC 8 / 現金 12</b>（完整論證見「💼 規劃v4」分頁）</div>
-    <div class="action-item">BTC 在 <b>$54-62k 分批</b>（如分 6-8 次），保留約 ⅓ 該額度給可能的 $41-50k 一洗</div>
-    <div class="action-item">MSTR 在 <b>$95-120 進場</b>；&gt;$140 別追、&lt;$90 先停手等止穩（別接反身性下跌的刀）</div>
-    <div class="action-item">GOOG 因在估值帶頂，<b>分批/逢回（~$330-355）布局</b>，當複利股長抱，別追ATH</div>
-    <div class="action-item success">10% 現金＝專款子彈，只在更深一洗時動用</div>
-    <div class="action-item warn-item">每季檢查：MSTR mNAV 是否＜1.0x、是否再賣幣、特別股股息覆蓋；GOOG 雲端成長與 capex ROI</div>
-    <div class="action-item danger">禁用 BITX/MSTU/MSTX 等槓桿ETF——波動率衰減會在2-4年長抱中吃掉你</div>
-    <div class="action-item danger">若用借貸資金：留 ≥6 個月生活費＋還款現金，避免在底部被迫賣出</div>
-    <div class="action-item">心理準備：此組合中途出現 -30%~-40% 是<b>基準劇情</b>，不是出場訊號</div>
+  <h2>🆚 MSTR vs BMNR — 比例怎麼分（6/9 更新）</h2>
+  <div class="analysis-box analysis-purple" style="font-size:0.93rem;">
+    兩者是「同一個槓桿加密注」的 BTC 版 vs ETH 版，<b>非互相分散</b>（熊市同跌）。
+    <b>現在我把比例從先前的 ~55/45 上修到 ~65/35 偏 MSTR</b>——因為最新供需顯示 <b>ETH 需求比 BTC 更弱</b>（ETF 出逃更兇、破 2023 低），BMNR 的「ETH 跌更深→彈更猛」論點被「ETH 需求更差」抵消。BMNR 當較小、較高變異的衛星倉。
   </div>
-
-  <h3>🌳 決策樹</h3>
-  <div style="padding:14px;background:var(--surface2);border-radius:8px;">
-<pre>❓ 這筆錢 2-4 年內都不會用到、且能承受中途 -40%？
-  ├─ ❌ 否 → 別碰 MSTR/BTC，只考慮 GOOG + 現金
-  └─ ✅ 是 → 下一題
-
-❓ 你能在 MSTR 再腰斬時「不砍、甚至加碼」嗎？
-  ├─ ✅ 能（強信念）→ v4更猛 GOOG22/BTC20/MSTR28/AVGO12/TSMC8/現金10
-  ├─ 🟡 普通 → v4 六資產 GOOG28/BTC21/MSTR18/AVGO13/TSMC8/現金12  ★主推
-  └─ ❌ 不能 → v4更穩 GOOG33/BTC16/MSTR12/AVGO12/TSMC7/GEV5/現金15
-
-❓ 擔心 MSTR 的特別股股息/溢價反身性風險？
-  ├─ ✅ 很擔心 → 把 MSTR 那份挪一半去現貨BTC (例:BTC35/MSTR15)
-  └─ ❌ 還好 → 維持原比例</pre>
+  <table>
+    <thead><tr><th>維度</th><th>MSTR（BTC財庫）</th><th>BMNR（ETH財庫）</th><th>誰較強</th></tr></thead>
+    <tbody>
+      <tr><td>現價 / 市值</td><td>$127.2 / $42.4B</td><td>$15.9 / $9.1B</td><td>—</td></tr>
+      <tr><td>持倉</td><td>843,706 BTC（全網4.0%）</td><td>5.42M ETH（全網4.49%，87%質押）</td><td>—</td></tr>
+      <tr><td>mNAV</td><td class="pos">~0.80x（折價，較便宜）</td><td>~1.0x（平價，無折價墊）</td><td class="pos">MSTR</td></tr>
+      <tr><td>底層資產原生現金流</td><td class="neg">無（不生息）</td><td class="pos">質押 ~$238M/年</td><td class="pos">BMNR</td></tr>
+      <tr><td>剛性年支出 / 反身性</td><td class="neg">特別股股息 ~$1B+/年→被迫賣幣</td><td class="pos">質押自償，賣壓低</td><td class="pos">BMNR</td></tr>
+      <tr><td>資本紀律 / 治理 / 稀釋</td><td class="pos">增發克制、S&amp;P候選、成熟</td><td class="neg">500億股授權、傳內控缺陷、暴力稀釋</td><td class="pos">MSTR</td></tr>
+      <tr><td>當下底層需求（6月）</td><td class="warn">BTC ETF -$4.4B/13天</td><td class="neg">ETH ETF -$401M/17天（更差）</td><td class="pos">MSTR（相對）</td></tr>
+      <tr><td>流動性 / 成熟度</td><td class="pos">高</td><td>中、波動更大</td><td class="pos">MSTR</td></tr>
+    </tbody>
+  </table>
+  <h3>建議配置（這個「進攻加密」格子內）</h3>
+  <div class="alloc-bar">
+    <div class="alloc-seg" style="width:65%;background:var(--purple);">MSTR 65%</div>
+    <div class="alloc-seg" style="width:35%;background:var(--green);">BMNR 35%</div>
   </div>
-
-  <h3>🧠 三個核心認知（帶走這三句）</h3>
-  <div class="analysis-box analysis-purple">
-    <p>1️⃣ <b>波克夏用行動替 GOOG 背書、對 BTC/MSTR 完全迴避</b>——你的「兩個都要」直覺，比「只 All-in MSTR」更接近頂級資金的做法。</p>
-    <p>2️⃣ <b>現在是抄底區但不是深底</b>（MVRV 0.41）——所以「分批 + 留子彈」勝過「一次梭哈」。</p>
-    <p>3️⃣ <b>MSTR 是賭注不是核心持股</b>——6/1 賣幣讓它的尾部風險變真，用部位大小（≤25-45%）來尊重這個不對稱。</p>
+  <div class="alloc-legend">
+    <span><i class="dot" style="background:var(--purple)"></i>MSTR 65% — BTC 較強、mNAV 折價、治理佳、反身性雖高但被折價補償</span>
+    <span><i class="dot" style="background:var(--green)"></i>BMNR 35% — 質押自償的續命力 + ETH 翻身選擇權，但需求弱+稀釋 → 縮小</span>
   </div>
-
-  <div class="disclaimer">
-    ⚠️ 本報告由 AI agent team 生成，僅供研究參考，<b>不構成投資建議</b>。事實型數據經多來源查證並標註信心；展望型數字（目標價、情境、機率）為推估，非預測。資料來源：SEC 13F/10-Q/8-K、Yahoo Finance、Fortune、CNBC、stockanalysis.com、macrotrends、alternative.me、bitbo、strategy.com 等（截至 2026/6/5-6）。槓桿與加密投資可能導致本金全部損失。過往績效不保證未來回報。請依自身財務狀況判斷，必要時諮詢合格財務顧問。
-    🔗 <a href="https://github.com/HsinTiger/mstr-btc-bottom-report" style="color:var(--blue2);">GitHub</a>
-  </div>
+  <p style="font-size:0.82rem;color:var(--text2);margin-top:6px;">若 ETH 的 ETF 流出止穩、甚至轉正，再把 BMNR 加回 ~45%。在那之前，偏 MSTR。<b>兩者合計仍要關在「輸得起」的進攻額度內，分批進。</b></p>
 </div>
 </div>
 
-<!-- ============ TAB: ALL-IN MSTR ============ -->
-<div id="tab-allin" class="tab-content">
+<!-- ===== 熊市規律 ===== -->
+<div id="tab-cycle" class="tab-content">
 <div class="section">
-  <h2>🎲 拼一波：All-in MSTR + Sell-Put 接貨</h2>
-  <div class="analysis-box analysis-purple">
-    <b>這是「如果你就是要 all-in」的執行頁，不是本報告主推（主推見 💼規劃v4）。</b>
-    你在賭：<b>BTC 未來 3 年內還有一輪大週期（下次減半 2028/4），MSTR 用「槓桿＋含币量成長」把它放大成 2–4 倍</b>。這在基準/牛市情境做得到（MSTR 基準 $180–400≈1.4–3x、牛市 $500–1200≈4–9x），但它是<b>雙峰結果</b>：對了翻幾倍，錯了或時機不對 -60% 並卡很久。用「高賠率投機」的心態管理，不是「投資」。
-  </div>
-
-  <h3>🧠 心態鐵則</h3>
-  <ul style="margin:6px 0 0 16px;font-size:0.88rem;">
-    <li><b>錢分對口袋</b>：押注的是「3 年歸零也不影響生活」的錢。生活費 6–12 個月＋所有貸款月付，<b>隔離在賭注之外</b>。這是你唯一真正的風控。</li>
-    <li><b>接受 -40~-50% 是常態</b>，不是出場訊號。會在腰斬時砍的人，這策略對你是負期望值。</li>
-    <li><b>零槓桿</b>：不碰 BITX/MSTU/MSTX（波動衰減）；賣 put <b>全程現金擔保、永不裸賣</b>。</li>
-    <li><b>進場前先定出場</b>（見下方），拼一波最大的敵人是「賺 2x 又坐回去」。</li>
-  </ul>
-
-  <h3>✅ 優點 / ⚠️ 你真正在冒的風險</h3>
+  <h2>📉 比特幣熊市規律（支持「別急」的時間框架）</h2>
   <table>
-    <thead><tr><th>✅ 優點</th><th>⚠️ 風險</th></tr></thead>
+    <thead><tr><th>週期</th><th>高→底跌幅</th><th>高→底時間</th><th>底部後型態</th></tr></thead>
     <tbody>
-      <tr><td>EV 最高（all-in≈+162%、牛+480%）</td><td><b>集中度</b>：單一公司＋單一論點，錯時無保護</td></tr>
-      <tr><td>現在 ≈0.85-0.9x mNAV＝折價買 BTC</td><td><b>反身性已啟動</b>：6/1 首度賣幣付特別股股息→折價擴大迴圈</td></tr>
-      <tr><td>含币量結構性墊高你的「底」</td><td><b>BTC 已在 MSTR 成本之下</b>(~$66-76k vs ~$60k)，股息持續抽血</td></tr>
-      <tr><td>超高 IV＝賣 put 收租特別肥</td><td><b>週期時機</b>：可能先熬 1-1.5 年熊段才等到牛</td></tr>
-      <tr><td>單一部位，管理簡單</td><td><b>極端尾部</b>：深熊+融資關閉→可能 -70%↓（機率低非零）</td></tr>
+      <tr><td>2013–15</td><td class="neg">-86%</td><td>~13–14 月</td><td class="warn">磨盤一整年才動</td></tr>
+      <tr><td>2017–18</td><td class="neg">-84%</td><td>~12 月</td><td class="warn">先暴彈+330%→失敗回測</td></tr>
+      <tr><td>2021–22</td><td class="neg">-77%</td><td>~12 月</td><td class="warn">磨盤一年→ETF後才加速</td></tr>
+      <tr style="background:rgba(234,179,8,0.06)"><td><b>本輪(估)</b></td><td class="warn">目前 -50%</td><td>約 7–8 月</td><td>—</td></tr>
     </tbody>
   </table>
-
-  <h3>🎯 Sell-Put 接貨：核心觀念</h3>
-  <p style="font-size:0.88rem;"><b>現金擔保賣權(CSP)＝你被付錢去掛限價單接貨。</b>賣履約價 K 的 put、收權利金 P、鎖住 K×100 現金。沒跌到 K：白賺 P，下月再賣；跌破 K（被指派）：用 K 買 100 股，<b>實際成本 K−P</b>（比掛限價單還低）。對想長期接貨的你，<b>被指派是好事</b>。你賺 theta＋短 vega → <b>要在 IV 高時賣</b>。</p>
   <div class="analysis-box analysis-yellow">
-    <b>關鍵取捨：</b>CSP 在「震盪/下跌/慢慢接」最強；<b>但若主升段就在眼前，CSP 會讓你踏空</b>。解法＝<b>混合：先買 1/3–1/2 現股（保住上行），其餘用 CSP 接</b>。現在 MVRV 0.41＝還沒深底、偏震盪 → CSP 適合當下。
+    <b>兩個規律對你的意義：</b><br>
+    ① <b>觸底通常在高點後 ~12–14 個月、跌 -77~-86%。</b>本輪才 -50%、約 7–8 個月——時間與幅度上都<b>可能還沒到</b>（一輪比一輪淺，故本輪未必跌那麼深，但「時間未到」很明確）。Cowen 估底約 <b>Q4 2026</b>。<br>
+    ② <b>底部後多是「磨盤緩漲」非「暴力 V 轉創高」。</b>唯一的暴力初彈（2019 +330%）後來失敗破底。真正的主升段歷史上多在<b>減半（2028/4）之後</b>。<br>
+    → 這就是為什麼「現在小額 DCA、子彈留著」比「借錢梭哈」合理：時間站在<b>耐心的人</b>那邊，不是站在<b>急著梭哈的人</b>那邊。
   </div>
-
-  <h3>⚙️ 實戰參數</h3>
-  <table>
-    <tbody>
-      <tr><td><b>履約價</b></td><td>買進區 $98–116，或 delta 0.25–0.35（想接到貨選高、想多收租選低）</td></tr>
-      <tr><td><b>天期</b></td><td>30–45 DTE（theta 效率最佳）</td></tr>
-      <tr><td><b>階梯</b></td><td>同時掛 2 個價位（如 -10% 與 -20%）分批</td></tr>
-      <tr><td><b>IV 時機</b></td><td>查 IV Rank，高檔才賣肥 put；IV 低就直接買現股</td></tr>
-      <tr><td><b>口數上限（最重要）</b></td><td>所有未平倉 put 的「履約價×100×口數」<b>≤ 你配給 MSTR 的現金</b> → 全被指派也付得出＝不爆倉</td></tr>
-      <tr><td><b>時間分散</b></td><td>建倉拆成 6–12 個月</td></tr>
-    </tbody>
-  </table>
-
-  <h3>🧮 Sell-Put 接貨試算器（輸入你的即時報價）</h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;background:var(--surface2);padding:14px;border-radius:10px;">
-    <label style="font-size:0.74rem;color:var(--text2);">MSTR 現價 $<input id="c_spot" type="number" value="130" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">總預算 $<input id="c_budget" type="number" value="130000" step="1000" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">先買現股 %<input id="c_base" type="number" value="40" step="5" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">Put#1 履約 $<input id="c_k1" type="number" value="115" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">Put#1 權利金 $<input id="c_p1" type="number" value="8" step="0.5" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">Put#2 履約 $<input id="c_k2" type="number" value="100" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">Put#2 權利金 $<input id="c_p2" type="number" value="5" step="0.5" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-    <label style="font-size:0.74rem;color:var(--text2);">天期 DTE<input id="c_dte" type="number" value="35" step="1" style="width:100%;margin-top:3px;padding:6px 8px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.9rem;"></label>
-  </div>
-  <div id="calcOut" style="margin-top:12px;"></div>
-  <p style="font-size:0.74rem;color:var(--text3);margin-top:6px;">權利金隨即時 IV 變動很大，下單前用券商鏈表確認。情境 A/B 是互斥路徑（漲 vs 跌）；CSP 的本質＝在震盪/下跌中划算（情境B），在直線上漲中吃虧（情境A）。</p>
-
-  <h3>🚫 接到貨之後：別賣 covered call</h3>
-  <p style="font-size:0.88rem;">「賣 put 接貨→賣 call 收租」(the wheel) <b>對 2-4x 論點是毒藥</b>——MSTR 可能一個月從 $130 噴到 $300，你若賣了 $180 call 就被卡死、錯過主升段。<b>核心信念股不要賣 call</b>（頂多拿小部分衛星倉賣很價外的 call）。你要的是最大上行，不是小確幸權利金。</p>
-
-  <h3>🏁 出場計畫 + 論點失效（進場前定好）</h3>
-  <ul style="margin:6px 0 0 16px;font-size:0.88rem;">
-    <li><b>分批了結</b>：2x 賣 1/4（拿回本金=之後無本玩）、3x 再賣 1/4、剩 1/2 掛移動停利（從高點回撤 30% 出）。</li>
-    <li><b>論點失效就走</b>（非因跌、因故事變了）：① mNAV 折價持續擴大＋<b>連續/加速賣幣</b>；② 償付/再融資危機；③ BTC 破前低且鏈上結構轉壞無回穩。</li>
-    <li><b>加碼訊號</b>：BTC <b>MVRV-Z 轉負</b>（真深底）→ 動用 CSP 鎖住的現金加大接貨。</li>
-  </ul>
-
-  <h3>🇹🇼 台灣實務小註（非稅務建議）</h3>
-  <p style="font-size:0.84rem;color:var(--text2);">賣選擇權要用有選擇權權限的美股券商（IBKR/Firstrade 等）；複委託多半不能賣選擇權。權利金與價差屬<b>海外所得</b>，過門檻牽涉最低稅負制，自行記錄、必要時問會計師。MSTR 不配息，無股息扣繳。</p>
-
-  <div class="disclaimer">
-    ⚠️ 不構成投資建議。All-in 單一槓桿型標的可能大幅虧損甚至（極端情境）接近歸零；賣選擇權在崩跌中會被指派接刀，下檔與持股相當（僅多權利金緩衝）。試算器數字為示意，請以即時報價為準。資料截至 2026/6/8。
-  </div>
+  <p style="font-size:0.78rem;color:var(--text3)">樣本僅 3–4 輪、統計意義有限；ETF/機構可能改變型態。資料：OANDA/Glassnode/TradeThatSwing/Cowen、Hougan 等，2026/6。</p>
 </div>
 </div>
 
@@ -1766,49 +389,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
-
-/* ===== All-in MSTR sell-put accumulator calculator ===== */
-(function(){
-  var ids=['c_spot','c_budget','c_base','c_k1','c_p1','c_k2','c_p2','c_dte'];
-  function g(id){var el=document.getElementById(id);return el?(parseFloat(el.value)||0):0;}
-  function m(n){return '$'+Math.round(n).toLocaleString();}
-  function calc(){
-    var out=document.getElementById('calcOut'); if(!out)return;
-    var spot=g('c_spot'),budget=g('c_budget'),basePct=g('c_base'),k1=g('c_k1'),p1=g('c_p1'),k2=g('c_k2'),p2=g('c_p2'),dte=g('c_dte')||35;
-    if(spot<=0||budget<=0){out.innerHTML='<p style="color:var(--text3)">請輸入現價與預算</p>';return;}
-    var baseShares=Math.floor((budget*basePct/100)/spot), baseCost=baseShares*spot;
-    var remain=Math.max(0,budget-baseCost), half=remain/2;
-    var n1=k1>0?Math.floor(half/(k1*100)):0, n2=k2>0?Math.floor(half/(k2*100)):0;
-    var prem1=n1*p1*100, prem2=n2*p2*100, totalPrem=prem1+prem2;
-    var lock1=n1*k1*100, lock2=n2*k2*100, totalLock=lock1+lock2;
-    var eff1=k1-p1, eff2=k2-p2;
-    var y1=k1>0?p1/k1*100:0, y1a=y1*365/dte, y2=k2>0?p2/k2*100:0, y2a=y2*365/dte;
-    var totalShares=baseShares+(n1+n2)*100;
-    var costB=baseCost+n1*eff1*100+n2*eff2*100, avgB=totalShares>0?costB/totalShares:0;
-    var allInShares=Math.floor(budget/spot);
-    var up='';[2,3,4].forEach(function(x){
-      var you=baseShares*spot*x+totalPrem+remain, ai=allInShares*spot*x, gap=ai-you;
-      up+='<tr><td>'+x+'x ($'+Math.round(spot*x)+')</td><td class="num">'+m(you)+'</td><td class="num">'+m(ai)+'</td><td class="num neg">'+m(gap)+'</td></tr>';
-    });
-    var dn='';[1,2,3].forEach(function(x){
-      var v=totalShares*spot*x, r=costB>0?(v/costB-1)*100:0;
-      dn+='<tr><td>回到 '+x+'x ($'+Math.round(spot*x)+')</td><td class="num">'+m(v)+'</td><td class="num '+(r>=0?'pos':'neg')+'">'+(r>=0?'+':'')+r.toFixed(0)+'%</td></tr>';
-    });
-    out.innerHTML=
-      '<table><tbody><tr><td><b>① 底倉現股</b></td><td class="num">'+baseShares+' 股 @ '+m(spot)+' = '+m(baseCost)+'</td></tr><tr><td><b>剩餘可賣 put 現金</b></td><td class="num">'+m(remain)+'</td></tr></tbody></table>'+
-      '<table><thead><tr><th>賣 put</th><th>口數</th><th>收權利金</th><th>鎖現金</th><th>被指派成本</th><th>未指派報酬(年化)</th></tr></thead><tbody>'+
-      '<tr><td>$'+k1+' put</td><td class="num">'+n1+'</td><td class="num pos">'+m(prem1)+'</td><td class="num">'+m(lock1)+'</td><td class="num">'+m(eff1)+'</td><td class="num">'+y1.toFixed(1)+'% ('+y1a.toFixed(0)+'%)</td></tr>'+
-      '<tr><td>$'+k2+' put</td><td class="num">'+n2+'</td><td class="num pos">'+m(prem2)+'</td><td class="num">'+m(lock2)+'</td><td class="num">'+m(eff2)+'</td><td class="num">'+y2.toFixed(1)+'% ('+y2a.toFixed(0)+'%)</td></tr>'+
-      '<tr style="background:rgba(34,197,94,0.05)"><td><b>合計</b></td><td class="num"><b>'+(n1+n2)+'</b></td><td class="num pos"><b>'+m(totalPrem)+'</b></td><td class="num"><b>'+m(totalLock)+'</b></td><td colspan="2"></td></tr></tbody></table>'+
-      '<div class="analysis-box analysis-bear" style="margin:8px 0"><b>情境 A — 上漲（put 沒接到貨，你只有底倉+現金+權利金）：踏空風險</b>'+
-      '<table><thead><tr><th>MSTR 漲到</th><th>你的總值</th><th>若當初全買現股</th><th>踏空成本</th></tr></thead><tbody>'+up+'</tbody></table></div>'+
-      '<div class="analysis-box analysis-bull" style="margin:8px 0"><b>情境 B — 下跌全接到貨（你變成 all-in）：'+totalShares+' 股，平均成本 '+m(avgB)+'</b>'+
-      '<table><thead><tr><th>之後 MSTR 到</th><th>市值</th><th>報酬(對投入)</th></tr></thead><tbody>'+dn+'</tbody></table></div>'+
-      '<p style="font-size:0.76rem;color:var(--text3)">預算使用：底倉 '+m(baseCost)+' + put 鎖定 '+m(totalLock)+' = '+m(baseCost+totalLock)+' / '+m(budget)+'（'+((baseCost+totalLock)/budget*100).toFixed(0)+'%），其餘為緩衝。口數上限規則確保全被指派也付得出＝不爆倉。</p>';
-  }
-  ids.forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calc);});
-  calc();
-})();
 </script>
 </body>
 </html>
