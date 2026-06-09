@@ -189,7 +189,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <div class="sub">All-in MSTR → AI 價值鏈 → MSTR vs BMNR → 新增「LEAP 槓桿實測 + BTC 熊市規律」</div>
   <div class="date">📅 2026/6/9 · v6 · 新增 LEAP call 兩方案量化(CBOE實鏈表) + 比特幣四輪熊市觸底/反彈規律</div>
   <div class="badge-row">
-    <span class="badge badge-purple">🎰 LEAP：深價內=股票替代(carry 7%)，價平最糟(28%)</span>
+    <span class="badge badge-purple">🛒 LEAP下單單：主推 Dec-2028 $100 call（掛$77.75）</span>
     <span class="badge badge-purple">📉 新：底部多「磨盤緩漲」非暴力V轉</span>
     <span class="badge badge-yellow">LEAP回本門檻+42% / IV Percentile 98%偏貴</span>
     <span class="badge badge-green">MSTR mNAV 0.80x / BMNR ~1.0x（6/8實查）</span>
@@ -200,6 +200,7 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   <button class="tab-btn active" data-tab="overview">🎯 結論先看</button>
   <button class="tab-btn" data-tab="bmnr">🆚 MSTR vs BMNR ★新</button>
   <button class="tab-btn" data-tab="leaps">🎰 LEAP槓桿 ★新</button>
+  <button class="tab-btn" data-tab="leapbuy">🛒 LEAP下單單 ★新</button>
   <button class="tab-btn" data-tab="btccycle">📉 BTC熊市規律 ★新</button>
   <button class="tab-btn" data-tab="plan">💼 規劃v4</button>
   <button class="tab-btn" data-tab="workflow">🔬 Workflow</button>
@@ -792,6 +793,79 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
     </ol>
   </div>
   <div class="disclaimer">⚠️ 不構成投資建議。選擇權可能 100% 歸零，且時間價值與 IV 變動會在股價未跌時就侵蝕價值。數字以 Black-Scholes＋CBOE 2026/6/9 鏈表計算，下單前以券商即時報價為準。台股投資人需用有選擇權權限的美股券商（IBKR 等），複委託多半不能買長天期選擇權；權利金損益屬海外所得。</div>
+</div>
+
+</div>
+
+<!-- ============ TAB: LEAP 下單單 ============ -->
+<div id="tab-leapbuy" class="tab-content">
+
+<div class="section">
+  <h2>🛒 LEAP 下單單 — 相對現價可考慮的具體合約</h2>
+  <p style="font-size:0.82rem;color:var(--text2);">即時錨點：MSTR <b>$127.2</b>（CBOE 延遲報價，2026/6/9）。<b>下單前務必用券商即時鏈表覆核權利金/IV。</b>所有「掛單價」= 抓取當下的 mid（中價），實際請以你下單當下的 mid 為準。</p>
+  <div class="analysis-box analysis-purple" style="font-size:0.92rem;">
+    <b>選擇邏輯（承前兩頁）：</b>不選價平（耗損最重）、不選 $50 深價內（價差 9%＋零成交、買不到）。
+    只在<b>「夠價內(delta 0.78-0.84，像現股)＋整數履約價＋OI 數百以上＋價差可控」</b>的交集裡挑。
+    <b>到期優先 Dec-2028</b>——因為「📉 BTC熊市規律」顯示暴力上行通常在 <b>2028/4 減半之後</b>，Dec-2027/Jan-2028 會在行情加速前就到期。
+  </div>
+</div>
+
+<div class="section">
+  <h3>🎯 三個可考慮的合約（按目標分）</h3>
+  <table>
+    <thead><tr><th>—</th><th>🥇 主推<br>低耗損·貼合減半</th><th>🥈 流動性最佳<br>省premium</th><th>🥉 進攻<br>更高槓桿</th></tr></thead>
+    <tbody>
+      <tr><td><b>到期日</b></td><td><b>2028/12/15</b></td><td>2028/1/21</td><td>2028/1/21</td></tr>
+      <tr><td><b>行權價(Call)</b></td><td><b>$100</b></td><td>$100</td><td>$120</td></tr>
+      <tr><td><b>掛單價(限價,mid)</b></td><td class="pos"><b>$77.75</b></td><td class="pos">$67.20</td><td class="pos">$59.65</td></tr>
+      <tr><td>可接受上限</td><td>$78.80</td><td>$68.10</td><td>$60.50</td></tr>
+      <tr><td>每口成本</td><td>~$7,775</td><td>~$6,720</td><td>~$5,965</td></tr>
+      <tr><td>delta(像現股?)</td><td class="pos">0.84</td><td>0.81</td><td>0.76</td></tr>
+      <tr><td>名目槓桿</td><td>1.64x</td><td>1.89x</td><td class="warn">2.13x</td></tr>
+      <tr><td>回本門檻(到期)</td><td>$178 (+40%)</td><td class="pos">$167 (+31%)</td><td class="warn">$180 (+41%)</td></tr>
+      <tr><td><b>年化持有成本</b></td><td class="pos"><b>15.8%</b></td><td>19.4%</td><td class="warn">25.5%</td></tr>
+      <tr><td>報酬@翻倍(到期)</td><td>+99%</td><td class="pos">+130%</td><td>+125%</td></tr>
+      <tr><td>未平倉OI / 價差</td><td>599 / 7.5%</td><td class="pos">846 / 5.6%</td><td>370 / 6.7%</td></tr>
+      <tr><td>定位</td><td class="pos">最像現股、減半後最大窗口</td><td>最好成交、回本最低</td><td class="warn">最接近2x、但耗損高、到期早</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.78rem;color:var(--text3);">IV 均 ~89-91%（偏貴，IV Percentile ~98%）→ 建議分批、IV 回落再加碼。「報酬@翻倍」為「到期時 MSTR 剛好 $254」的內含值報酬；若翻倍提早發生並中途賣出，可再多賺剩餘時間價值。</p>
+</div>
+
+<div class="section">
+  <h3>📝 主推合約的「掛單範本」（複製到券商）</h3>
+  <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;">商品(Symbol)   : MSTR  2028-12-15  Call  $100
+動作(Action)   : Buy to Open（買進開倉）
+數量(Qty)      : N 口   ← N = 你配給LEAP的預算 ÷ $7,775（無條件捨去）
+訂單類型(Type) : Limit（限價）   ← 絕不用 Market（市價）
+限價(Limit)    : $77.75（mid）；未成交可每次 +$0.25 微調，上限 $78.80
+效期(TIF)      : Day（當日）；分批時可用 GTC
+下單時段        : 美股盤中（台灣 21:30–04:00），避開開盤/收盤前後10分鐘
+預估總成本      : N × $7,775（+ 少量手續費）</pre>
+  <h4>口數試算</h4>
+  <table>
+    <thead><tr><th>你配給 LEAP 的錢</th><th class="num">主推$100(每口$7,775)</th><th class="num">控制名目曝險</th></tr></thead>
+    <tbody>
+      <tr><td>$10,000</td><td class="num">1 口</td><td class="num">~$12,720（1.64x）</td></tr>
+      <tr><td>$30,000</td><td class="num">3 口</td><td class="num">~$38,000</td></tr>
+      <tr><td>$50,000</td><td class="num">6 口</td><td class="num">~$76,000</td></tr>
+      <tr><td>$80,000</td><td class="num">10 口</td><td class="num">~$127,000</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <h3>✅ 執行紀律 + 出場</h3>
+  <ol style="margin:6px 0 0 18px;font-size:0.88rem;line-height:1.85;">
+    <li><b>只用限價單掛 mid</b>；寬價差下市價單＝直接送錢給造市商。掛 mid 不成交就等，或每次只 +$0.25。</li>
+    <li><b>分 2–3 批建倉</b>，別一次掃完；IV 從 ~90% 回落時再加碼（vega 順風）。</li>
+    <li><b>這筆 LEAP 的錢＝你輸得起的錢。</b>到期前若 MSTR 沒漲過回本門檻，會虧大部分權利金。</li>
+    <li><b>提早翻倍就分批了結</b>（賣出可多賺剩餘時間價值），別執著抱到期歸零邊緣。</li>
+    <li><b>展期(roll)</b>：到期前 3–4 個月，若論點仍在但還沒漲到位，可往更遠到期/更高履約價滾動。</li>
+    <li><b>論點失效就走</b>：MSTR 反身性加速賣幣／特別股停息／BTC 破前低且鏈上轉壞。</li>
+    <li><b>BMNR 不要用這招</b>：期權流動性太差，要 BMNR 曝險就買現股。</li>
+  </ol>
+  <div class="disclaimer">⚠️ 不構成投資建議，僅為研究示意。選擇權可能 100% 歸零；數字為 CBOE 延遲報價＋Black-Scholes 計算，下單前以券商即時鏈表為準。台灣需用有期權權限的美股券商（IBKR 等），複委託多半不能買長天期選擇權；權利金損益屬海外所得。資料 2026/6/9。</div>
 </div>
 
 </div>
