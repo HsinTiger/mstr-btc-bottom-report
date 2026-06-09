@@ -562,6 +562,75 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
   </div>
 </div>
 
+<!-- 資料新鮮度 + 融資換算 -->
+<div class="section">
+  <h3>🛰️ 先回答你三件事：資料來源、融資怎麼算、不用ETF/期權怎麼開槓桿</h3>
+
+  <h4>① 我抓的是「最新」嗎？</h4>
+  <p style="font-size:0.86rem;">我抓的是 <b>CBOE 公開鏈表（delayed quotes）</b>——盤中約 <b>15 分鐘延遲</b>，收盤後是<b>當日收盤值</b>，<b>不是即時逐筆</b>。最近一次快照：MSTR ~<b>$127.2</b>（2026/6/9）。
+  方向、IV、價差結構都可信，但<b>實際下單一定要用你券商的即時鏈表</b>（權利金幾秒就會跳動）。我無法接你的券商即時報價。</p>
+
+  <h4>② 「年化持有成本（融資率）」怎麼換算的？</h4>
+  <div class="analysis-box analysis-review" style="font-size:0.88rem;">
+    公式：<b>年化成本 = (時間價值 ÷ 現價) ÷ 年數</b>。意思是「若 MSTR 一年原地不動，這個槓桿讓你損失幾 % 的曝險」。<br>
+    <b>實例（$50 深價內 call）：</b>權利金 $90.5、內含值 $77.5 → 時間價值 = $13.0；現價 $127.2、到期 1.52 年。<br>
+    → (13.0 ÷ 127.2) ÷ 1.52 = 10.2% ÷ 1.52 ≈ <b>7%/年</b>。<br>
+    <span style="color:var(--text2)">這筆「成本」其實包含兩塊：(a) <b>槓桿的融資成本</b>（你延後到到期才付履約價 K，等於跟市場借錢）＋ (b) <b>一個內含的下跌保險</b>（價內賣權）。深價內時 (b) 很小，所以 ≈ 純融資；價平時幾乎全是 (b) 保險，這就是為什麼價平那麼貴。</span>
+  </div>
+  <table>
+    <thead><tr><th>開 2x 槓桿的方式</th><th class="num">年化成本</th><th>強制平倉(margin call)?</th><th>到期?</th><th>最大虧損</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(34,197,94,0.05)"><td>深價內 LEAP（$50-70）</td><td class="num pos">~7-11%</td><td class="pos">否（鎖死）</td><td class="warn">有,需展期</td><td>權利金</td></tr>
+      <tr><td>券商融資買現股（IBKR等）</td><td class="num">~6-7%*</td><td class="neg">會（崩盤被斷頭）</td><td class="pos">無</td><td>可超過本金</td></tr>
+      <tr style="background:rgba(239,68,68,0.05)"><td>2x 每日重設 ETF（MSTU/MSTX）</td><td class="num neg">~79%**</td><td class="pos">否</td><td class="pos">無</td><td>近乎歸零</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.74rem;color:var(--text3);">*MSTR 為高波動股，券商常加收較高保證金要求，實際可動用槓桿可能 &lt; 2x。**ETF 為「若標的橫盤」的波動衰減估計值，非利率。</p>
+
+  <h4>③ 不要 2x ETF、也不要期權，要開槓桿該買什麼？</h4>
+  <div class="analysis-box analysis-yellow" style="font-size:0.9rem;">
+    扣掉這兩者，「乾淨開槓桿」其實只剩兩條路，而且<b>最該先想清楚的是：你可能根本不用額外開槓桿。</b><br><br>
+    <b>🥇 最重要的觀念：MSTR / BMNR 本身就是槓桿。</b>MSTR 用可轉債＋特別股去持有 BTC，本身對 BTC 就有 <b>~1.5-2x 的 beta</b>——而且這個槓桿<b>不用你付融資、沒有到期、不會被斷頭</b>（成本由公司資本結構承擔）。所以「想要槓桿加密曝險」＝直接持有 MSTR/BMNR 現股就有了。<b>再在上面疊 2x，是「槓桿之上加槓桿」，崩盤時會非常慘。</b><br><br>
+    <b>🥈 若真要在 MSTR 之上再開槓桿：券商融資（margin）</b>是唯一「非 ETF、非期權」的乾淨選擇。成本 ~6-7%、線性、無時間價值。<b>但代價是 margin call</b>——MSTR 動輒單日 ±10%，崩盤時你會在最低點被強制平倉（這正是槓桿玩家最常陣亡的方式）。緩解：只開 1.3-1.5x（不要 2x）、留足現金緩衝。<br><br>
+    <b>結論：</b>想要「像現股、不會斷頭、定義好最大虧損」→ <b>深價內 LEAP 反而是最好的『無斷頭槓桿』</b>（只是要克服價差，見下）。想要最便宜的利率且能承受斷頭風險 → 低倍數 margin。<b>單純想要槓桿加密 → 直接持有 MSTR/BMNR 別再疊。</b>單一股票期貨在台/美散戶基本拿不到，box spread 屬期權範疇，皆略過。
+  </div>
+</div>
+
+<!-- 深價內實戰：流動性與滑點 -->
+<div class="section">
+  <h3>🎯 ④ 真要買深價內 call：怎麼買便宜、流動性好、不被賺價差</h3>
+  <div class="analysis-box analysis-bear" style="font-size:0.92rem;">
+    <b>殘酷現實：MSTR 深價內 LEAP 的買賣價差高達 7-11%，而且很多深價內履約價「零成交量」。</b>
+    你來回各付一次價差 ≈ <b>一次就吃掉約 8%</b>——而深價內 call 的「持有成本」一年才 ~7%。
+    <b>也就是：跨一次價差 ≈ 白付一整年的融資。價差(滑點)才是你最大的隱藏成本，比 carry 還兇。</b>
+  </div>
+  <h4>實鏈表流動性對照（CBOE 2026/6/9）</h4>
+  <table>
+    <thead><tr><th>到期 / 履約價</th><th class="num">買價</th><th class="num">賣價</th><th class="num">價差%</th><th class="num">未平倉(OI)</th><th class="num">當日量</th><th>評</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,0.05)"><td>Dec-2027 $50</td><td class="num">86.55</td><td class="num">94.50</td><td class="num neg">8.8%</td><td class="num neg">76</td><td class="num neg">0</td><td class="neg">深價內＝寬價差、沒量</td></tr>
+      <tr><td>Dec-2027 $100</td><td class="num">63.40</td><td class="num">68.00</td><td class="num warn">7.0%</td><td class="num">413</td><td class="num">10</td><td>整數價較好</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td><b>Jan-2028 $100</b></td><td class="num">65.35</td><td class="num">69.10</td><td class="num warn">5.6%</td><td class="num pos">846</td><td class="num pos">20</td><td class="pos">最佳：量大、價差較窄</td></tr>
+      <tr style="background:rgba(34,197,94,0.05)"><td><b>Jan-2028 $130</b></td><td class="num">54.40</td><td class="num">57.85</td><td class="num">6.1%</td><td class="num pos">779</td><td class="num pos">52</td><td class="pos">流動性最佳區</td></tr>
+      <tr><td>Jan-2028 $50</td><td class="num">88.65</td><td class="num">94.95</td><td class="num neg">6.9%</td><td class="num">372</td><td class="num neg">0</td><td class="warn">深價內仍沒量</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.8rem;color:var(--text2);">兩個規律：<b>① 整數履約價（$100/$120/$130）流動性最好；② Jan-2028 比 Dec-2027 更活</b>（OI 普遍 2-4 倍）。深價內（$50-70）雖然 carry 低，但價差寬、零成交——<b>實際成交困難、滑點吃光省下的 carry</b>。</p>
+  <h4>✅ 下單防被坑檢查清單</h4>
+  <ol style="margin:6px 0 0 18px;font-size:0.88rem;line-height:1.85;">
+    <li><b>永遠用限價單(limit)，掛在 mid（中價）或更好；絕不下市價單(market)。</b>寬價差下市價單＝直接送錢給造市商。</li>
+    <li><b>選流動的履約價＆到期</b>：整數價、OI 數百以上、有當日量、優先 <b>Jan-2028</b>。為了流動性，<b>寧可選 $100-120 而不是硬追 $50 深價內</b>——省下的 carry 會被滑點吃掉。</li>
+    <li><b>美股盤中交易</b>（台灣晚上 21:30–04:00 / 夏令 21:30–04:00），<b>避開開盤、收盤前後 10 分鐘</b>（價差最寬）。</li>
+    <li><b>用券商的「理論價(theo)/中價」當錨</b>；造市商模型多在 mid 附近，掛 mid 限價常能成交，不急就等。</li>
+    <li><b>分批建倉</b>（2-3 筆），別一次掃完整個 size。</li>
+    <li><b>看 IV 再買</b>：現在 IV Percentile ~98% 偏貴，IV 回落時買長天期更划算（vega 順風）。</li>
+    <li><b>BMNR 期權流動性更差</b>（公司更小），深價內 LEAP 的價差/滑點問題會更嚴重，BMNR 那 25% 建議<b>直接買現股</b>，別碰它的期權。</li>
+  </ol>
+  <div class="analysis-box analysis-review" style="margin-top:8px;">
+    <b>一句話：</b>對 MSTR，「深價內 LEAP」理論上是最好的無斷頭槓桿，但<b>它的真實敵人不是 theta，是價差/滑點</b>。若你不確定能用限價單在 mid 附近成交，那「<b>低倍數 margin 買現股</b>」或「<b>乾脆多買點 MSTR 現股（它本身已是槓桿）</b>」對你可能更實際、更省成本。
+  </div>
+</div>
+
 <!-- 方案1 -->
 <div class="section">
   <h3>① 方案1拆解：100% 資金壓 價平 Dec-2027 LEAP</h3>
