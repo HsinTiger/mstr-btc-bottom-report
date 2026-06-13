@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSTR / BMNR 囤現股決策 v7 — 大戶供需 + 誠實打臉版</title>
+<title>MSTR / BMNR 囤現股決策 v9 — 三維監看（籌碼 / 技術 / 基本面機構）</title>
 <style>
 :root {
   --bg: #0a0c14; --surface: #131722; --surface2: #1a1f2e; --surface3: #222838;
@@ -73,27 +73,11 @@ tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
 .analysis-yellow { background: rgba(234,179,8,0.04); border-color: var(--yellow); }
 .analysis-purple { background: rgba(168,85,247,0.05); border-color: var(--purple); }
 
-.signal-list { display: flex; flex-direction: column; gap: 5px; }
-.signal-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px;
-  border-radius: 6px; background: var(--surface2); font-size: 0.85rem; }
-.signal-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.signal-dot.on { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
-.signal-dot.off { background: var(--text3); opacity: 0.4; }
-.signal-dot.warn { background: var(--yellow); box-shadow: 0 0 6px rgba(234,179,8,0.4); }
-
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 10px; margin: 10px 0; }
 .kpi { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
 .kpi .label { font-size: 0.72rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
 .kpi .value { font-size: 1.5rem; font-weight: 800; margin: 2px 0; }
 .kpi .note { font-size: 0.74rem; color: var(--text3); }
-
-.collapsible { margin: 6px 0; }
-.collapsible summary { cursor: pointer; padding: 9px 12px; background: var(--surface2);
-  border-radius: 6px; font-weight: 600; font-size: 0.85rem; user-select: none; }
-.collapsible summary:hover { background: var(--surface3); }
-.collapsible[open] summary { border-radius: 6px 6px 0 0; }
-.collapsible .content { padding: 12px; border: 1px solid var(--border); border-top: 0;
-  border-radius: 0 0 6px 6px; font-size: 0.86rem; }
 
 .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 10px; margin: 10px 0; }
 .team-card { padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); }
@@ -101,75 +85,32 @@ tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
 .team-card .role { font-size: 0.76rem; color: var(--text2); margin: 4px 0 6px; }
 .team-card ul { margin: 0 0 0 16px; font-size: 0.8rem; color: var(--text); }
 
-/* Workflow */
-.flow { display: flex; flex-direction: column; gap: 0; margin: 10px 0; }
-.flow-step { display: flex; gap: 12px; align-items: flex-start; }
-.flow-marker { display:flex; flex-direction:column; align-items:center; }
-.flow-num { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
-.flow-line { width:2px; flex:1; background: var(--border); min-height: 14px; }
-.flow-body { padding-bottom: 16px; flex:1; }
-.flow-body .t { font-weight: 700; font-size: 0.92rem; }
-.flow-body .d { font-size: 0.82rem; color: var(--text2); }
-.flow-step.done .flow-num { background: var(--green); }
-.flow-step.key .flow-num { background: var(--purple); }
-
-.action-list { counter-reset: action; }
-.action-item { counter-increment: action; display: flex; gap: 10px; padding: 9px 11px;
-  border-left: 3px solid var(--blue); margin-bottom: 5px; background: var(--surface2);
-  border-radius: 0 6px 6px 0; font-size: 0.85rem; align-items: flex-start; }
-.action-item::before { content: counter(action); width: 22px; height: 22px;
-  background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; font-weight: 700; font-size: 0.7rem; flex-shrink: 0; }
-.action-item.danger { border-left-color: var(--red); }
-.action-item.danger::before { background: var(--red); }
-.action-item.success { border-left-color: var(--green); }
-.action-item.success::before { background: var(--green); }
-.action-item.warn-item { border-left-color: var(--yellow); }
-.action-item.warn-item::before { background: var(--yellow); color: #000; }
-
 .disclaimer { padding: 14px; background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15);
   border-radius: 10px; color: var(--text2); font-size: 0.78rem; text-align: center; margin-top: 16px; }
 
-.scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 10px; margin: 10px 0; }
-.scenario-card { padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); }
-.scenario-card .prob { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; margin-bottom: 6px; }
-
 blockquote { border-left: 3px solid var(--border); padding: 8px 12px; margin: 8px 0;
   background: var(--surface2); border-radius: 0 8px 8px 0; font-size: 0.85rem; color: var(--text2); }
-pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var(--text2); line-height: 1.7; white-space: pre-wrap; }
+code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background: var(--surface3); padding: 1px 5px; border-radius: 4px; }
 
-/* Allocation bar */
 .alloc-bar { display: flex; height: 38px; border-radius: 8px; overflow: hidden; margin: 8px 0; border:1px solid var(--border); }
 .alloc-seg { display:flex; align-items:center; justify-content:center; font-size:0.76rem; font-weight:700; color:#fff; }
 .alloc-legend { display:flex; flex-wrap:wrap; gap:10px; font-size:0.78rem; margin-top:4px; }
 .alloc-legend span { display:flex; align-items:center; gap:5px; }
 .dot { width:10px; height:10px; border-radius:2px; display:inline-block; }
 
-/* valuation band */
-.band { position: relative; height: 30px; border-radius: 6px; margin: 10px 0 4px;
-  background: linear-gradient(90deg, var(--green) 0%, var(--yellow) 55%, var(--red) 100%); opacity:0.85; }
-.band-marker { position:absolute; top:-6px; width:3px; height:42px; background:#fff; }
-.band-marker::after { content: attr(data-label); position:absolute; top:-18px; left:50%; transform:translateX(-50%);
-  font-size:0.68rem; white-space:nowrap; color:#fff; font-weight:700; }
-.band-labels { display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text2); }
-
-/* gauge for price targets */
-.tgt-wrap { background: var(--surface2); border-radius:10px; padding:14px; margin:8px 0; }
-.tgt-line { position: relative; height: 8px; background: var(--surface3); border-radius:4px; margin: 26px 0 22px; }
-.tgt-pin { position:absolute; top:-7px; transform:translateX(-50%); text-align:center; }
-.tgt-pin .bar { width:3px; height:22px; margin:0 auto; }
-.tgt-pin .lbl { font-size:0.68rem; white-space:nowrap; margin-top:2px; }
-
 .vbadge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 0.68rem; font-weight: 700; }
 .vbadge-pass { background: rgba(34,197,94,0.15); color: var(--green); }
 .vbadge-fail { background: rgba(239,68,68,0.15); color: var(--red); }
 .vbadge-warn { background: rgba(234,179,8,0.15); color: var(--yellow); }
-.vbadge-na { background: rgba(100,116,139,0.15); color: var(--text3); }
-.tag { font-size:0.66rem; padding:1px 5px; border-radius:3px; background:var(--surface3); color:var(--text2); font-weight:600; }
-.tag.v { background:rgba(34,197,94,0.12); color:var(--green); }
-.tag.e { background:rgba(234,179,8,0.12); color:var(--yellow); }
-.tag.c { background:rgba(59,130,246,0.12); color:var(--blue2); }
+
+/* thermometer */
+.thermo { height: 30px; border-radius: 6px; margin: 12px 0 4px;
+  background: linear-gradient(90deg, var(--green) 0%, #84cc16 30%, var(--yellow) 50%, var(--orange) 70%, var(--red) 100%); opacity:0.88; position: relative; }
+.thermo-labels { display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text2); }
+.dim-tag { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:10px; margin-bottom:6px; }
+.dim-1 { background:rgba(168,85,247,0.15); color:var(--purple); }
+.dim-2 { background:rgba(6,182,212,0.15); color:var(--cyan); }
+.dim-3 { background:rgba(249,115,22,0.15); color:var(--orange); }
 
 @media (max-width: 640px) {
   .hero h1 { font-size: 1.25rem; }
@@ -185,192 +126,157 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
 <div class="container">
 
 <div class="hero">
-  <h1>₿ MSTR / BMNR 囤現股決策 — 大戶在收？還是基本面壞了？</h1>
-  <div class="sub">全力聚焦：用本業收入/低息資金分批囤 MSTR、BMNR 現股（捨棄期權與槓桿ETF）</div>
-  <div class="date">📅 2026/6/9 · v7 · 砍掉舊內容，只留現在的重點 · 含大戶/供需實查 + 誠實打臉版</div>
+  <h1>₿ MSTR / BMNR 囤現股決策 — 三維監看儀表</h1>
+  <div class="sub">三個互不相干的維度盯盤：① 籌碼面　② 技術面　③ 基本面‧機構‧散戶</div>
+  <div class="date">📅 2026/6/13 · v9 三維重構版 · 本金 2 等份 / 抱 3–4 年 / 夠便宜＋信念不歸零就投</div>
   <div class="badge-row">
-    <span class="badge badge-red">⚠️ 結論：現在不是「全押抄底」的時點</span>
-    <span class="badge badge-yellow">大戶在收、但ETF在逃＝僵局</span>
-    <span class="badge badge-red">BTC ETF -$4.4B/13天 · ETH ETF -$401M/17天(史上最差)</span>
-    <span class="badge badge-green">不會歸零（鏈上是收籌碼不是死亡螺旋）</span>
+    <span class="badge badge-red">⚠️ 現況：未到「全押抄底」時點（溫度約 −3）</span>
+    <span class="badge badge-yellow">大戶在收 vs ETF 在逃＝僵局</span>
+    <span class="badge badge-green">不會歸零（鏈上收籌碼非死亡螺旋）</span>
+    <span class="badge badge-purple">MSTR 含幣量 4 年稀釋後仍增厚</span>
   </div>
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" data-tab="verdict">🎯 結論決策</button>
-  <button class="tab-btn" data-tab="model">🌡️ 四層共振模型</button>
-  <button class="tab-btn" data-tab="audit">🪙 含幣量稽核</button>
-  <button class="tab-btn" data-tab="whale">🐋 大戶與供需</button>
-  <button class="tab-btn" data-tab="slap">🔨 誠實打臉</button>
-  <button class="tab-btn" data-tab="ratio">🆚 MSTR vs BMNR</button>
-  <button class="tab-btn" data-tab="cycle">📉 熊市規律</button>
+  <button class="tab-btn active" data-tab="chips">🪙 籌碼面 ＋ 行動</button>
+  <button class="tab-btn" data-tab="tech">📈 技術面</button>
+  <button class="tab-btn" data-tab="fund">🏛️ 基本面‧機構‧散戶</button>
 </div>
 
-<!-- ===== 結論決策 ===== -->
-<div id="tab-verdict" class="tab-content active">
+<!-- ============================================================ -->
+<!-- ===== 維度一：籌碼面 ＋ 行動 ===== -->
+<!-- ============================================================ -->
+<div id="tab-chips" class="tab-content active">
+
 <div class="section">
-  <h2>🎯 給你的誠實結論（不迎合版）</h2>
-  <div class="analysis-box analysis-bear" style="font-size:0.96rem;">
-    <b>你的「方法」對，但「時機假設」我必須打臉。</b><br>
-    ✅ <b>用本業收入分批囤現股，方向正確</b>——現股沒有期權的時間耗損與滑點、沒有 2x ETF 的波動衰減、不會被斷頭，時間真的站在你這邊。<br>
-    ❌ <b>但「現在就是底、該全力（甚至借錢）抄」這個假設，數據不支持。</b>鏈上顯示這是<b>「大戶收籌碼 vs ETF 出逃」的僵局</b>，不是「底部已確認、要噴」。邊際買盤（ETF）正在離場，價格被卡住。<br>
-    ❌ <b>而且你挑的 MSTR/BMNR 是「反身性最強、beta 最高」的工具，偏偏挑在反身性風險點燃、邊際買盤撤退的時候。</b>它們可能比 BTC/ETH 本身跌更多。
-  </div>
+  <h2>🎯 行動計畫（先看這個）</h2>
   <div class="kpi-grid">
-    <div class="kpi"><div class="label">會歸零嗎？</div><div class="value pos" style="font-size:1.3rem;">不會</div><div class="note">鏈上是收籌碼非死亡螺旋</div></div>
-    <div class="kpi"><div class="label">現在是底嗎？</div><div class="value neg" style="font-size:1.3rem;">大概不是</div><div class="note">MVRV未到投降、ETF在逃</div></div>
-    <div class="kpi"><div class="label">基本面變了嗎？</div><div class="value warn" style="font-size:1.2rem;">部分變了</div><div class="note">財庫反身性+ETF順週期</div></div>
-    <div class="kpi"><div class="label">該怎麼做</div><div class="value" style="font-size:1.2rem;">小額DCA</div><div class="note">借錢子彈先留著</div></div>
+    <div class="kpi"><div class="label">會歸零嗎？</div><div class="value pos" style="font-size:1.3rem;">不會</div><div class="note">鏈上收籌碼，非死亡螺旋</div></div>
+    <div class="kpi"><div class="label">現在是底嗎？</div><div class="value neg" style="font-size:1.3rem;">大概不是</div><div class="note">溫度 ~−3，ETF 仍在逃</div></div>
+    <div class="kpi"><div class="label">含幣量增厚？</div><div class="value pos" style="font-size:1.2rem;">MSTR 是</div><div class="note">4 年稀釋後仍正；BMNR 未證明</div></div>
+    <div class="kpi"><div class="label">現在怎麼做</div><div class="value warn" style="font-size:1.2rem;">等＋小額DCA</div><div class="note">兩等份子彈留給訊號</div></div>
   </div>
-</div>
-
-<div class="section">
-  <h3>🛠️ 行動方案（現在 → 之後）</h3>
-  <table>
-    <thead><tr><th>項目</th><th>我的建議</th><th>為什麼</th></tr></thead>
-    <tbody>
-      <tr><td><b>工具</b></td><td class="pos">現股為主（MSTR/BMNR）</td><td>無 theta、無滑點、無斷頭，時間站你這邊（你的判斷對）</td></tr>
-      <tr><td><b>資金來源</b></td><td class="warn">本業收入定期定額；<b>低息貸款先別動</b></td><td>僵局可能再磨數月～跌更深；借錢買最反身的資產＝利息+回撤雙重壓力</td></tr>
-      <tr><td><b>標的</b></td><td class="pos">現貨 MSTR + BMNR，<b>0.75 : 0.25</b></td><td>你的選擇，且比 65/35 更穩——ETH 現在需求最弱、BMNR 有稀釋風險，先壓低它</td></tr>
-      <tr><td><b>梭哈方式</b></td><td>「梭哈」拆成 <b>2 段、各 50%</b>，按訊號投</td><td>底不可預測 → 用「觸發條件」代替「猜時間」</td></tr>
-    </tbody>
-  </table>
-
-  <h3>🎯 兩等份本金計畫（3–4 年持有 ‧ 夠便宜＋有信念就投）</h3>
-  <div class="analysis-box analysis-review" style="margin-bottom:12px">
-    <b>你的原則（已內化進觸發條件）：</b>本金只分 <b>2 等份（各 50%）</b>；目標抱 <b>3–4 年</b>；判準只有一條——<b>「夠便宜，且我相信它不會歸零、會再漲回去」</b>就投。所以兩等份都是<b>「買便宜」</b>，差別只在<b>確定性高低</b>：第 1 等份在最恐慌時接刀（最便宜、但要扛得住），第 2 等份在便宜＋底已成形時補（貴一點、但確定性高）。<b>不追高、不猜頂、不在橫盤梭哈。</b>
-  </div>
-  <table>
-    <thead><tr><th>子彈</th><th>觸發條件</th><th>邏輯</th><th>現況</th></tr></thead>
-    <tbody>
-      <tr><td><b>第 1 等份「投降接刀」<br>50%</b></td><td><b>任一</b>成立即投（夠便宜）：<br>① BTC 進 <b>$48–54k</b>（≤已實現價）<br>② BTC <b>MVRV-Z ≤ 0</b>（投降）<br>③ 四層<b>溫度 ≤ −6</b>（共振投降）<br>④ MSTR <b>mNAV ≤ 0.6x</b></td><td>最恐慌＝最便宜；信念夠就接</td><td><span class="vbadge vbadge-fail">未觸發</span><br><span style="font-size:0.7rem;color:var(--text3)">BTC ~$61.5k、MVRV-Z ~0.34、mNAV ~0.84x（6/10）</span></td></tr>
-      <tr><td><b>第 2 等份「便宜＋確認」<br>50%</b></td><td><b>全部</b>成立才投（便宜且底成形）：<br>① ETF <b>連 ≥10 交易日淨流入</b><br>② BTC <b>站回 200 日線</b>＋更高低點<br>③ MSTR <b>無被迫賣幣</b>、mNAV 回 ≥1.0x<br>④ 四層<b>溫度 +2~+5</b></td><td>還便宜、但底已確立＝低風險加碼</td><td><span class="vbadge vbadge-fail">未觸發</span><br><span style="font-size:0.7rem;color:var(--text3)">ETF 剛翻正~2日（需≥10）、BTC 在 200日線下</span></td></tr>
-    </tbody>
-  </table>
   <div class="analysis-box analysis-review">
-    <b>三種未來都有解：</b><b>續崩</b>→第 1 等份先接最便宜；<b>不崩直接回升</b>→第 2 等份追確認（仍在便宜區）；<b>長期橫盤</b>→兩等份都不動，本業收入小額 DCA 照常撿。<b>任一路徑錢都佈得出去，不空等、不在僵局梭哈。</b>
-    <br>＊<b>本業收入 DCA 是常駐底倉，不算在這兩等份裡。</b>
-    <br>＊判斷「夠便宜」用 <b>🌡️ 四層共振模型</b>分頁的溫度計；「不會歸零」的信念來自 <b>🐋 大戶供需</b>（鏈上吸籌、非死亡螺旋）＋ <b>🪙 含幣量稽核</b>（MSTR 4 年稀釋後仍增厚）。
+    <b>你的原則（已內化）：</b>本金只分 <b>2 等份（各 50%）</b>，抱 <b>3–4 年</b>，判準一條——<b>「夠便宜，且相信不會歸零、會漲回來」就投</b>。兩等份都是買便宜，差別在確定性：第 1 等份最恐慌時接刀（最便宜、要扛得住），第 2 等份便宜＋底已成形時補。<b>不追高、不猜頂、不在橫盤梭哈。</b>「夠便宜」用下方<b>三維溫度計</b>判斷。
   </div>
-  <div class="analysis-box analysis-yellow">📡 <b>每日監控排程</b>：每天台北早上回報 BTC/ETH 價、ETF 資金流、MVRV-Z、已實現價、永續 funding／期貨基差、MSTR/BMNR mNAV 與含幣量、是否賣幣，輸出 <b>BTC/ETH 溫度（−10~+10）</b> ＋ 明確動作（等 / 投第1等份 / 投第2等份）。</div>
-  <div class="disclaimer">不構成投資建議。加密與相關個股可能大幅虧損。數據為 2026/6 公開來源交叉比對，市場瞬息萬變。舊版完整報告（GOOG/AI價值鏈/期權等）保留在本 repo 的 git 歷史。</div>
-</div>
-</div>
 
-<!-- ===== 大戶與供需 ===== -->
-<div id="tab-whale" class="tab-content">
-<div class="section">
-  <h2>🐋 大戶在做什麼？真正的供需到底如何</h2>
-  <div class="analysis-box analysis-yellow" style="font-size:0.93rem;">
-    <b>一句話：這是「強手收籌碼 vs 邊際買盤(ETF)出逃」的拉鋸。</b>大戶確實在累積、交易所幣量被抽乾到多年低點（供給收縮，<b>利多</b>）；
-    但決定價格的<b>邊際買盤——現貨 ETF——正在史上級流出（利空）</b>。所以「鯨魚狂買、價格卻不動」＝買盤被賣壓吸收。<b>僵局，不是發車。</b>
-  </div>
-  <h3>供給面（收縮 = 利多）</h3>
+  <h3>🌡️ 三維共振溫度計（−10 投降底 → +10 狂熱頂）</h3>
+  <div class="thermo"></div>
+  <div class="thermo-labels"><span>−10 投降底</span><span>−6</span><span>0 中性</span><span>+6</span><span>+10 狂熱頂</span></div>
+  <p style="font-size:0.82rem;color:var(--text2);margin-top:8px;">三維各投一票，<b>同號才極端</b>：<span class="dim-tag dim-1">籌碼面</span>大戶收/ETF逃/槓桿投降/財庫無賣壓　<span class="dim-tag dim-2">技術面</span>估值便宜/破已實現價/週期到位　<span class="dim-tag dim-3">基本面機構</span>機構態度/賽道輪動/散戶投降。任一維度背離＝「還沒到」。</p>
   <table>
-    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
+    <thead><tr><th>溫度</th><th>狀態</th><th>動作</th></tr></thead>
     <tbody>
-      <tr><td>大戶累積</td><td class="pos">30天 +270,000 BTC（2013以來最大）；90天 +91,000</td><td class="pos">巨鯨累積達 10 週高；4天 +$322M</td><td class="pos">強手在低位收</td></tr>
-      <tr><td>交易所存量</td><td class="pos">2.21M（9年低、僅5.88%供給）</td><td>30% 已質押鎖倉（~37M ETH）</td><td class="pos">可賣的幣變少</td></tr>
-      <tr><td>長期持有者(LTH)</td><td class="pos">佔比升至 78.3%（原 74.1%）</td><td>—</td><td class="pos">籌碼從弱手轉強手</td></tr>
+      <tr style="background:rgba(34,197,94,0.10)"><td><b>−10 ~ −6</b></td><td>三維共振投降底</td><td class="pos">🟢 投第 1 等份（接刀）</td></tr>
+      <tr><td>−5 ~ −2</td><td>便宜但籌碼/技術未投降<br><b>← 現在約這裡</b></td><td class="warn">🟡 小額 DCA，子彈留著</td></tr>
+      <tr><td>−1 ~ +1</td><td>中性 / 橫盤</td><td>⚪ 等訊號</td></tr>
+      <tr style="background:rgba(34,197,94,0.10)"><td><b>+2 ~ +5</b></td><td>趨勢確認、未過熱</td><td class="pos">🟢 投第 2 等份；底倉續抱</td></tr>
+      <tr style="background:rgba(239,68,68,0.10)"><td><b>+6 ~ +10</b></td><td>三維共振狂熱頂</td><td class="neg">🔴 分批止盈，先減 BMNR</td></tr>
     </tbody>
   </table>
-  <h3>需求面（邊際買盤撤退 = 利空，且這才是定價的關鍵）</h3>
+
+  <h3>🎯 兩等份觸發條件（每日監控在比對）</h3>
   <table>
-    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
+    <thead><tr><th>子彈</th><th>觸發條件</th><th>現況</th></tr></thead>
     <tbody>
-      <tr style="background:rgba(239,68,68,0.05)"><td>現貨 ETF 資金流</td><td class="neg">13天淨流出 -$4.4B；IBIT 一家 -$3.3B</td><td class="neg">17天淨流出 -$401M（<b>史上最差</b>）</td><td class="neg">機構正在離場</td></tr>
-      <tr><td>ETF 規模</td><td class="neg">$104B → $83B（-20%）</td><td>—</td><td class="warn">但累計仍 +$55B（沒崩盤式贖回）</td></tr>
-      <tr style="background:rgba(239,68,68,0.05)"><td>價格</td><td class="warn">~$63k，鯨魚狂買仍卡住</td><td class="neg">$1,505，2023初以來新低</td><td class="neg">賣壓正好吸收買盤</td></tr>
+      <tr><td><b>第 1 等份<br>「投降接刀」50%</b></td><td><b>任一</b>成立即投：<br>① BTC 進 <b>$48–54k</b>（≤已實現價）<br>② BTC <b>MVRV-Z ≤ 0</b><br>③ 三維<b>溫度 ≤ −6</b><br>④ MSTR <b>mNAV ≤ 0.6x</b></td><td><span class="vbadge vbadge-fail">未觸發</span><br><span style="font-size:0.7rem;color:var(--text3)">BTC ~$61.5k、MVRV-Z ~0.34、mNAV ~0.84x（6/10）</span></td></tr>
+      <tr><td><b>第 2 等份<br>「便宜＋確認」50%</b></td><td><b>全部</b>成立才投：<br>① ETF <b>連 ≥10 交易日淨流入</b><br>② BTC <b>站回 200 日線</b>＋更高低點<br>③ MSTR <b>無被迫賣幣</b>、mNAV ≥1.0x<br>④ 三維<b>溫度 +2~+5</b></td><td><span class="vbadge vbadge-fail">未觸發</span><br><span style="font-size:0.7rem;color:var(--text3)">ETF 剛翻正~2日（需≥10）、BTC 在 200日線下</span></td></tr>
     </tbody>
   </table>
-  <div class="analysis-box analysis-bear" style="margin-top:8px;">
-    <b>關鍵判讀：ETH 明顯比 BTC 弱。</b>ETH 的 ETF 流出（17天）比 BTC（13天）更長、被點名是「ETH 專屬的機構輪出」，價格已破 2023 初低點。
-    → 這直接削弱「BMNR 因 ETH 跌更深所以反彈更猛」的論點：<b>現在 ETH 是「需求更差」的一方，不只是「跌更多」。</b>所以 BMNR 權重該縮、不是加。
-  </div>
-  <p style="font-size:0.78rem;color:var(--text3)">來源：spotedcrypto / CryptoQuant（鏈上）、bitcoinfoundation / techtimes / crypto.news（ETF 流）、farside（ETF）。數字隨時間更新，以即時鏈上站為準。</p>
-</div>
-</div>
-
-<!-- ===== 誠實打臉 ===== -->
-<div id="tab-slap" class="tab-content">
-<div class="section">
-  <h2>🔨 誠實打臉：現在該抄底嗎？基本面變了嗎？會歸零嗎？</h2>
-
-  <h3>❓ 會一路跌到歸零嗎？ → <span class="pos">不會（這點你可以放心）</span></h3>
-  <div class="analysis-box analysis-bull">
-    歸零需要「需求消失 + 持有者投降」。但鏈上是<b>相反</b>：交易所幣被抽到 9 年低、LTH 升到 78%、鯨魚 30 天收 27 萬枚、ETH 30% 質押鎖倉。
-    <b>這是「強手承接弱手」的累積行為，不是死亡螺旋。</b>BTC 的網路效應、ETF 制度化、主權/機構持有，都讓「歸零」不是基準情境。
-    ETH 競爭較多、風險高於 BTC，但「歸零」同樣不是合理預期。
-  </div>
-
-  <h3>❓ 現在就是底、該全力抄嗎？ → <span class="neg">數據說：大概還沒到，別全押</span></h3>
-  <table>
-    <thead><tr><th>檢驗</th><th>現況</th><th>判定</th></tr></thead>
-    <tbody>
-      <tr><td>邊際買盤(ETF)</td><td>BTC/ETH 雙雙史上級流出</td><td><span class="vbadge vbadge-fail">✗ 買盤在逃</span></td></tr>
-      <tr><td>MVRV-Z（估值溫度）</td><td>~1.2–1.8，真底常在負值(~-0.4)</td><td><span class="vbadge vbadge-fail">✗ 未到投降</span></td></tr>
-      <tr><td>跌幅</td><td>BTC -50%；歷次底 -77~-86%</td><td><span class="vbadge vbadge-warn">⚠ 可能還有空間</span></td></tr>
-      <tr><td>時間</td><td>距高點約 7–8 個月；歷次 ~12–14 月見底（Cowen 估 Q4 2026）</td><td><span class="vbadge vbadge-warn">⚠ 時間未到</span></td></tr>
-      <tr><td>大戶累積</td><td>強勁</td><td><span class="vbadge vbadge-pass">✓ 唯一明確利多</span></td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.84rem;color:var(--text2)">→ <b>五項裡四項偏「還沒到底」。</b>大戶在收是真的，但「收」可以收很久（磨盤），不等於「馬上漲」。把它當「不會歸零」的證據，不要當「立刻抄底發車」的訊號。</p>
-
-  <h3>❓ 基本面變了嗎？ → <span class="warn">是，有幾個「這次不一樣」是真的</span></h3>
-  <div class="team-grid">
-    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">① 財庫反身性（新風險）</div><ul><li>MSTR/BMNR 及一堆模仿者高位用槓桿囤幣</li><li>磨跌久了恐變<b>強制賣方</b>（MSTR 為付 $1B+ 股息；BMNR 增發）——<b>注意：MSTR 目前仍在買</b>，此為折價持續才會引爆的風險</li><li>會讓<b>財庫股跌得比幣兇</b>，還在最差時點加供給</li></ul></div>
-    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">② ETF＝順週期邊際買盤</div><ul><li>機構追高、也會殺低（現在在殺低）</li><li>放大雙向波動；它現在主導定價</li><li>「散戶慢慢進、價格穩漲」的舊劇本被改寫</li></ul></div>
-    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">③ 週期振幅收斂</div><ul><li>連看多方(Bitwise)都說「四年週期已死、漲幅會收斂」</li><li>「從這輕鬆 2–3 倍」的假設可能過時</li><li>看空方(Cowen)：週期還在、底約 Q4 2026</li></ul></div>
-  </div>
-
-  <h3>🩸 對 MSTR/BMNR 的直接含義（最該被打臉的地方）</h3>
-  <div class="analysis-box analysis-bear">
-    你想「囤最會漲的」，於是選了 <b>beta 最高、反身性最強</b>的 MSTR/BMNR。但在「邊際買盤撤退 + 反身性點燃」的此刻，這正是它們<b>最危險</b>的時候：<br>
-    • MSTR mNAV 0.80x、BMNR ~1.0x，恐慌時 <b>mNAV 可再殺到 0.5x</b>（封閉式結構歷史常態）——就算 BTC 不再跌，<b>折價擴大也能讓股價再 -30%</b>。<br>
-    • 若 BTC 磨到 $45–50k，MSTR（$1B+ 股息抽血、屆時恐被迫賣幣）可能比 BTC 再多跌 30–50%；BMNR（ETH 更弱 + 稀釋）類似或更糟。<br>
-    <b>結論：你欣賞的「內建槓桿」，在這個時點是雙面刃的刀刃那面。所以「借錢、現在、全押 MSTR/BMNR」是我會明確勸阻的組合。分批用收入囤、子彈留給訊號——可以；借錢梭哈——不行。</b>
-  </div>
-</div>
-</div>
-
-<!-- ===== MSTR vs BMNR ===== -->
-<div id="tab-ratio" class="tab-content">
-<div class="section">
-  <h2>🆚 MSTR vs BMNR — 比例怎麼分（6/9 更新）</h2>
-  <div class="analysis-box analysis-purple" style="font-size:0.93rem;">
-    兩者是「同一個槓桿加密注」的 BTC 版 vs ETH 版，<b>非互相分散</b>（熊市同跌）。
-    <b>採用你的 75 : 25 偏 MSTR（我同意，甚至比我原本的 65/35 更穩）</b>——因為最新供需顯示 <b>ETH 需求比 BTC 更弱</b>（ETF 出逃更兇、破 2023 低），BMNR 的「ETH 跌更深→彈更猛」論點被「ETH 需求更差」抵消，加上 BMNR 的 500 億股稀釋風險，把它壓到 1/4 衛星倉是合理的。
-  </div>
-  <table>
-    <thead><tr><th>維度</th><th>MSTR（BTC財庫）</th><th>BMNR（ETH財庫）</th><th>誰較強</th></tr></thead>
-    <tbody>
-      <tr><td>現價 / 市值</td><td>$127.2 / $42.4B</td><td>$15.9 / $9.1B</td><td>—</td></tr>
-      <tr><td>持倉</td><td>845,256 BTC（全網4.0%，6/7）</td><td>5.54M ETH（全網~4.6%，87%質押，6/7）</td><td>—</td></tr>
-      <tr><td>mNAV</td><td class="pos">~0.80x（折價，較便宜）</td><td>~1.0x（平價，無折價墊）</td><td class="pos">MSTR</td></tr>
-      <tr><td>底層資產原生現金流</td><td class="neg">無（不生息）</td><td class="pos">質押 ~$238M/年</td><td class="pos">BMNR</td></tr>
-      <tr><td>剛性年支出 / 反身性</td><td class="neg">特別股股息 ~$1B+/年；現仍<b>買</b>（6/1–7 加 1,550 BTC@$65,332），但折價久了恐<b>被迫賣幣</b></td><td class="pos">質押自償，賣壓低</td><td class="pos">BMNR</td></tr>
-      <tr><td>資本紀律 / 治理 / 稀釋</td><td class="pos">增發克制、S&amp;P候選、成熟</td><td class="neg">500億股授權、傳內控缺陷、暴力稀釋</td><td class="pos">MSTR</td></tr>
-      <tr><td>當下底層需求（6月）</td><td class="warn">BTC ETF -$4.4B/13天</td><td class="neg">ETH ETF -$401M/17天（更差）</td><td class="pos">MSTR（相對）</td></tr>
-      <tr><td>流動性 / 成熟度</td><td class="pos">高</td><td>中、波動更大</td><td class="pos">MSTR</td></tr>
-    </tbody>
-  </table>
-  <h3>建議配置（這個「進攻加密」格子內）</h3>
+  <h3>配置：MSTR 75 : BMNR 25</h3>
   <div class="alloc-bar">
     <div class="alloc-seg" style="width:75%;background:var(--purple);">MSTR 75%</div>
     <div class="alloc-seg" style="width:25%;background:var(--green);">BMNR 25%</div>
   </div>
   <div class="alloc-legend">
-    <span><i class="dot" style="background:var(--purple)"></i>MSTR 75% — BTC 較強、mNAV 折價、治理佳、反身性雖高但被折價補償</span>
-    <span><i class="dot" style="background:var(--green)"></i>BMNR 25% — 質押自償的續命力 + ETH 翻身選擇權，但需求最弱+稀釋 → 壓到 1/4</span>
+    <span><i class="dot" style="background:var(--purple)"></i>MSTR — BTC 較強、mNAV 折價、含幣量已證明</span>
+    <span><i class="dot" style="background:var(--green)"></i>BMNR — 質押續命＋ETH 翻身選擇權，但需求最弱＋稀釋 → 壓到 1/4</span>
   </div>
-  <p style="font-size:0.82rem;color:var(--text2);margin-top:6px;">若 ETH 的 ETF 流出止穩、甚至轉正，可考慮把 BMNR 加回 ~35%。在那之前維持 75/25。<b>兩者合計仍要關在「輸得起」的進攻額度內，並按「結論決策」分頁的兩段式訊號分批進。</b></p>
+  <div class="analysis-box analysis-yellow" style="margin-top:10px;">📡 <b>每日監控排程</b>（08:00 台北）：抓三維數據，輸出 <b>「BTC 溫度 X｜ETH 溫度 Y｜ETH/BTC 訊號｜建議配置｜行動：等/投第1等份/投第2等份/止盈」</b>，並 commit 進 monitor-log.md。</div>
+</div>
+
+<div class="section">
+  <h2><span class="dim-tag dim-1">維度一</span> 🪙 籌碼面：誰在買、誰在賣、槓桿與財庫</h2>
+  <div class="analysis-box analysis-yellow" style="font-size:0.93rem;">
+    <b>一句話：「強手收籌碼 vs 邊際買盤(ETF)出逃」的拉鋸。</b>大戶在累積、交易所幣量被抽到多年低（供給收縮＝<b>利多</b>）；但定價的<b>邊際買盤——現貨 ETF——史上級流出（利空）</b>。鯨魚狂買、價格卻不動＝買盤被賣壓吸收。<b>僵局，不是發車。</b>
+  </div>
+
+  <h3>① 供給面：大戶在收（利多）</h3>
+  <table>
+    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
+    <tbody>
+      <tr><td>大戶累積</td><td class="pos">30天 +270K（2013來最大）</td><td class="pos">巨鯨累積 10 週高</td><td class="pos">強手低位收</td></tr>
+      <tr><td>交易所存量</td><td class="pos">2.21M（9年低、5.88%供給）</td><td>~30% 已質押鎖倉</td><td class="pos">可賣的幣變少</td></tr>
+      <tr><td>長期持有者 LTH</td><td class="pos">佔比升至 78.3%</td><td>—</td><td class="pos">籌碼弱手→強手</td></tr>
+    </tbody>
+  </table>
+
+  <h3>② 需求面：邊際買盤 ETF 撤退（利空，且這才定價）</h3>
+  <table>
+    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(239,68,68,0.05)"><td>現貨 ETF 資金流</td><td class="neg">曾 13天 -$4.4B；近翻正~2日</td><td class="neg">曾 17天 -$401M（史上最差）</td><td class="neg">機構順週期買賣，主導定價</td></tr>
+      <tr><td>判讀</td><td class="warn">需 連≥10 日淨流入才算趨勢轉</td><td class="neg">ETH ETF 無質押息 → 比 BTC 弱</td><td class="warn">這是第 2 等份的關鍵閘門</td></tr>
+    </tbody>
+  </table>
+
+  <h3>③ 槓桿定位：永續/期貨/期權（最被低估，且領先價格）</h3>
+  <table>
+    <thead><tr><th>工具</th><th>底部訊號</th><th>頂部訊號</th></tr></thead>
+    <tbody>
+      <tr><td>永續資金費率 funding</td><td class="pos">深度負（空頭付多頭＝投降）</td><td class="neg">持續高正（多頭過熱）</td></tr>
+      <tr><td>未平倉 OI</td><td class="pos">OI 暴跌＋價瀑布＝多殺多</td><td class="neg">OI 創高＋價平＝脆弱頂</td></tr>
+      <tr><td>期貨年化基差 basis</td><td class="pos">收斂~0 或逆價差＝恐懼</td><td class="neg">&gt;15–20%＝泡沫</td></tr>
+      <tr><td>期權 25Δ skew / IV</td><td class="pos">極端 put skew＋IV backwardation</td><td class="neg">call skew＋低 IV 自滿</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.78rem;color:var(--text3)">價值：價格沒到鐵底但 funding 深負、basis 逆價差、put skew 爆 → 投降已發生，最高品質的底。</p>
+
+  <h3>④ 財庫反身性 ＋ 含幣量稽核（DAT 在加供給還是抽供給）</h3>
+  <div class="team-grid">
+    <div class="team-card" style="border-color:rgba(34,197,94,0.4)"><div class="name">mNAV &gt; 1.2＝需求</div><ul><li>溢價增發買幣，飛輪 ON、含幣量增厚</li></ul></div>
+    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">mNAV &lt; 1＝供給</div><ul><li>停止增發，甚至被迫賣幣付息，飛輪反轉</li></ul></div>
+  </div>
+  <p style="margin-top:8px;"><b>含幣量稽核（你最看重）</b>——用 MSTR 官方 KPI <b>BTC Yield</b>（分母＝完全稀釋股數，已含可轉債/選擇權/RSU）：</p>
+  <table>
+    <thead><tr><th>年度</th><th>BTC Yield</th><th>每股含幣量</th></tr></thead>
+    <tbody>
+      <tr><td>2024</td><td class="pos">+74.3%</td><td>→ 158,826 sats/股</td></tr>
+      <tr><td>2025</td><td class="pos">+22.8%</td><td>→ 194,986 sats/股</td></tr>
+      <tr style="background:rgba(34,197,94,0.06)"><td><b>2026 至今</b></td><td class="pos">持續為正</td><td><b>~240,000 sats/股</b></td></tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-bear">
+    <b>✅ MSTR 確實把每股含幣量做大（4 年、跨熊市、稀釋後仍正，約 3 倍）。</b>　<b>⚠️ 但只在 mNAV&gt;1（溢價）成立</b>——現 0.84x 折價，發股變稀釋、引擎熄火；加上 ~$8–9 億/年特別股息，折價拖久了恐<b>被迫賣幣→含幣量首度下降</b>。過去增厚是真的，<b>不保證未來</b>，條件是回到溢價。
+  </div>
+  <p style="font-size:0.78rem;color:var(--text3)">來源：Strategy SEC 8-K/FWP（BTC Yield、資本結構）、CryptoQuant/spotedcrypto（鏈上）、farside（ETF）、coinglass/laevitas（衍生品）。數字隨時更新。</p>
 </div>
 </div>
 
-<!-- ===== 熊市規律 ===== -->
-<div id="tab-cycle" class="tab-content">
+<!-- ============================================================ -->
+<!-- ===== 維度二：技術面 ===== -->
+<!-- ============================================================ -->
+<div id="tab-tech" class="tab-content">
 <div class="section">
-  <h2>📉 比特幣熊市規律（支持「別急」的時間框架）</h2>
+  <h2><span class="dim-tag dim-2">維度二</span> 📈 技術面：估值錨 ＋ 週期型態</h2>
+  <div class="analysis-box analysis-review">
+    技術面回答<b>「貴還是便宜」</b>，用鏈上估值錨給出「band」（區間），不負責抓精準時點——時點交給籌碼面的②③層。便宜不等於馬上漲，但<b>沒便宜到位就別動第 1 等份</b>。
+  </div>
+
+  <h3>① 估值錨</h3>
+  <table>
+    <thead><tr><th>指標</th><th>底部訊號</th><th>頂部訊號</th><th>現況（6/10）</th></tr></thead>
+    <tbody>
+      <tr><td>MVRV-Z</td><td class="pos">≤ 0（破已實現價）</td><td class="neg">&gt; 6–7</td><td class="warn">~0.34（偏低未投降）</td></tr>
+      <tr><td>Mayer Multiple（價/200DMA）</td><td class="pos">&lt; 0.8</td><td class="neg">&gt; 2.4</td><td class="warn">&lt;1（200日線下）</td></tr>
+      <tr><td>已實現價 / CVDD 鐵底</td><td class="pos">~$54k → CVDD ~$48k</td><td>—</td><td>BTC ~$61.5k（高於）</td></tr>
+      <tr><td>NUPL 淨未實現損益</td><td class="pos">&lt; 0（投降）</td><td class="neg">&gt; 0.75（狂熱）</td><td>—</td></tr>
+      <tr><td>Pi Cycle</td><td>—</td><td class="neg">111DMA 上穿 2×350DMA</td><td>未觸發</td></tr>
+      <tr><td>200 日均線</td><td class="pos">站回＋更高低點＝轉強</td><td>—</td><td class="neg">$61.5k &lt; $65.8k</td></tr>
+    </tbody>
+  </table>
+
+  <h3>② 熊市週期型態（支持「別急」的時間框架）</h3>
   <table>
     <thead><tr><th>週期</th><th>高→底跌幅</th><th>高→底時間</th><th>底部後型態</th></tr></thead>
     <tbody>
@@ -381,156 +287,110 @@ pre { font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.78rem; color: var
     </tbody>
   </table>
   <div class="analysis-box analysis-yellow">
-    <b>兩個規律對你的意義：</b><br>
-    ① <b>觸底通常在高點後 ~12–14 個月、跌 -77~-86%。</b>本輪才 -50%、約 7–8 個月——時間與幅度上都<b>可能還沒到</b>（一輪比一輪淺，故本輪未必跌那麼深，但「時間未到」很明確）。Cowen 估底約 <b>Q4 2026</b>。<br>
-    ② <b>底部後多是「磨盤緩漲」非「暴力 V 轉創高」。</b>唯一的暴力初彈（2019 +330%）後來失敗破底。真正的主升段歷史上多在<b>減半（2028/4）之後</b>。<br>
-    → 這就是為什麼「現在小額 DCA、子彈留著」比「借錢梭哈」合理：時間站在<b>耐心的人</b>那邊，不是站在<b>急著梭哈的人</b>那邊。
+    ① <b>觸底通常在高點後 ~12–14 個月、跌 -77~-86%。</b>本輪才 -50%、約 7–8 個月——時間與幅度<b>可能都還沒到</b>（一輪比一輪淺，故未必跌那麼深，但「時間未到」明確）。Cowen 估底 <b>Q4 2026</b>。<br>
+    ② <b>底部後多「磨盤緩漲」非「暴力 V 轉」。</b>唯一暴力初彈（2019 +330%）後失敗破底。真正主升段多在<b>減半（2028/4）之後</b>。<br>
+    → 這就是「現在小額 DCA、子彈留著」比「借錢梭哈」合理的技術理由。
   </div>
-  <p style="font-size:0.78rem;color:var(--text3)">樣本僅 3–4 輪、統計意義有限；ETF/機構可能改變型態。資料：OANDA/Glassnode/TradeThatSwing/Cowen、Hougan 等，2026/6。</p>
+
+  <h3>③ MSTR 價位地板（修正招財猫的壓力測試）</h3>
+  <div class="analysis-box analysis-bear">
+    招財猫公式 <code>MSTR = mNAV × 幣價 × 含幣量</code> 算出最壞 ~$67，但<b>不夠壞</b>，因為他：① 把含幣量釘死（熊市會被迫賣幣縮水）② 用 2022 的 0.635x 當地板（現特別股結構更危險）③ 忽略特別股次級求償。<b>修正：</b>普通股每股 = (BTC NAV − 特別股清算值 $15.5B − 淨債) ÷ 普通股數 × mNAV，且含幣量在 mNAV&lt;1 時下降 → <b>真實尾部地板比 $67 更低</b>。當參考、別當保證。
+  </div>
+  <p style="font-size:0.78rem;color:var(--text3)">樣本僅 3–4 輪、統計意義有限；ETF/機構可能改變型態。資料：Glassnode/OANDA/checkonchain/Cowen/Bitwise，2026/6。非投資建議。</p>
 </div>
 </div>
 
-<!-- ===== 四層共振模型 ===== -->
-<div id="tab-model" class="tab-content">
+<!-- ============================================================ -->
+<!-- ===== 維度三：基本面‧機構‧散戶 ===== -->
+<!-- ============================================================ -->
+<div id="tab-fund" class="tab-content">
 <div class="section">
-  <h2>🌡️ 四層共振模型（我們的獨家秘方）</h2>
+  <h2><span class="dim-tag dim-3">維度三</span> 🏛️ 基本面‧機構態度‧散戶情緒</h2>
   <div class="analysis-box analysis-review">
-    <b>核心哲學：沒有單一指標能定底/頂。</b>每層回答不同問題，真正的底/頂是<b>四層同時共振</b>；任一層背離＝「還沒到」。把它做成一支 <b>−10（投降底）→ +10（狂熱頂）的溫度計</b>。比「招財猫」多了第②③層（邊際買盤＋槓桿定位），而且<b>對稱讀底也讀頂</b>。
+    這維度回答<b>「這個產業/工具的長期趨勢與制度面變了沒」</b>——和籌碼/技術的短中期訊號互不相干，是你「3–4 年信念」的根基。包含：新賽道（RWA/穩定幣）、礦股 vs DAT 的 ROIC、用 DAT 當槓桿的須知、STRC 優先股結構，以及「基本面變了嗎」。
   </div>
 
-  <h3>① 估值錨 — 貴還是便宜</h3>
+  <h3>🆕 新賽道：RWA／穩定幣（機構真正在做的事）</h3>
   <table>
-    <thead><tr><th>指標</th><th>底部訊號</th><th>頂部訊號</th></tr></thead>
+    <thead><tr><th>指標</th><th>數據（2026/5）</th><th>意義</th></tr></thead>
     <tbody>
-      <tr><td>MVRV-Z</td><td class="pos">≤ 0（破已實現價）</td><td class="neg">&gt; 6–7</td></tr>
-      <tr><td>Mayer Multiple（價/200DMA）</td><td class="pos">&lt; 0.8</td><td class="neg">&gt; 2.4</td></tr>
-      <tr><td>已實現價 / CVDD</td><td class="pos">觸/破已實現(~$54k)→CVDD($48k)</td><td>—</td></tr>
-      <tr><td>NUPL 淨未實現損益</td><td class="pos">&lt; 0（投降）</td><td class="neg">&gt; 0.75（狂熱）</td></tr>
-      <tr><td>Pi Cycle</td><td>—</td><td class="neg">111DMA 上穿 2×350DMA</td></tr>
-      <tr><td>供給結構</td><td class="pos">LTH 佔比↑、交易所存量多年低</td><td class="neg">LTH 派發、幣回交易所</td></tr>
+      <tr><td>代幣化 RWA 市值</td><td class="pos">$34.5B（+100% YoY）</td><td>15 個月從 $5.4B 漲上來</td></tr>
+      <tr><td>龍頭產品</td><td>Circle USYC ~$2.9B、BlackRock BUIDL ~$2.5B</td><td>機構級在搶</td></tr>
+      <tr><td>最大非穩定幣類別</td><td>私募信貸（已超越國債）</td><td>機構要的是收益</td></tr>
+      <tr><td>長期 TAM</td><td class="pos">渣打估 2034 達 $30T</td><td>DTCC 2026/7→10 月上線</td></tr>
     </tbody>
   </table>
-  <p style="font-size:0.78rem;color:var(--text3)">弱點：會被超跌/超漲，只給「band」不給「timing」。timing 交給②③層。</p>
-
-  <h3>② 邊際買盤 — 現在誰在定價（ETF 時代新定價者）</h3>
-  <div class="analysis-box analysis-yellow">
-    <b>底：</b>ETF 淨流出<b>衰竭並翻正</b>、AUM 失血停止。　<b>頂：</b>ETF <b>單日破紀錄淨流入＋拋物線</b>、AUM 佔供給快速攀升。<br>
-    <b>用法：</b>在①的估值 band <b>裡面</b>用②抓時點。鏈上喊便宜但 ETF 還在逃 → 還沒投降，等。
+  <div class="analysis-box analysis-purple">
+    <b>對你的含意：</b>RWA/穩定幣是<b>機構最認真、ROIC 最高、最持久</b>的賽道，但它是<b>「收益/基礎設施」的賭注，不是「資產 beta」的賭注</b>——和你押 BTC/ETH 升值是<b>不同的車</b>。它的存在<b>強化「不會歸零」</b>（鏈上金融在制度化），但<b>不會讓 MSTR/BMNR 漲</b>。若你想分散，可把它當「另一種曝險」候選；但別把它的成長當成 DAT 會漲的理由。
   </div>
 
-  <h3>③ 槓桿定位 — 這筆交易多擁擠（最被低估、且領先①）</h3>
+  <h3>⚒️ 礦股 vs DAT：本輪礦股被輾壓，ROIC 誰是未來？</h3>
   <table>
-    <thead><tr><th>工具</th><th>底部訊號</th><th>頂部訊號</th></tr></thead>
+    <thead><tr><th>面向</th><th>礦股（MARA/RIOT…）</th><th>DAT（MSTR/BMNR）</th><th>穩定幣/RWA</th></tr></thead>
     <tbody>
-      <tr><td>永續資金費率 funding</td><td class="pos">深度負（空頭付多頭＝投降）</td><td class="neg">持續高正（多頭過熱）</td></tr>
-      <tr><td>未平倉 OI</td><td class="pos">OI 暴跌＋價瀑布＝多殺多</td><td class="neg">OI 創高＋價平＝脆弱頂</td></tr>
-      <tr><td>期貨年化基差 basis</td><td class="pos">收斂~0 或逆價差＝恐懼</td><td class="neg">&gt;15–20%＝貪婪/泡沫</td></tr>
-      <tr><td>期權 25Δ skew</td><td class="pos">極端 put skew（搶保險）</td><td class="neg">call skew＋高 IV（歡愉）</td></tr>
-      <tr><td>IV 期限結構</td><td class="pos">前端&gt;後端（backwardation 恐慌）</td><td class="neg">平滑/低 IV（自滿）</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3)">價值：<b>領先①層</b>。價格沒到鐵底但 funding 已深負、basis 逆價差、put skew 爆表 → 投降已發生，最高品質的底。</p>
-
-  <h3>④ 財庫反身性 — DAT 在加供給還是抽供給（MSTR/BMNR 放大器）</h3>
-  <div class="team-grid">
-    <div class="team-card" style="border-color:rgba(34,197,94,0.4)"><div class="name">mNAV &gt; 1.2＝需求</div><ul><li>增發買幣，飛輪 ON</li></ul></div>
-    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">mNAV &lt; 1＝供給</div><ul><li>停止增發，甚至被迫賣幣付息，飛輪反轉</li></ul></div>
-    <div class="team-card"><div class="name">含幣量趨勢</div><ul><li>↑增厚（健康）／↓稀釋被迫賣（警報）</li></ul></div>
-  </div>
-
-  <h3>🌡️ 共振計分（四層同號才動手）</h3>
-  <table>
-    <thead><tr><th>分數</th><th>狀態</th><th>動作</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.10)"><td><b>−10 ~ −6</b></td><td>四層共振投降底</td><td class="pos">🟢 投第 1 等份（接刀）</td></tr>
-      <tr><td>−5 ~ −2</td><td>估值便宜但②③未投降</td><td class="warn">🟡 小額 DCA，子彈留著</td></tr>
-      <tr><td>−1 ~ +1</td><td>中性/橫盤</td><td>⚪ 等訊號</td></tr>
-      <tr style="background:rgba(34,197,94,0.10)"><td><b>+2 ~ +5</b></td><td>趨勢確認、未過熱</td><td class="pos">🟢 投第 2 等份；底倉續抱</td></tr>
-      <tr style="background:rgba(239,68,68,0.10)"><td><b>+6 ~ +10</b></td><td>四層共振狂熱頂</td><td class="neg">🔴 分批止盈、先減 BMNR</td></tr>
-    </tbody>
-  </table>
-
-  <h3>📐 MSTR / BMNR 修正模組</h3>
-  <div class="analysis-box analysis-review">
-    招財猫公式 <code>價 = mNAV × 幣價 × 含幣量</code> 框架對，但要打三補丁：<br>
-    <b>① 資本結構感知：</b>普通股每股 = (幣 NAV − 特別股清算值 − 淨債) ÷ 普通股數 × mNAV。困境時普通股被不成比例砍 → 地板比他算的 $67 更低。<br>
-    <b>② 含幣量設成變數：</b>mNAV&lt;1 時會因被迫賣幣/無法增厚增發而<b>下降</b>，別釘死。<br>
-    <b>③ mNAV 是 regime 函數：</b>＝f(幣價趨勢, 含幣量增速, DAT 競爭, 反身性狀態)。競爭↑（Strive SATA 13%&gt;STRC 11.5%）→ 天花板↓。
-  </div>
-  <table>
-    <thead><tr><th>維度</th><th>MSTR（BTC）</th><th>BMNR（ETH）</th></tr></thead>
-    <tbody>
-      <tr><td>剛性現金流</td><td class="neg">~$8–9 億/年特別股息→可能被迫賣幣</td><td class="pos">質押息自償，不被迫賣</td></tr>
-      <tr><td>含幣量趨勢</td><td>折價時只能稀釋/縮</td><td class="pos">質押讓 ETH/股自然增厚</td></tr>
-      <tr><td>mNAV 狀態</td><td class="pos">~0.84x 折價（有墊）</td><td class="warn">~1.0–1.05x 平價（無墊）</td></tr>
-      <tr><td>主要風險</td><td class="neg">反身性死亡螺旋</td><td class="neg">100倍授權稀釋＋無墊</td></tr>
-    </tbody>
-  </table>
-
-  <h3>🎛️ ETH/BTC 比值＝MSTR:BMNR 配置主旋鈕</h3>
-  <table>
-    <thead><tr><th>ETH/BTC 訊號</th><th>解讀</th><th>配置</th></tr></thead>
-    <tbody>
-      <tr><td>多年低（現~0.027）且仍跌</td><td>ETH 相對弱、ETF 還逃</td><td><b>維持 0.75:0.25</b></td></tr>
-      <tr><td>止穩、做更高低點</td><td>ETH 需求回來</td><td>加回 ~0.65:0.35</td></tr>
-      <tr><td>ETF 獲准質押 / 比值放量上穿</td><td>ETH season 啟動</td><td>~0.6:0.4 吃 beta</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3)">ETH 高 beta：底部更晚確認、反彈更暴力。進場序：先 BTC/MSTR（領先）→ 等 ETH/BTC 止穩才加 BMNR。本模型為訊號框架，非投資建議。</p>
-</div>
-</div>
-
-<!-- ===== 含幣量稽核 ===== -->
-<div id="tab-audit" class="tab-content">
-<div class="section">
-  <h2>🪙 含幣量稽核：MSTR / BMNR 真的把每股幣做大了嗎？</h2>
-  <div class="analysis-box analysis-review">
-    你最看重含幣量。關鍵在 MSTR 官方 KPI <b>BTC Yield</b> 的定義：它是 <b>BTC ÷「假設完全稀釋股數」</b>的變化率——分母<b>已把所有可轉債轉換、選擇權、RSU/PSU 全算進去</b>。所以不是話術，是<b>稀釋後</b>的硬指標。
-  </div>
-
-  <h3>MSTR — ✅ 4 年、跨熊市、稀釋後仍逐年增厚</h3>
-  <table>
-    <thead><tr><th>年度</th><th>BTC Yield（每股含幣量增幅）</th><th>每股含幣量</th></tr></thead>
-    <tbody>
-      <tr><td>2020 轉 DAT 起點</td><td>—</td><td>~7–9 萬 sats/股</td></tr>
-      <tr><td>2024</td><td class="pos">+74.3%</td><td>→ 158,826 sats/股（年末）</td></tr>
-      <tr><td>2025</td><td class="pos">+22.8%</td><td>158,826 → 194,986 sats/股</td></tr>
-      <tr style="background:rgba(34,197,94,0.06)"><td><b>2026 至今</b></td><td class="pos">持續為正</td><td><b>~240,000 sats/股</b>（845,256 BTC ÷ 351.6M 股）</td></tr>
-    </tbody>
-  </table>
-  <p>→ 從轉 DAT 的 ~7–9 萬 sats/股到現在 ~24 萬，<b>含幣量約成長 3 倍，且每一年都是正的</b>（連 2022 熊市後都靠溢價增發補回）。<b>你的直覺對：MSTR 確實把每股含幣量做大了。</b></p>
-
-  <h3>MSTR 資本結構（2026/5/25）— 把負債/可轉債/特別股算進去</h3>
-  <table>
-    <thead><tr><th>項目</th><th>金額</th><th>負擔</th></tr></thead>
-    <tbody>
-      <tr><td>可轉債</td><td>$6.7B（曾 $8.2B，已回購）</td><td class="pos">加權票息 ~0.42%（~$35M/年，可忽略）</td></tr>
-      <tr><td>特別股 5 系列</td><td>$15.5B 名目（STRC $3.4B/STRK $1.4B/STRF $1.3B/STRD $1.4B/STRE）</td><td class="neg">現金股息 ~$8–9 億/年</td></tr>
-      <tr><td>總債 / 現金</td><td>$8.26B 債 vs $2.21B 現金</td><td>債+特別股合計 ~$16B</td></tr>
+      <tr><td>本輪表現</td><td class="neg">被 DAT 輾壓</td><td class="pos">主導</td><td class="pos">悄悄爆發</td></tr>
+      <tr><td>ROIC 結構</td><td class="neg">減半+難度升=融冰</td><td class="warn">條件式（靠 mNAV 溢價）</td><td class="pos">高且持久（float 賺息）</td></tr>
+      <tr><td>關鍵風險</td><td class="neg">RIOT EBITDA $463M→$13M</td><td class="neg">溢價壓縮→變帶息槓桿ETF</td><td>監管、競爭</td></tr>
+      <tr><td>生存策略</td><td class="warn">轉 AI/HPC（就不再是BTC曝險）</td><td>維持增厚＋折價買回</td><td>擴 float＋牌照</td></tr>
     </tbody>
   </table>
   <div class="analysis-box analysis-bear">
-    <b>⚠️ 最關鍵前瞻警告：</b>以上增厚<b>只在 mNAV &gt; 1（溢價）時成立</b>——溢價發股買幣，每股買到的幣多於稀釋。<b>現在 mNAV 0.84x（折價），發股變稀釋，引擎熄火甚至反轉。</b>加上 ~$8–9 億/年現金股息，折價拖久了可能<b>被迫賣幣→含幣量首度下降</b>。<b>過去增厚是真的，但不保證未來；條件是回到溢價。</b>（Peter Schiff：近期債務回購已燒掉 60% 流動性緩衝。）
+    <b>殘酷結論：</b>① 礦股 ROIC 是<b>結構性下降的融冰</b>（每 4 年補貼砍半＋難度升），靠轉 AI 續命，但轉了就不是 BTC 槓桿了。② <b>DAT 贏在「純資產累積＋溢價增厚、無營運衰減」</b>，但這優勢<b>依賴持續的 mNAV 溢價</b>——溢價隨競爭（Strive 等一堆模仿者）壓縮，<b>一旦 mNAV→1，DAT 只是帶 ~10% 股息拖累的槓桿 ETF</b>。③ <b>「買 DAT 就能複製過去績效」不成立。</b>過去績效是「低成本資本＋高溢價」的產物，兩者都在惡化。最持久的 ROIC 其實在穩定幣/RWA，但那是另一種賭注。
   </div>
 
-  <h3>BMNR — 🟡 早期增厚亮眼，但 &lt;1 年、稀釋風險極端</h3>
+  <h3>🎚️ 用 DAT 股票當「槓桿 BTC/ETH」需要考慮什麼</h3>
   <table>
-    <thead><tr><th>面向</th><th>數據</th><th>判讀</th></tr></thead>
+    <thead><tr><th>#</th><th>要考慮的點</th><th>怎麼判斷</th></tr></thead>
     <tbody>
-      <tr><td>早期每股加密 NAV</td><td>$22.84(7/27)→$39.84(8/24/25)</td><td class="pos">一個月近翻倍（溢價＋質押雙引擎）</td></tr>
-      <tr><td>ETH 持倉 / 佔比</td><td>4.07M→5.54M；3.41%→4.59%</td><td>但股數同時 426M→569M</td></tr>
-      <tr><td>授權股數提案</td><td class="neg">5 億 → 500 億（100 倍）</td><td class="neg">🚩 史詩級稀釋跑道</td></tr>
-      <tr><td>質押（MAVAN）</td><td>滿載 ~$266M/年、2M+ ETH 已質押</td><td class="pos">讓 ETH/股自然增厚（MSTR 沒有）</td></tr>
-      <tr><td>集中度</td><td>99.8% 壓 ETH</td><td class="neg">MSCI 指數剔除風險</td></tr>
+      <tr><td>1</td><td>mNAV regime</td><td class="pos">折價買＝免費槓桿；溢價買＝替別人的溢價買單</td></tr>
+      <tr><td>2</td><td>槓桿成本</td><td>優先股 ~10% 拖累 vs 0% 可轉債 vs 保證金/期權利息</td></tr>
+      <tr><td>3</td><td>反身性 / 被迫賣方</td><td class="neg">折價時恐被迫賣幣→放大下跌</td></tr>
+      <tr><td>4</td><td>求償順位</td><td class="neg">普通股次級於 $15.5B 特別股（殘值索取）</td></tr>
+      <tr><td>5</td><td>增厚可持續性</td><td>每股含幣量還在增嗎？（=稽核）</td></tr>
+      <tr><td>6</td><td>競爭壓縮 mNAV</td><td class="warn">模仿者越多，市場給的溢價越低</td></tr>
+      <tr><td>7</td><td class="pos">無保證金追繳/斷頭</td><td class="pos">這是 DAT 勝過期權/保證金的關鍵——不會被停損出場，適合你「時間站我這邊」的長抱</td></tr>
+      <tr><td>8</td><td>稀釋風險</td><td class="neg">尤其 BMNR 的 500 億股授權</td></tr>
     </tbody>
   </table>
 
-  <h3>🎯 對「重視含幣量」的你的結論</h3>
+  <h3>💵 STRC 這種優先股：誰買、得到什麼、失去什麼？</h3>
   <div class="analysis-box analysis-review">
-    <b>MSTR</b> 有 <b>4 年、跨熊市、稀釋後仍正</b>的鐵證——含幣量信仰有真實 track record 支撐。<b>BMNR</b> 增厚潛力真實（質押結構是 MSTR 沒有的），但 <b>track record &lt;1 年＋100 倍稀釋威脅＋平價無墊＋未經完整熊市考驗</b>。<br>
-    → <b>這正好支持你 0.75 : 0.25 偏 MSTR 的配置。</b>等 BMNR 走完一輪熊市、證明它在折價時仍能靠質押維持 ETH/股不縮水，再考慮加碼。
+    <b>STRC（Stretch）是什麼：</b>變動利率<b>永續</b>特別股、面額 $100、月配息、利率每月以 0.25% 調整以<b>讓股價貼著 $100</b>；<b>累積型</b>（漏配會累積複利、董事會可遞延而<b>不算違約</b>——你說的「拖茅」<b>完全正確</b>）；<b>無到期日、公司永遠不必買回</b>、<b>不可轉換</b>普通股、<b>可被公司贖回(call)</b>。求償順位：<b>高於普通股、低於債券</b>。
   </div>
-  <p style="font-size:0.78rem;color:var(--text3)">資料：Strategy SEC 8-K / FWP（BTC Yield、資本結構，2026/5）、CoinDesk、VanEck、BitMine PRNewswire/SEC 8-K、ts2.tech（2025–2026/6）。非投資建議。</p>
+  <table>
+    <thead><tr><th>立場</th><th>優點 ✅</th><th>缺點 ❌</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>STRC 持有人</b></td>
+        <td class="pos">~11.5% 高月息；貼 $100 相對穩；清算順位高於普通股；像「BTC 背書的高收益類債」</td>
+        <td class="neg">放棄 BTC 全部上行（報酬封頂≈$100＋息，<b>BTC 漲 10 倍也與你無關</b>）；無到期＝本金返還只能靠市場賣或被 call；<b>可被 call</b>（漲不上去）；<b>股息可被遞延</b>；通常無投票權</td>
+      </tr>
+      <tr>
+        <td><b>公司 / 管理層</b></td>
+        <td class="pos">永續＝<b>無到期牆</b>（不像可轉債要再融資）；危機可<b>遞延股息避免違約/破產</b>＝死亡螺旋的安全閥；變動利率便於持續發行；比增發普通股少稀釋含幣量</td>
+        <td class="neg">現金成本高（~$8–9 億/年）；股息<b>不可抵稅</b>（不像債息）；堆高固定現金負擔；一旦真遞延＝對市場放出財務壓力訊號</td>
+      </tr>
+      <tr>
+        <td><b>MSTR 普通股持有人（你）</b></td>
+        <td class="pos"><b>優先股是「永久資本」、無到期牆</b>→比等量負債的強制清算/破產風險低；可遞延特性降低死亡螺旋觸發；若維持增厚，每股含幣量續長</td>
+        <td class="neg"><b>~$8–9 億/年現金在你之前被抽走</b>（沒股權市場時恐賣幣）；困境時你<b>次級於 $15.5B 優先股</b>；股息是<b>順週期失血</b>；優先股越堆，你的安全墊越薄</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-bull">
+    <b>你的洞察正確：</b>管理層推 STRC/STRF/STRD 這類優先股，正是因為它<b>「比債更軟」</b>——沒到期牆、可遞延、不會被債權人逼到破產清算。<b>這實際上降低了 MSTR 的死亡螺旋風險（對普通股是好事）</b>，代價是把風險轉嫁給優先股持有人，並背上每年現金股息。所以你<b>買普通股</b>（吃 BTC 上行）比買 STRC（吃固定息、放棄上行）更符合你的「3–4 年博升值」目標——除非你要的是穩定現金流而非成長。
+  </div>
+
+  <h3>❓ 基本面變了嗎？散戶/機構態度</h3>
+  <div class="team-grid">
+    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">① 財庫反身性（新風險）</div><ul><li>磨跌久了 DAT 恐變強制賣方（MSTR 仍在買，折價持續才引爆）</li><li>財庫股可能跌得比幣兇</li></ul></div>
+    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">② ETF＝順週期邊際買盤</div><ul><li>機構追高也殺低，主導定價</li><li>「散戶慢進、價穩漲」舊劇本被改寫</li></ul></div>
+    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">③ 週期振幅收斂</div><ul><li>連 Bitwise 都說「四年週期已死、漲幅收斂」</li><li>「輕鬆 2–3 倍」假設可能過時</li></ul></div>
+  </div>
+  <div class="analysis-box analysis-bear" style="margin-top:8px;">
+    <b>對 MSTR/BMNR 的直接含義：</b>你選了 beta 最高、反身性最強的工具，偏在反身性點燃＋邊際買盤撤退時。恐慌時 mNAV 可再殺到 0.5x（封閉式結構常態）——<b>就算 BTC 不跌，折價擴大也能讓股價再 -30%</b>。<b>分批用收入囤、子彈留訊號＝可以；借錢梭哈＝不行。</b>
+  </div>
+  <p style="font-size:0.78rem;color:var(--text3)">來源：Strategy 424B5/SEC（STRC 條款）、CoinDesk/VanEck（資本結構）、Cointelegraph/247WallSt（礦股）、rwatimes/cryptotimes/bitcoin.com（RWA）、Bitwise/Cowen。非投資建議。</p>
 </div>
 </div>
 
