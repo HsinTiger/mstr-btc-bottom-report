@@ -112,6 +112,44 @@ code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background:
 .dim-2 { background:rgba(6,182,212,0.15); color:var(--cyan); }
 .dim-3 { background:rgba(249,115,22,0.15); color:var(--orange); }
 
+/* ===== visual polish ===== */
+body { background: radial-gradient(1200px 600px at 50% -100px, #141a2e 0%, var(--bg) 60%); background-attachment: fixed; }
+.section { box-shadow: 0 4px 20px rgba(0,0,0,0.35); position: relative; }
+.section h2 { padding-left: 12px; border-left: 4px solid var(--blue); line-height:1.3; }
+.section h3 { position: relative; padding-left: 14px; }
+.section h3::before { content:''; position:absolute; left:0; top:6px; width:6px; height:14px; border-radius:3px; background: var(--blue2); }
+.hero { box-shadow: 0 8px 40px rgba(59,130,246,0.08); }
+.hero::before { content:''; position:absolute; inset:0; background: radial-gradient(600px 200px at 50% 0, rgba(168,85,247,0.12), transparent 70%); pointer-events:none; }
+.hero h1, .hero .sub, .hero .date, .badge-row { position: relative; z-index:1; }
+.badge { backdrop-filter: blur(4px); }
+.kpi { transition: transform .18s, border-color .18s; }
+.kpi:hover { transform: translateY(-3px); border-color: var(--blue); }
+.team-card { transition: transform .18s, border-color .18s; }
+.team-card:hover { transform: translateY(-3px); }
+th { position: sticky; }
+tr:hover td { background: rgba(59,130,246,0.05) !important; }
+.analysis-box { box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+
+/* charts */
+.chart-card { background: var(--surface2); border:1px solid var(--border); border-radius:12px; padding:16px; margin:12px 0; }
+.chart-title { font-size:0.8rem; font-weight:700; color:var(--text2); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px; }
+.chart-flex { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+.chart-flex > .chart-card { flex:1; min-width:240px; }
+svg { display:block; max-width:100%; height:auto; overflow:visible; }
+.svg-grid { stroke: var(--border); stroke-width:1; }
+.svg-axis { fill: var(--text3); font-size:10px; font-family:inherit; }
+.svg-lbl { fill: var(--text); font-size:11px; font-weight:700; font-family:inherit; }
+.svg-sub { fill: var(--text2); font-size:9px; font-family:inherit; }
+
+/* thermometer with needle */
+.thermo-wrap { position: relative; padding-top: 26px; margin: 10px 0 4px; }
+.thermo-marker { position:absolute; top:0; transform:translateX(-50%); text-align:center; transition:left .4s; z-index:2; }
+.thermo-marker .pin { font-size:0.7rem; font-weight:800; color:#fff; background:var(--surface3); border:1px solid var(--border); padding:1px 7px; border-radius:10px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.4); }
+.thermo-marker .tri { width:0; height:0; margin:2px auto 0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid #fff; }
+
+/* donut legend inline */
+.donut-wrap { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+
 @media (max-width: 640px) {
   .hero h1 { font-size: 1.25rem; }
   .section { padding: 14px; }
@@ -161,7 +199,10 @@ code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background:
   </div>
 
   <h3>🌡️ 三維共振溫度計（−10 投降底 → +10 狂熱頂）</h3>
-  <div class="thermo"></div>
+  <div class="thermo-wrap">
+    <div class="thermo-marker" style="left:35%;"><div class="pin">現在 ~−3</div><div class="tri"></div></div>
+    <div class="thermo"></div>
+  </div>
   <div class="thermo-labels"><span>−10 投降底</span><span>−6</span><span>0 中性</span><span>+6</span><span>+10 狂熱頂</span></div>
   <p style="font-size:0.82rem;color:var(--text2);margin-top:8px;">三維各投一票，<b>同號才極端</b>：<span class="dim-tag dim-1">籌碼面</span>大戶收/ETF逃/槓桿投降/財庫無賣壓　<span class="dim-tag dim-2">技術面</span>估值便宜/破已實現價/週期到位　<span class="dim-tag dim-3">基本面機構</span>機構態度/賽道輪動/散戶投降。任一維度背離＝「還沒到」。</p>
   <table>
@@ -184,13 +225,20 @@ code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background:
     </tbody>
   </table>
   <h3>配置：MSTR 75 : BMNR 25</h3>
-  <div class="alloc-bar">
-    <div class="alloc-seg" style="width:75%;background:var(--purple);">MSTR 75%</div>
-    <div class="alloc-seg" style="width:25%;background:var(--green);">BMNR 25%</div>
-  </div>
-  <div class="alloc-legend">
-    <span><i class="dot" style="background:var(--purple)"></i>MSTR — BTC 較強、mNAV 折價、含幣量已證明</span>
-    <span><i class="dot" style="background:var(--green)"></i>BMNR — 質押續命＋ETH 翻身選擇權，但需求最弱＋稀釋 → 壓到 1/4</span>
+  <div class="donut-wrap">
+    <svg width="130" height="130" viewBox="0 0 130 130" style="flex-shrink:0">
+      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--surface3)" stroke-width="18"/>
+      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--purple)" stroke-width="18"
+        stroke-dasharray="235.6 314.2" stroke-dashoffset="0" transform="rotate(-90 65 65)" stroke-linecap="butt"/>
+      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--green)" stroke-width="18"
+        stroke-dasharray="78.5 314.2" stroke-dashoffset="-235.6" transform="rotate(-90 65 65)" stroke-linecap="butt"/>
+      <text x="65" y="60" text-anchor="middle" class="svg-lbl" style="font-size:15px">75/25</text>
+      <text x="65" y="76" text-anchor="middle" class="svg-sub">MSTR : BMNR</text>
+    </svg>
+    <div class="alloc-legend" style="flex-direction:column;align-items:flex-start;gap:8px;flex:1;min-width:200px">
+      <span><i class="dot" style="background:var(--purple)"></i><b>MSTR 75%</b> — BTC 較強、mNAV 折價、含幣量已證明</span>
+      <span><i class="dot" style="background:var(--green)"></i><b>BMNR 25%</b> — 質押續命＋ETH 翻身選擇權，但需求最弱＋稀釋 → 壓到 1/4</span>
+    </div>
   </div>
   <div class="analysis-box analysis-yellow" style="margin-top:10px;">📡 <b>每日監控排程</b>（08:00 台北）：抓三維數據，輸出 <b>「BTC 溫度 X｜ETH 溫度 Y｜ETH/BTC 訊號｜建議配置｜行動：等/投第1等份/投第2等份/止盈」</b>，並 commit 進 monitor-log.md。</div>
 </div>
@@ -238,6 +286,31 @@ code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background:
     <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">mNAV &lt; 1＝供給</div><ul><li>停止增發，甚至被迫賣幣付息，飛輪反轉</li></ul></div>
   </div>
   <p style="margin-top:8px;"><b>含幣量稽核（你最看重）</b>——用 MSTR 官方 KPI <b>BTC Yield</b>（分母＝完全稀釋股數，已含可轉債/選擇權/RSU）：</p>
+  <div class="chart-card">
+    <div class="chart-title">📈 MSTR 每股含幣量（sats/股）— 稀釋後仍逐年增厚</div>
+    <svg viewBox="0 0 340 175" width="100%">
+      <defs><linearGradient id="barG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#15803d"/></linearGradient></defs>
+      <line x1="24" y1="140" x2="330" y2="140" class="svg-grid"/>
+      <!-- 2020 -->
+      <rect x="32" y="102" width="50" height="38" rx="3" fill="url(#barG)" opacity="0.55"/>
+      <text x="57" y="96" text-anchor="middle" class="svg-sub">~75k</text>
+      <text x="57" y="155" text-anchor="middle" class="svg-axis">2020</text>
+      <!-- 2024 -->
+      <rect x="112" y="61" width="50" height="79" rx="3" fill="url(#barG)" opacity="0.72"/>
+      <text x="137" y="55" text-anchor="middle" class="svg-sub">158,826</text>
+      <text x="137" y="155" text-anchor="middle" class="svg-axis">2024</text>
+      <!-- 2025 -->
+      <rect x="192" y="43" width="50" height="97" rx="3" fill="url(#barG)" opacity="0.86"/>
+      <text x="217" y="37" text-anchor="middle" class="svg-sub">194,986</text>
+      <text x="217" y="155" text-anchor="middle" class="svg-axis">2025</text>
+      <!-- 2026 -->
+      <rect x="272" y="20" width="50" height="120" rx="3" fill="url(#barG)"/>
+      <text x="297" y="14" text-anchor="middle" class="svg-lbl" style="fill:var(--green)">~240k</text>
+      <text x="297" y="155" text-anchor="middle" class="svg-axis">2026</text>
+    </svg>
+    <div style="font-size:0.72rem;color:var(--text3);text-align:center">轉 DAT 以來約 3 倍；2024 BTC Yield +74.3%、2025 +22.8%（皆為稀釋後）</div>
+  </div>
   <table>
     <thead><tr><th>年度</th><th>BTC Yield</th><th>每股含幣量</th></tr></thead>
     <tbody>
@@ -264,6 +337,28 @@ code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background:
   </div>
 
   <h3>① 估值錨</h3>
+  <div class="chart-card">
+    <div class="chart-title">📍 BTC 現價 vs 估值帶（便宜 → 貴）</div>
+    <svg viewBox="0 0 340 96" width="100%">
+      <defs><linearGradient id="bandG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#22c55e"/><stop offset="50%" stop-color="#eab308"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs>
+      <rect x="20" y="46" width="300" height="18" rx="9" fill="url(#bandG)" opacity="0.85"/>
+      <!-- CVDD 48k -->
+      <line x1="56" y1="42" x2="56" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
+      <text x="56" y="82" text-anchor="middle" class="svg-axis">CVDD $48k</text>
+      <!-- realized 54k -->
+      <line x1="128" y1="42" x2="128" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
+      <text x="128" y="82" text-anchor="middle" class="svg-axis">已實現 $54k</text>
+      <!-- 200DMA 65.8k -->
+      <line x1="270" y1="42" x2="270" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
+      <text x="270" y="82" text-anchor="middle" class="svg-axis">200日線 $66k</text>
+      <!-- current 61.5k marker -->
+      <polygon points="218,30 212,20 224,20" fill="#fff"/>
+      <rect x="190" y="6" width="56" height="15" rx="7" fill="var(--surface3)" stroke="var(--border)"/>
+      <text x="218" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現在 $61.5k</text>
+    </svg>
+    <div style="font-size:0.72rem;color:var(--text3);text-align:center">現價在「已實現價」之上、200 日線之下 → 便宜但<b>未到投降區</b>（第 1 等份要等價格再往綠區走）</div>
+  </div>
   <table>
     <thead><tr><th>指標</th><th>底部訊號</th><th>頂部訊號</th><th>現況（6/10）</th></tr></thead>
     <tbody>
@@ -277,6 +372,24 @@ code { font-family: 'SF Mono','Menlo',monospace; font-size: 0.82rem; background:
   </table>
 
   <h3>② 熊市週期型態（支持「別急」的時間框架）</h3>
+  <div class="chart-card">
+    <div class="chart-title">📉 歷次熊市高→底跌幅（本輪目前才 -50%）</div>
+    <svg viewBox="0 0 340 150" width="100%">
+      <rect x="78" y="12" width="230" height="22" rx="3" fill="var(--red)" opacity="0.75"/>
+      <text x="70" y="27" text-anchor="end" class="svg-axis">2013–15</text>
+      <text x="314" y="27" class="svg-sub" style="fill:#fff">-86%</text>
+      <rect x="78" y="46" width="225" height="22" rx="3" fill="var(--red)" opacity="0.65"/>
+      <text x="70" y="61" text-anchor="end" class="svg-axis">2017–18</text>
+      <text x="309" y="61" class="svg-sub" style="fill:#fff">-84%</text>
+      <rect x="78" y="80" width="206" height="22" rx="3" fill="var(--red)" opacity="0.55"/>
+      <text x="70" y="95" text-anchor="end" class="svg-axis">2021–22</text>
+      <text x="290" y="95" class="svg-sub" style="fill:#fff">-77%</text>
+      <rect x="78" y="114" width="134" height="22" rx="3" fill="var(--yellow)"/>
+      <text x="70" y="129" text-anchor="end" class="svg-axis">本輪(估)</text>
+      <text x="218" y="129" class="svg-lbl" style="font-size:11px;fill:var(--yellow)">-50% ←現在</text>
+    </svg>
+    <div style="font-size:0.72rem;color:var(--text3);text-align:center">歷次觸底跌 -77~-86%、耗時 ~12–14 月；本輪約 7–8 月 → <b>時間與幅度可能都還沒到</b></div>
+  </div>
   <table>
     <thead><tr><th>週期</th><th>高→底跌幅</th><th>高→底時間</th><th>底部後型態</th></tr></thead>
     <tbody>
