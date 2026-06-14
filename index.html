@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MSTR / BMNR 囤現股決策 v9 — 三維監看（籌碼 / 技術 / 基本面機構）</title>
+<title>MSTR / BMNR 囤現股決策 v11 — 五維監看儀表</title>
 <style>
 /* ===== Geist / Vercel-inspired minimal system ===== */
 :root {
@@ -22,34 +22,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Not
 .container { max-width: 1040px; margin: 0 auto; padding: 28px 20px 80px; }
 b { font-weight: 650; color: #fff; }
 
-/* Tabs — clean segmented bar, detached from cards */
 .tabs { display: flex; gap: 4px; margin-bottom: 16px; overflow-x: auto; background: var(--surface);
   border-radius: var(--r); border: 1px solid var(--border); padding: 5px;
   position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); }
-.tab-btn { padding: 9px 16px; cursor: pointer; background: transparent; color: var(--text2);
-  border: none; font-size: 0.84rem; font-weight: 550; white-space: nowrap; border-radius: 8px;
-  transition: all 0.15s; }
+.tab-btn { padding: 9px 14px; cursor: pointer; background: transparent; color: var(--text2);
+  border: none; font-size: 0.82rem; font-weight: 550; white-space: nowrap; border-radius: 8px; transition: all 0.15s; }
 .tab-btn:hover { color: var(--text); background: var(--surface2); }
 .tab-btn.active { color: #fff; background: var(--surface3); box-shadow: inset 0 0 0 1px var(--border2); }
 .tab-content { display: none; animation: fade 0.25s ease; }
 .tab-content.active { display: block; }
 @keyframes fade { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
 
-.section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 28px; margin-bottom: 20px; }
-.section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 18px; letter-spacing: -0.02em;
-  display: flex; align-items: center; gap: 9px; line-height: 1.3; }
-.section h3 { font-size: 1.02rem; font-weight: 650; margin: 26px 0 10px; letter-spacing: -0.01em;
-  color: var(--text); display: flex; align-items: center; gap: 8px; }
+.section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 20px; }
+.section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 9px; line-height: 1.3; }
+.section h3 { font-size: 1.02rem; font-weight: 650; margin: 26px 0 10px; letter-spacing: -0.01em; color: var(--text); display: flex; align-items: center; gap: 8px; }
 .section h3::before { content:''; width:3px; height:15px; border-radius:2px; background: var(--blue); flex-shrink:0; }
 .section h4 { font-size: 0.92rem; font-weight: 650; margin: 14px 0 6px; }
 p { margin: 8px 0; color: var(--text2); }
 p b, td b, li b { color: var(--text); }
 
-/* tables — hairline, no zebra, tabular */
 table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
-th { text-align: left; padding: 9px 11px; font-weight: 600; color: var(--text3);
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border2); }
+th { text-align: left; padding: 9px 11px; font-weight: 600; color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border2); }
 td { padding: 10px 11px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
 tbody tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(255,255,255,0.02); }
@@ -58,60 +51,43 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .pos { color: var(--green); font-weight: 600; }
 .warn { color: var(--yellow); font-weight: 600; }
 
-/* badges / pills */
-.badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 999px;
-  font-size: 0.74rem; font-weight: 550; border: 1px solid transparent; }
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 999px; font-size: 0.74rem; font-weight: 550; border: 1px solid transparent; }
 .badge-red { background: rgba(229,72,77,0.10); color: #ff8a8d; border-color: rgba(229,72,77,0.22); }
 .badge-green { background: rgba(61,214,140,0.10); color: var(--green); border-color: rgba(61,214,140,0.22); }
 .badge-blue { background: rgba(59,130,246,0.10); color: var(--blue2); border-color: rgba(59,130,246,0.22); }
 .badge-yellow { background: rgba(233,185,73,0.10); color: var(--yellow); border-color: rgba(233,185,73,0.22); }
 .badge-purple { background: rgba(183,140,247,0.10); color: var(--purple); border-color: rgba(183,140,247,0.22); }
 
-/* hero — flat, crisp, minimal */
-.hero { text-align: left; padding: 40px 32px; background: var(--surface);
-  border-radius: var(--r); border: 1px solid var(--border); margin-bottom: 16px; }
+.hero { text-align: left; padding: 40px 32px; background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); margin-bottom: 16px; }
 .hero h1 { font-size: 1.85rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 8px; }
 .hero .sub { color: var(--text2); font-size: 0.95rem; font-weight: 450; }
 .hero .date { color: var(--text3); font-size: 0.8rem; margin-top: 4px; font-family: var(--mono); }
 .badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
 
-/* callouts */
-.analysis-box { padding: 15px 16px; margin: 12px 0; border-radius: 10px; border: 1px solid var(--border);
-  border-left: 3px solid var(--text3); font-size: 0.87rem; line-height: 1.7; color: var(--text2); background: var(--surface2); }
+.analysis-box { padding: 15px 16px; margin: 12px 0; border-radius: 10px; border: 1px solid var(--border); border-left: 3px solid var(--text3); font-size: 0.87rem; line-height: 1.7; color: var(--text2); background: var(--surface2); }
 .analysis-bull { border-left-color: var(--green); }
 .analysis-bear { border-left-color: var(--red); }
 .analysis-review { border-left-color: var(--blue); }
 .analysis-yellow { border-left-color: var(--yellow); }
 .analysis-purple { border-left-color: var(--purple); }
 
-/* KPI cards */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px,1fr)); gap: 12px; margin: 14px 0; }
-.kpi { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
-  transition: border-color .18s; }
+.kpi { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color .18s; }
 .kpi:hover { border-color: var(--border2); }
 .kpi .label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
 .kpi .value { font-size: 1.55rem; font-weight: 750; margin: 4px 0 2px; letter-spacing: -0.02em; color: #fff; }
 .kpi .note { font-size: 0.74rem; color: var(--text3); }
 
-/* cards grid */
 .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; margin: 14px 0; }
 .team-card { padding: 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); transition: border-color .18s; }
 .team-card:hover { border-color: var(--border2); }
 .team-card .name { font-weight: 650; font-size: 0.9rem; color: var(--text); display:flex; align-items:center; gap:6px; margin-bottom: 4px; }
-.team-card .role { font-size: 0.76rem; color: var(--text2); margin: 4px 0 6px; }
 .team-card ul { margin: 0 0 0 16px; font-size: 0.81rem; color: var(--text2); }
 .team-card li { margin: 3px 0; }
 
-.disclaimer { padding: 15px; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 10px; color: var(--text3); font-size: 0.78rem; text-align: center; margin-top: 18px; line-height: 1.6; }
-
-blockquote { border-left: 2px solid var(--border2); padding: 8px 14px; margin: 10px 0;
-  background: var(--surface2); border-radius: 0 8px 8px 0; font-size: 0.85rem; color: var(--text2); }
+.disclaimer { padding: 15px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text3); font-size: 0.78rem; text-align: center; margin-top: 18px; line-height: 1.6; }
 code { font-family: var(--mono); font-size: 0.82rem; background: var(--surface3); color: var(--blue2); padding: 2px 6px; border-radius: 5px; }
 
-/* allocation */
-.alloc-bar { display: flex; height: 38px; border-radius: 8px; overflow: hidden; margin: 8px 0; border:1px solid var(--border); }
-.alloc-seg { display:flex; align-items:center; justify-content:center; font-size:0.76rem; font-weight:700; color:#fff; }
 .alloc-legend { display:flex; flex-wrap:wrap; gap:10px; font-size:0.8rem; margin-top:4px; color: var(--text2); }
 .alloc-legend span { display:flex; align-items:center; gap:6px; }
 .dot { width:10px; height:10px; border-radius:3px; display:inline-block; flex-shrink:0; }
@@ -121,34 +97,45 @@ code { font-family: var(--mono); font-size: 0.82rem; background: var(--surface3)
 .vbadge-fail { background: rgba(229,72,77,0.12); color: #ff8a8d; }
 .vbadge-warn { background: rgba(233,185,73,0.12); color: var(--yellow); }
 
-/* dimension tags */
-.dim-tag { display:inline-block; font-size:0.72rem; font-weight:650; padding:3px 10px; border-radius:999px; margin-right:4px;
-  border: 1px solid transparent; }
-.dim-1 { background:rgba(183,140,247,0.10); color:var(--purple); border-color:rgba(183,140,247,0.22); }
-.dim-2 { background:rgba(59,201,219,0.10); color:var(--cyan); border-color:rgba(59,201,219,0.22); }
-.dim-3 { background:rgba(245,133,63,0.10); color:var(--orange); border-color:rgba(245,133,63,0.22); }
-
-/* charts */
 .chart-card { background: var(--surface2); border:1px solid var(--border); border-radius:10px; padding:18px; margin:14px 0; }
 .chart-title { font-size:0.76rem; font-weight:650; color:var(--text3); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.6px; }
-.chart-flex { display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
-.chart-flex > .chart-card { flex:1; min-width:240px; }
 svg { display:block; max-width:100%; height:auto; overflow:visible; }
 .svg-grid { stroke: var(--border2); stroke-width:1; }
 .svg-axis { fill: var(--text3); font-size:10px; font-family:var(--mono); }
 .svg-lbl { fill: var(--text); font-size:11px; font-weight:700; font-family:var(--mono); }
 .svg-sub { fill: var(--text2); font-size:9px; font-family:var(--mono); }
 
-/* thermometer */
-.thermo { height: 28px; border-radius: 8px; margin: 12px 0 4px;
-  background: linear-gradient(90deg, var(--green) 0%, #a3d977 30%, var(--yellow) 50%, var(--orange) 70%, var(--red) 100%); opacity:0.9; position: relative; }
+.thermo { height: 28px; border-radius: 8px; margin: 12px 0 4px; background: linear-gradient(90deg, var(--green) 0%, #a3d977 30%, var(--yellow) 50%, var(--orange) 70%, var(--red) 100%); opacity:0.9; position: relative; }
 .thermo-labels { display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text3); font-family:var(--mono); }
 .thermo-wrap { position: relative; padding-top: 28px; margin: 12px 0 4px; }
 .thermo-marker { position:absolute; top:0; transform:translateX(-50%); text-align:center; transition:left .4s; z-index:2; }
 .thermo-marker .pin { font-size:0.72rem; font-weight:750; color:#fff; background:var(--surface3); border:1px solid var(--border2); padding:2px 9px; border-radius:999px; white-space:nowrap; }
 .thermo-marker .tri { width:0; height:0; margin:3px auto 0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid #fff; }
-
 .donut-wrap { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+
+.stat-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:14px 0; }
+.stat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; border-left:3px solid var(--border2); }
+.stat .cap { font-size:0.68rem; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; font-weight:600; }
+.stat .big { font-size:1.45rem; font-weight:750; color:#fff; letter-spacing:-0.02em; margin:4px 0 2px; font-family:var(--mono); line-height:1.1; }
+.stat .sub { font-size:0.74rem; color:var(--text2); }
+.stat.g { border-left-color:var(--green); } .stat.r { border-left-color:var(--red); }
+.stat.y { border-left-color:var(--yellow); } .stat.b { border-left-color:var(--blue); } .stat.p { border-left-color:var(--purple); }
+
+.srcbar { display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 14px; }
+.src { display:inline-flex; align-items:center; gap:4px; font-size:0.72rem; font-family:var(--mono); color:var(--text2); background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:3px 9px; }
+.src::before { content:'◈'; color:var(--blue); font-size:0.7rem; }
+.src b { color:var(--text); font-weight:600; }
+
+.score { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+.score:last-child { border:none; }
+.score .nm { width:128px; font-weight:600; font-size:0.84rem; color:var(--text); flex-shrink:0; }
+.score .track { flex:1; height:8px; border-radius:4px; position:relative; background:linear-gradient(90deg,var(--green),var(--yellow) 55%,var(--red)); opacity:0.55; }
+.score .pin { position:absolute; top:-3px; width:3px; height:14px; background:#fff; border-radius:2px; transform:translateX(-50%); }
+.score .tmp { width:46px; text-align:right; font-family:var(--mono); font-weight:700; font-size:0.85rem; flex-shrink:0; }
+
+.target { text-align:center; padding:20px; background:var(--surface2); border:1px solid var(--border2); border-radius:12px; margin:14px 0; }
+.target .z { font-size:1.9rem; font-weight:800; color:#fff; font-family:var(--mono); letter-spacing:-0.02em; }
+.target .d { font-size:0.8rem; color:var(--text2); margin-top:4px; }
 
 @media (max-width: 640px) {
   .container { padding: 16px 14px 60px; }
@@ -166,346 +153,231 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 <div class="container">
 
 <div class="hero">
-  <h1>₿ MSTR / BMNR 囤現股決策 — 三維監看儀表</h1>
-  <div class="sub">三個互不相干的維度盯盤：① 籌碼面　② 技術面　③ 基本面‧機構‧散戶</div>
-  <div class="date">📅 2026/6/13 · v9 三維重構版 · 本金 2 等份 / 抱 3–4 年 / 夠便宜＋信念不歸零就投</div>
+  <h1>₿ MSTR / BMNR 囤現股決策 — 五維監看儀表</h1>
+  <div class="sub">籌碼面 · 技術面 · 週期遞減 · 市場情緒 · 基本面發展　｜　數據先溯權威平台，再判讀</div>
+  <div class="date">v11 · 2026/6/14 · 本金 2 等份 / 抱 3–4 年 / 夠便宜＋信念不歸零就投</div>
   <div class="badge-row">
-    <span class="badge badge-red">⚠️ 現況：未到「全押抄底」時點（溫度約 −3）</span>
-    <span class="badge badge-yellow">大戶在收 vs ETF 在逃＝僵局</span>
-    <span class="badge badge-green">不會歸零（鏈上收籌碼非死亡螺旋）</span>
-    <span class="badge badge-purple">MSTR 含幣量 4 年稀釋後仍增厚</span>
+    <span class="badge badge-red">綜合溫度 ~−3 · 未到全押</span>
+    <span class="badge badge-yellow">大戶收 vs ETF 逃＝僵局</span>
+    <span class="badge badge-green">底部區推估 $40–52k</span>
+    <span class="badge badge-purple">MSTR 含幣量 4 年增厚 ✓</span>
   </div>
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" data-tab="chips">🪙 籌碼面 ＋ 行動</button>
+  <button class="tab-btn active" data-tab="overview">🎯 總覽</button>
+  <button class="tab-btn" data-tab="chips">🪙 籌碼面</button>
   <button class="tab-btn" data-tab="tech">📈 技術面</button>
-  <button class="tab-btn" data-tab="fund">🏛️ 基本面‧機構‧散戶</button>
+  <button class="tab-btn" data-tab="cycle">📉 週期遞減</button>
+  <button class="tab-btn" data-tab="senti">😱 市場情緒</button>
+  <button class="tab-btn" data-tab="fund">🏛️ 基本面發展</button>
 </div>
 
-<!-- ============================================================ -->
-<!-- ===== 維度一：籌碼面 ＋ 行動 ===== -->
-<!-- ============================================================ -->
-<div id="tab-chips" class="tab-content active">
-
+<!-- ===== 總覽 ===== -->
+<div id="tab-overview" class="tab-content active">
 <div class="section">
-  <h2>🎯 行動計畫（先看這個）</h2>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">會歸零嗎？</div><div class="value pos" style="font-size:1.3rem;">不會</div><div class="note">鏈上收籌碼，非死亡螺旋</div></div>
-    <div class="kpi"><div class="label">現在是底嗎？</div><div class="value neg" style="font-size:1.3rem;">大概不是</div><div class="note">溫度 ~−3，ETF 仍在逃</div></div>
-    <div class="kpi"><div class="label">含幣量增厚？</div><div class="value pos" style="font-size:1.2rem;">MSTR 是</div><div class="note">4 年稀釋後仍正；BMNR 未證明</div></div>
-    <div class="kpi"><div class="label">現在怎麼做</div><div class="value warn" style="font-size:1.2rem;">等＋小額DCA</div><div class="note">兩等份子彈留給訊號</div></div>
-  </div>
-  <div class="analysis-box analysis-review">
-    <b>你的原則（已內化）：</b>本金只分 <b>2 等份（各 50%）</b>，抱 <b>3–4 年</b>，判準一條——<b>「夠便宜，且相信不會歸零、會漲回來」就投</b>。兩等份都是買便宜，差別在確定性：第 1 等份最恐慌時接刀（最便宜、要扛得住），第 2 等份便宜＋底已成形時補。<b>不追高、不猜頂、不在橫盤梭哈。</b>「夠便宜」用下方<b>三維溫度計</b>判斷。
-  </div>
-
-  <h3>🌡️ 三維共振溫度計（−10 投降底 → +10 狂熱頂）</h3>
+  <h2>🌡️ 五維共振溫度（−10 投降底 → +10 狂熱頂）</h2>
   <div class="thermo-wrap">
-    <div class="thermo-marker" style="left:35%;"><div class="pin">現在 ~−3</div><div class="tri"></div></div>
+    <div class="thermo-marker" style="left:35%;"><div class="pin">綜合 ~−3</div><div class="tri"></div></div>
     <div class="thermo"></div>
   </div>
-  <div class="thermo-labels"><span>−10 投降底</span><span>−6</span><span>0 中性</span><span>+6</span><span>+10 狂熱頂</span></div>
-  <p style="font-size:0.82rem;color:var(--text2);margin-top:8px;">三維各投一票，<b>同號才極端</b>：<span class="dim-tag dim-1">籌碼面</span>大戶收/ETF逃/槓桿投降/財庫無賣壓　<span class="dim-tag dim-2">技術面</span>估值便宜/破已實現價/週期到位　<span class="dim-tag dim-3">基本面機構</span>機構態度/賽道輪動/散戶投降。任一維度背離＝「還沒到」。</p>
-  <table>
-    <thead><tr><th>溫度</th><th>狀態</th><th>動作</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(34,197,94,0.10)"><td><b>−10 ~ −6</b></td><td>三維共振投降底</td><td class="pos">🟢 投第 1 等份（接刀）</td></tr>
-      <tr><td>−5 ~ −2</td><td>便宜但籌碼/技術未投降<br><b>← 現在約這裡</b></td><td class="warn">🟡 小額 DCA，子彈留著</td></tr>
-      <tr><td>−1 ~ +1</td><td>中性 / 橫盤</td><td>⚪ 等訊號</td></tr>
-      <tr style="background:rgba(34,197,94,0.10)"><td><b>+2 ~ +5</b></td><td>趨勢確認、未過熱</td><td class="pos">🟢 投第 2 等份；底倉續抱</td></tr>
-      <tr style="background:rgba(239,68,68,0.10)"><td><b>+6 ~ +10</b></td><td>三維共振狂熱頂</td><td class="neg">🔴 分批止盈，先減 BMNR</td></tr>
-    </tbody>
-  </table>
+  <div class="thermo-labels"><span>−10</span><span>−6 投降</span><span>0</span><span>+6 狂熱</span><span>+10</span></div>
+  <div style="margin-top:18px">
+    <div class="score"><div class="nm">🪙 籌碼面</div><div class="track"><div class="pin" style="left:35%"></div></div><div class="tmp neg">−3</div></div>
+    <div class="score"><div class="nm">📈 技術面</div><div class="track"><div class="pin" style="left:40%"></div></div><div class="tmp warn">−2</div></div>
+    <div class="score"><div class="nm">📉 週期遞減</div><div class="track"><div class="pin" style="left:35%"></div></div><div class="tmp neg">−3</div></div>
+    <div class="score"><div class="nm">😱 市場情緒</div><div class="track"><div class="pin" style="left:30%"></div></div><div class="tmp neg">−4</div></div>
+    <div class="score"><div class="nm">🏛️ 基本面</div><div class="track"><div class="pin" style="left:40%"></div></div><div class="tmp warn">−2</div></div>
+  </div>
+  <p style="font-size:0.78rem;margin-top:10px">每維各投一票：<b>便宜/投降為負（該買）</b>，貴/狂熱為正（該賣）。五維同向才極端。現況＝偏便宜、但無一維到投降。</p>
+</div>
 
-  <h3>🎯 兩等份觸發條件（每日監控在比對）</h3>
-  <table>
-    <thead><tr><th>子彈</th><th>觸發條件</th><th>現況</th></tr></thead>
-    <tbody>
-      <tr><td><b>第 1 等份<br>「投降接刀」50%</b></td><td><b>任一</b>成立即投：<br>① BTC 進 <b>$48–54k</b>（≤已實現價）<br>② BTC <b>MVRV-Z ≤ 0</b><br>③ 三維<b>溫度 ≤ −6</b><br>④ MSTR <b>mNAV ≤ 0.6x</b></td><td><span class="vbadge vbadge-fail">未觸發</span><br><span style="font-size:0.7rem;color:var(--text3)">BTC ~$61.5k、MVRV-Z ~0.34、mNAV ~0.84x（6/10）</span></td></tr>
-      <tr><td><b>第 2 等份<br>「便宜＋確認」50%</b></td><td><b>全部</b>成立才投：<br>① ETF <b>連 ≥10 交易日淨流入</b><br>② BTC <b>站回 200 日線</b>＋更高低點<br>③ MSTR <b>無被迫賣幣</b>、mNAV ≥1.0x<br>④ 三維<b>溫度 +2~+5</b></td><td><span class="vbadge vbadge-fail">未觸發</span><br><span style="font-size:0.7rem;color:var(--text3)">ETF 剛翻正~2日（需≥10）、BTC 在 200日線下</span></td></tr>
-    </tbody>
-  </table>
-  <h3>配置：MSTR 75 : BMNR 25</h3>
+<div class="section">
+  <h2>🎯 目標價與行動</h2>
+  <div class="target">
+    <div class="z">$40,000 – $52,000</div>
+    <div class="d">本輪 BTC 底部推估區（≈ ATH $126k 的 −59% ~ −68%）· 詳見「週期遞減」分頁</div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">第 1 等份｜投降接刀</div><div class="value warn">等</div><div class="note">任一：BTC≤$54k／MVRV-Z≤0／溫度≤−6／mNAV≤0.6x</div></div>
+    <div class="kpi"><div class="label">第 2 等份｜便宜+確認</div><div class="value warn">等</div><div class="note">全部：ETF連≥10日流入＋站回200日線＋mNAV≥1.0x＋溫度+2~+5</div></div>
+    <div class="kpi"><div class="label">本業收入 DCA</div><div class="value pos">照跑</div><div class="note">常駐底倉，不在兩等份內</div></div>
+    <div class="kpi"><div class="label">貸款子彈</div><div class="value neg">留著</div><div class="note">僵局未解，借錢梭哈＝勸阻</div></div>
+  </div>
+  <h3>配置 MSTR 75 : BMNR 25</h3>
   <div class="donut-wrap">
-    <svg width="130" height="130" viewBox="0 0 130 130" style="flex-shrink:0">
+    <svg width="120" height="120" viewBox="0 0 130 130" style="flex-shrink:0">
       <circle cx="65" cy="65" r="50" fill="none" stroke="var(--surface3)" stroke-width="18"/>
-      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--purple)" stroke-width="18"
-        stroke-dasharray="235.6 314.2" stroke-dashoffset="0" transform="rotate(-90 65 65)" stroke-linecap="butt"/>
-      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--green)" stroke-width="18"
-        stroke-dasharray="78.5 314.2" stroke-dashoffset="-235.6" transform="rotate(-90 65 65)" stroke-linecap="butt"/>
-      <text x="65" y="60" text-anchor="middle" class="svg-lbl" style="font-size:15px">75/25</text>
-      <text x="65" y="76" text-anchor="middle" class="svg-sub">MSTR : BMNR</text>
+      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--purple)" stroke-width="18" stroke-dasharray="235.6 314.2" transform="rotate(-90 65 65)"/>
+      <circle cx="65" cy="65" r="50" fill="none" stroke="var(--green)" stroke-width="18" stroke-dasharray="78.5 314.2" stroke-dashoffset="-235.6" transform="rotate(-90 65 65)"/>
+      <text x="65" y="61" text-anchor="middle" class="svg-lbl" style="font-size:15px">75/25</text>
+      <text x="65" y="77" text-anchor="middle" class="svg-sub">MSTR : BMNR</text>
     </svg>
     <div class="alloc-legend" style="flex-direction:column;align-items:flex-start;gap:8px;flex:1;min-width:200px">
-      <span><i class="dot" style="background:var(--purple)"></i><b>MSTR 75%</b> — BTC 較強、mNAV 折價、含幣量已證明</span>
-      <span><i class="dot" style="background:var(--green)"></i><b>BMNR 25%</b> — 質押續命＋ETH 翻身選擇權，但需求最弱＋稀釋 → 壓到 1/4</span>
+      <span><i class="dot" style="background:var(--purple)"></i><b>MSTR 75%</b> — mNAV 折價、含幣量已證明</span>
+      <span><i class="dot" style="background:var(--green)"></i><b>BMNR 25%</b> — 質押續命，但需求弱＋稀釋 → 壓 1/4</span>
     </div>
   </div>
-  <div class="analysis-box analysis-yellow" style="margin-top:10px;">📡 <b>每日監控排程</b>（08:00 台北）：抓三維數據，輸出 <b>「BTC 溫度 X｜ETH 溫度 Y｜ETH/BTC 訊號｜建議配置｜行動：等/投第1等份/投第2等份/止盈」</b>，並 commit 進 monitor-log.md。</div>
+  <div class="analysis-box analysis-yellow" style="margin-top:14px">📡 <b>每日監控</b>（08:00 台北）：抓五維數據 → 輸出「BTC/ETH 溫度｜ETH/BTC｜配置｜行動」，commit 進 monitor-log.md。</div>
+</div>
 </div>
 
+<!-- ===== 籌碼面 ===== -->
+<div id="tab-chips" class="tab-content">
 <div class="section">
-  <h2><span class="dim-tag dim-1">維度一</span> 🪙 籌碼面：誰在買、誰在賣、槓桿與財庫</h2>
-  <div class="analysis-box analysis-yellow" style="font-size:0.93rem;">
-    <b>一句話：「強手收籌碼 vs 邊際買盤(ETF)出逃」的拉鋸。</b>大戶在累積、交易所幣量被抽到多年低（供給收縮＝<b>利多</b>）；但定價的<b>邊際買盤——現貨 ETF——史上級流出（利空）</b>。鯨魚狂買、價格卻不動＝買盤被賣壓吸收。<b>僵局，不是發車。</b>
+  <h2>🪙 籌碼面指標</h2>
+  <div class="srcbar">
+    <span class="src">資料源 <b>CryptoQuant</b>（交易所存量·鯨魚比）</span>
+    <span class="src"><b>Glassnode</b>（LTH/STH·已實現）</span>
+    <span class="src"><b>Coinglass / Farside / SoSoValue</b>（ETF·OI）</span>
   </div>
-
-  <h3>① 供給面：大戶在收（利多）</h3>
-  <table>
-    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
-    <tbody>
-      <tr><td>大戶累積</td><td class="pos">30天 +270K（2013來最大）</td><td class="pos">巨鯨累積 10 週高</td><td class="pos">強手低位收</td></tr>
-      <tr><td>交易所存量</td><td class="pos">2.21M（9年低、5.88%供給）</td><td>~30% 已質押鎖倉</td><td class="pos">可賣的幣變少</td></tr>
-      <tr><td>長期持有者 LTH</td><td class="pos">佔比升至 78.3%</td><td>—</td><td class="pos">籌碼弱手→強手</td></tr>
-    </tbody>
-  </table>
-
-  <h3>② 需求面：邊際買盤 ETF 撤退（利空，且這才定價）</h3>
-  <table>
-    <thead><tr><th>指標</th><th>BTC</th><th>ETH</th><th>意義</th></tr></thead>
-    <tbody>
-      <tr style="background:rgba(239,68,68,0.05)"><td>現貨 ETF 資金流</td><td class="neg">曾 13天 -$4.4B；近翻正~2日</td><td class="neg">曾 17天 -$401M（史上最差）</td><td class="neg">機構順週期買賣，主導定價</td></tr>
-      <tr><td>判讀</td><td class="warn">需 連≥10 日淨流入才算趨勢轉</td><td class="neg">ETH ETF 無質押息 → 比 BTC 弱</td><td class="warn">這是第 2 等份的關鍵閘門</td></tr>
-    </tbody>
-  </table>
-
-  <h3>③ 槓桿定位：永續/期貨/期權（最被低估，且領先價格）</h3>
-  <table>
-    <thead><tr><th>工具</th><th>底部訊號</th><th>頂部訊號</th></tr></thead>
-    <tbody>
-      <tr><td>永續資金費率 funding</td><td class="pos">深度負（空頭付多頭＝投降）</td><td class="neg">持續高正（多頭過熱）</td></tr>
-      <tr><td>未平倉 OI</td><td class="pos">OI 暴跌＋價瀑布＝多殺多</td><td class="neg">OI 創高＋價平＝脆弱頂</td></tr>
-      <tr><td>期貨年化基差 basis</td><td class="pos">收斂~0 或逆價差＝恐懼</td><td class="neg">&gt;15–20%＝泡沫</td></tr>
-      <tr><td>期權 25Δ skew / IV</td><td class="pos">極端 put skew＋IV backwardation</td><td class="neg">call skew＋低 IV 自滿</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:0.78rem;color:var(--text3)">價值：價格沒到鐵底但 funding 深負、basis 逆價差、put skew 爆 → 投降已發生，最高品質的底。</p>
-
-  <h3>④ 財庫反身性 ＋ 含幣量稽核（DAT 在加供給還是抽供給）</h3>
-  <div class="team-grid">
-    <div class="team-card" style="border-color:rgba(34,197,94,0.4)"><div class="name">mNAV &gt; 1.2＝需求</div><ul><li>溢價增發買幣，飛輪 ON、含幣量增厚</li></ul></div>
-    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">mNAV &lt; 1＝供給</div><ul><li>停止增發，甚至被迫賣幣付息，飛輪反轉</li></ul></div>
+  <div class="stat-grid">
+    <div class="stat g"><div class="cap">交易所存量</div><div class="big">2.21M</div><div class="sub">9 年低 · 僅 5.88% 供給 ↓</div></div>
+    <div class="stat g"><div class="cap">大戶 30 天累積</div><div class="big">+270K</div><div class="sub">2013 來最大</div></div>
+    <div class="stat g"><div class="cap">長期持有 LTH</div><div class="big">78.3%</div><div class="sub">弱手→強手</div></div>
+    <div class="stat r"><div class="cap">BTC ETF（4 週）</div><div class="big">−$5.4B</div><div class="sub">邊際買盤在逃</div></div>
+    <div class="stat r"><div class="cap">ETH ETF</div><div class="big">流出</div><div class="sub">比 BTC 更弱</div></div>
+    <div class="stat y"><div class="cap">永續 funding</div><div class="big">+0.01%</div><div class="sub">剛轉正 · 非過熱</div></div>
+    <div class="stat y"><div class="cap">MSTR mNAV</div><div class="big">0.80x</div><div class="sub">折價 · 飛輪熄火無賣壓</div></div>
+    <div class="stat g"><div class="cap">MSTR 含幣量</div><div class="big">243k</div><div class="sub">sats/股 · 仍增厚</div></div>
   </div>
-  <p style="margin-top:8px;"><b>含幣量稽核（你最看重）</b>——用 MSTR 官方 KPI <b>BTC Yield</b>（分母＝完全稀釋股數，已含可轉債/選擇權/RSU）：</p>
-  <div class="chart-card">
-    <div class="chart-title">📈 MSTR 每股含幣量（sats/股）— 稀釋後仍逐年增厚</div>
-    <svg viewBox="0 0 340 175" width="100%">
-      <defs><linearGradient id="barG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#15803d"/></linearGradient></defs>
-      <line x1="24" y1="140" x2="330" y2="140" class="svg-grid"/>
-      <!-- 2020 -->
-      <rect x="32" y="102" width="50" height="38" rx="3" fill="url(#barG)" opacity="0.55"/>
-      <text x="57" y="96" text-anchor="middle" class="svg-sub">~75k</text>
-      <text x="57" y="155" text-anchor="middle" class="svg-axis">2020</text>
-      <!-- 2024 -->
-      <rect x="112" y="61" width="50" height="79" rx="3" fill="url(#barG)" opacity="0.72"/>
-      <text x="137" y="55" text-anchor="middle" class="svg-sub">158,826</text>
-      <text x="137" y="155" text-anchor="middle" class="svg-axis">2024</text>
-      <!-- 2025 -->
-      <rect x="192" y="43" width="50" height="97" rx="3" fill="url(#barG)" opacity="0.86"/>
-      <text x="217" y="37" text-anchor="middle" class="svg-sub">194,986</text>
-      <text x="217" y="155" text-anchor="middle" class="svg-axis">2025</text>
-      <!-- 2026 -->
-      <rect x="272" y="20" width="50" height="120" rx="3" fill="url(#barG)"/>
-      <text x="297" y="14" text-anchor="middle" class="svg-lbl" style="fill:var(--green)">~240k</text>
-      <text x="297" y="155" text-anchor="middle" class="svg-axis">2026</text>
-    </svg>
-    <div style="font-size:0.72rem;color:var(--text3);text-align:center">轉 DAT 以來約 3 倍；2024 BTC Yield +74.3%、2025 +22.8%（皆為稀釋後）</div>
-  </div>
-  <table>
-    <thead><tr><th>年度</th><th>BTC Yield</th><th>每股含幣量</th></tr></thead>
-    <tbody>
-      <tr><td>2024</td><td class="pos">+74.3%</td><td>→ 158,826 sats/股</td></tr>
-      <tr><td>2025</td><td class="pos">+22.8%</td><td>→ 194,986 sats/股</td></tr>
-      <tr style="background:rgba(34,197,94,0.06)"><td><b>2026 至今</b></td><td class="pos">持續為正</td><td><b>~240,000 sats/股</b></td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bear">
-    <b>✅ MSTR 確實把每股含幣量做大（4 年、跨熊市、稀釋後仍正，約 3 倍）。</b>　<b>⚠️ 但只在 mNAV&gt;1（溢價）成立</b>——現 0.84x 折價，發股變稀釋、引擎熄火；加上 ~$8–9 億/年特別股息，折價拖久了恐<b>被迫賣幣→含幣量首度下降</b>。過去增厚是真的，<b>不保證未來</b>，條件是回到溢價。
-  </div>
-  <p style="font-size:0.78rem;color:var(--text3)">來源：Strategy SEC 8-K/FWP（BTC Yield、資本結構）、CryptoQuant/spotedcrypto（鏈上）、farside（ETF）、coinglass/laevitas（衍生品）。數字隨時更新。</p>
+  <div class="analysis-box analysis-yellow"><b>判讀：</b>供給端收縮（利多）vs 邊際買盤 ETF 出逃（利空）＝<b>僵局</b>。鯨魚狂買被 ETF 賣壓吸收，價格卡住。籌碼面溫度 <b>−3</b>。</div>
 </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- ===== 維度二：技術面 ===== -->
-<!-- ============================================================ -->
+<!-- ===== 技術面 ===== -->
 <div id="tab-tech" class="tab-content">
 <div class="section">
-  <h2><span class="dim-tag dim-2">維度二</span> 📈 技術面：估值錨 ＋ 週期型態</h2>
-  <div class="analysis-box analysis-review">
-    技術面回答<b>「貴還是便宜」</b>，用鏈上估值錨給出「band」（區間），不負責抓精準時點——時點交給籌碼面的②③層。便宜不等於馬上漲，但<b>沒便宜到位就別動第 1 等份</b>。
+  <h2>📈 技術分析面指標</h2>
+  <div class="srcbar">
+    <span class="src">資料源 <b>TradingView</b>（價·均線·RSI）</span>
+    <span class="src"><b>Bitcoin Magazine Pro</b>（200WMA·Mayer·Pi Cycle）</span>
+    <span class="src"><b>CheckOnChain / LookIntoBitcoin</b></span>
   </div>
-
-  <h3>① 估值錨</h3>
   <div class="chart-card">
-    <div class="chart-title">📍 BTC 現價 vs 估值帶（便宜 → 貴）</div>
+    <div class="chart-title">📍 BTC 現價 vs 估值帶</div>
     <svg viewBox="0 0 340 96" width="100%">
-      <defs><linearGradient id="bandG" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#22c55e"/><stop offset="50%" stop-color="#eab308"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs>
+      <defs><linearGradient id="bandG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--green)"/><stop offset="50%" stop-color="var(--yellow)"/><stop offset="100%" stop-color="var(--red)"/></linearGradient></defs>
       <rect x="20" y="46" width="300" height="18" rx="9" fill="url(#bandG)" opacity="0.85"/>
-      <!-- CVDD 48k -->
-      <line x1="56" y1="42" x2="56" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
-      <text x="56" y="82" text-anchor="middle" class="svg-axis">CVDD $48k</text>
-      <!-- realized 54k -->
-      <line x1="128" y1="42" x2="128" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
-      <text x="128" y="82" text-anchor="middle" class="svg-axis">已實現 $54k</text>
-      <!-- 200DMA 65.8k -->
-      <line x1="270" y1="42" x2="270" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
-      <text x="270" y="82" text-anchor="middle" class="svg-axis">200日線 $66k</text>
-      <!-- current 61.5k marker -->
-      <polygon points="218,30 212,20 224,20" fill="#fff"/>
-      <rect x="190" y="6" width="56" height="15" rx="7" fill="var(--surface3)" stroke="var(--border)"/>
-      <text x="218" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現在 $61.5k</text>
+      <line x1="56" y1="42" x2="56" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/><text x="56" y="82" text-anchor="middle" class="svg-axis">CVDD $48k</text>
+      <line x1="128" y1="42" x2="128" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/><text x="128" y="82" text-anchor="middle" class="svg-axis">已實現 $54k</text>
+      <line x1="270" y1="42" x2="270" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/><text x="270" y="82" text-anchor="middle" class="svg-axis">200日 $66k</text>
+      <polygon points="218,30 212,20 224,20" fill="#fff"/><rect x="190" y="6" width="56" height="15" rx="7" fill="var(--surface3)" stroke="var(--border2)"/><text x="218" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現在 $61.5k</text>
     </svg>
-    <div style="font-size:0.72rem;color:var(--text3);text-align:center">現價在「已實現價」之上、200 日線之下 → 便宜但<b>未到投降區</b>（第 1 等份要等價格再往綠區走）</div>
   </div>
-  <table>
-    <thead><tr><th>指標</th><th>底部訊號</th><th>頂部訊號</th><th>現況（6/10）</th></tr></thead>
-    <tbody>
-      <tr><td>MVRV-Z</td><td class="pos">≤ 0（破已實現價）</td><td class="neg">&gt; 6–7</td><td class="warn">~0.34（偏低未投降）</td></tr>
-      <tr><td>Mayer Multiple（價/200DMA）</td><td class="pos">&lt; 0.8</td><td class="neg">&gt; 2.4</td><td class="warn">&lt;1（200日線下）</td></tr>
-      <tr><td>已實現價 / CVDD 鐵底</td><td class="pos">~$54k → CVDD ~$48k</td><td>—</td><td>BTC ~$61.5k（高於）</td></tr>
-      <tr><td>NUPL 淨未實現損益</td><td class="pos">&lt; 0（投降）</td><td class="neg">&gt; 0.75（狂熱）</td><td>—</td></tr>
-      <tr><td>Pi Cycle</td><td>—</td><td class="neg">111DMA 上穿 2×350DMA</td><td>未觸發</td></tr>
-      <tr><td>200 日均線</td><td class="pos">站回＋更高低點＝轉強</td><td>—</td><td class="neg">$61.5k &lt; $65.8k</td></tr>
-    </tbody>
-  </table>
+  <div class="stat-grid">
+    <div class="stat y"><div class="cap">MVRV-Z</div><div class="big">~0.30</div><div class="sub">底常在 ≤0 · 未投降</div></div>
+    <div class="stat y"><div class="cap">Mayer Multiple</div><div class="big">~1.0</div><div class="sub">底 &lt;0.8 · 頂 &gt;2.4</div></div>
+    <div class="stat y"><div class="cap">200 日均線</div><div class="big">$66k</div><div class="sub">現價在線附近拉鋸</div></div>
+    <div class="stat b"><div class="cap">Pi Cycle 頂訊號</div><div class="big">未觸</div><div class="sub">距頂部訊號遠</div></div>
+  </div>
+  <div class="analysis-box analysis-yellow"><b>判讀：</b>便宜但<b>未到深值區</b>——現價在已實現價之上、200 日線附近。技術面溫度 <b>−2</b>。</div>
+</div>
+</div>
 
-  <h3>② 熊市週期型態（支持「別急」的時間框架）</h3>
+<!-- ===== 週期遞減 ===== -->
+<div id="tab-cycle" class="tab-content">
+<div class="section">
+  <h2>📉 週期收益遞減 → 目標價</h2>
+  <div class="srcbar">
+    <span class="src">資料源 <b>Bitcoin Magazine Pro</b>（halving·Pi）</span>
+    <span class="src"><b>LookIntoBitcoin</b></span>
+    <span class="src"><b>Benjamin Cowen / IntoTheCryptoverse</b>（遞減報酬）</span>
+    <span class="src"><b>Bitbo · TradeThatSwing</b></span>
+  </div>
+
   <div class="chart-card">
-    <div class="chart-title">📉 歷次熊市高→底跌幅（本輪目前才 -50%）</div>
-    <svg viewBox="0 0 340 150" width="100%">
-      <rect x="78" y="12" width="230" height="22" rx="3" fill="var(--red)" opacity="0.75"/>
-      <text x="70" y="27" text-anchor="end" class="svg-axis">2013–15</text>
-      <text x="314" y="27" class="svg-sub" style="fill:#fff">-86%</text>
-      <rect x="78" y="46" width="225" height="22" rx="3" fill="var(--red)" opacity="0.65"/>
-      <text x="70" y="61" text-anchor="end" class="svg-axis">2017–18</text>
-      <text x="309" y="61" class="svg-sub" style="fill:#fff">-84%</text>
-      <rect x="78" y="80" width="206" height="22" rx="3" fill="var(--red)" opacity="0.55"/>
-      <text x="70" y="95" text-anchor="end" class="svg-axis">2021–22</text>
-      <text x="290" y="95" class="svg-sub" style="fill:#fff">-77%</text>
-      <rect x="78" y="114" width="134" height="22" rx="3" fill="var(--yellow)"/>
-      <text x="70" y="129" text-anchor="end" class="svg-axis">本輪(估)</text>
-      <text x="218" y="129" class="svg-lbl" style="font-size:11px;fill:var(--yellow)">-50% ←現在</text>
+    <div class="chart-title">↗ 每輪 低→高 漲幅倍數（遞減，對數高度）</div>
+    <svg viewBox="0 0 340 175" width="100%">
+      <defs><linearGradient id="upG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--green)"/><stop offset="100%" stop-color="#1f7a4d"/></linearGradient></defs>
+      <line x1="24" y1="140" x2="330" y2="140" class="svg-grid"/>
+      <rect x="32" y="20" width="50" height="120" rx="3" fill="url(#upG)" opacity="0.55"/><text x="57" y="14" text-anchor="middle" class="svg-lbl" style="font-size:10px">575x</text><text x="57" y="155" text-anchor="middle" class="svg-axis">'11→13</text>
+      <rect x="112" y="48" width="50" height="92" rx="3" fill="url(#upG)" opacity="0.7"/><text x="137" y="42" text-anchor="middle" class="svg-sub">130x</text><text x="137" y="155" text-anchor="middle" class="svg-axis">'15→17</text>
+      <rect x="192" y="82" width="50" height="58" rx="3" fill="url(#upG)" opacity="0.85"/><text x="217" y="76" text-anchor="middle" class="svg-sub">21.6x</text><text x="217" y="155" text-anchor="middle" class="svg-axis">'18→21</text>
+      <rect x="272" y="100" width="50" height="40" rx="3" fill="url(#upG)"/><text x="297" y="94" text-anchor="middle" class="svg-lbl" style="font-size:11px;fill:var(--green)">8.1x</text><text x="297" y="155" text-anchor="middle" class="svg-axis">'22→25</text>
     </svg>
-    <div style="font-size:0.72rem;color:var(--text3);text-align:center">歷次觸底跌 -77~-86%、耗時 ~12–14 月；本輪約 7–8 月 → <b>時間與幅度可能都還沒到</b></div>
-  </div>
-  <table>
-    <thead><tr><th>週期</th><th>高→底跌幅</th><th>高→底時間</th><th>底部後型態</th></tr></thead>
-    <tbody>
-      <tr><td>2013–15</td><td class="neg">-86%</td><td>~13–14 月</td><td class="warn">磨盤一整年才動</td></tr>
-      <tr><td>2017–18</td><td class="neg">-84%</td><td>~12 月</td><td class="warn">先暴彈+330%→失敗回測</td></tr>
-      <tr><td>2021–22</td><td class="neg">-77%</td><td>~12 月</td><td class="warn">磨盤一年→ETF後才加速</td></tr>
-      <tr style="background:rgba(234,179,8,0.06)"><td><b>本輪(估)</b></td><td class="warn">目前 -50%</td><td>約 7–8 月</td><td>—</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-yellow">
-    ① <b>觸底通常在高點後 ~12–14 個月、跌 -77~-86%。</b>本輪才 -50%、約 7–8 個月——時間與幅度<b>可能都還沒到</b>（一輪比一輪淺，故未必跌那麼深，但「時間未到」明確）。Cowen 估底 <b>Q4 2026</b>。<br>
-    ② <b>底部後多「磨盤緩漲」非「暴力 V 轉」。</b>唯一暴力初彈（2019 +330%）後失敗破底。真正主升段多在<b>減半（2028/4）之後</b>。<br>
-    → 這就是「現在小額 DCA、子彈留著」比「借錢梭哈」合理的技術理由。
+    <div style="font-size:0.72rem;color:var(--text3);text-align:center">每輪約剩前輪 1/4–1/6 → 下輪自底部粗估僅 <b>3–5x</b></div>
   </div>
 
-  <h3>③ MSTR 價位地板（修正招財猫的壓力測試）</h3>
-  <div class="analysis-box analysis-bear">
-    招財猫公式 <code>MSTR = mNAV × 幣價 × 含幣量</code> 算出最壞 ~$67，但<b>不夠壞</b>，因為他：① 把含幣量釘死（熊市會被迫賣幣縮水）② 用 2022 的 0.635x 當地板（現特別股結構更危險）③ 忽略特別股次級求償。<b>修正：</b>普通股每股 = (BTC NAV − 特別股清算值 $15.5B − 淨債) ÷ 普通股數 × mNAV，且含幣量在 mNAV&lt;1 時下降 → <b>真實尾部地板比 $67 更低</b>。當參考、別當保證。
+  <div class="chart-card">
+    <div class="chart-title">↘ 每輪 高→低 跌幅（同樣遞減）</div>
+    <svg viewBox="0 0 340 170" width="100%">
+      <text x="78" y="28" text-anchor="end" class="svg-axis">2011</text><rect x="84" y="14" width="230" height="22" rx="3" fill="var(--red)" opacity="0.8"/><text x="320" y="28" class="svg-sub" style="fill:#fff">-93%</text>
+      <text x="78" y="60" text-anchor="end" class="svg-axis">'14–15</text><rect x="84" y="46" width="213" height="22" rx="3" fill="var(--red)" opacity="0.7"/><text x="303" y="60" class="svg-sub" style="fill:#fff">-86%</text>
+      <text x="78" y="92" text-anchor="end" class="svg-axis">2018</text><rect x="84" y="78" width="208" height="22" rx="3" fill="var(--red)" opacity="0.6"/><text x="298" y="92" class="svg-sub" style="fill:#fff">-84%</text>
+      <text x="78" y="124" text-anchor="end" class="svg-axis">2022</text><rect x="84" y="110" width="190" height="22" rx="3" fill="var(--red)" opacity="0.5"/><text x="280" y="124" class="svg-sub" style="fill:#fff">-77%</text>
+      <text x="78" y="156" text-anchor="end" class="svg-axis">本輪推估</text><rect x="84" y="142" width="173" height="22" rx="3" fill="var(--yellow)"/><text x="263" y="156" class="svg-lbl" style="font-size:10px;fill:var(--yellow)">-65~-72%</text>
+    </svg>
   </div>
-  <p style="font-size:0.78rem;color:var(--text3)">樣本僅 3–4 輪、統計意義有限；ETF/機構可能改變型態。資料：Glassnode/OANDA/checkonchain/Cowen/Bitwise，2026/6。非投資建議。</p>
+
+  <h3>目標價推導</h3>
+  <div class="stat-grid">
+    <div class="stat r"><div class="cap">統計外推（跌幅遞減）</div><div class="big">$35–44k</div><div class="sub">ATH $126.3k ×（−65~−72%）</div></div>
+    <div class="stat y"><div class="cap">鏈上估值錨</div><div class="big">$48–54k</div><div class="sub">CVDD / 已實現價</div></div>
+    <div class="stat g"><div class="cap">綜合底部區</div><div class="big">$40–52k</div><div class="sub">中位 ~$46k（≈ −63%）</div></div>
+  </div>
+  <div class="analysis-box analysis-review"><b>結論：</b>純統計（跌幅遞減）指向 $35–44k，鏈上錨在 $48–54k；兩者交集 → <b>合理底部區 $40–52k</b>。第 1 等份對應 BTC ≤$54k 開始分批、$40–46k 加重。<b>不追求抓最低點</b>，落入區間即分批。</div>
+  <p style="font-size:0.74rem;color:var(--text3)">樣本僅 4 輪、統計意義有限；ETF/機構可能改變型態。漲跌幅來源：TradeThatSwing / Bitbo / Glassnode ATH-Drawdown / Fidelity，2026/6。</p>
 </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- ===== 維度三：基本面‧機構‧散戶 ===== -->
-<!-- ============================================================ -->
+<!-- ===== 市場情緒 ===== -->
+<div id="tab-senti" class="tab-content">
+<div class="section">
+  <h2>😱 市場情緒指標</h2>
+  <div class="srcbar">
+    <span class="src">資料源 <b>Alternative.me</b>（Fear &amp; Greed）</span>
+    <span class="src"><b>Santiment</b>（社群情緒·熱度）</span>
+    <span class="src"><b>Coinglass</b>（多空比·清算）</span>
+    <span class="src"><b>Google Trends</b></span>
+  </div>
+  <div class="stat-grid">
+    <div class="stat r"><div class="cap">Fear &amp; Greed</div><div class="big">恐懼</div><div class="sub">即時值見 Alternative.me</div></div>
+    <div class="stat y"><div class="cap">社群情緒</div><div class="big">低迷</div><div class="sub">Santiment 社群熱度低</div></div>
+    <div class="stat y"><div class="cap">多空 / 清算</div><div class="big">中性</div><div class="sub">大跌後 OI 去化</div></div>
+    <div class="stat g"><div class="cap">Google Trends</div><div class="big">低檔</div><div class="sub">散戶未進場（反向偏底）</div></div>
+  </div>
+  <div class="analysis-box analysis-yellow"><b>判讀：</b>情緒偏<b>恐懼</b>＝反向偏底部訊號，但<b>未到極端投降</b>（無 F&amp;G 個位數、無瀑布式清算）。情緒面溫度 <b>−4</b>（五維中最偏底，但獨木難撐）。</div>
+  <p style="font-size:0.74rem;color:var(--text3)">情緒是反向指標：極度恐懼接近底、極度貪婪接近頂。即時數值由每日監控抓 Alternative.me，靜態頁僅示意。</p>
+</div>
+</div>
+
+<!-- ===== 基本面發展 ===== -->
 <div id="tab-fund" class="tab-content">
 <div class="section">
-  <h2><span class="dim-tag dim-3">維度三</span> 🏛️ 基本面‧機構態度‧散戶情緒</h2>
-  <div class="analysis-box analysis-review">
-    這維度回答<b>「這個產業/工具的長期趨勢與制度面變了沒」</b>——和籌碼/技術的短中期訊號互不相干，是你「3–4 年信念」的根基。包含：新賽道（RWA/穩定幣）、礦股 vs DAT 的 ROIC、用 DAT 當槓桿的須知、STRC 優先股結構，以及「基本面變了嗎」。
+  <h2>🏛️ 基本面發展指標</h2>
+  <div class="srcbar">
+    <span class="src">資料源 <b>Coinbase</b>（月/季展望報告）</span>
+    <span class="src"><b>RWA.xyz</b>（代幣化）</span>
+    <span class="src"><b>DeFiLlama</b>（TVL·穩定幣）</span>
+    <span class="src"><b>SoSoValue</b>（ETF AUM）· <b>Electric Capital</b>（開發者）</span>
+  </div>
+  <div class="stat-grid">
+    <div class="stat g"><div class="cap">代幣化 RWA</div><div class="big">$34.5B</div><div class="sub">+100% YoY · 渣打估 2034 $30T</div></div>
+    <div class="stat g"><div class="cap">RWA 龍頭</div><div class="big">Circle/BLK</div><div class="sub">USYC $2.9B · BUIDL $2.5B</div></div>
+    <div class="stat y"><div class="cap">DAT 含幣量</div><div class="big">MSTR ✓</div><div class="sub">4 年增厚；BMNR 稀釋風險</div></div>
+    <div class="stat r"><div class="cap">礦股 ROIC</div><div class="big">融冰</div><div class="sub">減半+難度 → 轉 AI 求生</div></div>
   </div>
 
-  <h3>🆕 新賽道：RWA／穩定幣（機構真正在做的事）</h3>
+  <h3>礦股 vs DAT vs 穩定幣／RWA — ROIC 未來</h3>
   <table>
-    <thead><tr><th>指標</th><th>數據（2026/5）</th><th>意義</th></tr></thead>
+    <thead><tr><th>類別</th><th>本輪</th><th>ROIC</th><th>性質</th></tr></thead>
     <tbody>
-      <tr><td>代幣化 RWA 市值</td><td class="pos">$34.5B（+100% YoY）</td><td>15 個月從 $5.4B 漲上來</td></tr>
-      <tr><td>龍頭產品</td><td>Circle USYC ~$2.9B、BlackRock BUIDL ~$2.5B</td><td>機構級在搶</td></tr>
-      <tr><td>最大非穩定幣類別</td><td>私募信貸（已超越國債）</td><td>機構要的是收益</td></tr>
-      <tr><td>長期 TAM</td><td class="pos">渣打估 2034 達 $30T</td><td>DTCC 2026/7→10 月上線</td></tr>
+      <tr><td>礦股</td><td class="neg">被輾壓</td><td class="neg">結構性融冰</td><td>轉 AI＝不再是 BTC 曝險</td></tr>
+      <tr><td>DAT</td><td class="pos">主導</td><td class="warn">條件式（靠 mNAV 溢價）</td><td>溢價沒了＝帶息槓桿 ETF</td></tr>
+      <tr><td>穩定幣/RWA</td><td class="pos">悄悄爆發</td><td class="pos">高且持久（float 賺息）</td><td>收益/基礎設施，非資產 beta</td></tr>
     </tbody>
   </table>
-  <div class="analysis-box analysis-purple">
-    <b>對你的含意：</b>RWA/穩定幣是<b>機構最認真、ROIC 最高、最持久</b>的賽道，但它是<b>「收益/基礎設施」的賭注，不是「資產 beta」的賭注</b>——和你押 BTC/ETH 升值是<b>不同的車</b>。它的存在<b>強化「不會歸零」</b>（鏈上金融在制度化），但<b>不會讓 MSTR/BMNR 漲</b>。若你想分散，可把它當「另一種曝險」候選；但別把它的成長當成 DAT 會漲的理由。
-  </div>
+  <div class="analysis-box analysis-bear"><b>「買 DAT 就複製過去績效」不成立</b>——過去績效＝低成本資本＋高溢價，兩者都在惡化。最持久 ROIC 在穩定幣/RWA，但那是另一種賭注。</div>
 
-  <h3>⚒️ 礦股 vs DAT：本輪礦股被輾壓，ROIC 誰是未來？</h3>
-  <table>
-    <thead><tr><th>面向</th><th>礦股（MARA/RIOT…）</th><th>DAT（MSTR/BMNR）</th><th>穩定幣/RWA</th></tr></thead>
-    <tbody>
-      <tr><td>本輪表現</td><td class="neg">被 DAT 輾壓</td><td class="pos">主導</td><td class="pos">悄悄爆發</td></tr>
-      <tr><td>ROIC 結構</td><td class="neg">減半+難度升=融冰</td><td class="warn">條件式（靠 mNAV 溢價）</td><td class="pos">高且持久（float 賺息）</td></tr>
-      <tr><td>關鍵風險</td><td class="neg">RIOT EBITDA $463M→$13M</td><td class="neg">溢價壓縮→變帶息槓桿ETF</td><td>監管、競爭</td></tr>
-      <tr><td>生存策略</td><td class="warn">轉 AI/HPC（就不再是BTC曝險）</td><td>維持增厚＋折價買回</td><td>擴 float＋牌照</td></tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bear">
-    <b>殘酷結論：</b>① 礦股 ROIC 是<b>結構性下降的融冰</b>（每 4 年補貼砍半＋難度升），靠轉 AI 續命，但轉了就不是 BTC 槓桿了。② <b>DAT 贏在「純資產累積＋溢價增厚、無營運衰減」</b>，但這優勢<b>依賴持續的 mNAV 溢價</b>——溢價隨競爭（Strive 等一堆模仿者）壓縮，<b>一旦 mNAV→1，DAT 只是帶 ~10% 股息拖累的槓桿 ETF</b>。③ <b>「買 DAT 就能複製過去績效」不成立。</b>過去績效是「低成本資本＋高溢價」的產物，兩者都在惡化。最持久的 ROIC 其實在穩定幣/RWA，但那是另一種賭注。
-  </div>
-
-  <h3>🎚️ 用 DAT 股票當「槓桿 BTC/ETH」需要考慮什麼</h3>
-  <table>
-    <thead><tr><th>#</th><th>要考慮的點</th><th>怎麼判斷</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td>mNAV regime</td><td class="pos">折價買＝免費槓桿；溢價買＝替別人的溢價買單</td></tr>
-      <tr><td>2</td><td>槓桿成本</td><td>優先股 ~10% 拖累 vs 0% 可轉債 vs 保證金/期權利息</td></tr>
-      <tr><td>3</td><td>反身性 / 被迫賣方</td><td class="neg">折價時恐被迫賣幣→放大下跌</td></tr>
-      <tr><td>4</td><td>求償順位</td><td class="neg">普通股次級於 $15.5B 特別股（殘值索取）</td></tr>
-      <tr><td>5</td><td>增厚可持續性</td><td>每股含幣量還在增嗎？（=稽核）</td></tr>
-      <tr><td>6</td><td>競爭壓縮 mNAV</td><td class="warn">模仿者越多，市場給的溢價越低</td></tr>
-      <tr><td>7</td><td class="pos">無保證金追繳/斷頭</td><td class="pos">這是 DAT 勝過期權/保證金的關鍵——不會被停損出場，適合你「時間站我這邊」的長抱</td></tr>
-      <tr><td>8</td><td>稀釋風險</td><td class="neg">尤其 BMNR 的 500 億股授權</td></tr>
-    </tbody>
-  </table>
-
-  <h3>💵 STRC 這種優先股：誰買、得到什麼、失去什麼？</h3>
-  <div class="analysis-box analysis-review">
-    <b>STRC（Stretch）是什麼：</b>變動利率<b>永續</b>特別股、面額 $100、月配息、利率每月以 0.25% 調整以<b>讓股價貼著 $100</b>；<b>累積型</b>（漏配會累積複利、董事會可遞延而<b>不算違約</b>——你說的「拖茅」<b>完全正確</b>）；<b>無到期日、公司永遠不必買回</b>、<b>不可轉換</b>普通股、<b>可被公司贖回(call)</b>。求償順位：<b>高於普通股、低於債券</b>。
-  </div>
-  <table>
-    <thead><tr><th>立場</th><th>優點 ✅</th><th>缺點 ❌</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><b>STRC 持有人</b></td>
-        <td class="pos">~11.5% 高月息；貼 $100 相對穩；清算順位高於普通股；像「BTC 背書的高收益類債」</td>
-        <td class="neg">放棄 BTC 全部上行（報酬封頂≈$100＋息，<b>BTC 漲 10 倍也與你無關</b>）；無到期＝本金返還只能靠市場賣或被 call；<b>可被 call</b>（漲不上去）；<b>股息可被遞延</b>；通常無投票權</td>
-      </tr>
-      <tr>
-        <td><b>公司 / 管理層</b></td>
-        <td class="pos">永續＝<b>無到期牆</b>（不像可轉債要再融資）；危機可<b>遞延股息避免違約/破產</b>＝死亡螺旋的安全閥；變動利率便於持續發行；比增發普通股少稀釋含幣量</td>
-        <td class="neg">現金成本高（~$8–9 億/年）；股息<b>不可抵稅</b>（不像債息）；堆高固定現金負擔；一旦真遞延＝對市場放出財務壓力訊號</td>
-      </tr>
-      <tr>
-        <td><b>MSTR 普通股持有人（你）</b></td>
-        <td class="pos"><b>優先股是「永久資本」、無到期牆</b>→比等量負債的強制清算/破產風險低；可遞延特性降低死亡螺旋觸發；若維持增厚，每股含幣量續長</td>
-        <td class="neg"><b>~$8–9 億/年現金在你之前被抽走</b>（沒股權市場時恐賣幣）；困境時你<b>次級於 $15.5B 優先股</b>；股息是<b>順週期失血</b>；優先股越堆，你的安全墊越薄</td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="analysis-box analysis-bull">
-    <b>你的洞察正確：</b>管理層推 STRC/STRF/STRD 這類優先股，正是因為它<b>「比債更軟」</b>——沒到期牆、可遞延、不會被債權人逼到破產清算。<b>這實際上降低了 MSTR 的死亡螺旋風險（對普通股是好事）</b>，代價是把風險轉嫁給優先股持有人，並背上每年現金股息。所以你<b>買普通股</b>（吃 BTC 上行）比買 STRC（吃固定息、放棄上行）更符合你的「3–4 年博升值」目標——除非你要的是穩定現金流而非成長。
-  </div>
-
-  <h3>❓ 基本面變了嗎？散戶/機構態度</h3>
+  <h3>用 DAT 當槓桿 · STRC 優先股</h3>
   <div class="team-grid">
-    <div class="team-card" style="border-color:rgba(239,68,68,0.4)"><div class="name">① 財庫反身性（新風險）</div><ul><li>磨跌久了 DAT 恐變強制賣方（MSTR 仍在買，折價持續才引爆）</li><li>財庫股可能跌得比幣兇</li></ul></div>
-    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">② ETF＝順週期邊際買盤</div><ul><li>機構追高也殺低，主導定價</li><li>「散戶慢進、價穩漲」舊劇本被改寫</li></ul></div>
-    <div class="team-card" style="border-color:rgba(234,179,8,0.4)"><div class="name">③ 週期振幅收斂</div><ul><li>連 Bitwise 都說「四年週期已死、漲幅收斂」</li><li>「輕鬆 2–3 倍」假設可能過時</li></ul></div>
+    <div class="team-card"><div class="name">🎚️ DAT 槓桿須知</div><ul><li>折價買＝免費槓桿</li><li>普通股次級於 $15.5B 特別股</li><li class="pos">無斷頭（勝過期權/保證金）</li><li>BMNR 500 億股稀釋風險</li></ul></div>
+    <div class="team-card"><div class="name">💵 STRC（持有人）</div><ul><li class="pos">~11.5% 月息、貼 $100</li><li class="neg">放棄 BTC 全部上行</li><li class="neg">可遞延、可被 call</li></ul></div>
+    <div class="team-card"><div class="name">💵 STRC（對你=普通股）</div><ul><li class="pos">永續無到期牆＝降破產風險</li><li class="neg">~$8–9億/年現金在你之前抽走</li><li>博升值該買普通股、非 STRC</li></ul></div>
   </div>
-  <div class="analysis-box analysis-bear" style="margin-top:8px;">
-    <b>對 MSTR/BMNR 的直接含義：</b>你選了 beta 最高、反身性最強的工具，偏在反身性點燃＋邊際買盤撤退時。恐慌時 mNAV 可再殺到 0.5x（封閉式結構常態）——<b>就算 BTC 不跌，折價擴大也能讓股價再 -30%</b>。<b>分批用收入囤、子彈留訊號＝可以；借錢梭哈＝不行。</b>
-  </div>
-  <p style="font-size:0.78rem;color:var(--text3)">來源：Strategy 424B5/SEC（STRC 條款）、CoinDesk/VanEck（資本結構）、Cointelegraph/247WallSt（礦股）、rwatimes/cryptotimes/bitcoin.com（RWA）、Bitwise/Cowen。非投資建議。</p>
+  <div class="analysis-box analysis-yellow"><b>判讀：</b>RWA/穩定幣制度化＝<b>「不會歸零」</b>的結構支撐（基本面偏正），但對 MSTR/BMNR 是另一條賽道、不直接拉抬。疊加 DAT 反身性風險 → 基本面溫度 <b>−2</b>（價格相對發展便宜，但風險未消）。</div>
+  <div class="disclaimer">不構成投資建議。加密與相關個股可能大幅虧損。數據為 2026/6 公開來源交叉比對。指標數值由每日監控自權威平台抓取，靜態頁部分為示意。舊版報告留 git 歷史。</div>
 </div>
 </div>
 
