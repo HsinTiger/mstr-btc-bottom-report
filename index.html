@@ -169,12 +169,13 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 
 <div class="tabs">
   <button class="tab-btn active" data-tab="overview">🎯 總覽</button>
+  <button class="tab-btn" data-tab="trend">📈 歷史趨勢</button>
   <button class="tab-btn" data-tab="chips">🪙 籌碼面</button>
   <button class="tab-btn" data-tab="tech">📈 技術面</button>
   <button class="tab-btn" data-tab="cycle">📉 週期遞減</button>
   <button class="tab-btn" data-tab="senti">😱 市場情緒</button>
   <button class="tab-btn" data-tab="fund">🏛️ 基本面發展</button>
-  <button class="tab-btn" data-tab="yt">📺 招財貓 vs 我們</button>
+  <button class="tab-btn" data-tab="yt">📺 KOL 觀點 vs 我們</button>
 </div>
 
 <!-- ===== 總覽 ===== -->
@@ -264,6 +265,21 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     </tbody>
   </table>
   <p style="font-size:0.74rem;color:var(--text3)">原則：主來源為機構/鏈上級權威；備援為交叉驗證或免費替代。發現主來源失準或停更時，改用備援並更新監控 prompt 的對應平台名。</p>
+</div>
+</div>
+
+<!-- ===== 歷史趨勢 ===== -->
+<div id="tab-trend" class="tab-content">
+<div class="section">
+  <h2>📈 五維綜合溫度 — 歷史趨勢</h2>
+  <p style="font-size:0.83rem">追蹤<b>我們自己的綜合評分</b>隨時間怎麼走——是<b>朝投降底（往下）</b>、<b>朝狂熱頂（往上）</b>，還是<b>卡在僵局（橫盤）</b>。每日監控自動 append 一筆。</p>
+  <div class="chart-card">
+    <div class="chart-title">綜合溫度走勢（−10 投降底 → +10 狂熱頂）</div>
+    <svg id="trendChart" viewBox="0 0 700 260" width="100%"></svg>
+    <div id="trendNote" style="font-size:0.8rem;color:var(--text2);text-align:center;margin-top:8px">載入中…</div>
+  </div>
+  <div class="stat-grid" id="trendStats"></div>
+  <p style="font-size:0.74rem;color:var(--text3)">資料：<code>data/history.json</code>（每日監控 append）。溫度為五維平均訊號分，非價格預測；目前樣本少，趨勢需累積數週才明顯。</p>
 </div>
 </div>
 
@@ -429,14 +445,27 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 <!-- ===== 招財貓 vs 我們 ===== -->
 <div id="tab-yt" class="tab-content">
 <div class="section">
-  <h2>📺 招財貓觀點 vs 我們的質疑</h2>
+  <h2>📺 KOL 觀點 vs 我們的質疑</h2>
   <div class="srcbar">
-    <span class="src">頻道 <b>加密招财猫</b> @luckycatcrypto</span>
     <span class="src">追蹤源 <b>YouTube RSS</b>（每日監控偵測上新）</span>
     <span class="src">字幕分析 <b>本地 yt-dlp</b>（最可靠）</span>
   </div>
 
-  <h3>最新影片</h3>
+  <h3>追蹤中的 5 位 KOL</h3>
+  <table>
+    <thead><tr><th>頻道</th><th>更新規則</th><th>連結</th></tr></thead>
+    <tbody>
+      <tr><td><b>加密招财猫</b></td><td>每片</td><td><a href="https://youtube.com/@luckycatcrypto" target="_blank">@luckycatcrypto</a></td></tr>
+      <tr><td><b>直男說 G哥</b></td><td>每週四 個人片</td><td><a href="https://youtube.com/@mens.talk.official" target="_blank">@mens.talk.official</a></td></tr>
+      <tr><td><b>區塊鏈大隊長</b></td><td>每支短線（日更）</td><td><a href="https://youtube.com/@captain2024-t3r" target="_blank">@captain2024-t3r</a></td></tr>
+      <tr><td><b>區塊鏈日報</b></td><td>每週三 唯一公開片</td><td><a href="https://youtube.com/@blockchaindailynews" target="_blank">@blockchaindailynews</a></td></tr>
+      <tr><td><b>邦妮區塊鏈</b></td><td>每片</td><td><a href="https://youtube.com/@bonnieblockchain" target="_blank">@bonnieblockchain</a></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.78rem;color:var(--text3)">每日監控以各頻道 RSS 偵測上新、報告標 🆕；字幕深度分析由本地 yt-dlp 擷取後更新下方。已分析：加密招財貓；其餘待新片觸發。</p>
+
+  <h3>🐱 加密招財貓 — 深度分析</h3>
+  <h4>最新影片</h4>
   <div class="stat-grid">
     <div class="stat b"><div class="cap">日期</div><div class="big" style="font-size:1.1rem">6/13</div><div class="sub"><a href="https://youtu.be/lyl3QmlZ_10" target="_blank">《極度危險微策略｜別跟我抄底》</a></div></div>
     <div class="stat y"><div class="cap">他的最壞價</div><div class="big">$67</div><div class="sub">MSTR 極端壓力測試</div></div>
@@ -487,6 +516,34 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
+
+// ===== 歷史趨勢圖 =====
+fetch('data/history.json', {cache:'no-store'}).then(r=>r.json()).then(d=>{
+  const s=(d.series||[]).filter(x=>typeof x.composite==='number');
+  const note=document.getElementById('trendNote');
+  if(!s.length){ note.textContent='尚無歷史資料'; return; }
+  const W=700,H=260,pL=36,pR=16,pT=18,pB=30,n=s.length;
+  const X=i=> pL + (n<=1?(W-pL-pR)/2:(i/(n-1))*(W-pL-pR));
+  const Y=t=> pT + ((10-t)/20)*(H-pT-pB);
+  let g='';
+  g+=`<rect x="${pL}" y="${pT}" width="${W-pL-pR}" height="${Y(0)-pT}" fill="rgba(229,72,77,0.06)"/>`;
+  g+=`<rect x="${pL}" y="${Y(0)}" width="${W-pL-pR}" height="${H-pB-Y(0)}" fill="rgba(61,214,140,0.06)"/>`;
+  [10,6,0,-6,-10].forEach(t=>{ g+=`<line x1="${pL}" y1="${Y(t)}" x2="${W-pR}" y2="${Y(t)}" stroke="var(--border)"/>`;
+    g+=`<text x="${pL-6}" y="${Y(t)+3}" text-anchor="end" class="svg-axis">${t>0?'+'+t:t}</text>`; });
+  g+=`<line x1="${pL}" y1="${Y(0)}" x2="${W-pR}" y2="${Y(0)}" stroke="var(--border2)" stroke-width="1.5"/>`;
+  g+=`<polyline points="${s.map((x,i)=>X(i)+','+Y(x.composite)).join(' ')}" fill="none" stroke="var(--blue)" stroke-width="2.5"/>`;
+  s.forEach((x,i)=>{ g+=`<circle cx="${X(i)}" cy="${Y(x.composite)}" r="3.5" fill="var(--blue2)"/>`;
+    if(i===0||i===n-1||i===Math.floor((n-1)/2)) g+=`<text x="${X(i)}" y="${H-pB+16}" text-anchor="middle" class="svg-axis">${x.date.slice(5)}</text>`; });
+  const last=s[n-1]; g+=`<text x="${X(n-1)}" y="${Y(last.composite)-9}" text-anchor="end" class="svg-lbl">${last.composite>0?'+'+last.composite:last.composite}</text>`;
+  document.getElementById('trendChart').innerHTML=g;
+  const delta=last.composite-s[0].composite;
+  const dir = delta<=-1.5 ? '↓ 朝投降底發展（轉冷，接近第1等份）' : delta>=1.5 ? '↑ 朝狂熱頂發展（轉熱，留意止盈）' : '→ 橫盤僵局（區間內等訊號）';
+  note.innerHTML=`區間 ${s[0].date} → ${last.date}　｜　綜合溫度 ${s[0].composite} → <b>${last.composite}</b>　｜　趨勢：<b>${dir}</b>`;
+  const dims=[['chips','🪙 籌碼'],['tech','📈 技術'],['cycle','📉 週期'],['senti','😱 情緒'],['fund','🏛️ 基本']];
+  let st=''; dims.forEach(([k,nm])=>{ const v=last[k]; if(typeof v==='number'){ const cls=v<=-3?'g':(v>=2?'r':'y');
+    st+=`<div class="stat ${cls}"><div class="cap">${nm}</div><div class="big">${v>0?'+'+v:v}</div><div class="sub">最新 ${last.date.slice(5)}</div></div>`; } });
+  document.getElementById('trendStats').innerHTML=st;
+}).catch(()=>{ const el=document.getElementById('trendNote'); if(el) el.textContent='歷史資料載入失敗（須由 GitHub Pages 線上開啟才能讀 data/history.json）'; });
 </script>
 </body>
 </html>
