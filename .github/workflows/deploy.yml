@@ -1,0 +1,77 @@
+name: Deploy dashboard + Quartz wiki to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Clone Quartz v4
+        run: git clone --depth 1 https://github.com/jackyzha0/quartz.git quartz-tmp
+
+      - name: Install Quartz
+        run: cd quartz-tmp && (npm ci || npm install) --no-audit --no-fund
+
+      - name: Inject our wiki content
+        run: |
+          rm -rf quartz-tmp/content
+          mkdir -p quartz-tmp/content
+          cp -R wiki/. quartz-tmp/content/
+          # schema/manifest 不需當頁面（原檔仍留在 repo/wiki/）
+          rm -f quartz-tmp/content/CLAUDE.md quartz-tmp/content/manifest.json
+
+      - name: Configure Quartz (title + subpath baseUrl)
+        run: |
+          cd quartz-tmp
+          perl -0pi -e 's/pageTitle:\s*"[^"]*"/pageTitle: "幣圈投資 Wiki"/' quartz.config.ts
+          perl -0pi -e 's|baseUrl:\s*"[^"]*"|baseUrl: "hsintiger.github.io/mstr-btc-bottom-report/kb"|' quartz.config.ts
+
+      - name: Build Quartz
+        run: cd quartz-tmp && npx quartz build
+
+      - name: Assemble site (dashboard at root + Quartz at /kb)
+        run: |
+          mkdir -p _site
+          rsync -a --exclude '.git' --exclude 'quartz-tmp' --exclude '_site' --exclude 'node_modules' ./ _site/
+          rm -rf _site/kb
+          mkdir -p _site/kb
+          cp -R quartz-tmp/public/. _site/kb/
+          touch _site/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
