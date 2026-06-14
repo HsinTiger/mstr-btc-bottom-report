@@ -141,14 +141,22 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 .target .d { font-size:0.8rem; color:var(--text2); margin-top:4px; }
 
 @media (max-width: 640px) {
-  .container { padding: 16px 14px 60px; }
-  .hero { padding: 26px 18px; }
-  .hero h1 { font-size: 1.35rem; }
-  .section { padding: 18px; }
-  table { font-size: 0.74rem; }
-  th, td { padding: 7px 7px; }
+  .container { padding: 14px 12px 60px; }
+  .hero { padding: 24px 16px; }
+  .hero h1 { font-size: 1.3rem; }
+  .section { padding: 16px 14px; }
+  .section h2 { font-size: 1.1rem; flex-wrap: wrap; }
+  .section h3 { font-size: 0.95rem; }
+  /* 寬表格在手機上自己可橫向卷動，不撐破版面 */
+  table { font-size: 0.76rem; display: block; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+  th, td { padding: 7px 8px; }
   .tab-btn { padding: 8px 11px; font-size: 0.76rem; }
   .kpi .value { font-size: 1.3rem; }
+  .target .z { font-size: 1.5rem; }
+  .stat .big { font-size: 1.25rem; }
+  .score .nm { width: 92px; font-size: 0.78rem; }
+  .srcbar { gap: 5px; }
+  .src { font-size: 0.68rem; }
 }
 </style>
 </head>

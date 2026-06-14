@@ -61,6 +61,8 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
   .main h1{font-size:1.4rem;}
   .right{position:static;height:auto;border-left:none;border-top:1px solid var(--border);}
   #graph{height:300px;}
+  .md table{display:block;overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;font-size:0.78rem;}
+  .md h1{font-size:1.4rem;} .md h2{font-size:1.05rem;}
 }
 </style>
 </head>
@@ -155,6 +157,7 @@ function buildGraph(){
 function load(slug){
   const p=PAGES[slug]; if(!p)return; location.hash=slug;
   let t=p.text.replace(/^---\n[\s\S]*?\n---\n/,'');               // strip frontmatter
+  t=t.replace(/^\s*#\s+.+\n/,'');                                  // strip duplicate H1 (pgTitle 已顯示)
   t=t.replace(slugRe,(m,s,al)=>{const tg=PAGES[s];const lbl=al||(tg?tg.title:s);return `<a class="wl" data-slug="${s}">${lbl}</a>`;});
   document.getElementById('pgTitle').textContent=p.title;
   document.getElementById('pgCrumb').textContent=p.group+' / '+p.path;
