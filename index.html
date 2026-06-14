@@ -87,6 +87,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
 .disclaimer { padding: 15px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text3); font-size: 0.78rem; text-align: center; margin-top: 18px; line-height: 1.6; }
 code { font-family: var(--mono); font-size: 0.82rem; background: var(--surface3); color: var(--blue2); padding: 2px 6px; border-radius: 5px; }
+a { color: var(--blue2); text-decoration: none; } a:hover { text-decoration: underline; }
+.srctbl td { font-size: 0.82rem; } .srctbl .dim { font-weight: 650; color: var(--text); white-space: nowrap; }
+.srctbl .alt { color: var(--text3); font-size: 0.78rem; }
 
 .alloc-legend { display:flex; flex-wrap:wrap; gap:10px; font-size:0.8rem; margin-top:4px; color: var(--text2); }
 .alloc-legend span { display:flex; align-items:center; gap:6px; }
@@ -219,6 +222,47 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     </div>
   </div>
   <div class="analysis-box analysis-yellow" style="margin-top:14px">📡 <b>每日監控</b>（08:00 台北）：抓五維數據 → 輸出「BTC/ETH 溫度｜ETH/BTC｜配置｜行動」，commit 進 monitor-log.md。</div>
+</div>
+
+<div class="section">
+  <h2>🗂️ 五維權威數據源總表</h2>
+  <p style="font-size:0.82rem">每維數據都先溯<b>權威平台</b>再判讀。主來源為預設，備援可定期輪換（換來源時同步更新每日監控 prompt）。</p>
+  <table class="srctbl">
+    <thead><tr><th>維度</th><th>主要指標</th><th>主來源（權威）</th><th>備援 / 可替換</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="dim">🪙 籌碼面</td>
+        <td>交易所存量、鯨魚比、LTH/STH、ETF 流、funding</td>
+        <td><a href="https://cryptoquant.com" target="_blank">CryptoQuant</a> · <a href="https://glassnode.com" target="_blank">Glassnode</a></td>
+        <td class="alt"><a href="https://coinglass.com" target="_blank">Coinglass</a> · <a href="https://farside.co.uk/btc/" target="_blank">Farside</a> · <a href="https://sosovalue.com" target="_blank">SoSoValue</a> · IntoTheBlock</td>
+      </tr>
+      <tr>
+        <td class="dim">📈 技術面</td>
+        <td>價/200日均線、MVRV-Z、Mayer、Pi Cycle、NUPL</td>
+        <td><a href="https://www.tradingview.com" target="_blank">TradingView</a> · <a href="https://www.bitcoinmagazinepro.com" target="_blank">Bitcoin Magazine Pro</a></td>
+        <td class="alt"><a href="https://charts.checkonchain.com" target="_blank">CheckOnChain</a> · <a href="https://www.lookintobitcoin.com" target="_blank">LookIntoBitcoin</a> · Barchart</td>
+      </tr>
+      <tr>
+        <td class="dim">📉 週期遞減</td>
+        <td>距 ATH 回撤%、漲跌幅遞減、底部區</td>
+        <td><a href="https://www.bitcoinmagazinepro.com" target="_blank">Bitcoin Magazine Pro</a> · <a href="https://charts.bitbo.io" target="_blank">Bitbo</a></td>
+        <td class="alt"><a href="https://intothecryptoverse.com" target="_blank">Cowen / IntoTheCryptoverse</a> · <a href="https://www.lookintobitcoin.com" target="_blank">LookIntoBitcoin</a> · TradeThatSwing</td>
+      </tr>
+      <tr>
+        <td class="dim">😱 市場情緒</td>
+        <td>Fear &amp; Greed、社群情緒、多空比</td>
+        <td><a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank">Alternative.me</a> · <a href="https://santiment.net" target="_blank">Santiment</a></td>
+        <td class="alt"><a href="https://coinglass.com" target="_blank">Coinglass</a> · <a href="https://trends.google.com" target="_blank">Google Trends</a> · The Tie</td>
+      </tr>
+      <tr>
+        <td class="dim">🏛️ 基本面發展</td>
+        <td>RWA 規模、穩定幣供給、ETF AUM、DAT 財庫</td>
+        <td><a href="https://www.coinbase.com/institutional/research-insights" target="_blank">Coinbase 報告</a> · <a href="https://www.rwa.xyz" target="_blank">RWA.xyz</a></td>
+        <td class="alt"><a href="https://defillama.com" target="_blank">DeFiLlama</a> · <a href="https://sosovalue.com" target="_blank">SoSoValue</a> · <a href="https://www.developerreport.com" target="_blank">Electric Capital</a> · <a href="https://stockanalysis.com" target="_blank">stockanalysis.com</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.74rem;color:var(--text3)">原則：主來源為機構/鏈上級權威；備援為交叉驗證或免費替代。發現主來源失準或停更時，改用備援並更新監控 prompt 的對應平台名。</p>
 </div>
 </div>
 
