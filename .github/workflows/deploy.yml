@@ -10,6 +10,10 @@ permissions:
   pages: write
   id-token: write
 
+# 強制 JS actions 跑 Node 24，消除 Node 20 淘汰警告
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: pages
   cancel-in-progress: true
