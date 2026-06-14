@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>幣圈投資 LLM Wiki</title>
 <style>
-:root{--bg:#0a0a0a;--surface:#0f0f0f;--surface2:#141414;--surface3:#1c1c1c;--border:#232323;--border2:#2e2e2e;
---text:#ededed;--text2:#9b9b9b;--text3:#6a6a6a;--blue:#6ea8fe;--green:#3dd68c;--purple:#b78cf7;--cyan:#3bc9db;
+:root{--bg:#e7e3da;--surface:#f1eee8;--surface2:#eae6dd;--surface3:#ddd6c9;--border:#d3ccbd;--border2:#beb6a3;
+--text:#44403a;--text2:#736c60;--text3:#9a9183;--ink:#34312b;--blue:#587888;--green:#6b8260;--purple:#8d7e98;--cyan:#6f968d;
 --mono:ui-monospace,'SF Mono','Menlo',monospace;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;}
@@ -19,7 +19,7 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
 .side .grp{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);margin:16px 0 6px;font-weight:700;}
 .side a.nav{display:block;padding:5px 9px;border-radius:7px;color:var(--text2);font-size:0.85rem;}
 .side a.nav:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
-.side a.nav.active{background:var(--surface3);color:#fff;box-shadow:inset 0 0 0 1px var(--border2);}
+.side a.nav.active{background:var(--surface3);color:var(--ink);box-shadow:inset 0 0 0 1px var(--border2);}
 .side .home{display:inline-block;margin-top:18px;font-size:0.76rem;color:var(--text3);}
 /* content */
 .main{padding:34px 40px;max-width:760px;}
@@ -33,7 +33,7 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
 .md th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border2);color:var(--text3);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;}
 .md td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;}
 .md code{font-family:var(--mono);font-size:0.82rem;background:var(--surface3);color:var(--blue);padding:2px 6px;border-radius:5px;}
-.md strong,.md b{color:#fff;font-weight:650;}
+.md strong,.md b{color:var(--ink);font-weight:650;}
 .md a.wl{color:var(--purple);border-bottom:1px dashed rgba(183,140,247,0.4);} .md a.wl:hover{text-decoration:none;border-bottom-style:solid;}
 /* right */
 .right{border-left:1px solid var(--border);padding:18px 16px;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);}
@@ -46,7 +46,7 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
 .legend span{display:flex;align-items:center;gap:4px;} .legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
 .note{padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:0.8rem;}
 /* mobile top bar (hidden on desktop) */
-.topbar{display:none;position:sticky;top:0;z-index:150;align-items:center;gap:12px;padding:11px 16px;background:rgba(15,15,15,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+.topbar{display:none;position:sticky;top:0;z-index:150;align-items:center;gap:12px;padding:11px 16px;background:rgba(241,238,232,0.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
 .topbar .burger{font-size:1.3rem;background:none;border:none;color:var(--text);cursor:pointer;line-height:1;}
 .topbar .tt{font-weight:800;font-size:1rem;letter-spacing:-0.02em;}
 .backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:140;}
@@ -104,7 +104,7 @@ function toggleSide(open){ side.classList.toggle('open',open); backdrop.classLis
 document.getElementById('burger').onclick=()=>toggleSide(!side.classList.contains('open'));
 backdrop.onclick=()=>toggleSide(false);
 
-const GCOL={'總述':'#6ea8fe','概念':'#b78cf7','標的':'#3dd68c','來源':'#3bc9db','維護':'#6a6a6a'};
+const GCOL={'總述':'#587888','概念':'#8d7e98','標的':'#6b8260','來源':'#6f968d','維護':'#9a9183'};
 let PAGES={}, MAN=[], EDGES=[];
 const slugRe=/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
 
@@ -120,7 +120,8 @@ fetch('wiki/manifest.json',{cache:'no-store'}).then(r=>r.json()).then(async m=>{
   const seen=new Set();
   Object.values(PAGES).forEach(p=>p.links.forEach(t=>{const k=[p.slug,t].sort().join('|'); if(!seen.has(k)){seen.add(k);EDGES.push({s:p.slug,t});}}));
   buildNav(); buildGraph();
-  const start=location.hash.replace('#','')||'overview';
+  window.addEventListener('hashchange',()=>{const s=decodeURIComponent(location.hash.replace('#',''));if(PAGES[s])load(s);});
+  const start=decodeURIComponent(location.hash.replace('#',''))||'overview';
   load(PAGES[start]?start:'overview');
 }).catch(e=>{ document.getElementById('pgBody').innerHTML='<div class="note">無法載入 wiki/manifest.json — 請在 GitHub Pages 線上開啟（本機 file:// 會被瀏覽器擋）。</div>'; });
 
@@ -129,7 +130,6 @@ function buildNav(){
   let h=''; Object.keys(groups).forEach(g=>{ h+=`<div class="grp">${g}</div>`;
     groups[g].forEach(p=>h+=`<a class="nav" data-slug="${p.slug}" href="#${p.slug}">${p.title}</a>`); });
   document.getElementById('nav').innerHTML=h;
-  document.querySelectorAll('.side a.nav').forEach(a=>a.onclick=e=>{e.preventDefault();load(a.dataset.slug);});
 }
 
 function buildGraph(){
@@ -147,11 +147,11 @@ function buildGraph(){
       n.x+=Math.max(-7,Math.min(7,n.vx));n.y+=Math.max(-7,Math.min(7,n.vy));n.vx*=0.85;n.vy*=0.85;
       n.x=Math.max(14,Math.min(W-14,n.x));n.y=Math.max(14,Math.min(H-14,n.y));});
   }
-  let g=''; EDGES.forEach(e=>{let a=nodes[idx[e.s]],b=nodes[idx[e.t]];if(a&&b)g+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#2e2e2e" stroke-width="1"/>`;});
+  let g=''; EDGES.forEach(e=>{let a=nodes[idx[e.s]],b=nodes[idx[e.t]];if(a&&b)g+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#c8c0b0" stroke-width="1"/>`;});
   nodes.forEach(n=>{g+=`<circle data-slug="${n.slug}" cx="${n.x}" cy="${n.y}" r="5" fill="${GCOL[n.group]||'#6a6a6a'}"/>`;
     g+=`<text x="${n.x}" y="${n.y-8}" text-anchor="middle">${n.title.slice(0,6)}</text>`;});
   document.getElementById('graph').innerHTML=g; window._nodes=nodes;
-  document.querySelectorAll('#graph circle').forEach(c=>c.onclick=()=>load(c.dataset.slug));
+  document.querySelectorAll('#graph circle').forEach(c=>c.onclick=()=>{location.hash=c.dataset.slug;});
 }
 
 function load(slug){
@@ -163,13 +163,13 @@ function load(slug){
   document.getElementById('pgCrumb').textContent=p.group+' / '+p.path;
   const body=document.getElementById('pgBody');
   body.innerHTML=(window.marked?marked.parse(t):('<pre>'+t+'</pre>'));
-  body.querySelectorAll('a.wl').forEach(a=>a.onclick=e=>{e.preventDefault();load(a.dataset.slug);});
+  body.querySelectorAll('a.wl').forEach(a=>a.onclick=e=>{e.preventDefault();location.hash=a.dataset.slug;});
   document.querySelectorAll('.side a.nav').forEach(a=>a.classList.toggle('active',a.dataset.slug===slug));
   document.querySelectorAll('#graph circle').forEach(c=>c.setAttribute('r',c.dataset.slug===slug?'7.5':'5'));
   // backlinks
   const back=Object.values(PAGES).filter(q=>q.links.includes(slug));
   document.getElementById('backlinks').innerHTML = back.length? back.map(q=>`<a data-slug="${q.slug}">← ${q.title}</a>`).join('') : '<div style="font-size:0.78rem;color:var(--text3)">（無）</div>';
-  document.querySelectorAll('#backlinks a').forEach(a=>a.onclick=e=>{e.preventDefault();load(a.dataset.slug);});
+  document.querySelectorAll('#backlinks a').forEach(a=>a.onclick=e=>{e.preventDefault();location.hash=a.dataset.slug;});
   toggleSide(false);
   window.scrollTo({top:0,behavior:'smooth'});
 }

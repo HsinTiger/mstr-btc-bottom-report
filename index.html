@@ -7,10 +7,11 @@
 <style>
 /* ===== Geist / Vercel-inspired minimal system ===== */
 :root {
-  --bg: #0a0a0a; --surface: #0f0f0f; --surface2: #141414; --surface3: #1c1c1c;
-  --border: #232323; --border2: #2e2e2e; --text: #ededed; --text2: #9b9b9b; --text3: #6a6a6a;
-  --blue: #3b82f6; --blue2: #6ea8fe; --red: #e5484d; --green: #3dd68c;
-  --yellow: #e9b949; --purple: #b78cf7; --orange: #f5853f; --cyan: #3bc9db;
+  /* 莫蘭迪簡約色系（warm muted） */
+  --bg: #e7e3da; --surface: #f1eee8; --surface2: #eae6dd; --surface3: #ddd6c9;
+  --border: #d3ccbd; --border2: #beb6a3; --text: #44403a; --text2: #736c60; --text3: #9a9183; --ink: #34312b;
+  --blue: #647f8e; --blue2: #587888; --red: #a8695c; --green: #6b8260;
+  --yellow: #9c8038; --purple: #8d7e98; --orange: #a5754f; --cyan: #6f968d;
   --mono: ui-monospace, 'SF Mono', 'Menlo', 'Roboto Mono', monospace;
   --r: 12px;
 }
@@ -20,7 +21,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Not
   background: var(--bg); color: var(--text); line-height: 1.65; font-size: 15px;
   font-variant-numeric: tabular-nums; }
 .container { max-width: 1040px; margin: 0 auto; padding: 28px 20px 80px; }
-b { font-weight: 650; color: #fff; }
+b { font-weight: 650; color: var(--ink); }
 
 .tabs { display: flex; gap: 4px; margin-bottom: 16px; overflow-x: auto; background: var(--surface);
   border-radius: var(--r); border: 1px solid var(--border); padding: 5px;
@@ -28,7 +29,7 @@ b { font-weight: 650; color: #fff; }
 .tab-btn { padding: 9px 14px; cursor: pointer; background: transparent; color: var(--text2);
   border: none; font-size: 0.82rem; font-weight: 550; white-space: nowrap; border-radius: 8px; transition: all 0.15s; }
 .tab-btn:hover { color: var(--text); background: var(--surface2); }
-.tab-btn.active { color: #fff; background: var(--surface3); box-shadow: inset 0 0 0 1px var(--border2); }
+.tab-btn.active { color: var(--ink); background: var(--surface3); box-shadow: inset 0 0 0 1px var(--border2); }
 .tab-content { display: none; animation: fade 0.25s ease; }
 .tab-content.active { display: block; }
 @keyframes fade { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
@@ -45,21 +46,21 @@ table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85r
 th { text-align: left; padding: 9px 11px; font-weight: 600; color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--border2); }
 td { padding: 10px 11px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
 tbody tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(255,255,255,0.02); }
+tr:hover td { background: rgba(0,0,0,0.03); }
 .num { text-align: right; font-family: var(--mono); }
 .neg { color: var(--red); font-weight: 600; }
 .pos { color: var(--green); font-weight: 600; }
 .warn { color: var(--yellow); font-weight: 600; }
 
 .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 999px; font-size: 0.74rem; font-weight: 550; border: 1px solid transparent; }
-.badge-red { background: rgba(229,72,77,0.10); color: #ff8a8d; border-color: rgba(229,72,77,0.22); }
+.badge-red { background: rgba(229,72,77,0.10); color: var(--red); border-color: rgba(229,72,77,0.22); }
 .badge-green { background: rgba(61,214,140,0.10); color: var(--green); border-color: rgba(61,214,140,0.22); }
 .badge-blue { background: rgba(59,130,246,0.10); color: var(--blue2); border-color: rgba(59,130,246,0.22); }
 .badge-yellow { background: rgba(233,185,73,0.10); color: var(--yellow); border-color: rgba(233,185,73,0.22); }
 .badge-purple { background: rgba(183,140,247,0.10); color: var(--purple); border-color: rgba(183,140,247,0.22); }
 
 .hero { text-align: left; padding: 40px 32px; background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); margin-bottom: 16px; }
-.hero h1 { font-size: 1.85rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 8px; }
+.hero h1 { font-size: 1.85rem; font-weight: 800; color: var(--ink); letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 8px; }
 .hero .sub { color: var(--text2); font-size: 0.95rem; font-weight: 450; }
 .hero .date { color: var(--text3); font-size: 0.8rem; margin-top: 4px; font-family: var(--mono); }
 .badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
@@ -75,7 +76,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .kpi { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color .18s; }
 .kpi:hover { border-color: var(--border2); }
 .kpi .label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
-.kpi .value { font-size: 1.55rem; font-weight: 750; margin: 4px 0 2px; letter-spacing: -0.02em; color: #fff; }
+.kpi .value { font-size: 1.55rem; font-weight: 750; margin: 4px 0 2px; letter-spacing: -0.02em; color: var(--ink); }
 .kpi .note { font-size: 0.74rem; color: var(--text3); }
 
 .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; margin: 14px 0; }
@@ -97,7 +98,7 @@ a { color: var(--blue2); text-decoration: none; } a:hover { text-decoration: und
 
 .vbadge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 650; }
 .vbadge-pass { background: rgba(61,214,140,0.12); color: var(--green); }
-.vbadge-fail { background: rgba(229,72,77,0.12); color: #ff8a8d; }
+.vbadge-fail { background: rgba(229,72,77,0.12); color: var(--red); }
 .vbadge-warn { background: rgba(233,185,73,0.12); color: var(--yellow); }
 
 .chart-card { background: var(--surface2); border:1px solid var(--border); border-radius:10px; padding:18px; margin:14px 0; }
@@ -108,18 +109,18 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 .svg-lbl { fill: var(--text); font-size:11px; font-weight:700; font-family:var(--mono); }
 .svg-sub { fill: var(--text2); font-size:9px; font-family:var(--mono); }
 
-.thermo { height: 28px; border-radius: 8px; margin: 12px 0 4px; background: linear-gradient(90deg, var(--green) 0%, #a3d977 30%, var(--yellow) 50%, var(--orange) 70%, var(--red) 100%); opacity:0.9; position: relative; }
+.thermo { height: 28px; border-radius: 8px; margin: 12px 0 4px; background: linear-gradient(90deg, var(--green) 0%, var(--green) 30%, var(--yellow) 50%, var(--orange) 70%, var(--red) 100%); opacity:0.9; position: relative; }
 .thermo-labels { display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text3); font-family:var(--mono); }
 .thermo-wrap { position: relative; padding-top: 28px; margin: 12px 0 4px; }
 .thermo-marker { position:absolute; top:0; transform:translateX(-50%); text-align:center; transition:left .4s; z-index:2; }
-.thermo-marker .pin { font-size:0.72rem; font-weight:750; color:#fff; background:var(--surface3); border:1px solid var(--border2); padding:2px 9px; border-radius:999px; white-space:nowrap; }
-.thermo-marker .tri { width:0; height:0; margin:3px auto 0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid #fff; }
+.thermo-marker .pin { font-size:0.72rem; font-weight:750; color:var(--ink); background:var(--surface3); border:1px solid var(--border2); padding:2px 9px; border-radius:999px; white-space:nowrap; }
+.thermo-marker .tri { width:0; height:0; margin:3px auto 0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid var(--ink); }
 .donut-wrap { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
 
 .stat-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:14px 0; }
 .stat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; border-left:3px solid var(--border2); }
 .stat .cap { font-size:0.68rem; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; font-weight:600; }
-.stat .big { font-size:1.45rem; font-weight:750; color:#fff; letter-spacing:-0.02em; margin:4px 0 2px; font-family:var(--mono); line-height:1.1; }
+.stat .big { font-size:1.45rem; font-weight:750; color:var(--ink); letter-spacing:-0.02em; margin:4px 0 2px; font-family:var(--mono); line-height:1.1; }
 .stat .sub { font-size:0.74rem; color:var(--text2); }
 .stat.g { border-left-color:var(--green); } .stat.r { border-left-color:var(--red); }
 .stat.y { border-left-color:var(--yellow); } .stat.b { border-left-color:var(--blue); } .stat.p { border-left-color:var(--purple); }
@@ -133,11 +134,11 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 .score:last-child { border:none; }
 .score .nm { width:128px; font-weight:600; font-size:0.84rem; color:var(--text); flex-shrink:0; }
 .score .track { flex:1; height:8px; border-radius:4px; position:relative; background:linear-gradient(90deg,var(--green),var(--yellow) 55%,var(--red)); opacity:0.55; }
-.score .pin { position:absolute; top:-3px; width:3px; height:14px; background:#fff; border-radius:2px; transform:translateX(-50%); }
+.score .pin { position:absolute; top:-3px; width:3px; height:14px; background:var(--ink); border-radius:2px; transform:translateX(-50%); }
 .score .tmp { width:46px; text-align:right; font-family:var(--mono); font-weight:700; font-size:0.85rem; flex-shrink:0; }
 
 .target { text-align:center; padding:20px; background:var(--surface2); border:1px solid var(--border2); border-radius:12px; margin:14px 0; }
-.target .z { font-size:1.9rem; font-weight:800; color:#fff; font-family:var(--mono); letter-spacing:-0.02em; }
+.target .z { font-size:1.9rem; font-weight:800; color:var(--ink); font-family:var(--mono); letter-spacing:-0.02em; }
 .target .d { font-size:0.8rem; color:var(--text2); margin-top:4px; }
 
 @media (max-width: 640px) {
@@ -329,10 +330,10 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <svg viewBox="0 0 340 96" width="100%">
       <defs><linearGradient id="bandG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--green)"/><stop offset="50%" stop-color="var(--yellow)"/><stop offset="100%" stop-color="var(--red)"/></linearGradient></defs>
       <rect x="20" y="46" width="300" height="18" rx="9" fill="url(#bandG)" opacity="0.85"/>
-      <line x1="56" y1="42" x2="56" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/><text x="56" y="82" text-anchor="middle" class="svg-axis">CVDD $48k</text>
-      <line x1="128" y1="42" x2="128" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/><text x="128" y="82" text-anchor="middle" class="svg-axis">已實現 $54k</text>
-      <line x1="270" y1="42" x2="270" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/><text x="270" y="82" text-anchor="middle" class="svg-axis">200日 $66k</text>
-      <polygon points="218,30 212,20 224,20" fill="#fff"/><rect x="190" y="6" width="56" height="15" rx="7" fill="var(--surface3)" stroke="var(--border2)"/><text x="218" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現在 $61.5k</text>
+      <line x1="56" y1="42" x2="56" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="56" y="82" text-anchor="middle" class="svg-axis">CVDD $48k</text>
+      <line x1="128" y1="42" x2="128" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="128" y="82" text-anchor="middle" class="svg-axis">已實現 $54k</text>
+      <line x1="270" y1="42" x2="270" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="270" y="82" text-anchor="middle" class="svg-axis">200日 $66k</text>
+      <polygon points="218,30 212,20 224,20" fill="var(--ink)"/><rect x="190" y="6" width="56" height="15" rx="7" fill="var(--surface3)" stroke="var(--border2)"/><text x="218" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現在 $61.5k</text>
     </svg>
   </div>
   <div class="stat-grid">
@@ -359,7 +360,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <div class="chart-card">
     <div class="chart-title">↗ 每輪 低→高 漲幅倍數（遞減，對數高度）</div>
     <svg viewBox="0 0 340 175" width="100%">
-      <defs><linearGradient id="upG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--green)"/><stop offset="100%" stop-color="#1f7a4d"/></linearGradient></defs>
+      <defs><linearGradient id="upG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--green)"/><stop offset="100%" stop-color="#4f6147"/></linearGradient></defs>
       <line x1="24" y1="140" x2="330" y2="140" class="svg-grid"/>
       <rect x="32" y="20" width="50" height="120" rx="3" fill="url(#upG)" opacity="0.55"/><text x="57" y="14" text-anchor="middle" class="svg-lbl" style="font-size:10px">575x</text><text x="57" y="155" text-anchor="middle" class="svg-axis">'11→13</text>
       <rect x="112" y="48" width="50" height="92" rx="3" fill="url(#upG)" opacity="0.7"/><text x="137" y="42" text-anchor="middle" class="svg-sub">130x</text><text x="137" y="155" text-anchor="middle" class="svg-axis">'15→17</text>
@@ -372,10 +373,10 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <div class="chart-card">
     <div class="chart-title">↘ 每輪 高→低 跌幅（同樣遞減）</div>
     <svg viewBox="0 0 340 170" width="100%">
-      <text x="78" y="28" text-anchor="end" class="svg-axis">2011</text><rect x="84" y="14" width="230" height="22" rx="3" fill="var(--red)" opacity="0.8"/><text x="320" y="28" class="svg-sub" style="fill:#fff">-93%</text>
-      <text x="78" y="60" text-anchor="end" class="svg-axis">'14–15</text><rect x="84" y="46" width="213" height="22" rx="3" fill="var(--red)" opacity="0.7"/><text x="303" y="60" class="svg-sub" style="fill:#fff">-86%</text>
-      <text x="78" y="92" text-anchor="end" class="svg-axis">2018</text><rect x="84" y="78" width="208" height="22" rx="3" fill="var(--red)" opacity="0.6"/><text x="298" y="92" class="svg-sub" style="fill:#fff">-84%</text>
-      <text x="78" y="124" text-anchor="end" class="svg-axis">2022</text><rect x="84" y="110" width="190" height="22" rx="3" fill="var(--red)" opacity="0.5"/><text x="280" y="124" class="svg-sub" style="fill:#fff">-77%</text>
+      <text x="78" y="28" text-anchor="end" class="svg-axis">2011</text><rect x="84" y="14" width="230" height="22" rx="3" fill="var(--red)" opacity="0.8"/><text x="320" y="28" class="svg-sub" style="fill:var(--ink)">-93%</text>
+      <text x="78" y="60" text-anchor="end" class="svg-axis">'14–15</text><rect x="84" y="46" width="213" height="22" rx="3" fill="var(--red)" opacity="0.7"/><text x="303" y="60" class="svg-sub" style="fill:var(--ink)">-86%</text>
+      <text x="78" y="92" text-anchor="end" class="svg-axis">2018</text><rect x="84" y="78" width="208" height="22" rx="3" fill="var(--red)" opacity="0.6"/><text x="298" y="92" class="svg-sub" style="fill:var(--ink)">-84%</text>
+      <text x="78" y="124" text-anchor="end" class="svg-axis">2022</text><rect x="84" y="110" width="190" height="22" rx="3" fill="var(--red)" opacity="0.5"/><text x="280" y="124" class="svg-sub" style="fill:var(--ink)">-77%</text>
       <text x="78" y="156" text-anchor="end" class="svg-axis">本輪推估</text><rect x="84" y="142" width="173" height="22" rx="3" fill="var(--yellow)"/><text x="263" y="156" class="svg-lbl" style="font-size:10px;fill:var(--yellow)">-65~-72%</text>
     </svg>
   </div>
