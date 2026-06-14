@@ -29,7 +29,7 @@ jobs:
           node-version: 22
 
       - name: Clone Quartz v4
-        run: git clone --depth 1 https://github.com/jackyzha0/quartz.git quartz-tmp
+        run: git clone --depth 1 --branch v4 https://github.com/jackyzha0/quartz.git quartz-tmp
 
       - name: Install Quartz
         working-directory: quartz-tmp
