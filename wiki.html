@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幣圈投資 LLM Wiki</title>
+<style>
+:root{--bg:#0a0a0a;--surface:#0f0f0f;--surface2:#141414;--surface3:#1c1c1c;--border:#232323;--border2:#2e2e2e;
+--text:#ededed;--text2:#9b9b9b;--text3:#6a6a6a;--blue:#6ea8fe;--green:#3dd68c;--purple:#b78cf7;--cyan:#3bc9db;
+--mono:ui-monospace,'SF Mono','Menlo',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:15px;}
+a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
+.wrap{display:grid;grid-template-columns:230px 1fr 300px;min-height:100vh;}
+/* sidebar */
+.side{border-right:1px solid var(--border);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);}
+.side .logo{font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;margin-bottom:4px;}
+.side .sub{font-size:0.72rem;color:var(--text3);margin-bottom:16px;font-family:var(--mono);}
+.side .grp{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);margin:16px 0 6px;font-weight:700;}
+.side a.nav{display:block;padding:5px 9px;border-radius:7px;color:var(--text2);font-size:0.85rem;}
+.side a.nav:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+.side a.nav.active{background:var(--surface3);color:#fff;box-shadow:inset 0 0 0 1px var(--border2);}
+.side .home{display:inline-block;margin-top:18px;font-size:0.76rem;color:var(--text3);}
+/* content */
+.main{padding:34px 40px;max-width:760px;}
+.main h1{font-size:1.7rem;font-weight:800;letter-spacing:-0.03em;margin:0 0 6px;}
+.crumb{font-size:0.74rem;color:var(--text3);font-family:var(--mono);margin-bottom:20px;}
+.md h2{font-size:1.2rem;margin:22px 0 8px;letter-spacing:-0.01em;border-bottom:1px solid var(--border);padding-bottom:5px;}
+.md h3{font-size:1.02rem;margin:18px 0 6px;color:var(--text);}
+.md p{margin:9px 0;color:var(--text2);}
+.md ul{margin:8px 0 8px 20px;color:var(--text2);} .md li{margin:3px 0;}
+.md table{width:100%;border-collapse:collapse;margin:12px 0;font-size:0.84rem;}
+.md th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border2);color:var(--text3);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;}
+.md td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;}
+.md code{font-family:var(--mono);font-size:0.82rem;background:var(--surface3);color:var(--blue);padding:2px 6px;border-radius:5px;}
+.md strong,.md b{color:#fff;font-weight:650;}
+.md a.wl{color:var(--purple);border-bottom:1px dashed rgba(183,140,247,0.4);} .md a.wl:hover{text-decoration:none;border-bottom-style:solid;}
+/* right */
+.right{border-left:1px solid var(--border);padding:18px 16px;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);}
+.right .ttl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);font-weight:700;margin:0 0 8px;}
+#graph{width:100%;height:268px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+#graph circle{cursor:pointer;transition:r .15s;} #graph circle:hover{r:7;}
+#graph text{font-size:8px;fill:var(--text2);font-family:var(--mono);pointer-events:none;}
+.bl{margin-top:18px;} .bl a{display:block;font-size:0.82rem;padding:4px 0;color:var(--text2);} .bl a:hover{color:var(--blue);}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:0.68rem;color:var(--text3);}
+.legend span{display:flex;align-items:center;gap:4px;} .legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
+.note{padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:0.8rem;}
+@media(max-width:900px){.wrap{grid-template-columns:1fr;}.side,.right{position:static;height:auto;border:none;border-bottom:1px solid var(--border);}.main{padding:22px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="side">
+    <div class="logo">📚 幣圈投資 Wiki</div>
+    <div class="sub">Karpathy LLM-Wiki 模式</div>
+    <div id="nav"></div>
+    <a class="home" href="index.html">← 回決策儀表</a>
+  </nav>
+  <main class="main">
+    <h1 id="pgTitle">載入中…</h1>
+    <div class="crumb" id="pgCrumb"></div>
+    <div class="md" id="pgBody"><div class="note">載入 Wiki 中…（須由 GitHub Pages 線上開啟才能讀 wiki/ 檔案）</div></div>
+  </main>
+  <aside class="right">
+    <div class="ttl">關係圖 Graph</div>
+    <svg id="graph" viewBox="0 0 300 268"></svg>
+    <div class="legend">
+      <span><i style="background:var(--blue)"></i>總述</span><span><i style="background:var(--purple)"></i>概念</span>
+      <span><i style="background:var(--green)"></i>標的</span><span><i style="background:var(--cyan)"></i>來源</span>
+      <span><i style="background:var(--text3)"></i>維護</span>
+    </div>
+    <div class="bl"><div class="ttl">反向連結 Backlinks</div><div id="backlinks"></div></div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script>
+const GCOL={'總述':'#6ea8fe','概念':'#b78cf7','標的':'#3dd68c','來源':'#3bc9db','維護':'#6a6a6a'};
+let PAGES={}, MAN=[], EDGES=[];
+const slugRe=/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+
+fetch('wiki/manifest.json',{cache:'no-store'}).then(r=>r.json()).then(async m=>{
+  MAN=m.pages;
+  await Promise.all(MAN.map(async p=>{
+    try{ const t=await (await fetch('wiki/'+p.path,{cache:'no-store'})).text();
+      const links=[...t.matchAll(slugRe)].map(x=>x[1]).filter(s=>MAN.some(q=>q.slug===s));
+      PAGES[p.slug]={...p,text:t,links:[...new Set(links)]};
+    }catch(e){ PAGES[p.slug]={...p,text:'(讀取失敗)',links:[]}; }
+  }));
+  // edges
+  const seen=new Set();
+  Object.values(PAGES).forEach(p=>p.links.forEach(t=>{const k=[p.slug,t].sort().join('|'); if(!seen.has(k)){seen.add(k);EDGES.push({s:p.slug,t});}}));
+  buildNav(); buildGraph();
+  const start=location.hash.replace('#','')||'overview';
+  load(PAGES[start]?start:'overview');
+}).catch(e=>{ document.getElementById('pgBody').innerHTML='<div class="note">無法載入 wiki/manifest.json — 請在 GitHub Pages 線上開啟（本機 file:// 會被瀏覽器擋）。</div>'; });
+
+function buildNav(){
+  const groups={}; MAN.forEach(p=>{(groups[p.group]=groups[p.group]||[]).push(p);});
+  let h=''; Object.keys(groups).forEach(g=>{ h+=`<div class="grp">${g}</div>`;
+    groups[g].forEach(p=>h+=`<a class="nav" data-slug="${p.slug}" href="#${p.slug}">${p.title}</a>`); });
+  document.getElementById('nav').innerHTML=h;
+  document.querySelectorAll('.side a.nav').forEach(a=>a.onclick=e=>{e.preventDefault();load(a.dataset.slug);});
+}
+
+function buildGraph(){
+  const W=300,H=268,nodes=MAN.map(p=>({slug:p.slug,title:p.title,group:p.group}));
+  const idx={}; nodes.forEach((n,i)=>idx[n.slug]=i);
+  nodes.forEach(n=>{n.x=40+Math.random()*(W-80);n.y=40+Math.random()*(H-80);n.vx=0;n.vy=0;});
+  for(let it=0;it<320;it++){
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+      let dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d2=dx*dx+dy*dy+0.01,d=Math.sqrt(d2),f=900/d2;
+      nodes[i].vx+=f*dx/d;nodes[i].vy+=f*dy/d;nodes[j].vx-=f*dx/d;nodes[j].vy-=f*dy/d;}
+    EDGES.forEach(e=>{let a=nodes[idx[e.s]],b=nodes[idx[e.t]];if(!a||!b)return;
+      let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)+0.01,f=(d-58)*0.03;
+      a.vx+=f*dx/d;a.vy+=f*dy/d;b.vx-=f*dx/d;b.vy-=f*dy/d;});
+    nodes.forEach(n=>{n.vx+=(W/2-n.x)*0.006;n.vy+=(H/2-n.y)*0.006;
+      n.x+=Math.max(-7,Math.min(7,n.vx));n.y+=Math.max(-7,Math.min(7,n.vy));n.vx*=0.85;n.vy*=0.85;
+      n.x=Math.max(14,Math.min(W-14,n.x));n.y=Math.max(14,Math.min(H-14,n.y));});
+  }
+  let g=''; EDGES.forEach(e=>{let a=nodes[idx[e.s]],b=nodes[idx[e.t]];if(a&&b)g+=`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#2e2e2e" stroke-width="1"/>`;});
+  nodes.forEach(n=>{g+=`<circle data-slug="${n.slug}" cx="${n.x}" cy="${n.y}" r="5" fill="${GCOL[n.group]||'#6a6a6a'}"/>`;
+    g+=`<text x="${n.x}" y="${n.y-8}" text-anchor="middle">${n.title.slice(0,6)}</text>`;});
+  document.getElementById('graph').innerHTML=g; window._nodes=nodes;
+  document.querySelectorAll('#graph circle').forEach(c=>c.onclick=()=>load(c.dataset.slug));
+}
+
+function load(slug){
+  const p=PAGES[slug]; if(!p)return; location.hash=slug;
+  let t=p.text.replace(/^---\n[\s\S]*?\n---\n/,'');               // strip frontmatter
+  t=t.replace(slugRe,(m,s,al)=>{const tg=PAGES[s];const lbl=al||(tg?tg.title:s);return `<a class="wl" data-slug="${s}">${lbl}</a>`;});
+  document.getElementById('pgTitle').textContent=p.title;
+  document.getElementById('pgCrumb').textContent=p.group+' / '+p.path;
+  const body=document.getElementById('pgBody');
+  body.innerHTML=(window.marked?marked.parse(t):('<pre>'+t+'</pre>'));
+  body.querySelectorAll('a.wl').forEach(a=>a.onclick=e=>{e.preventDefault();load(a.dataset.slug);});
+  document.querySelectorAll('.side a.nav').forEach(a=>a.classList.toggle('active',a.dataset.slug===slug));
+  document.querySelectorAll('#graph circle').forEach(c=>c.setAttribute('r',c.dataset.slug===slug?'7.5':'5'));
+  // backlinks
+  const back=Object.values(PAGES).filter(q=>q.links.includes(slug));
+  document.getElementById('backlinks').innerHTML = back.length? back.map(q=>`<a data-slug="${q.slug}">← ${q.title}</a>`).join('') : '<div style="font-size:0.78rem;color:var(--text3)">（無）</div>';
+  document.querySelectorAll('#backlinks a').forEach(a=>a.onclick=e=>{e.preventDefault();load(a.dataset.slug);});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
