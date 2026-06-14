@@ -174,6 +174,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <button class="tab-btn" data-tab="cycle">📉 週期遞減</button>
   <button class="tab-btn" data-tab="senti">😱 市場情緒</button>
   <button class="tab-btn" data-tab="fund">🏛️ 基本面發展</button>
+  <button class="tab-btn" data-tab="yt">📺 招財貓 vs 我們</button>
 </div>
 
 <!-- ===== 總覽 ===== -->
@@ -422,6 +423,56 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   </div>
   <div class="analysis-box analysis-yellow"><b>判讀：</b>RWA/穩定幣制度化＝<b>「不會歸零」</b>的結構支撐（基本面偏正），但對 MSTR/BMNR 是另一條賽道、不直接拉抬。疊加 DAT 反身性風險 → 基本面溫度 <b>−2</b>（價格相對發展便宜，但風險未消）。</div>
   <div class="disclaimer">不構成投資建議。加密與相關個股可能大幅虧損。數據為 2026/6 公開來源交叉比對。指標數值由每日監控自權威平台抓取，靜態頁部分為示意。舊版報告留 git 歷史。</div>
+</div>
+</div>
+
+<!-- ===== 招財貓 vs 我們 ===== -->
+<div id="tab-yt" class="tab-content">
+<div class="section">
+  <h2>📺 招財貓觀點 vs 我們的質疑</h2>
+  <div class="srcbar">
+    <span class="src">頻道 <b>加密招财猫</b> @luckycatcrypto</span>
+    <span class="src">追蹤源 <b>YouTube RSS</b>（每日監控偵測上新）</span>
+    <span class="src">字幕分析 <b>本地 yt-dlp</b>（最可靠）</span>
+  </div>
+
+  <h3>最新影片</h3>
+  <div class="stat-grid">
+    <div class="stat b"><div class="cap">日期</div><div class="big" style="font-size:1.1rem">6/13</div><div class="sub"><a href="https://youtu.be/lyl3QmlZ_10" target="_blank">《極度危險微策略｜別跟我抄底》</a></div></div>
+    <div class="stat y"><div class="cap">他的最壞價</div><div class="big">$67</div><div class="sub">MSTR 極端壓力測試</div></div>
+    <div class="stat g"><div class="cap">他的抄底區</div><div class="big">$48–56k</div><div class="sub">BTC → MSTR $94–110</div></div>
+    <div class="stat p"><div class="cap">他的上行夢</div><div class="big">10x</div><div class="sub">下輪牛市（2029）</div></div>
+  </div>
+
+  <h3>他的核心論點</h3>
+  <div class="team-grid">
+    <div class="team-card"><div class="name">🪜 分批抄底</div><ul><li>BTC $56/54/52/48k 四檔分批</li><li>MSTR 對應 $110/106/102/94</li><li>不猜絕對底、先學會虧</li></ul></div>
+    <div class="team-card"><div class="name">📐 估值公式</div><ul><li>MSTR = mNAV × 幣價 × 含幣量</li><li>2022 Luna 底 mNAV 0.635x</li><li>最壞 $67（極端中的極端）</li></ul></div>
+    <div class="team-card"><div class="name">⚠️ 他也承認的風險</div><ul><li>mNAV 受競爭壓縮（Strive SATA 13%）</li><li>含幣量敘事可能講不動</li><li>近期已「空轉多」、32 枚 BTC 非首次賣</li></ul></div>
+  </div>
+
+  <h3>🔨 我們的質疑（他的盲點）</h3>
+  <div class="stat-grid">
+    <div class="stat r"><div class="cap">盲點①</div><div class="big" style="font-size:1rem">含幣量釘死</div><div class="sub">熊市會被迫賣幣→縮水，三項該一起砸</div></div>
+    <div class="stat r"><div class="cap">盲點②</div><div class="big" style="font-size:1rem">地板太樂觀</div><div class="sub">用 2022 的 0.635x，但現特別股結構更危險</div></div>
+    <div class="stat r"><div class="cap">盲點③</div><div class="big" style="font-size:1rem">上下緣不對稱</div><div class="sub">下檔用極限、上檔給慷慨 3x＝美化風報比</div></div>
+    <div class="stat r"><div class="cap">盲點④</div><div class="big" style="font-size:1rem">漏 ETF 邊際買盤</div><div class="sub">只看鏈上+mNAV，漏今天的定價者</div></div>
+    <div class="stat r"><div class="cap">盲點⑤</div><div class="big" style="font-size:1rem">漏特別股次級</div><div class="sub">$15.5B 特別股先求償，普通股殘值更薄</div></div>
+  </div>
+
+  <h3>🤝 如何結合（採其長、補其短）</h3>
+  <table>
+    <thead><tr><th>議題</th><th>招財貓</th><th>我們的修正</th><th>採用</th></tr></thead>
+    <tbody>
+      <tr><td>抄底方式</td><td>四檔分批、不猜底、先算虧</td><td class="pos">一致（＝我們兩等份紀律）</td><td class="pos">✓ 採用他的紀律</td></tr>
+      <tr><td>抄底價區</td><td>BTC $48–56k</td><td>我們第 1 等份 BTC ≤$54k 起</td><td class="pos">✓ 高度重疊</td></tr>
+      <tr><td>最壞底部</td><td>MSTR $67（BTC $48k）</td><td class="neg">不夠壞 → BTC 底部區 $40–52k</td><td class="warn">採我們更保守值</td></tr>
+      <tr><td>上行目標</td><td>10x</td><td class="warn">漲幅遞減 → 自底 3–5x</td><td class="warn">打折看待</td></tr>
+      <tr><td>判斷工具</td><td>鏈上 + mNAV（2 層）</td><td class="pos">五維溫度（+ETF/槓桿/情緒/週期）</td><td class="pos">✓ 用五維扣板機</td></tr>
+    </tbody>
+  </table>
+  <div class="analysis-box analysis-review"><b>一句話：</b>採用他的<b>「分批接刀、先算虧」紀律與 $48–54k 抄底區</b>，但用<b>我們的五維溫度當扣板機</b>、目標底部用更保守的 <b>$40–52k</b>、上行<b>打折成 3–5x</b>。他是好的「節奏感」來源，我們補上「邊際買盤＋資本結構＋對稱風報」的嚴謹。</div>
+  <p style="font-size:0.74rem;color:var(--text3)">本專區隨他發新片更新：每日監控以 YouTube RSS 偵測上新並在報告提示；新片字幕由本地 yt-dlp 擷取後，更新此頁的「最新影片 / 核心論點 / 結合」。非投資建議。</p>
 </div>
 </div>
 
