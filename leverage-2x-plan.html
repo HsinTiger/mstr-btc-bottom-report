@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6/17 兩倍槓桿做多計畫 — 全面評估</title>
+<style>
+:root{
+  --bg:#e7e3da; --surface:#f1eee8; --card:#faf8f4; --line:#d8d2c6;
+  --text:#44403a; --ink:#34312b; --muted:#7a7468;
+  --blue:#647f8e; --red:#a8695c; --green:#6b8260; --yellow:#9c8038; --purple:#8d7e98;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang TC","Noto Sans TC",Helvetica,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:920px;margin:0 auto;padding:24px 18px 80px}
+a.back{color:var(--blue);text-decoration:none;font-size:14px}
+h1{font-size:26px;color:var(--ink);margin:14px 0 4px;letter-spacing:.5px}
+.date{color:var(--muted);font-size:13px;margin-bottom:20px}
+h2{font-size:20px;color:var(--ink);margin:34px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+h3{font-size:16px;color:var(--ink);margin:18px 0 8px}
+p{margin:10px 0;font-size:15px}
+.muted{color:var(--muted);font-size:13px}
+.verdict{background:var(--ink);color:#f1eee8;border-radius:14px;padding:22px 22px;margin:18px 0 8px}
+.verdict h2{color:#fff;border:none;margin:0 0 10px;font-size:19px}
+.verdict p{font-size:15px;color:#e7e3da}
+.verdict strong{color:#fff}
+.snap{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.snap .s{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+.snap .k{font-size:12px;color:var(--muted)}
+.snap .v{font-size:19px;font-weight:700;color:var(--ink);margin:3px 0}
+.snap .d{font-size:12px;font-weight:600}
+.dn{color:var(--red)} .up{color:var(--green)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px}
+.card h3{margin-top:0;display:flex;align-items:center;gap:8px}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;color:#fff}
+.tag.r{background:var(--red)} .tag.y{background:var(--yellow)} .tag.g{background:var(--green)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.row:last-child{border:none}
+.row b{color:var(--ink);font-weight:600}
+.prob{font-size:34px;font-weight:800;line-height:1;margin:6px 0 2px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface);color:var(--ink);font-size:12.5px;position:sticky;top:0}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.x{color:var(--red);font-weight:700} .ok{color:var(--green);font-weight:700} .warn{color:var(--yellow);font-weight:700}
+.box{background:var(--surface);border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 16px;margin:14px 0;font-size:14px}
+.box.red{border-color:var(--red)} .box.green{border-color:var(--green)}
+.kbig{font-size:15px}
+.note{font-size:12px;color:var(--muted);margin-top:30px;border-top:1px solid var(--line);padding-top:14px}
+ul{margin:8px 0 8px 20px} li{margin:5px 0;font-size:14px}
+.src a{color:var(--blue);font-size:12px;display:block;margin:3px 0;word-break:break-all}
+@media (max-width:680px){
+  .snap{grid-template-columns:repeat(2,1fr)}
+  .cards{grid-template-columns:1fr}
+  h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← 回到主儀表板</a>
+<h1>兩倍槓桿做多計畫 — 全面評估</h1>
+<div class="date">資料日期 2026-06-17｜目標部位 80% MSTR / 20% BMNR｜本金 128 萬台幣信貸（≈ $40,648）｜持倉 3 個月～4 年</div>
+
+<div class="verdict">
+  <h2>⚖️ 一句話結論（先講重點）</h2>
+  <p><strong>「2 倍槓桿」和「抱過這個週期底部」是互斥的兩件事。</strong>我們自己預測的 BTC $40–52k 恐慌瀑布，正好就是<strong>清算（perp）、保證金追繳（margin）、波動損耗（槓桿 ETF）</strong>三種機制的觸發點。五種工具沒有一種能在 2029 前活著走到payoff。</p>
+  <p>你昨天的決定（<strong>純現股、慢慢來</strong>）是對的：128 萬借款進現股，本身就是一份「無清算、不會被時間掃出場」的 ~1x 槓桿。真正能存活的額外槓桿上限是 <strong>MSTR 那段用深價內長天期 LEAP（~1.3x）</strong>，BMNR 期權太薄只能純現股。<strong>真 2x，否決。</strong></p>
+</div>
+
+<h2>Part 1 ｜ 再度腰斬的情境與機率</h2>
+<div class="snap">
+  <div class="s"><div class="k">BTC</div><div class="v">$65.7k</div><div class="d dn">距ATH −48%</div></div>
+  <div class="s"><div class="k">ETH</div><div class="v">$1,794</div><div class="d dn">距ATH −62%</div></div>
+  <div class="s"><div class="k">MSTR</div><div class="v">$122.81</div><div class="d dn">距ATH −70~77%</div></div>
+  <div class="s"><div class="k">BMNR</div><div class="v">$16.21</div><div class="d dn">距ATH −88%</div></div>
+</div>
+
+<div class="box">
+  <b>週期收益遞減 → 本輪高低點推估：</b>歷史 BTC 各輪「高→底」回撤逐輪縮小：−93%(2011) → −86%(2015) → −84%(2018) → −77%(2022) → <b>本輪推估 −59~−68%</b>。對應 ATH $126k → <b>底部區 $40–52k（中值 ~$46k）</b>。MSTR/BMNR 是 BTC/ETH 的<b>放大槓桿</b>，回撤會被 mNAV 進一步放大。
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h3>MSTR <span class="tag y">中度脆弱</span></h3>
+    <div class="muted" style="margin-bottom:8px">再度腰斬（$122→$61）機率</div>
+    <div class="prob" style="color:var(--yellow)">~40%</div>
+    <div class="muted" style="margin-bottom:10px">（若 BTC 真打到 $46k 瀑布，條件機率躍升 ~60–70%）</div>
+    <div class="row"><span>本輪 ATH（2024/11）</span><b>~$543</b></div>
+    <div class="row"><span>已回撤</span><b class="dn">約 −77%</b></div>
+    <div class="row"><span>上一輪 crypto 回撤</span><b>2021→22 約 −90%</b></div>
+    <div class="row"><span>BTC 持倉</span><b>843,706 顆</b></div>
+    <div class="row"><span>含幣量趨勢</span><b class="up">持續增長 ✓</b></div>
+  </div>
+  <div class="card">
+    <h3>BMNR <span class="tag r">高度脆弱</span></h3>
+    <div class="muted" style="margin-bottom:8px">再度腰斬（$16→$8）機率</div>
+    <div class="prob" style="color:var(--red)">~45%</div>
+    <div class="muted" style="margin-bottom:10px">（ETH beta 更高、史上曾 −94%、靠增發稀釋）</div>
+    <div class="row"><span>本輪 ATH（2025/07）</span><b>$135</b></div>
+    <div class="row"><span>已回撤</span><b class="dn">約 −88%</b></div>
+    <div class="row"><span>ETH 史上最大回撤</span><b>2018 約 −94%</b></div>
+    <div class="row"><span>ETH 持倉</span><b>5,620,754 顆（4.66%）</b></div>
+    <div class="row"><span>資本結構</span><b>幾乎無債，靠增發</b></div>
+  </div>
+</div>
+
+<h3>💣 最關鍵的發現：MSTR「便宜」是幻覺，腰斬是算術</h3>
+<div class="box red">
+  原始 mNAV（市值 ÷ BTC 淨值）看起來 ~0.66，像在「打折」。但<b>共同股東前面壓著一疊 $22B 的優先求償權</b>：$6.7B 可轉債 + $15.5B 永續優先股。把它扣掉後，歸屬共同股的淨值其實是：<br><br>
+  <span class="kbig">BTC 淨值 $55.4B − 債 $6.7B − 優先股 $15.5B = <b>$33.2B（每股 ~$107）</b></span><br><br>
+  也就是 MSTR $122 其實是用 <b>~1.1x</b> 在買「淨值」，不是 0.66x 的便宜貨。更要命的是這個算式在瀑布裡的走向：<br><br>
+  <b>若 BTC → $46k（我們自己的底部目標）：</b>BTC 淨值 = 843,706 × $46k = $38.8B，扣 $22.2B 優先求償 = <b>歸屬共同股僅 $16.6B → 每股 ~$55</b>。<br><br>
+  <span class="kbig"><b>$122 → $55 ≈ 腰斬，這幾乎是機械式結果，不是尾部風險。</b></span>共同股是 BTC 的<b>剩餘槓桿求償權</b>，BTC 跌它跌更兇。
+</div>
+
+<h3>🩺 財務健康：不會破產，但有一道新裂縫</h3>
+<div class="box">
+  <b>MSTR：</b>結構上很難破產——可轉債多為低/零息、到期遠（$1.05B 2027/2、$4.1B 2027–28，可用股票交割）；優先股永續、可遞延。<b>但</b>每年 $1.7B 現金優先股股息（2026 約 $904M，STRC $10.5B @ 變動 11.25%）是真實現金流出。當 mNAV &lt; 1，發股票的 ATM 飛輪會「反向稀釋」而失靈 → 股息要從別處來。<b>2026/5 Saylor 已首度鬆口「會考慮賣 BTC」</b>——這是 2020 以來「絕不賣」立場的第一道裂縫，也是把「中度脆弱」而非「無敵」貼在 MSTR 上的原因。
+</div>
+<div class="box">
+  <b>BMNR：</b>幾乎無傳統債（current ratio &gt;50、現金 ~$502M、總資產 ~$10.4B）→ 不會因到期債違約。<b>但</b>它年輕、未經完整熊市考驗、押注波動更大的 ETH、靠 ATM 大量增發稀釋，且 2026/6 剛發 $280M 的 9.5% 永續優先股開始疊息。mNAV 約 0.9（較貼近真實「打折」，因前面沒有 MSTR 那麼厚的優先層）。<b>高 beta、高稀釋、高彈性——上漲更猛，腰斬也更容易。</b>
+</div>
+
+<h2>Part 2 ｜ 五種「2 倍槓桿」工具全面解剖</h2>
+<div class="tbl-scroll">
+<table>
+<tr><th>工具</th><th>真實槓桿</th><th>出局機制（致命點）</th><th>成本</th><th>能做 BMNR？</th><th>判決</th></tr>
+<tr>
+  <td><b>① 派網 2x 永續</b></td>
+  <td>2.0x</td>
+  <td>≈ −45% 即清算；交易所<b>插針</b>風險；4 年持倉幾乎必被瀑布清算</td>
+  <td>資金費率：熊市起步可能 ~0 甚至收你錢；牛市成熟後年化常 <b>+10~50%</b>，頂部更兇</td>
+  <td class="x">✗ 派網是<b>純加密</b>交易所，沒有 MSTR/BMNR。你只能買 BTC/ETH 永續當替身 → 失去 mNAV 彈性</td>
+  <td class="x">✗ 多年持倉必死</td>
+</tr>
+<tr>
+  <td><b>② FT 長天期期權</b></td>
+  <td>深價內 ~1.3x／價平 ~2x</td>
+  <td>價平：theta + 到期歸零；深價內：只有到期風險（長天期可緩解）</td>
+  <td>深價內 carry ~5–6%/年；價平時間價值極貴</td>
+  <td class="warn">△ BMNR 期權<b>極薄</b>，長天期幾乎無報價，買賣價差/滑價巨大，開平倉都不便</td>
+  <td class="warn">△ 深價內可行但只 ~1.3x；要 2x 得用價平 → theta 吃掉你</td>
+</tr>
+<tr>
+  <td><b>③ FT 融資帳戶</b></td>
+  <td>最高 ~2x（Reg-T）</td>
+  <td><b>保證金追繳：2x 部位約 −29% 就被call</b>（MSTR 一週就能跌這麼多）→ 在瀑布最低點被強制平倉</td>
+  <td>FT 融資利率 ~9–13%/年（<b>疊在 2.72% 信貸之上 = 雙重利息</b>）</td>
+  <td class="x">✗ BMNR 多半不可融資或要求 100% 保證金</td>
+  <td class="x">✗ 瀑布時被追繳</td>
+</tr>
+<tr>
+  <td><b>④ FT 期貨</b></td>
+  <td>—</td>
+  <td>—</td>
+  <td>—</td>
+  <td class="x">✗ FT <b>不提供期貨</b>；MSTR/BMNR 也沒有單一個股期貨</td>
+  <td class="x">✗ 此路不通</td>
+</tr>
+<tr>
+  <td><b>⑤ 槓桿 ETF（MSTU/MSTX）</b></td>
+  <td>2x（每日重設）</td>
+  <td><b>波動損耗</b>：MSTR 年化波動 ~90% → 即使 MSTR 原地不動，一年中位數 −79%；實證 MSTR −53% 時 MSTU <b>−91%</b></td>
+  <td>內扣 ~0.9–1.3% + 巨大decay</td>
+  <td class="x">✗ 無 2x BMNR ETF</td>
+  <td class="x">✗ 多年持倉被 decay 慢慢絞死</td>
+</tr>
+<tr style="background:var(--surface)">
+  <td><b>＋ IBKR 融資</b>（替代）</td>
+  <td>最高 2x</td>
+  <td>同樣 ~−29% 追繳</td>
+  <td>~5.8%/年（<b>比 FT 便宜</b>）</td>
+  <td class="warn">△ 組合保證金或可</td>
+  <td class="x">✗ 融資最便宜，但一樣被掃出場</td>
+</tr>
+<tr style="background:var(--surface)">
+  <td><b>＋ Box-spread 融資</b>（替代）</td>
+  <td>彈性</td>
+  <td>過度槓桿才爆</td>
+  <td><b>~4–5%/年（最便宜）</b></td>
+  <td class="warn">△ 複雜、需組合保證金</td>
+  <td class="warn">△ 進階；只有在「低總槓桿」下才安全</td>
+</tr>
+</table>
+</div>
+
+<div class="box red">
+  <b>清算數學（為什麼 2x 撐不過我們自己的瀑布）：</b>2x 部位 = 毛額 $81k／自有 $40.5k／借 $40.5k。MSTR 維持保證金以 30% 估，當 (毛額−40.5k)/毛額 &lt; 30% 觸發追繳 → 毛額 &lt; $57.9k → <b>只要 −28.6% 就被 call</b>。永續清算約 −45%。<b>而我們在等的 $40–52k 瀑布，BTC 還要 −30% 上下、MSTR 可能 −40%+。</b>結論：你<b>等著抄底的那一根插針，正好就是把任何 2x 結構清算掉的那一根</b>。
+</div>
+
+<h2>Part 3 ｜ 決斷</h2>
+<div class="box green">
+  <p><b>1. 2x ＋ 抱過底，二選一，不可兼得。</b>任何能給你真 2x 的工具（永續/融資/槓桿ETF）都內建「強制出場」機制，且觸發點正是我們預期的瀑布。要 2x，就得當波段客（瀑布前減碼、瀑布後再加槓桿）——那跟「慢慢來、抱到 2029」直接矛盾。</p>
+  <p><b>2. 你的 128 萬借款進現股，本身就是槓桿。</b>那是你原本沒有的錢、變成曝險，而且<b>沒有清算、不會被時間歸零</b>。這是唯一能撐過我們自己預測的 −65% 瀑布、活到 2029 的槓桿型態。</p>
+  <p><b>3. 想再往上推一點，存活上限 ≈ 1.3–1.4x：</b>MSTR 那段用<b>深價內、2028 長天期 LEAP（~1.3x，只有到期風險、無追繳）</b>；BMNR 期權太薄，只能<b>純現股</b>。混合後約 1.3–1.4x，無 margin call。<b>真 2x 的每一條路，都會在 payoff 之前把你掃出場。</b></p>
+</div>
+
+<div class="note">
+  <b>說明：</b>本頁為個人投資研究紀錄，非投資建議。股數/市值/mNAV 為依公開資料推估（MSTR 流通股以 ~310M 估、BMNR 以近期增發後概估），實際以公司財報為準。價格為 2026-06-17 盤中延遲報價。槓桿、清算、資金費率與波動損耗皆會隨市況劇烈變動，實際下單前請重抓即時數據。
+  <div class="src" style="margin-top:10px">
+    <b>資料來源：</b>
+    <a href="https://www.strategy.com/press/strategy-announces-first-quarter-2026-financial-results_05-05-2026">Strategy Q1 2026 財報</a>
+    <a href="https://www.vaneck.com/us/en/blogs/digital-assets/matthew-sigel-deconstructing-strategy-mstr-premium-leverage-and-capital-structure/">VanEck — Deconstructing Strategy 資本結構</a>
+    <a href="https://www.sec.gov/Archives/edgar/data/1829311/000149315226028622/ex99-1.htm">BitMine 8-K（ETH 持倉/資產）</a>
+    <a href="https://finance.yahoo.com/news/leverage-decay-forced-mstu-91-145632892.html">MSTU 槓桿損耗 −91% 實證</a>
+    <a href="https://247wallst.com/investing/2026/06/15/mstx-vs-mstu-which-2x-microstrategy-etf-survives-the-volatility/">MSTX vs MSTU 波動損耗分析</a>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
