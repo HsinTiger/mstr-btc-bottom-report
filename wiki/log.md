@@ -2,6 +2,9 @@
 
 格式：`## [YYYY-MM-DD] op | 標題`。查詢：`grep "^## \[" log.md | tail`。
 
+## [2026-06-28] alert | 第1等份條件④確認觸發：MSTR mNAV(basic) 連續2日<0.6x
+BTC/ETH自昨日恐慌低點反彈+4.18%、F&G由極度恐懼13回升至約17–39區間，整體綜合溫度由−5.3回升至−4.5，距[[two-tranche-plan]]第1等份③門檻(−6)拉開距離。但MSTR mNAV(basic) 0.58x經CoinDesk 6/27報導重申、連續≥2個交易日由多源一致確認低於[[two-tranche-plan]]④的0.6x扳機，信心由「疑似待核實」提升至「中高確信」，**判定為第1等份(50%)已觸發**（單一維度財庫便宜，非五維共振投降）。MSTR本期無新增強制賣幣，6月初已反向買回1,550 BTC。更新 [[mstr]]、[[mnav-reflexivity]]、[[two-tranche-plan]]。
+
 ## [2026-06-27] alert | BTC破200DMA創年內新低、MSTR mNAV疑跌破0.6x扳機
 BTC跌破$60k、200DMA、年內新低$58,115，距ATH回撤52.3%；綜合溫度−5.3創本輪最深、距[[two-tranche-plan]]第1等份③門檻(−6)僅差0.7格。MSTR股價跌至兩年低$85.33，現價首度低於其BTC持倉均成本$66,384.56（估浮虧$10.6B），多源/自算mNAV落在0.58–0.63x，疑似首次觸及[[two-tranche-plan]]④的0.6x扳機，但因 WebFetch 持續403、來源口徑衝突，信心中低，標記待人工核實。更新 [[mstr]]、[[mnav-reflexivity]]、[[target-price]]。
 
