@@ -67,7 +67,7 @@ h2:first-child{margin-top:0}
 <!-- ================= 今日 ================= -->
 <section class="tab on" id="today">
   <div class="grid g4">
-    <div class="card"><h3>狀態機判定</h3><span class="badge s1">S1 深熊下跌</span><div class="mini" style="margin-top:6px">無投降三要件；反彈屬性待 L2 裁決</div></div>
+    <div class="card"><h3>狀態機判定</h3><span class="badge s1">S1 深熊下跌</span><div class="mini" style="margin-top:6px">位置變量多數已亮（LTH 吸籌／存量九年低／F&G 連週恐懼），事件變量未亮。<b>S3′ 無投降築底路徑監測中</b>：自 6/27 低點 $57k 起算 45 天不創新低＋ETF 連 10 日流入＋守 200WMA</div></div>
     <div class="card"><h3>BTC</h3><div class="big" id="px"></div><div class="mini" id="chg"></div></div>
     <div class="card"><h3>距 ATH（<span id="athd" class="mini"></span>）</h3><div class="big neg" id="ddv"></div><div class="mini" id="athdays"></div></div>
     <div class="card"><h3>情緒 F&G</h3><div class="big warn" id="fng"></div><div class="mini">Extreme Fear&lt;25</div></div>
@@ -118,6 +118,7 @@ h2:first-child{margin-top:0}
     <div class="card"><h3>近 30 天</h3><div class="big" id="m1"></div><div class="mini"></div></div>
   </div>
   <div class="note">每個觸發條件為什麼存在、為什麼是這個門檻 → 見「邏輯」分頁。標 [STALE·外部] 的欄位（MVRV-Z、溫度、mNAV、ETF 流）來自 7/4 雲端監控報告，非本頁即時計算——每日以 routine 報告為準。本頁可即時刷新的只有價格/均線/F&G/費率。</div>
+  <div class="verdict" style="margin-top:10px"><b>場內共識 vs 我們（07-06）：</b>追蹤的 4/4 KOL 全在等最後一跌 $40–52k——擁擠劇本。我們不押哪條路，雙路覆蓋：瀑布來 → S2 觸發執行；不來 → S3′ 路徑啟動第 1 等份 1/3 DCA。若 57–58k 再測且費率轉極端負：KOL 讀「最後一跌開始」、我們按回測讀「買點」（30 天中位 +16.5%）——30 天見分曉。完整推理見「邏輯」分頁。</div>
 </section>
 
 <!-- ================= 本週 ================= -->
@@ -279,14 +280,29 @@ h2:first-child{margin-top:0}
     <tr><td>山寨幣／meme／HYPE</td><td>市場多數</td><td>能力圈外＋阿貓自己都說「全網共識的財富密碼，爆發力已被提前透支」</td></tr>
   </tbody></table></div>
 
-  <h2>狀態機轉換條件（為什麼是這幾條）</h2>
-  <div class="card"><table><thead><tr><th>轉換</th><th>條件</th><th>設計原因</th></tr></thead><tbody>
-    <tr><td>S1→S2 投降</td><td>觸發（≤54k／MVRV-Z≤0／溫度≤−6／mNAV≤0.6）＋實現虧損放量＋（費率極端 或 F&amp;G≤10）</td><td>三要件缺一不可：只有價格觸發＝可能是陰跌中繼；要看到「有人認賠」＋「槓桿被清」才是投降。絕望道是回測補的漏</td></tr>
-    <tr><td>S2→S3 築底</td><td>≥14 天不創新低＋放量反轉陽線＋LTH 積累</td><td>時間（不再恐慌）×量能（有人接）×鏈上（聰明錢囤）三個獨立面向，防單一假訊號</td></tr>
-    <tr><td>S3→S4 確認</td><td>第 2 等份四條件全部</td><td>右側確認寧可貴、不可假——四條全亮才配得上第二個 50%</td></tr>
-    <tr><td>S4→S1 回退</td><td>更高低點破＋ETF 重回連 5 日流出</td><td>結構＋資金雙證偽，單一破位不轉向（防插針畫門）</td></tr>
-    <tr><td>判定紀律</td><td>只認日收盤，盤中不轉換</td><td>大隊長的「畫門」教材：盤中插針是主力語言，收盤才是市場語言</td></tr>
-  </tbody></table></div>
+  <h2>場內共識 vs 我們的獨立觀點（07-06，紅隊挑戰後 v1.1）</h2>
+  <div class="card">
+    <div class="verdict"><b>先承認回音室：</b>4/4 KOL 超級看空等 $40–52k 最後一跌，而我們的第 1 等份也在等 ≤$54k——觸發器本身泡在共識裡。獨立性只能來自下面四條（每條可證偽）。</div>
+    <table><thead><tr><th>#</th><th>獨立觀點</th><th>依據</th><th>怎麼證偽</th></tr></thead><tbody>
+      <tr><td>1</td><td><b>「最後一跌 $46k」是擁擠劇本</b>——全場買單疊同一區，按大隊長自己的反身性，最一致的劇本最難照演；替代路徑＝時間換空間橫盤磨底（S3′ 存在的理由）</td><td>3/3 KOL 目標＋我們遞減帶全在 $40–56k</td><td>Q4 前真瀑布到 $46k＝此條錯、共識對</td></tr>
+      <tr><td>2</td><td><b>同一根 K 線、相反解讀</b>：57–58k 再測＋費率極端負，KOL 讀「最後一跌開始」，我們讀「買點」</td><td>軸 D 回測：20 次事件、30 天中位 +16.5%~+26.9%</td><td>30 天內見分曉，輸贏記入月審計</td></tr>
+      <tr><td>3</td><td><b>ETF 週期可能已取代減半週期主宰振幅</b>：若本輪最深 −55%，全場 $46k 單永遠不成交。我們用 S3′＋淺底備案結構性押注「也許」，不當預測——<b>不需要看法正確也能完成布局</b>（KOL 賣觀點必須預測，我們管倉位只需覆蓋）</td><td>位置變量已亮：LTH 吸籌數週、存量九年低、6/27 低點 −54.9% 距投降代理一步、mNAV 曾 0.57x</td><td>§6.5 判據②：最終回撤 &lt;45% 成立→框架換軌</td></tr>
+      <tr><td>4</td><td><b>防為反而反</b>：KOL 4 月至今看空是對的。我們的獨立不是反方向，是反「擁擠價位」與反「必須等到那個價」的路徑依賴</td><td>科幣託 $90k 空單一路對</td><td>—（誠實註記）</td></tr>
+    </tbody></table>
+  </div>
+
+  <h2>狀態機轉換條件 v1.1（紅隊修正版：三類變量分裝）</h2>
+  <div class="card">
+    <div class="mini" style="margin-bottom:8px"><b>修正原則：</b>位置變量（慢，早已極值：LTH 吸籌／存量低／F&G 連週恐懼／MVRV-Z 低位）＝定義「在底部區域內」，只提高準備度、<b>不當扳機</b>；事件變量（瞬時）＝S2 扳機；確認變量（轉折後）＝S3/S4 扳機。<span class="warn">v1.0 勘誤：LTH 積累原列 S2→S3 要件——錯置，它已亮燈數週毫無鑑別力；降級為背景檢查，轉派發才是紅旗。</span></div>
+    <table><thead><tr><th>轉換</th><th>條件（全為事件/確認變量）</th><th>設計原因</th></tr></thead><tbody>
+      <tr><td>S1→S2 瀑布投降</td><td>觸發（≤54k／MVRV-Z≤0／溫度≤−6／mNAV≤0.6 任一）＋實現虧損放量＋（費率極端 或 F&amp;G≤10）</td><td>只有價格觸發可能是陰跌中繼；要看到「有人認賠」＋「槓桿被清」。絕望道是回測補的漏（2022/6 型）</td></tr>
+      <tr><td>S2→S3 投降後築底</td><td>≥14 天不創新低＋放量反轉陽線＋回踩縮量不破投降低點</td><td>時間×量能×結構三個獨立面向；LTH 條款移除（見勘誤），改由量能結構把關</td></tr>
+      <tr><td class="warn"><b>S1→S3′ 無投降築底（v1.1 新增）</b></td><td>位置變量已亮＋<b>≥45 天不創新低</b>（無瀑布就用更長時間證明）＋ETF 連 ≥10 日流入 或 週線放量反轉＋站回 200WMA 守 ≥14 天</td><td>共識劇本（最後一跌）不上演時的路徑——成立後第 1 等份 1/3 分三月 DCA、餘 2/3 留 S2/S4。<b>資金規則變更，待信哥開卡批准</b></td></tr>
+      <tr><td>S3/S3′→S4 確認</td><td>第 2 等份四條件全部</td><td>右側確認寧可貴、不可假</td></tr>
+      <tr><td>S4→S1 回退</td><td>更高低點破＋ETF 重回連 5 日流出</td><td>結構＋資金雙證偽，防插針畫門</td></tr>
+      <tr><td>判定紀律</td><td>只認日收盤，盤中不轉換</td><td>盤中插針是主力語言，收盤才是市場語言</td></tr>
+    </tbody></table>
+  </div>
 </section>
 
 <!-- ================= 交易紀錄 ================= -->
