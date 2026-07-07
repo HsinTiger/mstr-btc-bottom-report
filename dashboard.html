@@ -72,7 +72,7 @@ h2:first-child{margin-top:0}
 </head>
 <body>
 <header>
-  <h1>🧭 BTC 體系儀表板</h1>
+  <h1>🧭 MSTR / BMNR 每日追蹤</h1>
   <span class="sub"><a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/institutional-ic-memo-v3.md" style="color:#58a6ff;text-decoration:none">IC Memo v3 ↗</a>｜<a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/btc-trading-system.md" style="color:#58a6ff;text-decoration:none">體系文件 ↗</a>｜<a href="index.html" style="color:#58a6ff;text-decoration:none">主儀表（五維監控）↗</a>｜數據截至 <b id="genDate"></b>｜<span id="liveState">內嵌數據</span></span>
   <button class="ghost" onclick="refreshLive()">↻ 抓即時價</button>
 </header>
@@ -89,14 +89,16 @@ h2:first-child{margin-top:0}
 <!-- ================= 今日 ================= -->
 <section class="tab on" id="today">
   <div class="grid g4">
+    <div class="card"><h3>今日裁決</h3><div class="big neg">等待</div><div class="mini">小倉 2.5x MSTR 合約禁開；大倉現貨 4:1 觀察</div></div>
     <div class="card"><h3>狀態機判定</h3><span class="badge s1">S1 深熊下跌</span><div class="mini" style="margin-top:6px">位置變量多數已亮（LTH 吸籌／存量九年低／F&G 連週恐懼），事件變量未亮。<b>S3′ 無投降築底路徑監測中</b>：自 6/27 低點 $57k 起算 45 天不創新低＋ETF 連 10 日流入＋守 200WMA</div></div>
     <div class="card"><h3>BTC</h3><div class="big" id="px"></div><div class="mini" id="chg"></div></div>
     <div class="card"><h3>距 ATH（<span id="athd" class="mini"></span>）</h3><div class="big neg" id="ddv"></div><div class="mini" id="athdays"></div></div>
     <div class="card"><h3>情緒 F&G</h3><div class="big warn" id="fng"></div><div class="mini">Extreme Fear&lt;25</div></div>
+    <div class="card"><h3>大倉配置</h3><div class="big pos">4:1</div><div class="mini">MSTR 80% / BMNR 20%，1–4 年週期現貨</div></div>
   </div>
   <div class="grid g2" style="margin-top:12px">
     <div class="card">
-      <h3>第 1 等份「投降接刀」（任一成立即投 50%）</h3>
+      <h3>大倉現貨「投降接刀」條件</h3>
       <ul class="chk">
         <li><span>① BTC ≤ $54,000</span><span class="neg" id="t54"></span></li>
         <li><span>② MVRV-Z ≤ 0</span><span class="warn">0.20（7/1）[STALE·外部]</span></li>
@@ -106,16 +108,16 @@ h2:first-child{margin-top:0}
       <div class="mini" style="margin-top:6px">整體：<b class="neg">未觸發</b></div>
     </div>
     <div class="card">
-      <h3>S2 投降三要件（合約原型 A 的前置）</h3>
+      <h3>小倉 2.5x MSTR 合約前置閘門</h3>
       <ul class="chk">
         <li><span>觸發（上方任一）</span><span class="neg">✗</span></li>
         <li><span>實現虧損放量</span><span class="neg">✗（未見歷史級）</span></li>
         <li><span>費率極端負 ≤−20%年化</span><span class="neg" id="frNow"></span></li>
       </ul>
-      <div class="mini" style="margin-top:6px">三要件缺一＝只是下跌，不是投降 → <b>合約模組全面待機</b></div>
+      <div class="mini" style="margin-top:6px">紅燈/趨勢/清算緩衝缺一 → <b>2.5x MSTR 合約待機</b></div>
     </div>
     <div class="card">
-      <h3>第 2 等份「便宜＋確認」（全部成立才投 50%）</h3>
+      <h3>大倉現貨「便宜＋確認」條件</h3>
       <ul class="chk">
         <li><span>① ETF 連 ≥10 日淨流入</span><span class="warn">Day 1（7/3 +$221.7M）[STALE·外部]</span></li>
         <li><span>② 站回 200DMA＋更高低點</span><span class="neg" id="tma"></span></li>
@@ -140,7 +142,7 @@ h2:first-child{margin-top:0}
     <div class="card"><h3>近 30 天</h3><div class="big" id="m1"></div><div class="mini"></div></div>
   </div>
   <div class="note">每個觸發條件為什麼存在、為什麼是這個門檻 → 見「邏輯」分頁。標 [STALE·外部] 的欄位（MVRV-Z、溫度、mNAV、ETF 流）來自 7/4 雲端監控報告，非本頁即時計算——每日以 routine 報告為準。本頁可即時刷新的只有價格/均線/F&G/費率。</div>
-  <div class="verdict" style="margin-top:10px"><b>IC 裁決（07-07）：</b>今日不開新合約多單；S1/S2/S3 條件未齊，且 Strategy BTC monetization / reported BTC sales 使 MSTR 機構閘升為紅燈覆核。雙路仍保留：瀑布來 → S2 後 W1；不瀑布 → S3′/S4 後 M1。紅燈解除前，不以 MSTR 反身性作為加倉或追多理由。</div>
+  <div class="verdict" style="margin-top:10px"><b>IC 裁決（07-07）：</b>今日不開新 2.5x MSTR 合約；S1/S2/S3 條件未齊，且 Strategy BTC monetization / reported BTC sales 使 MSTR 機構閘升為紅燈覆核。雙路仍保留：大倉等 S2/S4；小倉等 MSTR 紅燈解除＋月線/年線趨勢確認。紅燈解除前，不以 MSTR 反身性作為加倉或追多理由。</div>
 </section>
 
 <!-- ================= 本週 ================= -->
@@ -162,15 +164,15 @@ h2:first-child{margin-top:0}
       </ul>
     </div>
     <div class="card"><h3>本週交易彙總（自動統計交易紀錄）</h3><div id="wkSum" class="mini">尚無紀錄</div></div>
-    <div class="card"><h3>W1 週線合約做多（投降後 2–8 週）</h3>
+    <div class="card"><h3>小倉 MSTR 2.5x 合約（月線～年線）</h3>
       <ul class="chk">
-        <li><span>S2/S3 才可開；S1 僅待機</span><span class="neg">目前待機</span></li>
-        <li><span>投降觸發＋實現虧損放量＋F&amp;G≤10/費率≤−20%年化</span><span class="tag">三重確認</span></li>
-        <li><span>日收盤站回 7 日高點或反轉 K 不破低</span><span class="tag">只認收盤</span></li>
-        <li><span>單筆風險 0.5%，保證金≤2%，槓桿≤2x</span><span class="warn">降槓桿</span></li>
+        <li><span>紅燈解除＋BTC/MSTR 右側確認才可開</span><span class="neg">目前待機</span></li>
+        <li><span>BTC 週期閘＋MSTR 趨勢閘＋mNAV/資本結構閘</span><span class="tag">三重確認</span></li>
+        <li><span>MSTR 週線更高低點成立，回踩不破</span><span class="tag">只認收盤</span></li>
+        <li><span>目標 2.5x；清算價需低於結構止損外</span><span class="warn">降槓桿</span></li>
         <li><span>清算價必須低於止損至少 2×ATR 緩衝</span><span class="neg">硬條件</span></li>
       </ul>
-      <div class="note">出場：+1R 出 1/3 並移成本；50DMA 或 +2R 再出 1/3；剩餘跟 20DMA/前週低點。14 天未達 +0.5R 平半，21 天未達 +1R 全平。</div>
+      <div class="note">出場：+2R 出 1/3，+4R 再出 1/3；剩餘跟 10 週均線或前週低點。8 週未達 +1R 降半，12 週未達 +1.5R 全平或重開 thesis。</div>
     </div>
   </div>
 </section>
@@ -198,7 +200,7 @@ h2:first-child{margin-top:0}
         <li><span>體系文件版本是否需要 v1.x 修訂</span><span class="tag">§11</span></li>
       </ul>
       <div id="moSum" class="mini" style="margin-top:8px">本月交易彙總：尚無紀錄</div>
-      <div class="note"><b>M1 月線合約/等效曝險：</b>S3′ 或 S4 才可啟動；週收盤站回 200DMA 且斜率轉平/上彎＋週線更高低點＋ETF 連 ≥10 日流入或月度轉正＋溫度 −2~+5。等效曝險上限 1.3x，永續只允許 30 天內戰術持有，月線核心優先現貨/LEAP/CME micro。</div>
+      <div class="note"><b>大倉現貨 4:1：</b>MSTR 80% / BMNR 20%，抓 1–4 年週期。BMNR 是 ETH beta 衛星，不升主倉；大倉不用會清算的工具。</div>
     </div>
   </div>
   <div class="grid g2" style="margin-top:12px">
@@ -210,7 +212,7 @@ h2:first-child{margin-top:0}
         <tr><td>2024-04-19</td><td>2025-10-06（+17.6）</td><td><b class="warn">窗口 2026-10~12</b></td><td class="num">推估 −59~−68%</td></tr>
         <tr><td class="mini">~2028-04 推估</td><td class="mini">2029-09~11 → 減半+20月無條件出50%</td><td class="mini">~2030 H2</td><td class="num mini">更淺?</td></tr>
       </tbody></table>
-      <div class="mini" style="margin-top:6px"><b>假說的證偽判據：</b>①2027-04 前無投降→時間假說失效，淺底備案接管；②本輪回撤最終 &lt;45%→振幅假說失效，改流動性框架；③2029-12 無新 ATH→出場改純訊號；④M2 相關性 &gt; 減半時程（Phase 3 第三案）→整體換軌。<br><b>月線 M1 補充：</b>週線更高低點跌破或週收盤跌回 200DMA 下方兩週＝結構失效；+3R/+5R 各出 1/3，剩餘跟 10 週均線。</div>
+      <div class="mini" style="margin-top:6px"><b>假說的證偽判據：</b>①2027-04 前無投降→時間假說失效，淺底備案接管；②本輪回撤最終 &lt;45%→振幅假說失效，改流動性框架；③2029-12 無新 ATH→出場改純訊號；④M2 相關性 &gt; 減半時程（Phase 3 第三案）→整體換軌。<br><b>大倉補充：</b>現貨 4:1 不用清算工具；週期 thesis 失效或 S5 狂熱才做大幅調整。</div>
     </div>
     <div class="card" id="histCard" style="display:none">
       <h3>五維溫度史（同站 data/history.json，雲端監控每日更新）</h3>
@@ -254,7 +256,7 @@ h2:first-child{margin-top:0}
 
 <!-- ================= 邏輯 ================= -->
 <section class="tab" id="logic">
-  <div class="verdict"><b>機構級決策鏈：</b>IC Memo v3 → L1 數據 → L2 狀態機（S1–S5） → L3 三閘門（紅燈可否決） → L4 執行（現貨兩等份＋W1/M1） → L5 紅隊/IC 覆核。<br>
+  <div class="verdict"><b>機構級決策鏈：</b>IC Memo v3 → L1 數據 → L2 狀態機（S1–S5） → L3 三閘門（紅燈可否決） → L4 執行（大倉現貨 4:1＋小倉 MSTR 2.5x） → L5 紅隊/IC 覆核。<br>
   <span class="mini">鐵則：KOL 是輸入不是答案｜觸發器代替預測｜無證偽條件不進場｜出局風險是唯一紅線｜激進在時機不在規模。</span></div>
   <div class="mini" style="margin:8px 0">依據標籤：<span class="tag" style="color:var(--g)">回測驗證</span> <span class="tag" style="color:var(--b)">KOL共識＋採納</span> <span class="tag" style="color:var(--p)">自有研究</span> <span class="tag" style="color:var(--y)">假說待驗</span></div>
 
@@ -341,10 +343,10 @@ h2:first-child{margin-top:0}
 <!-- ================= 交易紀錄 ================= -->
 <section class="tab" id="log">
   <div class="card">
-    <h3>新增交易（開倉前自檢：W1/M1？有 Thesis Card？清算距離足夠？——無卡不開倉）</h3>
+    <h3>新增交易（開倉前自檢：小倉/大倉？有 Thesis Card？清算距離足夠？——無卡不開倉）</h3>
     <div class="formrow">
       <div><label>日期</label><input type="date" id="f_d"></div>
-      <div><label>策略</label><select id="f_s"><option>現貨-第1等份</option><option>現貨-第2等份</option><option>現貨-DCA</option><option>合約-W1週線</option><option>合約-M1月線</option><option>合約-原型A(回測)</option><option>合約-原型B(回測)</option><option>其他</option></select></div>
+      <div><label>策略</label><select id="f_s"><option>現貨-第1等份</option><option>現貨-第2等份</option><option>現貨-DCA</option><option>合約-MSTR-2.5x</option><option>現貨-MSTR/BMNR-4:1</option><option>合約-W1週線(歷史)</option><option>合約-M1月線(歷史)</option><option>合約-原型A(回測)</option><option>合約-原型B(回測)</option><option>其他</option></select></div>
       <div><label>方向</label><select id="f_dir"><option>多</option><option>空</option></select></div>
       <div><label>進場價</label><input type="number" id="f_e" step="any"></div>
       <div><label>止損價</label><input type="number" id="f_st" step="any"></div>
@@ -465,8 +467,8 @@ function addTrade(){
   const w=[];
   if(!g('f_tc')) w.push('⚠️ 無 Thesis Card——體系規定不可開倉');
   if(g('f_s').startsWith('合約') && +g('f_sz')>2) w.push('⚠️ 合約保證金 >2% 超限');
-  if(g('f_s')==='合約-W1週線' && +g('f_lv')>2) w.push('⚠️ W1 槓桿 >2x 超限');
-  if(g('f_s')==='合約-M1月線' && +g('f_lv')>1.3) w.push('⚠️ M1 等效曝險 >1.3x 超限');
+  if(g('f_s')==='合約-MSTR-2.5x' && +g('f_lv')>2.5) w.push('⚠️ MSTR 小倉槓桿 >2.5x 超限');
+  if(g('f_s')==='現貨-MSTR/BMNR-4:1' && +g('f_lv')>1) w.push('⚠️ 大倉現貨不應使用合約槓桿');
   if(g('f_s').startsWith('合約') && +g('f_lv')>3) w.push('⚠️ 槓桿 >3x 絕對違規');
   document.getElementById('f_warn').textContent=w.join('｜');
   const a=load();
@@ -491,7 +493,7 @@ function render(){
   const fut=closed.filter(t=>t.s.startsWith('合約'));
   const futR=fut.reduce((x,t)=>x+t.R,0);
   const lossStreak=(()=>{let s=0;for(let i=fut.length-1;i>=0;i--){if(fut[i].R<0)s++;else break;}return s;})();
-  document.getElementById('riskSum').innerHTML=fut.length?`合約已平 ${fut.length} 筆｜ΣR ${futR.toFixed(2)}<br>連續虧損 ${lossStreak} 筆${lossStreak>=2?'<br><b class="neg">⚠️ 觸發 30 天冷卻</b>':''}<br><span class="mini">預算 5% 硬頂、單筆風險預設 ≤0.5%、W1≤2x、M1≤1.3x、連敗/累虧即停機</span>`:'尚無合約紀錄';
+  document.getElementById('riskSum').innerHTML=fut.length?`合約已平 ${fut.length} 筆｜ΣR ${futR.toFixed(2)}<br>連續虧損 ${lossStreak} 筆${lossStreak>=2?'<br><b class="neg">⚠️ 觸發 30 天冷卻</b>':''}<br><span class="mini">小倉預算硬頂、MSTR≤2.5x、大倉現貨不補保證金、連敗/累虧即停機</span>`:'尚無合約紀錄';
   const vio=a.filter(t=>t.vio).length + a.filter(t=>!t.tc).length;
   document.getElementById('vioSum').innerHTML=vio?`<b class="neg">${vio} 項違規待紅隊審計</b>`:'無違規 ✓';
   // 週/月彙總
