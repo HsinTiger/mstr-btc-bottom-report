@@ -46,6 +46,28 @@ button.ghost{background:none;border:1px solid var(--line);color:var(--dim);paddi
 .verdict{border-left:3px solid var(--b);padding:10px 12px;background:#0d419d1a;border-radius:0 8px 8px 0;margin:8px 0}
 h2{font-size:15px;margin:18px 0 10px;color:var(--tx)}
 h2:first-child{margin-top:0}
+@media (max-width:640px){
+  body{font-size:14px;overflow-x:hidden}
+  header{padding:14px 14px;display:block}
+  header h1{font-size:18px;margin-bottom:8px}
+  header .sub{display:block;line-height:1.7;overflow-wrap:anywhere}
+  button.ghost,button.act,nav button,input,select{min-height:44px}
+  nav{gap:8px;padding:10px 12px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  nav::after{content:'滑動看更多 →';flex:0 0 auto;align-self:center;color:var(--dim);font-size:12px;padding:0 6px}
+  nav button{flex:0 0 auto;padding:10px 15px;font-size:14px}
+  main{padding:12px;max-width:100%}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .card{padding:14px;border-radius:12px}
+  .big{font-size:28px}
+  .chk li{display:block;padding:8px 0}
+  .chk li span{display:block;overflow-wrap:anywhere}
+  .chk li span+span{margin-top:4px}
+  table{display:block;overflow-x:auto;max-width:100%;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  th,td{padding:8px 9px}
+  canvas{max-height:280px}
+  .formrow{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
