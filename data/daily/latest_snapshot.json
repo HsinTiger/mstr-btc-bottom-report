@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "date": "2026-07-07",
+  "generated_at": "2026-07-07T12:25:25+00:00",
+  "metrics": {
+    "prices": {
+      "btc_usd": 63694.5,
+      "mstr_usd": 100.77,
+      "bmnr_usd": 15.55,
+      "strc_usd": 88.58
+    },
+    "mstr_metrics": {
+      "btc_nav_musd": 53743.8267375,
+      "equity_mnav": 0.9484681087832132,
+      "enterprise_mnav": 1.0184137104217308,
+      "pref_dilution_flag": false,
+      "coverage_months": 15.87136929460581,
+      "sale_ratio": 5.825726141078838,
+      "sats_per_share": 296061.4035087719,
+      "strc_discount": 0.11419999999999997,
+      "mnav_gate_ok": false,
+      "contract_red_light": true
+    },
+    "manual_inputs": {
+      "mstr_btc_holdings": 843775,
+      "usd_reserve_musd": 2550,
+      "cash_other_musd": 0,
+      "debt_face_musd": 8214,
+      "annual_interest_musd": 34,
+      "preferred": {
+        "STRF": {
+          "notional_musd": 3700,
+          "rate": 0.1
+        },
+        "STRC": {
+          "notional_musd": 7800,
+          "rate": 0.12
+        },
+        "STRK": {
+          "notional_musd": 2100,
+          "rate": 0.08
+        },
+        "STRD": {
+          "notional_musd": 4200,
+          "rate": 0.1
+        }
+      },
+      "diluted_shares_m": 285.0,
+      "weekly_btc_sales_musd": 216.0,
+      "prev_pref_notional_musd": 17800,
+      "prev_mnav_equity": 0.62
+    }
+  },
+  "decision": {
+    "score": -6,
+    "state": "禁止小倉合約加碼",
+    "reasons": [
+      "M1/M2 或稀釋旗標尚未允許第二等份加倉",
+      "覆蓋月數仍高於 12 個月紅線",
+      "週賣幣比值高於 2，視為被迫賣幣風險",
+      "STRC 折價超過 5%，優先股信任票轉弱"
+    ]
+  },
+  "source_count": 9,
+  "error_count": 1
+}

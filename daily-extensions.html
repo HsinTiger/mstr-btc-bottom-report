@@ -1,0 +1,81 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>每日延伸｜MSTR/BTC 研究</title>
+<style>
+:root{--bg:#080b12;--panel:#101827;--panel2:#0d1320;--text:#eaf0ff;--muted:#8fa0bd;--line:#24314a;--blue:#58a6ff;--green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#17233a 0,#080b12 42%,#05070c 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",Arial,sans-serif;line-height:1.55}
+a{color:var(--blue);text-decoration:none}header{position:sticky;top:0;z-index:5;display:flex;gap:14px;align-items:center;justify-content:space-between;padding:16px 18px;background:rgba(8,11,18,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}h1{font-size:1.1rem;margin:0}.sub{color:var(--muted);font-size:.82rem}.wrap{max-width:1180px;margin:0 auto;padding:18px}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.card{background:linear-gradient(180deg,rgba(16,24,39,.95),rgba(9,14,24,.95));border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 36px rgba(0,0,0,.22)}.card h2,.card h3{margin:.1rem 0 .65rem}.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:#0d1320;color:var(--muted);font-size:.78rem}.ok{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.view{border-left:4px solid var(--blue)}.view:nth-child(2){border-left-color:var(--yellow)}.view:nth-child(3){border-left-color:var(--purple)}.label{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.big{font-size:1.75rem;font-weight:800;margin:.25rem 0}.mini{font-size:.88rem;color:var(--muted)}.quote{padding:10px 12px;border-radius:12px;background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.25);margin-top:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.day{min-height:160px}.day.today{border-color:rgba(63,185,80,.65)}ul{margin:.35rem 0 0;padding-left:1.1rem}li{margin:.3rem 0}.src{font-size:.78rem;color:var(--muted);word-break:break-word}.error{border-color:rgba(248,81,73,.45);background:rgba(248,81,73,.08)}footer{padding:20px;color:var(--muted);font-size:.78rem;text-align:center}@media(max-width:820px){header{align-items:flex-start;flex-direction:column}.hero,.grid,.three{grid-template-columns:1fr}.wrap{padding:12px}.big{font-size:1.45rem}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>每日延伸｜資料驗證後的三個觀點</h1><div class="sub">昨天 / 今天 / 明天觀察；過期內容保留在後端 JSON archive</div></div>
+  <div class="sub"><a href="index.html">主儀表</a> ｜ <a href="dashboard.html">Dashboard</a> ｜ <a href="wiki.html">wiki_llm</a></div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div class="card">
+      <span class="pill" id="updated">載入中</span>
+      <h2 id="decision">等待資料</h2>
+      <div class="mini" id="summary">每日 GitHub Actions 會抓資料、驗證、產出三個延伸觀點。</div>
+      <div class="quote" id="verifyBox">驗證代理狀態載入中。</div>
+    </div>
+    <div class="card">
+      <h3>今日核心數據</h3>
+      <div class="big" id="btcPrice">—</div>
+      <div class="mini" id="priceLine">BTC / MSTR / BMNR / STRC</div>
+      <div class="mini" id="mnavLine" style="margin-top:8px">M1/M2/M4/M5/M7</div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:14px">
+    <h2>今天的三個延伸觀點</h2>
+    <div class="grid" id="views"></div>
+  </section>
+
+  <section class="card" style="margin-top:14px">
+    <h2>昨天 / 今天 / 明天 對比</h2>
+    <div class="three" id="window"></div>
+  </section>
+
+  <section class="card" style="margin-top:14px">
+    <h2>wiki_llm study inputs</h2>
+    <div class="mini">每日觀點會明確引用我們知識庫的概念層，不讓數據變成無脈絡的雜訊。</div>
+    <ul id="wikiInputs"></ul>
+  </section>
+</main>
+<footer>非投資建議。自動化資料可能延遲或缺漏；重大倉位調整前仍需人工覆核 SEC/公司公告與券商成交資料。</footer>
+<script>
+const fmt=(v,d=2)=>v===null||v===undefined||Number.isNaN(Number(v))?'N/A':Number(v).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+const pct=v=>v===null||v===undefined?'N/A':(Number(v)*100).toFixed(1)+'%';
+const cls=s=>s==='pass'?'ok':(s==='fail'?'bad':'warn');
+async function load(){
+  const [ext,snap,verify]=await Promise.all([
+    fetch('data/daily/daily_extensions.json',{cache:'no-store'}).then(r=>r.json()),
+    fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),
+    fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json())
+  ]);
+  const today=ext.items?.find(x=>x.date===ext.current_date)||ext.items?.at(-1);
+  const m=snap.metrics.mstr_metrics, p=snap.metrics.prices;
+  document.getElementById('updated').textContent=`${ext.current_date} updated ${ext.updated_at}`;
+  document.getElementById('decision').textContent=snap.decision.state;
+  document.getElementById('summary').textContent=(snap.decision.reasons||[]).join('；');
+  document.getElementById('verifyBox').innerHTML=`資料驗證代理：<b class="${cls(verify.status)}">${verify.status.toUpperCase()}</b>｜warnings ${verify.warnings?.length||0}｜failures ${verify.failures?.length||0}`;
+  document.getElementById('btcPrice').textContent=`BTC $${fmt(p.btc_usd,0)}`;
+  document.getElementById('priceLine').textContent=`MSTR $${fmt(p.mstr_usd)}｜BMNR $${fmt(p.bmnr_usd)}｜STRC $${fmt(p.strc_usd)}`;
+  document.getElementById('mnavLine').textContent=`M1 ${fmt(m.equity_mnav)}x｜M2 ${fmt(m.enterprise_mnav)}x｜M4 ${fmt(m.coverage_months,1)}m｜M5 ${fmt(m.sale_ratio,1)}x｜M7 ${pct(m.strc_discount)}`;
+  document.getElementById('views').innerHTML=(today?.viewpoints||[]).map(v=>`<article class="card view"><div class="label">${v.lens}｜信心 ${v.confidence}</div><h3>${v.title}</h3><p><b>Claim：</b>${v.claim}</p><p><b>So what：</b>${v.so_what}</p><div class="quote"><b>Study：</b>${v.study_note}</div></article>`).join('');
+  document.getElementById('window').innerHTML=(ext.visible_window||[]).map(item=>{
+    if(item.type==='tomorrow_watch') return `<article class="card day"><div class="label">明天 ${item.date}</div><h3>${item.title}</h3><ul>${(item.watch_items||[]).map(x=>`<li>${x}</li>`).join('')}</ul></article>`;
+    const first=item.viewpoints?.[0]; const dayCls=item.date===ext.current_date?' today':'';
+    return `<article class="card day${dayCls}"><div class="label">${item.date===ext.current_date?'今天':'昨天'} ${item.date}</div><h3>${item.decision_state||'—'}</h3><p>${first?.title||'尚無資料'}</p><div class="mini">驗證：${item.verification_status}</div></article>`;
+  }).join('');
+  document.getElementById('wikiInputs').innerHTML=(today?.wiki_study_inputs||[]).map(x=>`<li>${x}</li>`).join('');
+}
+load().catch(err=>{document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="card error">每日延伸資料載入失敗：${err.message}</div>`)});
+</script>
+</body>
+</html>

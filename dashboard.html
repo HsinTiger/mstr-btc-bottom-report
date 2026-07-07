@@ -73,7 +73,7 @@ h2:first-child{margin-top:0}
 <body>
 <header>
   <h1>🧭 MSTR / BMNR 每日追蹤</h1>
-  <span class="sub"><a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/institutional-ic-memo-v3.md" style="color:#58a6ff;text-decoration:none">IC Memo v3 ↗</a>｜<a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/btc-trading-system.md" style="color:#58a6ff;text-decoration:none">體系文件 ↗</a>｜<a href="index.html" style="color:#58a6ff;text-decoration:none">主儀表（五維監控）↗</a>｜數據截至 <b id="genDate"></b>｜<span id="liveState">內嵌數據</span></span>
+  <span class="sub"><a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/institutional-ic-memo-v3.md" style="color:#58a6ff;text-decoration:none">IC Memo v3 ↗</a>｜<a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/btc-trading-system.md" style="color:#58a6ff;text-decoration:none">體系文件 ↗</a>｜<a href="index.html" style="color:#58a6ff;text-decoration:none">主儀表（五維監控）↗</a>｜<a href="daily-extensions.html" style="color:#58a6ff;text-decoration:none">每日延伸 ↗</a>｜數據截至 <b id="genDate"></b>｜<span id="liveState">內嵌數據</span></span>
   <button class="ghost" onclick="refreshLive()">↻ 抓即時價</button>
 </header>
 <nav>
@@ -146,14 +146,15 @@ h2:first-child{margin-top:0}
 
   <h2>獨家自算指標 M1–M7（不採公司自訂口徑）</h2>
   <div class="grid g4">
-    <div class="card"><h3>M1 equity mNAV</h3><div class="big warn">自算</div><div class="mini">普通股市值 ÷ 扣債務/特別股後的淨 BTC NAV</div></div>
-    <div class="card"><h3>M3 稀釋旗標</h3><div class="big warn">降權</div><div class="mini">特別股淨增且 mNAV 回升 → 訊號打五折</div></div>
-    <div class="card"><h3>M4 覆蓋月數</h3><div class="big neg">12m</div><div class="mini">USD Reserve ÷ 月股息/利息義務；低於 12 月紅燈</div></div>
-    <div class="card"><h3>M5 週賣幣比值</h3><div class="big neg">>2x</div><div class="mini">連兩週 >2＝被迫賣幣，凍結加倉</div></div>
-    <div class="card"><h3>M6 sats/股</h3><div class="big info">跟蹤</div><div class="mini">BTC 持倉與稀釋股數同時看，防假增厚</div></div>
-    <div class="card"><h3>M7 STRC 折價</h3><div class="big warn">5%</div><div class="mini">優先股信任票；折價深時 mNAV 全部降權</div></div>
+    <div class="card"><h3>M1 equity mNAV</h3><div class="big warn" id="dm1">自算</div><div class="mini">普通股市值 ÷ 扣債務/特別股後的淨 BTC NAV</div></div>
+    <div class="card"><h3>M3 稀釋旗標</h3><div class="big warn" id="dm3">降權</div><div class="mini">特別股淨增且 mNAV 回升 → 訊號打五折</div></div>
+    <div class="card"><h3>M4 覆蓋月數</h3><div class="big neg" id="dm4">12m</div><div class="mini">USD Reserve ÷ 月股息/利息義務；低於 12 月紅燈</div></div>
+    <div class="card"><h3>M5 週賣幣比值</h3><div class="big neg" id="dm5">>2x</div><div class="mini">連兩週 >2＝被迫賣幣，凍結加倉</div></div>
+    <div class="card"><h3>M6 sats/股</h3><div class="big info" id="dm6">跟蹤</div><div class="mini">BTC 持倉與稀釋股數同時看，防假增厚</div></div>
+    <div class="card"><h3>M7 STRC 折價</h3><div class="big warn" id="dm7">5%</div><div class="mini">優先股信任票；折價深時 mNAV 全部降權</div></div>
   </div>
   <div class="note">規格：<a href="metrics-spec.md" style="color:#58a6ff">metrics-spec.md</a>；概念：<a href="wiki.html#mnav-definition-risk" style="color:#58a6ff">mNAV 定義權風險</a>、<a href="wiki.html#delayed-pro-cyclical" style="color:#58a6ff">延遲順週期</a>、<a href="wiki.html#indicator-regime-change" style="color:#58a6ff">指標 regime change</a>。</div>
+  <div class="note">每日資料管線：<a href="data/daily/latest_snapshot.json" style="color:#58a6ff">latest_snapshot</a>、<a href="data/daily/agent_verification_report.json" style="color:#58a6ff">驗證代理報告</a>、<a href="daily-extensions.html" style="color:#58a6ff">每日延伸三觀點</a>。</div>
 </section>
 
 <!-- ================= 本週 ================= -->
@@ -418,6 +419,22 @@ function paintToday(px,fng){
   set('frNow',`✗（近 3 日最小 ${C.fr_min_recent}%/8h）`);
 }
 paintToday(C.px, C.fng);
+
+async function loadDailySnapshot(){
+  try{
+    const snap=await (await fetch('data/daily/latest_snapshot.json',{cache:'no-store'})).json();
+    const m=snap.metrics.mstr_metrics;
+    const nf=(v,d=2)=>v==null?'N/A':Number(v).toFixed(d);
+    set('dm1',nf(m.equity_mnav)+'x');
+    set('dm3',m.pref_dilution_flag?'觸發':'未觸發');
+    set('dm4',nf(m.coverage_months,1)+'m');
+    set('dm5',nf(m.sale_ratio,1)+'x');
+    set('dm6',Math.round(m.sats_per_share).toLocaleString());
+    set('dm7',m.strc_discount==null?'N/A':(m.strc_discount*100).toFixed(1)+'%');
+  }catch(e){ console.warn('daily snapshot unavailable',e); }
+}
+loadDailySnapshot();
+
 async function refreshLive(){
   try{
     const t=await (await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')).json();

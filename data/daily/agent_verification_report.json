@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "agent": "daily-data-verifier",
+  "verified_at": "2026-07-07T12:25:26+00:00",
+  "date": "2026-07-07",
+  "status": "pass",
+  "failures": [],
+  "warnings": [
+    "MSTR 僅有單一可用來源，已保留但降信心",
+    "BMNR 僅有單一可用來源，已保留但降信心",
+    "STRC 僅有單一可用來源，已保留但降信心",
+    "SEC 最新表單型別非核心清單: "
+  ],
+  "evidence": [
+    "btc_usd_coingecko=63689 from CoinGecko simple price",
+    "btc_usd_coinbase=63700.0 from Coinbase Exchange ticker",
+    "mstr_usd_yahoo=100.77 from Yahoo Finance chart"
+  ],
+  "policy": {
+    "btc_cross_source_max_gap": "1.5%",
+    "equity_cross_source_max_gap": "8%",
+    "required_sources": [
+      "CoinGecko",
+      "Coinbase",
+      "Yahoo Finance"
+    ],
+    "manual_review_sources": [
+      "SEC EDGAR / Strategy filings for capital-structure inputs"
+    ]
+  }
+}
