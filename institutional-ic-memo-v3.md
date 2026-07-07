@@ -71,6 +71,22 @@
 
 ---
 
+## 4.5 獨家指標接線
+
+| 指標 | 用途 | 紅燈 / 降權 |
+|---|---|---|
+| M1 equity mNAV | 普通股真安全邊際 | <1 不視為便宜 |
+| M2 enterprise mNAV | 與官方口徑對照 | 與官網差異擴大需註記 |
+| M3 pref-dilution flag | 防特別股發行墊高 mNAV | 觸發時 mNAV 回升打五折 |
+| M4 coverage months | USD Reserve 能撐多久 | <12 月直接紅燈 |
+| M5 sale ratio | 是否被迫賣幣 | 連兩週 >2 凍結加倉 |
+| M6 sats/share | 真含幣量增厚 | BTC 減且稀釋增＝惡化 |
+| M7 STRC discount | 優先股信任票 | >5% 時全體 mNAV 訊號降權 |
+
+規格見 `metrics-spec.md`，計算工具見 `calc/mnav_calc.py`。
+
+---
+
 ## 5. Portfolio Construction
 
 ### 5.1 資金分桶

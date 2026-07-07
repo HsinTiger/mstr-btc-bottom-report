@@ -37,3 +37,11 @@
 - 將過期的「信貸重倉」語氣降級為歷史版本，不再出現在首頁首屏。
 - 首頁只保留 6–8 張大字卡：大倉、小倉、MSTR 紅燈、BTC regime、ETF 流、mNAV、200DMA/200WMA、情緒/溫度。
 - wiki 保留長文與推理，首頁只保留行動訊號。
+
+## 新增獨家指標層（2026-07-07）
+
+- `metrics-spec.md`：M1–M7 自算指標規格。
+- `calc/mnav_calc.py`：自算 mNAV / 覆蓋月數 / 週賣幣比值工具。
+- `wiki/concepts/mnav-definition-risk.md`：mNAV 定義權風險。
+- `wiki/concepts/delayed-pro-cyclical.md`：延遲順週期與 tranche 類比。
+- `wiki/concepts/indicator-regime-change.md`：Pi Cycle / MVRV 等舊 regime 指標降權。

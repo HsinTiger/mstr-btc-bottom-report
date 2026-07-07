@@ -143,6 +143,17 @@ h2:first-child{margin-top:0}
   </div>
   <div class="note">每個觸發條件為什麼存在、為什麼是這個門檻 → 見「邏輯」分頁。標 [STALE·外部] 的欄位（MVRV-Z、溫度、mNAV、ETF 流）來自 7/4 雲端監控報告，非本頁即時計算——每日以 routine 報告為準。本頁可即時刷新的只有價格/均線/F&G/費率。</div>
   <div class="verdict" style="margin-top:10px"><b>IC 裁決（07-07）：</b>今日不開新 2.5x MSTR 合約；S1/S2/S3 條件未齊，且 Strategy BTC monetization / reported BTC sales 使 MSTR 機構閘升為紅燈覆核。雙路仍保留：大倉等 S2/S4；小倉等 MSTR 紅燈解除＋月線/年線趨勢確認。紅燈解除前，不以 MSTR 反身性作為加倉或追多理由。</div>
+
+  <h2>獨家自算指標 M1–M7（不採公司自訂口徑）</h2>
+  <div class="grid g4">
+    <div class="card"><h3>M1 equity mNAV</h3><div class="big warn">自算</div><div class="mini">普通股市值 ÷ 扣債務/特別股後的淨 BTC NAV</div></div>
+    <div class="card"><h3>M3 稀釋旗標</h3><div class="big warn">降權</div><div class="mini">特別股淨增且 mNAV 回升 → 訊號打五折</div></div>
+    <div class="card"><h3>M4 覆蓋月數</h3><div class="big neg">12m</div><div class="mini">USD Reserve ÷ 月股息/利息義務；低於 12 月紅燈</div></div>
+    <div class="card"><h3>M5 週賣幣比值</h3><div class="big neg">>2x</div><div class="mini">連兩週 >2＝被迫賣幣，凍結加倉</div></div>
+    <div class="card"><h3>M6 sats/股</h3><div class="big info">跟蹤</div><div class="mini">BTC 持倉與稀釋股數同時看，防假增厚</div></div>
+    <div class="card"><h3>M7 STRC 折價</h3><div class="big warn">5%</div><div class="mini">優先股信任票；折價深時 mNAV 全部降權</div></div>
+  </div>
+  <div class="note">規格：<a href="metrics-spec.md" style="color:#58a6ff">metrics-spec.md</a>；概念：<a href="wiki.html#mnav-definition-risk" style="color:#58a6ff">mNAV 定義權風險</a>、<a href="wiki.html#delayed-pro-cyclical" style="color:#58a6ff">延遲順週期</a>、<a href="wiki.html#indicator-regime-change" style="color:#58a6ff">指標 regime change</a>。</div>
 </section>
 
 <!-- ================= 本週 ================= -->
