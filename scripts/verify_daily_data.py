@@ -239,18 +239,30 @@ def main() -> int:
         degradations.append("mempool fee proxy missing")
     if as_float(radar.get("treasury_avg_bill_rate_pct")) is None:
         degradations.append("macro funding proxy missing")
-    if radar.get("etf_flow_status") != "automated":
-        degradations.append("ETF flow not automated")
+    etf_status = str(radar.get("etf_flow_status") or "")
+    if etf_status == "automated":
+        evidence.append("ETF flow automated and cross-source verified")
+    elif etf_status == "automated_third_party_single_source":
+        degradations.append("ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified")
+    else:
+        degradations.append("ETF flow unavailable; not eligible as hard trigger")
+    if as_float(radar.get("btc_mvrv_current")) is None:
+        degradations.append("BTC MVRV ratio missing")
 
     manual = snapshot.get("metrics", {}).get("manual_inputs", {})
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
     fields = provenance.get("fields", {})
-    manual_risk_keys = ["mstr_btc_holdings", "debt_face_musd", "weekly_btc_sales_musd", "diluted_shares_m", "net_deferred_tax_liability_musd"]
-    manual_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") == "manual" or key in manual]
+    manual_risk_keys = ["mstr_btc_holdings", "usd_reserve_musd", "cash_other_musd", "debt_face_musd", "annual_interest_musd", "preferred", "weekly_btc_sales_musd", "diluted_shares_m", "net_deferred_tax_liability_musd", "prev_pref_notional_musd", "prev_mnav_equity"]
+    manual_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") in {"manual", None}]
     if manual_fields:
         degradations.append("manual capital-structure inputs: " + ", ".join(manual_fields))
     if provenance.get("status") != "automated":
         degradations.append(f"capital-structure provenance status={provenance.get('status', 'missing')}")
+    sec_facts = snapshot.get("metrics", {}).get("sec_companyfacts", {})
+    sec_diluted = as_float(sec_facts.get("diluted_shares_m"))
+    effective_diluted = as_float(manual.get("diluted_shares_m"))
+    if sec_diluted is not None and effective_diluted is not None and pct_gap(sec_diluted, effective_diluted) > 0.01:
+        failures.append(f"diluted_shares_m: effective input differs from SEC companyfacts by {pct_gap(sec_diluted, effective_diluted):.2%}")
 
     status = "fail" if failures else ("degraded" if degradations or warnings else "pass")
     report = {
@@ -269,7 +281,8 @@ def main() -> int:
             "equity_mismatched_quote_basis": "degraded, not fail",
             "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
             "required_sources": ["CoinGecko", "Coinbase", "Yahoo Finance"],
-            "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "ETF flow automation"],
+            "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "cross-source ETF flow verification", "BTC MVRV ratio"],
+            "not_hard_triggers": ["single-source ETF flow", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
         },
     }
     write_json(REPORT_PATH, report)

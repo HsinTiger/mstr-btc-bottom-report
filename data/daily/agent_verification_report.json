@@ -1,27 +1,26 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-08T10:00:35+00:00",
+  "verified_at": "2026-07-08T12:31:52+00:00",
   "date": "2026-07-08",
   "status": "degraded",
   "failures": [],
   "degradations": [
-    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 4.16% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-    "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.60% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-    "ETF flow not automated",
-    "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
-    "capital-structure provenance status=manual_seed"
+    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.73% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+    "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
+    "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
+    "capital-structure provenance status=mixed_automated_manual"
   ],
   "warnings": [
-    "STRC equity: 報價基準不同且差距 1.21%，需留意盤前/盤後波動"
+    "BMNR equity: 報價基準不同且差距 1.70%，需留意盤前/盤後波動"
   ],
   "evidence": [
-    "btc_usd_coingecko=62017 from CoinGecko simple price",
-    "btc_usd_coinbase=62005.99 from Coinbase Exchange ticker",
+    "btc_usd_coingecko=62226 from CoinGecko simple price",
+    "btc_usd_coinbase=62197.0 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.36 from Yahoo Finance chart",
-    "MSTR Yahoo/Nasdaq=97.36/93.39; basis=regular_market_close/extended_hours_realtime; gap=4.16%",
-    "BMNR Yahoo/Nasdaq=14.8/14.42; basis=regular_market_close/extended_hours_realtime; gap=2.60%",
-    "STRC Yahoo/Nasdaq=86.56/85.52; basis=regular_market_close/extended_hours_realtime; gap=1.21%",
+    "MSTR Yahoo/Nasdaq=97.36/94.7358; basis=regular_market_close/extended_hours_realtime; gap=2.73%",
+    "BMNR Yahoo/Nasdaq=14.8/14.5501; basis=regular_market_close/extended_hours_realtime; gap=1.70%",
+    "STRC Yahoo/Nasdaq=86.56/85.76; basis=regular_market_close/extended_hours_realtime; gap=0.93%",
     "SEC latest form=8-K"
   ],
   "policy": {
@@ -38,7 +37,14 @@
       "Nasdaq backup quotes",
       "SEC EDGAR submissions",
       "automated capital-structure inputs",
-      "ETF flow automation"
+      "cross-source ETF flow verification",
+      "BTC MVRV ratio"
+    ],
+    "not_hard_triggers": [
+      "single-source ETF flow",
+      "realized loss without stable free API",
+      "Google Trends without official unauthenticated API",
+      "macro calendar without official free event API"
     ]
   }
 }

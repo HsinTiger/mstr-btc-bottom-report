@@ -258,14 +258,14 @@ def main() -> None:
         invariants,
         rule_id="MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
         passed=(provenance_status == "automated") or verification_status == "degraded",
-        evidence=f"manual_input_provenance={provenance_status}, verification={verification_status}",
+        evidence=f"manual_input_provenance={provenance_status}, verification={verification_status}; pass means false-green-light is blocked, not that inputs are fully automated",
         risk_if_failed="Manual capital-stack seeds could be displayed as fully verified data.",
     )
     add_invariant(
         invariants,
         rule_id="ETF_FLOW_NOT_HARD_TRIGGER_UNTIL_AUTOMATED",
         passed=(etf_flow_status == "automated") or "use_etf_flow_as_hard_trigger" in blocked_actions,
-        evidence=f"etf_flow_status={etf_flow_status}, blocked_actions={sorted(blocked_actions)}",
+        evidence=f"etf_flow_status={etf_flow_status}, blocked_actions={sorted(blocked_actions)}; single-source ETF data may inform context but remains barred from hard triggers",
         risk_if_failed="Missing ETF-flow automation could still influence hard trading decisions.",
         severity="major",
     )

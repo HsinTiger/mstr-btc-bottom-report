@@ -271,7 +271,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <div class="d">本輪 BTC 底部推估區（≈ ATH $126k 的 −59% ~ −68%）· 詳見「週期遞減」分頁</div>
   </div>
   <div class="kpi-grid">
-    <div class="kpi"><div class="label">第 1 等份｜投降接刀</div><div class="value warn">等</div><div class="note">任一：BTC≤$54k／MVRV-Z≤0／溫度≤−6／mNAV≤0.6x</div></div>
+    <div class="kpi"><div class="label">第 1 等份｜投降接刀</div><div class="value warn">等</div><div class="note">任一：BTC≤$54k／MVRV≤1.0／溫度≤−6／普通股安全邊際≤0.6x</div></div>
     <div class="kpi"><div class="label">第 2 等份｜便宜+確認</div><div class="value warn">等</div><div class="note">全部：ETF連≥10日流入＋站回200日線＋mNAV≥1.0x＋溫度+2~+5</div></div>
     <div class="kpi"><div class="label">本業收入 DCA</div><div class="value pos">照跑</div><div class="note">常駐底倉，不在兩等份內</div></div>
     <div class="kpi"><div class="label">貸款子彈</div><div class="value neg">留著</div><div class="note">僵局未解，借錢梭哈＝勸阻</div></div>
@@ -307,7 +307,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
       </tr>
       <tr>
         <td class="dim">📈 技術面</td>
-        <td>價/200日均線、MVRV-Z、Mayer、Pi Cycle、NUPL</td>
+        <td>價/200日均線、MVRV ratio、Mayer、Pi Cycle、NUPL</td>
         <td><a href="https://www.tradingview.com" target="_blank">TradingView</a> · <a href="https://www.bitcoinmagazinepro.com" target="_blank">Bitcoin Magazine Pro</a></td>
         <td class="alt"><a href="https://charts.checkonchain.com" target="_blank">CheckOnChain</a> · <a href="https://www.lookintobitcoin.com" target="_blank">LookIntoBitcoin</a> · Barchart</td>
       </tr>
@@ -394,7 +394,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     </svg>
   </div>
   <div class="stat-grid">
-    <div class="stat y"><div class="cap">MVRV-Z</div><div class="big">~0.30</div><div class="sub">底常在 ≤0 · 未投降</div></div>
+    <div class="stat y"><div class="cap">MVRV ratio</div><div class="big" id="staticMvrv">接每日資料</div><div class="sub">Coin Metrics；Z-score 免費端點受限</div></div>
     <div class="stat y"><div class="cap">Mayer Multiple</div><div class="big">~1.0</div><div class="sub">底 &lt;0.8 · 頂 &gt;2.4</div></div>
     <div class="stat y"><div class="cap">200 日均線</div><div class="big">$66k</div><div class="sub">現價在線附近拉鋸</div></div>
     <div class="stat b"><div class="cap">Pi Cycle 頂訊號</div><div class="big">未觸</div><div class="sub">距頂部訊號遠</div></div>
@@ -586,7 +586,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <div class="analysis-box analysis-bull"><b>我們的看法：</b>「快速插針愈低愈好＝愈可能是真底」與我們<b>第 1 等份接刀邏輯一致</b>；他的 ~$50k 落在我們 $40–52k 區內。時間點（拖到 8–9 月）呼應我們「距底 12–14 月、別急」。</div>
 
   <div class="analysis-box analysis-review" style="border-left-color:var(--green)"><b>🤝 三家抄底派底部共識：</b>招財貓 $48–56k｜G哥 $46–54k｜區塊鏈日報 ~$50k+ → <b>全部落在 $46–56k</b>，與我們 <b>$40–52k 高度重疊</b>。差別：我們<b>更保守（下緣 $40k）</b>＋用<b>五維扣板機</b>＋上行打折。三家獨立來源同向，提高底部區的可信度。</div>
-  <p style="font-size:0.74rem;color:var(--text3)">已分析：招財貓(6/13)、直男說(6/10)、區塊鏈日報(6/10)。大隊長短線片多無字幕、邦妮最新為 SpaceX IPO（非幣市）→ 待相關新片。字幕原檔存 repo <code>raw/kol-subtitles/</code>。每日監控 RSS 偵測上新。非投資建議。</p>
+  <p style="font-size:0.74rem;color:var(--text3)">已分析：招財貓(6/13)、直男說(6/10)、區塊鏈日報(6/10)。大隊長短線片多無字幕、邦妮最新為 SpaceX IPO（非幣市）→ 等待下一支幣市相關新片；不作今日訊號。字幕原檔存 repo <code>raw/kol-subtitles/</code>。每日監控 RSS 偵測上新。非投資建議。</p>
 </div>
 </div>
 
@@ -641,12 +641,14 @@ function coreCards(today,yday,verify){
     card({label:'F&G 情緒',value:radar.fear_greed??'—',tone:radar.fear_greed<=25?'good':radar.fear_greed>=70?'bad':'warn',read:radar.fear_greed<=25?'市場恐懼，等觸發':'情緒非投降'}),
     card({label:'鏈上手續費',value:radar.btc_fee_fastest_sat_vb==null?'—':radar.btc_fee_fastest_sat_vb+' sat/vB',tone:'info',read:'鏈上壓力 proxy'}),
     card({label:'宏觀資金成本',value:radar.treasury_avg_bill_rate_pct==null?'—':Number(radar.treasury_avg_bill_rate_pct).toFixed(2)+'%',tone:'warn',read:'高利率壓估值'}),
-    card({label:'ETF Flow',value:radar.etf_flow_status==='automated'?'ON':'\u672A\u81EA\u52D5\u5316',tone:'warn',read:'\u5C1A\u672A\u81EA\u52D5\u5316\uFF0C\u4E0D\u4F5C\u786C\u89F8\u767C'})
+    card({label:'BTC MVRV ratio',value:radar.btc_mvrv_current==null?'—':num(radar.btc_mvrv_current,2)+'x',tone:radar.btc_mvrv_current<=1?'good':radar.btc_mvrv_current<=1.3?'warn':'bad',read:'Coin Metrics 免費可驗證；不是 Z-score'}),
+    card({label:'ETF Flow',value:radar.etf_flow_7d_usd==null?'來源缺漏':money(radar.etf_flow_7d_usd),tone:'warn',read:'第三方單一來源，只能當背景，不作硬觸發'})
   ].join('');
 }
 function mstrCards(today,yday){
   const m=today.metrics.mstr_metrics;
   const manual=today.metrics.manual_inputs||{};
+  const provenance=today.metrics.manual_input_provenance||{};
   return [
     card({label:'普通股真實安全邊際',value:num(m.equity_mnav,2)+'x',tone:m.equity_mnav>=1?'good':'bad',read:m.equity_mnav>=1?'安全邊際過關':'還不算便宜'}),
     card({label:'企業價值安全邊際',value:num(m.enterprise_mnav,2)+'x',tone:m.enterprise_mnav>=1?'warn':'bad',read:m.enterprise_mnav>=1?'只能當對照':'飛輪未重啟'}),
@@ -655,7 +657,8 @@ function mstrCards(today,yday){
     card({label:'每週賣幣壓力倍數',value:num(m.sale_ratio,1)+'x',tone:m.sale_ratio>2?'bad':m.sale_ratio>1.5?'warn':'good',read:m.sale_ratio>2?'被迫賣幣風險':'未超紅線'}),
     card({label:'每股比特幣含量',value:Number(m.sats_per_share||0).toLocaleString(),tone:'info',read:'防止假性增厚'}),
     card({label:'STRC 優先股折價信任票',value:pct(m.strc_discount),tone:m.strc_discount>0.05?'bad':m.strc_discount>0.01?'warn':'good',read:m.strc_discount>0.05?'估值樂觀全部降權':'信任票改善'}),
-    card({label:'GAAP 稅務楔子',value:`$${num(manual.net_deferred_tax_liability_musd||0,0)}M`,tone:'warn',read:'季報必覆核'})
+    card({label:'GAAP 稅務楔子',value:`$${num(manual.net_deferred_tax_liability_musd||0,0)}M`,tone:'warn',read:'季報必覆核'}),
+    card({label:'資本結構來源狀態',value:(provenance.status||'unknown').replaceAll('_',' '),tone:provenance.status==='automated'?'good':'warn',read:'未全自動前不可視為交易級'})
   ].join('');
 }
 async function loadHomeDailyCards(){
@@ -678,6 +681,8 @@ async function loadHomeDailyCards(){
     if(chipMnav) chipMnav.textContent=num(m.equity_mnav,2)+'x';
     if(chipMnavNote) chipMnavNote.textContent=m.equity_mnav>=1?'安全邊際過關':'折價不等於安全，仍需資本結構修復';
     if(chipSats) chipSats.textContent=Number(m.sats_per_share||0).toLocaleString();
+    const staticMvrv=document.getElementById('staticMvrv');
+    if(staticMvrv) staticMvrv.textContent=latest.metrics.market_radar?.btc_mvrv_current?num(latest.metrics.market_radar.btc_mvrv_current,2)+'x':'來源缺漏';
   }catch(e){
     document.getElementById('dailyMeta').textContent=`每日資料載入失敗：${e.message}。請用 GitHub Pages 開啟。`;
   }

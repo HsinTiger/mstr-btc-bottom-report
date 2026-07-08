@@ -7,6 +7,7 @@ snapshot that the verifier and static pages can consume.
 
 from __future__ import annotations
 
+import copy
 import csv
 import json
 import math
@@ -38,7 +39,7 @@ MANUAL_INPUTS = {
     "mstr_btc_holdings": 843_775,
     "usd_reserve_musd": 2_550,
     "cash_other_musd": 0,
-    "net_deferred_tax_liability_musd": 0,  # TODO: 每季用 10-Q/10-K income tax footnote 更新；淨遞延稅資產用負值
+    "net_deferred_tax_liability_musd": 0,  # fallback only; SEC companyfacts overrides when available
     "debt_face_musd": 8_214,
     "annual_interest_musd": 34,
     "preferred": {
@@ -244,6 +245,123 @@ def collect_treasury_average_rate() -> Observation:
     row = (data.get("data") or [{}])[0]
     return obs("treasury_avg_bill_rate_pct", safe_float(row.get("avg_interest_rate_amt")), "Treasury Fiscal Data avg interest rates", url, ok=row.get("avg_interest_rate_amt") is not None, detail=f"record_date={row.get('record_date')} {row.get('security_desc')}")
 
+def collect_coinmetrics_btc_cycle() -> list[Observation]:
+    metrics = "PriceUSD,CapMVRVCur,SplyCur,CapMrktCurUSD"
+    url = "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?" + urllib.parse.urlencode({
+        "assets": "btc",
+        "metrics": metrics,
+        "frequency": "1d",
+        "page_size": "7",
+    })
+    data = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    rows = data.get("data") or []
+    latest = rows[-1] if rows else {}
+    detail = f"time={latest.get('time')} metrics={metrics}"
+    return [
+        obs("btc_price_coinmetrics_usd", safe_float(latest.get("PriceUSD")), "Coin Metrics community API", url, ok=latest.get("PriceUSD") is not None, detail=detail),
+        obs("btc_mvrv_current", safe_float(latest.get("CapMVRVCur")), "Coin Metrics community API", url, ok=latest.get("CapMVRVCur") is not None, detail=detail),
+        obs("btc_supply_current", safe_float(latest.get("SplyCur")), "Coin Metrics community API", url, ok=latest.get("SplyCur") is not None, detail=detail),
+        obs("btc_market_cap_coinmetrics_usd", safe_float(latest.get("CapMrktCurUSD")), "Coin Metrics community API", url, ok=latest.get("CapMrktCurUSD") is not None, detail=detail),
+    ]
+
+
+def parse_signed_number(text: str) -> float | None:
+    cleaned = text.replace(",", "").replace("+", "").strip()
+    multiplier = 1.0
+    if cleaned.endswith("B"):
+        multiplier = 1_000_000_000.0
+        cleaned = cleaned[:-1]
+    elif cleaned.endswith("M"):
+        multiplier = 1_000_000.0
+        cleaned = cleaned[:-1]
+    elif cleaned.endswith("K"):
+        multiplier = 1_000.0
+        cleaned = cleaned[:-1]
+    return safe_float(cleaned) * multiplier if safe_float(cleaned) is not None else None
+
+
+def collect_walletpilot_etf_flows() -> list[Observation]:
+    url = "https://www.walletpilot.com/bitcoin-tracker/etfs"
+    html = fetch_text(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "text/html"})
+    def extract(label: str) -> tuple[float | None, float | None]:
+        pattern = rf"{re.escape(label)}</h3>.*?<p[^>]*>([+-]?[0-9,]+) BTC</p>.*?<p[^>]*>([+-]?\$[0-9,.]+[KMB]?)</p>"
+        match = re.search(pattern, html, re.DOTALL)
+        if not match:
+            return None, None
+        btc = parse_signed_number(match.group(1))
+        usd = parse_signed_number(match.group(2).replace("$", ""))
+        return btc, usd
+    one_btc, one_usd = extract("1-Day Net Flows")
+    seven_btc, seven_usd = extract("7-Day Net Flows")
+    thirty_btc, thirty_usd = extract("30-Day Net Flows")
+    status = "automated_third_party_single_source" if one_btc is not None else "unavailable"
+    detail = "source=WalletPilot third_party_single_source hard_trigger=false"
+    return [
+        obs("btc_etf_flow_status", status, "WalletPilot Bitcoin ETF tracker", url, ok=status != "unavailable", detail=detail),
+        obs("btc_etf_flow_1d_btc", one_btc, "WalletPilot Bitcoin ETF tracker", url, ok=one_btc is not None, detail=detail),
+        obs("btc_etf_flow_1d_usd", one_usd, "WalletPilot Bitcoin ETF tracker", url, ok=one_usd is not None, detail=detail),
+        obs("btc_etf_flow_7d_btc", seven_btc, "WalletPilot Bitcoin ETF tracker", url, ok=seven_btc is not None, detail=detail),
+        obs("btc_etf_flow_7d_usd", seven_usd, "WalletPilot Bitcoin ETF tracker", url, ok=seven_usd is not None, detail=detail),
+        obs("btc_etf_flow_30d_btc", thirty_btc, "WalletPilot Bitcoin ETF tracker", url, ok=thirty_btc is not None, detail=detail),
+        obs("btc_etf_flow_30d_usd", thirty_usd, "WalletPilot Bitcoin ETF tracker", url, ok=thirty_usd is not None, detail=detail),
+    ]
+
+
+def latest_sec_fact(facts: dict[str, Any], tag: str, unit: str = "USD", instant: bool | None = None) -> tuple[float | None, str]:
+    rows = facts.get("us-gaap", {}).get(tag, {}).get("units", {}).get(unit, [])
+    if instant is True:
+        rows = [row for row in rows if not row.get("start")]
+    elif instant is False:
+        rows = [row for row in rows if row.get("start")]
+    if not rows:
+        return None, f"tag={tag} unit={unit} missing"
+    latest = sorted(rows, key=lambda row: (row.get("end") or "", row.get("filed") or "", row.get("frame") or ""))[-1]
+    return safe_float(latest.get("val")), f"tag={tag} unit={unit} form={latest.get('form')} filed={latest.get('filed')} end={latest.get('end')} accn={latest.get('accn')}"
+
+
+def collect_mstr_sec_companyfacts() -> list[Observation]:
+    url = "https://data.sec.gov/api/xbrl/companyfacts/CIK0001050446.json"
+    data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    facts = data.get("facts", {})
+    cash, cash_detail = latest_sec_fact(facts, "CashAndCashEquivalentsAtCarryingValue", "USD", True)
+    diluted, diluted_detail = latest_sec_fact(facts, "WeightedAverageNumberOfDilutedSharesOutstanding", "shares", False)
+    stockholders_equity, equity_detail = latest_sec_fact(facts, "StockholdersEquity", "USD", True)
+    pref_div, pref_div_detail = latest_sec_fact(facts, "DividendsPreferredStock", "USD", False)
+    pref_cash_div, pref_cash_div_detail = latest_sec_fact(facts, "DividendsPreferredStockCash", "USD", False)
+    deferred_tax_liability, dtl_detail = latest_sec_fact(facts, "DeferredTaxLiabilities", "USD", True)
+    return [
+        obs("mstr_sec_cash_musd", cash / 1e6 if cash is not None else None, "SEC companyfacts", url, ok=cash is not None, detail=cash_detail),
+        obs("mstr_sec_diluted_shares_m", diluted / 1e6 if diluted is not None else None, "SEC companyfacts", url, ok=diluted is not None, detail=diluted_detail),
+        obs("mstr_sec_stockholders_equity_musd", stockholders_equity / 1e6 if stockholders_equity is not None else None, "SEC companyfacts", url, ok=stockholders_equity is not None, detail=equity_detail),
+        obs("mstr_sec_preferred_dividends_musd", pref_div / 1e6 if pref_div is not None else None, "SEC companyfacts", url, ok=pref_div is not None, detail=pref_div_detail),
+        obs("mstr_sec_preferred_cash_dividends_musd", pref_cash_div / 1e6 if pref_cash_div is not None else None, "SEC companyfacts", url, ok=pref_cash_div is not None, detail=pref_cash_div_detail),
+        obs("mstr_sec_deferred_tax_liability_musd", deferred_tax_liability / 1e6 if deferred_tax_liability is not None else None, "SEC companyfacts", url, ok=deferred_tax_liability is not None, detail=dtl_detail),
+    ]
+
+def collect_strategy_purchases() -> list[Observation]:
+    url = "https://www.strategy.com/purchases"
+    html = fetch_text(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "text/html"})
+    match = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html)
+    if not match:
+        raise ValueError("Strategy purchases __NEXT_DATA__ missing")
+    data = json.loads(match.group(1))
+    rows = data.get("props", {}).get("pageProps", {}).get("bitcoinData", [])
+    if not rows:
+        raise ValueError("Strategy purchases bitcoinData empty")
+    latest = sorted(rows, key=lambda row: row.get("date_of_purchase") or "")[-1]
+    detail = (
+        f"date={latest.get('date_of_purchase')} title={latest.get('title')} "
+        f"sec_url={(latest.get('sec') or {}).get('url')} source=strategy_purchases_next_data"
+    )
+    return [
+        obs("mstr_strategy_btc_holdings", safe_float(latest.get("btc_holdings")), "Strategy purchases page", url, ok=latest.get("btc_holdings") is not None, detail=detail),
+        obs("mstr_strategy_latest_btc_delta", safe_float(latest.get("count")), "Strategy purchases page", url, ok=latest.get("count") is not None, detail=detail),
+        obs("mstr_strategy_latest_purchase_price", safe_float(latest.get("purchase_price")), "Strategy purchases page", url, ok=latest.get("purchase_price") is not None, detail=detail),
+        obs("mstr_strategy_latest_purchase_usd_m", (safe_float(latest.get("total_purchase_price")) or 0) / 1e6, "Strategy purchases page", url, ok=latest.get("total_purchase_price") is not None, detail=detail),
+        obs("mstr_strategy_average_cost", safe_float(latest.get("average_price")), "Strategy purchases page", url, ok=latest.get("average_price") is not None, detail=detail),
+        obs("mstr_strategy_latest_purchase_date", latest.get("date_of_purchase"), "Strategy purchases page", url, ok=bool(latest.get("date_of_purchase")), detail=detail),
+    ]
+
 def collect_sec_submissions() -> list[Observation]:
     cik = "0001050446"
     url = f"https://data.sec.gov/submissions/CIK{cik}.json"
@@ -308,6 +426,44 @@ def selected_price(
     }
 
 
+def set_automated_input(
+    inputs: dict[str, Any],
+    provenance: dict[str, Any],
+    key: str,
+    value: float | None,
+    source_ref: str,
+    detail: str | None,
+) -> None:
+    if value is None:
+        return
+    inputs[key] = value
+    provenance.setdefault("fields", {})[key] = {
+        "source_type": "automated_sec_companyfacts",
+        "source_ref": source_ref,
+        "detail": detail,
+        "as_of": today_utc(),
+        "confidence": "medium",
+    }
+
+
+def build_effective_inputs(observations: list[Observation]) -> tuple[dict[str, Any], dict[str, Any]]:
+    inputs = copy.deepcopy(MANUAL_INPUTS)
+    provenance = copy.deepcopy(load_input_provenance())
+    provenance["status"] = "mixed_automated_manual"
+    provenance["updated_at"] = today_utc()
+    sec_cash = latest_observation(observations, "mstr_sec_cash_musd")
+    sec_diluted = latest_observation(observations, "mstr_sec_diluted_shares_m")
+    sec_dtl = latest_observation(observations, "mstr_sec_deferred_tax_liability_musd")
+    strategy_btc = latest_observation(observations, "mstr_strategy_btc_holdings")
+    strategy_weekly = latest_observation(observations, "mstr_strategy_latest_purchase_usd_m")
+    set_automated_input(inputs, provenance, "usd_reserve_musd", safe_float(sec_cash.value) if sec_cash else None, "SEC companyfacts CashAndCashEquivalentsAtCarryingValue", sec_cash.detail if sec_cash else None)
+    set_automated_input(inputs, provenance, "diluted_shares_m", safe_float(sec_diluted.value) if sec_diluted else None, "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding", sec_diluted.detail if sec_diluted else None)
+    set_automated_input(inputs, provenance, "net_deferred_tax_liability_musd", safe_float(sec_dtl.value) if sec_dtl else None, "SEC companyfacts DeferredTaxLiabilities", sec_dtl.detail if sec_dtl else None)
+    set_automated_input(inputs, provenance, "mstr_btc_holdings", safe_float(strategy_btc.value) if strategy_btc else None, "Strategy official purchases page", strategy_btc.detail if strategy_btc else None)
+    set_automated_input(inputs, provenance, "weekly_btc_sales_musd", abs(safe_float(strategy_weekly.value) or 0) if strategy_weekly else None, "Strategy official purchases page latest transaction absolute USD amount", strategy_weekly.detail if strategy_weekly else None)
+    return inputs, provenance
+
+
 def load_input_provenance() -> dict[str, Any]:
     return load_json(PROVENANCE_PATH, {"schema": 1, "status": "missing", "fields": {}})
 
@@ -320,7 +476,7 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     bmnr_px, bmnr_basis = selected_price(observations, "bmnr_usd_yahoo", "bmnr_usd_nasdaq", "BMNR")
     strc_px, strc_basis = selected_price(observations, "strc_usd_yahoo", "strc_usd_nasdaq", "STRC")
 
-    inputs = MANUAL_INPUTS
+    inputs, input_provenance = build_effective_inputs(observations)
     pref_total = sum(item["notional_musd"] for item in inputs["preferred"].values())
     annual_div = sum(item["notional_musd"] * item["rate"] for item in inputs["preferred"].values())
     annual_obligation = annual_div + inputs["annual_interest_musd"]
@@ -368,7 +524,22 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "btc_fee_hour_sat_vb": safe_float(latest_value(observations, "btc_fee_hour_sat_vb")),
             "btc_hashrate_ths": safe_float(latest_value(observations, "btc_hashrate_ths")),
             "treasury_avg_bill_rate_pct": safe_float(latest_value(observations, "treasury_avg_bill_rate_pct")),
-            "etf_flow_status": "not_automated_yet",
+            "btc_mvrv_current": safe_float(latest_value(observations, "btc_mvrv_current")),
+            "btc_supply_current": safe_float(latest_value(observations, "btc_supply_current")),
+            "btc_market_cap_coinmetrics_usd": safe_float(latest_value(observations, "btc_market_cap_coinmetrics_usd")),
+            "etf_flow_status": latest_value(observations, "btc_etf_flow_status") or "unavailable",
+            "etf_flow_1d_btc": safe_float(latest_value(observations, "btc_etf_flow_1d_btc")),
+            "etf_flow_1d_usd": safe_float(latest_value(observations, "btc_etf_flow_1d_usd")),
+            "etf_flow_7d_btc": safe_float(latest_value(observations, "btc_etf_flow_7d_btc")),
+            "etf_flow_7d_usd": safe_float(latest_value(observations, "btc_etf_flow_7d_usd")),
+            "etf_flow_30d_btc": safe_float(latest_value(observations, "btc_etf_flow_30d_btc")),
+            "etf_flow_30d_usd": safe_float(latest_value(observations, "btc_etf_flow_30d_usd")),
+            "automation_limits": {
+                "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
+                "realized_loss": "Glassnode/CheckOnChain realized-loss series is not available as a stable free API; not used as a hard trigger.",
+                "google_trends": "No stable unauthenticated official API; excluded from hard gates.",
+                "macro_calendar": "No stable free official event API wired; regulatory/event gate remains manual review only.",
+            },
         },
         "mstr_metrics": {
             "btc_nav_musd": btc_nav_musd,
@@ -383,7 +554,17 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "contract_red_light": contract_red_light,
         },
         "manual_inputs": inputs,
-        "manual_input_provenance": load_input_provenance(),
+        "manual_seed_inputs": MANUAL_INPUTS,
+        "manual_input_provenance": input_provenance,
+        "sec_companyfacts": {
+            "cash_musd": safe_float(latest_value(observations, "mstr_sec_cash_musd")),
+            "diluted_shares_m": safe_float(latest_value(observations, "mstr_sec_diluted_shares_m")),
+            "stockholders_equity_musd": safe_float(latest_value(observations, "mstr_sec_stockholders_equity_musd")),
+            "preferred_dividends_musd": safe_float(latest_value(observations, "mstr_sec_preferred_dividends_musd")),
+            "preferred_cash_dividends_musd": safe_float(latest_value(observations, "mstr_sec_preferred_cash_dividends_musd")),
+            "deferred_tax_liability_musd": safe_float(latest_value(observations, "mstr_sec_deferred_tax_liability_musd")),
+            "status": "automated_sec_companyfacts_supporting_check",
+        },
     }
 
 
@@ -435,7 +616,11 @@ def collect_all() -> list[Observation]:
         ("mempool", collect_mempool_fees),
         ("hashrate", lambda: [collect_blockchain_hashrate()]),
         ("treasury", lambda: [collect_treasury_average_rate()]),
+        ("coinmetrics", collect_coinmetrics_btc_cycle),
+        ("etf_flow", collect_walletpilot_etf_flows),
         ("sec", collect_sec_submissions),
+        ("sec_facts", collect_mstr_sec_companyfacts),
+        ("strategy_purchases", collect_strategy_purchases),
     ]
     observations: list[Observation] = []
     for name, collector in collectors:

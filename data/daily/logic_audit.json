@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-07-08",
-  "generated_at": "2026-07-08T10:00:37+00:00",
+  "generated_at": "2026-07-08T12:31:54+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -11,8 +11,6 @@
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
-      "claim_common_equity_cheap",
-      "mnav_green_light",
       "treat_mnav_as_green",
       "use_etf_flow_as_hard_trigger"
     ],
@@ -29,8 +27,6 @@
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
-      "claim_common_equity_cheap",
-      "mnav_green_light",
       "treat_mnav_as_green",
       "use_etf_flow_as_hard_trigger"
     ],
@@ -41,7 +37,7 @@
       "id": "NO_TACTICAL_ADD_WHEN_CONTRACT_RED_LIGHT",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "False green light for the user's 2.5x leveraged MSTR tactical sleeve."
     },
     {
@@ -55,56 +51,56 @@
       "id": "M1_BELOW_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=0.961x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "equity_mnav=1.215x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Common equity may be called cheap while adjusted common NAV is still below threshold."
     },
     {
       "id": "MNAV_DUAL_GATE_REQUIRED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "mnav_gate_ok=False, equity_mnav=0.961x, enterprise_mnav=1.027x, pref_dilution_flag=False",
+      "evidence": "mnav_gate_ok=True, equity_mnav=1.215x, enterprise_mnav=1.115x, pref_dilution_flag=False",
       "risk_if_failed": "Official or single-line mNAV could override the self-calculated dual gate."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=0.961x, sats_per_share=296061",
+      "evidence": "equity_mnav=1.215x, sats_per_share=252693",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
       "id": "STRC_DISCOUNT_DOWNGRADES_MNAV",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "strc_discount=13.4%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "strc_discount=13.4%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Headline mNAV could ignore preferred-market capital-stack stress."
     },
     {
       "id": "SALE_PRESSURE_BLOCKS_LEVERAGED_ADD",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "sale_ratio=5.83x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "sale_ratio=3.64x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Forced-sale pressure could be treated as a dip-buy setup."
     },
     {
       "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "manual_input_provenance=manual_seed, verification=degraded",
+      "evidence": "manual_input_provenance=mixed_automated_manual, verification=degraded; pass means false-green-light is blocked, not that inputs are fully automated",
       "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
     },
     {
       "id": "ETF_FLOW_NOT_HARD_TRIGGER_UNTIL_AUTOMATED",
       "status": "pass",
       "severity": "major",
-      "evidence": "etf_flow_status=not_automated_yet, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "etf_flow_status=automated_third_party_single_source, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']; single-source ETF data may inform context but remains barred from hard triggers",
       "risk_if_failed": "Missing ETF-flow automation could still influence hard trading decisions."
     },
     {
       "id": "RESERVE_COVERAGE_ESCALATES_BELOW_ONE_YEAR",
       "status": "pass",
       "severity": "major",
-      "evidence": "coverage_months=15.9, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "coverage_months=13.7, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Liquidity runway deterioration could be missed in leveraged sizing."
     }
   ],
@@ -112,21 +108,21 @@
     {
       "metric": "普通股真實安全邊際",
       "threshold": "< 1.00 blocks common-equity cheapness claims",
-      "current": "0.961x",
+      "current": "1.215x",
       "rationale": "Below 1.0 means common equity trades through internally adjusted BTC NAV after debt, preferred, cash, and tax inputs.",
       "action": "Do not frame MSTR common as cheap until provenance and capital stack are reviewed."
     },
     {
       "metric": "企業價值安全邊際",
       "threshold": "< 1.00 would imply enterprise trades below BTC NAV before common-stack haircuts",
-      "current": "1.027x",
+      "current": "1.115x",
       "rationale": "Separates company-level BTC premium from common-share capital-structure burden.",
       "action": "只能當背景參考；不可蓋過普通股安全邊際、賣幣壓力、STRC 折價這三個紅旗。"
     },
     {
       "metric": "每週賣幣壓力倍數",
       "threshold": "> 2.00 is forced-sale pressure red flag",
-      "current": "5.83x",
+      "current": "3.64x",
       "rationale": "Weekly BTC sales versus economic cushion can turn financing reflexivity from tailwind to headwind.",
       "action": "Block 2.5x tactical adds when above threshold."
     },
@@ -140,7 +136,7 @@
     {
       "metric": "USD reserve coverage",
       "threshold": "< 12 months weakens survivability buffer",
-      "current": "15.9 months",
+      "current": "13.7 months",
       "rationale": "Cash duration matters more than narrative when dividends, interest, or ATM access tighten.",
       "action": "Escalate to risk-off review if coverage drops below one year."
     },

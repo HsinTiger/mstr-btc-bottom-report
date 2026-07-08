@@ -1,16 +1,15 @@
 {
   "schema": 1,
   "date": "2026-07-08",
-  "generated_at": "2026-07-08T10:00:37+00:00",
+  "generated_at": "2026-07-08T12:31:55+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
     "degradations": [
-      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 4.16% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.60% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-      "ETF flow not automated",
-      "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
-      "capital-structure provenance status=manual_seed"
+      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.73% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
+      "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
+      "capital-structure provenance status=mixed_automated_manual"
     ],
     "logic_audit_status": "consistent",
     "logic_failed_invariants": 0,
@@ -26,8 +25,6 @@
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
-      "claim_common_equity_cheap",
-      "mnav_green_light",
       "treat_mnav_as_green",
       "use_etf_flow_as_hard_trigger"
     ],
@@ -35,20 +32,20 @@
     "contradictions": 0
   },
   "decomposition": {
-    "btc_return_1d": -0.026423082055750613,
+    "btc_return_1d": -0.023283015016995146,
     "mstr_return_1d": -0.033839436340180606,
-    "mstr_minus_btc_1d": -0.0074163542844299934,
-    "m1_delta_1d": 0.012995548223526665,
+    "mstr_minus_btc_1d": -0.010556421323185461,
+    "m1_delta_1d": 0.266224628152274,
     "strc_discount_delta_1d": 0.020199999999999996,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": -0.0074163542844299934,
+        "value": -0.010556421323185461,
         "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
       },
       {
         "driver": "普通股真實安全邊際變化",
-        "value": 0.012995548223526665,
+        "value": 0.266224628152274,
         "read": "普通股安全邊際改善"
       },
       {
@@ -62,28 +59,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 49609.195999999996,
-        "equity_mnav_at_current_mstr": 1.5084316919320084
+        "btc_price": 49769.200000000004,
+        "equity_mnav_at_current_mstr": 1.9987219536569236
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 55810.345499999996,
-        "equity_mnav_at_current_mstr": 1.1743835636542017
+        "btc_price": 55990.35,
+        "equity_mnav_at_current_mstr": 1.5110611446249338
       },
       {
         "btc_shock": 0,
-        "btc_price": 62011.494999999995,
-        "equity_mnav_at_current_mstr": 0.9614636570067399
+        "btc_price": 62211.5,
+        "equity_mnav_at_current_mstr": 1.2146927369354872
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 68212.6445,
-        "equity_mnav_at_current_mstr": 0.81390059205579
+        "btc_price": 68432.65000000001,
+        "equity_mnav_at_current_mstr": 1.0155167569828867
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 74413.794,
-        "equity_mnav_at_current_mstr": 0.7056059373362557
+        "btc_price": 74653.8,
+        "equity_mnav_at_current_mstr": 0.8724578273847133
       }
     ]
   },
@@ -96,14 +93,14 @@
     },
     {
       "name": "普通股真實安全邊際",
-      "severity": "high",
-      "value": "0.96x",
-      "read": "低於 1.0；普通股還不能說便宜"
+      "severity": "low",
+      "value": "1.21x",
+      "read": "高於 1.0，但仍需檢查紅旗"
     },
     {
       "name": "每週賣幣壓力倍數",
       "severity": "high",
-      "value": "5.8x",
+      "value": "3.6x",
       "read": "高於 2 倍；凍結小倉合約加碼"
     },
     {
