@@ -180,6 +180,40 @@ def collect_stooq_close(ticker: str, symbol: str) -> Observation:
     return obs(f"{ticker.lower()}_usd_stooq", value, "Stooq quote CSV", url, ok=value is not None, detail=detail)
 
 
+
+def collect_fear_greed() -> list[Observation]:
+    url = "https://api.alternative.me/fng/?limit=1"
+    data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    row = (data.get("data") or [{}])[0]
+    return [
+        obs("fear_greed_value", safe_float(row.get("value")), "Alternative.me Fear & Greed", url, ok=row.get("value") is not None, detail=str(row.get("value_classification") or "")),
+        obs("fear_greed_timestamp", row.get("timestamp"), "Alternative.me Fear & Greed", url, ok=bool(row.get("timestamp"))),
+    ]
+
+
+def collect_mempool_fees() -> list[Observation]:
+    url = "https://mempool.space/api/v1/fees/recommended"
+    data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    return [
+        obs("btc_fee_fastest_sat_vb", safe_float(data.get("fastestFee")), "mempool.space fees", url),
+        obs("btc_fee_hour_sat_vb", safe_float(data.get("hourFee")), "mempool.space fees", url),
+    ]
+
+
+def collect_blockchain_hashrate() -> Observation:
+    url = "https://api.blockchain.info/charts/hash-rate?timespan=7days&format=json&cors=true"
+    data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    values = data.get("values") or []
+    latest = values[-1] if values else {}
+    return obs("btc_hashrate_ths", safe_float(latest.get("y")), "Blockchain.com hash-rate chart", url, ok=latest.get("y") is not None, detail=f"timestamp={latest.get('x')}")
+
+
+def collect_treasury_average_rate() -> Observation:
+    url = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/avg_interest_rates?sort=-record_date&page[size]=1&format=json"
+    data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    row = (data.get("data") or [{}])[0]
+    return obs("treasury_avg_bill_rate_pct", safe_float(row.get("avg_interest_rate_amt")), "Treasury Fiscal Data avg interest rates", url, ok=row.get("avg_interest_rate_amt") is not None, detail=f"record_date={row.get('record_date')} {row.get('security_desc')}")
+
 def collect_sec_submissions() -> list[Observation]:
     cik = "0001050446"
     url = f"https://data.sec.gov/submissions/CIK{cik}.json"
@@ -262,6 +296,15 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "bmnr_usd": bmnr_px,
             "strc_usd": strc_px,
         },
+        "market_radar": {
+            "fear_greed": safe_float(latest_value(observations, "fear_greed_value")),
+            "fear_greed_timestamp": latest_value(observations, "fear_greed_timestamp"),
+            "btc_fee_fastest_sat_vb": safe_float(latest_value(observations, "btc_fee_fastest_sat_vb")),
+            "btc_fee_hour_sat_vb": safe_float(latest_value(observations, "btc_fee_hour_sat_vb")),
+            "btc_hashrate_ths": safe_float(latest_value(observations, "btc_hashrate_ths")),
+            "treasury_avg_bill_rate_pct": safe_float(latest_value(observations, "treasury_avg_bill_rate_pct")),
+            "etf_flow_status": "not_automated_yet",
+        },
         "mstr_metrics": {
             "btc_nav_musd": btc_nav_musd,
             "equity_mnav": equity_mnav,
@@ -315,6 +358,10 @@ def collect_all() -> list[Observation]:
         ("mstr_nasdaq", lambda: [collect_nasdaq_equity("MSTR")]),
         ("bmnr_nasdaq", lambda: [collect_nasdaq_equity("BMNR")]),
         ("strc_nasdaq", lambda: [collect_nasdaq_equity("STRC")]),
+        ("fng", collect_fear_greed),
+        ("mempool", collect_mempool_fees),
+        ("hashrate", lambda: [collect_blockchain_hashrate()]),
+        ("treasury", lambda: [collect_treasury_average_rate()]),
         ("sec", collect_sec_submissions),
     ]
     observations: list[Observation] = []

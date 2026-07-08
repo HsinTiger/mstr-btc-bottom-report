@@ -622,6 +622,7 @@ function card({label,value,read,tone,hero=false}){
 }
 function coreCards(today,yday,verify){
   const p=today.metrics.prices, pm=yday?.metrics?.prices||{};
+  const radar=today.metrics.market_radar||{};
   const m=today.metrics.mstr_metrics;
   const btcChg=delta(p.btc_usd,pm.btc_usd,'rel');
   const mstrChg=delta(p.mstr_usd,pm.mstr_usd,'rel');
@@ -635,7 +636,11 @@ function coreCards(today,yday,verify){
     card({label:'BMNR',value:money(p.bmnr_usd),tone:'info',read:bmnrChg<0?'衛星轉弱':'衛星反彈，不升主倉'}),
     card({label:'STRC',value:money(p.strc_usd),tone:m.strc_discount>0.05?'bad':'good',read:m.strc_discount>0.05?'優先股信任弱':'優先股信任改善'}),
     card({label:'合約紅燈',value:m.contract_red_light?'ON':'OFF',tone:m.contract_red_light?'bad':'good',read:m.contract_red_light?'禁止小倉加碼':'可等右側確認'}),
-    card({label:'資料驗證',value:(verify?.status||'unknown').toUpperCase(),tone:verify?.status==='pass'?'good':verify?.status==='fail'?'bad':'warn',read:verify?.status==='pass'?'資料完整':verify?.status==='fail'?'停止使用今日資料':'可看不可交易級'})
+    card({label:'資料驗證',value:(verify?.status||'unknown').toUpperCase(),tone:verify?.status==='pass'?'good':verify?.status==='fail'?'bad':'warn',read:verify?.status==='pass'?'資料完整':verify?.status==='fail'?'停止使用今日資料':'可看不可交易級'}),
+    card({label:'F&G 情緒',value:radar.fear_greed??'—',tone:radar.fear_greed<=25?'good':radar.fear_greed>=70?'bad':'warn',read:radar.fear_greed<=25?'市場恐懼，等觸發':'情緒非投降'}),
+    card({label:'鏈上手續費',value:radar.btc_fee_fastest_sat_vb==null?'—':radar.btc_fee_fastest_sat_vb+' sat/vB',tone:'info',read:'鏈上壓力 proxy'}),
+    card({label:'宏觀資金成本',value:radar.treasury_avg_bill_rate_pct==null?'—':Number(radar.treasury_avg_bill_rate_pct).toFixed(2)+'%',tone:'warn',read:'高利率壓估值'}),
+    card({label:'ETF Flow',value:radar.etf_flow_status==='automated'?'ON':'待接',tone:'warn',read:'尚未自動化，不作硬觸發'})
   ].join('');
 }
 function mstrCards(today,yday){

@@ -169,6 +169,16 @@ def main() -> int:
     for key, expected in recomputed.items():
         assert_close(key, expected, metrics.get(key), failures)
 
+    radar = snapshot.get("metrics", {}).get("market_radar", {})
+    if as_float(radar.get("fear_greed")) is None:
+        degradations.append("Fear & Greed missing")
+    if as_float(radar.get("btc_fee_fastest_sat_vb")) is None:
+        degradations.append("mempool fee proxy missing")
+    if as_float(radar.get("treasury_avg_bill_rate_pct")) is None:
+        degradations.append("macro funding proxy missing")
+    if radar.get("etf_flow_status") != "automated":
+        degradations.append("ETF flow not automated")
+
     manual = snapshot.get("metrics", {}).get("manual_inputs", {})
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
     fields = provenance.get("fields", {})
@@ -194,7 +204,7 @@ def main() -> int:
             "btc_cross_source_max_gap": "1.5%",
             "equity_cross_source_max_gap": "2%",
             "required_sources": ["CoinGecko", "Coinbase", "Yahoo Finance"],
-            "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs"],
+            "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "ETF flow automation"],
         },
     }
     write_json(REPORT_PATH, report)

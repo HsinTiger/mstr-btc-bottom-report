@@ -1,18 +1,19 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-08T05:23:10+00:00",
+  "verified_at": "2026-07-08T05:48:49+00:00",
   "date": "2026-07-08",
   "status": "degraded",
   "failures": [],
   "degradations": [
+    "ETF flow not automated",
     "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
     "capital-structure provenance status=manual_seed"
   ],
   "warnings": [],
   "evidence": [
-    "btc_usd_coingecko=62773 from CoinGecko simple price",
-    "btc_usd_coinbase=62724.29 from Coinbase Exchange ticker",
+    "btc_usd_coingecko=62570 from CoinGecko simple price",
+    "btc_usd_coinbase=62536.03 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.36 from Yahoo Finance chart",
     "MSTR Yahoo/Nasdaq=97.36/97.36",
     "BMNR Yahoo/Nasdaq=14.8/14.8",
@@ -30,7 +31,8 @@
     "degraded_if_missing": [
       "Nasdaq backup quotes",
       "SEC EDGAR submissions",
-      "automated capital-structure inputs"
+      "automated capital-structure inputs",
+      "ETF flow automation"
     ]
   }
 }
