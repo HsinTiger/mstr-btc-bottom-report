@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-07-08T07:10:54+00:00",
+  "updated_at": "2026-07-08T09:39:01+00:00",
   "current_date": "2026-07-08",
   "visible_window": [
     {
@@ -52,17 +52,19 @@
     },
     {
       "date": "2026-07-08",
-      "generated_at": "2026-07-08T07:10:54+00:00",
+      "generated_at": "2026-07-08T09:39:01+00:00",
       "type": "daily_extension",
-      "verification_status": "degraded",
-      "verification_warnings": [],
+      "verification_status": "fail",
+      "verification_warnings": [
+        "STRC equity: 來源差距 1.28% 接近門檻"
+      ],
       "decision_state": "禁止小倉合約加碼",
       "decision_state_code": "BLOCK_LEVERAGED_ADD",
       "viewpoints": [
         {
           "title": "結構先於價格：今天不是看 MSTR 漲跌，而是看普通股是否重新拿回安全邊際",
           "lens": "普通股安全邊際／企業價值安全邊際／特別股稀釋污染",
-          "claim": "普通股真實安全邊際=0.95x、企業價值安全邊際=1.02x、特別股稀釋污染旗標=False；第二等份加碼門檻=False。",
+          "claim": "普通股真實安全邊際=0.96x、企業價值安全邊際=1.03x、特別股稀釋污染旗標=False；第二等份加碼門檻=False。",
           "so_what": "小倉 2.5x 合約只在加碼門檻打開且紅燈解除時討論；否則最多是研究，不是行動訊號。",
           "study_note": "從 wiki_llm 的估值倍率定義權風險延伸：公司口徑可被融資結構改寫，因此觸發條件必須使用自算的普通股安全邊際與企業價值安全邊際。",
           "confidence": "中"
@@ -78,7 +80,7 @@
         {
           "title": "大倉與小倉分離：MSTR/BMNR 現貨 4:1 看週期，合約只吃低頻確認後的波段",
           "lens": "Portfolio split",
-          "claim": "BTC=62551、MSTR=97.36、BMNR=14.80；資料驗證=degraded。",
+          "claim": "BTC=62020、MSTR=97.36、BMNR=14.80；資料驗證=fail。",
           "so_what": "大倉用 1–4 年週期容忍波動；小倉用紅燈/綠燈避免在融資壓力區追多。",
           "study_note": "從 indicator regime change 延伸：Pi Cycle/MVRV 仍可當背景，但不可凌駕 ETF、公司融資與優先股折價。",
           "confidence": "中"
@@ -154,17 +156,19 @@
     },
     {
       "date": "2026-07-08",
-      "generated_at": "2026-07-08T07:10:54+00:00",
+      "generated_at": "2026-07-08T09:39:01+00:00",
       "type": "daily_extension",
-      "verification_status": "degraded",
-      "verification_warnings": [],
+      "verification_status": "fail",
+      "verification_warnings": [
+        "STRC equity: 來源差距 1.28% 接近門檻"
+      ],
       "decision_state": "禁止小倉合約加碼",
       "decision_state_code": "BLOCK_LEVERAGED_ADD",
       "viewpoints": [
         {
           "title": "結構先於價格：今天不是看 MSTR 漲跌，而是看普通股是否重新拿回安全邊際",
           "lens": "普通股安全邊際／企業價值安全邊際／特別股稀釋污染",
-          "claim": "普通股真實安全邊際=0.95x、企業價值安全邊際=1.02x、特別股稀釋污染旗標=False；第二等份加碼門檻=False。",
+          "claim": "普通股真實安全邊際=0.96x、企業價值安全邊際=1.03x、特別股稀釋污染旗標=False；第二等份加碼門檻=False。",
           "so_what": "小倉 2.5x 合約只在加碼門檻打開且紅燈解除時討論；否則最多是研究，不是行動訊號。",
           "study_note": "從 wiki_llm 的估值倍率定義權風險延伸：公司口徑可被融資結構改寫，因此觸發條件必須使用自算的普通股安全邊際與企業價值安全邊際。",
           "confidence": "中"
@@ -180,7 +184,7 @@
         {
           "title": "大倉與小倉分離：MSTR/BMNR 現貨 4:1 看週期，合約只吃低頻確認後的波段",
           "lens": "Portfolio split",
-          "claim": "BTC=62551、MSTR=97.36、BMNR=14.80；資料驗證=degraded。",
+          "claim": "BTC=62020、MSTR=97.36、BMNR=14.80；資料驗證=fail。",
           "so_what": "大倉用 1–4 年週期容忍波動；小倉用紅燈/綠燈避免在融資壓力區追多。",
           "study_note": "從 indicator regime change 延伸：Pi Cycle/MVRV 仍可當背景，但不可凌駕 ETF、公司融資與優先股折價。",
           "confidence": "中"

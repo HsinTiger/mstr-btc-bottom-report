@@ -1,23 +1,28 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-08T07:10:53+00:00",
+  "verified_at": "2026-07-08T09:38:59+00:00",
   "date": "2026-07-08",
-  "status": "degraded",
-  "failures": [],
+  "status": "fail",
+  "failures": [
+    "MSTR equity: 來源差距 4.38% > 2.00%",
+    "BMNR equity: 來源差距 2.53% > 2.00%"
+  ],
   "degradations": [
     "ETF flow not automated",
     "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
     "capital-structure provenance status=manual_seed"
   ],
-  "warnings": [],
+  "warnings": [
+    "STRC equity: 來源差距 1.28% 接近門檻"
+  ],
   "evidence": [
-    "btc_usd_coingecko=62531 from CoinGecko simple price",
-    "btc_usd_coinbase=62570.38 from Coinbase Exchange ticker",
+    "btc_usd_coingecko=62052 from CoinGecko simple price",
+    "btc_usd_coinbase=61988.12 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.36 from Yahoo Finance chart",
-    "MSTR Yahoo/Nasdaq=97.36/97.36",
-    "BMNR Yahoo/Nasdaq=14.8/14.8",
-    "STRC Yahoo/Nasdaq=86.56/86.56",
+    "MSTR Yahoo/Nasdaq=97.36/93.19",
+    "BMNR Yahoo/Nasdaq=14.8/14.43",
+    "STRC Yahoo/Nasdaq=86.56/85.46",
     "SEC latest form=8-K"
   ],
   "policy": {

@@ -101,37 +101,37 @@ h2:first-child{margin-top:0}
       <h3>大倉現貨「投降接刀」條件</h3>
       <ul class="chk">
         <li><span>① BTC ≤ $54,000</span><span class="neg" id="t54"></span></li>
-        <li><span>② MVRV-Z ≤ 0</span><span class="warn">0.20（7/1）[STALE·外部]</span></li>
-        <li><span>③ 綜合溫度 ≤ −6</span><span class="warn">−3.2（7/4 監控）[STALE·外部]</span></li>
-        <li><span>④ MSTR mNAV ≤ 0.6x</span><span class="warn">0.67x（7/4 監控）[STALE·外部]</span></li>
+        <li><span>② MVRV-Z ≤ 0</span><span class="warn" id="mvrvNow">未自動化</span></li>
+        <li><span>③ 綜合溫度 ≤ −6</span><span class="warn" id="tempNow">未自動化</span></li>
+        <li><span>④ 普通股真實安全邊際 ≤ 0.6x</span><span class="warn" id="cheapMnavNow">載入中</span></li>
       </ul>
-      <div class="mini" style="margin-top:6px">整體：<b class="neg">未觸發</b></div>
+      <div class="mini" style="margin-top:6px">整體：<b class="neg" id="capitulationOverall">載入中</b></div>
     </div>
     <div class="card">
       <h3>小倉 2.5x MSTR 合約前置閘門</h3>
       <ul class="chk">
-        <li><span>觸發（上方任一）</span><span class="neg">✗</span></li>
-        <li><span>實現虧損放量</span><span class="neg">✗（未見歷史級）</span></li>
+        <li><span>觸發（上方任一）</span><span class="neg" id="contractTriggerNow">載入中</span></li>
+        <li><span>實現虧損放量</span><span class="warn" id="realizedLossNow">未自動化</span></li>
         <li><span>費率極端負 ≤−20%年化</span><span class="neg" id="frNow"></span></li>
       </ul>
-      <div class="mini" style="margin-top:6px">紅燈/趨勢/清算緩衝缺一 → <b>2.5x MSTR 合約待機</b></div>
+      <div class="mini" style="margin-top:6px" id="contractGateSummary">載入中</div>
     </div>
     <div class="card">
       <h3>大倉現貨「便宜＋確認」條件</h3>
       <ul class="chk">
-        <li><span>① ETF 連 ≥10 日淨流入</span><span class="warn">Day 1（7/3 +$221.7M）[STALE·外部]</span></li>
+        <li><span>① ETF 連 ≥10 日淨流入</span><span class="warn" id="etfFlowNow">未自動化</span></li>
         <li><span>② 站回 200DMA＋更高低點</span><span class="neg" id="tma"></span></li>
-        <li><span>③ MSTR 健康且 mNAV ≥1.0x</span><span class="neg">✗ Strategy monetization / reported BTC sales 紅燈</span></li>
-        <li><span>④ 溫度 +2~+5</span><span class="neg">✗（−3.2）</span></li>
+        <li><span>③ MSTR 資本結構健康且普通股安全邊際 ≥1.0x</span><span class="neg" id="mstrHealthNow">載入中</span></li>
+        <li><span>④ 綜合溫度 +2~+5</span><span class="warn" id="confirmTempNow">未自動化</span></li>
       </ul>
     </div>
     <div class="card">
       <h3>三道閘門</h3>
       <ul class="chk">
-        <li><span>機構閘：Strategy BTC monetization / reported BTC sales</span><span class="neg">紅（IC 覆核前凍結）</span></li>
-        <li><span>機構閘：IBIT 背離</span><span class="warn">黃（7/3 −$40M 逆向）</span></li>
-        <li><span>散戶閘：抄底熱度</span><span class="mini">待接 Google Trends</span></li>
-        <li><span>監管閘：48h 事件窗</span><span class="mini">對照晨報宏觀日曆</span></li>
+        <li><span>機構閘：Strategy BTC monetization / reported BTC sales</span><span class="neg" id="strategyGateNow">載入中</span></li>
+        <li><span>機構閘：ETF / IBIT flow</span><span class="warn" id="ibitGateNow">未自動化</span></li>
+        <li><span>散戶閘：抄底熱度</span><span class="warn" id="retailGateNow">未自動化：Google Trends 尚未接入</span></li>
+        <li><span>監管閘：48h 事件窗</span><span class="warn" id="regGateNow">未自動化：宏觀日曆尚未接入</span></li>
       </ul>
     </div>
   </div>
@@ -141,17 +141,17 @@ h2:first-child{margin-top:0}
     <div class="card"><h3>近 7 天</h3><div class="big" id="w1"></div><div class="mini">KOL 共識的「7 月反彈」進行中</div></div>
     <div class="card"><h3>近 30 天</h3><div class="big" id="m1"></div><div class="mini"></div></div>
   </div>
-  <div class="note">每個觸發條件為什麼存在、為什麼是這個門檻 → 見「邏輯」分頁。標 [STALE·外部] 的欄位（MVRV-Z、溫度、mNAV、ETF 流）來自 7/4 雲端監控報告，非本頁即時計算——每日以 routine 報告為準。本頁可即時刷新的只有價格/均線/F&G/費率。</div>
-  <div class="verdict" style="margin-top:10px"><b>IC 裁決（07-07）：</b>今日不開新 2.5x MSTR 合約；S1/S2/S3 條件未齊，且 Strategy BTC monetization / reported BTC sales 使 MSTR 機構閘升為紅燈覆核。雙路仍保留：大倉等 S2/S4；小倉等 MSTR 紅燈解除＋月線/年線趨勢確認。紅燈解除前，不以 MSTR 反身性作為加倉或追多理由。</div>
+  <div class="note" id="dataCoverageNote">每日自動資料會覆蓋已接欄位；尚未自動化的 MVRV-Z、綜合溫度、ETF flow、Google Trends、宏觀日曆會明確標示為未自動化，不再顯示過期外部數字。</div>
+  <div class="verdict" style="margin-top:10px" id="icVerdict"><b>IC 裁決：</b>載入每日資料中…</div>
 
-  <h2>獨家自算指標 M1–M7（不採公司自訂口徑）</h2>
+  <h2>獨家自算核心指標（不採公司自訂口徑）</h2>
   <div class="grid g4">
-    <div class="card"><h3>M1 equity mNAV</h3><div class="big warn" id="dm1">自算</div><div class="mini">普通股市值 ÷ 扣債務/特別股後的淨 BTC NAV</div></div>
-    <div class="card"><h3>M3 稀釋旗標</h3><div class="big warn" id="dm3">降權</div><div class="mini">特別股淨增且 mNAV 回升 → 訊號打五折</div></div>
-    <div class="card"><h3>M4 覆蓋月數</h3><div class="big neg" id="dm4">12m</div><div class="mini">USD Reserve ÷ 月股息/利息義務；低於 12 月紅燈</div></div>
-    <div class="card"><h3>M5 週賣幣比值</h3><div class="big neg" id="dm5">>2x</div><div class="mini">連兩週 >2＝被迫賣幣，凍結加倉</div></div>
-    <div class="card"><h3>M6 sats/股</h3><div class="big info" id="dm6">跟蹤</div><div class="mini">BTC 持倉與稀釋股數同時看，防假增厚</div></div>
-    <div class="card"><h3>M7 STRC 折價</h3><div class="big warn" id="dm7">5%</div><div class="mini">優先股信任票；折價深時 mNAV 全部降權</div></div>
+    <div class="card"><h3>普通股真實安全邊際</h3><div class="big warn" id="dm1">自算</div><div class="mini">普通股市值 ÷ 扣債務/特別股後的淨 BTC NAV</div></div>
+    <div class="card"><h3>特別股稀釋污染旗標</h3><div class="big warn" id="dm3">降權</div><div class="mini">特別股淨增且安全邊際回升 → 訊號打五折</div></div>
+    <div class="card"><h3>現金覆蓋月數</h3><div class="big neg" id="dm4">12m</div><div class="mini">USD Reserve ÷ 月股息/利息義務；低於 12 月紅燈</div></div>
+    <div class="card"><h3>每週賣幣壓力倍數</h3><div class="big neg" id="dm5">>2x</div><div class="mini">連兩週 >2＝被迫賣幣，凍結加倉</div></div>
+    <div class="card"><h3>每股比特幣含量</h3><div class="big info" id="dm6">跟蹤</div><div class="mini">BTC 持倉與稀釋股數同時看，防假增厚</div></div>
+    <div class="card"><h3>STRC 優先股折價信任票</h3><div class="big warn" id="dm7">5%</div><div class="mini">優先股信任票；折價深時估值樂觀全部降權</div></div>
   </div>
   <div class="note">規格：<a href="metrics-spec.md" style="color:#58a6ff">metrics-spec.md</a>；概念：<a href="wiki.html#gaap-vs-mnav" style="color:#58a6ff">GAAP/Non-GAAP/mNAV</a>、<a href="wiki.html#mnav-definition-risk" style="color:#58a6ff">mNAV 定義權風險</a>、<a href="wiki.html#delayed-pro-cyclical" style="color:#58a6ff">延遲順週期</a>、<a href="wiki.html#indicator-regime-change" style="color:#58a6ff">指標 regime change</a>。</div>
   <div class="note">每日資料管線：<a href="data/daily/latest_snapshot.json" style="color:#58a6ff">latest_snapshot</a>、<a href="data/daily/agent_verification_report.json" style="color:#58a6ff">驗證代理報告</a>、<a href="daily-extensions.html" style="color:#58a6ff">每日延伸三觀點</a>。</div>
@@ -277,10 +277,10 @@ h2:first-child{margin-top:0}
   <div class="card"><table><thead><tr><th>指標</th><th>怎麼用（門檻）</th><th>為什麼選它（原因）</th><th>依據</th><th>資料源</th></tr></thead><tbody>
     <tr><td><b>ETF 淨流向＋連續天數</b></td><td>連 ≥10 日淨流入＝第 2 等份①</td><td>本輪邊際買盤的主力與順週期放大器；流向轉向是趨勢確認最快的「硬數據」，比任何均線先講話</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>Farside／CoinDesk（routine 每日）</td></tr>
     <tr><td><b>資金費率極端值</b></td><td>≤−20% 年化（±2 日窗）＝S2 要件之一</td><td>回測 20 次事件：極端負費率後 30 天中位 +16.5%～+26.9%、勝率 75–100%——軋空反彈統計成立（7 天內先洗，別急）</td><td><span class="tag" style="color:var(--g)">回測驗證</span></td><td>Coinglass／Binance（本頁週分頁有圖）</td></tr>
-    <tr><td><b>實現虧損放量</b></td><td>歷史高分位＝S2 要件之一</td><td>投降＝有人真的認賠出場。價格新低但沒人割肉＝還沒完（科幣託：籌碼清洗不足論）</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>Glassnode／CheckOnChain（待接歷史源）</td></tr>
+    <tr><td><b>實現虧損放量</b></td><td>歷史高分位＝S2 要件之一</td><td>投降＝有人真的認賠出場。價格新低但沒人割肉＝還沒完；目前尚未自動化，因此不作硬觸發。</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>Glassnode／CheckOnChain（未自動化，降級顯示）</td></tr>
     <tr><td>IBIT 與全體 ETF 背離</td><td>連 3 日反向＝機構閘黃燈</td><td>最大單一持有者逆向時，「連續流入天數」的計數可能是假訊號——防閘</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>Farside 分家數據</td></tr>
     <tr><td>交易所存量／鯨魚比</td><td>背景結構，不進觸發器</td><td>供給緊縮的慢變量：定方向不定時點，當觸發器會太早進場</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>CryptoQuant（routine 既有）</td></tr>
-    <tr><td>Coinbase 溢價</td><td>轉正＝美國買盤回流佐證</td><td>廢熊用它辨識反彈的資金地理來源；輔助不觸發</td><td><span class="tag" style="color:var(--y)">假說待驗</span></td><td>CryptoQuant（待接）</td></tr>
+    <tr><td>Coinbase 溢價</td><td>轉正＝美國買盤回流佐證</td><td>可輔助辨識反彈資金來源；目前尚未自動化，因此不作硬觸發。</td><td><span class="tag" style="color:var(--y)">假說待驗</span></td><td>CryptoQuant（未自動化，降級顯示）</td></tr>
   </tbody></table></div>
 
   <h2>② 技術面——結構與位置</h2>
@@ -304,13 +304,13 @@ h2:first-child{margin-top:0}
   <h2>④ 情緒與散戶行為——反著讀</h2>
   <div class="card"><table><thead><tr><th>指標</th><th>怎麼用（門檻）</th><th>為什麼選它（原因）</th><th>依據</th><th>資料源</th></tr></thead><tbody>
     <tr><td><b>Fear &amp; Greed</b></td><td>≤20＝S2 過濾；<b>≤10＝絕望道</b>（費率不極端時的替代要件）</td><td>回測抓到規格漏洞：2022/6 三箭投降時 OI 已清空、費率全程不極端，但 F&amp;G＝6–8——絕望道補上這型投降</td><td><span class="tag" style="color:var(--g)">回測驗證</span></td><td>alternative.me（本頁即時）</td></tr>
-    <tr><td>散戶抄底熱度</td><td>90 日高位＝原型 A 延後一日確認</td><td>大隊長反指標：「還在猜底＝不是底；真見底是沒人想抄底」——先量化蒐集 3 個月再定去留</td><td><span class="tag" style="color:var(--y)">假說待驗</span></td><td>Google Trends（待接）</td></tr>
+    <tr><td>散戶抄底熱度</td><td>90 日高位＝原型 A 延後一日確認</td><td>散戶還在猜底時通常不是乾淨投降；目前尚未自動化，因此不作硬觸發。</td><td><span class="tag" style="color:var(--y)">假說待驗</span></td><td>Google Trends（未自動化，降級顯示）</td></tr>
     <tr><td>多空比／爆倉量極端</td><td>提醒用，不觸發</td><td>大隊長：「指標太扎眼時往往反向」——本質是擁擠度訊號，單獨用容易被畫門</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>Coinglass</td></tr>
   </tbody></table></div>
 
   <h2>⑤ 機構／基本面——論點的生命線</h2>
   <div class="card"><table><thead><tr><th>指標</th><th>怎麼用（門檻）</th><th>為什麼選它（原因）</th><th>依據</th><th>資料源</th></tr></thead><tbody>
-    <tr><td><b>MSTR mNAV（修正口徑）</b></td><td>帳面 ≤0.6x＝第 1 等份④；心中安全邊際用修正值</td><td>自有研究：扣掉 $22B 優先求償後，帳面 0.67x 實為 ~1.1x——「折價」是幻覺，全網沒人這樣算（阿貓 0.635x 地板因此太樂觀）</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>SEC 文件＋自算</td></tr>
+    <tr><td><b>普通股真實安全邊際</b></td><td>≤0.6x＝投降接刀參考；≥1.0x 才能討論普通股便宜</td><td>不採公司自訂口徑；每日用自算資料扣除債務、優先股、現金與稅務輸入，缺人工覆核時降級顯示。</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>SEC 文件＋data/daily/latest_snapshot.json</td></tr>
     <tr><td><b>MSTR 被迫賣幣（8-K）</b></td><td>動用 $1.25B 授權＝機構閘紅燈＋凍結原型 B</td><td>「財庫不賣幣」是持有論點的核心假設，8-K 是它的直接證偽事件——這就是為什麼它有一票否決權</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>SEC EDGAR（routine 盯）</td></tr>
     <tr><td>含幣量 sats/股</td><td>持續增厚＝飛輪健康</td><td>阿貓框架的合理部分：稀釋 vs 增持的淨效果，一個數字講完</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>8-K＋自算</td></tr>
     <tr><td>監管政策事件窗</td><td>白名單事件 ±48h 禁開新合約單</td><td>事件當下方向不可測、點差與插針成本最高——寧可錯過前 5%，不吃反向插針</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>晨報宏觀日曆</td></tr>
@@ -423,17 +423,45 @@ paintToday(C.px, C.fng);
 
 async function loadDailySnapshot(){
   try{
-    const [snap,verify]=await Promise.all([fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)]);
-    const m=snap.metrics.mstr_metrics;
+    const [snap,verify,logic,analytics]=await Promise.all([
+      fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null),
+      fetch('data/daily/logic_audit.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null),
+      fetch('data/daily/institutional_analytics.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)
+    ]);
+    const m=snap.metrics.mstr_metrics, radar=snap.metrics.market_radar||{};
     const nf=(v,d=2)=>v==null?'N/A':Number(v).toFixed(d);
+    const pct=v=>v==null?'N/A':(Number(v)*100).toFixed(1)+'%';
+    const put=(id,txt,cls)=>{ const el=document.getElementById(id); if(el){ el.textContent=txt; if(cls) el.className=cls; } };
     set('dm1',nf(m.equity_mnav)+'x');
-    set('dm3',m.pref_dilution_flag?'觸發':'未觸發');
-    set('dm4',nf(m.coverage_months,1)+'m');
+    set('dm3',m.pref_dilution_flag?'\u89f8\u767c':'\u672a\u89f8\u767c');
+    set('dm4',nf(m.coverage_months,1)+'\u6708');
     set('dm5',nf(m.sale_ratio,1)+'x');
     set('dm6',Math.round(m.sats_per_share).toLocaleString());
-    set('dm7',m.strc_discount==null?'N/A':(m.strc_discount*100).toFixed(1)+'%');
+    set('dm7',pct(m.strc_discount));
+
+    put('cheapMnavNow', `${nf(m.equity_mnav)}x\uFF08\u81EA\u52D5\uFF09`, m.equity_mnav<=0.6?'pos':'neg');
+    put('mvrvNow', '\u672a\u81ea\u52d5\u5316\uff1a\u4e0d\u7d66\u904e\u671f\u6578\u5b57', 'warn');
+    put('tempNow', '\u672a\u81ea\u52d5\u5316\uff1a\u7b49\u5f85\u7d9c\u5408\u6eab\u5ea6\u7ba1\u7dda', 'warn');
+    put('confirmTempNow', '\u672a\u81ea\u52d5\u5316\uff1a\u7b49\u5f85\u7d9c\u5408\u6eab\u5ea6\u7ba1\u7dda', 'warn');
+    const capHit=(snap.metrics.prices.btc_usd<=54000)||(m.equity_mnav<=0.6);
+    put('capitulationOverall', capHit?'\u90e8\u5206\u89f8\u767c':'\u672a\u89f8\u767c', capHit?'pos':'neg');
+    put('contractTriggerNow', m.contract_red_light?'\u2717 \u7d05\u71c8\u4e2d':'\u2713 \u53ef\u7814\u7a76', m.contract_red_light?'neg':'warn');
+    put('realizedLossNow','\u672a\u81ea\u52d5\u5316\uff1a\u93c8\u4e0a\u5be6\u73fe\u8667\u640d\u5c1a\u672a\u63a5\u5165','warn');
+    const blocked=(logic?.decision?.blocked_actions||[]);
+    const blockContract=blocked.includes('add_2_5x_mstr')||m.contract_red_light;
+    document.getElementById('contractGateSummary').innerHTML=blockContract?'<b class="neg">2.5x MSTR \u5408\u7d04\u5f85\u6a5f</b>\uff5c\u7d05\u71c8/\u8cc7\u6599/\u8cc7\u672c\u7d50\u69cb\u4efb\u4e00\u672a\u904e\u5c31\u4e0d\u958b':'<b class="warn">\u53ea\u53ef\u7814\u7a76</b>\uff5c\u4ecd\u9700\u53f3\u5074\u78ba\u8a8d\u8207\u6e05\u7b97\u7de9\u885d';
+    put('etfFlowNow', radar.etf_flow_status==='automated'?'\u5df2\u81ea\u52d5\u5316':'\u672a\u81ea\u52d5\u5316\uff1a\u4e0d\u53ef\u7576\u786c\u89f8\u767c', radar.etf_flow_status==='automated'?'pos':'warn');
+    const healthy=m.equity_mnav>=1 && !m.contract_red_light && (m.strc_discount==null||m.strc_discount<=0.05);
+    put('mstrHealthNow', healthy?'\u2713 \u901a\u904e':'\u2717 \u672a\u901a\u904e\uff1a\u666e\u901a\u80a1\u5b89\u5168\u908a\u969b/\u8ce3\u5e63\u58d3\u529b/STRC \u6298\u50f9\u4ecd\u9700\u4fee\u5fa9', healthy?'pos':'neg');
+    put('strategyGateNow', m.sale_ratio>2?'\u7d05\uff1a\u6bcf\u9031\u8ce3\u5e63\u58d3\u529b\u904e\u9ad8':'\u9ec3\uff1a\u6301\u7e8c\u89c0\u5bdf', m.sale_ratio>2?'neg':'warn');
+    put('ibitGateNow', radar.etf_flow_status==='automated'?'\u5df2\u63a5 ETF flow':'\u672a\u81ea\u52d5\u5316\uff1aETF/IBIT flow \u5c1a\u672a\u63a5\u5165', radar.etf_flow_status==='automated'?'pos':'warn');
+    put('retailGateNow','\u672a\u81ea\u52d5\u5316\uff1aGoogle Trends \u5c1a\u672a\u63a5\u5165','warn');
+    put('regGateNow','\u672a\u81ea\u52d5\u5316\uff1a\u5b8f\u89c0\u65e5\u66c6\u5c1a\u672a\u63a5\u5165','warn');
+    const verdict=analytics?.executive_read?.one_line || logic?.decision?.plain_english || snap.decision?.state || '\u8f09\u5165\u5b8c\u6210';
+    document.getElementById('icVerdict').innerHTML=`<b>IC \u88c1\u6c7a\uff08${snap.date}\uff09\uff1a</b>${verdict}`;
     const av=document.getElementById('autoVerify');
-    if(av&&verify){ const bad=verify.status==='fail'; const deg=verify.status==='degraded'; av.innerHTML=`自動驗證：<b class="${bad?'neg':deg?'warn':'pos'}">${verify.status.toUpperCase()}</b>｜${(verify.degradations||verify.warnings||[]).slice(0,2).join('；')||'資料完整'}`; }
+    if(av&&verify){ const bad=verify.status==='fail'; const deg=verify.status==='degraded'; av.innerHTML=`\u81ea\u52d5\u9a57\u8b49\uff1a<b class="${bad?'neg':deg?'warn':'pos'}">${verify.status.toUpperCase()}</b>\uff5c${(verify.degradations||verify.warnings||[]).slice(0,3).join('\uff1b')||'\u8cc7\u6599\u5b8c\u6574'}\uff5c\u908f\u8f2f\u7a3d\u6838 ${logic?.status||'not_run'}`; }
   }catch(e){ console.warn('daily snapshot unavailable',e); }
 }
 loadDailySnapshot();

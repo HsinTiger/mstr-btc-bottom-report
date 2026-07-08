@@ -196,7 +196,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 <div class="hero">
   <h1>₿ MSTR / BMNR 每日追蹤：今天能不能加？</h1>
   <div class="sub">大倉現貨 4:1 · 小倉 MSTR 2.5x 合約 · 紅燈先擋風險，再談進攻</div>
-  <div class="date">v12 · 2026/7/7 · 每日大字卡 / 1–4 年週期現貨 / 月線到年線 MSTR 合約波段</div>
+  <div class="date" id="heroDate">每日資料載入中 · 每日大字卡 / 1–4 年週期現貨 / 月線到年線 MSTR 合約波段</div>
   <div class="badge-row">
     <span class="badge badge-red">今日：小倉禁開 · 大倉觀察</span>
     <span class="badge badge-yellow">MSTR 紅燈：reported BTC sales</span>
@@ -208,7 +208,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <a class="badge badge-blue" href="wiki.html" style="text-decoration:none">📚 wiki_llm 投資知識庫 →</a>
     <a class="badge badge-red" href="leverage-2x-plan.html" style="text-decoration:none">⚖️ 2x 槓桿評估（6/17）→</a>
     <a class="badge badge-purple" href="spacex-lesson.html" style="text-decoration:none">🧠 SpaceX 行為課（6/17）→</a>
-    <a class="badge badge-green" href="metrics-spec.md" style="text-decoration:none">?? 自算核心指標說明 ?</a>
+    <a class="badge badge-green" href="metrics-spec.md" style="text-decoration:none">🧪 自算核心指標說明 →</a>
     <a class="badge badge-blue" href="wiki.html#gaap-vs-mnav" style="text-decoration:none">📐 GAAP / Non-GAAP / mNAV →</a>
     <a class="badge badge-purple" href="daily-extensions.html" style="text-decoration:none">🗓️ 每日延伸（三觀點）→</a>
     <a class="badge badge-blue" href="analytics.html" style="text-decoration:none">📊 專業分析層 →</a>
@@ -366,8 +366,8 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <div class="stat r"><div class="cap">BTC ETF（4 週）</div><div class="big">−$5.4B</div><div class="sub">邊際買盤在逃</div></div>
     <div class="stat r"><div class="cap">ETH ETF</div><div class="big">流出</div><div class="sub">比 BTC 更弱</div></div>
     <div class="stat y"><div class="cap">永續 funding</div><div class="big">+0.01%</div><div class="sub">剛轉正 · 非過熱</div></div>
-    <div class="stat y"><div class="cap">MSTR mNAV</div><div class="big">0.80x</div><div class="sub">折價 · 飛輪熄火無賣壓</div></div>
-    <div class="stat g"><div class="cap">MSTR 含幣量</div><div class="big">243k</div><div class="sub">sats/股 · 仍增厚</div></div>
+    <div class="stat y"><div class="cap">普通股真實安全邊際</div><div class="big" id="chipMnav">載入</div><div class="sub" id="chipMnavNote">每日資料接線中</div></div>
+    <div class="stat g"><div class="cap">每股比特幣含量</div><div class="big" id="chipSats">載入</div><div class="sub">sats/股 · 自動更新</div></div>
   </div>
   <div class="analysis-box analysis-yellow"><b>判讀：</b>供給端收縮（利多）vs 邊際買盤 ETF 出逃（利空）＝<b>僵局</b>。鯨魚狂買被 ETF 賣壓吸收，價格卡住。籌碼面溫度 <b>−3</b>。</div>
 </div>
@@ -641,7 +641,7 @@ function coreCards(today,yday,verify){
     card({label:'F&G 情緒',value:radar.fear_greed??'—',tone:radar.fear_greed<=25?'good':radar.fear_greed>=70?'bad':'warn',read:radar.fear_greed<=25?'市場恐懼，等觸發':'情緒非投降'}),
     card({label:'鏈上手續費',value:radar.btc_fee_fastest_sat_vb==null?'—':radar.btc_fee_fastest_sat_vb+' sat/vB',tone:'info',read:'鏈上壓力 proxy'}),
     card({label:'宏觀資金成本',value:radar.treasury_avg_bill_rate_pct==null?'—':Number(radar.treasury_avg_bill_rate_pct).toFixed(2)+'%',tone:'warn',read:'高利率壓估值'}),
-    card({label:'ETF Flow',value:radar.etf_flow_status==='automated'?'ON':'待接',tone:'warn',read:'尚未自動化，不作硬觸發'})
+    card({label:'ETF Flow',value:radar.etf_flow_status==='automated'?'ON':'\u672A\u81EA\u52D5\u5316',tone:'warn',read:'\u5C1A\u672A\u81EA\u52D5\u5316\uFF0C\u4E0D\u4F5C\u786C\u89F8\u767C'})
   ].join('');
 }
 function mstrCards(today,yday){
@@ -669,6 +669,15 @@ async function loadHomeDailyCards(){
     document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜昨日對比 ${yday?.date||'無'}｜只顯示結論與一個關鍵數字`;
     document.getElementById('dailyCoreCards').innerHTML=coreCards(latest,yday,verify);
     document.getElementById('dailyMstrCards').innerHTML=mstrCards(latest,yday);
+    const heroDate=document.getElementById('heroDate');
+    if(heroDate) heroDate.textContent=`v13 · 資料日 ${latest.date} · 每日大字卡 / 1–4 年週期現貨 / 月線到年線 MSTR 合約波段`;
+    const m=latest.metrics.mstr_metrics;
+    const chipMnav=document.getElementById('chipMnav');
+    const chipMnavNote=document.getElementById('chipMnavNote');
+    const chipSats=document.getElementById('chipSats');
+    if(chipMnav) chipMnav.textContent=num(m.equity_mnav,2)+'x';
+    if(chipMnavNote) chipMnavNote.textContent=m.equity_mnav>=1?'安全邊際過關':'折價不等於安全，仍需資本結構修復';
+    if(chipSats) chipSats.textContent=Number(m.sats_per_share||0).toLocaleString();
   }catch(e){
     document.getElementById('dailyMeta').textContent=`每日資料載入失敗：${e.message}。請用 GitHub Pages 開啟。`;
   }
