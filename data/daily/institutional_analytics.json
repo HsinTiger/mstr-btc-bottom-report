@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "date": "2026-07-08",
+  "generated_at": "2026-07-08T06:40:08+00:00",
+  "quality": {
+    "verification_status": "degraded",
+    "confidence": "medium-low",
+    "degradations": [
+      "ETF flow not automated",
+      "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
+      "capital-structure provenance status=manual_seed"
+    ]
+  },
+  "executive_read": {
+    "headline": "Research-grade only; not auto-trading grade",
+    "one_line": "M1 is below 1.0 and M5/M7 red flags remain; today is about avoiding chase, not finding reasons to add."
+  },
+  "decomposition": {
+    "btc_return_1d": -0.01907904136149896,
+    "mstr_return_1d": -0.033839436340180606,
+    "mstr_minus_btc_1d": -0.014760394978681646,
+    "m1_delta_1d": 2.3616475547161286e-05,
+    "strc_discount_delta_1d": 0.020199999999999996,
+    "drivers": [
+      {
+        "driver": "MSTR_vs_BTC",
+        "value": -0.014760394978681646,
+        "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
+      },
+      {
+        "driver": "M1_delta",
+        "value": 2.3616475547161286e-05,
+        "read": "Common-equity safety margin improved"
+      },
+      {
+        "driver": "STRC_discount_delta",
+        "value": 0.020199999999999996,
+        "read": "Preferred-stock trust signal deteriorated"
+      }
+    ]
+  },
+  "sensitivity": {
+    "scenarios": [
+      {
+        "btc_shock": -0.2,
+        "btc_price": 49983.416000000005,
+        "equity_mnav_at_current_mstr": 1.4829758220951623
+      },
+      {
+        "btc_shock": -0.1,
+        "btc_price": 56231.34300000001,
+        "equity_mnav_at_current_mstr": 1.1569887474309988
+      },
+      {
+        "btc_shock": 0,
+        "btc_price": 62479.270000000004,
+        "equity_mnav_at_current_mstr": 0.9484917252587604
+      },
+      {
+        "btc_shock": 0.1,
+        "btc_price": 68727.19700000001,
+        "equity_mnav_at_current_mstr": 0.8036658291024625
+      },
+      {
+        "btc_shock": 0.2,
+        "btc_price": 74975.124,
+        "equity_mnav_at_current_mstr": 0.6972085456651804
+      }
+    ]
+  },
+  "risk_stack": [
+    {
+      "name": "Automation quality",
+      "severity": "medium",
+      "value": "degraded",
+      "read": "Research-grade only"
+    },
+    {
+      "name": "M1 common-equity margin",
+      "severity": "high",
+      "value": "0.95x",
+      "read": "Below 1.0; common equity is not cheap enough"
+    },
+    {
+      "name": "M5 BTC-sale pressure",
+      "severity": "high",
+      "value": "5.8x",
+      "read": "Above 2x; freeze tactical adds"
+    },
+    {
+      "name": "M7 STRC trust vote",
+      "severity": "high",
+      "value": "13.4%",
+      "read": "Discount too deep; downgrade all mNAV signals"
+    },
+    {
+      "name": "Sentiment",
+      "severity": "opportunity",
+      "value": "20",
+      "read": "Fear helps setup quality; not a buy trigger by itself"
+    }
+  ]
+}

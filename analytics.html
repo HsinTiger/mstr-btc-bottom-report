@@ -1,0 +1,37 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Institutional Analytics｜Personal Bloomberg</title>
+<style>
+:root{--bg:#0b0f17;--panel:#111827;--panel2:#172033;--line:#2a354c;--text:#e8edf7;--muted:#94a3b8;--red:#f87171;--yellow:#fbbf24;--green:#34d399;--blue:#60a5fa}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#080b11,#111827 45%,#0b1220);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center;background:rgba(8,11,17,.78);position:sticky;top:0;backdrop-filter:blur(14px)}h1{font-size:1.1rem;margin:0}.sub{color:var(--muted);font-size:.82rem}a{color:var(--blue);text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:18px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{grid-column:span 6;background:rgba(17,24,39,.88);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.card.full{grid-column:span 12}.kpi{grid-column:span 3}.label{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em}.num{font-size:2rem;font-weight:850;letter-spacing:-.04em;margin:.25rem 0}.read{color:var(--muted);font-size:.9rem;line-height:1.45}.high{color:var(--red)}.medium{color:var(--yellow)}.low,.opportunity{color:var(--green)}.neutral{color:var(--blue)}table{width:100%;border-collapse:collapse;font-size:.86rem}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:.72rem;text-transform:uppercase}.bar{height:10px;border-radius:999px;background:#263246;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));width:50%}@media(max-width:760px){.card,.kpi{grid-column:span 12}header{display:block}.num{font-size:1.55rem}}
+</style>
+</head>
+<body>
+<header><div><h1>Institutional Analytics｜Personal Bloomberg</h1><div class="sub">Attribution · Sensitivity · Risk stack · Data confidence</div></div><div class="sub"><a href="index.html">首頁</a>｜<a href="dashboard.html">Dashboard</a>｜<a href="daily-extensions.html">每日延伸</a></div></header>
+<main class="wrap">
+  <div class="grid" id="top"></div>
+  <div class="grid" style="margin-top:14px">
+    <section class="card"><h2>Return / Signal Attribution</h2><table id="drivers"></table></section>
+    <section class="card"><h2>BTC Shock Sensitivity</h2><table id="sensitivity"></table></section>
+    <section class="card full"><h2>Risk Stack</h2><table id="risk"></table></section>
+  </div>
+</main>
+<script>
+const pct=v=>v==null?'—':(Number(v)*100).toFixed(2)+'%';
+const num=(v,d=2)=>v==null?'—':Number(v).toFixed(d);
+async function load(){
+ const a=await fetch('data/daily/institutional_analytics.json',{cache:'no-store'}).then(r=>r.json());
+ document.getElementById('top').innerHTML=`
+ <div class="card full"><div class="label">Executive Read · ${a.date}</div><div class="num">${a.executive_read.headline}</div><div class="read">${a.executive_read.one_line}</div></div>
+ <div class="card kpi"><div class="label">Confidence</div><div class="num ${a.quality.confidence.includes('low')?'medium':'low'}">${a.quality.confidence}</div><div class="read">${a.quality.verification_status}</div></div>
+ <div class="card kpi"><div class="label">MSTR - BTC</div><div class="num ${a.decomposition.mstr_minus_btc_1d<0?'high':'low'}">${pct(a.decomposition.mstr_minus_btc_1d)}</div><div class="read">1D relative performance</div></div>
+ <div class="card kpi"><div class="label">M1 Δ</div><div class="num ${a.decomposition.m1_delta_1d<0?'high':'low'}">${num(a.decomposition.m1_delta_1d,3)}x</div><div class="read">Common-equity margin move</div></div>
+ <div class="card kpi"><div class="label">STRC discount Δ</div><div class="num ${a.decomposition.strc_discount_delta_1d>0?'high':'low'}">${pct(a.decomposition.strc_discount_delta_1d)}</div><div class="read">Trust-vote move</div></div>`;
+ document.getElementById('drivers').innerHTML='<tr><th>Driver</th><th>Value</th><th>Read</th></tr>'+a.decomposition.drivers.map(d=>`<tr><td>${d.driver}</td><td>${pct(d.value)}</td><td>${d.read}</td></tr>`).join('');
+ document.getElementById('sensitivity').innerHTML='<tr><th>BTC shock</th><th>BTC price</th><th>M1 @ current MSTR</th></tr>'+a.sensitivity.scenarios.map(s=>`<tr><td>${pct(s.btc_shock)}</td><td>$${Math.round(s.btc_price).toLocaleString()}</td><td>${num(s.equity_mnav_at_current_mstr)}x</td></tr>`).join('');
+ document.getElementById('risk').innerHTML='<tr><th>Risk</th><th>Severity</th><th>Value</th><th>Read</th></tr>'+a.risk_stack.map(r=>`<tr><td>${r.name}</td><td class="${r.severity}">${r.severity}</td><td>${r.value}</td><td>${r.read}</td></tr>`).join('');
+}
+load().catch(e=>{document.getElementById('top').innerHTML=`<div class="card full">Load failed: ${e.message}</div>`});
+</script>
+</body></html>

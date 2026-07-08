@@ -1,4 +1,4 @@
-﻿name: Daily verified data pipeline
+name: Daily verified data pipeline
 
 on:
   schedule:
@@ -36,6 +36,9 @@ jobs:
 
       - name: Generate daily extensions
         run: python scripts/generate_daily_extensions.py
+
+      - name: Generate institutional analytics
+        run: python scripts/generate_institutional_analytics.py
 
       - name: Commit updated data
         run: |
