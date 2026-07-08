@@ -203,38 +203,17 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 <!-- ===== 總覽 ===== -->
 <div id="tab-overview" class="tab-content active">
 <div class="section" style="border-color:var(--border2)">
-  <h2>📌 今日大字卡（先決策，再研究）</h2>
-  <div class="analysis-box analysis-review" style="margin-top:0">
-    <b>今日裁決：</b>不開新 <b>2.5x MSTR 合約</b>；大倉現貨維持觀察，不因單日反彈追價。Strategy reported BTC sales 紅燈未解除前，MSTR 反身性不得作為加倉理由。
+  <h2>📌 今日一眼判斷</h2>
+  <div class="analysis-box analysis-review" style="margin-top:0" id="dailyVerdict">
+    <b>載入今日資料中…</b> 若在本機 file:// 開啟會讀不到 JSON，請用 GitHub Pages。
   </div>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="label">今日動作</div><div class="value neg">等待</div><div class="note">小倉禁開；大倉等 S2 投降或 S4 右側確認</div></div>
-    <div class="kpi"><div class="label">小倉</div><div class="value">2.5x</div><div class="note">MSTR 合約，月線到年線波段；只在紅燈解除＋趨勢確認後做</div></div>
-    <div class="kpi"><div class="label">大倉</div><div class="value pos">4:1</div><div class="note">MSTR 80% / BMNR 20%，1–4 年週期現貨波段</div></div>
-    <div class="kpi"><div class="label">最大紅燈</div><div class="value neg">MSTR</div><div class="note">Strategy monetization / reported BTC sales，IC 覆核前凍結加倉</div></div>
-  </div>
+  <div class="daily-meta" id="dailyMeta">資料來源：data/daily/latest_snapshot.json + database.json</div>
 
-  <h3>🔎 每日最在乎的 8 個指標</h3>
-  <div class="stat-grid">
-    <div class="stat r"><div class="cap">MSTR 紅燈</div><div class="big">ON</div><div class="sub">reported BTC sales；先覆核用途與是否持續</div></div>
-    <div class="stat y"><div class="cap">BTC 狀態</div><div class="big">S1</div><div class="sub">深熊下跌尾部；S3′ 仍在觀察</div></div>
-    <div class="stat y"><div class="cap">ETF 流</div><div class="big">Day 1</div><div class="sub">未達連 10 日確認</div></div>
-    <div class="stat r"><div class="cap">vs 200DMA</div><div class="big">-16%</div><div class="sub">右側確認未成立</div></div>
-    <div class="stat g"><div class="cap">vs 200WMA</div><div class="big">守線</div><div class="sub">底部區監控，但非買入充分條件</div></div>
-    <div class="stat y"><div class="cap">五維溫度</div><div class="big">~-3</div><div class="sub">便宜但未投降</div></div>
-    <div class="stat p"><div class="cap">MSTR mNAV</div><div class="big">覆核</div><div class="sub">帳面折價需扣優先求償與賣幣風險</div></div>
-    <div class="stat b"><div class="cap">BMNR 上限</div><div class="big">20%</div><div class="sub">ETH beta 衛星，不升主倉</div></div>
-  </div>
+  <h3>🔎 今天最該看的指標：數值、日變化、一句白話</h3>
+  <div class="daily-grid" id="dailyCoreCards"></div>
 
-  <h3>🧪 我們的獨家指標（M1–M7）</h3>
-  <div class="stat-grid">
-    <div class="stat r"><div class="cap">M1 equity mNAV</div><div class="big">自算</div><div class="sub">扣債務與特別股清算面額，才是普通股真 NAV</div></div>
-    <div class="stat p"><div class="cap">M3 pref 稀釋旗標</div><div class="big">降權</div><div class="sub">特別股淨增＋mNAV 回升時，回升訊號打五折</div></div>
-    <div class="stat y"><div class="cap">M4 覆蓋月數</div><div class="big">12m</div><div class="sub">USD Reserve / 月義務，低於 12 月直接紅燈</div></div>
-    <div class="stat r"><div class="cap">M5 週賣幣比值</div><div class="big">>2x</div><div class="sub">連兩週超過週義務基準＝被迫賣幣</div></div>
-    <div class="stat b"><div class="cap">M6 sats/股</div><div class="big">跟蹤</div><div class="sub">分子 BTC 與分母稀釋股數同時監控</div></div>
-    <div class="stat y"><div class="cap">M7 STRC 折價</div><div class="big">5%</div><div class="sub">優先股信任票；折價深時 mNAV 全部降權</div></div>
-  </div>
+  <h3>🧪 我們的獨家 M1–M7：每天自算，不看公司自訂口徑</h3>
+  <div class="daily-grid" id="dailyMstrCards"></div>
 
   <h3>📚 兩本帳：不要混用</h3>
   <table>
@@ -601,6 +580,76 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
+
+
+// ===== 每日首頁卡：今日數據 + 日變化 + 一句白話 =====
+const money=v=>v==null?'—':'$'+Number(v).toLocaleString('en-US',{maximumFractionDigits:0});
+const num=(v,d=2)=>v==null?'—':Number(v).toFixed(d);
+const pct=v=>v==null?'—':(Number(v)*100).toFixed(1)+'%';
+const signed=(v,d=1,suffix='')=>v==null?'—':(v>0?'+':'')+Number(v).toFixed(d)+suffix;
+const toneClass=t=>t==='good'?'good':t==='bad'?'bad':t==='warn'?'warn':'info';
+function pickYesterday(database,todayDate){
+  const snaps=(database.snapshots||[]).filter(x=>x.date!==todayDate).sort((a,b)=>a.date.localeCompare(b.date));
+  return snaps.at(-1)||null;
+}
+function delta(now,prev,kind='pctpoint'){
+  if(now==null||prev==null) return null;
+  if(kind==='rel') return prev===0?null:(now/prev-1);
+  return now-prev;
+}
+function card({label,value,change,read,tone}){
+  return `<div class="daily-card ${toneClass(tone)}"><div class="cap">${label}</div><div class="num">${value}</div><div class="chg">${change}</div><div class="read">${read}</div></div>`;
+}
+function coreCards(today,yday){
+  const p=today.metrics.prices, pm=yday?.metrics?.prices||{};
+  const m=today.metrics.mstr_metrics, ym=yday?.metrics?.mstr_metrics||{};
+  const btcChg=delta(p.btc_usd,pm.btc_usd,'rel');
+  const mstrChg=delta(p.mstr_usd,pm.mstr_usd,'rel');
+  const bmnrChg=delta(p.bmnr_usd,pm.bmnr_usd,'rel');
+  const strcChg=delta(p.strc_usd,pm.strc_usd,'rel');
+  const score=today.decision?.score;
+  return [
+    card({label:'今日裁決',value:today.decision?.state||'—',change:`分數 ${score??'—'}｜${today.date}`,tone:m.contract_red_light?'bad':'warn',read:m.contract_red_light?'<b>小倉不加碼</b>；先等紅燈解除。':'可研究，但仍不追價。'}),
+    card({label:'BTC 現價',value:money(p.btc_usd),change:`日變化 ${signed((btcChg??0)*100,1,'%')}`,tone:btcChg>=0?'good':'warn',read:btcChg==null?'缺昨日資料。':btcChg<0?'<b>底層資產轉弱</b>，MSTR 不該硬追。':'BTC 轉強，但仍要看 MSTR 結構紅燈。'}),
+    card({label:'MSTR 現價',value:money(p.mstr_usd),change:`日變化 ${signed((mstrChg??0)*100,1,'%')}`,tone:mstrChg>=0?'good':'warn',read:mstrChg==null?'缺昨日資料。':mstrChg<btcChg?'<b>跑輸 BTC</b>，折價/結構壓力還在。':'跑贏 BTC，但需確認不是短線反身性。'}),
+    card({label:'BMNR 現價',value:money(p.bmnr_usd),change:`日變化 ${signed((bmnrChg??0)*100,1,'%')}`,tone:'info',read:bmnrChg==null?'缺昨日資料。':bmnrChg<0?'ETH beta 衛星轉弱，維持 20% 上限。':'衛星倉反彈，不升主倉。'}),
+    card({label:'STRC 價格',value:money(p.strc_usd),change:`日變化 ${signed((strcChg??0)*100,1,'%')}｜折價 ${pct(m.strc_discount)}`,tone:m.strc_discount>0.05?'bad':'good',read:m.strc_discount>0.05?'<b>優先股信任票很弱</b>，mNAV 全部降權。':'接近面額，融資信任改善。'}),
+    card({label:'合約紅燈',value:m.contract_red_light?'ON':'OFF',change:`M5 ${num(m.sale_ratio,1)}x｜M7 ${pct(m.strc_discount)}`,tone:m.contract_red_light?'bad':'good',read:m.contract_red_light?'<b>2.5x 小倉禁開/禁加</b>。':'紅燈解除後才討論右側進場。'})
+  ].join('');
+}
+function mstrCards(today,yday){
+  const m=today.metrics.mstr_metrics, ym=yday?.metrics?.mstr_metrics||{};
+  const manual=today.metrics.manual_inputs||{};
+  const m1d=delta(m.equity_mnav,ym.equity_mnav);
+  const m2d=delta(m.enterprise_mnav,ym.enterprise_mnav);
+  const m7d=delta(m.strc_discount,ym.strc_discount);
+  return [
+    card({label:'M1 equity mNAV',value:num(m.equity_mnav,2)+'x',change:`較昨日 ${signed(m1d,2,'x')}｜門檻 ≥1`,tone:m.equity_mnav>=1?'good':'bad',read:m.equity_mnav>=1?'普通股安全邊際初步過關。':'<b>普通股還不算便宜</b>，扣債/優先股/稅後未過關。'}),
+    card({label:'M2 enterprise mNAV',value:num(m.enterprise_mnav,2)+'x',change:`較昨日 ${signed(m2d,2,'x')}｜對照官方口徑`,tone:m.enterprise_mnav>=1?'warn':'bad',read:m.enterprise_mnav>=1?'企業價值口徑勉強過 1，但不能單獨加倉。':'連企業價值口徑都未過，飛輪未重啟。'}),
+    card({label:'M3 稀釋旗標',value:m.pref_dilution_flag?'觸發':'未觸發',change:`特別股面額 $${Number(Object.values(manual.preferred||{}).reduce((a,x)=>a+(x.notional_musd||0),0)/1000).toFixed(1)}B`,tone:m.pref_dilution_flag?'bad':'good',read:m.pref_dilution_flag?'<b>mNAV 回升要打折</b>，可能是融資工程。':'今天沒有稀釋旗標，但仍看 M7。'}),
+    card({label:'M4 覆蓋月數',value:num(m.coverage_months,1)+'m',change:'紅線 12m 以下',tone:m.coverage_months>=12?'good':'bad',read:m.coverage_months>=12?'現金覆蓋暫時夠，非主要紅燈。':'<b>現金覆蓋不足</b>，融資/賣幣壓力上升。'}),
+    card({label:'M5 週賣幣比值',value:num(m.sale_ratio,1)+'x',change:'>2x 視為被迫賣幣風險',tone:m.sale_ratio>2?'bad':m.sale_ratio>1.5?'warn':'good',read:m.sale_ratio>2?'<b>賣幣壓力過高</b>，凍結小倉加碼。':'賣幣節奏未超紅線。'}),
+    card({label:'M6 sats/股',value:Number(m.sats_per_share||0).toLocaleString(),change:`BTC 持倉 ${Number(manual.mstr_btc_holdings||0).toLocaleString()} 顆`,tone:'info',read:'追蹤每股含幣量；若股數稀釋更快就是假增厚。'}),
+    card({label:'M7 STRC 折價',value:pct(m.strc_discount),change:`較昨日 ${signed((m7d??0)*100,1,'%p')}`,tone:m.strc_discount>0.05?'bad':m.strc_discount>0.01?'warn':'good',read:m.strc_discount>0.05?'<b>Senior 市場不信任</b>，普通股要更保守。':'優先股信任改善，mNAV 訊號可逐步恢復權重。'}),
+    card({label:'GAAP 稅務楔子',value:`$${num(manual.net_deferred_tax_liability_musd||0,0)}M`,change:'每季 10-Q/10-K 覆核',tone:'warn',read:'目前為手動輸入；BTC 高於成本區後要防遞延稅負債低估。'})
+  ].join('');
+}
+async function loadHomeDailyCards(){
+  try{
+    const [latest,database]=await Promise.all([
+      fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/daily/database.json',{cache:'no-store'}).then(r=>r.json())
+    ]);
+    const yday=pickYesterday(database,latest.date);
+    document.getElementById('dailyVerdict').innerHTML=`<b>今日裁決：</b>${latest.decision.state}。${(latest.decision.reasons||[]).slice(0,3).join('；')}。`;
+    document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜來源 ${latest.source_count} 個成功、${latest.error_count} 個警示｜昨日對比 ${yday?.date||'無'}`;
+    document.getElementById('dailyCoreCards').innerHTML=coreCards(latest,yday);
+    document.getElementById('dailyMstrCards').innerHTML=mstrCards(latest,yday);
+  }catch(e){
+    document.getElementById('dailyVerdict').innerHTML=`<b>每日資料載入失敗：</b>${e.message}。請用 GitHub Pages 開啟。`;
+  }
+}
+loadHomeDailyCards();
 
 // ===== 歷史趨勢圖 =====
 fetch('data/history.json', {cache:'no-store'}).then(r=>r.json()).then(d=>{

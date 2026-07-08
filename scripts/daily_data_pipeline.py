@@ -291,10 +291,17 @@ def collect_all() -> list[Observation]:
     return observations
 
 
+def normalize_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
+    manual = snapshot.setdefault("metrics", {}).setdefault("manual_inputs", {})
+    for key, value in MANUAL_INPUTS.items():
+        manual.setdefault(key, value)
+    return snapshot
+
+
 def upsert_database(snapshot: dict[str, Any]) -> dict[str, Any]:
     database = load_json(DATABASE_PATH, {"schema": 1, "snapshots": []})
-    snapshots = [item for item in database.get("snapshots", []) if item.get("date") != snapshot["date"]]
-    snapshots.append(snapshot)
+    snapshots = [normalize_snapshot(item) for item in database.get("snapshots", []) if item.get("date") != snapshot["date"]]
+    snapshots.append(normalize_snapshot(snapshot))
     snapshots.sort(key=lambda item: item.get("date", ""))
     database["snapshots"] = snapshots[-730:]
     database["updated_at"] = now_iso()
