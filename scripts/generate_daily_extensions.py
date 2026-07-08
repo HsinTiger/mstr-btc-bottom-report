@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Generate daily three-viewpoint research notes from verified data + wiki_llm."""
 
 from __future__ import annotations

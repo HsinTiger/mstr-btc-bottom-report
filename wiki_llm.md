@@ -1,4 +1,4 @@
-﻿# wiki_llm 投資知識庫出口
+# wiki_llm 投資知識庫出口
 
 > 這是給人與 LLM 共用的投資知識庫入口。前端瀏覽用 `wiki.html`；LLM 讀取用 `wiki/manifest.json` 與各 Markdown 頁。
 

@@ -35,6 +35,7 @@ MANUAL_INPUTS = {
     "mstr_btc_holdings": 843_775,
     "usd_reserve_musd": 2_550,
     "cash_other_musd": 0,
+    "net_deferred_tax_liability_musd": 0,  # TODO: 每季用 10-Q/10-K income tax footnote 更新；淨遞延稅資產用負值
     "debt_face_musd": 8_214,
     "annual_interest_musd": 34,
     "preferred": {
@@ -213,7 +214,7 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     if btc_px and mstr_px:
         btc_nav_musd = inputs["mstr_btc_holdings"] * btc_px / 1e6
         mkt_cap_musd = inputs["diluted_shares_m"] * mstr_px
-        net_to_common = btc_nav_musd + inputs["usd_reserve_musd"] + inputs["cash_other_musd"] - inputs["debt_face_musd"] - pref_total
+        net_to_common = btc_nav_musd + inputs["usd_reserve_musd"] + inputs["cash_other_musd"] - inputs["debt_face_musd"] - pref_total - inputs["net_deferred_tax_liability_musd"]
         equity_mnav = mkt_cap_musd / net_to_common if net_to_common > 0 else None
         enterprise_mnav = (mkt_cap_musd + inputs["debt_face_musd"] + pref_total) / btc_nav_musd
         pref_dilution_flag = pref_total > inputs["prev_pref_notional_musd"] and bool(equity_mnav and equity_mnav > inputs["prev_mnav_equity"])

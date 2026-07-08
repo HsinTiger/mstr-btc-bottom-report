@@ -87,6 +87,19 @@
 
 ---
 
+
+## 4.6 GAAP / Non-GAAP 估值保護欄
+
+| 層級 | 定義 | 本體系用途 |
+|---|---|---|
+| BTC NAV | BTC 持倉 × 現貨價 | 只衡量底層資產線，不等於普通股安全邊際 |
+| GAAP NAV / 股東權益 | BTC 公允價值 + 現金 + 其他資產 − 債務 − 淨遞延稅負債 − 其他負債 | 檢查資產負債表與稅務楔子；優先股列權益不代表屬於普通股 |
+| mNAV / BTC Yield | Strategy 自訂 Non-GAAP KPI | 可觀察公司溝通與反身性，但不作未覆核下單依據 |
+
+結論：MSTR 持有分析不能再把「ASU 2023-08 讓 BTC 按市價入帳」簡化成「GAAP NAV 等於 BTC NAV」。小倉 2.5x 合約要求更高：M1 必須扣淨遞延稅負債；STRC 折價、賣幣紅燈或 SEC/10-Q 未覆核時，mNAV 回升不視為安全邊際。BMNR 也不能只套「ETH 版 MSTR」：必須獨立檢查每股 ETH 增厚效率、稀釋速度與任何 senior financing。
+
+---
+
 ## 5. Portfolio Construction
 
 ### 5.1 資金分桶

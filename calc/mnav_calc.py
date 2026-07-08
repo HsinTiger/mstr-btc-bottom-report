@@ -22,7 +22,8 @@ INPUTS = {
     "as_of": "2026-07-05",           # 8-K 資料截止日
     "btc_holdings": 843_775,          # BTC 持倉（顆）
     "usd_reserve_musd": 2_550,        # USD Reserve（百萬美元）
-    "cash_other_musd": 0,             # Reserve 以外現金（10-Q）
+    "cash_other_musd": 0,
+    "net_deferred_tax_liability_musd": 0,  # TODO: 每季用 10-Q/10-K income tax footnote 更新；淨遞延稅資產用負值
     "debt_face_musd": 8_214,          # 可轉債面額合計（10-Q 核實）
     "annual_interest_musd": 34,       # 債務年利息（10-Q 核實）
     # 特別股各系列：清算面額總額（musd）與股息率
@@ -85,7 +86,7 @@ def main() -> None:
     cash = i["usd_reserve_musd"] + i["cash_other_musd"]
 
     # M1 equity mNAV（保守）
-    net_to_common = btc_nav + cash - i["debt_face_musd"] - pref_total
+    net_to_common = btc_nav + cash - i["debt_face_musd"] - pref_total - i["net_deferred_tax_liability_musd"]
     m1 = mkt_cap / net_to_common if net_to_common > 0 else float("nan")
 
     # M2 enterprise mNAV（官方同構自算版）
