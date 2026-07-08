@@ -60,6 +60,67 @@ def check_cross_source(name: str, left: float | None, right: float | None, thres
         warnings.append(f"{name}: 來源差距 {gap:.2%} 接近門檻")
 
 
+def detail_field(item: dict[str, Any] | None, key: str) -> str | None:
+    detail = str((item or {}).get("detail") or "")
+    prefix = f"{key}="
+    for part in detail.split():
+        if part.startswith(prefix):
+            return part[len(prefix):]
+    return None
+
+
+def quote_bases_comparable(left_basis: str | None, right_basis: str | None) -> bool:
+    if not left_basis or not right_basis:
+        return False
+    same_basis_groups = [
+        {"regular_market_close", "latest_daily_close"},
+        {"regular_or_delayed_quote"},
+    ]
+    return any(left_basis in group and right_basis in group for group in same_basis_groups)
+
+
+def check_equity_cross_source(
+    ticker: str,
+    yahoo_item: dict[str, Any] | None,
+    nasdaq_item: dict[str, Any] | None,
+    failures: list[str],
+    degradations: list[str],
+    warnings: list[str],
+    evidence: list[str],
+) -> None:
+    yahoo = as_float((yahoo_item or {}).get("value"))
+    nasdaq = as_float((nasdaq_item or {}).get("value"))
+    label = f"{ticker.upper()} equity"
+    if yahoo is None or nasdaq is None:
+        degradations.append(f"{ticker.upper()} 缺少股票第二來源，前端需標 degraded")
+        return
+
+    yahoo_basis = detail_field(yahoo_item, "quote_basis")
+    nasdaq_basis = detail_field(nasdaq_item, "quote_basis")
+    gap = pct_gap(yahoo, nasdaq)
+    evidence.append(
+        f"{ticker.upper()} Yahoo/Nasdaq={yahoo}/{nasdaq}; "
+        f"basis={yahoo_basis}/{nasdaq_basis}; gap={gap:.2%}"
+    )
+
+    if quote_bases_comparable(yahoo_basis, nasdaq_basis):
+        if gap > 0.02:
+            failures.append(f"{label}: 同報價基準來源差距 {gap:.2%} > 2.00%")
+        elif gap > 0.01:
+            warnings.append(f"{label}: 同報價基準來源差距 {gap:.2%} 接近門檻")
+        return
+
+    if gap > 0.02:
+        degradations.append(
+            f"{label}: Yahoo={yahoo_basis or 'unknown'}、Nasdaq={nasdaq_basis or 'unknown'} 報價基準不同，"
+            f"差距 {gap:.2%} 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查"
+        )
+    elif gap > 0.01:
+        warnings.append(
+            f"{label}: 報價基準不同且差距 {gap:.2%}，需留意盤前/盤後波動"
+        )
+
+
 def recompute_metrics(snapshot: dict[str, Any]) -> dict[str, float | bool | None]:
     prices = snapshot.get("metrics", {}).get("prices", {})
     inputs = snapshot.get("metrics", {}).get("manual_inputs", {})
@@ -132,13 +193,15 @@ def main() -> int:
         warnings,
     )
     for ticker in ["mstr", "bmnr", "strc"]:
-        yahoo = as_float(observations.get(f"{ticker}_usd_yahoo", {}).get("value"))
-        nasdaq = as_float(observations.get(f"{ticker}_usd_nasdaq", {}).get("value"))
-        if yahoo is not None and nasdaq is not None:
-            check_cross_source(f"{ticker.upper()} equity", yahoo, nasdaq, 0.02, failures, warnings)
-            evidence.append(f"{ticker.upper()} Yahoo/Nasdaq={yahoo}/{nasdaq}")
-        else:
-            degradations.append(f"{ticker.upper()} 缺少股票第二來源，前端需標 degraded")
+        check_equity_cross_source(
+            ticker,
+            observations.get(f"{ticker}_usd_yahoo"),
+            observations.get(f"{ticker}_usd_nasdaq"),
+            failures,
+            degradations,
+            warnings,
+            evidence,
+        )
 
     latest_form = str(observations.get("mstr_sec_latest_form", {}).get("value") or "")
     if latest_form:
@@ -202,7 +265,9 @@ def main() -> int:
         "evidence": evidence,
         "policy": {
             "btc_cross_source_max_gap": "1.5%",
-            "equity_cross_source_max_gap": "2%",
+            "equity_cross_source_max_gap_same_basis": "2%",
+            "equity_mismatched_quote_basis": "degraded, not fail",
+            "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
             "required_sources": ["CoinGecko", "Coinbase", "Yahoo Finance"],
             "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "ETF flow automation"],
         },

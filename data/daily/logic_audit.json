@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "date": "2026-07-08",
-  "generated_at": "2026-07-08T09:39:03+00:00",
-  "status": "blocked",
+  "generated_at": "2026-07-08T10:00:37+00:00",
+  "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
-    "passed_invariants": 8,
-    "failed_invariants": 2,
+    "passed_invariants": 10,
+    "failed_invariants": 0,
     "contradictions": 0,
     "blocked_actions": [
       "add_2_5x_mstr",
@@ -46,9 +46,9 @@
     },
     {
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
-      "status": "fail",
+      "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=fail, headline=block_leveraged_add, confidence=low",
+      "evidence": "verification=degraded, headline=Research-grade only; not auto-trading grade, confidence=medium-low",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
     },
     {
@@ -88,9 +88,9 @@
     },
     {
       "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
-      "status": "fail",
+      "status": "pass",
       "severity": "blocking",
-      "evidence": "manual_input_provenance=manual_seed, verification=fail",
+      "evidence": "manual_input_provenance=manual_seed, verification=degraded",
       "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
     },
     {

@@ -11,6 +11,7 @@ import csv
 import json
 import math
 import os
+import re
 import sys
 import time
 import gzip
@@ -127,17 +128,24 @@ def collect_coinbase_btc() -> Observation:
     return obs("btc_usd_coinbase", safe_float(data.get("price")), "Coinbase Exchange ticker", url)
 
 
-def yahoo_chart(ticker: str) -> tuple[float | None, str]:
+def yahoo_chart(ticker: str) -> tuple[float | None, str, str]:
     encoded = urllib.parse.quote(ticker)
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{encoded}?range=5d&interval=1d"
     data = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
     result = data["chart"]["result"][0]
-    price = result.get("meta", {}).get("regularMarketPrice")
+    meta = result.get("meta", {})
+    price = meta.get("regularMarketPrice")
+    source_field = "regularMarketPrice"
     if price is None:
         closes = result.get("indicators", {}).get("quote", [{}])[0].get("close", [])
         closes = [c for c in closes if c is not None]
         price = closes[-1] if closes else None
-    return safe_float(price), url
+        source_field = "latest_daily_close"
+    detail = (
+        f"quote_basis=regular_market_close source_field={source_field} "
+        f"regularMarketTime={meta.get('regularMarketTime')} timezone={meta.get('timezone')}"
+    )
+    return safe_float(price), url, detail
 
 
 
@@ -145,6 +153,27 @@ def clean_price(value: Any) -> float | None:
     if isinstance(value, str):
         value = value.replace("$", "").replace(",", "").replace("%", "").strip()
     return safe_float(value)
+
+
+def nasdaq_quote_basis(primary: dict[str, Any]) -> str:
+    timestamp = str(primary.get("lastTradeTimestamp") or "")
+    is_realtime = str(primary.get("isRealTime") or "").lower() == "true"
+    if not is_realtime:
+        return "regular_or_delayed_quote"
+    match = re.search(r"(\d{1,2}):(\d{2})\s*(AM|PM)\s*ET", timestamp, re.IGNORECASE)
+    if not match:
+        return "realtime_unknown_session"
+    hour = int(match.group(1))
+    minute = int(match.group(2))
+    am_pm = match.group(3).upper()
+    if am_pm == "PM" and hour != 12:
+        hour += 12
+    if am_pm == "AM" and hour == 12:
+        hour = 0
+    minutes = hour * 60 + minute
+    if minutes < 9 * 60 + 30 or minutes > 16 * 60:
+        return "extended_hours_realtime"
+    return "regular_session_realtime"
 
 
 def collect_nasdaq_equity(ticker: str) -> Observation:
@@ -160,12 +189,13 @@ def collect_nasdaq_equity(ticker: str) -> Observation:
     )
     primary = data.get("data", {}).get("primaryData", {})
     value = clean_price(primary.get("lastSalePrice"))
-    detail = f"timestamp={primary.get('lastTradeTimestamp')} realTime={primary.get('isRealTime')}"
+    quote_basis = nasdaq_quote_basis(primary)
+    detail = f"quote_basis={quote_basis} timestamp={primary.get('lastTradeTimestamp')} realTime={primary.get('isRealTime')}"
     return obs(f"{ticker.lower()}_usd_nasdaq", value, "Nasdaq quote API", url, ok=value is not None, detail=detail)
 
 def collect_yahoo_equity(ticker: str) -> Observation:
-    value, url = yahoo_chart(ticker)
-    return obs(f"{ticker.lower()}_usd_yahoo", value, "Yahoo Finance chart", url, ok=value is not None)
+    value, url, detail = yahoo_chart(ticker)
+    return obs(f"{ticker.lower()}_usd_yahoo", value, "Yahoo Finance chart", url, ok=value is not None, detail=detail)
 
 
 def collect_stooq_close(ticker: str, symbol: str) -> Observation:
@@ -245,11 +275,37 @@ def write_json(path: Path, data: Any) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def latest_value(observations: list[Observation], name: str) -> float | str | None:
+def latest_observation(observations: list[Observation], name: str) -> Observation | None:
     for item in observations:
-        if item.name == name:
-            return item.value
+        if item.name == name and item.ok:
+            return item
     return None
+
+
+def latest_value(observations: list[Observation], name: str) -> float | str | None:
+    item = latest_observation(observations, name)
+    return item.value if item else None
+
+
+def selected_price(
+    observations: list[Observation],
+    primary_name: str,
+    fallback_name: str,
+    label: str,
+) -> tuple[float | None, dict[str, Any]]:
+    primary = latest_observation(observations, primary_name)
+    fallback = latest_observation(observations, fallback_name)
+    selected = primary or fallback
+    value = safe_float(selected.value) if selected else None
+    return value, {
+        "selected_source": selected.source if selected else None,
+        "selected_observation": selected.name if selected else None,
+        "selected_detail": selected.detail if selected else None,
+        "policy": f"{label}: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+        "fallback_source": fallback.source if fallback else None,
+        "fallback_observation": fallback.name if fallback else None,
+        "fallback_detail": fallback.detail if fallback else None,
+    }
 
 
 def load_input_provenance() -> dict[str, Any]:
@@ -260,9 +316,9 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     btc_prices = [safe_float(latest_value(observations, n)) for n in ["btc_usd_coingecko", "btc_usd_coinbase"]]
     btc_prices = [p for p in btc_prices if p is not None]
     btc_px = sum(btc_prices) / len(btc_prices) if btc_prices else None
-    mstr_px = safe_float(latest_value(observations, "mstr_usd_yahoo")) or safe_float(latest_value(observations, "mstr_usd_nasdaq"))
-    bmnr_px = safe_float(latest_value(observations, "bmnr_usd_yahoo")) or safe_float(latest_value(observations, "bmnr_usd_nasdaq"))
-    strc_px = safe_float(latest_value(observations, "strc_usd_yahoo")) or safe_float(latest_value(observations, "strc_usd_nasdaq"))
+    mstr_px, mstr_basis = selected_price(observations, "mstr_usd_yahoo", "mstr_usd_nasdaq", "MSTR")
+    bmnr_px, bmnr_basis = selected_price(observations, "bmnr_usd_yahoo", "bmnr_usd_nasdaq", "BMNR")
+    strc_px, strc_basis = selected_price(observations, "strc_usd_yahoo", "strc_usd_nasdaq", "STRC")
 
     inputs = MANUAL_INPUTS
     pref_total = sum(item["notional_musd"] for item in inputs["preferred"].values())
@@ -295,6 +351,15 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "mstr_usd": mstr_px,
             "bmnr_usd": bmnr_px,
             "strc_usd": strc_px,
+        },
+        "price_basis": {
+            "btc_usd": {
+                "selected_source": "CoinGecko/Coinbase average",
+                "policy": "BTC 使用 CoinGecko 與 Coinbase 平均值，並由 verifier 檢查兩者差距",
+            },
+            "mstr_usd": mstr_basis,
+            "bmnr_usd": bmnr_basis,
+            "strc_usd": strc_basis,
         },
         "market_radar": {
             "fear_greed": safe_float(latest_value(observations, "fear_greed_value")),
@@ -374,11 +439,19 @@ def collect_all() -> list[Observation]:
     ]
     observations: list[Observation] = []
     for name, collector in collectors:
-        try:
-            observations.extend(collector())
-            time.sleep(0.25)
-        except Exception as exc:  # Keep partial data visible, verifier decides pass/fail.
-            observations.append(obs(f"{name}_error", None, name, "", ok=False, detail=repr(exc)[:500]))
+        last_exc: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                observations.extend(collector())
+                last_exc = None
+                break
+            except Exception as exc:  # Keep partial data visible, verifier decides pass/fail.
+                last_exc = exc
+                if attempt < 3:
+                    time.sleep(0.75 * attempt)
+        if last_exc is not None:
+            observations.append(obs(f"{name}_error", None, name, "", ok=False, detail=repr(last_exc)[:500]))
+        time.sleep(0.25)
     return observations
 
 

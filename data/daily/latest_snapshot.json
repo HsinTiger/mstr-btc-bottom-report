@@ -1,13 +1,46 @@
 {
   "schema": 1,
   "date": "2026-07-08",
-  "generated_at": "2026-07-08T09:38:58+00:00",
+  "generated_at": "2026-07-08T10:00:34+00:00",
   "metrics": {
     "prices": {
-      "btc_usd": 62020.06,
+      "btc_usd": 62011.494999999995,
       "mstr_usd": 97.36,
       "bmnr_usd": 14.8,
       "strc_usd": 86.56
+    },
+    "price_basis": {
+      "btc_usd": {
+        "selected_source": "CoinGecko/Coinbase average",
+        "policy": "BTC 使用 CoinGecko 與 Coinbase 平均值，並由 verifier 檢查兩者差距"
+      },
+      "mstr_usd": {
+        "selected_source": "Yahoo Finance chart",
+        "selected_observation": "mstr_usd_yahoo",
+        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783454401 timezone=EDT",
+        "policy": "MSTR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+        "fallback_source": "Nasdaq quote API",
+        "fallback_observation": "mstr_usd_nasdaq",
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 8, 2026 6:00 AM ET realTime=True"
+      },
+      "bmnr_usd": {
+        "selected_source": "Yahoo Finance chart",
+        "selected_observation": "bmnr_usd_yahoo",
+        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783454402 timezone=EDT",
+        "policy": "BMNR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+        "fallback_source": "Nasdaq quote API",
+        "fallback_observation": "bmnr_usd_nasdaq",
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 8, 2026 6:00 AM ET realTime=True"
+      },
+      "strc_usd": {
+        "selected_source": "Yahoo Finance chart",
+        "selected_observation": "strc_usd_yahoo",
+        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783454400 timezone=EDT",
+        "policy": "STRC: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+        "fallback_source": "Nasdaq quote API",
+        "fallback_observation": "strc_usd_nasdaq",
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 8, 2026 6:00 AM ET realTime=True"
+      }
     },
     "market_radar": {
       "fear_greed": 20.0,
@@ -19,9 +52,9 @@
       "etf_flow_status": "not_automated_yet"
     },
     "mstr_metrics": {
-      "btc_nav_musd": 52330.9761265,
-      "equity_mnav": 0.9612229517357584,
-      "enterprise_mnav": 1.0273379932765203,
+      "btc_nav_musd": 52323.74919362499,
+      "equity_mnav": 0.9614636570067399,
+      "enterprise_mnav": 1.0274798887414243,
       "pref_dilution_flag": false,
       "coverage_months": 15.87136929460581,
       "sale_ratio": 5.825726141078838,
