@@ -27,7 +27,7 @@ a{color:var(--blue);text-decoration:none}header{position:sticky;top:0;z-index:5;
       <h3>今日核心數據</h3>
       <div class="big" id="btcPrice">—</div>
       <div class="mini" id="priceLine">BTC / MSTR / BMNR / STRC</div>
-      <div class="mini" id="mnavLine" style="margin-top:8px">M1/M2/M4/M5/M7</div>
+      <div class="mini" id="mnavLine" style="margin-top:8px">普通股安全邊際／企業價值安全邊際／現金覆蓋／賣幣壓力／STRC 信任票</div>
     </div>
   </section>
 
@@ -67,7 +67,7 @@ async function load(){
   document.getElementById('verifyBox').innerHTML=`資料驗證代理：<b class="${cls(verify.status)}">${verify.status.toUpperCase()}</b>｜degraded ${(verify.degradations||[]).length}｜warnings ${verify.warnings?.length||0}｜failures ${verify.failures?.length||0}<br><span class="mini">${[...(verify.degradations||[]),...(verify.failures||[])].slice(0,2).join('；')||'資料完整'}</span>`;
   document.getElementById('btcPrice').textContent=`BTC $${fmt(p.btc_usd,0)}`;
   document.getElementById('priceLine').textContent=`MSTR $${fmt(p.mstr_usd)}｜BMNR $${fmt(p.bmnr_usd)}｜STRC $${fmt(p.strc_usd)}`;
-  document.getElementById('mnavLine').textContent=`M1 ${fmt(m.equity_mnav)}x｜M2 ${fmt(m.enterprise_mnav)}x｜M4 ${fmt(m.coverage_months,1)}m｜M5 ${fmt(m.sale_ratio,1)}x｜M7 ${pct(m.strc_discount)}`;
+  document.getElementById('mnavLine').textContent=`普通股安全邊際 ${fmt(m.equity_mnav)}x?企業價值安全邊際 ${fmt(m.enterprise_mnav)}x?現金覆蓋 ${fmt(m.coverage_months,1)}月?賣幣壓力 ${fmt(m.sale_ratio,1)}x?STRC 信任票 ${pct(m.strc_discount)}`;
   document.getElementById('views').innerHTML=(today?.viewpoints||[]).map(v=>`<article class="card view"><div class="label">${v.lens}｜信心 ${v.confidence}</div><h3>${v.title}</h3><p><b>Claim：</b>${v.claim}</p><p><b>So what：</b>${v.so_what}</p><div class="quote"><b>Study：</b>${v.study_note}</div></article>`).join('');
   document.getElementById('window').innerHTML=(ext.visible_window||[]).map(item=>{
     if(item.type==='tomorrow_watch') return `<article class="card day"><div class="label">明天 ${item.date}</div><h3>${item.title}</h3><ul>${(item.watch_items||[]).map(x=>`<li>${x}</li>`).join('')}</ul></article>`;

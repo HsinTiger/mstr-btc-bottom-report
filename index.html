@@ -208,7 +208,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <a class="badge badge-blue" href="wiki.html" style="text-decoration:none">📚 wiki_llm 投資知識庫 →</a>
     <a class="badge badge-red" href="leverage-2x-plan.html" style="text-decoration:none">⚖️ 2x 槓桿評估（6/17）→</a>
     <a class="badge badge-purple" href="spacex-lesson.html" style="text-decoration:none">🧠 SpaceX 行為課（6/17）→</a>
-    <a class="badge badge-green" href="metrics-spec.md" style="text-decoration:none">🧪 M1–M7 自算指標 →</a>
+    <a class="badge badge-green" href="metrics-spec.md" style="text-decoration:none">?? 自算核心指標說明 ?</a>
     <a class="badge badge-blue" href="wiki.html#gaap-vs-mnav" style="text-decoration:none">📐 GAAP / Non-GAAP / mNAV →</a>
     <a class="badge badge-purple" href="daily-extensions.html" style="text-decoration:none">🗓️ 每日延伸（三觀點）→</a>
     <a class="badge badge-blue" href="analytics.html" style="text-decoration:none">📊 專業分析層 →</a>
@@ -233,7 +233,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <div class="daily-meta" id="dailyMeta">載入今日資料中…</div>
   <div class="decision-wall" id="dailyCoreCards"></div>
 
-  <div class="decision-subhead"><h3>🧪 獨家指標 M1–M7</h3><div class="hint">每張卡只保留：結論 + 一個數字</div></div>
+  <div class="decision-subhead"><h3>?? 獨家核心指標</h3><div class="hint">每張卡只保留：結論 + 一個數字</div></div>
   <div class="decision-wall" id="dailyMstrCards"></div>
 
   <h3>📚 兩本帳：不要混用</h3>
@@ -648,13 +648,13 @@ function mstrCards(today,yday){
   const m=today.metrics.mstr_metrics;
   const manual=today.metrics.manual_inputs||{};
   return [
-    card({label:'M1 普通股真 NAV',value:num(m.equity_mnav,2)+'x',tone:m.equity_mnav>=1?'good':'bad',read:m.equity_mnav>=1?'安全邊際過關':'還不算便宜'}),
-    card({label:'M2 企業價值 NAV',value:num(m.enterprise_mnav,2)+'x',tone:m.enterprise_mnav>=1?'warn':'bad',read:m.enterprise_mnav>=1?'只能當對照':'飛輪未重啟'}),
-    card({label:'M3 稀釋旗標',value:m.pref_dilution_flag?'ON':'OFF',tone:m.pref_dilution_flag?'bad':'good',read:m.pref_dilution_flag?'mNAV 回升降權':'今日未觸發'}),
-    card({label:'M4 覆蓋月數',value:num(m.coverage_months,1)+'m',tone:m.coverage_months>=12?'good':'bad',read:m.coverage_months>=12?'現金暫時夠':'現金壓力紅燈'}),
-    card({label:'M5 賣幣壓力',value:num(m.sale_ratio,1)+'x',tone:m.sale_ratio>2?'bad':m.sale_ratio>1.5?'warn':'good',read:m.sale_ratio>2?'被迫賣幣風險':'未超紅線'}),
-    card({label:'M6 每股含幣',value:Number(m.sats_per_share||0).toLocaleString(),tone:'info',read:'防假增厚'}),
-    card({label:'M7 STRC 折價',value:pct(m.strc_discount),tone:m.strc_discount>0.05?'bad':m.strc_discount>0.01?'warn':'good',read:m.strc_discount>0.05?'mNAV 全部降權':'信任票改善'}),
+    card({label:'普通股真實安全邊際',value:num(m.equity_mnav,2)+'x',tone:m.equity_mnav>=1?'good':'bad',read:m.equity_mnav>=1?'安全邊際過關':'還不算便宜'}),
+    card({label:'企業價值安全邊際',value:num(m.enterprise_mnav,2)+'x',tone:m.enterprise_mnav>=1?'warn':'bad',read:m.enterprise_mnav>=1?'只能當對照':'飛輪未重啟'}),
+    card({label:'特別股稀釋污染旗標',value:m.pref_dilution_flag?'ON':'OFF',tone:m.pref_dilution_flag?'bad':'good',read:m.pref_dilution_flag?'安全邊際改善要打折':'今日未觸發'}),
+    card({label:'現金覆蓋月數',value:num(m.coverage_months,1)+'m',tone:m.coverage_months>=12?'good':'bad',read:m.coverage_months>=12?'現金暫時夠':'現金壓力紅燈'}),
+    card({label:'每週賣幣壓力倍數',value:num(m.sale_ratio,1)+'x',tone:m.sale_ratio>2?'bad':m.sale_ratio>1.5?'warn':'good',read:m.sale_ratio>2?'被迫賣幣風險':'未超紅線'}),
+    card({label:'每股比特幣含量',value:Number(m.sats_per_share||0).toLocaleString(),tone:'info',read:'防止假性增厚'}),
+    card({label:'STRC 優先股折價信任票',value:pct(m.strc_discount),tone:m.strc_discount>0.05?'bad':m.strc_discount>0.01?'warn':'good',read:m.strc_discount>0.05?'估值樂觀全部降權':'信任票改善'}),
     card({label:'GAAP 稅務楔子',value:`$${num(manual.net_deferred_tax_liability_musd||0,0)}M`,tone:'warn',read:'季報必覆核'})
   ].join('');
 }

@@ -100,9 +100,9 @@ def mstr_decomposition(snapshot: dict[str, Any], previous: dict[str, Any] | None
     if beta_gap is not None:
         drivers.append({"driver": "MSTR_vs_BTC", "value": beta_gap, "read": "MSTR underperformed BTC; discount/capital-structure pressure persists" if beta_gap < 0 else "MSTR outperformed BTC; verify it is not short-term reflexivity"})
     if m1_delta is not None:
-        drivers.append({"driver": "M1_delta", "value": m1_delta, "read": "Common-equity safety margin deteriorated" if m1_delta < 0 else "Common-equity safety margin improved"})
+        drivers.append({"driver": "普通股真實安全邊際變化", "value": m1_delta, "read": "普通股安全邊際變差" if m1_delta < 0 else "普通股安全邊際改善"})
     if strc_delta is not None:
-        drivers.append({"driver": "STRC_discount_delta", "value": strc_delta, "read": "Preferred-stock trust signal deteriorated" if strc_delta > 0 else "Preferred-stock trust signal improved"})
+        drivers.append({"driver": "STRC 優先股折價信任票變化", "value": strc_delta, "read": "STRC 折價擴大，市場信任變差" if strc_delta > 0 else "STRC 折價收斂，市場信任改善"})
     return {
         "btc_return_1d": btc_ret,
         "mstr_return_1d": mstr_ret,
@@ -146,9 +146,9 @@ def risk_stack(snapshot: dict[str, Any], verification: dict[str, Any]) -> list[d
         stack.append({"name": name, "severity": severity, "value": value, "read": read})
 
     add("Automation quality", "medium" if verification.get("status") == "degraded" else verification.get("status", "unknown"), verification.get("status", "unknown"), "Research-grade only" if verification.get("status") == "degraded" else "Data quality requires review")
-    add("M1 common-equity margin", "high" if (f(metrics.get("equity_mnav")) or 0) < 1 else "low", fmt(metrics.get("equity_mnav")) + "x", "Below 1.0; common equity is not cheap enough" if (f(metrics.get("equity_mnav")) or 0) < 1 else "Above 1.0; still check red flags")
-    add("M5 BTC-sale pressure", "high" if (f(metrics.get("sale_ratio")) or 0) > 2 else "low", fmt(metrics.get("sale_ratio"), 1) + "x", "Above 2x; freeze tactical adds" if (f(metrics.get("sale_ratio")) or 0) > 2 else "Below red-line threshold")
-    add("M7 STRC trust vote", "high" if (f(metrics.get("strc_discount")) or 0) > 0.05 else "low", pct(metrics.get("strc_discount")), "Discount too deep; downgrade all mNAV signals" if (f(metrics.get("strc_discount")) or 0) > 0.05 else "Trust vote improving")
+    add("普通股真實安全邊際", "high" if (f(metrics.get("equity_mnav")) or 0) < 1 else "low", fmt(metrics.get("equity_mnav")) + "x", "低於 1.0；普通股還不能說便宜" if (f(metrics.get("equity_mnav")) or 0) < 1 else "高於 1.0，但仍需檢查紅旗")
+    add("每週賣幣壓力倍數", "high" if (f(metrics.get("sale_ratio")) or 0) > 2 else "low", fmt(metrics.get("sale_ratio"), 1) + "x", "高於 2 倍；凍結小倉合約加碼" if (f(metrics.get("sale_ratio")) or 0) > 2 else "低於紅線")
+    add("STRC 優先股折價信任票", "high" if (f(metrics.get("strc_discount")) or 0) > 0.05 else "low", pct(metrics.get("strc_discount")), "折價太深；所有估值樂觀訊號降權" if (f(metrics.get("strc_discount")) or 0) > 0.05 else "信任票改善")
     add("Sentiment", "opportunity" if (f(radar.get("fear_greed")) or 50) <= 25 else "neutral", fmt(radar.get("fear_greed"), 0), "Fear helps setup quality; not a buy trigger by itself" if (f(radar.get("fear_greed")) or 50) <= 25 else "Not capitulation sentiment")
     return stack
 
@@ -174,7 +174,7 @@ def main() -> int:
         },
         "executive_read": {
             "headline": "Research-grade only; not auto-trading grade" if verification.get("status") == "degraded" else snapshot.get("decision", {}).get("state"),
-            "one_line": "M1 is below 1.0 and M5/M7 red flags remain; today is about avoiding chase, not finding reasons to add.",
+            "one_line": "普通股真實安全邊際低於 1.0，且每週賣幣壓力與 STRC 優先股折價仍是紅旗；今天重點是避免追高，不是找理由加碼。",
         },
         "logic_audit": {
             "status": logic_audit.get("status", "not_run"),

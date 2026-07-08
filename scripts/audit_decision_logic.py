@@ -79,28 +79,28 @@ def build_thresholds(metrics: dict[str, Any], radar: dict[str, Any]) -> list[dic
     treasury = n(radar.get("treasury_avg_bill_rate_pct"))
     return [
         {
-            "metric": "M1 equity_mnav",
+            "metric": "普通股真實安全邊際",
             "threshold": "< 1.00 blocks common-equity cheapness claims",
             "current": f"{num(equity_mnav, 3)}x",
             "rationale": "Below 1.0 means common equity trades through internally adjusted BTC NAV after debt, preferred, cash, and tax inputs.",
             "action": "Do not frame MSTR common as cheap until provenance and capital stack are reviewed.",
         },
         {
-            "metric": "M2 enterprise_mnav",
+            "metric": "企業價值安全邊際",
             "threshold": "< 1.00 would imply enterprise trades below BTC NAV before common-stack haircuts",
             "current": f"{num(enterprise_mnav, 3)}x",
             "rationale": "Separates company-level BTC premium from common-share capital-structure burden.",
-            "action": "Use only as context; never override M1/M5/M7 red flags.",
+            "action": "只能當背景參考；不可蓋過普通股安全邊際、賣幣壓力、STRC 折價這三個紅旗。",
         },
         {
-            "metric": "M5 weekly BTC-sale pressure",
+            "metric": "每週賣幣壓力倍數",
             "threshold": "> 2.00 is forced-sale pressure red flag",
             "current": f"{num(sale_ratio, 2)}x",
             "rationale": "Weekly BTC sales versus economic cushion can turn financing reflexivity from tailwind to headwind.",
             "action": "Block 2.5x tactical adds when above threshold.",
         },
         {
-            "metric": "M7 STRC discount",
+            "metric": "STRC 優先股折價信任票",
             "threshold": "> 5.0% downgrades all mNAV signals",
             "current": pct(strc_discount),
             "rationale": "Preferred-stock market is the capital-structure trust vote; a wide discount can invalidate headline mNAV optimism.",
@@ -118,7 +118,7 @@ def build_thresholds(metrics: dict[str, Any], radar: dict[str, Any]) -> list[dic
             "threshold": "< 25 is panic context, not automatic buy signal",
             "current": num(fear_greed, 0),
             "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
-            "action": "Allow research watchlist; require M1/M5/M7 confirmation before action.",
+            "action": "只允許列入研究清單；行動前必須看到普通股安全邊際、賣幣壓力、STRC 折價一起確認。",
         },
         {
             "metric": "Treasury bill rate proxy",
@@ -133,17 +133,17 @@ def build_thresholds(metrics: dict[str, Any], radar: dict[str, Any]) -> list[dic
 def build_falsification_watch() -> list[dict[str, Any]]:
     return [
         {
-            "hypothesis": "M5 > 2 means financing pressure blocks tactical 2.5x MSTR adds.",
-            "what_would_disprove": "Repeated M5 > 2 while STRC discount narrows, reserve coverage improves, and MSTR outperforms BTC across multiple weeks.",
+            "hypothesis": "每週賣幣壓力倍數高於 2，代表融資壓力足以封鎖 2.5 倍 MSTR 小倉加碼。",
+            "what_would_disprove": "連續多週賣幣壓力高於 2，但 STRC 折價收斂、現金覆蓋月數改善，且 MSTR 持續跑贏 BTC。",
             "required_evidence": "At least 4 weekly observations, preferred-market confirmation, and no verifier degradation.",
         },
         {
-            "hypothesis": "STRC discount > 5% is a capital-structure trust warning.",
+            "hypothesis": "STRC 優先股折價高於 5%，代表市場正在對資本結構投不信任票。",
             "what_would_disprove": "Discount remains wide for liquidity-only reasons while preferred coverage, issuance terms, and MSTR/BTC relative strength improve.",
             "required_evidence": "Bid/ask or volume context plus independent preferred-price source.",
         },
         {
-            "hypothesis": "M1 below 1.0 means common-equity cheapness claims require extra review.",
+            "hypothesis": "普通股真實安全邊際低於 1.0 時，不能直接說 MSTR 普通股便宜，必須額外覆核。",
             "what_would_disprove": "Reviewed capital inputs show diluted shares, debt, preferred liquidation value, and deferred tax liabilities were overstated.",
             "required_evidence": "SEC filing extraction promoted from manual_seed to reviewed input provenance.",
         },
@@ -287,11 +287,11 @@ def main() -> None:
     if equity_mnav is not None and equity_mnav < 1 and "cheap" in (headline + " " + one_line).lower():
         contradictions.append({"id": "CHEAPNESS_LANGUAGE_WITH_M1_BELOW_ONE", "evidence": headline + " / " + one_line})
     if mnav_gate_ok and (equity_mnav is None or equity_mnav < 1 or enterprise_mnav is None or enterprise_mnav < 1 or pref_dilution_flag):
-        contradictions.append({"id": "MNAV_GATE_CONTRADICTS_COMPONENTS", "evidence": f"gate={mnav_gate_ok}, M1={num(equity_mnav, 3)}, M2={num(enterprise_mnav, 3)}, M3={pref_dilution_flag}"})
+        contradictions.append({"id": "MNAV_GATE_CONTRADICTS_COMPONENTS", "evidence": f"gate={mnav_gate_ok}, 普通股真實安全邊際={num(equity_mnav, 3)}, 企業價值安全邊際={num(enterprise_mnav, 3)}, 特別股稀釋污染旗標={pref_dilution_flag}"})
     if analytics.get("decomposition", {}).get("mstr_return_1d") and (equity_mnav is not None and equity_mnav < 1 or sale_ratio is not None and sale_ratio > 2 or strc_discount is not None and strc_discount > 0.05):
         mstr_return = n(analytics.get("decomposition", {}).get("mstr_return_1d"))
         if mstr_return is not None and mstr_return > 0 and "mnav_green_light" not in blocked_actions:
-            contradictions.append({"id": "PRICE_REBOUND_WITHOUT_STRUCTURE_REPAIR", "evidence": f"mstr_return_1d={pct(mstr_return)}, M1={num(equity_mnav, 3)}, M5={num(sale_ratio, 2)}, M7={pct(strc_discount)}"})
+            contradictions.append({"id": "PRICE_REBOUND_WITHOUT_STRUCTURE_REPAIR", "evidence": f"mstr_return_1d={pct(mstr_return)}, 普通股真實安全邊際={num(equity_mnav, 3)}, 每週賣幣壓力倍數={num(sale_ratio, 2)}, STRC 優先股折價={pct(strc_discount)}"})
 
     failed_blocking = [item for item in invariants if item["status"] == "fail" and item["severity"] == "blocking"]
     failed_any = [item for item in invariants if item["status"] == "fail"]
@@ -320,7 +320,7 @@ def main() -> None:
         "decision": {
             "allowed_actions": sorted(allowed_actions),
             "blocked_actions": sorted(blocked_actions),
-            "plain_english": "Only research/observe is allowed while verification is degraded or M5/M7 red flags remain.",
+            "plain_english": "資料驗證降級，或每週賣幣壓力／STRC 折價紅旗還在時，只允許研究與觀察。",
         },
         "invariants": invariants,
         "thresholds": build_thresholds(metrics, radar),

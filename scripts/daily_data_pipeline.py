@@ -330,11 +330,11 @@ def score_snapshot(metrics: dict[str, Any]) -> dict[str, Any]:
     if m["mnav_gate_ok"]:
         score += 2
         reason_codes.append("MNAV_GATE_OK")
-        reasons.append("M1/M2 mNAV gate passed without preferred-dilution flag")
+        reasons.append("Self-calculated common-equity and enterprise-value safety margins passed without preferred-dilution flag")
     else:
         score -= 2
         reason_codes.append("MNAV_GATE_CLOSED")
-        reasons.append("M1/M2 mNAV gate or dilution flag does not allow second-tranche add")
+        reasons.append("Self-calculated common-equity or enterprise-value safety margin gate is closed, or preferred-dilution flag is active")
     if m["coverage_months"] >= 12:
         score += 1
         reason_codes.append("COVERAGE_ABOVE_12M")
