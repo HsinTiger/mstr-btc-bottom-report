@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-07-08",
-  "generated_at": "2026-07-08T06:40:08+00:00",
+  "generated_at": "2026-07-08T06:54:50+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
@@ -9,28 +9,45 @@
       "ETF flow not automated",
       "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
       "capital-structure provenance status=manual_seed"
-    ]
+    ],
+    "logic_audit_status": "consistent",
+    "logic_failed_invariants": 0,
+    "logic_contradictions": 0
   },
   "executive_read": {
     "headline": "Research-grade only; not auto-trading grade",
     "one_line": "M1 is below 1.0 and M5/M7 red flags remain; today is about avoiding chase, not finding reasons to add."
   },
+  "logic_audit": {
+    "status": "consistent",
+    "plain_english": "Only research/observe is allowed while verification is degraded or M5/M7 red flags remain.",
+    "blocked_actions": [
+      "add_2_5x_mstr",
+      "auto_trade",
+      "claim_common_equity_cheap",
+      "mnav_green_light",
+      "treat_mnav_as_green",
+      "use_etf_flow_as_hard_trigger"
+    ],
+    "failed_invariants": 0,
+    "contradictions": 0
+  },
   "decomposition": {
-    "btc_return_1d": -0.01907904136149896,
+    "btc_return_1d": -0.016318206438546534,
     "mstr_return_1d": -0.033839436340180606,
-    "mstr_minus_btc_1d": -0.014760394978681646,
-    "m1_delta_1d": 2.3616475547161286e-05,
+    "mstr_minus_btc_1d": -0.017521229901634072,
+    "m1_delta_1d": -0.004762833564341484,
     "strc_discount_delta_1d": 0.020199999999999996,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": -0.014760394978681646,
+        "value": -0.017521229901634072,
         "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
       },
       {
         "driver": "M1_delta",
-        "value": 2.3616475547161286e-05,
-        "read": "Common-equity safety margin improved"
+        "value": -0.004762833564341484,
+        "read": "Common-equity safety margin deteriorated"
       },
       {
         "driver": "STRC_discount_delta",
@@ -43,28 +60,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 49983.416000000005,
-        "equity_mnav_at_current_mstr": 1.4829758220951623
+        "btc_price": 50124.096,
+        "equity_mnav_at_current_mstr": 1.4736270356519847
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 56231.34300000001,
-        "equity_mnav_at_current_mstr": 1.1569887474309988
+        "btc_price": 56389.608,
+        "equity_mnav_at_current_mstr": 1.1505820701572724
       },
       {
         "btc_shock": 0,
-        "btc_price": 62479.270000000004,
-        "equity_mnav_at_current_mstr": 0.9484917252587604
+        "btc_price": 62655.119999999995,
+        "equity_mnav_at_current_mstr": 0.9437052752188717
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 68727.19700000001,
-        "equity_mnav_at_current_mstr": 0.8036658291024625
+        "btc_price": 68920.632,
+        "equity_mnav_at_current_mstr": 0.7998845468537572
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 74975.124,
-        "equity_mnav_at_current_mstr": 0.6972085456651804
+        "btc_price": 75186.14399999999,
+        "equity_mnav_at_current_mstr": 0.6941031882863408
       }
     ]
   },
@@ -78,7 +95,7 @@
     {
       "name": "M1 common-equity margin",
       "severity": "high",
-      "value": "0.95x",
+      "value": "0.94x",
       "read": "Below 1.0; common equity is not cheap enough"
     },
     {

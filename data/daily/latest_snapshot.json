@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "date": "2026-07-08",
-  "generated_at": "2026-07-08T06:40:07+00:00",
+  "generated_at": "2026-07-08T06:54:47+00:00",
   "metrics": {
     "prices": {
-      "btc_usd": 62479.270000000004,
+      "btc_usd": 62655.119999999995,
       "mstr_usd": 97.36,
       "bmnr_usd": 14.8,
       "strc_usd": 86.56
@@ -19,9 +19,9 @@
       "etf_flow_status": "not_automated_yet"
     },
     "mstr_metrics": {
-      "btc_nav_musd": 52718.44604425,
-      "equity_mnav": 0.9484917252587604,
-      "enterprise_mnav": 1.0197872667732735,
+      "btc_nav_musd": 52866.823877999996,
+      "equity_mnav": 0.9437052752188717,
+      "enterprise_mnav": 1.016925096995894,
       "pref_dilution_flag": false,
       "coverage_months": 15.87136929460581,
       "sale_ratio": 5.825726141078838,
@@ -137,12 +137,19 @@
   },
   "decision": {
     "score": -6,
-    "state": "禁止小倉合約加碼",
+    "state": "block_leveraged_add",
+    "state_code": "BLOCK_LEVERAGED_ADD",
+    "reason_codes": [
+      "MNAV_GATE_CLOSED",
+      "COVERAGE_ABOVE_12M",
+      "SALE_RATIO_ABOVE_2X",
+      "STRC_DISCOUNT_ABOVE_5PCT"
+    ],
     "reasons": [
-      "M1/M2 或稀釋旗標尚未允許第二等份加倉",
-      "覆蓋月數仍高於 12 個月紅線",
-      "週賣幣比值高於 2，視為被迫賣幣風險",
-      "STRC 折價超過 5%，優先股信任票轉弱"
+      "M1/M2 mNAV gate or dilution flag does not allow second-tranche add",
+      "USD reserve coverage remains above the 12-month red line",
+      "Weekly BTC-sale pressure ratio is above 2x",
+      "STRC discount is above 5%, weakening the preferred-market trust vote"
     ]
   },
   "source_count": 21,

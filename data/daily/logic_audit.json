@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "date": "2026-07-08",
+  "generated_at": "2026-07-08T06:54:50+00:00",
+  "status": "consistent",
+  "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
+  "summary": {
+    "passed_invariants": 10,
+    "failed_invariants": 0,
+    "contradictions": 0,
+    "blocked_actions": [
+      "add_2_5x_mstr",
+      "auto_trade",
+      "claim_common_equity_cheap",
+      "mnav_green_light",
+      "treat_mnav_as_green",
+      "use_etf_flow_as_hard_trigger"
+    ],
+    "allowed_actions": [
+      "observe",
+      "research"
+    ]
+  },
+  "decision": {
+    "allowed_actions": [
+      "observe",
+      "research"
+    ],
+    "blocked_actions": [
+      "add_2_5x_mstr",
+      "auto_trade",
+      "claim_common_equity_cheap",
+      "mnav_green_light",
+      "treat_mnav_as_green",
+      "use_etf_flow_as_hard_trigger"
+    ],
+    "plain_english": "Only research/observe is allowed while verification is degraded or M5/M7 red flags remain."
+  },
+  "invariants": [
+    {
+      "id": "NO_TACTICAL_ADD_WHEN_CONTRACT_RED_LIGHT",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "False green light for the user's 2.5x leveraged MSTR tactical sleeve."
+    },
+    {
+      "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "verification=degraded, headline=Research-grade only; not auto-trading grade, confidence=medium-low",
+      "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
+    },
+    {
+      "id": "M1_BELOW_ONE_BLOCKS_CHEAPNESS_CLAIM",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "equity_mnav=0.944x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "Common equity may be called cheap while adjusted common NAV is still below threshold."
+    },
+    {
+      "id": "MNAV_DUAL_GATE_REQUIRED",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "mnav_gate_ok=False, equity_mnav=0.944x, enterprise_mnav=1.017x, pref_dilution_flag=False",
+      "risk_if_failed": "Official or single-line mNAV could override the self-calculated dual gate."
+    },
+    {
+      "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "equity_mnav=0.944x, sats_per_share=296061",
+      "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
+    },
+    {
+      "id": "STRC_DISCOUNT_DOWNGRADES_MNAV",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "strc_discount=13.4%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "Headline mNAV could ignore preferred-market capital-stack stress."
+    },
+    {
+      "id": "SALE_PRESSURE_BLOCKS_LEVERAGED_ADD",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "sale_ratio=5.83x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "Forced-sale pressure could be treated as a dip-buy setup."
+    },
+    {
+      "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "manual_input_provenance=manual_seed, verification=degraded",
+      "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
+    },
+    {
+      "id": "ETF_FLOW_NOT_HARD_TRIGGER_UNTIL_AUTOMATED",
+      "status": "pass",
+      "severity": "major",
+      "evidence": "etf_flow_status=not_automated_yet, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "Missing ETF-flow automation could still influence hard trading decisions."
+    },
+    {
+      "id": "RESERVE_COVERAGE_ESCALATES_BELOW_ONE_YEAR",
+      "status": "pass",
+      "severity": "major",
+      "evidence": "coverage_months=15.9, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_common_equity_cheap', 'mnav_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "Liquidity runway deterioration could be missed in leveraged sizing."
+    }
+  ],
+  "thresholds": [
+    {
+      "metric": "M1 equity_mnav",
+      "threshold": "< 1.00 blocks common-equity cheapness claims",
+      "current": "0.944x",
+      "rationale": "Below 1.0 means common equity trades through internally adjusted BTC NAV after debt, preferred, cash, and tax inputs.",
+      "action": "Do not frame MSTR common as cheap until provenance and capital stack are reviewed."
+    },
+    {
+      "metric": "M2 enterprise_mnav",
+      "threshold": "< 1.00 would imply enterprise trades below BTC NAV before common-stack haircuts",
+      "current": "1.017x",
+      "rationale": "Separates company-level BTC premium from common-share capital-structure burden.",
+      "action": "Use only as context; never override M1/M5/M7 red flags."
+    },
+    {
+      "metric": "M5 weekly BTC-sale pressure",
+      "threshold": "> 2.00 is forced-sale pressure red flag",
+      "current": "5.83x",
+      "rationale": "Weekly BTC sales versus economic cushion can turn financing reflexivity from tailwind to headwind.",
+      "action": "Block 2.5x tactical adds when above threshold."
+    },
+    {
+      "metric": "M7 STRC discount",
+      "threshold": "> 5.0% downgrades all mNAV signals",
+      "current": "13.4%",
+      "rationale": "Preferred-stock market is the capital-structure trust vote; a wide discount can invalidate headline mNAV optimism.",
+      "action": "Treat mNAV as suspect until preferred market stabilizes."
+    },
+    {
+      "metric": "USD reserve coverage",
+      "threshold": "< 12 months weakens survivability buffer",
+      "current": "15.9 months",
+      "rationale": "Cash duration matters more than narrative when dividends, interest, or ATM access tighten.",
+      "action": "Escalate to risk-off review if coverage drops below one year."
+    },
+    {
+      "metric": "Fear & Greed",
+      "threshold": "< 25 is panic context, not automatic buy signal",
+      "current": "20",
+      "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
+      "action": "Allow research watchlist; require M1/M5/M7 confirmation before action."
+    },
+    {
+      "metric": "Treasury bill rate proxy",
+      "threshold": "> 4.5% tightens preferred/debt refinancing pressure",
+      "current": "3.71%",
+      "rationale": "Risk-free yield competes with STRC and raises required return on capital-stack instruments.",
+      "action": "Add financing-risk weight when rates rise."
+    }
+  ],
+  "contradictions": [],
+  "falsification_watch": [
+    {
+      "hypothesis": "M5 > 2 means financing pressure blocks tactical 2.5x MSTR adds.",
+      "what_would_disprove": "Repeated M5 > 2 while STRC discount narrows, reserve coverage improves, and MSTR outperforms BTC across multiple weeks.",
+      "required_evidence": "At least 4 weekly observations, preferred-market confirmation, and no verifier degradation."
+    },
+    {
+      "hypothesis": "STRC discount > 5% is a capital-structure trust warning.",
+      "what_would_disprove": "Discount remains wide for liquidity-only reasons while preferred coverage, issuance terms, and MSTR/BTC relative strength improve.",
+      "required_evidence": "Bid/ask or volume context plus independent preferred-price source."
+    },
+    {
+      "hypothesis": "M1 below 1.0 means common-equity cheapness claims require extra review.",
+      "what_would_disprove": "Reviewed capital inputs show diluted shares, debt, preferred liquidation value, and deferred tax liabilities were overstated.",
+      "required_evidence": "SEC filing extraction promoted from manual_seed to reviewed input provenance."
+    },
+    {
+      "hypothesis": "Degraded verifier status means research-grade only.",
+      "what_would_disprove": "All required sources cross-check within tolerance and manual capital-structure inputs are reviewed or automated.",
+      "required_evidence": "agent_verification_report.status == pass plus reviewed provenance."
+    },
+    {
+      "hypothesis": "ETF-flow signals are not decision-grade until automated.",
+      "what_would_disprove": "Daily ETF flow feed is sourced, cross-checked, timestamped, and included in verifier evidence.",
+      "required_evidence": "Non-stale ETF source with independent backup and explicit tolerance policy."
+    }
+  ]
+}

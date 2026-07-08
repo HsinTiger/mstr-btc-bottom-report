@@ -326,26 +326,34 @@ def score_snapshot(metrics: dict[str, Any]) -> dict[str, Any]:
     m = metrics["mstr_metrics"]
     score = 0
     reasons: list[str] = []
+    reason_codes: list[str] = []
     if m["mnav_gate_ok"]:
         score += 2
-        reasons.append("M1/M2 雙軌 mNAV 達標且未觸發稀釋旗標")
+        reason_codes.append("MNAV_GATE_OK")
+        reasons.append("M1/M2 mNAV gate passed without preferred-dilution flag")
     else:
         score -= 2
-        reasons.append("M1/M2 或稀釋旗標尚未允許第二等份加倉")
+        reason_codes.append("MNAV_GATE_CLOSED")
+        reasons.append("M1/M2 mNAV gate or dilution flag does not allow second-tranche add")
     if m["coverage_months"] >= 12:
         score += 1
-        reasons.append("覆蓋月數仍高於 12 個月紅線")
+        reason_codes.append("COVERAGE_ABOVE_12M")
+        reasons.append("USD reserve coverage remains above the 12-month red line")
     else:
         score -= 2
-        reasons.append("覆蓋月數低於 12 個月紅線")
+        reason_codes.append("COVERAGE_BELOW_12M")
+        reasons.append("USD reserve coverage is below the 12-month red line")
     if m["sale_ratio"] > 2:
         score -= 3
-        reasons.append("週賣幣比值高於 2，視為被迫賣幣風險")
+        reason_codes.append("SALE_RATIO_ABOVE_2X")
+        reasons.append("Weekly BTC-sale pressure ratio is above 2x")
     if m["strc_discount"] is not None and m["strc_discount"] > 0.05:
         score -= 2
-        reasons.append("STRC 折價超過 5%，優先股信任票轉弱")
-    state = "禁止小倉合約加碼" if m["contract_red_light"] else "可列入觀察，不自動追價"
-    return {"score": score, "state": state, "reasons": reasons}
+        reason_codes.append("STRC_DISCOUNT_ABOVE_5PCT")
+        reasons.append("STRC discount is above 5%, weakening the preferred-market trust vote")
+    state_code = "BLOCK_LEVERAGED_ADD" if m["contract_red_light"] else "WATCH_ONLY_NO_CHASE"
+    state = "block_leveraged_add" if m["contract_red_light"] else "watch_only_no_chase"
+    return {"score": score, "state": state, "state_code": state_code, "reason_codes": reason_codes, "reasons": reasons}
 
 
 def collect_all() -> list[Observation]:

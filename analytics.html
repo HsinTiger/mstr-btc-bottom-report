@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,9 +12,12 @@
 <main class="wrap">
   <div class="grid" id="top"></div>
   <div class="grid" style="margin-top:14px">
+    <section class="card"><h2>Logic Audit</h2><table id="logic"></table></section>
     <section class="card"><h2>Return / Signal Attribution</h2><table id="drivers"></table></section>
     <section class="card"><h2>BTC Shock Sensitivity</h2><table id="sensitivity"></table></section>
+    <section class="card"><h2>Blocked Actions</h2><table id="blocked"></table></section>
     <section class="card full"><h2>Risk Stack</h2><table id="risk"></table></section>
+    <section class="card full"><h2>Thresholds & Falsification</h2><table id="thresholds"></table></section>
   </div>
 </main>
 <script>
@@ -31,6 +34,9 @@ async function load(){
  document.getElementById('drivers').innerHTML='<tr><th>Driver</th><th>Value</th><th>Read</th></tr>'+a.decomposition.drivers.map(d=>`<tr><td>${d.driver}</td><td>${pct(d.value)}</td><td>${d.read}</td></tr>`).join('');
  document.getElementById('sensitivity').innerHTML='<tr><th>BTC shock</th><th>BTC price</th><th>M1 @ current MSTR</th></tr>'+a.sensitivity.scenarios.map(s=>`<tr><td>${pct(s.btc_shock)}</td><td>$${Math.round(s.btc_price).toLocaleString()}</td><td>${num(s.equity_mnav_at_current_mstr)}x</td></tr>`).join('');
  document.getElementById('risk').innerHTML='<tr><th>Risk</th><th>Severity</th><th>Value</th><th>Read</th></tr>'+a.risk_stack.map(r=>`<tr><td>${r.name}</td><td class="${r.severity}">${r.severity}</td><td>${r.value}</td><td>${r.read}</td></tr>`).join('');
+ const thresholdRows=(logic?.thresholds||[]).map(t=>`<tr><td>${t.metric}</td><td>${t.current}</td><td>${t.threshold}</td><td>${t.action}</td></tr>`).join('');
+ const falsifyRows=(logic?.falsification_watch||[]).map(f=>`<tr><td>${f.hypothesis}</td><td colspan="3">${'\u53cd\u8b49\u689d\u4ef6\uff1a'}${f.what_would_disprove}</td></tr>`).join('');
+ document.getElementById('thresholds').innerHTML='<tr><th>Metric / Hypothesis</th><th>Current</th><th>Threshold</th><th>Action / Disproof</th></tr>'+thresholdRows+falsifyRows;
 }
 load().catch(e=>{document.getElementById('top').innerHTML=`<div class="card full">Load failed: ${e.message}</div>`});
 </script>

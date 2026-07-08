@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Institutional analytics layer for the personal Bloomberg dashboard.
 
 This layer converts verified daily data into professional-grade analysis:
@@ -19,9 +19,14 @@ SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 DATABASE_PATH = DATA_DIR / "database.json"
 VERIFY_PATH = DATA_DIR / "agent_verification_report.json"
 ANALYTICS_PATH = DATA_DIR / "institutional_analytics.json"
+LOGIC_AUDIT_PATH = DATA_DIR / "logic_audit.json"
 
 
-def load_json(path: Path) -> Any:
+def load_json(path: Path, default: Any | None = None) -> Any:
+    if not path.exists():
+        if default is not None:
+            return default
+        raise FileNotFoundError(path)
     return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
@@ -152,6 +157,7 @@ def main() -> int:
     snapshot = load_json(SNAPSHOT_PATH)
     database = load_json(DATABASE_PATH)
     verification = load_json(VERIFY_PATH)
+    logic_audit = load_json(LOGIC_AUDIT_PATH, {})
     previous = latest_previous(database, snapshot["date"])
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
     analytics = {
@@ -162,10 +168,20 @@ def main() -> int:
             "verification_status": verification.get("status"),
             "confidence": confidence_from_verification(verification, provenance),
             "degradations": verification.get("degradations", []),
+            "logic_audit_status": logic_audit.get("status", "not_run"),
+            "logic_failed_invariants": logic_audit.get("summary", {}).get("failed_invariants"),
+            "logic_contradictions": logic_audit.get("summary", {}).get("contradictions"),
         },
         "executive_read": {
             "headline": "Research-grade only; not auto-trading grade" if verification.get("status") == "degraded" else snapshot.get("decision", {}).get("state"),
             "one_line": "M1 is below 1.0 and M5/M7 red flags remain; today is about avoiding chase, not finding reasons to add.",
+        },
+        "logic_audit": {
+            "status": logic_audit.get("status", "not_run"),
+            "plain_english": logic_audit.get("decision", {}).get("plain_english", "Logic audit has not run yet."),
+            "blocked_actions": logic_audit.get("decision", {}).get("blocked_actions", []),
+            "failed_invariants": logic_audit.get("summary", {}).get("failed_invariants"),
+            "contradictions": logic_audit.get("summary", {}).get("contradictions"),
         },
         "decomposition": mstr_decomposition(snapshot, previous),
         "sensitivity": sensitivity(snapshot),

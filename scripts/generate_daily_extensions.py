@@ -49,6 +49,15 @@ def pct(value: Any) -> str:
     return f"{float(value) * 100:.1f}%"
 
 
+def decision_label(decision: dict[str, Any]) -> str:
+    labels = {
+        "BLOCK_LEVERAGED_ADD": "\u7981\u6b62\u5c0f\u5009\u5408\u7d04\u52a0\u78bc",
+        "WATCH_ONLY_NO_CHASE": "\u53ef\u5217\u5165\u89c0\u5bdf\uff0c\u4e0d\u81ea\u52d5\u8ffd\u50f9",
+    }
+    return labels.get(decision.get("state_code"), str(decision.get("state", "N/A")))
+
+
+
 def wiki_signals() -> list[str]:
     if not WIKI_PATH.exists():
         return []
@@ -116,7 +125,8 @@ def main() -> int:
         "type": "daily_extension",
         "verification_status": verification.get("status"),
         "verification_warnings": verification.get("warnings", []),
-        "decision_state": snapshot.get("decision", {}).get("state"),
+        "decision_state": decision_label(snapshot.get("decision", {})),
+        "decision_state_code": snapshot.get("decision", {}).get("state_code"),
         "viewpoints": build_viewpoints(snapshot, verification),
         "wiki_study_inputs": wiki_signals(),
     }

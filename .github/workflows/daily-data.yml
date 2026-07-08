@@ -40,6 +40,12 @@ jobs:
       - name: Generate institutional analytics
         run: python scripts/generate_institutional_analytics.py
 
+      - name: Audit decision logic
+        run: python scripts/audit_decision_logic.py
+
+      - name: Attach logic audit to analytics
+        run: python scripts/generate_institutional_analytics.py
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
