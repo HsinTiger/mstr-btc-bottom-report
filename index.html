@@ -620,7 +620,7 @@ function delta(now,prev,kind='pctpoint'){
 function card({label,value,read,tone,hero=false}){
   return `<div class="decision-card ${toneClass(tone)} ${hero?'hero-card':''}"><div class="label">${label}</div><div class="number">${value}</div><div class="conclusion">${read}</div></div>`;
 }
-function coreCards(today,yday){
+function coreCards(today,yday,verify){
   const p=today.metrics.prices, pm=yday?.metrics?.prices||{};
   const m=today.metrics.mstr_metrics;
   const btcChg=delta(p.btc_usd,pm.btc_usd,'rel');
@@ -635,7 +635,7 @@ function coreCards(today,yday){
     card({label:'BMNR',value:money(p.bmnr_usd),tone:'info',read:bmnrChg<0?'衛星轉弱':'衛星反彈，不升主倉'}),
     card({label:'STRC',value:money(p.strc_usd),tone:m.strc_discount>0.05?'bad':'good',read:m.strc_discount>0.05?'優先股信任弱':'優先股信任改善'}),
     card({label:'合約紅燈',value:m.contract_red_light?'ON':'OFF',tone:m.contract_red_light?'bad':'good',read:m.contract_red_light?'禁止小倉加碼':'可等右側確認'}),
-    card({label:'資料驗證',value:today.error_count?`${today.error_count} 警示`:'PASS',tone:today.error_count?'warn':'good',read:today.error_count?'可看但需覆核':'資料通過檢查'})
+    card({label:'資料驗證',value:(verify?.status||'unknown').toUpperCase(),tone:verify?.status==='pass'?'good':verify?.status==='fail'?'bad':'warn',read:verify?.status==='pass'?'資料完整':verify?.status==='fail'?'停止使用今日資料':'可看不可交易級'})
   ].join('');
 }
 function mstrCards(today,yday){
@@ -654,13 +654,14 @@ function mstrCards(today,yday){
 }
 async function loadHomeDailyCards(){
   try{
-    const [latest,database]=await Promise.all([
+    const [latest,database,verify]=await Promise.all([
       fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),
-      fetch('data/daily/database.json',{cache:'no-store'}).then(r=>r.json())
+      fetch('data/daily/database.json',{cache:'no-store'}).then(r=>r.json()),
+      fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)
     ]);
     const yday=pickYesterday(database,latest.date);
     document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜昨日對比 ${yday?.date||'無'}｜只顯示結論與一個關鍵數字`;
-    document.getElementById('dailyCoreCards').innerHTML=coreCards(latest,yday);
+    document.getElementById('dailyCoreCards').innerHTML=coreCards(latest,yday,verify);
     document.getElementById('dailyMstrCards').innerHTML=mstrCards(latest,yday);
   }catch(e){
     document.getElementById('dailyMeta').textContent=`每日資料載入失敗：${e.message}。請用 GitHub Pages 開啟。`;

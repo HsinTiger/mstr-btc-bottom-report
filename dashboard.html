@@ -155,6 +155,7 @@ h2:first-child{margin-top:0}
   </div>
   <div class="note">規格：<a href="metrics-spec.md" style="color:#58a6ff">metrics-spec.md</a>；概念：<a href="wiki.html#gaap-vs-mnav" style="color:#58a6ff">GAAP/Non-GAAP/mNAV</a>、<a href="wiki.html#mnav-definition-risk" style="color:#58a6ff">mNAV 定義權風險</a>、<a href="wiki.html#delayed-pro-cyclical" style="color:#58a6ff">延遲順週期</a>、<a href="wiki.html#indicator-regime-change" style="color:#58a6ff">指標 regime change</a>。</div>
   <div class="note">每日資料管線：<a href="data/daily/latest_snapshot.json" style="color:#58a6ff">latest_snapshot</a>、<a href="data/daily/agent_verification_report.json" style="color:#58a6ff">驗證代理報告</a>、<a href="daily-extensions.html" style="color:#58a6ff">每日延伸三觀點</a>。</div>
+  <div class="note" id="autoVerify">自動驗證狀態載入中…</div>
 </section>
 
 <!-- ================= 本週 ================= -->
@@ -422,7 +423,7 @@ paintToday(C.px, C.fng);
 
 async function loadDailySnapshot(){
   try{
-    const snap=await (await fetch('data/daily/latest_snapshot.json',{cache:'no-store'})).json();
+    const [snap,verify]=await Promise.all([fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)]);
     const m=snap.metrics.mstr_metrics;
     const nf=(v,d=2)=>v==null?'N/A':Number(v).toFixed(d);
     set('dm1',nf(m.equity_mnav)+'x');
@@ -431,6 +432,8 @@ async function loadDailySnapshot(){
     set('dm5',nf(m.sale_ratio,1)+'x');
     set('dm6',Math.round(m.sats_per_share).toLocaleString());
     set('dm7',m.strc_discount==null?'N/A':(m.strc_discount*100).toFixed(1)+'%');
+    const av=document.getElementById('autoVerify');
+    if(av&&verify){ const bad=verify.status==='fail'; const deg=verify.status==='degraded'; av.innerHTML=`自動驗證：<b class="${bad?'neg':deg?'warn':'pos'}">${verify.status.toUpperCase()}</b>｜${(verify.degradations||verify.warnings||[]).slice(0,2).join('；')||'資料完整'}`; }
   }catch(e){ console.warn('daily snapshot unavailable',e); }
 }
 loadDailySnapshot();

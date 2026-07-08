@@ -60,12 +60,60 @@ def check_cross_source(name: str, left: float | None, right: float | None, thres
         warnings.append(f"{name}: 來源差距 {gap:.2%} 接近門檻")
 
 
+def recompute_metrics(snapshot: dict[str, Any]) -> dict[str, float | bool | None]:
+    prices = snapshot.get("metrics", {}).get("prices", {})
+    inputs = snapshot.get("metrics", {}).get("manual_inputs", {})
+    btc_px = as_float(prices.get("btc_usd"))
+    mstr_px = as_float(prices.get("mstr_usd"))
+    strc_px = as_float(prices.get("strc_usd"))
+    preferred = inputs.get("preferred", {})
+    pref_total = sum(as_float(item.get("notional_musd")) or 0 for item in preferred.values())
+    annual_div = sum((as_float(item.get("notional_musd")) or 0) * (as_float(item.get("rate")) or 0) for item in preferred.values())
+    annual_obligation = annual_div + (as_float(inputs.get("annual_interest_musd")) or 0)
+    coverage_months = (as_float(inputs.get("usd_reserve_musd")) or 0) / (annual_obligation / 12) if annual_obligation else None
+    weekly_need = annual_obligation / 52 if annual_obligation else None
+    sale_ratio = (as_float(inputs.get("weekly_btc_sales_musd")) or 0) / weekly_need if weekly_need else None
+    sats_per_share = (as_float(inputs.get("mstr_btc_holdings")) or 0) * 1e8 / ((as_float(inputs.get("diluted_shares_m")) or 0) * 1e6) if as_float(inputs.get("diluted_shares_m")) else None
+    equity_mnav = enterprise_mnav = None
+    if btc_px and mstr_px:
+        btc_nav_musd = (as_float(inputs.get("mstr_btc_holdings")) or 0) * btc_px / 1e6
+        mkt_cap_musd = (as_float(inputs.get("diluted_shares_m")) or 0) * mstr_px
+        net_to_common = btc_nav_musd + (as_float(inputs.get("usd_reserve_musd")) or 0) + (as_float(inputs.get("cash_other_musd")) or 0) - (as_float(inputs.get("debt_face_musd")) or 0) - pref_total - (as_float(inputs.get("net_deferred_tax_liability_musd")) or 0)
+        equity_mnav = mkt_cap_musd / net_to_common if net_to_common > 0 else None
+        enterprise_mnav = (mkt_cap_musd + (as_float(inputs.get("debt_face_musd")) or 0) + pref_total) / btc_nav_musd if btc_nav_musd else None
+    pref_dilution_flag = bool(pref_total > (as_float(inputs.get("prev_pref_notional_musd")) or 0) and equity_mnav and equity_mnav > (as_float(inputs.get("prev_mnav_equity")) or 0))
+    strc_discount = 1 - strc_px / 100 if strc_px else None
+    return {
+        "equity_mnav": equity_mnav,
+        "enterprise_mnav": enterprise_mnav,
+        "pref_dilution_flag": pref_dilution_flag,
+        "coverage_months": coverage_months,
+        "sale_ratio": sale_ratio,
+        "sats_per_share": sats_per_share,
+        "strc_discount": strc_discount,
+    }
+
+
+def assert_close(name: str, expected: Any, actual: Any, failures: list[str], tolerance: float = 1e-6) -> None:
+    if isinstance(expected, bool) or isinstance(actual, bool):
+        if bool(expected) != bool(actual):
+            failures.append(f"{name}: 重算 {expected} != snapshot {actual}")
+        return
+    e = as_float(expected)
+    a = as_float(actual)
+    if e is None and a is None:
+        return
+    if e is None or a is None or abs(e - a) > tolerance * max(1, abs(e), abs(a)):
+        failures.append(f"{name}: 重算 {e} != snapshot {a}")
+
+
 def main() -> int:
     raw = load_json(RAW_PATH)
     snapshot = load_json(SNAPSHOT_PATH)
     observations = obs_map(raw)
     failures: list[str] = []
     warnings: list[str] = []
+    degradations: list[str] = []
     evidence: list[str] = []
 
     for required in ["btc_usd_coingecko", "btc_usd_coinbase", "mstr_usd_yahoo"]:
@@ -85,11 +133,20 @@ def main() -> int:
     )
     for ticker in ["mstr", "bmnr", "strc"]:
         yahoo = as_float(observations.get(f"{ticker}_usd_yahoo", {}).get("value"))
-        stooq = as_float(observations.get(f"{ticker}_usd_stooq", {}).get("value"))
-        if yahoo is not None and stooq is not None:
-            check_cross_source(f"{ticker.upper()} equity", yahoo, stooq, 0.08, failures, warnings)
+        nasdaq = as_float(observations.get(f"{ticker}_usd_nasdaq", {}).get("value"))
+        if yahoo is not None and nasdaq is not None:
+            check_cross_source(f"{ticker.upper()} equity", yahoo, nasdaq, 0.02, failures, warnings)
+            evidence.append(f"{ticker.upper()} Yahoo/Nasdaq={yahoo}/{nasdaq}")
         else:
-            warnings.append(f"{ticker.upper()} 僅有單一可用來源，已保留但降信心")
+            degradations.append(f"{ticker.upper()} 缺少股票第二來源，前端需標 degraded")
+
+    latest_form = str(observations.get("mstr_sec_latest_form", {}).get("value") or "")
+    if latest_form:
+        evidence.append(f"SEC latest form={latest_form}")
+    else:
+        degradations.append("SEC submissions 不可用；資本結構 manual inputs 需人工覆核")
+    if latest_form and latest_form not in {"8-K", "10-K", "10-Q", "S-3ASR", "424B5", "4", "144"}:
+        warnings.append(f"SEC 最新表單型別非核心清單: {latest_form}")
 
     metrics = snapshot.get("metrics", {}).get("mstr_metrics", {})
     numeric_ranges = {
@@ -103,37 +160,46 @@ def main() -> int:
     for key, (low, high) in numeric_ranges.items():
         value = as_float(metrics.get(key))
         if value is None:
-            if key in {"equity_mnav", "enterprise_mnav", "strc_discount"}:
-                warnings.append(f"{key}: 今日無法計算")
-            else:
-                failures.append(f"{key}: 缺值")
+            failures.append(f"{key}: 缺值")
             continue
         if not low <= value <= high:
             failures.append(f"{key}: {value} 超出合理範圍 {low}..{high}")
 
-    latest_form = str(observations.get("mstr_sec_latest_form", {}).get("value") or "")
-    if latest_form not in {"8-K", "10-K", "10-Q", "S-3ASR", "424B5", "4", "144"}:
-        warnings.append(f"SEC 最新表單型別非核心清單: {latest_form}")
+    recomputed = recompute_metrics(snapshot)
+    for key, expected in recomputed.items():
+        assert_close(key, expected, metrics.get(key), failures)
 
+    manual = snapshot.get("metrics", {}).get("manual_inputs", {})
+    provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
+    fields = provenance.get("fields", {})
+    manual_risk_keys = ["mstr_btc_holdings", "debt_face_musd", "weekly_btc_sales_musd", "diluted_shares_m", "net_deferred_tax_liability_musd"]
+    manual_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") == "manual" or key in manual]
+    if manual_fields:
+        degradations.append("manual capital-structure inputs: " + ", ".join(manual_fields))
+    if provenance.get("status") != "automated":
+        degradations.append(f"capital-structure provenance status={provenance.get('status', 'missing')}")
+
+    status = "fail" if failures else ("degraded" if degradations or warnings else "pass")
     report = {
         "schema": 1,
         "agent": "daily-data-verifier",
         "verified_at": now_iso(),
         "date": snapshot.get("date"),
-        "status": "pass" if not failures else "fail",
+        "status": status,
         "failures": failures,
+        "degradations": degradations,
         "warnings": warnings,
         "evidence": evidence,
         "policy": {
             "btc_cross_source_max_gap": "1.5%",
-            "equity_cross_source_max_gap": "8%",
+            "equity_cross_source_max_gap": "2%",
             "required_sources": ["CoinGecko", "Coinbase", "Yahoo Finance"],
-            "manual_review_sources": ["SEC EDGAR / Strategy filings for capital-structure inputs"],
+            "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs"],
         },
     }
     write_json(REPORT_PATH, report)
-    print(json.dumps({"status": report["status"], "failures": len(failures), "warnings": len(warnings)}, ensure_ascii=False))
-    return 0 if not failures else 1
+    print(json.dumps({"status": status, "failures": len(failures), "degradations": len(degradations), "warnings": len(warnings)}, ensure_ascii=False))
+    return 0 if status != "fail" else 1
 
 
 if __name__ == "__main__":

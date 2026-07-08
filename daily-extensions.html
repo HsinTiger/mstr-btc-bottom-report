@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8" />
@@ -63,7 +63,7 @@ async function load(){
   document.getElementById('updated').textContent=`${ext.current_date} updated ${ext.updated_at}`;
   document.getElementById('decision').textContent=snap.decision.state;
   document.getElementById('summary').textContent=(snap.decision.reasons||[]).join('；');
-  document.getElementById('verifyBox').innerHTML=`資料驗證代理：<b class="${cls(verify.status)}">${verify.status.toUpperCase()}</b>｜warnings ${verify.warnings?.length||0}｜failures ${verify.failures?.length||0}`;
+  document.getElementById('verifyBox').innerHTML=`資料驗證代理：<b class="${cls(verify.status)}">${verify.status.toUpperCase()}</b>｜degraded ${(verify.degradations||[]).length}｜warnings ${verify.warnings?.length||0}｜failures ${verify.failures?.length||0}<br><span class="mini">${[...(verify.degradations||[]),...(verify.failures||[])].slice(0,2).join('；')||'資料完整'}</span>`;
   document.getElementById('btcPrice').textContent=`BTC $${fmt(p.btc_usd,0)}`;
   document.getElementById('priceLine').textContent=`MSTR $${fmt(p.mstr_usd)}｜BMNR $${fmt(p.bmnr_usd)}｜STRC $${fmt(p.strc_usd)}`;
   document.getElementById('mnavLine').textContent=`M1 ${fmt(m.equity_mnav)}x｜M2 ${fmt(m.enterprise_mnav)}x｜M4 ${fmt(m.coverage_months,1)}m｜M5 ${fmt(m.sale_ratio,1)}x｜M7 ${pct(m.strc_discount)}`;

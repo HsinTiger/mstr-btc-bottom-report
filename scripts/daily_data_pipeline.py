@@ -13,6 +13,7 @@ import math
 import os
 import sys
 import time
+import gzip
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
@@ -25,6 +26,7 @@ DATA_DIR = ROOT / "data" / "daily"
 RAW_PATH = DATA_DIR / "raw_observations.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 DATABASE_PATH = DATA_DIR / "database.json"
+PROVENANCE_PATH = ROOT / "data" / "inputs" / "mstr_capital_structure_provenance.json"
 
 SEC_USER_AGENT = os.environ.get(
     "SEC_USER_AGENT",
@@ -76,7 +78,10 @@ def today_utc() -> str:
 def fetch_url(url: str, *, headers: dict[str, str] | None = None, timeout: int = 20) -> bytes:
     req = urllib.request.Request(url, headers=headers or {"User-Agent": SEC_USER_AGENT})
     with urllib.request.urlopen(req, timeout=timeout) as response:
-        return response.read()
+        data = response.read()
+        if response.headers.get("Content-Encoding") == "gzip" or data[:2] == b"\x1f\x8b":
+            return gzip.decompress(data)
+        return data
 
 
 def fetch_json(url: str, *, headers: dict[str, str] | None = None) -> Any:
@@ -135,6 +140,29 @@ def yahoo_chart(ticker: str) -> tuple[float | None, str]:
     return safe_float(price), url
 
 
+
+def clean_price(value: Any) -> float | None:
+    if isinstance(value, str):
+        value = value.replace("$", "").replace(",", "").replace("%", "").strip()
+    return safe_float(value)
+
+
+def collect_nasdaq_equity(ticker: str) -> Observation:
+    url = f"https://api.nasdaq.com/api/quote/{urllib.parse.quote(ticker)}/info?assetclass=stocks"
+    data = fetch_json(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json",
+            "Origin": "https://www.nasdaq.com",
+            "Referer": "https://www.nasdaq.com/",
+        },
+    )
+    primary = data.get("data", {}).get("primaryData", {})
+    value = clean_price(primary.get("lastSalePrice"))
+    detail = f"timestamp={primary.get('lastTradeTimestamp')} realTime={primary.get('isRealTime')}"
+    return obs(f"{ticker.lower()}_usd_nasdaq", value, "Nasdaq quote API", url, ok=value is not None, detail=detail)
+
 def collect_yahoo_equity(ticker: str) -> Observation:
     value, url = yahoo_chart(ticker)
     return obs(f"{ticker.lower()}_usd_yahoo", value, "Yahoo Finance chart", url, ok=value is not None)
@@ -190,13 +218,17 @@ def latest_value(observations: list[Observation], name: str) -> float | str | No
     return None
 
 
+def load_input_provenance() -> dict[str, Any]:
+    return load_json(PROVENANCE_PATH, {"schema": 1, "status": "missing", "fields": {}})
+
+
 def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     btc_prices = [safe_float(latest_value(observations, n)) for n in ["btc_usd_coingecko", "btc_usd_coinbase"]]
     btc_prices = [p for p in btc_prices if p is not None]
     btc_px = sum(btc_prices) / len(btc_prices) if btc_prices else None
-    mstr_px = safe_float(latest_value(observations, "mstr_usd_yahoo")) or safe_float(latest_value(observations, "mstr_usd_stooq"))
-    bmnr_px = safe_float(latest_value(observations, "bmnr_usd_yahoo")) or safe_float(latest_value(observations, "bmnr_usd_stooq"))
-    strc_px = safe_float(latest_value(observations, "strc_usd_yahoo")) or safe_float(latest_value(observations, "strc_usd_stooq"))
+    mstr_px = safe_float(latest_value(observations, "mstr_usd_yahoo")) or safe_float(latest_value(observations, "mstr_usd_nasdaq"))
+    bmnr_px = safe_float(latest_value(observations, "bmnr_usd_yahoo")) or safe_float(latest_value(observations, "bmnr_usd_nasdaq"))
+    strc_px = safe_float(latest_value(observations, "strc_usd_yahoo")) or safe_float(latest_value(observations, "strc_usd_nasdaq"))
 
     inputs = MANUAL_INPUTS
     pref_total = sum(item["notional_musd"] for item in inputs["preferred"].values())
@@ -243,6 +275,7 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "contract_red_light": contract_red_light,
         },
         "manual_inputs": inputs,
+        "manual_input_provenance": load_input_provenance(),
     }
 
 
@@ -279,6 +312,9 @@ def collect_all() -> list[Observation]:
         ("mstr_yahoo", lambda: [collect_yahoo_equity("MSTR")]),
         ("bmnr_yahoo", lambda: [collect_yahoo_equity("BMNR")]),
         ("strc_yahoo", lambda: [collect_yahoo_equity("STRC")]),
+        ("mstr_nasdaq", lambda: [collect_nasdaq_equity("MSTR")]),
+        ("bmnr_nasdaq", lambda: [collect_nasdaq_equity("BMNR")]),
+        ("strc_nasdaq", lambda: [collect_nasdaq_equity("STRC")]),
         ("sec", collect_sec_submissions),
     ]
     observations: list[Observation] = []

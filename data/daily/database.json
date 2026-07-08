@@ -71,18 +71,18 @@
     {
       "schema": 1,
       "date": "2026-07-08",
-      "generated_at": "2026-07-08T03:32:57+00:00",
+      "generated_at": "2026-07-08T05:23:09+00:00",
       "metrics": {
         "prices": {
-          "btc_usd": 62947.765,
+          "btc_usd": 62748.645000000004,
           "mstr_usd": 97.36,
           "bmnr_usd": 14.8,
           "strc_usd": 86.56
         },
         "mstr_metrics": {
-          "btc_nav_musd": 53113.750412875,
-          "equity_mnav": 0.9358459890424906,
-          "enterprise_mnav": 1.0121973986413875,
+          "btc_nav_musd": 52945.737934875,
+          "equity_mnav": 0.9411792500596233,
+          "enterprise_mnav": 1.0154094002075964,
           "pref_dilution_flag": false,
           "coverage_months": 15.87136929460581,
           "sale_ratio": 5.825726141078838,
@@ -120,6 +120,80 @@
           "weekly_btc_sales_musd": 216.0,
           "prev_pref_notional_musd": 17800,
           "prev_mnav_equity": 0.62
+        },
+        "manual_input_provenance": {
+          "schema": 1,
+          "updated_at": "2026-07-08",
+          "status": "manual_seed",
+          "stale_after_days": 30,
+          "fields": {
+            "mstr_btc_holdings": {
+              "source_type": "manual",
+              "source_ref": "Strategy/SEC filings pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "usd_reserve_musd": {
+              "source_type": "manual",
+              "source_ref": "Strategy/SEC filings pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "cash_other_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "low"
+            },
+            "net_deferred_tax_liability_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q/10-K income tax footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "low"
+            },
+            "debt_face_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q debt footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "annual_interest_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q debt footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "preferred": {
+              "source_type": "manual",
+              "source_ref": "10-Q preferred stock footnote + latest 8-K/424B5 pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "diluted_shares_m": {
+              "source_type": "manual",
+              "source_ref": "10-Q share count + ATM updates pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "weekly_btc_sales_musd": {
+              "source_type": "manual",
+              "source_ref": "8-K/press release holdings delta pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "low"
+            },
+            "prev_pref_notional_musd": {
+              "source_type": "manual",
+              "source_ref": "prior daily snapshot",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "prev_mnav_equity": {
+              "source_type": "manual",
+              "source_ref": "prior daily snapshot",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            }
+          }
         }
       },
       "decision": {
@@ -132,9 +206,9 @@
           "STRC 折價超過 5%，優先股信任票轉弱"
         ]
       },
-      "source_count": 9,
-      "error_count": 1
+      "source_count": 15,
+      "error_count": 0
     }
   ],
-  "updated_at": "2026-07-08T03:32:57+00:00"
+  "updated_at": "2026-07-08T05:23:09+00:00"
 }

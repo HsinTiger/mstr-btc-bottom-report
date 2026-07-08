@@ -1,31 +1,36 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-08T03:32:59+00:00",
+  "verified_at": "2026-07-08T05:23:10+00:00",
   "date": "2026-07-08",
-  "status": "pass",
+  "status": "degraded",
   "failures": [],
-  "warnings": [
-    "MSTR 僅有單一可用來源，已保留但降信心",
-    "BMNR 僅有單一可用來源，已保留但降信心",
-    "STRC 僅有單一可用來源，已保留但降信心",
-    "SEC 最新表單型別非核心清單: "
+  "degradations": [
+    "manual capital-structure inputs: mstr_btc_holdings, debt_face_musd, weekly_btc_sales_musd, diluted_shares_m, net_deferred_tax_liability_musd",
+    "capital-structure provenance status=manual_seed"
   ],
+  "warnings": [],
   "evidence": [
-    "btc_usd_coingecko=62974 from CoinGecko simple price",
-    "btc_usd_coinbase=62921.53 from Coinbase Exchange ticker",
-    "mstr_usd_yahoo=97.36 from Yahoo Finance chart"
+    "btc_usd_coingecko=62773 from CoinGecko simple price",
+    "btc_usd_coinbase=62724.29 from Coinbase Exchange ticker",
+    "mstr_usd_yahoo=97.36 from Yahoo Finance chart",
+    "MSTR Yahoo/Nasdaq=97.36/97.36",
+    "BMNR Yahoo/Nasdaq=14.8/14.8",
+    "STRC Yahoo/Nasdaq=86.56/86.56",
+    "SEC latest form=8-K"
   ],
   "policy": {
     "btc_cross_source_max_gap": "1.5%",
-    "equity_cross_source_max_gap": "8%",
+    "equity_cross_source_max_gap": "2%",
     "required_sources": [
       "CoinGecko",
       "Coinbase",
       "Yahoo Finance"
     ],
-    "manual_review_sources": [
-      "SEC EDGAR / Strategy filings for capital-structure inputs"
+    "degraded_if_missing": [
+      "Nasdaq backup quotes",
+      "SEC EDGAR submissions",
+      "automated capital-structure inputs"
     ]
   }
 }
