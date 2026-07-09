@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "date": "2026-07-08",
-  "generated_at": "2026-07-08T12:31:51+00:00",
+  "date": "2026-07-09",
+  "generated_at": "2026-07-09T03:22:08+00:00",
   "metrics": {
     "prices": {
-      "btc_usd": 62211.5,
-      "mstr_usd": 97.36,
-      "bmnr_usd": 14.8,
-      "strc_usd": 86.56
+      "btc_usd": 61765.095,
+      "mstr_usd": 93.87,
+      "bmnr_usd": 14.86,
+      "strc_usd": 86.17
     },
     "price_basis": {
       "btc_usd": {
@@ -17,47 +17,47 @@
       "mstr_usd": {
         "selected_source": "Yahoo Finance chart",
         "selected_observation": "mstr_usd_yahoo",
-        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783454401 timezone=EDT",
+        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783540801 timezone=EDT",
         "policy": "MSTR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "mstr_usd_nasdaq",
-        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 8, 2026 8:31 AM ET realTime=True"
+        "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 8, 2026 realTime=False"
       },
       "bmnr_usd": {
         "selected_source": "Yahoo Finance chart",
         "selected_observation": "bmnr_usd_yahoo",
-        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783454402 timezone=EDT",
+        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783540802 timezone=EDT",
         "policy": "BMNR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "bmnr_usd_nasdaq",
-        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 8, 2026 8:31 AM ET realTime=True"
+        "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 8, 2026 realTime=False"
       },
       "strc_usd": {
         "selected_source": "Yahoo Finance chart",
         "selected_observation": "strc_usd_yahoo",
-        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783454400 timezone=EDT",
+        "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783540800 timezone=EDT",
         "policy": "STRC: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "strc_usd_nasdaq",
-        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 8, 2026 8:31 AM ET realTime=True"
+        "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 8, 2026 realTime=False"
       }
     },
     "market_radar": {
-      "fear_greed": 20.0,
-      "fear_greed_timestamp": "1783468800",
+      "fear_greed": 22.0,
+      "fear_greed_timestamp": "1783555200",
       "btc_fee_fastest_sat_vb": 1.0,
       "btc_fee_hour_sat_vb": 1.0,
-      "btc_hashrate_ths": 925004205.552695,
+      "btc_hashrate_ths": 891730672.9788568,
       "treasury_avg_bill_rate_pct": 3.706,
-      "btc_mvrv_current": 1.196288648174336,
-      "btc_supply_current": 20053235.51091219,
-      "btc_market_cap_coinmetrics_usd": 1272540635753.489,
+      "btc_mvrv_current": 1.1731707452338487,
+      "btc_supply_current": 20053651.13589914,
+      "btc_market_cap_coinmetrics_usd": 1247618703070.3462,
       "etf_flow_status": "automated_third_party_single_source",
-      "etf_flow_1d_btc": 339.0,
+      "etf_flow_1d_btc": 0.0,
       "etf_flow_1d_usd": 21000000.0,
-      "etf_flow_7d_btc": 3414.0,
+      "etf_flow_7d_btc": 0.0,
       "etf_flow_7d_usd": 212000000.0,
-      "etf_flow_30d_btc": -40596.0,
+      "etf_flow_30d_btc": 0.0,
       "etf_flow_30d_usd": -2527000000.0,
       "automation_limits": {
         "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
@@ -67,14 +67,14 @@
       }
     },
     "mstr_metrics": {
-      "btc_nav_musd": 52492.5084125,
-      "equity_mnav": 1.2146927369354872,
-      "enterprise_mnav": 1.1148975625265372,
+      "btc_nav_musd": 52115.843033625,
+      "equity_mnav": 1.1878681420859363,
+      "enterprise_mnav": 1.1005945595659368,
       "pref_dilution_flag": false,
       "coverage_months": 13.737877593360997,
       "sale_ratio": 3.6410788381742734,
       "sats_per_share": 252693.06675690974,
-      "strc_discount": 0.13439999999999996,
+      "strc_discount": 0.13829999999999998,
       "mnav_gate_ok": true,
       "contract_red_light": true
     },
@@ -140,7 +140,7 @@
     },
     "manual_input_provenance": {
       "schema": 1,
-      "updated_at": "2026-07-08",
+      "updated_at": "2026-07-09",
       "status": "mixed_automated_manual",
       "stale_after_days": 30,
       "fields": {
@@ -148,14 +148,14 @@
           "source_type": "automated_sec_companyfacts",
           "source_ref": "Strategy official purchases page",
           "detail": "date=2026-07-06 title=July 2026 sec_url=https://assets.contentstack.io/v3/assets/bltf8d808d9b8cebd37/blt6b18e7bc25a68a8f/6a4b0be1a8ab282d09015d81/form-8-k_07-06-2026.pdf source=strategy_purchases_next_data",
-          "as_of": "2026-07-08",
+          "as_of": "2026-07-09",
           "confidence": "medium"
         },
         "usd_reserve_musd": {
           "source_type": "automated_sec_companyfacts",
           "source_ref": "SEC companyfacts CashAndCashEquivalentsAtCarryingValue",
           "detail": "tag=CashAndCashEquivalentsAtCarryingValue unit=USD form=10-Q filed=2026-05-06 end=2026-03-31 accn=0001050446-26-000031",
-          "as_of": "2026-07-08",
+          "as_of": "2026-07-09",
           "confidence": "medium"
         },
         "cash_other_musd": {
@@ -168,7 +168,7 @@
           "source_type": "automated_sec_companyfacts",
           "source_ref": "SEC companyfacts DeferredTaxLiabilities",
           "detail": "tag=DeferredTaxLiabilities unit=USD form=10-K filed=2026-02-19 end=2025-12-31 accn=0001050446-26-000020",
-          "as_of": "2026-07-08",
+          "as_of": "2026-07-09",
           "confidence": "medium"
         },
         "debt_face_musd": {
@@ -193,14 +193,14 @@
           "source_type": "automated_sec_companyfacts",
           "source_ref": "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding",
           "detail": "tag=WeightedAverageNumberOfDilutedSharesOutstanding unit=shares form=10-Q filed=2026-05-06 end=2026-03-31 accn=0001050446-26-000031",
-          "as_of": "2026-07-08",
+          "as_of": "2026-07-09",
           "confidence": "medium"
         },
         "weekly_btc_sales_musd": {
           "source_type": "automated_sec_companyfacts",
           "source_ref": "Strategy official purchases page latest transaction absolute USD amount",
           "detail": "date=2026-07-06 title=July 2026 sec_url=https://assets.contentstack.io/v3/assets/bltf8d808d9b8cebd37/blt6b18e7bc25a68a8f/6a4b0be1a8ab282d09015d81/form-8-k_07-06-2026.pdf source=strategy_purchases_next_data",
-          "as_of": "2026-07-08",
+          "as_of": "2026-07-09",
           "confidence": "medium"
         },
         "prev_pref_notional_musd": {

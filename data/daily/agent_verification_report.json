@@ -1,26 +1,23 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-08T12:31:52+00:00",
-  "date": "2026-07-08",
+  "verified_at": "2026-07-09T03:22:08+00:00",
+  "date": "2026-07-09",
   "status": "degraded",
   "failures": [],
   "degradations": [
-    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.73% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
     "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
     "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
     "capital-structure provenance status=mixed_automated_manual"
   ],
-  "warnings": [
-    "BMNR equity: 報價基準不同且差距 1.70%，需留意盤前/盤後波動"
-  ],
+  "warnings": [],
   "evidence": [
-    "btc_usd_coingecko=62226 from CoinGecko simple price",
-    "btc_usd_coinbase=62197.0 from Coinbase Exchange ticker",
-    "mstr_usd_yahoo=97.36 from Yahoo Finance chart",
-    "MSTR Yahoo/Nasdaq=97.36/94.7358; basis=regular_market_close/extended_hours_realtime; gap=2.73%",
-    "BMNR Yahoo/Nasdaq=14.8/14.5501; basis=regular_market_close/extended_hours_realtime; gap=1.70%",
-    "STRC Yahoo/Nasdaq=86.56/85.76; basis=regular_market_close/extended_hours_realtime; gap=0.93%",
+    "btc_usd_coingecko=61755 from CoinGecko simple price",
+    "btc_usd_coinbase=61775.19 from Coinbase Exchange ticker",
+    "mstr_usd_yahoo=93.87 from Yahoo Finance chart",
+    "MSTR Yahoo/Nasdaq=93.87/93.87; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "BMNR Yahoo/Nasdaq=14.86/14.86; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "STRC Yahoo/Nasdaq=86.17/86.17; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=8-K"
   ],
   "policy": {

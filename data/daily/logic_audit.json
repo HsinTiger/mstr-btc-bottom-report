@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "date": "2026-07-08",
-  "generated_at": "2026-07-08T12:31:54+00:00",
+  "date": "2026-07-09",
+  "generated_at": "2026-07-09T03:22:08+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -51,28 +51,28 @@
       "id": "M1_BELOW_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.215x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "equity_mnav=1.188x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Common equity may be called cheap while adjusted common NAV is still below threshold."
     },
     {
       "id": "MNAV_DUAL_GATE_REQUIRED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "mnav_gate_ok=True, equity_mnav=1.215x, enterprise_mnav=1.115x, pref_dilution_flag=False",
+      "evidence": "mnav_gate_ok=True, equity_mnav=1.188x, enterprise_mnav=1.101x, pref_dilution_flag=False",
       "risk_if_failed": "Official or single-line mNAV could override the self-calculated dual gate."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.215x, sats_per_share=252693",
+      "evidence": "equity_mnav=1.188x, sats_per_share=252693",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
       "id": "STRC_DISCOUNT_DOWNGRADES_MNAV",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "strc_discount=13.4%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "strc_discount=13.8%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Headline mNAV could ignore preferred-market capital-stack stress."
     },
     {
@@ -108,14 +108,14 @@
     {
       "metric": "普通股真實安全邊際",
       "threshold": "< 1.00 blocks common-equity cheapness claims",
-      "current": "1.215x",
+      "current": "1.188x",
       "rationale": "Below 1.0 means common equity trades through internally adjusted BTC NAV after debt, preferred, cash, and tax inputs.",
       "action": "Do not frame MSTR common as cheap until provenance and capital stack are reviewed."
     },
     {
       "metric": "企業價值安全邊際",
       "threshold": "< 1.00 would imply enterprise trades below BTC NAV before common-stack haircuts",
-      "current": "1.115x",
+      "current": "1.101x",
       "rationale": "Separates company-level BTC premium from common-share capital-structure burden.",
       "action": "只能當背景參考；不可蓋過普通股安全邊際、賣幣壓力、STRC 折價這三個紅旗。"
     },
@@ -129,7 +129,7 @@
     {
       "metric": "STRC 優先股折價信任票",
       "threshold": "> 5.0% downgrades all mNAV signals",
-      "current": "13.4%",
+      "current": "13.8%",
       "rationale": "Preferred-stock market is the capital-structure trust vote; a wide discount can invalidate headline mNAV optimism.",
       "action": "Treat mNAV as suspect until preferred market stabilizes."
     },
@@ -143,7 +143,7 @@
     {
       "metric": "Fear & Greed",
       "threshold": "< 25 is panic context, not automatic buy signal",
-      "current": "20",
+      "current": "22",
       "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
       "action": "只允許列入研究清單；行動前必須看到普通股安全邊際、賣幣壓力、STRC 折價一起確認。"
     },
