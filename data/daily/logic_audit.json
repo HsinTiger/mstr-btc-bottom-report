@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "date": "2026-07-11",
-  "generated_at": "2026-07-11T02:42:34+00:00",
-  "status": "contradiction",
+  "date": "2026-07-12",
+  "generated_at": "2026-07-12T02:50:15+00:00",
+  "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
     "passed_invariants": 10,
     "failed_invariants": 0,
-    "contradictions": 1,
+    "contradictions": 0,
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
@@ -155,12 +155,7 @@
       "action": "Add financing-risk weight when rates rise."
     }
   ],
-  "contradictions": [
-    {
-      "id": "PRICE_REBOUND_WITHOUT_STRUCTURE_REPAIR",
-      "evidence": "mstr_return_1d=0.8%, 普通股真實安全邊際=1.116, 每週賣幣壓力倍數=3.64, STRC 優先股折價=12.5%"
-    }
-  ],
+  "contradictions": [],
   "falsification_watch": [
     {
       "hypothesis": "每週賣幣壓力倍數高於 2，代表融資壓力足以封鎖 2.5 倍 MSTR 小倉加碼。",
