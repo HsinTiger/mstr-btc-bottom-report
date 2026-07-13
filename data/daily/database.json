@@ -1312,7 +1312,256 @@
       },
       "source_count": 41,
       "error_count": 3
+    },
+    {
+      "schema": 1,
+      "date": "2026-07-13",
+      "generated_at": "2026-07-13T02:51:53+00:00",
+      "metrics": {
+        "prices": {
+          "btc_usd": 63405.55,
+          "mstr_usd": 94.64,
+          "bmnr_usd": 14.98,
+          "strc_usd": 87.48
+        },
+        "price_basis": {
+          "btc_usd": {
+            "selected_source": "CoinGecko/Coinbase average",
+            "policy": "BTC 使用 CoinGecko 與 Coinbase 平均值，並由 verifier 檢查兩者差距"
+          },
+          "mstr_usd": {
+            "selected_source": "Yahoo Finance chart",
+            "selected_observation": "mstr_usd_yahoo",
+            "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783713601 timezone=EDT",
+            "policy": "MSTR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+            "fallback_source": "Nasdaq quote API",
+            "fallback_observation": "mstr_usd_nasdaq",
+            "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 9, 2026 realTime=False"
+          },
+          "bmnr_usd": {
+            "selected_source": "Yahoo Finance chart",
+            "selected_observation": "bmnr_usd_yahoo",
+            "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783713602 timezone=EDT",
+            "policy": "BMNR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+            "fallback_source": "Nasdaq quote API",
+            "fallback_observation": "bmnr_usd_nasdaq",
+            "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 9, 2026 realTime=False"
+          },
+          "strc_usd": {
+            "selected_source": "Yahoo Finance chart",
+            "selected_observation": "strc_usd_yahoo",
+            "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1783713600 timezone=EDT",
+            "policy": "STRC: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+            "fallback_source": "Nasdaq quote API",
+            "fallback_observation": "strc_usd_nasdaq",
+            "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 9, 2026 realTime=False"
+          }
+        },
+        "market_radar": {
+          "fear_greed": 28.0,
+          "fear_greed_timestamp": "1783900800",
+          "btc_fee_fastest_sat_vb": 1.0,
+          "btc_fee_hour_sat_vb": 1.0,
+          "btc_hashrate_ths": 910321900.5977656,
+          "treasury_avg_bill_rate_pct": 3.706,
+          "btc_mvrv_current": null,
+          "btc_supply_current": 20055332.38588731,
+          "btc_market_cap_coinmetrics_usd": 1278572998435.0295,
+          "etf_flow_status": "automated_third_party_single_source",
+          "etf_flow_1d_btc": 1425.0,
+          "etf_flow_1d_usd": 90000000.0,
+          "etf_flow_7d_btc": 3104.0,
+          "etf_flow_7d_usd": 197000000.0,
+          "etf_flow_30d_btc": -35202.0,
+          "etf_flow_30d_usd": -2234000000.0,
+          "automation_limits": {
+            "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
+            "realized_loss": "Glassnode/CheckOnChain realized-loss series is not available as a stable free API; not used as a hard trigger.",
+            "google_trends": "No stable unauthenticated official API; excluded from hard gates.",
+            "macro_calendar": "No stable free official event API wired; regulatory/event gate remains manual review only."
+          }
+        },
+        "mstr_metrics": {
+          "btc_nav_musd": 53500.01795125,
+          "equity_mnav": 1.1379207222809469,
+          "enterprise_mnav": 1.076925364258758,
+          "pref_dilution_flag": false,
+          "coverage_months": 13.737877593360997,
+          "sale_ratio": 3.6410788381742734,
+          "sats_per_share": 252693.06675690974,
+          "strc_discount": 0.12519999999999998,
+          "mnav_gate_ok": true,
+          "contract_red_light": true
+        },
+        "manual_inputs": {
+          "mstr_btc_holdings": 843775.0,
+          "usd_reserve_musd": 2207.219,
+          "cash_other_musd": 0,
+          "net_deferred_tax_liability_musd": 1921.947,
+          "debt_face_musd": 8214,
+          "annual_interest_musd": 34,
+          "preferred": {
+            "STRF": {
+              "notional_musd": 3700,
+              "rate": 0.1
+            },
+            "STRC": {
+              "notional_musd": 7800,
+              "rate": 0.12
+            },
+            "STRK": {
+              "notional_musd": 2100,
+              "rate": 0.08
+            },
+            "STRD": {
+              "notional_musd": 4200,
+              "rate": 0.1
+            }
+          },
+          "diluted_shares_m": 333.913,
+          "weekly_btc_sales_musd": 135.0,
+          "prev_pref_notional_musd": 17800,
+          "prev_mnav_equity": 0.62
+        },
+        "manual_seed_inputs": {
+          "mstr_btc_holdings": 843775,
+          "usd_reserve_musd": 2550,
+          "cash_other_musd": 0,
+          "net_deferred_tax_liability_musd": 0,
+          "debt_face_musd": 8214,
+          "annual_interest_musd": 34,
+          "preferred": {
+            "STRF": {
+              "notional_musd": 3700,
+              "rate": 0.1
+            },
+            "STRC": {
+              "notional_musd": 7800,
+              "rate": 0.12
+            },
+            "STRK": {
+              "notional_musd": 2100,
+              "rate": 0.08
+            },
+            "STRD": {
+              "notional_musd": 4200,
+              "rate": 0.1
+            }
+          },
+          "diluted_shares_m": 285.0,
+          "weekly_btc_sales_musd": 216.0,
+          "prev_pref_notional_musd": 17800,
+          "prev_mnav_equity": 0.62
+        },
+        "manual_input_provenance": {
+          "schema": 1,
+          "updated_at": "2026-07-13",
+          "status": "mixed_automated_manual",
+          "stale_after_days": 30,
+          "fields": {
+            "mstr_btc_holdings": {
+              "source_type": "automated_sec_companyfacts",
+              "source_ref": "Strategy official purchases page",
+              "detail": "date=2026-07-06 title=July 2026 sec_url=https://assets.contentstack.io/v3/assets/bltf8d808d9b8cebd37/blt6b18e7bc25a68a8f/6a4b0be1a8ab282d09015d81/form-8-k_07-06-2026.pdf source=strategy_purchases_next_data",
+              "as_of": "2026-07-13",
+              "confidence": "medium"
+            },
+            "usd_reserve_musd": {
+              "source_type": "automated_sec_companyfacts",
+              "source_ref": "SEC companyfacts CashAndCashEquivalentsAtCarryingValue",
+              "detail": "tag=CashAndCashEquivalentsAtCarryingValue unit=USD form=10-Q filed=2026-05-06 end=2026-03-31 accn=0001050446-26-000031",
+              "as_of": "2026-07-13",
+              "confidence": "medium"
+            },
+            "cash_other_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "low"
+            },
+            "net_deferred_tax_liability_musd": {
+              "source_type": "automated_sec_companyfacts",
+              "source_ref": "SEC companyfacts DeferredTaxLiabilities",
+              "detail": "tag=DeferredTaxLiabilities unit=USD form=10-K filed=2026-02-19 end=2025-12-31 accn=0001050446-26-000020",
+              "as_of": "2026-07-13",
+              "confidence": "medium"
+            },
+            "debt_face_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q debt footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "annual_interest_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q debt footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "preferred": {
+              "source_type": "manual",
+              "source_ref": "10-Q preferred stock footnote + latest 8-K/424B5 pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "diluted_shares_m": {
+              "source_type": "automated_sec_companyfacts",
+              "source_ref": "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding",
+              "detail": "tag=WeightedAverageNumberOfDilutedSharesOutstanding unit=shares form=10-Q filed=2026-05-06 end=2026-03-31 accn=0001050446-26-000031",
+              "as_of": "2026-07-13",
+              "confidence": "medium"
+            },
+            "weekly_btc_sales_musd": {
+              "source_type": "automated_sec_companyfacts",
+              "source_ref": "Strategy official purchases page latest transaction absolute USD amount",
+              "detail": "date=2026-07-06 title=July 2026 sec_url=https://assets.contentstack.io/v3/assets/bltf8d808d9b8cebd37/blt6b18e7bc25a68a8f/6a4b0be1a8ab282d09015d81/form-8-k_07-06-2026.pdf source=strategy_purchases_next_data",
+              "as_of": "2026-07-13",
+              "confidence": "medium"
+            },
+            "prev_pref_notional_musd": {
+              "source_type": "manual",
+              "source_ref": "prior daily snapshot",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "prev_mnav_equity": {
+              "source_type": "manual",
+              "source_ref": "prior daily snapshot",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            }
+          }
+        },
+        "sec_companyfacts": {
+          "cash_musd": 2207.219,
+          "diluted_shares_m": 333.913,
+          "stockholders_equity_musd": 36651.357,
+          "preferred_dividends_musd": 229.527,
+          "preferred_cash_dividends_musd": 250.558,
+          "deferred_tax_liability_musd": 1921.947,
+          "status": "automated_sec_companyfacts_supporting_check"
+        }
+      },
+      "decision": {
+        "score": -2,
+        "state": "block_leveraged_add",
+        "state_code": "BLOCK_LEVERAGED_ADD",
+        "reason_codes": [
+          "MNAV_GATE_OK",
+          "COVERAGE_ABOVE_12M",
+          "SALE_RATIO_ABOVE_2X",
+          "STRC_DISCOUNT_ABOVE_5PCT"
+        ],
+        "reasons": [
+          "Self-calculated common-equity and enterprise-value safety margins passed without preferred-dilution flag",
+          "USD reserve coverage remains above the 12-month red line",
+          "Weekly BTC-sale pressure ratio is above 2x",
+          "STRC discount is above 5%, weakening the preferred-market trust vote"
+        ]
+      },
+      "source_count": 43,
+      "error_count": 1
     }
   ],
-  "updated_at": "2026-07-12T02:50:15+00:00"
+  "updated_at": "2026-07-13T02:51:53+00:00"
 }
