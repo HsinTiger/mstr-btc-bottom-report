@@ -1,13 +1,12 @@
 {
   "schema": 1,
-  "date": "2026-07-13",
-  "generated_at": "2026-07-13T02:51:53+00:00",
+  "date": "2026-07-14",
+  "generated_at": "2026-07-14T02:32:50+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
     "degradations": [
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
-      "BTC MVRV ratio missing",
       "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
       "capital-structure provenance status=mixed_automated_manual"
     ],
@@ -32,26 +31,26 @@
     "contradictions": 0
   },
   "decomposition": {
-    "btc_return_1d": -0.009937777537657455,
-    "mstr_return_1d": 0.0,
-    "mstr_minus_btc_1d": 0.009937777537657455,
-    "m1_delta_1d": 0.02158633725260084,
-    "strc_discount_delta_1d": 0.0,
+    "btc_return_1d": -0.01671202284342621,
+    "mstr_return_1d": -0.02683854606931535,
+    "mstr_minus_btc_1d": -0.010126523225889139,
+    "m1_delta_1d": 0.006297849068058747,
+    "strc_discount_delta_1d": 0.0046000000000000485,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": 0.009937777537657455,
-        "read": "MSTR outperformed BTC; verify it is not short-term reflexivity"
+        "value": -0.010126523225889139,
+        "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
       },
       {
         "driver": "普通股真實安全邊際變化",
-        "value": 0.02158633725260084,
+        "value": 0.006297849068058747,
         "read": "普通股安全邊際改善"
       },
       {
         "driver": "STRC 優先股折價信任票變化",
-        "value": 0.0,
-        "read": "STRC 折價收斂，市場信任改善"
+        "value": 0.0046000000000000485,
+        "read": "STRC 折價擴大，市場信任變差"
       }
     ]
   },
@@ -59,28 +58,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 50724.44,
-        "equity_mnav_at_current_mstr": 1.8511508536459729
+        "btc_price": 49876.732,
+        "equity_mnav_at_current_mstr": 1.880249791863082
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 57064.995,
-        "equity_mnav_at_current_mstr": 1.4094429410099334
+        "btc_price": 56111.3235,
+        "equity_mnav_at_current_mstr": 1.422674316447446
       },
       {
         "btc_shock": 0,
-        "btc_price": 63405.55,
-        "equity_mnav_at_current_mstr": 1.1379207222809469
+        "btc_price": 62345.915,
+        "equity_mnav_at_current_mstr": 1.1442185713490056
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 69746.10500000001,
-        "equity_mnav_at_current_mstr": 0.9541151523312391
+        "btc_price": 68580.5065,
+        "equity_mnav_at_current_mstr": 0.9569229364985328
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 76086.66,
-        "equity_mnav_at_current_mstr": 0.8214313429807242
+        "btc_price": 74815.098,
+        "equity_mnav_at_current_mstr": 0.8223186731268056
       }
     ]
   },
@@ -106,14 +105,14 @@
     {
       "name": "STRC 優先股折價信任票",
       "severity": "high",
-      "value": "12.5%",
+      "value": "13.0%",
       "read": "折價太深；所有估值樂觀訊號降權"
     },
     {
       "name": "Sentiment",
-      "severity": "neutral",
-      "value": "28",
-      "read": "Not capitulation sentiment"
+      "severity": "opportunity",
+      "value": "22",
+      "read": "Fear helps setup quality; not a buy trigger by itself"
     }
   ]
 }
