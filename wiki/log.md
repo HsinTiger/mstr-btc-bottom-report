@@ -2,6 +2,9 @@
 
 格式：`## [YYYY-MM-DD] op | 標題`。查詢：`grep "^## \[" log.md | tail`。
 
+## [2026-07-15] ingest | 加密招財貓新片上新（WebSearch索引偵測，RSS封鎖中）
+加密招財貓疑似發布今日新片「2026/07/15 (三) IBM 暴跌 25% 史上最慘，AI 正在吞噬傳統科技業？」（https://youtu.be/GV3gCpFUQcM），內容聚焦IBM財報暴跌25%事件及AI對傳統科技業的衝擊；YouTube RSS持續403封鎖，本偵測源自WebSearch索引，頻道確認度中等。BTC當日因June CPI軟化反彈+4.9%至$65,030，重回[[five-dimension-model]] 200DMA上方；BTC ETF則鉅額出逃-$424.7M。[[kol-roster]]
+
 ## [2026-06-30] alert | MSTR mNAV由≤0.6x反彈至~0.62x，第1等份④觸發條件暫解除
 MSTR今日大漲+8.63%（自52週低點$81.81反彈至$89.07），市值回升至~$31.74B，估算mNAV ~0.62x，穿回[[two-tranche-plan]]第1等份④的0.6x門檻以上；該條件由「連續3日觸發（6/27–29）」轉為今日暫解除。BTC ~$60,000，整體綜合溫度-4.1（較昨日-4.6回升）。BMNR ETH增至5,700,040（+27K），新加入Russell 1000；staking量增至4,879,157 ETH。**框架行動：等待，四個第1等份條件均未達標；若MSTR回落使mNAV重跌至≤0.6x則條件再度成立。**
 
