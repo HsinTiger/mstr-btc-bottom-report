@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "date": "2026-07-16",
-  "generated_at": "2026-07-16T02:39:22+00:00",
+  "date": "2026-07-17",
+  "generated_at": "2026-07-17T02:41:53+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -58,7 +58,7 @@
       "id": "MNAV_DUAL_GATE_REQUIRED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "mnav_gate_ok=True, equity_mnav=1.131x, enterprise_mnav=1.075x, pref_dilution_flag=False",
+      "evidence": "mnav_gate_ok=True, equity_mnav=1.131x, enterprise_mnav=1.073x, pref_dilution_flag=False",
       "risk_if_failed": "Official or single-line mNAV could override the self-calculated dual gate."
     },
     {
@@ -72,7 +72,7 @@
       "id": "STRC_DISCOUNT_DOWNGRADES_MNAV",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "strc_discount=12.2%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "strc_discount=14.6%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Headline mNAV could ignore preferred-market capital-stack stress."
     },
     {
@@ -115,7 +115,7 @@
     {
       "metric": "企業價值安全邊際",
       "threshold": "< 1.00 would imply enterprise trades below BTC NAV before common-stack haircuts",
-      "current": "1.075x",
+      "current": "1.073x",
       "rationale": "Separates company-level BTC premium from common-share capital-structure burden.",
       "action": "只能當背景參考；不可蓋過普通股安全邊際、賣幣壓力、STRC 折價這三個紅旗。"
     },
@@ -129,7 +129,7 @@
     {
       "metric": "STRC 優先股折價信任票",
       "threshold": "> 5.0% downgrades all mNAV signals",
-      "current": "12.2%",
+      "current": "14.6%",
       "rationale": "Preferred-stock market is the capital-structure trust vote; a wide discount can invalidate headline mNAV optimism.",
       "action": "Treat mNAV as suspect until preferred market stabilizes."
     },
@@ -143,7 +143,7 @@
     {
       "metric": "Fear & Greed",
       "threshold": "< 25 is panic context, not automatic buy signal",
-      "current": "25",
+      "current": "27",
       "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
       "action": "只允許列入研究清單；行動前必須看到普通股安全邊際、賣幣壓力、STRC 折價一起確認。"
     },
