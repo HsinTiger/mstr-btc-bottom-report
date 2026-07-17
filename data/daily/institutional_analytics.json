@@ -1,13 +1,14 @@
 {
   "schema": 1,
   "date": "2026-07-17",
-  "generated_at": "2026-07-17T02:41:53+00:00",
+  "generated_at": "2026-07-17T11:46:46+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
     "degradations": [
+      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.10% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.16% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
-      "BTC MVRV ratio missing",
       "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
       "capital-structure provenance status=mixed_automated_manual"
     ],
@@ -32,25 +33,25 @@
     "contradictions": 0
   },
   "decomposition": {
-    "btc_return_1d": -0.018527740750509225,
-    "mstr_return_1d": -0.03529291063917095,
-    "mstr_minus_btc_1d": -0.016765169888661724,
-    "m1_delta_1d": -0.00022928659505128124,
-    "strc_discount_delta_1d": 0.023599999999999954,
+    "btc_return_1d": 0.01652017713766729,
+    "mstr_return_1d": -0.03420295809367291,
+    "mstr_minus_btc_1d": -0.0507231352313402,
+    "m1_delta_1d": -0.0783647689969631,
+    "strc_discount_delta_1d": 0.011399999999999966,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": -0.016765169888661724,
+        "value": -0.0507231352313402,
         "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
       },
       {
         "driver": "普通股真實安全邊際變化",
-        "value": -0.00022928659505128124,
+        "value": -0.0783647689969631,
         "read": "普通股安全邊際變差"
       },
       {
         "driver": "STRC 優先股折價信任票變化",
-        "value": 0.023599999999999954,
+        "value": 0.011399999999999966,
         "read": "STRC 折價擴大，市場信任變差"
       }
     ]
@@ -59,28 +60,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 50713.288,
-        "equity_mnav_at_current_mstr": 1.8402336483172184
+        "btc_price": 50591.396,
+        "equity_mnav_at_current_mstr": 1.8513938974188862
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 57052.449,
-        "equity_mnav_at_current_mstr": 1.4010198865201522
+        "btc_price": 56915.320499999994,
+        "equity_mnav_at_current_mstr": 1.4082908383817168
       },
       {
         "btc_shock": 0,
-        "btc_price": 63391.61,
-        "equity_mnav_at_current_mstr": 1.131065329998858
+        "btc_price": 63239.244999999995,
+        "equity_mnav_at_current_mstr": 1.136327967938524
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 69730.77100000001,
-        "equity_mnav_at_current_mstr": 0.9483358808274562
+        "btc_price": 69563.1695,
+        "equity_mnav_at_current_mstr": 0.9524039484274652
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 76069.932,
-        "equity_mnav_at_current_mstr": 0.8164363666259163
+        "btc_price": 75887.094,
+        "equity_mnav_at_current_mstr": 0.8197247598648562
       }
     ]
   },
@@ -94,7 +95,7 @@
     {
       "name": "普通股真實安全邊際",
       "severity": "low",
-      "value": "1.13x",
+      "value": "1.14x",
       "read": "高於 1.0，但仍需檢查紅旗"
     },
     {

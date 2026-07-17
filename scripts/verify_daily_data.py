@@ -246,8 +246,15 @@ def main() -> int:
         degradations.append("ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified")
     else:
         degradations.append("ETF flow unavailable; not eligible as hard trigger")
-    if as_float(radar.get("btc_mvrv_current")) is None:
-        degradations.append("BTC MVRV ratio missing")
+    btc_required = ["btc_mvrv_current", "btc_200dma", "btc_50dma", "btc_drawdown_1y_pct", "btc_return_30d_pct"]
+    missing_btc = [key for key in btc_required if as_float(radar.get(key)) is None]
+    if missing_btc:
+        degradations.append("BTC standard inputs missing: " + ", ".join(missing_btc))
+    btc_standard = snapshot.get("metrics", {}).get("btc_standard", {})
+    if not btc_standard.get("regime") or as_float(btc_standard.get("score")) is None:
+        failures.append("BTC standard: missing regime or score")
+    else:
+        evidence.append(f"BTC standard={btc_standard.get('regime')} score={btc_standard.get('score')}")
 
     manual = snapshot.get("metrics", {}).get("manual_inputs", {})
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
@@ -282,6 +289,7 @@ def main() -> int:
             "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
             "required_sources": ["CoinGecko", "Coinbase", "Yahoo Finance"],
             "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "cross-source ETF flow verification", "BTC MVRV ratio"],
+            "btc_standard_required_inputs": ["BTC spot cross-source", "BTC 50/200DMA", "BTC MVRV ratio", "Fear & Greed", "ETF flow context"],
             "not_hard_triggers": ["single-source ETF flow", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
         },
     }

@@ -624,14 +624,15 @@ function card({label,value,read,tone,hero=false}){
 function coreCards(today,yday,verify){
   const p=today.metrics.prices, pm=yday?.metrics?.prices||{};
   const radar=today.metrics.market_radar||{};
+  const btcStd=today.metrics.btc_standard||{};
   const m=today.metrics.mstr_metrics;
   const btcChg=delta(p.btc_usd,pm.btc_usd,'rel');
   const mstrChg=delta(p.mstr_usd,pm.mstr_usd,'rel');
   const bmnrChg=delta(p.bmnr_usd,pm.bmnr_usd,'rel');
   const strcChg=delta(p.strc_usd,pm.strc_usd,'rel');
   return [
-    card({label:'今日動作',value:m.contract_red_light?'禁開':'觀察',tone:m.contract_red_light?'bad':'warn',hero:true,read:m.contract_red_light?'小倉 2.5x 不加碼':'可研究，不追價'}),
-    card({label:'MSTR/BMNR 大倉',value:'4:1',tone:'info',hero:true,read:'現貨週期倉，BMNR 不升主倉'}),
+    card({label:'BTC 今日判斷',value:btcStd.regime||'載入中',tone:btcStd.tone==='deep_value'?'good':btcStd.tone==='overheated'?'bad':'warn',hero:true,read:btcStd.action||'等待每日標準分層'}),
+    card({label:'MSTR 合約動作',value:m.contract_red_light?'禁開':'觀察',tone:m.contract_red_light?'bad':'warn',hero:true,read:m.contract_red_light?'小倉 2.5x 不加碼':'可研究，不追價'}),
     card({label:'BTC',value:money(p.btc_usd),tone:btcChg>=0?'good':'warn',read:btcChg<0?'底層資產轉弱':'底層資產轉強'}),
     card({label:'MSTR',value:money(p.mstr_usd),tone:mstrChg>=0?'good':'warn',read:mstrChg<btcChg?'跑輸 BTC':'反彈仍需過結構閘'}),
     card({label:'BMNR',value:money(p.bmnr_usd),tone:'info',read:bmnrChg<0?'衛星轉弱':'衛星反彈，不升主倉'}),
@@ -641,6 +642,8 @@ function coreCards(today,yday,verify){
     card({label:'F&G 情緒',value:radar.fear_greed??'—',tone:radar.fear_greed<=25?'good':radar.fear_greed>=70?'bad':'warn',read:radar.fear_greed<=25?'市場恐懼，等觸發':'情緒非投降'}),
     card({label:'鏈上手續費',value:radar.btc_fee_fastest_sat_vb==null?'—':radar.btc_fee_fastest_sat_vb+' sat/vB',tone:'info',read:'鏈上壓力 proxy'}),
     card({label:'宏觀資金成本',value:radar.treasury_avg_bill_rate_pct==null?'—':Number(radar.treasury_avg_bill_rate_pct).toFixed(2)+'%',tone:'warn',read:'高利率壓估值'}),
+    card({label:'BTC 標準分',value:btcStd.score==null?'—':String(btcStd.score),tone:btcStd.score<=-5?'good':btcStd.score>=5?'bad':'warn',read:'負分偏冷可準備；正分偏熱防追高'}),
+    card({label:'BTC vs 200DMA',value:btcStd.signals?.btc_vs_200dma_pct==null?'—':pct(btcStd.signals.btc_vs_200dma_pct),tone:btcStd.signals?.btc_vs_200dma_pct>=0?'good':'warn',read:'右側確認核心條件'}),
     card({label:'BTC MVRV ratio',value:radar.btc_mvrv_current==null?'—':num(radar.btc_mvrv_current,2)+'x',tone:radar.btc_mvrv_current<=1?'good':radar.btc_mvrv_current<=1.3?'warn':'bad',read:'Coin Metrics 免費可驗證；不是 Z-score'}),
     card({label:'ETF Flow',value:radar.etf_flow_7d_usd==null?'來源缺漏':money(radar.etf_flow_7d_usd),tone:'warn',read:'第三方單一來源，只能當背景，不作硬觸發'})
   ].join('');
@@ -669,7 +672,7 @@ async function loadHomeDailyCards(){
       fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)
     ]);
     const yday=pickYesterday(database,latest.date);
-    document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜昨日對比 ${yday?.date||'無'}｜只顯示結論與一個關鍵數字`;
+    document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜BTC：${latest.metrics.btc_standard?.one_line||'等待標準分層'}｜昨日對比 ${yday?.date||'無'}`;
     document.getElementById('dailyCoreCards').innerHTML=coreCards(latest,yday,verify);
     document.getElementById('dailyMstrCards').innerHTML=mstrCards(latest,yday);
     const heroDate=document.getElementById('heroDate');

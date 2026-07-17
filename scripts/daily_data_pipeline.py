@@ -129,6 +129,54 @@ def collect_coinbase_btc() -> Observation:
     return obs("btc_usd_coinbase", safe_float(data.get("price")), "Coinbase Exchange ticker", url)
 
 
+def yahoo_daily_closes(ticker: str, range_: str = "1y") -> tuple[list[dict[str, Any]], str]:
+    encoded = urllib.parse.quote(ticker)
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{encoded}?range={range_}&interval=1d"
+    data = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    result = data["chart"]["result"][0]
+    timestamps = result.get("timestamp") or []
+    quotes = result.get("indicators", {}).get("quote", [{}])[0]
+    closes = quotes.get("close", [])
+    lows = quotes.get("low", [])
+    highs = quotes.get("high", [])
+    rows: list[dict[str, Any]] = []
+    for idx, timestamp in enumerate(timestamps):
+        close = safe_float(closes[idx] if idx < len(closes) else None)
+        if close is None:
+            continue
+        rows.append({
+            "timestamp": timestamp,
+            "close": close,
+            "low": safe_float(lows[idx] if idx < len(lows) else None),
+            "high": safe_float(highs[idx] if idx < len(highs) else None),
+        })
+    return rows, url
+
+
+def collect_yahoo_btc_technicals() -> list[Observation]:
+    rows, url = yahoo_daily_closes("BTC-USD", "1y")
+    closes = [row["close"] for row in rows]
+    if not closes:
+        return [obs("btc_technical_error", None, "Yahoo Finance chart", url, ok=False, detail="no closes")]
+    latest = closes[-1]
+    ma200 = sum(closes[-200:]) / min(200, len(closes)) if len(closes) >= 30 else None
+    ma50 = sum(closes[-50:]) / min(50, len(closes)) if len(closes) >= 30 else None
+    ath_1y = max(closes)
+    ret_30d = latest / closes[-31] - 1 if len(closes) > 31 else None
+    ret_90d = latest / closes[-91] - 1 if len(closes) > 91 else None
+    drawdown_1y = latest / ath_1y - 1 if ath_1y else None
+    detail = f"points={len(closes)} latest_timestamp={rows[-1].get('timestamp')} basis=daily_close"
+    return [
+        obs("btc_yahoo_close", latest, "Yahoo Finance BTC-USD chart", url, ok=True, detail=detail),
+        obs("btc_200dma", ma200, "Yahoo Finance BTC-USD chart", url, ok=ma200 is not None, detail=detail),
+        obs("btc_50dma", ma50, "Yahoo Finance BTC-USD chart", url, ok=ma50 is not None, detail=detail),
+        obs("btc_1y_ath", ath_1y, "Yahoo Finance BTC-USD chart", url, ok=True, detail=detail),
+        obs("btc_drawdown_1y_pct", drawdown_1y, "Yahoo Finance BTC-USD chart", url, ok=drawdown_1y is not None, detail=detail),
+        obs("btc_return_30d_pct", ret_30d, "Yahoo Finance BTC-USD chart", url, ok=ret_30d is not None, detail=detail),
+        obs("btc_return_90d_pct", ret_90d, "Yahoo Finance BTC-USD chart", url, ok=ret_90d is not None, detail=detail),
+    ]
+
+
 def yahoo_chart(ticker: str) -> tuple[float | None, str, str]:
     encoded = urllib.parse.quote(ticker)
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{encoded}?range=5d&interval=1d"
@@ -468,6 +516,120 @@ def load_input_provenance() -> dict[str, Any]:
     return load_json(PROVENANCE_PATH, {"schema": 1, "status": "missing", "fields": {}})
 
 
+def score_between(value: float | None, cold: float, hot: float, invert: bool = False) -> int:
+    if value is None:
+        return 0
+    if invert:
+        if value <= cold:
+            return -2
+        if value <= (cold + hot) / 2:
+            return -1
+        if value >= hot:
+            return 2
+        return 1
+    if value <= cold:
+        return -2
+    if value <= (cold + hot) / 2:
+        return -1
+    if value >= hot:
+        return 2
+    return 1
+
+
+def build_btc_standards(metrics: dict[str, Any]) -> dict[str, Any]:
+    prices = metrics.get("prices", {})
+    radar = metrics.get("market_radar", {})
+    mstr = metrics.get("mstr_metrics", {})
+    btc = safe_float(prices.get("btc_usd"))
+    ma200 = safe_float(radar.get("btc_200dma"))
+    ma50 = safe_float(radar.get("btc_50dma"))
+    mvrv = safe_float(radar.get("btc_mvrv_current"))
+    fear_greed = safe_float(radar.get("fear_greed"))
+    etf_7d = safe_float(radar.get("etf_flow_7d_usd"))
+    dd_1y = safe_float(radar.get("btc_drawdown_1y_pct"))
+    ret_30d = safe_float(radar.get("btc_return_30d_pct"))
+    sale_ratio = safe_float(mstr.get("sale_ratio"))
+    strc_discount = safe_float(mstr.get("strc_discount"))
+    trend_vs_200dma = btc / ma200 - 1 if btc is not None and ma200 else None
+    trend_vs_50dma = btc / ma50 - 1 if btc is not None and ma50 else None
+    dimensions = {
+        "估值便宜度": score_between(mvrv, 1.0, 2.2),
+        "價格趨勢": score_between(trend_vs_200dma, -0.15, 0.15),
+        "市場情緒": score_between(fear_greed, 25, 75),
+        "ETF 邊際買盤": score_between(etf_7d, -500_000_000, 500_000_000),
+        "MSTR 資本壓力": score_between(max(sale_ratio or 0, (strc_discount or 0) * 20), 1.0, 2.0),
+    }
+    score = sum(dimensions.values())
+    capitulation_conditions = [
+        btc is not None and btc <= 54_000,
+        mvrv is not None and mvrv <= 1.0,
+        fear_greed is not None and fear_greed <= 15,
+        dd_1y is not None and dd_1y <= -0.45,
+        mstr.get("equity_mnav") is not None and mstr.get("equity_mnav") <= 0.6,
+    ]
+    confirmation_conditions = [
+        trend_vs_200dma is not None and trend_vs_200dma >= 0,
+        trend_vs_50dma is not None and trend_vs_50dma >= 0,
+        mvrv is not None and 1.0 < mvrv <= 1.5,
+        etf_7d is not None and etf_7d > 0,
+        fear_greed is not None and 25 <= fear_greed <= 65,
+    ]
+    capitulation_hits = sum(1 for item in capitulation_conditions if item)
+    confirmation_hits = sum(1 for item in confirmation_conditions if item)
+    if capitulation_hits >= 2 and score <= -5:
+        regime = "投降接刀區"
+        action = "只允許現貨分批；MSTR 合約仍需等待資本結構與右側確認"
+        tone = "deep_value"
+    elif confirmation_hits >= 4 and -3 <= score <= 3:
+        regime = "便宜後右側確認區"
+        action = "可研究大倉現貨加碼；合約仍需 MSTR 紅燈解除"
+        tone = "constructive"
+    elif score >= 5:
+        regime = "偏熱追高區"
+        action = "不追價；只檢查減碼與風險上限"
+        tone = "overheated"
+    elif score <= -3:
+        regime = "偏冷等待區"
+        action = "準備買單但等待投降或右側確認，不用預設今日是底"
+        tone = "cold_watch"
+    else:
+        regime = "中性拉扯區"
+        action = "保持觀察；避免用單一指標判斷 BTC 底部"
+        tone = "neutral"
+    return {
+        "schema": 1,
+        "score": score,
+        "regime": regime,
+        "tone": tone,
+        "action": action,
+        "one_line": f"BTC：{regime}｜{action}",
+        "dimensions": dimensions,
+        "signals": {
+            "btc_usd": btc,
+            "btc_vs_200dma_pct": trend_vs_200dma,
+            "btc_vs_50dma_pct": trend_vs_50dma,
+            "btc_1y_drawdown_pct": dd_1y,
+            "btc_30d_return_pct": ret_30d,
+            "mvrv_ratio": mvrv,
+            "fear_greed": fear_greed,
+            "etf_flow_7d_usd": etf_7d,
+            "mstr_sale_pressure_ratio": sale_ratio,
+            "strc_discount": strc_discount,
+        },
+        "thresholds": {
+            "投降接刀區": "至少 2 個投降條件且總分 ≤ -5；現貨分批，不自動開 MSTR 合約",
+            "便宜後右側確認區": "至少 4 個右側確認條件且總分 -3 到 +3；可研究現貨加碼",
+            "偏熱追高區": "總分 ≥ +5；禁止追價",
+            "偏冷等待區": "總分 ≤ -3 但投降不足；準備但不預設見底",
+        },
+        "limits": [
+            "MVRV-Z、realized loss、Google Trends 無穩定免費官方 API 時不作硬觸發",
+            "ETF flow 目前為第三方單源，只能加權背景，不可單獨放行交易",
+            "BTC 判斷標準只決定現貨節奏；MSTR 合約需另過資本結構紅燈",
+        ],
+    }
+
+
 def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     btc_prices = [safe_float(latest_value(observations, n)) for n in ["btc_usd_coingecko", "btc_usd_coinbase"]]
     btc_prices = [p for p in btc_prices if p is not None]
@@ -501,7 +663,7 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     mnav_gate_ok = bool(equity_mnav and enterprise_mnav and equity_mnav >= 1 and enterprise_mnav >= 1 and not pref_dilution_flag)
     contract_red_light = bool(sale_ratio > 2 or coverage_months < 12 or (strc_discount is not None and strc_discount > 0.05))
 
-    return {
+    result = {
         "prices": {
             "btc_usd": btc_px,
             "mstr_usd": mstr_px,
@@ -524,6 +686,12 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "btc_fee_hour_sat_vb": safe_float(latest_value(observations, "btc_fee_hour_sat_vb")),
             "btc_hashrate_ths": safe_float(latest_value(observations, "btc_hashrate_ths")),
             "treasury_avg_bill_rate_pct": safe_float(latest_value(observations, "treasury_avg_bill_rate_pct")),
+            "btc_200dma": safe_float(latest_value(observations, "btc_200dma")),
+            "btc_50dma": safe_float(latest_value(observations, "btc_50dma")),
+            "btc_1y_ath": safe_float(latest_value(observations, "btc_1y_ath")),
+            "btc_drawdown_1y_pct": safe_float(latest_value(observations, "btc_drawdown_1y_pct")),
+            "btc_return_30d_pct": safe_float(latest_value(observations, "btc_return_30d_pct")),
+            "btc_return_90d_pct": safe_float(latest_value(observations, "btc_return_90d_pct")),
             "btc_mvrv_current": safe_float(latest_value(observations, "btc_mvrv_current")),
             "btc_supply_current": safe_float(latest_value(observations, "btc_supply_current")),
             "btc_market_cap_coinmetrics_usd": safe_float(latest_value(observations, "btc_market_cap_coinmetrics_usd")),
@@ -566,6 +734,8 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "status": "automated_sec_companyfacts_supporting_check",
         },
     }
+    result["btc_standard"] = build_btc_standards(result)
+    return result
 
 
 def score_snapshot(metrics: dict[str, Any]) -> dict[str, Any]:
@@ -606,6 +776,7 @@ def collect_all() -> list[Observation]:
     collectors = [
         ("coingecko", collect_coingecko_btc),
         ("coinbase", lambda: [collect_coinbase_btc()]),
+        ("btc_technicals", collect_yahoo_btc_technicals),
         ("mstr_yahoo", lambda: [collect_yahoo_equity("MSTR")]),
         ("bmnr_yahoo", lambda: [collect_yahoo_equity("BMNR")]),
         ("strc_yahoo", lambda: [collect_yahoo_equity("STRC")]),

@@ -142,7 +142,7 @@ h2:first-child{margin-top:0}
     <div class="card"><h3>近 30 天</h3><div class="big" id="m1"></div><div class="mini"></div></div>
   </div>
   <div class="note" id="dataCoverageNote">每日自動資料會覆蓋已接欄位；MVRV ratio、綜合溫度、ETF flow 已資料驅動。Realized loss、Google Trends、宏觀事件因無穩定免費官方 API，只顯示來源受限且不作硬觸發。</div>
-  <div class="verdict" style="margin-top:10px" id="icVerdict"><b>IC 裁決：</b>載入每日資料中…</div>
+  <div class="verdict" style="margin-top:10px" id="icVerdict"><b>BTC 標準裁決：</b>載入每日資料中…</div>
 
   <h2>獨家自算核心指標（不採公司自訂口徑）</h2>
   <div class="grid g4">
@@ -432,7 +432,7 @@ async function loadDailySnapshot(){
       fetch('data/daily/institutional_analytics.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null),
       fetch('data/history.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)
     ]);
-    const m=snap.metrics.mstr_metrics, radar=snap.metrics.market_radar||{};
+    const m=snap.metrics.mstr_metrics, radar=snap.metrics.market_radar||{}, btcStd=snap.metrics.btc_standard||{};
     const nf=(v,d=2)=>v==null?'N/A':Number(v).toFixed(d);
     const pct=v=>v==null?'N/A':(Number(v)*100).toFixed(1)+'%';
     const put=(id,txt,cls)=>{ const el=document.getElementById(id); if(el){ el.textContent=txt; if(cls) el.className=cls; } };
@@ -450,7 +450,7 @@ async function loadDailySnapshot(){
     put('tempNow', latestTemp?`${nf(latestTemp.composite)}（${latestTemp.date}）`:'來源缺漏', latestTemp&&latestTemp.composite<=-6?'pos':latestTemp&&latestTemp.composite<=-3?'warn':'neg');
     put('confirmTempNow', latestTemp?`${nf(latestTemp.composite)}（${latestTemp.date}）`:'來源缺漏', latestTemp&&latestTemp.composite>=2&&latestTemp.composite<=5?'pos':'neg');
     const capHit=(snap.metrics.prices.btc_usd<=54000)||(m.equity_mnav<=0.6)||(mvrv&&mvrv<=1)||(latestTemp&&latestTemp.composite<=-6);
-    put('capitulationOverall', capHit?'部分觸發':'未觸發', capHit?'pos':'neg');
+    put('capitulationOverall', btcStd.regime?`${btcStd.regime}｜分數 ${btcStd.score}`:(capHit?'部分觸發':'未觸發'), btcStd.tone==='deep_value'?'pos':btcStd.tone==='overheated'?'neg':capHit?'pos':'warn');
     put('contractTriggerNow', m.contract_red_light?'✗ 紅燈中':'✓ 可研究', m.contract_red_light?'neg':'warn');
     put('realizedLossNow','來源受限：不作硬觸發','warn');
     const blocked=(logic?.decision?.blocked_actions||[]);
@@ -465,8 +465,8 @@ async function loadDailySnapshot(){
     put('ibitGateNow', etfUsd!=null?`${etfStatus}｜7日 ${money(etfUsd)}`:'來源缺漏', 'warn');
     put('retailGateNow','來源受限：Google Trends 不作硬觸發','warn');
     put('regGateNow','人工覆核：重大事件窗不自動放行','warn');
-    const verdict=analytics?.executive_read?.one_line || logic?.decision?.plain_english || snap.decision?.state || '\u8f09\u5165\u5b8c\u6210';
-    document.getElementById('icVerdict').innerHTML=`<b>IC \u88c1\u6c7a\uff08${snap.date}\uff09\uff1a</b>${verdict}`;
+    const verdict=btcStd.one_line || analytics?.executive_read?.one_line || logic?.decision?.plain_english || snap.decision?.state || '\u8f09\u5165\u5b8c\u6210';
+    document.getElementById('icVerdict').innerHTML=`<b>BTC 標準裁決（${snap.date}）：</b>${verdict}`;
     const av=document.getElementById('autoVerify');
     if(av&&verify){ const bad=verify.status==='fail'; const deg=verify.status==='degraded'; av.innerHTML=`\u81ea\u52d5\u9a57\u8b49\uff1a<b class="${bad?'neg':deg?'warn':'pos'}">${verify.status.toUpperCase()}</b>\uff5c${(verify.degradations||verify.warnings||[]).slice(0,3).join('\uff1b')||'\u8cc7\u6599\u5b8c\u6574'}\uff5c\u908f\u8f2f\u7a3d\u6838 ${logic?.status||'not_run'}`; }
   }catch(e){ console.warn('daily snapshot unavailable',e); }

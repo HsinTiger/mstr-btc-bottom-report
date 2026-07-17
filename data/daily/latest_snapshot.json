@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "date": "2026-07-17",
-  "generated_at": "2026-07-17T02:41:53+00:00",
+  "generated_at": "2026-07-17T11:46:42+00:00",
   "metrics": {
     "prices": {
-      "btc_usd": 63391.61,
+      "btc_usd": 63239.244999999995,
       "mstr_usd": 94.03,
       "bmnr_usd": 15.44,
       "strc_usd": 85.42
@@ -21,7 +21,7 @@
         "policy": "MSTR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "mstr_usd_nasdaq",
-        "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 16, 2026 realTime=False"
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 17, 2026 7:46 AM ET realTime=True"
       },
       "bmnr_usd": {
         "selected_source": "Yahoo Finance chart",
@@ -30,7 +30,7 @@
         "policy": "BMNR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "bmnr_usd_nasdaq",
-        "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 16, 2026 realTime=False"
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 17, 2026 7:46 AM ET realTime=True"
       },
       "strc_usd": {
         "selected_source": "Yahoo Finance chart",
@@ -39,26 +39,32 @@
         "policy": "STRC: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "strc_usd_nasdaq",
-        "fallback_detail": "quote_basis=regular_or_delayed_quote timestamp=Jul 16, 2026 realTime=False"
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 17, 2026 7:46 AM ET realTime=True"
       }
     },
     "market_radar": {
       "fear_greed": 27.0,
       "fear_greed_timestamp": "1784246400",
-      "btc_fee_fastest_sat_vb": 1.0,
+      "btc_fee_fastest_sat_vb": 2.0,
       "btc_fee_hour_sat_vb": 1.0,
       "btc_hashrate_ths": 764923263.6967337,
       "treasury_avg_bill_rate_pct": 3.706,
-      "btc_mvrv_current": null,
-      "btc_supply_current": null,
-      "btc_market_cap_coinmetrics_usd": null,
+      "btc_200dma": 73273.61849609375,
+      "btc_50dma": 63695.6628125,
+      "btc_1y_ath": 124752.53125,
+      "btc_drawdown_1y_pct": -0.49304050318618287,
+      "btc_return_30d_pct": -0.01822404806659006,
+      "btc_return_90d_pct": -0.16482708317535777,
+      "btc_mvrv_current": 1.2064208959075768,
+      "btc_supply_current": 20057088.63584605,
+      "btc_market_cap_coinmetrics_usd": 1279243956154.6978,
       "etf_flow_status": "automated_third_party_single_source",
-      "etf_flow_1d_btc": 1697.0,
-      "etf_flow_1d_usd": 108000000.0,
-      "etf_flow_7d_btc": -2218.0,
-      "etf_flow_7d_usd": -141000000.0,
-      "etf_flow_30d_btc": -38148.0,
-      "etf_flow_30d_usd": -2421000000.0,
+      "etf_flow_1d_btc": 1249.0,
+      "etf_flow_1d_usd": 79000000.0,
+      "etf_flow_7d_btc": 532.0,
+      "etf_flow_7d_usd": 34000000.0,
+      "etf_flow_30d_btc": -37146.0,
+      "etf_flow_30d_usd": -2352000000.0,
       "automation_limits": {
         "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
         "realized_loss": "Glassnode/CheckOnChain realized-loss series is not available as a stable free API; not used as a hard trigger.",
@@ -67,9 +73,9 @@
       }
     },
     "mstr_metrics": {
-      "btc_nav_musd": 53488.25572775,
-      "equity_mnav": 1.131065329998858,
-      "enterprise_mnav": 1.073354115008361,
+      "btc_nav_musd": 53359.69394987499,
+      "equity_mnav": 1.136327967938524,
+      "enterprise_mnav": 1.0759401926842291,
       "pref_dilution_flag": false,
       "coverage_months": 13.737877593360997,
       "sale_ratio": 3.6410788381742734,
@@ -225,6 +231,44 @@
       "preferred_cash_dividends_musd": 250.558,
       "deferred_tax_liability_musd": 1921.947,
       "status": "automated_sec_companyfacts_supporting_check"
+    },
+    "btc_standard": {
+      "schema": 1,
+      "score": 0,
+      "regime": "中性拉扯區",
+      "tone": "neutral",
+      "action": "保持觀察；避免用單一指標判斷 BTC 底部",
+      "one_line": "BTC：中性拉扯區｜保持觀察；避免用單一指標判斷 BTC 底部",
+      "dimensions": {
+        "估值便宜度": -1,
+        "價格趨勢": -1,
+        "市場情緒": -1,
+        "ETF 邊際買盤": 1,
+        "MSTR 資本壓力": 2
+      },
+      "signals": {
+        "btc_usd": 63239.244999999995,
+        "btc_vs_200dma_pct": -0.13694387832953403,
+        "btc_vs_50dma_pct": -0.007165602685437977,
+        "btc_1y_drawdown_pct": -0.49304050318618287,
+        "btc_30d_return_pct": -0.01822404806659006,
+        "mvrv_ratio": 1.2064208959075768,
+        "fear_greed": 27.0,
+        "etf_flow_7d_usd": 34000000.0,
+        "mstr_sale_pressure_ratio": 3.6410788381742734,
+        "strc_discount": 0.14579999999999993
+      },
+      "thresholds": {
+        "投降接刀區": "至少 2 個投降條件且總分 ≤ -5；現貨分批，不自動開 MSTR 合約",
+        "便宜後右側確認區": "至少 4 個右側確認條件且總分 -3 到 +3；可研究現貨加碼",
+        "偏熱追高區": "總分 ≥ +5；禁止追價",
+        "偏冷等待區": "總分 ≤ -3 但投降不足；準備但不預設見底"
+      },
+      "limits": [
+        "MVRV-Z、realized loss、Google Trends 無穩定免費官方 API 時不作硬觸發",
+        "ETF flow 目前為第三方單源，只能加權背景，不可單獨放行交易",
+        "BTC 判斷標準只決定現貨節奏；MSTR 合約需另過資本結構紅燈"
+      ]
     }
   },
   "decision": {
@@ -244,6 +288,6 @@
       "STRC discount is above 5%, weakening the preferred-market trust vote"
     ]
   },
-  "source_count": 41,
-  "error_count": 3
+  "source_count": 51,
+  "error_count": 0
 }
