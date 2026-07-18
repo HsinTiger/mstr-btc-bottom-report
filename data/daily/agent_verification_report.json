@@ -1,27 +1,25 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-17T11:46:42+00:00",
-  "date": "2026-07-17",
+  "verified_at": "2026-07-18T02:32:40+00:00",
+  "date": "2026-07-18",
   "status": "degraded",
   "failures": [],
   "degradations": [
-    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.10% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-    "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.16% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
     "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
     "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
     "capital-structure provenance status=mixed_automated_manual"
   ],
   "warnings": [],
   "evidence": [
-    "btc_usd_coingecko=63234 from CoinGecko simple price",
-    "btc_usd_coinbase=63244.49 from Coinbase Exchange ticker",
-    "mstr_usd_yahoo=94.03 from Yahoo Finance chart",
-    "MSTR Yahoo/Nasdaq=94.03/92.08; basis=regular_market_close/extended_hours_realtime; gap=2.10%",
-    "BMNR Yahoo/Nasdaq=15.44/15.11; basis=regular_market_close/extended_hours_realtime; gap=2.16%",
-    "STRC Yahoo/Nasdaq=85.42/85.4503; basis=regular_market_close/extended_hours_realtime; gap=0.04%",
+    "btc_usd_coingecko=63959 from CoinGecko simple price",
+    "btc_usd_coinbase=63959.22 from Coinbase Exchange ticker",
+    "mstr_usd_yahoo=94.85 from Yahoo Finance chart",
+    "MSTR Yahoo/Nasdaq=94.85/94.85; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "BMNR Yahoo/Nasdaq=15.69/15.69; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "STRC Yahoo/Nasdaq=85.29/85.29; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=8-K",
-    "BTC standard=中性拉扯區 score=0"
+    "BTC standard=便宜後右側確認區 score=-1"
   ],
   "policy": {
     "btc_cross_source_max_gap": "1.5%",
