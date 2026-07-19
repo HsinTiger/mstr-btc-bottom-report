@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "date": "2026-07-18",
-  "generated_at": "2026-07-18T02:32:40+00:00",
+  "date": "2026-07-19",
+  "generated_at": "2026-07-19T02:47:12+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
@@ -10,16 +10,16 @@
       "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
       "capital-structure provenance status=mixed_automated_manual"
     ],
-    "logic_audit_status": "contradiction",
+    "logic_audit_status": "consistent",
     "logic_failed_invariants": 0,
-    "logic_contradictions": 1
+    "logic_contradictions": 0
   },
   "executive_read": {
     "headline": "Research-grade only; not auto-trading grade",
     "one_line": "普通股真實安全邊際低於 1.0，且每週賣幣壓力與 STRC 優先股折價仍是紅旗；今天重點是避免追高，不是找理由加碼。"
   },
   "logic_audit": {
-    "status": "contradiction",
+    "status": "consistent",
     "plain_english": "資料驗證降級，或每週賣幣壓力／STRC 折價紅旗還在時，只允許研究與觀察。",
     "blocked_actions": [
       "add_2_5x_mstr",
@@ -28,29 +28,29 @@
       "use_etf_flow_as_hard_trigger"
     ],
     "failed_invariants": 0,
-    "contradictions": 1
+    "contradictions": 0
   },
   "decomposition": {
-    "btc_return_1d": 0.011383200416134054,
-    "mstr_return_1d": 0.008720621078379232,
-    "mstr_minus_btc_1d": -0.0026625793377548224,
-    "m1_delta_1d": -0.014745950107596606,
-    "strc_discount_delta_1d": 0.0012999999999999678,
+    "btc_return_1d": 0.01318780076833459,
+    "mstr_return_1d": 0.0,
+    "mstr_minus_btc_1d": -0.01318780076833459,
+    "m1_delta_1d": -0.02757291943422646,
+    "strc_discount_delta_1d": 0.0,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": -0.0026625793377548224,
+        "value": -0.01318780076833459,
         "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
       },
       {
         "driver": "普通股真實安全邊際變化",
-        "value": -0.014745950107596606,
+        "value": -0.02757291943422646,
         "read": "普通股安全邊際變差"
       },
       {
         "driver": "STRC 優先股折價信任票變化",
-        "value": 0.0012999999999999678,
-        "read": "STRC 折價擴大，市場信任變差"
+        "value": 0.0,
+        "read": "STRC 折價收斂，市場信任改善"
       }
     ]
   },
@@ -58,28 +58,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 51167.288,
-        "equity_mnav_at_current_mstr": 1.8155195208546013
+        "btc_price": 51842.072,
+        "equity_mnav_at_current_mstr": 1.7581376678078733
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 57563.199,
-        "equity_mnav_at_current_mstr": 1.3865738182976457
+        "btc_price": 58322.331,
+        "equity_mnav_at_current_mstr": 1.3487514931605802
       },
       {
         "btc_shock": 0,
-        "btc_price": 63959.11,
-        "equity_mnav_at_current_mstr": 1.1215820178309275
+        "btc_price": 64802.59,
+        "equity_mnav_at_current_mstr": 1.094009098396701
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 70355.02100000001,
-        "equity_mnav_at_current_mstr": 0.9416254754451191
+        "btc_price": 71282.849,
+        "equity_mnav_at_current_mstr": 0.9202070654000044
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 76750.932,
-        "equity_mnav_at_current_mstr": 0.8114321258487165
+        "btc_price": 77763.108,
+        "equity_mnav_at_current_mstr": 0.7940574719911913
       }
     ]
   },
@@ -93,7 +93,7 @@
     {
       "name": "普通股真實安全邊際",
       "severity": "low",
-      "value": "1.12x",
+      "value": "1.09x",
       "read": "高於 1.0，但仍需檢查紅旗"
     },
     {
@@ -110,9 +110,9 @@
     },
     {
       "name": "Sentiment",
-      "severity": "opportunity",
-      "value": "25",
-      "read": "Fear helps setup quality; not a buy trigger by itself"
+      "severity": "neutral",
+      "value": "28",
+      "read": "Not capitulation sentiment"
     }
   ]
 }
