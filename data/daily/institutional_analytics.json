@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "date": "2026-07-19",
-  "generated_at": "2026-07-19T02:47:12+00:00",
+  "date": "2026-07-20",
+  "generated_at": "2026-07-20T03:16:03+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
@@ -31,21 +31,21 @@
     "contradictions": 0
   },
   "decomposition": {
-    "btc_return_1d": 0.01318780076833459,
+    "btc_return_1d": -0.00028255043509828326,
     "mstr_return_1d": 0.0,
-    "mstr_minus_btc_1d": -0.01318780076833459,
-    "m1_delta_1d": -0.02757291943422646,
+    "mstr_minus_btc_1d": 0.00028255043509828326,
+    "m1_delta_1d": 0.0005841414585627813,
     "strc_discount_delta_1d": 0.0,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": -0.01318780076833459,
-        "read": "MSTR underperformed BTC; discount/capital-structure pressure persists"
+        "value": 0.00028255043509828326,
+        "read": "MSTR outperformed BTC; verify it is not short-term reflexivity"
       },
       {
         "driver": "普通股真實安全邊際變化",
-        "value": -0.02757291943422646,
-        "read": "普通股安全邊際變差"
+        "value": 0.0005841414585627813,
+        "read": "普通股安全邊際改善"
       },
       {
         "driver": "STRC 優先股折價信任票變化",
@@ -58,28 +58,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 51842.072,
-        "equity_mnav_at_current_mstr": 1.7581376678078733
+        "btc_price": 51827.424,
+        "equity_mnav_at_current_mstr": 1.7593447536363962
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 58322.331,
-        "equity_mnav_at_current_mstr": 1.3487514931605802
+        "btc_price": 58305.852,
+        "equity_mnav_at_current_mstr": 1.3495506057222626
       },
       {
         "btc_shock": 0,
-        "btc_price": 64802.59,
-        "equity_mnav_at_current_mstr": 1.094009098396701
+        "btc_price": 64784.28,
+        "equity_mnav_at_current_mstr": 1.0945932398552638
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 71282.849,
-        "equity_mnav_at_current_mstr": 0.9202070654000044
+        "btc_price": 71262.708,
+        "equity_mnav_at_current_mstr": 0.9206616582920394
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 77763.108,
-        "equity_mnav_at_current_mstr": 0.7940574719911913
+        "btc_price": 77741.136,
+        "equity_mnav_at_current_mstr": 0.7944267312274725
       }
     ]
   },
@@ -111,7 +111,7 @@
     {
       "name": "Sentiment",
       "severity": "neutral",
-      "value": "28",
+      "value": "29",
       "read": "Not capitulation sentiment"
     }
   ]

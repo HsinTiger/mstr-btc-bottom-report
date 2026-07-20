@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "date": "2026-07-19",
-  "generated_at": "2026-07-19T02:47:12+00:00",
+  "date": "2026-07-20",
+  "generated_at": "2026-07-20T03:16:03+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -51,21 +51,21 @@
       "id": "M1_BELOW_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.094x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "equity_mnav=1.095x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Common equity may be called cheap while adjusted common NAV is still below threshold."
     },
     {
       "id": "MNAV_DUAL_GATE_REQUIRED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "mnav_gate_ok=True, equity_mnav=1.094x, enterprise_mnav=1.055x, pref_dilution_flag=False",
+      "evidence": "mnav_gate_ok=True, equity_mnav=1.095x, enterprise_mnav=1.055x, pref_dilution_flag=False",
       "risk_if_failed": "Official or single-line mNAV could override the self-calculated dual gate."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.094x, sats_per_share=252693",
+      "evidence": "equity_mnav=1.095x, sats_per_share=252693",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
@@ -108,7 +108,7 @@
     {
       "metric": "普通股真實安全邊際",
       "threshold": "< 1.00 blocks common-equity cheapness claims",
-      "current": "1.094x",
+      "current": "1.095x",
       "rationale": "Below 1.0 means common equity trades through internally adjusted BTC NAV after debt, preferred, cash, and tax inputs.",
       "action": "Do not frame MSTR common as cheap until provenance and capital stack are reviewed."
     },
@@ -143,7 +143,7 @@
     {
       "metric": "Fear & Greed",
       "threshold": "< 25 is panic context, not automatic buy signal",
-      "current": "28",
+      "current": "29",
       "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
       "action": "只允許列入研究清單；行動前必須看到普通股安全邊際、賣幣壓力、STRC 折價一起確認。"
     },
