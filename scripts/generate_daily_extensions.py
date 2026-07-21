@@ -15,6 +15,7 @@ SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 VERIFY_PATH = DATA_DIR / "agent_verification_report.json"
 ANALYTICS_PATH = DATA_DIR / "institutional_analytics.json"
 KNOWLEDGE_PATH = DATA_DIR / "knowledge_context.json"
+MARKET_PATH = DATA_DIR / "market_universe.json"
 EXTENSIONS_PATH = DATA_DIR / "daily_extensions.json"
 
 
@@ -103,7 +104,35 @@ def signal_to_viewpoint(
     }
 
 
-def build_viewpoints(analytics: dict[str, Any], verification: dict[str, Any]) -> list[dict[str, Any]]:
+def thesis_study_note(market: dict[str, Any]) -> str | None:
+    thesis = market.get("btc_thesis", {})
+    quality = thesis.get("quality", {})
+    if quality.get("coverage_status") != "complete" or quality.get("status") not in {"pass", "degraded"}:
+        return None
+    gold = thesis.get("gold_monetization", {})
+    credit = thesis.get("digital_dollar_competition", {})
+    company = thesis.get("public_company_adoption", {})
+    security = thesis.get("security_consensus", {})
+    sovereign = thesis.get("sovereign_credit_competition", {})
+    values = {
+        "黃金貨幣化": gold.get("btc_to_gold_market_value_ratio"),
+        "穩定幣30日": credit.get("stablecoin_supply_30d_change"),
+        "公開公司持幣": company.get("share_of_btc_supply"),
+        "算力保留": security.get("hashrate_vs_90d_high"),
+        "債務GDP": sovereign.get("us_federal_debt_to_gdp_pct"),
+        "10年實質利率": sovereign.get("us_10y_real_yield_pct"),
+    }
+    if any(value is None for value in values.values()):
+        return None
+    return (
+        f"長期論證：BTC/黃金代理總值={values['黃金貨幣化']:.1%}；"
+        f"美元穩定幣30日={values['穩定幣30日']:+.1%}；公開公司樣本持有供給={values['公開公司持幣']:.1%}；"
+        f"算力仍為90日高點={values['算力保留']:.1%}；美國債務/GDP={values['債務GDP']:.1f}%、"
+        f"10年實質利率={values['10年實質利率']:.2f}%。這些只檢驗結構假說，不放行短線交易。"
+    )
+
+
+def build_viewpoints(analytics: dict[str, Any], verification: dict[str, Any], market: dict[str, Any]) -> list[dict[str, Any]]:
     brief = analytics.get("decision_brief", {})
     consensus = brief.get("consensus_signals", [])
     exclusive = brief.get("exclusive_signals", [])
@@ -113,11 +142,18 @@ def build_viewpoints(analytics: dict[str, Any], verification: dict[str, Any]) ->
         (exclusive[0] if exclusive else {}, "MSTR", "普通股估值＋資本結構＋相對動能"),
         (exclusive[1] if len(exclusive) > 1 else {}, "BMNR", "gross-assets＋股數含幣量＋質押流動性"),
     ]
-    return [
+    viewpoints = [
         signal_to_viewpoint(signal, title_prefix=prefix, lens_name=lens_name, confidence=confidence)
         for signal, prefix, lens_name in candidates
         if signal
     ]
+    structural_status = verification.get("structural_context_quality", {}).get("status")
+    structural_note = thesis_study_note(market) if structural_status in {"pass", "degraded"} else None
+    if viewpoints and structural_note:
+        viewpoints[0]["study_note"] = viewpoints[0].get("study_note", "") + "｜" + structural_note
+        viewpoints[0].setdefault("wiki_refs", []).append("btc-neutral-anchor")
+        viewpoints[0].setdefault("source_refs", []).append("data/daily/market_universe.json")
+    return viewpoints
 
 
 def tomorrow_watch(snapshot: dict[str, Any], analytics: dict[str, Any]) -> dict[str, Any]:
@@ -137,8 +173,9 @@ def main() -> int:
     verification = load_json(VERIFY_PATH)
     analytics = load_json(ANALYTICS_PATH)
     knowledge = load_json(KNOWLEDGE_PATH, {"status": "missing", "pages": [], "quality": {}})
+    market = load_json(MARKET_PATH, {})
     existing = load_json(EXTENSIONS_PATH, {"schema": 2, "items": [], "archive": []})
-    viewpoints = build_viewpoints(analytics, verification)
+    viewpoints = build_viewpoints(analytics, verification, market)
     referenced_slugs = list(dict.fromkeys(slug for view in viewpoints for slug in view.get("wiki_refs", [])))
     today_item = {
         "date": snapshot["date"],

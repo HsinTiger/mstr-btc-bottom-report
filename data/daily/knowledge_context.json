@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-21T07:37:49+00:00",
+  "generated_at": "2026-07-21T08:52:30+00:00",
   "as_of_date": "2026-07-21",
-  "source_manifest": "/home/runner/work/mstr-btc-bottom-report/mstr-btc-bottom-report/wiki/manifest.json",
+  "source_manifest": "C:/work/mstr-btc-bottom-report/wiki/manifest.json",
   "stale_after_days": 30,
   "status": "degraded",
   "usage_policy": {
@@ -11,8 +11,8 @@
     "fact_requirement": "Corroborate with verified daily data or primary-source evidence before factual use."
   },
   "quality": {
-    "active_pages": 19,
-    "context_only_pages": 14,
+    "active_pages": 20,
+    "context_only_pages": 15,
     "excluded_pages": 5,
     "global_flags": [],
     "flag_counts": {
@@ -379,6 +379,7 @@
       "stale_days": 0,
       "wikilinks": [
         "five-dimension-model",
+        "btc-neutral-anchor",
         "kol-roster",
         "CLAUDE"
       ],
@@ -563,6 +564,37 @@
       "quality_flags": [],
       "analysis_use": "context_only",
       "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "btc-neutral-anchor",
+      "title": "比特幣非主權價值錨與中立抵押品論證",
+      "summary": "以黃金貨幣化比例、美元穩定幣與 RWA 規模、公開公司持幣、算力安全及主權信用壓力，檢驗 BTC 是否仍在走向非主權價值錨；結構證據不直接等於底部或買點。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "medium",
+      "confidence": "medium",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "five-dimension-model",
+        "indicator-regime-change",
+        "cycle-diminishing-returns",
+        "data-feeds"
+      ],
+      "source_path": "wiki/concepts/btc-neutral-anchor.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [
+        "btc_to_gold_market_value_ratio",
+        "btc_share_of_btc_plus_stablecoins",
+        "public_company_share_of_supply",
+        "hashrate_vs_90d_high",
+        "us_federal_debt_to_gdp_pct",
+        "us_10y_real_yield_pct"
+      ],
       "requires_independent_verification": true
     }
   ]

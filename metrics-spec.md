@@ -87,6 +87,55 @@ strc_discount = 1 − STRC 市價/100
 - 資料覆蓋低於 80% 時，狀態只能是「資料不足觀察區」。
 - 模型狀態是 `heuristic_unbacktested`：這是制度化 regime context，不是已證明有 alpha 的預測模型；完成 walk-forward 回測、交易成本與樣本外基準前，不可稱為已驗證訊號。
 
+### BTC 非主權價值錨論證指標
+
+這組指標回答 BTC 是否持續貨幣化與金融化，**不得進入 BTC 五維底部標準分**。
+
+```
+BTC 對黃金代理總值比例
+= BTC 市值 ÷（COMEX 黃金前月代理價 × WGC 地上黃金公噸 × 32,150.746568627 金衡盎司/公噸）
+
+黃金占比情境 BTC 價
+= 黃金代理總值 × 情境占比(25%/50%/100%) ÷ BTC 流通供給
+
+BTC 對美元穩定幣規模比
+= BTC 市值 ÷ DefiLlama 美元掛鉤穩定幣供給
+
+美元穩定幣 30 日變化
+= 同時具備今日與 30 日前數值的同群穩定幣今日供給 ÷ 同群 30 日前供給 − 1
+
+BTC 在 BTC＋穩定幣中的規模占比
+= BTC 市值 ÷（BTC 市值 + 美元掛鉤穩定幣供給）
+
+RWA 協議可觀測總鎖倉價值
+= DefiLlama 分類為 RWA 的各協議 TVL 加總
+
+公開公司持幣滲透率
+= CoinGecko 公開公司 BTC 總持倉 ÷ BTC 流通供給
+
+公開公司持幣集中度
+= 樣本最大公司 BTC 持倉 ÷ CoinGecko 公開公司 BTC 總持倉
+
+算力相對 90 日高點
+= 最新算力 ÷ 最近 90 日最高算力
+
+算力 30 日變化
+= 最新算力 ÷ 30 日前最近一期算力 − 1
+
+美國聯邦債務占 GDP
+= FRED `GFDEGDQ188S` 最新季度百分比
+
+美國 10 年實質利率
+= FRED `DFII10` 最新可用百分比
+```
+
+- 黃金代理值是情境模型，不是可投資總市值；情境價不是目標價，也不能把市值增量誤稱為所需淨流入。
+- RWA 只列 DefiLlama `RWA` 類別協議 TVL，不與穩定幣供給相加，避免分類與重複計算風險。
+- 債務／GDP 只作慢速主權信用壓力代理，不能證明 BTC 需求；10 年實質利率是 BTC 無現金流特性的週期機會成本，兩者可能方向相反。
+- 全球 BTC 抵押信用存量目前沒有完整可去重公開資料，必須顯示未知；ETF、DAT 與衍生品 OI 不得冒充抵押採用。
+- 敘事狀態門檻是未回測的描述性 heuristic：BTC／黃金 `<10%` 為早期、`10–50%` 為規模化、`>=50%` 為接近成熟；算力需同時為 90 日高點 `>=85%` 且 30 日跌幅不超過 `10%` 才稱穩固，低於 90 日高點 `70%` 才稱明顯回落；美國債務／GDP `>=100%` 與 10 年實質利率 `>=2%` 分別標記結構壓力與週期逆風。任一必要值缺漏即為未知。
+- 本層使用獨立 `structural_context_quality`；缺漏、逾時或公式錯誤只能封鎖研究卡，不得降低執行層 `agent_verification_report.status` 或改變任何交易閘門。
+
 ### BMNR 市值／gross treasury
 
 ```
@@ -112,6 +161,10 @@ market_cap_to_gross_treasury = 回購調整後估計市值 ÷ gross_treasury
 | BTC 價格 | CoinGecko API | Coinbase spot | 每日 |
 | ETH 價格 | CoinGecko API | Coinbase spot | 每日 |
 | BTC MVRV | Coin Metrics community API | — | 每日；超過 3 日降級 |
+| 黃金代理總值 | World Gold Council 地上存量 × Yahoo `GC=F` | — | 黃金價四小時；存量年度 |
+| 美元穩定幣供給／RWA 協議 TVL | DefiLlama Stablecoins／Protocols | — | 四小時；供應商分類 |
+| BTC 算力持續性 | Blockchain.com 180 日 hash-rate | — | 四小時；超過 72 小時降級 |
+| 美國債務／GDP、10 年實質利率 | FRED `GFDEGDQ188S`／`DFII10` | — | 季度／交易日 |
 | BMNR ETH/BTC/現金/回購 | SEC EDGAR 8-K Exhibit 99.1（CIK 0001829311） | SEC companyfacts 股數 | 每日抓取 |
 | 官網 mNAV（僅對照用） | strategy.com | — | 每日，記錄與自算企業價值／BTC 總值差異 |
 
@@ -126,6 +179,7 @@ market_cap_to_gross_treasury = 回購調整後估計市值 ÷ gross_treasury
 | MSTR 普通股估值 | `普通股市值／普通股淨值 ≤ 1.0x` 才能稱折價；仍須資料品質與資本結構覆核 |
 | 資本飛輪狀態 | `普通股 Price/NAV ≥ 1.0x` 且 `企業價值/BTC 總值 ≥ 1.0x` 只代表可能仍能溢價融資，不代表普通股便宜 |
 | BTC 現貨 regime | 只使用 BTC 五維與 BTC-only 投降／確認條件，不接 MSTR/BMNR 倍率 |
+| BTC 長期貨幣化論證 | 黃金、穩定幣／RWA、公開公司持幣、算力及主權信用只作結構背景，不放行短線交易 |
 | 「被迫賣幣」判定 | 每週賣幣壓力倍數連續兩週 >2 |
 | 儲備健康 | 現金覆蓋月數 < 12 即❌ |
 | 優先股體系信任 | STRC 折價 > 5% 期間封鎖 MSTR 2.5x 合約，估值結論降權 |

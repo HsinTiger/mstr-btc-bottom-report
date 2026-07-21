@@ -55,6 +55,15 @@ jobs:
               raise SystemExit("Verifier report is not bound to the current snapshot")
           if report.get("status") not in {"pass", "degraded", "fail"}:
               raise SystemExit("Verifier report has an unknown status")
+          if report.get("status_scope") != "execution_and_decision_inputs_only":
+              raise SystemExit("Verifier main status scope is invalid")
+          structural = report.get("structural_context_quality", {})
+          if structural.get("status") not in {"pass", "degraded", "fail"}:
+              raise SystemExit("Structural-context verification is missing")
+          if structural.get("execution_gate_eligible") is not False:
+              raise SystemExit("Structural context must never control execution gates")
+          if structural.get("scope") != "structural_context_only":
+              raise SystemExit("Structural-context scope is invalid")
           print(f"Verifier artifact current: {report['date']} status={report['status']}")
           PY
 

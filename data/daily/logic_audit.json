@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T07:37:49+00:00",
+  "generated_at": "2026-07-21T08:52:35+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
-    "passed_invariants": 17,
+    "passed_invariants": 18,
     "failed_invariants": 0,
     "contradictions": 0,
     "blocked_actions": [
@@ -66,6 +66,13 @@
       "severity": "blocking",
       "evidence": "snapshot_date=2026-07-21, verification_date=2026-07-21",
       "risk_if_failed": "A stale pass report could authorize a newer unverified snapshot."
+    },
+    {
+      "id": "STRUCTURAL_CONTEXT_CANNOT_CONTROL_EXECUTION_GATE",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "structural_status=degraded, execution_gate_eligible=False, main_scope=execution_and_decision_inputs_only, structural_scope=structural_context_only",
+      "risk_if_failed": "Long-horizon thesis data could incorrectly block or release a short-horizon execution gate."
     },
     {
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",

@@ -9,6 +9,9 @@ from __future__ import annotations
 
 import json
 import math
+import csv
+import io
+import re
 import statistics
 import urllib.parse
 import urllib.request
@@ -23,6 +26,7 @@ OUTPUT_PATH = DATA_DIR / "market_universe.json"
 HISTORY_PATH = DATA_DIR / "market_universe_history.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 USER_AGENT = "mstr-btc-bottom-report/market-universe hsin73@realtek.com"
+TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
 
 ASSETS = {
     "BTC": {"coingecko": "bitcoin", "binance": "BTCUSDT", "coinbase": "BTC-USD"},
@@ -33,6 +37,7 @@ ASSETS = {
     "XRP": {"coingecko": "ripple", "binance": "XRPUSDT", "coinbase": "XRP-USD"},
     "DOGE": {"coingecko": "dogecoin", "binance": "DOGEUSDT", "coinbase": "DOGE-USD"},
 }
+STRUCTURAL_COLLECTOR_NAMES = {"thesis_credit", "thesis_gold", "thesis_hashrate", "thesis_sovereign"}
 
 SECTORS = {
     "RWA": "real-world-assets-rwa",
@@ -94,6 +99,12 @@ def fetch_json(url: str, *, data: dict[str, Any] | None = None, timeout: int = 2
     request = urllib.request.Request(url, data=body, headers=headers)
     with urllib.request.urlopen(request, timeout=timeout) as response:
         return json.loads(response.read().decode("utf-8"))
+
+
+def fetch_text(url: str, *, timeout: int = 25) -> str:
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/csv,text/html,*/*"})
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read().decode("utf-8", "replace")
 
 
 def load_json(path: Path, default: Any) -> Any:
@@ -276,6 +287,154 @@ def collect_categories() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             "as_of": now_iso(),
         }
     return result, [source("coingecko_categories", "CoinGecko Categories", url, "independent_market_aggregator", now_iso(), "賽道市值與 24 小時變化；分類由供應商定義", "retrieval_time_no_upstream_timestamp")]
+
+
+def collect_stablecoin_and_rwa_credit() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    stablecoin_url = "https://stablecoins.llama.fi/stablecoins?includePrices=true"
+    protocols_url = "https://api.llama.fi/protocols"
+    stablecoin_payload = fetch_json(stablecoin_url)
+    protocols = fetch_json(protocols_url)
+
+    usd_assets = [item for item in stablecoin_payload.get("peggedAssets", []) if item.get("pegType") == "peggedUSD"]
+    current_values = [finite(item.get("circulating", {}).get("peggedUSD")) for item in usd_assets]
+    current = sum(value for value in current_values if value is not None)
+    matched_assets = [
+        (finite(item.get("circulating", {}).get("peggedUSD")), finite(item.get("circulatingPrevMonth", {}).get("peggedUSD")))
+        for item in usd_assets
+    ]
+    matched_assets = [(current_value, prior_value) for current_value, prior_value in matched_assets if current_value is not None and prior_value is not None]
+    matched_current = sum(current_value for current_value, _ in matched_assets)
+    matched_prior_month = sum(prior_value for _, prior_value in matched_assets)
+
+    rwa_protocols = [item for item in protocols if item.get("category") == "RWA" and finite(item.get("tvl")) is not None]
+    rwa_protocols.sort(key=lambda item: finite(item.get("tvl")) or 0, reverse=True)
+    rwa_tvl = sum(finite(item.get("tvl")) or 0 for item in rwa_protocols)
+    result = {
+        "stablecoin_supply_usd": current or None,
+        "stablecoin_supply_matched_cohort_usd": matched_current or None,
+        "stablecoin_supply_matched_cohort_30d_ago_usd": matched_prior_month or None,
+        "stablecoin_supply_30d_change": matched_current / matched_prior_month - 1 if matched_current and matched_prior_month else None,
+        "usd_stablecoin_count": len(usd_assets),
+        "stablecoin_30d_matched_count": len(matched_assets),
+        "stablecoin_30d_unmatched_count": len(usd_assets) - len(matched_assets),
+        "rwa_protocol_tvl_usd": rwa_tvl or None,
+        "rwa_protocol_count": len(rwa_protocols),
+        "rwa_top_protocols": [
+            {"name": item.get("name"), "tvl_usd": finite(item.get("tvl"))}
+            for item in rwa_protocols[:5]
+        ],
+        "as_of": now_iso(),
+        "as_of_basis": "retrieval_time_no_upstream_timestamp",
+        "limitations": [
+            "Stablecoin supply is DefiLlama's peggedUSD aggregation, not bank deposits or transaction volume; 30-day change uses only assets with both current and prior-month values",
+            "RWA TVL is the sum of protocols classified as RWA by DefiLlama and may contain provider taxonomy or double-counting risk",
+            "Stablecoin and RWA scale are reported separately and are never added together",
+        ],
+    }
+    return result, [
+        source("defillama_usd_stablecoins", "DefiLlama Stablecoins", stablecoin_url, "independent_market_aggregator", result["as_of"], "美元掛鉤穩定幣供給與 30 日變化；上游未提供統一時間戳", "retrieval_time_no_upstream_timestamp"),
+        source("defillama_rwa_protocols", "DefiLlama Protocols", protocols_url, "independent_market_aggregator", result["as_of"], "供應商分類為 RWA 的協議 TVL 加總；不與穩定幣供給相加", "retrieval_time_no_upstream_timestamp"),
+    ]
+
+
+def collect_gold_reference() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    gold_url = "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?range=5d&interval=1d"
+    stock_url = "https://www.gold.org/goldhub/data/how-much-gold"
+    chart = fetch_json(gold_url)["chart"]["result"][0]
+    meta = chart.get("meta", {})
+    gold_price = finite(meta.get("regularMarketPrice"))
+    gold_as_of = datetime.fromtimestamp(meta["regularMarketTime"], timezone.utc).isoformat() if meta.get("regularMarketTime") else None
+    html = fetch_text(stock_url)
+    matches = re.findall(r"above-ground stock \(end-(\d{4})\):\s*([0-9,]+) tonnes", html, re.IGNORECASE)
+    if not matches:
+        raise ValueError("World Gold Council above-ground stock value not found")
+    stock_year_text, tonnes_text = max(matches, key=lambda item: int(item[0]))
+    tonnes = finite(tonnes_text.replace(",", ""))
+    estimated_market_value = gold_price * tonnes * TROY_OZ_PER_METRIC_TONNE if gold_price is not None and tonnes is not None else None
+    result = {
+        "gold_price_proxy_usd_per_troy_oz": gold_price,
+        "gold_price_proxy_ticker": "GC=F",
+        "gold_price_as_of": gold_as_of,
+        "above_ground_gold_tonnes": tonnes,
+        "above_ground_stock_year": int(stock_year_text),
+        "estimated_gold_market_value_usd": estimated_market_value,
+        "as_of": gold_as_of,
+        "limitation": "Gold market value is a scenario proxy: Yahoo COMEX front-month price multiplied by World Gold Council above-ground stock; it is not an investable market-cap series",
+    }
+    return result, [
+        source("yahoo_gold_front_month", "Yahoo Finance / COMEX proxy", gold_url, "third_party_market_proxy", gold_as_of, "黃金前月期貨代理價格；受延遲與換月影響，不是現貨成交價"),
+        source("wgc_above_ground_gold", "World Gold Council", stock_url, "official_industry_research", f"{stock_year_text}-12-31", f"全球地上黃金存量 {tonnes:,.0f} 公噸；年度更新"),
+    ]
+
+
+def collect_hashrate_consensus() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    url = "https://api.blockchain.info/charts/hash-rate?timespan=180days&format=json&cors=true"
+    payload = fetch_json(url)
+    values = sorted(
+        [(datetime.fromtimestamp(item["x"], timezone.utc), finite(item.get("y"))) for item in payload.get("values", []) if finite(item.get("y")) is not None],
+        key=lambda item: item[0],
+    )
+    if len(values) < 31:
+        raise ValueError("Insufficient hashrate history")
+    latest_time, latest_value = values[-1]
+
+    def value_at_or_before(target: datetime) -> float | None:
+        candidates = [value for timestamp, value in values if timestamp <= target and value is not None]
+        return candidates[-1] if candidates else None
+
+    prior_30d = value_at_or_before(latest_time - timedelta(days=30))
+    recent_90d = [value for timestamp, value in values if timestamp >= latest_time - timedelta(days=90) and value is not None]
+    high_90d = max(recent_90d) if recent_90d else None
+    result = {
+        "hashrate_ths": latest_value,
+        "hashrate_30d_ago_ths": prior_30d,
+        "hashrate_30d_change": latest_value / prior_30d - 1 if latest_value is not None and prior_30d not in (None, 0) else None,
+        "hashrate_90d_high_ths": high_90d,
+        "hashrate_vs_90d_high": latest_value / high_90d if latest_value is not None and high_90d not in (None, 0) else None,
+        "as_of": latest_time.isoformat(),
+        "limitation": "Hashrate is a network-security and miner-commitment proxy, not a direct price or adoption signal",
+    }
+    return result, [source("blockchain_hashrate_180d", "Blockchain.com", url, "independent_onchain", result["as_of"], "180 日算力序列，用於 30 日變化與相對 90 日高點")]
+
+
+def latest_fred_observations(series_id: str) -> list[tuple[date, float]]:
+    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
+    rows = csv.DictReader(io.StringIO(fetch_text(url)))
+    result: list[tuple[date, float]] = []
+    for row in rows:
+        value = finite(row.get(series_id))
+        if value is not None:
+            result.append((date.fromisoformat(row["observation_date"]), value))
+    if not result:
+        raise ValueError(f"FRED {series_id} has no observations")
+    return result
+
+
+def collect_sovereign_credit() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    debt_series = "GFDEGDQ188S"
+    real_yield_series = "DFII10"
+    debt_values = latest_fred_observations(debt_series)
+    yield_values = latest_fred_observations(real_yield_series)
+    debt_date, debt_value = debt_values[-1]
+    yield_date, yield_value = yield_values[-1]
+    debt_prior_year = debt_values[-5][1] if len(debt_values) >= 5 else None
+    yield_cutoff = yield_date - timedelta(days=30)
+    prior_yield_values = [value for observation_date, value in yield_values if observation_date <= yield_cutoff]
+    prior_yield = prior_yield_values[-1] if prior_yield_values else None
+    result = {
+        "us_federal_debt_to_gdp_pct": debt_value,
+        "us_federal_debt_to_gdp_yoy_change_pp": debt_value - debt_prior_year if debt_prior_year is not None else None,
+        "us_federal_debt_to_gdp_as_of": debt_date.isoformat(),
+        "us_10y_real_yield_pct": yield_value,
+        "us_10y_real_yield_30d_change_pp": yield_value - prior_yield if prior_yield is not None else None,
+        "us_10y_real_yield_as_of": yield_date.isoformat(),
+        "as_of": max(debt_date, yield_date).isoformat(),
+        "limitation": "Debt/GDP is a slow structural sovereign-credit proxy; the 10-year real yield is a cyclical opportunity-cost proxy. Neither is a direct BTC timing signal",
+    }
+    return result, [
+        source("fred_us_debt_gdp", "FRED / U.S. Office of Management and Budget", f"https://fred.stlouisfed.org/series/{debt_series}", "official_macro_aggregator", debt_date.isoformat(), "美國聯邦債務占 GDP，季度結構資料；FRED 轉載 OMB 序列"),
+        source("fred_us_10y_real_yield", "FRED / Federal Reserve Board", f"https://fred.stlouisfed.org/series/{real_yield_series}", "official_macro_aggregator", yield_date.isoformat(), "美國 10 年期通膨保值公債實質殖利率；FRED 轉載聯準會理事會序列"),
+    ]
 
 
 def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -567,7 +726,8 @@ def collect_dat_treasuries(asset: str) -> tuple[dict[str, Any], list[dict[str, A
     url = f"https://api.coingecko.com/api/v3/companies/public_treasury/{coin}"
     payload = fetch_json(url)
     companies = []
-    for row in payload.get("companies", [])[:8]:
+    company_rows = sorted(payload.get("companies", []), key=lambda row: finite(row.get("total_holdings")) or 0, reverse=True)
+    for row in company_rows[:8]:
         companies.append({
             "name": row.get("name"),
             "symbol": row.get("symbol"),
@@ -691,6 +851,182 @@ def analyze(output: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: dict[str, Any]) -> dict[str, Any]:
+    btc = output.get("assets", {}).get("BTC", {})
+    btc_market_cap = finite(btc.get("market_cap_usd"))
+    radar = snapshot.get("metrics", {}).get("market_radar", {})
+    btc_supply = finite(radar.get("btc_supply_current"))
+    btc_supply_basis = "coin_metrics_snapshot"
+    if btc_supply is None and btc_market_cap is not None and finite(btc.get("price_usd")) not in (None, 0):
+        btc_supply = btc_market_cap / finite(btc.get("price_usd"))
+        btc_supply_basis = "derived_market_cap_divided_by_price"
+
+    gold = inputs.get("gold", {})
+    credit = inputs.get("credit", {})
+    hashrate = inputs.get("hashrate", {})
+    sovereign = inputs.get("sovereign", {})
+    gold_market_value = finite(gold.get("estimated_gold_market_value_usd"))
+    stablecoin_supply = finite(credit.get("stablecoin_supply_usd"))
+    public_company_holdings = finite(output.get("dat", {}).get("BTC", {}).get("total_holdings"))
+    observed_companies = output.get("dat", {}).get("BTC", {}).get("companies", [])
+    top_company = max(observed_companies, key=lambda item: finite(item.get("holdings")) or 0, default={})
+    top_company_holdings = finite(top_company.get("holdings"))
+
+    btc_to_gold = btc_market_cap / gold_market_value if btc_market_cap is not None and gold_market_value not in (None, 0) else None
+    btc_to_stablecoin = btc_market_cap / stablecoin_supply if btc_market_cap is not None and stablecoin_supply not in (None, 0) else None
+    digital_anchor_share = btc_market_cap / (btc_market_cap + stablecoin_supply) if btc_market_cap is not None and stablecoin_supply is not None and btc_market_cap + stablecoin_supply else None
+    public_company_supply_share = public_company_holdings / btc_supply if public_company_holdings is not None and btc_supply not in (None, 0) else None
+    top_company_concentration = top_company_holdings / public_company_holdings if top_company_holdings is not None and public_company_holdings not in (None, 0) else None
+
+    scenario_prices = {
+        label: gold_market_value * share / btc_supply if gold_market_value is not None and btc_supply not in (None, 0) else None
+        for label, share in {"gold_25pct": 0.25, "gold_50pct": 0.50, "gold_100pct": 1.0}.items()
+    }
+    monetization_stage = (
+        "仍屬早期貨幣化"
+        if btc_to_gold is not None and btc_to_gold < 0.10
+        else "進入規模化貨幣化"
+        if btc_to_gold is not None and btc_to_gold < 0.50
+        else "接近成熟儲備資產規模"
+        if btc_to_gold is not None
+        else "未知"
+    )
+    security_state = (
+        "未知"
+        if finite(hashrate.get("hashrate_vs_90d_high")) is None or finite(hashrate.get("hashrate_30d_change")) is None
+        else
+        "安全共識穩固"
+        if finite(hashrate.get("hashrate_vs_90d_high")) is not None
+        and hashrate["hashrate_vs_90d_high"] >= 0.85
+        and finite(hashrate.get("hashrate_30d_change")) is not None
+        and hashrate["hashrate_30d_change"] >= -0.10
+        else "算力明顯回落"
+        if finite(hashrate.get("hashrate_vs_90d_high")) is not None and hashrate["hashrate_vs_90d_high"] < 0.70
+        else "安全共識待觀察"
+    )
+    debt = finite(sovereign.get("us_federal_debt_to_gdp_pct"))
+    real_yield = finite(sovereign.get("us_10y_real_yield_pct"))
+    sovereign_state = (
+        "未知"
+        if debt is None or real_yield is None
+        else
+        "結構壓力高、週期逆風高"
+        if debt is not None and debt >= 100 and real_yield is not None and real_yield >= 2
+        else "結構壓力高、週期逆風較低"
+        if debt is not None and debt >= 100
+        else "主權信用壓力中性"
+    )
+
+    missing = []
+    for name, value in {
+        "btc_market_cap": btc_market_cap,
+        "btc_supply": btc_supply,
+        "gold_market_value": gold_market_value,
+        "btc_to_gold_market_value_ratio": btc_to_gold,
+        "stablecoin_supply": stablecoin_supply,
+        "stablecoin_supply_30d_change": finite(credit.get("stablecoin_supply_30d_change")),
+        "rwa_protocol_tvl": finite(credit.get("rwa_protocol_tvl_usd")),
+        "public_company_holdings": public_company_holdings,
+        "public_company_supply_share": public_company_supply_share,
+        "top_company_concentration": top_company_concentration,
+        "hashrate_30d_change": finite(hashrate.get("hashrate_30d_change")),
+        "hashrate_vs_90d_high": finite(hashrate.get("hashrate_vs_90d_high")),
+        "debt_to_gdp": debt,
+        "real_yield": real_yield,
+    }.items():
+        if value is None:
+            missing.append(name)
+
+    structural_degradations = []
+    structural_failures = list(inputs.get("collector_errors", []))
+    if btc_supply_basis != "coin_metrics_snapshot":
+        structural_degradations.append("BTC supply uses market-cap/price fallback instead of the primary on-chain snapshot")
+    if credit.get("as_of_basis") == "retrieval_time_no_upstream_timestamp":
+        structural_degradations.append("Stablecoin and RWA providers expose no uniform upstream observation timestamp")
+    if output.get("dat", {}).get("BTC", {}).get("as_of_basis") == "retrieval_time_no_upstream_timestamp":
+        structural_degradations.append("Public-company treasury aggregation exposes retrieval time rather than upstream filing time")
+    structural_status = "fail" if missing or structural_failures else "degraded" if structural_degradations else "pass"
+
+    return {
+        "framework": "BTC non-sovereign monetary anchor and neutral-collateral thesis",
+        "model_policy": "Structural adoption evidence only; never enters the short-horizon BTC bottom score or directly releases a trade gate",
+        "quality": {
+            "status": structural_status,
+            "scope": "structural_context_only",
+            "coverage_status": "complete" if not missing else "incomplete",
+            "missing": missing,
+            "failures": structural_failures,
+            "degradations": structural_degradations,
+            "execution_gate_eligible": False,
+        },
+        "gold_monetization": {
+            "btc_market_cap_usd": btc_market_cap,
+            "btc_supply_used": btc_supply,
+            "btc_supply_basis": btc_supply_basis,
+            "estimated_gold_market_value_usd": gold_market_value,
+            "gold_price_proxy_usd_per_troy_oz": finite(gold.get("gold_price_proxy_usd_per_troy_oz")),
+            "gold_price_as_of": gold.get("gold_price_as_of"),
+            "above_ground_gold_tonnes": finite(gold.get("above_ground_gold_tonnes")),
+            "above_ground_stock_year": gold.get("above_ground_stock_year"),
+            "btc_to_gold_market_value_ratio": btc_to_gold,
+            "stage": monetization_stage,
+            "scenario_btc_price_usd": scenario_prices,
+            "plain_read": f"BTC 目前約為黃金代理總值的 {btc_to_gold:.1%}；代表貨幣化空間仍大，但情境價不是預測，也不代表需要等額資金流入。" if btc_to_gold is not None else "黃金貨幣化資料不足。",
+            "limits": [gold.get("limitation")],
+        },
+        "digital_dollar_competition": {
+            "stablecoin_supply_usd": stablecoin_supply,
+            "stablecoin_supply_matched_cohort_usd": finite(credit.get("stablecoin_supply_matched_cohort_usd")),
+            "stablecoin_supply_matched_cohort_30d_ago_usd": finite(credit.get("stablecoin_supply_matched_cohort_30d_ago_usd")),
+            "stablecoin_supply_30d_change": finite(credit.get("stablecoin_supply_30d_change")),
+            "usd_stablecoin_count": credit.get("usd_stablecoin_count"),
+            "stablecoin_30d_matched_count": credit.get("stablecoin_30d_matched_count"),
+            "stablecoin_30d_unmatched_count": credit.get("stablecoin_30d_unmatched_count"),
+            "rwa_protocol_tvl_usd": finite(credit.get("rwa_protocol_tvl_usd")),
+            "rwa_protocol_count": credit.get("rwa_protocol_count"),
+            "as_of": credit.get("as_of"),
+            "as_of_basis": credit.get("as_of_basis"),
+            "btc_to_stablecoin_market_scale_ratio": btc_to_stablecoin,
+            "btc_share_of_btc_plus_stablecoins": digital_anchor_share,
+            "plain_read": (
+                f"可比美元穩定幣供給近月增加 {credit['stablecoin_supply_30d_change']:.1%}；這提供鏈上美元交易層擴張的旁證，但不直接否定 BTC 的非主權價值錨假說。"
+                if finite(credit.get("stablecoin_supply_30d_change")) is not None and credit["stablecoin_supply_30d_change"] >= 0
+                else f"可比美元穩定幣供給近月減少 {abs(credit['stablecoin_supply_30d_change']):.1%}；RWA 只有當期規模，不能據此宣稱整體鏈上信用正在擴張。"
+                if finite(credit.get("stablecoin_supply_30d_change")) is not None
+                else "穩定幣趨勢不足；RWA 當期規模只能描述可觀測信用層，不能證明成長。"
+            ),
+            "limits": credit.get("limitations", []),
+        },
+        "public_company_adoption": {
+            "observed_public_company_btc": public_company_holdings,
+            "btc_supply_used": btc_supply,
+            "share_of_btc_supply": public_company_supply_share,
+            "top_company": top_company.get("name"),
+            "top_company_btc": top_company_holdings,
+            "top_company_share_of_observed_holdings": top_company_concentration,
+            "as_of": output.get("dat", {}).get("BTC", {}).get("as_of"),
+            "as_of_basis": output.get("dat", {}).get("BTC", {}).get("as_of_basis"),
+            "plain_read": f"CoinGecko 公開公司樣本持有約 {public_company_supply_share:.1%} BTC 供給；其中最大公司占樣本 {top_company_concentration:.1%}，採用已有規模但集中度仍高。" if public_company_supply_share is not None and top_company_concentration is not None else "公開公司財庫資料不足。",
+            "limitation": "Only CoinGecko's public-company treasury set; excludes private companies, ETFs, governments, custodians and collateral reuse",
+        },
+        "security_consensus": {
+            **hashrate,
+            "state": security_state,
+            "plain_read": f"算力較 30 日前 {hashrate['hashrate_30d_change']:+.1%}，仍為 90 日高點的 {hashrate['hashrate_vs_90d_high']:.1%}；這只是網路安全投入的代理，不預測價格。" if finite(hashrate.get("hashrate_30d_change")) is not None and finite(hashrate.get("hashrate_vs_90d_high")) is not None else "算力歷史不足。",
+        },
+        "sovereign_credit_competition": {
+            **sovereign,
+            "state": sovereign_state,
+            "plain_read": f"美國聯邦債務占 GDP {debt:.1f}%，只提供主權信用壓力背景；10 年實質利率 {real_yield:.2f}% 則提高持有無現金流 BTC 的機會成本。" if debt is not None and real_yield is not None else "主權信用資料不足。",
+        },
+        "unmeasured_falsifier": {
+            "name": "全球金融機構以 BTC 作抵押品的存量",
+            "status": "unknown_no_complete_public_dataset",
+            "plain_read": "ETF、DAT 與衍生品只能證明持有和金融化，不能證明銀行或全球信用市場已把 BTC 當中立抵押品。",
+        },
+    }
+
+
 def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
     failures: list[str] = []
     degradations = list(errors)
@@ -793,6 +1129,21 @@ def compact_history(output: dict[str, Any]) -> dict[str, Any]:
             "total_holdings": item.get("total_holdings"),
             "companies": {company.get("symbol"): company.get("holdings") for company in item.get("companies", []) if company.get("symbol")},
         } for asset, item in output["dat"].items()},
+        "btc_thesis": {
+            "btc_to_gold_market_value_ratio": output.get("btc_thesis", {}).get("gold_monetization", {}).get("btc_to_gold_market_value_ratio"),
+            "gold_price_as_of": output.get("btc_thesis", {}).get("gold_monetization", {}).get("gold_price_as_of"),
+            "stablecoin_supply_usd": output.get("btc_thesis", {}).get("digital_dollar_competition", {}).get("stablecoin_supply_usd"),
+            "stablecoin_supply_30d_change": output.get("btc_thesis", {}).get("digital_dollar_competition", {}).get("stablecoin_supply_30d_change"),
+            "stablecoin_as_of": output.get("btc_thesis", {}).get("digital_dollar_competition", {}).get("as_of"),
+            "public_company_share_of_supply": output.get("btc_thesis", {}).get("public_company_adoption", {}).get("share_of_btc_supply"),
+            "public_company_as_of": output.get("btc_thesis", {}).get("public_company_adoption", {}).get("as_of"),
+            "hashrate_vs_90d_high": output.get("btc_thesis", {}).get("security_consensus", {}).get("hashrate_vs_90d_high"),
+            "hashrate_as_of": output.get("btc_thesis", {}).get("security_consensus", {}).get("as_of"),
+            "us_10y_real_yield_pct": output.get("btc_thesis", {}).get("sovereign_credit_competition", {}).get("us_10y_real_yield_pct"),
+            "us_10y_real_yield_as_of": output.get("btc_thesis", {}).get("sovereign_credit_competition", {}).get("us_10y_real_yield_as_of"),
+            "us_federal_debt_to_gdp_as_of": output.get("btc_thesis", {}).get("sovereign_credit_competition", {}).get("us_federal_debt_to_gdp_as_of"),
+            "quality_status": output.get("btc_thesis", {}).get("quality", {}).get("status"),
+        },
         "quality_status": output["quality"]["status"],
     }
 
@@ -815,10 +1166,15 @@ def main() -> int:
         "eth_options": lambda: collect_options("ETH"),
         "btc_dat": lambda: collect_dat_treasuries("BTC"),
         "eth_dat": lambda: collect_dat_treasuries("ETH"),
+        "thesis_credit": collect_stablecoin_and_rwa_credit,
+        "thesis_gold": collect_gold_reference,
+        "thesis_hashrate": collect_hashrate_consensus,
+        "thesis_sovereign": collect_sovereign_credit,
     }
     results: dict[str, Any] = {}
     sources: list[dict[str, Any]] = []
-    errors: list[str] = []
+    execution_errors: list[str] = []
+    structural_errors: list[str] = []
     with ThreadPoolExecutor(max_workers=8) as executor:
         futures = {executor.submit(collector): name for name, collector in collectors.items()}
         for future in as_completed(futures):
@@ -834,7 +1190,8 @@ def main() -> int:
                     "coingecko": "CoinGecko",
                     "categories": "CoinGecko 賽道分類",
                 }.get(name, name)
-                errors.append(readable_source_error(provider, exc))
+                target_errors = structural_errors if name in STRUCTURAL_COLLECTOR_NAMES else execution_errors
+                target_errors.append(readable_source_error(provider, exc))
                 results[name] = {}
 
     coingecko = results.get("coingecko", {})
@@ -946,10 +1303,18 @@ def main() -> int:
         "dat": dat,
         "sectors": results.get("categories", {}),
         "sources": sorted(sources, key=lambda item: item["source_id"]),
-        "collector_errors": errors,
+        "collector_errors": execution_errors,
     }
+    thesis_inputs = {
+        "credit": results.get("thesis_credit", {}),
+        "gold": results.get("thesis_gold", {}),
+        "hashrate": results.get("thesis_hashrate", {}),
+        "sovereign": results.get("thesis_sovereign", {}),
+        "collector_errors": structural_errors,
+    }
+    output["btc_thesis"] = build_btc_thesis(output, snapshot, thesis_inputs)
     output["analysis"] = analyze(output)
-    output["quality"] = quality_checks(output, errors)
+    output["quality"] = quality_checks(output, execution_errors)
     write_json(OUTPUT_PATH, output)
 
     items = [item for item in history.get("items", []) if item.get("date") != output["date"]]
@@ -957,7 +1322,13 @@ def main() -> int:
     items.sort(key=lambda item: item.get("date", ""))
     history.update({"schema": 1, "updated_at": now_iso(), "items": items[-730:]})
     write_json(HISTORY_PATH, history)
-    print(json.dumps({"output": str(OUTPUT_PATH), "quality": output["quality"]["status"], "sources": len(output["sources"]), "errors": len(errors)}, ensure_ascii=False))
+    print(json.dumps({
+        "output": str(OUTPUT_PATH),
+        "quality": output["quality"]["status"],
+        "sources": len(output["sources"]),
+        "execution_errors": len(execution_errors),
+        "structural_errors": len(structural_errors),
+    }, ensure_ascii=False))
     return 0
 
 

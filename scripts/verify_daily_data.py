@@ -17,6 +17,7 @@ RAW_PATH = DATA_DIR / "raw_observations.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 REPORT_PATH = DATA_DIR / "agent_verification_report.json"
 MARKET_UNIVERSE_PATH = DATA_DIR / "market_universe.json"
+TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
 
 
 def load_json(path: Path) -> Any:
@@ -236,6 +237,9 @@ def main() -> int:
     warnings: list[str] = []
     degradations: list[str] = []
     evidence: list[str] = []
+    structural_failures: list[str] = []
+    structural_degradations: list[str] = []
+    structural_evidence: list[str] = []
 
     if not market_universe:
         failures.append("market universe artifact missing")
@@ -344,6 +348,93 @@ def main() -> int:
                 assert_close(f"market universe {symbol} put/call OI", put_oi / call_oi, options.get("put_call_open_interest_ratio"), failures)
             if options.get("contract_set") != "inverse_coin_margined_only":
                 failures.append(f"market universe {symbol}: options contract coverage is not explicit")
+        thesis = market_universe.get("btc_thesis", {})
+        thesis_quality = thesis.get("quality", {})
+        if thesis_quality.get("coverage_status") != "complete":
+            structural_failures.append("BTC thesis layer incomplete: " + ", ".join(thesis_quality.get("missing", [])))
+        structural_failures.extend(thesis_quality.get("failures", []))
+        structural_degradations.extend(thesis_quality.get("degradations", []))
+        if thesis_quality.get("execution_gate_eligible") is not False:
+            structural_failures.append("BTC thesis quality must be explicitly ineligible for execution gates")
+
+        gold = thesis.get("gold_monetization", {})
+        btc_market_cap = as_float(gold.get("btc_market_cap_usd"))
+        btc_supply = as_float(gold.get("btc_supply_used"))
+        gold_price = as_float(gold.get("gold_price_proxy_usd_per_troy_oz"))
+        gold_tonnes = as_float(gold.get("above_ground_gold_tonnes"))
+        gold_value = as_float(gold.get("estimated_gold_market_value_usd"))
+        if gold_price is not None and gold_tonnes is not None:
+            assert_close("BTC thesis estimated gold market value", gold_price * gold_tonnes * TROY_OZ_PER_METRIC_TONNE, gold_value, structural_failures, tolerance=1e-8)
+        if btc_market_cap is not None and gold_value not in (None, 0):
+            assert_close("BTC thesis BTC/gold ratio", btc_market_cap / gold_value, gold.get("btc_to_gold_market_value_ratio"), structural_failures)
+        if btc_supply not in (None, 0) and gold_value is not None:
+            scenarios = gold.get("scenario_btc_price_usd", {})
+            for key, share in {"gold_25pct": 0.25, "gold_50pct": 0.50, "gold_100pct": 1.0}.items():
+                assert_close(f"BTC thesis {key} scenario", gold_value * share / btc_supply, scenarios.get(key), structural_failures, tolerance=1e-8)
+        gold_age = age_hours(gold.get("gold_price_as_of"))
+        if gold_age is None or gold_age < -0.25 or gold_age > 72:
+            structural_degradations.append("BTC thesis gold-price proxy stale or timestamp missing")
+        stock_year = int(gold.get("above_ground_stock_year") or 0)
+        if stock_year < datetime.now(timezone.utc).year - 2:
+            structural_degradations.append("BTC thesis World Gold Council stock estimate is older than two years")
+
+        credit = thesis.get("digital_dollar_competition", {})
+        stablecoin_supply = as_float(credit.get("stablecoin_supply_usd"))
+        matched_supply = as_float(credit.get("stablecoin_supply_matched_cohort_usd"))
+        matched_prior = as_float(credit.get("stablecoin_supply_matched_cohort_30d_ago_usd"))
+        if matched_supply is not None and matched_prior not in (None, 0):
+            assert_close("BTC thesis stablecoin matched-cohort 30d change", matched_supply / matched_prior - 1, credit.get("stablecoin_supply_30d_change"), structural_failures)
+        matched_count = int(credit.get("stablecoin_30d_matched_count") or 0)
+        unmatched_count = int(credit.get("stablecoin_30d_unmatched_count") or 0)
+        total_count = int(credit.get("usd_stablecoin_count") or 0)
+        if matched_count + unmatched_count != total_count or matched_count < 1:
+            structural_failures.append("BTC thesis stablecoin matched-cohort counts are inconsistent")
+        if btc_market_cap is not None and stablecoin_supply not in (None, 0):
+            assert_close("BTC thesis BTC/stablecoin scale", btc_market_cap / stablecoin_supply, credit.get("btc_to_stablecoin_market_scale_ratio"), structural_failures)
+            assert_close("BTC thesis digital anchor share", btc_market_cap / (btc_market_cap + stablecoin_supply), credit.get("btc_share_of_btc_plus_stablecoins"), structural_failures)
+        if as_float(credit.get("rwa_protocol_tvl_usd")) is None or int(credit.get("rwa_protocol_count") or 0) < 1:
+            structural_degradations.append("BTC thesis RWA protocol coverage missing")
+        credit_age = age_hours(credit.get("as_of"))
+        if credit_age is None or credit_age < -0.25 or credit_age > 8:
+            structural_degradations.append("BTC thesis stablecoin/RWA retrieval stale or timestamp missing")
+
+        company = thesis.get("public_company_adoption", {})
+        company_holdings = as_float(company.get("observed_public_company_btc"))
+        company_supply = as_float(company.get("btc_supply_used"))
+        top_company_holdings = as_float(company.get("top_company_btc"))
+        if company_holdings is not None and company_supply not in (None, 0):
+            assert_close("BTC thesis public-company supply share", company_holdings / company_supply, company.get("share_of_btc_supply"), structural_failures)
+        if top_company_holdings is not None and company_holdings not in (None, 0):
+            assert_close("BTC thesis top-company concentration", top_company_holdings / company_holdings, company.get("top_company_share_of_observed_holdings"), structural_failures)
+        company_age = age_hours(company.get("as_of"))
+        if company_age is None or company_age < -0.25 or company_age > 8:
+            structural_degradations.append("BTC thesis public-company treasury retrieval stale or timestamp missing")
+
+        security = thesis.get("security_consensus", {})
+        hashrate = as_float(security.get("hashrate_ths"))
+        hashrate_30d = as_float(security.get("hashrate_30d_ago_ths"))
+        hashrate_high = as_float(security.get("hashrate_90d_high_ths"))
+        if hashrate is not None and hashrate_30d not in (None, 0):
+            assert_close("BTC thesis hashrate 30d change", hashrate / hashrate_30d - 1, security.get("hashrate_30d_change"), structural_failures)
+        if hashrate is not None and hashrate_high not in (None, 0):
+            assert_close("BTC thesis hashrate vs 90d high", hashrate / hashrate_high, security.get("hashrate_vs_90d_high"), structural_failures)
+        security_age = age_hours(security.get("as_of"))
+        if security_age is None or security_age < -0.25 or security_age > 72:
+            structural_degradations.append("BTC thesis hashrate history stale or timestamp missing")
+
+        sovereign = thesis.get("sovereign_credit_competition", {})
+        debt_age = age_days(sovereign.get("us_federal_debt_to_gdp_as_of"))
+        real_yield_age = age_days(sovereign.get("us_10y_real_yield_as_of"))
+        if debt_age is None or debt_age < 0 or debt_age > 240:
+            structural_degradations.append("BTC thesis U.S. debt/GDP stale or timestamp missing")
+        if real_yield_age is None or real_yield_age < 0 or real_yield_age > 10:
+            structural_degradations.append("BTC thesis U.S. 10-year real yield stale or timestamp missing")
+        if thesis.get("unmeasured_falsifier", {}).get("status") != "unknown_no_complete_public_dataset":
+            structural_failures.append("BTC thesis must preserve unknown global BTC collateral stock")
+        structural_evidence.append(
+            f"BTC thesis gold_ratio={gold.get('btc_to_gold_market_value_ratio')} "
+            f"stablecoin_supply={credit.get('stablecoin_supply_usd')} company_supply_share={company.get('share_of_btc_supply')}"
+        )
         if len(market_universe.get("sources", [])) < 20:
             degradations.append("market universe: fewer than 20 traceable source records")
         evidence.append(
@@ -516,7 +607,11 @@ def main() -> int:
     degradations = unique(degradations)
     warnings = unique(warnings)
     evidence = unique(evidence)
+    structural_failures = unique(structural_failures)
+    structural_degradations = unique(structural_degradations)
+    structural_evidence = unique(structural_evidence)
     status = "fail" if failures else ("degraded" if degradations or warnings else "pass")
+    structural_status = "fail" if structural_failures else ("degraded" if structural_degradations else "pass")
     report = {
         "schema": 1,
         "agent": "daily-data-verifier",
@@ -525,10 +620,20 @@ def main() -> int:
         "snapshot_generated_at": snapshot.get("generated_at"),
         "market_universe_generated_at": market_universe.get("generated_at"),
         "status": status,
+        "status_scope": "execution_and_decision_inputs_only",
         "failures": failures,
         "degradations": degradations,
         "warnings": warnings,
         "evidence": evidence,
+        "structural_context_quality": {
+            "status": structural_status,
+            "scope": "structural_context_only",
+            "execution_gate_eligible": False,
+            "failures": structural_failures,
+            "degradations": structural_degradations,
+            "evidence": structural_evidence,
+            "verification_scope": "formula integrity, timestamps and declared source semantics; not an independent reconstruction of every upstream dataset",
+        },
         "policy": {
             "btc_cross_source_max_gap": "1.5%",
             "eth_cross_source_max_gap": "1.5%",

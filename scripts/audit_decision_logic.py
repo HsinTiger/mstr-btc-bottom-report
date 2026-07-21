@@ -189,6 +189,7 @@ def main() -> None:
     common_valuation_gate_ok = metrics.get("common_valuation_gate_ok") is True
     capital_flywheel_gate_ok = metrics.get("capital_flywheel_gate_ok") is True
     verification_status = verification.get("status", "missing")
+    structural_quality = verification.get("structural_context_quality", {})
     verification_date_matches = verification.get("date") == snapshot.get("date")
     analytics_confidence = quality.get("confidence", "missing")
     provenance_status = provenance.get("status", "missing")
@@ -255,6 +256,21 @@ def main() -> None:
         passed=verification_date_matches,
         evidence=f"snapshot_date={snapshot.get('date')}, verification_date={verification.get('date')}",
         risk_if_failed="A stale pass report could authorize a newer unverified snapshot.",
+    )
+    add_invariant(
+        invariants,
+        rule_id="STRUCTURAL_CONTEXT_CANNOT_CONTROL_EXECUTION_GATE",
+        passed=(
+            structural_quality.get("execution_gate_eligible") is False
+            and structural_quality.get("scope") == "structural_context_only"
+            and verification.get("status_scope") == "execution_and_decision_inputs_only"
+        ),
+        evidence=(
+            f"structural_status={structural_quality.get('status')}, "
+            f"execution_gate_eligible={structural_quality.get('execution_gate_eligible')}, "
+            f"main_scope={verification.get('status_scope')}, structural_scope={structural_quality.get('scope')}"
+        ),
+        risk_if_failed="Long-horizon thesis data could incorrectly block or release a short-horizon execution gate.",
     )
     add_invariant(
         invariants,

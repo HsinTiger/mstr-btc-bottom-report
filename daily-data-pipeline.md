@@ -29,6 +29,8 @@
    - 期權：Deribit 幣本位 DVOL、Put／Call 未平倉量、ATM 隱含波動率、最大痛點集中價與觀測未平倉量；不含 USDC 期權。
    - 機構流：BTC ETF、ETH ETF 可用性、BTC／ETH DAT 公司持倉。
    - 賽道：RWA、Layer 1、DeFi、Meme 市值與 24 小時變化。
+   - BTC 長期論證：黃金貨幣化比例、穩定幣與 RWA 規模、公開公司持幣滲透／集中度、算力安全及美國主權信用競爭。
+   - 長期論證另用 `structural_context_quality` 驗證；不得污染短線執行品質與交易閘門。
    - 產出 `market_universe.json` 與 `market_universe_history.json`。
 
 3. `scripts/verify_daily_data.py`

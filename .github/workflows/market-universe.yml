@@ -54,6 +54,13 @@ jobs:
               raise SystemExit("Tracked asset universe is incomplete")
           if data.get("quality", {}).get("status") != "fail" and any(data["assets"][symbol].get("source_count", 0) < 2 for symbol in required):
               raise SystemExit("At least one tracked asset lacks two spot sources")
+          thesis_quality = data.get("btc_thesis", {}).get("quality", {})
+          if thesis_quality.get("status") not in {"pass", "degraded", "fail"}:
+              raise SystemExit("BTC structural-context quality status is invalid")
+          if thesis_quality.get("execution_gate_eligible") is not False:
+              raise SystemExit("BTC structural context must never control execution gates")
+          if thesis_quality.get("scope") != "structural_context_only":
+              raise SystemExit("BTC structural-context scope is invalid")
           print(f"Market universe valid: quality={data['quality']['status']} sources={len(data.get('sources', []))}")
           PY
 
