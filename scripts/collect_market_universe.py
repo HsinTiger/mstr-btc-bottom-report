@@ -67,6 +67,15 @@ def millis_iso(value: Any) -> str | None:
     return datetime.fromtimestamp(timestamp / 1000, timezone.utc).isoformat() if timestamp is not None else None
 
 
+def readable_source_error(provider: str, exc: Exception) -> str:
+    code = getattr(exc, "code", None)
+    if code == 451:
+        return f"{provider} 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源"
+    if code == 403:
+        return f"{provider} 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源"
+    return f"{provider} 暫時無法取得（{type(exc).__name__}），已切換備援來源"
+
+
 def finite(value: Any) -> float | None:
     try:
         if value in (None, ""):
@@ -297,7 +306,7 @@ def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]
         }
         sources.append(source(f"binance_{symbol.lower()}_perp", "Binance USD-M Futures", premium_url, "primary_derivatives_market", as_of, "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"))
     except Exception as exc:
-        venue_errors.append(f"Binance: {type(exc).__name__}: {exc}")
+        venue_errors.append(readable_source_error("Binance", exc))
 
     try:
         bybit_url = f"https://api.bybit.com/v5/market/tickers?category=linear&symbol={pair}"
@@ -318,7 +327,7 @@ def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]
         }
         sources.append(source(f"bybit_{symbol.lower()}_perp", "Bybit Linear", bybit_url, "primary_derivatives_market", as_of, f"永續標記價、指數價、{interval:g} 小時資金費率、未平倉量與 24 小時成交額" if interval else "永續資料；資金費率週期未知"))
     except Exception as exc:
-        venue_errors.append(f"Bybit: {type(exc).__name__}: {exc}")
+        venue_errors.append(readable_source_error("Bybit", exc))
 
     try:
         instrument = f"{symbol}-USDT-SWAP"
@@ -351,7 +360,7 @@ def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]
         }
         sources.append(source(f"okx_{symbol.lower()}_perp", "OKX Linear Swap", funding_url, "primary_derivatives_market", as_of, f"永續標記價、指數價、{interval:g} 小時已結算資金費率、未平倉量與 24 小時成交額" if interval else "永續資料；資金費率週期未知"))
     except Exception as exc:
-        venue_errors.append(f"OKX: {type(exc).__name__}: {exc}")
+        venue_errors.append(readable_source_error("OKX", exc))
 
     try:
         hyperliquid_url = "https://api.hyperliquid.xyz/info"
@@ -376,7 +385,7 @@ def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]
         }
         sources.append(source(f"hyperliquid_{symbol.lower()}_perp", "Hyperliquid", hyperliquid_url, "primary_derivatives_market", as_of, "每小時資金費率、標記價、預言機價、未平倉量與 24 小時名目成交額", "retrieval_time"))
     except Exception as exc:
-        venue_errors.append(f"Hyperliquid: {type(exc).__name__}: {exc}")
+        venue_errors.append(readable_source_error("Hyperliquid", exc))
 
     valid_venues = {name: item for name, item in venues.items() if item.get("funding_annualized") is not None}
     annualized_values = [item["funding_annualized"] for item in valid_venues.values()]
@@ -818,7 +827,14 @@ def main() -> int:
                 results[name], result_sources = future.result()
                 sources.extend(result_sources)
             except Exception as exc:
-                errors.append(f"{name}: {type(exc).__name__}: {exc}")
+                provider = {
+                    "binance_spot": "Binance 現貨",
+                    "okx_spot": "OKX 現貨",
+                    "coinbase_spot": "Coinbase 現貨",
+                    "coingecko": "CoinGecko",
+                    "categories": "CoinGecko 賽道分類",
+                }.get(name, name)
+                errors.append(readable_source_error(provider, exc))
                 results[name] = {}
 
     coingecko = results.get("coingecko", {})
