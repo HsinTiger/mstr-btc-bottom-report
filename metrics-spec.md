@@ -113,7 +113,7 @@ market_cap_to_gross_treasury = 回購調整後估計市值 ÷ gross_treasury
 | ETH 價格 | CoinGecko API | Coinbase spot | 每日 |
 | BTC MVRV | Coin Metrics community API | — | 每日；超過 3 日降級 |
 | BMNR ETH/BTC/現金/回購 | SEC EDGAR 8-K Exhibit 99.1（CIK 0001829311） | SEC companyfacts 股數 | 每日抓取 |
-| 官網 mNAV（僅對照用） | strategy.com | — | 每日，記錄與 M2 差值 |
+| 官網 mNAV（僅對照用） | strategy.com | — | 每日，記錄與自算企業價值／BTC 總值差異 |
 
 **審計規則**：每季 10-Q 發布後，用文件數字回校週度累加值；差異 >1% 需在 monitor-log 註記原因。
 

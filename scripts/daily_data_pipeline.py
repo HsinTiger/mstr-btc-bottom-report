@@ -895,6 +895,11 @@ def build_btc_standards(metrics: dict[str, Any]) -> dict[str, Any]:
         tone = "neutral"
     return {
         "schema": 1,
+        "model_id": "btc-regime-five-dimension",
+        "model_version": "2.0.0",
+        "formula_version": "weighted-normalized-v1",
+        "calibrated": False,
+        "score_comparable_from": "2026-07-21",
         "model_status": "heuristic_unbacktested",
         "intended_horizon": "weekly_to_monthly_regime_context",
         "score": score,
@@ -1158,8 +1163,8 @@ def score_snapshot(metrics: dict[str, Any]) -> dict[str, Any]:
         reasons.append("Common-equity price/NAV exceeds 1.0, is unavailable, or preferred-financing distortion flag is active")
     if m["coverage_months"] >= 12:
         score += 1
-        reason_codes.append("COVERAGE_ABOVE_12M")
-        reasons.append("USD reserve coverage remains above the 12-month red line")
+        reason_codes.append("COVERAGE_AT_LEAST_12M")
+        reasons.append("USD reserve coverage remains above the 12-month minimum buffer")
     else:
         score -= 2
         reason_codes.append("COVERAGE_BELOW_12M")

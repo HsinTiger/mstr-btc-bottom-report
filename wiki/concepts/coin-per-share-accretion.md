@@ -23,4 +23,4 @@ confidence: high
 - 質押（MAVAN ~$266M/年）讓 ETH/股可**自然增厚**（MSTR 沒有的優勢）。
 - 🚩 **500 億股授權（100 倍）** = 史詩級稀釋；track record <1 年、平價無墊。
 
-→ 支持 [[mstr]] : [[bmnr]] = 0.75 : 0.25 偏 MSTR。每日 sats/股、ETH/股 由 [[data-feeds]] 追蹤。
+→ 支持 [[mstr]] : [[bmnr]] = 0.80 : 0.20（4:1）偏 MSTR。每日 sats/股、ETH/股由 [[data-feeds]] 追蹤。

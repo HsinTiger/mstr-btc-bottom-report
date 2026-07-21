@@ -35,8 +35,22 @@ jobs:
         continue-on-error: true
         run: python scripts/verify_daily_data.py
 
-      - name: Generate daily extensions
-        run: python scripts/generate_daily_extensions.py
+      - name: Enforce verifier artifact freshness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+          report = json.loads(Path("data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
+          if report.get("date") != snapshot.get("date"):
+              raise SystemExit("Verifier report is missing or stale for the current snapshot")
+          if report.get("status") not in {"pass", "degraded", "fail"}:
+              raise SystemExit("Verifier report has an unknown status")
+          print(f"Verifier artifact current: {report['date']} status={report['status']}")
+          PY
+
+      - name: Compile guarded Wiki context
+        run: python scripts/build_knowledge_context.py
 
       - name: Generate institutional analytics
         run: python scripts/generate_institutional_analytics.py
@@ -46,6 +60,27 @@ jobs:
 
       - name: Attach logic audit to analytics
         run: python scripts/generate_institutional_analytics.py
+
+      - name: Validate fail-closed decision publication
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          analytics = json.loads(Path("data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
+          audit = json.loads(Path("data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
+          context = json.loads(Path("data/daily/knowledge_context.json").read_text(encoding="utf-8-sig"))
+          required_page_keys = {"slug", "title", "confidence", "last_verified", "quality_flags", "analysis_use", "decision_inputs"}
+          if any(not required_page_keys.issubset(page) for page in context.get("pages", [])):
+              raise SystemExit("Knowledge context contract is incomplete")
+          summary = analytics.get("decision_brief", {}).get("summary_cards", [])
+          action = next((item for item in summary if item.get("id") == "today_action"), {})
+          if audit.get("status") != "consistent" and (action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", "")):
+              raise SystemExit("Unsafe publication: logic audit failed without a fail-closed action card")
+          print(f"Safe publication validated: logic={audit.get('status')} knowledge_pages={len(context.get('pages', []))}")
+          PY
+
+      - name: Generate knowledge-backed daily extensions
+        run: python scripts/generate_daily_extensions.py
 
       - name: Commit updated data
         run: |

@@ -97,21 +97,21 @@ def main() -> None:
     price_to_nav_increased = (common_price_to_nav == common_price_to_nav) and common_price_to_nav > i["prev_mnav_equity"]
     preferred_distortion_flag = pref_increased and price_to_nav_increased
 
-    # M4 覆蓋月數
+    # 明示固定義務覆蓋月數
     annual_div = sum(
         s["notional_musd"] * s["rate"] for s in i["preferred"].values()
     )
     annual_obligation = annual_div + i["annual_interest_musd"]
     coverage_months = i["usd_reserve_musd"] / (annual_obligation / 12)
 
-    # M5 週賣幣比值
+    # 7 日賣幣壓力倍數
     weekly_need = annual_obligation / 52
     sale_pressure_ratio = i["weekly_btc_sales_musd"] / weekly_need if i["weekly_btc_sales_musd"] is not None else None
 
-    # M6 sats/股
+    # 每股比特幣含量
     sats_per_share = i["btc_holdings"] * 1e8 / (i["common_shares_outstanding_m"] * 1e6)
 
-    # M7 STRC 折價
+    # STRC 優先股折價信任票
     strc_discount = 1 - strc_px / 100
 
     def status(ok: bool, warn: bool = False) -> str:

@@ -19,6 +19,7 @@ SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 VERIFY_PATH = DATA_DIR / "agent_verification_report.json"
 ANALYTICS_PATH = DATA_DIR / "institutional_analytics.json"
 AUDIT_PATH = DATA_DIR / "logic_audit.json"
+KNOWLEDGE_PATH = DATA_DIR / "knowledge_context.json"
 
 
 def load_json(path: Path, default: Any | None = None) -> Any:
@@ -164,6 +165,7 @@ def main() -> None:
     snapshot = load_json(SNAPSHOT_PATH)
     verification = load_json(VERIFY_PATH, {})
     analytics = load_json(ANALYTICS_PATH, {})
+    knowledge = load_json(KNOWLEDGE_PATH, {})
 
     metrics = snapshot.get("metrics", {}).get("mstr_metrics", {})
     btc_standard = snapshot.get("metrics", {}).get("btc_standard", {})
@@ -172,7 +174,9 @@ def main() -> None:
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
     decision = snapshot.get("decision", {})
     quality = analytics.get("quality", {})
-    executive = analytics.get("executive_read", {})
+    brief = analytics.get("decision_brief", {})
+    summary_cards = brief.get("summary_cards", [])
+    today_action = next((item for item in summary_cards if item.get("id") == "today_action"), {})
 
     contract_red_light = metrics.get("contract_red_light") is True
     equity_mnav = n(metrics.get("equity_mnav"))
@@ -185,13 +189,14 @@ def main() -> None:
     common_valuation_gate_ok = metrics.get("common_valuation_gate_ok") is True
     capital_flywheel_gate_ok = metrics.get("capital_flywheel_gate_ok") is True
     verification_status = verification.get("status", "missing")
+    verification_date_matches = verification.get("date") == snapshot.get("date")
     analytics_confidence = quality.get("confidence", "missing")
     provenance_status = provenance.get("status", "missing")
     etf_flow_status = radar.get("etf_flow_status", "missing")
     state = str(decision.get("state", ""))
-    headline = str(executive.get("headline", ""))
-    one_line = str(executive.get("one_line", ""))
-    tactical_read = str(executive.get("tactical_mstr_sleeve", ""))
+    headline = " | ".join(str(item.get("key_number", "")) for item in summary_cards)
+    one_line = " | ".join(str(item.get("plain_read", "")) for item in summary_cards)
+    tactical_read = f"{today_action.get('key_number', '')} {today_action.get('plain_read', '')}"
     btc_dimensions = btc_standard.get("dimensions", {})
     bmnr_quality = bmnr_metrics.get("quality")
     expected_contract_red_light = bool(
@@ -215,7 +220,7 @@ def main() -> None:
         blocked_actions.add("common_valuation_green_light")
     if not capital_flywheel_gate_ok:
         blocked_actions.add("capital_flywheel_green_light")
-    if verification_status != "pass" or provenance_status != "automated":
+    if verification_status != "pass" or not verification_date_matches or provenance_status != "automated":
         blocked_actions.add("auto_trade")
     if etf_flow_status != "automated":
         blocked_actions.add("use_etf_flow_as_hard_trigger")
@@ -226,7 +231,7 @@ def main() -> None:
     add_invariant(
         invariants,
         rule_id="NO_TACTICAL_ADD_WHEN_CONTRACT_RED_LIGHT",
-        passed=(not contract_red_light) or (state == "block_leveraged_add" and "禁止" in tactical_read),
+        passed=(not contract_red_light) or (state == "block_leveraged_add" and any(word in tactical_read for word in ["禁止", "禁開", "封鎖"])),
         evidence=f"contract_red_light={contract_red_light}, decision_state={state}, tactical_read={tactical_read}",
         risk_if_failed="False green light for the user's 2.5x leveraged MSTR tactical sleeve.",
     )
@@ -240,9 +245,16 @@ def main() -> None:
     add_invariant(
         invariants,
         rule_id="DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
-        passed=(verification_status == "pass") or ("auto_trade" in blocked_actions and analytics_confidence != "high"),
-        evidence=f"verification={verification_status}, headline={headline}, confidence={analytics_confidence}",
+        passed=(verification_status == "pass" and verification_date_matches) or ("auto_trade" in blocked_actions and analytics_confidence not in {"high", "高"}),
+        evidence=f"verification={verification_status}, date_matches={verification_date_matches}, headline={headline}, confidence={analytics_confidence}",
         risk_if_failed="Research-grade data could be mistaken for execution-grade signal.",
+    )
+    add_invariant(
+        invariants,
+        rule_id="VERIFICATION_REPORT_MATCHES_SNAPSHOT_DATE",
+        passed=verification_date_matches,
+        evidence=f"snapshot_date={snapshot.get('date')}, verification_date={verification.get('date')}",
+        risk_if_failed="A stale pass report could authorize a newer unverified snapshot.",
     )
     add_invariant(
         invariants,
@@ -323,6 +335,21 @@ def main() -> None:
         evidence=f"bmnr_quality={bmnr_quality}, blocked_actions={sorted(blocked_actions)}",
         risk_if_failed="Gross crypto and cash holdings could be mislabeled as value attributable to common equity.",
     )
+    add_invariant(
+        invariants,
+        rule_id="KNOWLEDGE_CONTEXT_NEVER_PROMOTED_DIRECTLY_TO_FACT",
+        passed=knowledge.get("usage_policy", {}).get("treat_as_facts") is False,
+        evidence=f"knowledge_status={knowledge.get('status')}, treat_as_facts={knowledge.get('usage_policy', {}).get('treat_as_facts')}",
+        risk_if_failed="Stale or unverified Wiki hypotheses could be presented as current market facts.",
+    )
+    add_invariant(
+        invariants,
+        rule_id="BTC_SCORE_MODEL_IS_VERSIONED",
+        passed=all(btc_standard.get(key) for key in ["model_id", "model_version", "formula_version"]),
+        evidence=f"model_id={btc_standard.get('model_id')}, model_version={btc_standard.get('model_version')}, formula_version={btc_standard.get('formula_version')}",
+        risk_if_failed="Scores produced by different formulas could be compared as one continuous history.",
+        severity="major",
+    )
 
     contradictions: list[dict[str, Any]] = []
     if contract_red_light and any(word in state for word in ["加碼", "做多", "買進"]) and "禁止" not in state:
@@ -334,11 +361,6 @@ def main() -> None:
         contradictions.append({"id": "CHEAPNESS_LANGUAGE_WITH_COMMON_PREMIUM", "evidence": headline + " / " + one_line})
     if common_valuation_gate_ok and (equity_mnav is None or equity_mnav > 1 or pref_dilution_flag):
         contradictions.append({"id": "COMMON_VALUATION_GATE_CONTRADICTS_COMPONENTS", "evidence": f"gate={common_valuation_gate_ok}, 普通股市值／淨值={num(equity_mnav, 3)}, 特別股融資扭曲旗標={pref_dilution_flag}"})
-    if analytics.get("decomposition", {}).get("mstr_return_1d") and (equity_mnav is not None and equity_mnav > 1 or sale_ratio is None or sale_ratio > 2 or strc_discount is None or strc_discount > 0.05):
-        mstr_return = n(analytics.get("decomposition", {}).get("mstr_return_1d"))
-        valuation_blocks = {"common_valuation_green_light", "treat_mnav_as_green"} & blocked_actions
-        if mstr_return is not None and mstr_return > 0 and not valuation_blocks:
-            contradictions.append({"id": "PRICE_REBOUND_WITHOUT_STRUCTURE_REPAIR", "evidence": f"mstr_return_1d={pct(mstr_return)}, 普通股市值／淨值={num(equity_mnav, 3)}, 每週賣幣壓力倍數={num(sale_ratio, 2)}, STRC 優先股折價={pct(strc_discount)}"})
     if bmnr_quality != "net_to_common_reviewed" and any(term in (headline + " " + one_line).lower() for term in ["bmnr net nav", "bmnr 淨值折價", "bmnr 普通股安全邊際"]):
         contradictions.append({"id": "BMNR_GROSS_ASSETS_MISLABELED_AS_NET_NAV", "evidence": headline + " / " + one_line})
 

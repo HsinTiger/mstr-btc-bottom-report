@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T04:42:29+00:00",
+  "generated_at": "2026-07-21T05:52:41+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
-    "passed_invariants": 14,
+    "passed_invariants": 17,
     "failed_invariants": 0,
     "contradictions": 0,
     "blocked_actions": [
@@ -43,7 +43,7 @@
       "id": "NO_TACTICAL_ADD_WHEN_CONTRACT_RED_LIGHT",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, tactical_read=禁止 2.5x 加碼",
+      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, tactical_read=MSTR 合約禁開 STRC 折價、賣幣可觀測性與估值閘門尚未同時通過；BTC 偏冷不等於 2.5x 合約可開。",
       "risk_if_failed": "False green light for the user's 2.5x leveraged MSTR tactical sleeve."
     },
     {
@@ -57,14 +57,21 @@
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=fail, headline=偏冷等待區｜MSTR 合約封鎖｜BMNR 市值/gross treasury=0.85x, confidence=low",
+      "evidence": "verification=fail, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 20/100, confidence=低",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
+    },
+    {
+      "id": "VERIFICATION_REPORT_MATCHES_SNAPSHOT_DATE",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "snapshot_date=2026-07-21, verification_date=2026-07-21",
+      "risk_if_failed": "A stale pass report could authorize a newer unverified snapshot."
     },
     {
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_equity_price_to_nav=1.161x, headline=偏冷等待區｜MSTR 合約封鎖｜BMNR 市值/gross treasury=0.85x",
+      "evidence": "common_equity_price_to_nav=1.161x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 20/100",
       "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
@@ -136,6 +143,20 @@
       "severity": "blocking",
       "evidence": "bmnr_quality=gross_asset_view_not_net_nav, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_bmnr_net_nav_discount', 'claim_common_equity_cheap', 'common_valuation_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
       "risk_if_failed": "Gross crypto and cash holdings could be mislabeled as value attributable to common equity."
+    },
+    {
+      "id": "KNOWLEDGE_CONTEXT_NEVER_PROMOTED_DIRECTLY_TO_FACT",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "knowledge_status=degraded, treat_as_facts=False",
+      "risk_if_failed": "Stale or unverified Wiki hypotheses could be presented as current market facts."
+    },
+    {
+      "id": "BTC_SCORE_MODEL_IS_VERSIONED",
+      "status": "pass",
+      "severity": "major",
+      "evidence": "model_id=btc-regime-five-dimension, model_version=2.0.0, formula_version=weighted-normalized-v1",
+      "risk_if_failed": "Scores produced by different formulas could be compared as one continuous history."
     }
   ],
   "thresholds": [

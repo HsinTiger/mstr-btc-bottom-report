@@ -8,7 +8,7 @@ confidence: high
 
 # BMNR (BitMine Immersion)
 
-ETH 財庫公司（Tom Lee），衛星部位（配置 25%）。
+ETH 財庫公司（Tom Lee），衛星部位（配置 20%）。
 
 ## 數據（2026-06）
 - ETH 持倉：**5.54M ETH**（全網 ~4.6%，~87% 已質押）

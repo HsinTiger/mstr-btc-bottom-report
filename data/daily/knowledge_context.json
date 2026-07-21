@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-21T05:52:37+00:00",
+  "as_of_date": "2026-07-21",
+  "source_manifest": "C:/work/mstr-btc-bottom-report/wiki/manifest.json",
+  "stale_after_days": 30,
+  "status": "degraded",
+  "usage_policy": {
+    "treat_as_facts": false,
+    "allowed_use": "hypothesis_and_background_context_only",
+    "fact_requirement": "Corroborate with verified daily data or primary-source evidence before factual use."
+  },
+  "quality": {
+    "active_pages": 19,
+    "context_only_pages": 14,
+    "excluded_pages": 5,
+    "global_flags": [],
+    "flag_counts": {
+      "missing_confidence": 3,
+      "missing_frontmatter": 2,
+      "missing_summary": 12,
+      "missing_updated": 2,
+      "stale": 8,
+      "summary_derived_from_body": 12,
+      "unresolved_wikilink": 1
+    }
+  },
+  "pages": [
+    {
+      "slug": "index",
+      "title": "目錄",
+      "summary": "依 Karpathy LLM Wiki 模式 維護。規範見 CLAUDE。瀏覽前端：../wiki.html（含關係圖）。",
+      "summary_source": "body_derived",
+      "declared_confidence": "unverified",
+      "confidence": "unverified",
+      "updated": "2026-06-14",
+      "last_verified": "2026-07-07",
+      "stale_days": 14,
+      "wikilinks": [
+        "CLAUDE",
+        "overview",
+        "five-dimension-model",
+        "two-tranche-plan",
+        "target-price",
+        "cycle-diminishing-returns",
+        "mnav-reflexivity",
+        "coin-per-share-accretion",
+        "mstr",
+        "bmnr",
+        "strc-preferred",
+        "kol-roster",
+        "data-feeds",
+        "log"
+      ],
+      "source_path": "wiki/index.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_confidence",
+        "missing_summary",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "exclude",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "overview",
+      "title": "投資論點總述",
+      "summary": "用本業收入/低息資金，分批囤現股 mstr + bmnr（4 : 1，MSTR 80% / BMNR 20%），抱 1–4 年週期波段；判準是「夠便宜＋相信不會歸零會漲回來」。大倉工具用現股（無 theta、無滑點、無斷頭）；小倉另以 2.5x MSTR 合約抓月線到年線波段。現在不是全押時點（綜合溫度 −3，大戶收 vs ETF 出逃僵局）。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "medium",
+      "updated": "2026-06-14",
+      "last_verified": "2026-07-07",
+      "stale_days": 14,
+      "wikilinks": [
+        "mstr",
+        "bmnr",
+        "mnav-reflexivity",
+        "five-dimension-model",
+        "cycle-diminishing-returns",
+        "two-tranche-plan",
+        "target-price",
+        "coin-per-share-accretion",
+        "strc-preferred",
+        "kol-roster",
+        "data-feeds"
+      ],
+      "source_path": "wiki/overview.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "five-dimension-model",
+      "title": "比特幣五維市場體制模型",
+      "summary": "以鏈上估值、趨勢、情緒、ETF 邊際資金與週期回撤描述比特幣市場體制；不含 MSTR 或 BMNR 載具風險，也不直接產生交易指令。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "medium",
+      "confidence": "medium",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "data-feeds",
+        "two-tranche-plan"
+      ],
+      "source_path": "wiki/concepts/five-dimension-model.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "cycle-diminishing-returns",
+      "title": "週期收益遞減",
+      "summary": "BTC 每輪牛熊的漲幅與跌幅都隨市值成熟而遞減。用來推 target-price。",
+      "summary_source": "body_derived",
+      "declared_confidence": "medium",
+      "confidence": "unverified",
+      "updated": "2026-06-14",
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "target-price",
+        "five-dimension-model"
+      ],
+      "source_path": "wiki/concepts/cycle-diminishing-returns.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "exclude",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "mnav-reflexivity",
+      "title": "財庫反身性（mNAV）",
+      "summary": "mNAV = 普通股市值 ÷ 幣資產 NAV。是 mstr、bmnr 這類 DAT（數位資產財庫）的核心估值與風險放大器。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "low",
+      "updated": "2026-06-14",
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "mstr",
+        "bmnr",
+        "coin-per-share-accretion",
+        "strc-preferred",
+        "five-dimension-model",
+        "kol-roster",
+        "two-tranche-plan"
+      ],
+      "source_path": "wiki/concepts/mnav-reflexivity.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "coin-per-share-accretion",
+      "title": "含幣量增厚",
+      "summary": "使用者最看重的指標：持有 DAT 是否讓每股對應的幣越來越多。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "low",
+      "updated": "2026-06-14",
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "strc-preferred",
+        "mnav-reflexivity",
+        "mstr",
+        "bmnr",
+        "data-feeds"
+      ],
+      "source_path": "wiki/concepts/coin-per-share-accretion.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "target-price",
+      "title": "條件式目標價假說",
+      "summary": "40,000–52,000 美元是未回測、可證偽的比特幣底部研究假說；觸價不等於見底，仍需獨立領先訊號與右側確認。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "low",
+      "confidence": "low",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "cycle-diminishing-returns",
+        "kol-roster",
+        "two-tranche-plan",
+        "mnav-reflexivity"
+      ],
+      "source_path": "wiki/concepts/target-price.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [
+        "btc_bottom_hypothesis_40000_52000",
+        "requires_price_structure_confirmation",
+        "never_confirm_on_touch_alone"
+      ],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "two-tranche-plan",
+      "title": "兩等份本金計畫",
+      "summary": "兩等份只用於分批現貨決策；比特幣市場體制、執行條件與 MSTR／BMNR 載具閘門必須分開判斷。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "high",
+      "confidence": "high",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "mstr",
+        "bmnr",
+        "target-price",
+        "five-dimension-model",
+        "data-feeds"
+      ],
+      "source_path": "wiki/concepts/two-tranche-plan.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "mstr",
+      "title": "MSTR (Strategy)",
+      "summary": "BTC 財庫公司，主要進攻部位（配置 80%）。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "medium",
+      "updated": "2026-06-14",
+      "last_verified": "2026-07-07",
+      "stale_days": 14,
+      "wikilinks": [
+        "mnav-reflexivity",
+        "coin-per-share-accretion",
+        "strc-preferred",
+        "bmnr",
+        "overview",
+        "two-tranche-plan"
+      ],
+      "source_path": "wiki/entities/mstr.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "bmnr",
+      "title": "BMNR (BitMine)",
+      "summary": "ETH 財庫公司（Tom Lee），衛星部位（配置 20%）。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "medium",
+      "updated": "2026-06-14",
+      "last_verified": "2026-07-07",
+      "stale_days": 14,
+      "wikilinks": [
+        "coin-per-share-accretion",
+        "mstr"
+      ],
+      "source_path": "wiki/entities/bmnr.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "strc-preferred",
+      "title": "STRC 優先股 (Stretch)",
+      "summary": "mstr 發行的變動利率永續特別股。理解它＝理解 MSTR 的反身性安全閥。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "low",
+      "updated": "2026-06-14",
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "mstr",
+        "mnav-reflexivity"
+      ],
+      "source_path": "wiki/entities/strc-preferred.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "kol-roster",
+      "title": "KOL 名單與觀點",
+      "summary": "追蹤的 5 位幣圈 YouTuber，每日監控以 RSS 偵測上新；字幕由本地 yt-dlp 擷取分析。原始字幕存 ../raw/kol-subtitles/。",
+      "summary_source": "body_derived",
+      "declared_confidence": "medium",
+      "confidence": "unverified",
+      "updated": "2026-06-14",
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "target-price",
+        "five-dimension-model",
+        "mnav-reflexivity",
+        "strc-preferred"
+      ],
+      "source_path": "wiki/entities/kol-roster.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "exclude",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "data-feeds",
+      "title": "數據流與權威來源",
+      "summary": "five-dimension-model 各維的權威數據平台（先溯源、再判讀）。每日監控排程（08:00 台北）自動抓取，append 至 ../data/history.json、../monitor-log.md。",
+      "summary_source": "body_derived",
+      "declared_confidence": "high",
+      "confidence": "low",
+      "updated": "2026-06-14",
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "five-dimension-model",
+        "kol-roster",
+        "CLAUDE"
+      ],
+      "source_path": "wiki/sources/data-feeds.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_summary",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "log",
+      "title": "變更日誌",
+      "summary": "格式：## [YYYY-MM-DD] op | 標題。查詢：grep \"^## \\[\" log.md | tail。",
+      "summary_source": "body_derived",
+      "declared_confidence": "unverified",
+      "confidence": "unverified",
+      "updated": null,
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "five-dimension-model",
+        "kol-roster",
+        "two-tranche-plan",
+        "mstr",
+        "mnav-reflexivity",
+        "target-price",
+        "CLAUDE",
+        "overview",
+        "cycle-diminishing-returns",
+        "coin-per-share-accretion",
+        "bmnr",
+        "strc-preferred",
+        "data-feeds"
+      ],
+      "source_path": "wiki/log.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_confidence",
+        "missing_frontmatter",
+        "missing_summary",
+        "missing_updated",
+        "stale",
+        "summary_derived_from_body"
+      ],
+      "analysis_use": "exclude",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "CLAUDE",
+      "title": "Schema 規範",
+      "summary": "本目錄是依 Karpathy LLM Wiki 模式 維護的幣圈投資知識庫。LLM 負責整理、交叉引用、保持一致；人類負責提供來源與提問。",
+      "summary_source": "body_derived",
+      "declared_confidence": "unverified",
+      "confidence": "unverified",
+      "updated": null,
+      "last_verified": "2026-06-14",
+      "stale_days": 37,
+      "wikilinks": [
+        "wikilink",
+        "slug",
+        "index",
+        "log",
+        "mstr",
+        "bmnr",
+        "strc-preferred",
+        "five-dimension-model",
+        "two-tranche-plan",
+        "target-price",
+        "mnav-reflexivity",
+        "coin-per-share-accretion",
+        "cycle-diminishing-returns",
+        "kol-roster",
+        "data-feeds"
+      ],
+      "source_path": "wiki/CLAUDE.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [
+        "missing_confidence",
+        "missing_frontmatter",
+        "missing_summary",
+        "missing_updated",
+        "stale",
+        "summary_derived_from_body",
+        "unresolved_wikilink"
+      ],
+      "analysis_use": "exclude",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "gaap-vs-mnav",
+      "title": "GAAP、Non-GAAP 與市場價格對淨資產價值",
+      "summary": "BTC 總值、GAAP 股東權益與公司自訂 mNAV 是三本不同的帳；普通股估值還要扣債務、優先股與稅務楔子。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "medium",
+      "confidence": "medium",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "mnav-definition-risk",
+        "mnav-reflexivity",
+        "two-tranche-plan"
+      ],
+      "source_path": "wiki/concepts/gaap-vs-mnav.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "mnav-definition-risk",
+      "title": "市場價格對淨資產價值的定義權風險",
+      "summary": "公司官方 mNAV 是融資行為變數，定義可受優先股清算面額與發行結構影響；必須與普通股淨值及資本結構壓力分開自算。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "medium",
+      "confidence": "medium",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "gaap-vs-mnav",
+        "mnav-reflexivity",
+        "delayed-pro-cyclical"
+      ],
+      "source_path": "wiki/concepts/mnav-definition-risk.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "delayed-pro-cyclical",
+      "title": "延遲順週期風險",
+      "summary": "現金儲備與融資工具只能延後無息 BTC 資產對有息義務的壓力，不能消除折價期的順週期賣壓。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "medium",
+      "confidence": "medium",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "mnav-reflexivity",
+        "coin-per-share-accretion",
+        "strc-preferred"
+      ],
+      "source_path": "wiki/concepts/delayed-pro-cyclical.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    },
+    {
+      "slug": "indicator-regime-change",
+      "title": "鏈上與週期指標的體制轉變",
+      "summary": "ETF 與機構託管可能改變已實現市值及四年週期指標的分布；舊門檻必須降權並用價格結構與獨立證據驗證。",
+      "summary_source": "frontmatter",
+      "declared_confidence": "low",
+      "confidence": "low",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
+      "wikilinks": [
+        "five-dimension-model",
+        "data-feeds",
+        "target-price"
+      ],
+      "source_path": "wiki/concepts/indicator-regime-change.md",
+      "legacy_metric_names": [],
+      "legacy_metric_replacements": {},
+      "quality_flags": [],
+      "analysis_use": "context_only",
+      "decision_inputs": [],
+      "requires_independent_verification": true
+    }
+  ]
+}

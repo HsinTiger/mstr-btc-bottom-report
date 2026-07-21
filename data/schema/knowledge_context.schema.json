@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "knowledge_context.schema.json",
+  "title": "Compiled Wiki knowledge context",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "as_of_date",
+    "source_manifest",
+    "stale_after_days",
+    "status",
+    "usage_policy",
+    "quality",
+    "pages"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "as_of_date": { "type": "string", "format": "date" },
+    "source_manifest": { "type": "string", "minLength": 1 },
+    "stale_after_days": { "type": "integer", "minimum": 0 },
+    "status": { "enum": ["ok", "degraded", "blocked"] },
+    "usage_policy": {
+      "type": "object",
+      "required": ["treat_as_facts", "allowed_use", "fact_requirement"],
+      "properties": {
+        "treat_as_facts": { "const": false },
+        "allowed_use": { "const": "hypothesis_and_background_context_only" },
+        "fact_requirement": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "active_pages",
+        "context_only_pages",
+        "excluded_pages",
+        "global_flags",
+        "flag_counts"
+      ],
+      "properties": {
+        "active_pages": { "type": "integer", "minimum": 0 },
+        "context_only_pages": { "type": "integer", "minimum": 0 },
+        "excluded_pages": { "type": "integer", "minimum": 0 },
+        "global_flags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "flag_counts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "pages": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/page" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nullableDate": {
+      "oneOf": [
+        { "type": "string", "format": "date" },
+        { "type": "null" }
+      ]
+    },
+    "nullableString": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "confidence": {
+      "enum": ["high", "medium", "low", "unverified"]
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "slug",
+        "title",
+        "summary",
+        "summary_source",
+        "declared_confidence",
+        "confidence",
+        "updated",
+        "last_verified",
+        "stale_days",
+        "wikilinks",
+        "source_path",
+        "legacy_metric_names",
+        "legacy_metric_replacements",
+        "quality_flags",
+        "analysis_use",
+        "decision_inputs",
+        "requires_independent_verification"
+      ],
+      "properties": {
+        "slug": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "summary": { "$ref": "#/$defs/nullableString" },
+        "summary_source": { "enum": ["frontmatter", "manifest", "body_derived", "missing"] },
+        "declared_confidence": { "$ref": "#/$defs/confidence" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "updated": { "$ref": "#/$defs/nullableDate" },
+        "last_verified": { "$ref": "#/$defs/nullableDate" },
+        "stale_days": {
+          "oneOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "wikilinks": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "source_path": { "type": "string", "pattern": "^wiki/" },
+        "legacy_metric_names": {
+          "type": "array",
+          "items": { "enum": ["M1", "M2", "M3", "M4", "M5", "M6", "M7"] },
+          "uniqueItems": true
+        },
+        "legacy_metric_replacements": {
+          "type": "object",
+          "propertyNames": { "pattern": "^M[1-7]$" },
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "quality_flags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "analysis_use": { "enum": ["context_only", "exclude"] },
+        "decision_inputs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "requires_independent_verification": { "const": true }
+      },
+      "additionalProperties": false
+    }
+  }
+}

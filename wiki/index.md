@@ -20,8 +20,8 @@ updated: 2026-06-14
 - [[coin-per-share-accretion]] — 含幣量增厚（MSTR 已證明）
 
 ## 標的 / 人物
-- [[mstr]] — BTC 財庫（配置 75%）
-- [[bmnr]] — ETH 財庫（配置 25%）
+- [[mstr]] — BTC 財庫（配置 80%）
+- [[bmnr]] — ETH 財庫（配置 20%）
 - [[strc-preferred]] — STRC 優先股三方優缺點
 - [[kol-roster]] — 5 位 KOL 觀點 vs 我們
 
