@@ -1,16 +1,23 @@
 {
   "schema": 2,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T09:02:04+00:00",
+  "generated_at": "2026-07-21T09:26:48+00:00",
   "quality": {
     "verification_status": "fail",
     "verification_date_matches_snapshot": true,
     "confidence": "低",
     "confidence_score_0_100": 20,
     "degradations": [
+      "market universe: Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+      "market universe: BTC 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+      "market universe: BTC 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
+      "market universe: ETH 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+      "market universe: ETH 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
+      "market universe: BTC ETF 流向僅有第三方單一來源，不作硬觸發",
+      "market universe: ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
       "Strategy BTC holdings: stale 15 days > 14",
-      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.52% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.02% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.49% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.32% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
       "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
       "capital-structure provenance status=mixed_automated_manual",
@@ -19,7 +26,7 @@
       "common_shares_outstanding_m: official input stale 86 days > 45"
     ],
     "warnings": [
-      "STRC equity: 報價基準不同且差距 1.13%，需留意盤前/盤後波動"
+      "STRC equity: 報價基準不同且差距 1.31%，需留意盤前/盤後波動"
     ],
     "knowledge_status": "degraded",
     "knowledge_nodes": 15,
@@ -63,14 +70,14 @@
       "status": "candidate_not_confirmed",
       "key_number": "未確認",
       "headline": "接近長期支撐，但底部尚未確認",
-      "plain_read": "BTC 現價 $66,174，距 200 週均線 4.9%；右側確認 1/4，研究假說區 $40,000–$52,000 尚未觸及。",
-      "current_price": 66173.705,
+      "plain_read": "BTC 現價 $66,187，距 200 週均線 4.9%；右側確認 1/4，研究假說區 $40,000–$52,000 尚未觸及。",
+      "current_price": 66187.055,
       "support_200wma": 63094.54282226563,
       "research_hypothesis": {
         "lower": 40000.0,
         "upper": 52000.0,
         "status": "not_touched",
-        "distance_to_upper": 0.27257124999999993,
+        "distance_to_upper": 0.27282798076923065,
         "classification": "未回測研究假說，不是保證目標",
         "knowledge_authorized": true
       },
@@ -170,23 +177,23 @@
           52000.0
         ],
         "status": "not_touched",
-        "current_price": 66173.705,
+        "current_price": 66187.055,
         "confirmation_level_200dma": 72927.12583984375,
-        "plain_read": "$40,000–$52,000 是未回測底部假說；現價 $66,174 尚未觸及。$72,927 是右側確認門檻，不是獲利目標。"
+        "plain_read": "$40,000–$52,000 是未回測底部假說；現價 $66,187 尚未觸及。$72,927 是右側確認門檻，不是獲利目標。"
       },
       "mstr": {
         "common_nav_per_share_at_btc_lower": 22.89148441454938,
         "common_nav_per_share_at_btc_upper": 51.78394120766697,
-        "common_nav_per_share_at_current_btc": 85.91003781690817,
+        "common_nav_per_share_at_current_btc": 85.94218067509048,
         "plain_read": "若 BTC 落在假說區，按目前股數、現金、債務、優先股與已揭露遞延稅負債靜態估算，MSTR 普通股淨值約 $23–$52／股；不含未來 ATM、稅額變動與其他資產。"
       },
       "bmnr": {
-        "gross_treasury_value_per_share": 19.793634424005376,
+        "gross_treasury_value_per_share": 19.796780412820453,
         "indicative_0_8x_to_1_0x": [
-          15.834907539204302,
-          19.793634424005376
+          15.837424330256363,
+          19.796780412820453
         ],
-        "plain_read": "目前 gross treasury 約 $19.79／股；0.8–1.0x 僅為 $15.83–$19.79 的資產倍率參考，未扣完整負債，不能稱目標價。"
+        "plain_read": "目前 gross treasury 約 $19.80／股；0.8–1.0x 僅為 $15.84–$19.80 的資產倍率參考，未扣完整負債，不能稱目標價。"
       },
       "assumptions": [
         "MSTR 採目前普通股股數、BTC 持倉、現金、債務、優先股清算面額與已揭露遞延稅負債靜態計算。",
@@ -336,7 +343,7 @@
           {
             "name": "持倉交叉驗證",
             "direction": "bullish",
-            "value": "2.8%",
+            "value": "2.9%",
             "read": "由持倉逐項重算與管理層總額差距",
             "independence_key": "持倉交叉驗證"
           },
@@ -380,7 +387,7 @@
         "lagging_confirmations": [
           {
             "name": "持倉重算差距 ≤5%",
-            "value": "2.8%",
+            "value": "2.9%",
             "state": "pass",
             "read": "管理層總額交叉驗證"
           },
@@ -556,8 +563,8 @@
       {
         "id": "btc_liquidity_trend",
         "title": "資金流與長短期趨勢",
-        "key_number": "-9.3%",
-        "plain_read": "BTC 距 200 日均線 -9.3%，距 200 週均線 4.9%；長期支撐靠近，但中期趨勢尚未翻多。",
+        "key_number": "-9.2%",
+        "plain_read": "BTC 距 200 日均線 -9.2%，距 200 週均線 4.9%；長期支撐靠近，但中期趨勢尚未翻多。",
         "lenses": [
           {
             "name": "ETF 邊際買盤",
@@ -576,7 +583,7 @@
           {
             "name": "中期趨勢",
             "direction": "bearish",
-            "value": "-9.3%",
+            "value": "-9.2%",
             "read": "200 日均線是落後但必要的趨勢確認",
             "independence_key": "中期趨勢"
           },

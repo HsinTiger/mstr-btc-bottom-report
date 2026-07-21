@@ -1,46 +1,27 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-21T09:02:04+00:00",
+  "verified_at": "2026-07-21T09:26:47+00:00",
   "date": "2026-07-21",
-  "snapshot_generated_at": "2026-07-21T09:02:02+00:00",
-  "market_universe_generated_at": "2026-07-21T09:02:04+00:00",
+  "snapshot_generated_at": "2026-07-21T09:26:43+00:00",
+  "market_universe_generated_at": "2026-07-21T09:26:47+00:00",
   "status": "fail",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [
-    "market universe: BTC dated-futures basis missing",
-    "market universe: BTC dated-futures source stale or timestamp missing",
-    "market universe: BTC options DVOL missing",
-    "market universe: BTC options put/call OI missing",
-    "market universe: BTC options source stale or timestamp missing",
-    "market universe: BTC DVOL source stale or timestamp missing",
-    "market universe: ETH dated-futures basis missing",
-    "market universe: ETH dated-futures source stale or timestamp missing",
-    "market universe: ETH options DVOL missing",
-    "market universe: ETH options put/call OI missing",
-    "market universe: ETH options source stale or timestamp missing",
-    "market universe: ETH DVOL source stale or timestamp missing",
-    "market universe BTC: dated futures basis missing",
-    "market universe BTC: options DVOL missing",
-    "market universe BTC: options put/call OI missing",
-    "market universe BTC: dated-futures source stale or timestamp missing",
-    "market universe BTC: options source stale or timestamp missing",
-    "market universe BTC: DVOL source stale or timestamp missing",
-    "market universe BTC: options contract coverage is not explicit",
-    "market universe ETH: dated futures basis missing",
-    "market universe ETH: options DVOL missing",
-    "market universe ETH: options put/call OI missing",
-    "market universe ETH: dated-futures source stale or timestamp missing",
-    "market universe ETH: options source stale or timestamp missing",
-    "market universe ETH: DVOL source stale or timestamp missing",
-    "market universe ETH: options contract coverage is not explicit",
     "sale_ratio: 缺值",
     "weekly_btc_sales_musd: official input stale 15 days > 7"
   ],
   "degradations": [
+    "market universe: Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: BTC 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: BTC 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
+    "market universe: ETH 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: ETH 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
+    "market universe: BTC ETF 流向僅有第三方單一來源，不作硬觸發",
+    "market universe: ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
     "Strategy BTC holdings: stale 15 days > 14",
-    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.52% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-    "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.02% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.49% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+    "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.32% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
     "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
     "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
     "capital-structure provenance status=mixed_automated_manual",
@@ -49,24 +30,24 @@
     "common_shares_outstanding_m: official input stale 86 days > 45"
   ],
   "warnings": [
-    "STRC equity: 報價基準不同且差距 1.13%，需留意盤前/盤後波動"
+    "STRC equity: 報價基準不同且差距 1.31%，需留意盤前/盤後波動"
   ],
   "evidence": [
-    "market universe quality=fail score=0 sources=38 age_hours=0.00",
-    "btc_usd_coingecko=66173 from CoinGecko simple price",
-    "btc_usd_coinbase=66174.41 from Coinbase Exchange ticker",
-    "eth_usd_coingecko=1937.91 from CoinGecko simple price",
-    "eth_usd_coinbase=1937.31 from Coinbase Exchange ticker",
+    "market universe quality=degraded score=72 sources=44 age_hours=0.00",
+    "btc_usd_coingecko=66184 from CoinGecko simple price",
+    "btc_usd_coinbase=66190.11 from Coinbase Exchange ticker",
+    "eth_usd_coingecko=1938.11 from CoinGecko simple price",
+    "eth_usd_coinbase=1937.76 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.82 from Yahoo Finance chart",
     "BTC MVRV as_of=2026-07-20 age_days=1",
     "Strategy BTC holdings as_of=2026-07-06 age_days=15",
     "BMNR treasury holdings as_of=2026-07-19 age_days=2",
-    "MSTR Yahoo/Nasdaq=97.82/101.32; basis=regular_market_close/extended_hours_realtime; gap=3.52%",
-    "BMNR Yahoo/Nasdaq=16.63/16.9692; basis=regular_market_close/extended_hours_realtime; gap=2.02%",
-    "STRC Yahoo/Nasdaq=87.1/88.09; basis=regular_market_close/extended_hours_realtime; gap=1.13%",
+    "MSTR Yahoo/Nasdaq=97.82/101.297; basis=regular_market_close/extended_hours_realtime; gap=3.49%",
+    "BMNR Yahoo/Nasdaq=16.63/17.02; basis=regular_market_close/extended_hours_realtime; gap=2.32%",
+    "STRC Yahoo/Nasdaq=87.1/88.25; basis=regular_market_close/extended_hours_realtime; gap=1.31%",
     "SEC latest form=8-K",
     "BTC standard=偏冷等待區 score=-5.8",
-    "BMNR gross treasury=11831.177728415001m market_cap_to_gross=0.840169099002426 as_of=2026-07-19"
+    "BMNR gross treasury=11833.058168965m market_cap_to_gross=0.8400355842321898 as_of=2026-07-19"
   ],
   "structural_context_quality": {
     "status": "degraded",
@@ -78,7 +59,7 @@
       "Public-company treasury aggregation exposes retrieval time rather than upstream filing time"
     ],
     "evidence": [
-      "BTC thesis gold_ratio=0.046183637104026926 stablecoin_supply=308358845738.1259 company_supply_share=0.06406334007711519"
+      "BTC thesis gold_ratio=0.046125899853007 stablecoin_supply=308325068856.4304 company_supply_share=0.06406334007711519"
     ],
     "verification_scope": "formula integrity, timestamps and declared source semantics; not an independent reconstruction of every upstream dataset"
   },
@@ -135,9 +116,9 @@
       ],
       "derivatives": [
         "Bybit/OKX/Hyperliquid and available Binance perpetuals",
-        "Deribit near-90-day dated futures",
+        "Deribit near-90-day dated futures with OKX fallback",
         "CME Yahoo proxy",
-        "Deribit options/DVOL"
+        "Deribit DVOL/options with labeled OKX ATM-IV/options fallback"
       ],
       "coverage_rule": "venue observations remain partial-market context; unknown data never becomes zero"
     }

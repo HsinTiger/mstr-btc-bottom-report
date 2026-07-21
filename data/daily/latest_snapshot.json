@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T09:02:02+00:00",
+  "generated_at": "2026-07-21T09:26:43+00:00",
   "metrics": {
     "prices": {
-      "btc_usd": 66173.705,
-      "eth_usd": 1937.6100000000001,
+      "btc_usd": 66187.055,
+      "eth_usd": 1937.935,
       "mstr_usd": 97.82,
       "bmnr_usd": 16.63,
       "strc_usd": 87.1
@@ -26,7 +26,7 @@
         "policy": "MSTR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "mstr_usd_nasdaq",
-        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 21, 2026 5:01 AM ET realTime=True"
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 21, 2026 5:26 AM ET realTime=True"
       },
       "bmnr_usd": {
         "selected_source": "Yahoo Finance chart",
@@ -35,7 +35,7 @@
         "policy": "BMNR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "bmnr_usd_nasdaq",
-        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 21, 2026 5:01 AM ET realTime=True"
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 21, 2026 5:26 AM ET realTime=True"
       },
       "strc_usd": {
         "selected_source": "Yahoo Finance chart",
@@ -44,7 +44,7 @@
         "policy": "STRC: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
         "fallback_source": "Nasdaq quote API",
         "fallback_observation": "strc_usd_nasdaq",
-        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 21, 2026 5:00 AM ET realTime=True"
+        "fallback_detail": "quote_basis=extended_hours_realtime timestamp=Jul 21, 2026 5:22 AM ET realTime=True"
       }
     },
     "market_radar": {
@@ -68,11 +68,11 @@
       "btc_supply_current": 20058976.13571372,
       "btc_market_cap_coinmetrics_usd": 1307482661102.6436,
       "etf_flow_status": "automated_third_party_single_source",
-      "etf_flow_1d_btc": 3425.0,
+      "etf_flow_1d_btc": 3424.0,
       "etf_flow_1d_usd": 227000000.0,
-      "etf_flow_7d_btc": 10980.0,
+      "etf_flow_7d_btc": 10977.0,
       "etf_flow_7d_usd": 727000000.0,
-      "etf_flow_30d_btc": -27486.0,
+      "etf_flow_30d_btc": -27478.0,
       "etf_flow_30d_usd": -1820000000.0,
       "automation_limits": {
         "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
@@ -82,11 +82,11 @@
       }
     },
     "mstr_metrics": {
-      "btc_nav_musd": 55835.717936375,
-      "common_equity_price_to_nav": 1.1386329523969527,
-      "equity_mnav": 1.1386329523969527,
-      "enterprise_value_to_btc_nav": 1.0403303474172396,
-      "enterprise_mnav": 1.0403303474172396,
+      "btc_nav_musd": 55846.98233262499,
+      "common_equity_price_to_nav": 1.1382070972787426,
+      "equity_mnav": 1.1382070972787426,
+      "enterprise_value_to_btc_nav": 1.0401205116700833,
+      "enterprise_mnav": 1.0401205116700833,
       "pref_dilution_flag": false,
       "coverage_months": 13.737877593360997,
       "sale_ratio": null,
@@ -106,8 +106,8 @@
       "beast_stake_musd": 180.0,
       "eightco_stake_musd": 58.0,
       "reported_total_holdings_musd": 11500.0,
-      "bottom_up_gross_treasury_musd": 11831.177728415001,
-      "reported_total_crosscheck_gap": 0.02838928512482766,
+      "bottom_up_gross_treasury_musd": 11833.058168965,
+      "reported_total_crosscheck_gap": 0.028548179715936005,
       "sec_reported_shares_m": 603.226394,
       "share_count_as_of": "2026-07-09",
       "weekly_buyback_shares_m": 5.5,
@@ -115,9 +115,9 @@
       "buyback_adjusted_shares_estimate_m": 597.726394,
       "buyback_adjustment_applied": true,
       "market_cap_estimate_musd": 9940.18993222,
-      "market_cap_to_gross_treasury": 0.840169099002426,
-      "gross_treasury_discount": 0.15983090099757402,
-      "gross_treasury_value_per_share": 19.793634424005376,
+      "market_cap_to_gross_treasury": 0.8400355842321898,
+      "gross_treasury_discount": 0.15996441576781018,
+      "gross_treasury_value_per_share": 19.796780412820453,
       "eth_per_1000_shares": 9.6657401412995,
       "gross_treasury_price_as_of": "2026-07-21",
       "reported_total_value_basis": "BMNR rounded management total; underlying price timestamp not disclosed",
@@ -197,7 +197,7 @@
           "source_ref": "Strategy official purchases page",
           "detail": "date=2026-07-06 title=July 2026 sec_url=https://assets.contentstack.io/v3/assets/bltf8d808d9b8cebd37/blt6b18e7bc25a68a8f/6a4b0be1a8ab282d09015d81/form-8-k_07-06-2026.pdf source=strategy_purchases_next_data",
           "as_of": "2026-07-06",
-          "fetched_at": "2026-07-21T09:02:01+00:00",
+          "fetched_at": "2026-07-21T09:26:42+00:00",
           "basis": "latest_official_ledger",
           "source_tier": "official_company",
           "confidence": "high"
@@ -207,7 +207,7 @@
           "source_ref": "SEC companyfacts CashAndCashEquivalentsAtCarryingValue",
           "detail": "namespace=us-gaap tag=CashAndCashEquivalentsAtCarryingValue unit=USD form=10-Q filed=2026-05-06 end=2026-03-31 accn=0001050446-26-000031",
           "as_of": "2026-03-31",
-          "fetched_at": "2026-07-21T09:02:00+00:00",
+          "fetched_at": "2026-07-21T09:26:42+00:00",
           "basis": "quarter_end",
           "source_tier": "official_filing",
           "confidence": "high"
@@ -217,7 +217,7 @@
           "source_ref": "Conservative valuation policy",
           "detail": "Unverified other assets receive zero value until a reviewed filing parser is available",
           "as_of": "2026-07-21",
-          "fetched_at": "2026-07-21T09:02:02+00:00",
+          "fetched_at": "2026-07-21T09:26:43+00:00",
           "basis": "conservative_zero",
           "confidence": "high"
         },
@@ -226,7 +226,7 @@
           "source_ref": "SEC companyfacts DeferredTaxLiabilities",
           "detail": "namespace=us-gaap tag=DeferredTaxLiabilities unit=USD form=10-K filed=2026-02-19 end=2025-12-31 accn=0001050446-26-000020",
           "as_of": "2025-12-31",
-          "fetched_at": "2026-07-21T09:02:00+00:00",
+          "fetched_at": "2026-07-21T09:26:42+00:00",
           "basis": "quarter_end",
           "source_tier": "official_filing",
           "confidence": "high"
@@ -254,7 +254,7 @@
           "source_ref": "SEC filing cover EntityCommonStockSharesOutstanding across share classes",
           "detail": "form=10-Q filed=2026-05-06 accn=0001050446-26-000031 classes=2 contexts=c-7,c-8",
           "as_of": "2026-04-26",
-          "fetched_at": "2026-07-21T09:02:01+00:00",
+          "fetched_at": "2026-07-21T09:26:42+00:00",
           "basis": "point_in_time_common_shares_outstanding",
           "source_tier": "official_filing",
           "confidence": "high"
@@ -264,7 +264,7 @@
           "source_ref": "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding",
           "detail": "namespace=us-gaap tag=WeightedAverageNumberOfDilutedSharesOutstanding unit=shares form=10-Q filed=2026-05-06 end=2026-03-31 accn=0001050446-26-000031",
           "as_of": "2026-03-31",
-          "fetched_at": "2026-07-21T09:02:00+00:00",
+          "fetched_at": "2026-07-21T09:26:42+00:00",
           "basis": "quarter_weighted_average",
           "source_tier": "official_filing",
           "confidence": "medium"
@@ -274,7 +274,7 @@
           "source_ref": "Strategy official purchases ledger rolling 7-day reported sales",
           "detail": "window=2026-07-15..2026-07-21 events=0 latest_disclosure=2026-07-06 coverage=stale_unknown_not_zero source=strategy_purchases_next_data",
           "as_of": "2026-07-06",
-          "fetched_at": "2026-07-21T09:02:01+00:00",
+          "fetched_at": "2026-07-21T09:26:42+00:00",
           "basis": "rolling_7d_reported_sales",
           "source_tier": "official_company_derived",
           "confidence": "high"
@@ -284,7 +284,7 @@
           "source_ref": "Prior daily snapshot preferred total",
           "detail": "",
           "as_of": "2026-07-20",
-          "fetched_at": "2026-07-21T09:02:02+00:00",
+          "fetched_at": "2026-07-21T09:26:43+00:00",
           "basis": "prior_snapshot",
           "source_tier": "internal_derived",
           "confidence": "high"
@@ -294,7 +294,7 @@
           "source_ref": "Prior daily snapshot equity mNAV",
           "detail": "",
           "as_of": "2026-07-20",
-          "fetched_at": "2026-07-21T09:02:02+00:00",
+          "fetched_at": "2026-07-21T09:26:43+00:00",
           "basis": "prior_snapshot",
           "source_tier": "internal_derived",
           "confidence": "high"
@@ -348,9 +348,9 @@
         "etf_flow_reason": "第三方單一來源，權重固定為 0.5，且不計入右側確認票數"
       },
       "signals": {
-        "btc_usd": 66173.705,
-        "btc_vs_200dma_pct": -0.09260505966840138,
-        "btc_vs_50dma_pct": 0.047235060745087765,
+        "btc_usd": 66187.055,
+        "btc_vs_200dma_pct": -0.0924220002121805,
+        "btc_vs_50dma_pct": 0.0474463317939271,
         "btc_1y_drawdown_pct": -0.4771246187138989,
         "btc_30d_return_pct": 0.015416509352761398,
         "mvrv_ratio": 1.2327473883123754,
