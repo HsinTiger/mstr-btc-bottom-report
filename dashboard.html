@@ -157,8 +157,8 @@ h2:first-child{margin-top:0}
   <div class="grid g4">
     <div class="card"><h3>普通股市值／普通股淨值</h3><div class="big warn" id="dm1">自算</div><div class="mini">低於 1 是折價；高於 1 是溢價，不叫安全邊際</div></div>
     <div class="card"><h3>特別股融資扭曲旗標</h3><div class="big warn" id="dm3">降權</div><div class="mini">新增優先股可能壓低分母，使 Price/NAV 被動上升</div></div>
-    <div class="card"><h3>明示固定義務覆蓋月數</h3><div class="big neg" id="dm4">12m</div><div class="mini">僅含股息與利息；低於 12 月紅燈，不等於完整 runway</div></div>
-    <div class="card"><h3>每週賣幣壓力倍數</h3><div class="big neg" id="dm5">>2x</div><div class="mini">連兩週 >2＝被迫賣幣，凍結加倉</div></div>
+    <div class="card"><h3>保守儲備覆蓋月數</h3><div class="big neg" id="dm4">12m</div><div class="mini" id="dm4note">僅含股息與利息；低於 12 月紅燈，不等於完整 runway</div></div>
+    <div class="card"><h3>每週已報告賣幣壓力倍數</h3><div class="big neg" id="dm5">>2x</div><div class="mini" id="dm5note">未知一律封鎖；零值也必須有完整週期對帳</div></div>
     <div class="card"><h3>每股比特幣含量</h3><div class="big info" id="dm6">跟蹤</div><div class="mini">BTC 持倉與實際流通普通股數同時看，防假增厚</div></div>
     <div class="card"><h3>STRC 優先股折價信任票</h3><div class="big warn" id="dm7">5%</div><div class="mini">優先股信任票；折價深時估值樂觀全部降權</div></div>
   </div>
@@ -327,7 +327,7 @@ h2:first-child{margin-top:0}
   <h2>⑤ 機構／基本面——論點的生命線</h2>
   <div class="card"><table><thead><tr><th>指標</th><th>怎麼用（門檻）</th><th>為什麼選它（原因）</th><th>依據</th><th>資料源</th></tr></thead><tbody>
     <tr><td><b>普通股市值／普通股淨值</b></td><td>≤1.0x＝折價背景；&gt;1.0x＝溢價</td><td>不採公司自訂口徑；倍率愈低才相對便宜。缺股數、債務、優先股、現金或稅務覆核時禁止估值結論。</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>SEC 文件＋data/daily/latest_snapshot.json</td></tr>
-    <tr><td><b>MSTR 賣幣壓力梯度</b></td><td>7 日已揭露賣幣金額／每週固定義務 &gt;2 倍＝紅；未知也封鎖小倉 2.5 倍合約</td><td>公司 purchases 頁是直接證偽證據；官方揭露過舊時不得把未觀察到賣幣寫成零，也不得沿用舊日期的紅綠燈。</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>strategy.com purchases／每日驗證報告</td></tr>
+    <tr><td><b>MSTR 賣幣壓力梯度</b></td><td>7 日已報告賣幣金額／每週固定義務 &gt;2 倍＝紅；未知也封鎖小倉 2.5 倍合約</td><td>優先解析連續兩期 SEC 8-K；只有完整週、明示無買入且持幣調節為零，才以中信心標示「未報告賣幣」。缺任一條件維持未知。</td><td><span class="tag" style="color:var(--p)">自有研究</span></td><td>SEC 8-K／strategy.com 備援／每日驗證報告</td></tr>
     <tr><td><b>STRC 優先股折價信任票</b></td><td>&gt;5%＝資本結構紅燈；所有 mNAV 樂觀訊號降權</td><td>普通股估值、企業融資飛輪與優先股市場信任是三個不同問題；STRC 折價擴大時，不得用單一 mNAV 宣稱安全邊際。</td><td><span class="tag" style="color:var(--y)">每日重算</span></td><td>STRC 收盤價／每日數據管線</td></tr>
     <tr><td>礦工類指標（hash ribbon／礦工投降）</td><td>降級「參考、不觸發」；改追「機構財庫拋售枯竭」＝底部確認加分</td><td>發行端 450 BTC/日 ≈ $28M 不敵 ETF 億級流量（判據④證據）；AI 轉型是賣幣融資（已拋 15K+、CORZ −75%、MARA 棄 HODL、業界尚持 121.5K 枚懸頂）——賣壓動機與盈利性脫鉤，古典「礦工投降=底」語義失效</td><td><span class="tag" style="color:var(--y)">重定價 v3.3</span></td><td>季度持倉揭露／CoinDesk</td></tr>
     <tr><td>含幣量 sats/股</td><td>持續增厚＝飛輪健康</td><td>阿貓框架的合理部分：稀釋 vs 增持的淨效果，一個數字講完</td><td><span class="tag" style="color:var(--b)">共識＋採納</span></td><td>8-K＋自算</td></tr>
@@ -514,6 +514,8 @@ async function loadDailySnapshot(){
     set('dm3',m.pref_dilution_flag==null?'UNKNOWN':m.pref_dilution_flag?'\u89f8\u767c':'\u672a\u89f8\u767c');
     set('dm4',m.coverage_months==null?'N/A':nf(m.coverage_months,1)+'\u6708');
     put('dm5',m.sale_ratio==null?'\u672a\u77e5':nf(m.sale_ratio,1)+'x',m.sale_ratio==null?'big neg':m.sale_ratio>2?'big neg':'big pos');
+    put('dm4note',`儲備 ${m.usd_reserve_musd==null?'未知':'$'+nf(m.usd_reserve_musd,1)+'M'}｜${m.usd_reserve_basis==='gross_reserve_less_all_period_atm_proceeds'?'已扣當週全部 ATM 淨募資的保守下限':'請查來源口徑'}`,'mini');
+    put('dm5note',`${String(m.sale_ratio_basis||'').includes('reconciliation_zero')?'完整週 SEC 連續期對帳推定':'直接揭露或備援'}｜信心 ${m.sale_ratio_confidence||'未知'}`,'mini');
     set('dm6',m.sats_per_share==null?'N/A':Math.round(m.sats_per_share).toLocaleString());
     set('dm7',pct(m.strc_discount));
     set('bmnrGrossMultiple',b.market_cap_to_gross_treasury==null?'N/A':nf(b.market_cap_to_gross_treasury)+'x');

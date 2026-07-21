@@ -21,6 +21,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -619,16 +620,24 @@ def collect_strategy_purchases() -> list[Observation]:
             continue
         if window_start <= row_date <= today:
             rolling_rows.append(row)
-    rolling_sales_musd = sum(max(-(safe_float(row.get("total_purchase_price")) or 0), 0) for row in rolling_rows) / 1e6 if window_is_covered else None
-    rolling_purchases_musd = sum(max(safe_float(row.get("total_purchase_price")) or 0, 0) for row in rolling_rows) / 1e6 if window_is_covered else None
-    rolling_net_btc = sum(safe_float(row.get("count")) or 0 for row in rolling_rows) if window_is_covered else None
+    rolling_prices = [safe_float(row.get("total_purchase_price")) for row in rolling_rows]
+    rolling_counts = [safe_float(row.get("count")) for row in rolling_rows]
+    rolling_fields_complete = bool(
+        window_is_covered
+        and rolling_rows
+        and all(value is not None for value in rolling_prices)
+        and all(value is not None for value in rolling_counts)
+    )
+    rolling_sales_musd = sum(max(-value, 0) for value in rolling_prices if value is not None) / 1e6 if rolling_fields_complete else None
+    rolling_purchases_musd = sum(max(value, 0) for value in rolling_prices if value is not None) / 1e6 if rolling_fields_complete else None
+    rolling_net_btc = sum(value for value in rolling_counts if value is not None) if rolling_fields_complete else None
     detail = (
         f"date={latest.get('date_of_purchase')} title={latest.get('title')} "
         f"sec_url={(latest.get('sec') or {}).get('url')} source=strategy_purchases_next_data"
     )
     rolling_detail = (
         f"window={window_start.isoformat()}..{today.isoformat()} events={len(rolling_rows)} "
-        f"latest_disclosure={latest_date.isoformat()} coverage={'covered' if window_is_covered else 'stale_unknown_not_zero'} "
+        f"latest_disclosure={latest_date.isoformat()} coverage={'covered_complete' if rolling_fields_complete else 'stale_or_incomplete_unknown_not_zero'} "
         "source=strategy_purchases_next_data"
     )
     return [
@@ -638,9 +647,218 @@ def collect_strategy_purchases() -> list[Observation]:
         obs("mstr_strategy_latest_purchase_usd_m", (safe_float(latest.get("total_purchase_price")) or 0) / 1e6, "Strategy purchases page", url, ok=latest.get("total_purchase_price") is not None, detail=detail, as_of=latest.get("date_of_purchase"), basis="latest_event", source_tier="official_company"),
         obs("mstr_strategy_average_cost", safe_float(latest.get("average_price")), "Strategy purchases page", url, ok=latest.get("average_price") is not None, detail=detail, as_of=latest.get("date_of_purchase"), basis="latest_official_ledger", source_tier="official_company"),
         obs("mstr_strategy_latest_purchase_date", latest.get("date_of_purchase"), "Strategy purchases page", url, ok=bool(latest.get("date_of_purchase")), detail=detail, as_of=latest.get("date_of_purchase"), basis="latest_event", source_tier="official_company"),
-        obs("mstr_strategy_rolling_7d_sales_musd", rolling_sales_musd, "Strategy purchases page", url, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_sales", source_tier="official_company_derived"),
-        obs("mstr_strategy_rolling_7d_purchases_musd", rolling_purchases_musd, "Strategy purchases page", url, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_purchases", source_tier="official_company_derived"),
-        obs("mstr_strategy_rolling_7d_net_btc", rolling_net_btc, "Strategy purchases page", url, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_net_change", source_tier="official_company_derived"),
+        obs("mstr_strategy_rolling_7d_sales_musd", rolling_sales_musd, "Strategy purchases page", url, ok=rolling_sales_musd is not None, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_sales", source_tier="official_company_derived"),
+        obs("mstr_strategy_rolling_7d_purchases_musd", rolling_purchases_musd, "Strategy purchases page", url, ok=rolling_purchases_musd is not None, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_purchases", source_tier="official_company_derived"),
+        obs("mstr_strategy_rolling_7d_net_btc", rolling_net_btc, "Strategy purchases page", url, ok=rolling_net_btc is not None, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_net_change", source_tier="official_company_derived"),
+    ]
+
+
+class SecTableParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.tables: list[list[str]] = []
+        self.table_depth = 0
+        self.current_table: list[str] = []
+        self.cell_depth = 0
+        self.current_cell: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "table":
+            if self.table_depth == 0:
+                self.current_table = []
+            self.table_depth += 1
+        elif tag in {"td", "th"} and self.table_depth:
+            if self.cell_depth == 0:
+                self.current_cell = []
+            self.cell_depth += 1
+
+    def handle_data(self, data: str) -> None:
+        if self.cell_depth:
+            self.current_cell.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"td", "th"} and self.cell_depth:
+            self.cell_depth -= 1
+            if self.cell_depth == 0:
+                value = " ".join(" ".join(self.current_cell).split())
+                if value:
+                    self.current_table.append(value)
+        elif tag == "table" and self.table_depth:
+            self.table_depth -= 1
+            if self.table_depth == 0:
+                self.tables.append(self.current_table)
+
+
+def parse_sec_date(value: str) -> str | None:
+    match = re.search(r"([A-Z][a-z]+ \d{1,2}, \d{4})", value)
+    if not match:
+        return None
+    try:
+        return datetime.strptime(match.group(1), "%B %d, %Y").date().isoformat()
+    except ValueError:
+        return None
+
+
+def integer_cells(cells: list[str]) -> list[float]:
+    values: list[float] = []
+    for cell in cells:
+        match = re.fullmatch(r"([\d]{1,3}(?:,\d{3})+|\d+)(?:\s*\(\d+\))?", cell.strip())
+        if match:
+            values.append(float(match.group(1).replace(",", "")))
+    return values
+
+
+def parse_strategy_sec_btc_filing(html_text: str, filing: dict[str, str]) -> dict[str, Any] | None:
+    parser = SecTableParser()
+    parser.feed(html_text)
+    holdings_tables = [table for table in parser.tables if any("Aggregate BTC Holdings" in cell for cell in table)]
+    if not holdings_tables:
+        return None
+    holdings_table = holdings_tables[-1]
+    holdings_values = integer_cells(holdings_table)
+    if not holdings_values:
+        return None
+    holdings = holdings_values[-1]
+    acquired = 0.0
+    if any("BTC Acquired" in cell for cell in holdings_table) and len(holdings_values) >= 2:
+        acquired = holdings_values[0]
+    period_cell = next((cell for cell in holdings_table if cell.startswith("During Period ")), "")
+    period_dates = [parse_sec_date(value) for value in re.findall(r"[A-Z][a-z]+ \d{1,2}, \d{4}", period_cell)]
+    period_dates = [value for value in period_dates if value]
+    period_start = period_dates[0] if len(period_dates) >= 2 else None
+    period_end = period_dates[-1] if len(period_dates) >= 2 else None
+    period_end = period_end or next((parse_sec_date(cell) for cell in reversed(holdings_table) if cell.startswith("As of ")), None)
+    if not period_end:
+        period_end = filing["filing_date"]
+    direct_sales: list[float] = []
+    for table in parser.tables:
+        if not any("BTC Sold" in cell for cell in table):
+            continue
+        sale_price_index = next((index for index, cell in enumerate(table) if "Aggregate Sale Price" in cell and "millions" in cell), None)
+        if sale_price_index is None:
+            continue
+        for cell in table[sale_price_index + 1:]:
+            match = re.fullmatch(r"\$([\d,]+(?:\.\d+)?)", cell.strip())
+            if match:
+                direct_sales.append(float(match.group(1).replace(",", "")))
+                break
+    plain_text = html.unescape(re.sub(r"<[^>]+>", " ", html_text))
+    plain_text = re.sub(r"\s+", " ", plain_text)
+    reserve_match = re.search(
+        r'balance of the USD Reserve (?:is|was) \$([\d,.]+)\s*(billion|million)',
+        plain_text,
+        flags=re.IGNORECASE,
+    )
+    reserve_musd = None
+    if reserve_match:
+        reserve_musd = float(reserve_match.group(1).replace(",", "")) * (1000 if reserve_match.group(2).lower() == "billion" else 1)
+    atm_net_proceeds_musd = None
+    for table in parser.tables:
+        if not any("Net Proceeds (in millions)" in cell for cell in table) or "Total" not in table:
+            continue
+        total_index = len(table) - 1 - table[::-1].index("Total")
+        for cell in table[total_index + 1:]:
+            match = re.fullmatch(r"([\d,]+(?:\.\d+)?)", cell.strip())
+            if match:
+                atm_net_proceeds_musd = float(match.group(1).replace(",", ""))
+                break
+        if atm_net_proceeds_musd is not None:
+            break
+    return {
+        **filing,
+        "holdings": holdings,
+        "acquired": acquired,
+        "period_start": period_start,
+        "period_end": period_end,
+        "direct_sales_musd": sum(direct_sales) if direct_sales else None,
+        "usd_reserve_musd": reserve_musd,
+        "atm_net_proceeds_musd": atm_net_proceeds_musd,
+        "explicit_no_purchases": "No bitcoin purchases were made this week" in plain_text,
+    }
+
+
+def collect_strategy_sec_btc_updates() -> list[Observation]:
+    submissions_url = "https://data.sec.gov/submissions/CIK0001050446.json"
+    headers = {"User-Agent": SEC_USER_AGENT, "Accept-Encoding": "gzip, deflate"}
+    data = fetch_json(submissions_url, headers=headers)
+    recent = data.get("filings", {}).get("recent", {})
+    records: list[dict[str, str]] = []
+    for form, filing_date, accession, primary in zip(
+        recent.get("form", []),
+        recent.get("filingDate", []),
+        recent.get("accessionNumber", []),
+        recent.get("primaryDocument", []),
+    ):
+        if form != "8-K" or not all([filing_date, accession, primary]):
+            continue
+        archive_accession = accession.replace("-", "")
+        records.append({
+            "filing_date": filing_date,
+            "accession": accession,
+            "url": f"https://www.sec.gov/Archives/edgar/data/1050446/{archive_accession}/{primary}",
+        })
+        if len(records) >= 8:
+            break
+    parsed: list[dict[str, Any]] = []
+    for record in records:
+        filing_html = fetch_text(record["url"], headers=headers)
+        btc_update = parse_strategy_sec_btc_filing(filing_html, record)
+        if btc_update:
+            parsed.append(btc_update)
+        if len(parsed) >= 2:
+            break
+        time.sleep(0.15)
+    if len(parsed) < 2:
+        raise ValueError("Fewer than two consecutive Strategy SEC BTC updates were parseable")
+    current, previous = parsed[0], parsed[1]
+    inferred_sold_btc = previous["holdings"] + current["acquired"] - current["holdings"]
+    if inferred_sold_btc < 0:
+        raise ValueError("Strategy SEC BTC holdings reconciliation produced negative inferred sales")
+    sales_musd = current["direct_sales_musd"]
+    sale_basis = "direct_reported_sale_proceeds"
+    contiguous_period = False
+    if current.get("period_start") and previous.get("period_end"):
+        contiguous_period = (
+            datetime.fromisoformat(current["period_start"]).date()
+            - datetime.fromisoformat(previous["period_end"]).date()
+        ).days == 1
+    complete_week = False
+    if current.get("period_start") and current.get("period_end"):
+        complete_week = (
+            datetime.fromisoformat(current["period_end"]).date()
+            - datetime.fromisoformat(current["period_start"]).date()
+        ).days == 6
+    reconciled_zero = bool(
+        sales_musd is None
+        and inferred_sold_btc == 0
+        and current["acquired"] == 0
+        and current.get("explicit_no_purchases")
+        and contiguous_period
+        and complete_week
+    )
+    if reconciled_zero:
+        sales_musd = 0.0
+        sale_basis = "complete_week_two_filing_reported_sales_reconciliation_zero"
+    reserve_gross = current.get("usd_reserve_musd")
+    atm_net_proceeds = current.get("atm_net_proceeds_musd")
+    reserve_settled_floor = (
+        max(reserve_gross - atm_net_proceeds, 0)
+        if reserve_gross is not None and atm_net_proceeds is not None
+        else None
+    )
+    detail = (
+        f"current_accn={current['accession']} previous_accn={previous['accession']} "
+        f"period={current.get('period_start')}..{current.get('period_end')} contiguous={contiguous_period} complete_week={complete_week} "
+        f"previous_holdings={previous['holdings']:.0f} acquired={current['acquired']:.0f} "
+        f"current_holdings={current['holdings']:.0f} inferred_sold_btc={inferred_sold_btc:.0f} "
+        f"reported_sales_musd={sales_musd} sale_basis={sale_basis}"
+    )
+    return [
+        obs("mstr_sec_btc_holdings_latest", current["holdings"], "Strategy SEC 8-K BTC update", current["url"], detail=detail, as_of=current["period_end"], basis="official_weekly_holdings", source_tier="official_filing"),
+        obs("mstr_sec_rolling_7d_sales_musd", sales_musd, "Strategy SEC 8-K BTC update", current["url"], ok=sales_musd is not None, detail=detail, as_of=current["period_end"], basis=sale_basis, source_tier="official_filing_derived"),
+        obs("mstr_sec_rolling_7d_acquired_btc", current["acquired"], "Strategy SEC 8-K BTC update", current["url"], detail=detail, as_of=current["period_end"], basis="official_weekly_acquisition", source_tier="official_filing"),
+        obs("mstr_sec_usd_reserve_gross_musd", reserve_gross, "Strategy SEC 8-K USD Reserve update", current["url"], ok=reserve_gross is not None, detail=f"current_accn={current['accession']} includes_expected_unsettled_atm=true", as_of=current["period_end"], basis="official_gross_usd_reserve_including_unsettled_atm", source_tier="official_filing"),
+        obs("mstr_sec_usd_reserve_settled_floor_musd", reserve_settled_floor, "Strategy SEC 8-K USD Reserve conservative floor", current["url"], ok=reserve_settled_floor is not None, detail=f"gross_reserve_musd={reserve_gross} less_full_period_atm_net_proceeds_musd={atm_net_proceeds} conservative_floor=true", as_of=current["period_end"], basis="gross_reserve_less_all_period_atm_proceeds", source_tier="official_filing_derived"),
     ]
 
 def collect_sec_submissions() -> list[Observation]:
@@ -720,6 +938,19 @@ def set_automated_input(
     value = safe_float(observation.value) if observation else None
     if value is None and not allow_none:
         return
+    if observation is None:
+        inputs[key] = None
+        provenance.setdefault("fields", {})[key] = {
+            "source_type": "missing_required",
+            "source_ref": source_ref,
+            "detail": "No valid source observation was available; unknown is preserved and decision gates must fail closed",
+            "as_of": None,
+            "fetched_at": now_iso(),
+            "basis": "unknown_not_zero",
+            "source_tier": "missing",
+            "confidence": "none",
+        }
+        return
     inputs[key] = value
     provenance.setdefault("fields", {})[key] = {
         "source_type": source_type,
@@ -739,17 +970,22 @@ def build_effective_inputs(observations: list[Observation]) -> tuple[dict[str, A
     provenance["status"] = "mixed_automated_manual"
     provenance["updated_at"] = today_utc()
     sec_cash = latest_observation(observations, "mstr_sec_cash_musd")
+    sec_weekly_reserve = latest_observation(observations, "mstr_sec_usd_reserve_settled_floor_musd")
+    sec_weekly_reserve_gross = latest_observation(observations, "mstr_sec_usd_reserve_gross_musd")
     sec_common_shares = latest_observation(observations, "mstr_sec_common_shares_outstanding_m")
     sec_diluted = latest_observation(observations, "mstr_sec_diluted_shares_m")
     sec_dtl = latest_observation(observations, "mstr_sec_deferred_tax_liability_musd")
-    strategy_btc = latest_observation(observations, "mstr_strategy_btc_holdings")
-    strategy_weekly_sales = latest_observation(observations, "mstr_strategy_rolling_7d_sales_musd")
-    set_automated_input(inputs, provenance, "usd_reserve_musd", sec_cash, "SEC companyfacts CashAndCashEquivalentsAtCarryingValue", "official_filing_structured")
+    strategy_btc = latest_observation(observations, "mstr_sec_btc_holdings_latest") or latest_observation(observations, "mstr_strategy_btc_holdings")
+    strategy_weekly_sales = latest_observation(observations, "mstr_sec_rolling_7d_sales_musd") or latest_observation(observations, "mstr_strategy_rolling_7d_sales_musd")
+    reserve_observation = sec_weekly_reserve or sec_weekly_reserve_gross or sec_cash
+    reserve_confidence = "high" if sec_weekly_reserve else "medium" if sec_weekly_reserve_gross else "low"
+    set_automated_input(inputs, provenance, "usd_reserve_musd", reserve_observation, "Strategy SEC 8-K conservative floor; gross disclosed reserve fallback; SEC companyfacts last resort", "official_filing_derived", reserve_confidence)
     set_automated_input(inputs, provenance, "common_shares_outstanding_m", sec_common_shares, "SEC filing cover EntityCommonStockSharesOutstanding across share classes", "official_filing_inline_xbrl")
     set_automated_input(inputs, provenance, "diluted_shares_m", sec_diluted, "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding", "official_filing_structured", "medium")
     set_automated_input(inputs, provenance, "deferred_tax_liability_musd", sec_dtl, "SEC companyfacts DeferredTaxLiabilities", "official_filing_structured")
-    set_automated_input(inputs, provenance, "mstr_btc_holdings", strategy_btc, "Strategy official purchases page", "official_company_disclosure")
-    set_automated_input(inputs, provenance, "weekly_btc_sales_musd", strategy_weekly_sales, "Strategy official purchases ledger rolling 7-day reported sales", "official_company_derived", allow_none=True)
+    set_automated_input(inputs, provenance, "mstr_btc_holdings", strategy_btc, "Strategy SEC 8-K BTC update; official purchases page fallback", "official_filing_disclosure")
+    sales_confidence = "medium" if strategy_weekly_sales and "reconciliation_zero" in str(strategy_weekly_sales.basis) else "high"
+    set_automated_input(inputs, provenance, "weekly_btc_sales_musd", strategy_weekly_sales, "Strategy SEC 8-K complete-week reported-sales reconciliation; official purchases ledger fallback", "official_filing_derived", sales_confidence, allow_none=True)
     provenance.setdefault("fields", {})["cash_other_musd"] = {
         "source_type": "policy_assumption",
         "source_ref": "Conservative valuation policy",
@@ -996,9 +1232,9 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
 
     bmnr_eth = safe_float(latest_value(observations, "bmnr_eth_holdings"))
     bmnr_btc = safe_float(latest_value(observations, "bmnr_btc_holdings"))
-    bmnr_cash = safe_float(latest_value(observations, "bmnr_cash_marketable_musd")) or 0
-    bmnr_beast = safe_float(latest_value(observations, "bmnr_beast_stake_musd")) or 0
-    bmnr_eightco = safe_float(latest_value(observations, "bmnr_eightco_stake_musd")) or 0
+    bmnr_cash = safe_float(latest_value(observations, "bmnr_cash_marketable_musd"))
+    bmnr_beast = safe_float(latest_value(observations, "bmnr_beast_stake_musd"))
+    bmnr_eightco = safe_float(latest_value(observations, "bmnr_eightco_stake_musd"))
     bmnr_staked_eth = safe_float(latest_value(observations, "bmnr_staked_eth"))
     bmnr_reported_total = safe_float(latest_value(observations, "bmnr_reported_total_holdings_musd"))
     bmnr_shares_obs = latest_observation(observations, "bmnr_sec_common_shares_m")
@@ -1018,7 +1254,7 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
         else bmnr_reported_shares
     )
     bmnr_gross_nav = None
-    if bmnr_eth is not None and eth_px is not None and bmnr_btc is not None and btc_px is not None:
+    if all(value is not None for value in [bmnr_eth, eth_px, bmnr_btc, btc_px, bmnr_cash, bmnr_beast, bmnr_eightco]):
         bmnr_gross_nav = bmnr_eth * eth_px / 1e6 + bmnr_btc * btc_px / 1e6 + bmnr_cash + bmnr_beast + bmnr_eightco
     bmnr_market_cap = bmnr_estimated_shares * bmnr_px if bmnr_estimated_shares is not None and bmnr_px is not None else None
     bmnr_market_to_gross = bmnr_market_cap / bmnr_gross_nav if bmnr_market_cap is not None and bmnr_gross_nav else None
@@ -1094,8 +1330,14 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "enterprise_value_to_btc_nav": enterprise_mnav,
             "enterprise_mnav": enterprise_mnav,
             "pref_dilution_flag": pref_dilution_flag,
+            "usd_reserve_musd": inputs["usd_reserve_musd"],
+            "usd_reserve_basis": input_provenance.get("fields", {}).get("usd_reserve_musd", {}).get("basis"),
+            "usd_reserve_confidence": input_provenance.get("fields", {}).get("usd_reserve_musd", {}).get("confidence"),
             "coverage_months": coverage_months,
+            "weekly_reported_btc_sales_musd": weekly_sales,
             "sale_ratio": sale_ratio,
+            "sale_ratio_basis": input_provenance.get("fields", {}).get("weekly_btc_sales_musd", {}).get("basis"),
+            "sale_ratio_confidence": input_provenance.get("fields", {}).get("weekly_btc_sales_musd", {}).get("confidence"),
             "sats_per_share": sats_per_share,
             "strc_discount": strc_discount,
             "common_valuation_gate_ok": common_valuation_gate_ok,
@@ -1208,6 +1450,7 @@ def collect_all() -> list[Observation]:
         ("sec_facts", collect_mstr_sec_companyfacts),
         ("mstr_cover_shares", collect_mstr_cover_shares),
         ("strategy_purchases", collect_strategy_purchases),
+        ("strategy_sec_btc_updates", collect_strategy_sec_btc_updates),
         ("bmnr_sec_treasury", collect_bmnr_sec_treasury),
     ]
     observations: list[Observation] = []

@@ -104,7 +104,7 @@ async function loadDashboard(){
     document.getElementById("consensusCount").textContent=`${Math.min(brief.consensus_signals.length,3)} 項`;
     document.getElementById("targetBrief").innerHTML=targetCards(brief.conditional_targets,brief.bottom_assessment);
     const strip=document.getElementById("qualityStrip");strip.className=`quality ${allSafe?"good":"bad"}`;strip.textContent=allSafe?`三重總閘門通過｜資料信心 ${analytics.quality.confidence}`:`研究級資料｜交易封鎖｜驗證 ${verify.status}／日期 ${dateSafe?"一致":"不一致"}／邏輯 ${analytics.quality.logic_audit_status}｜${(verify.failures||[])[0]||(verify.degradations||[])[0]||"請查驗證報告"}`;
-    const m=latest.metrics?.mstr_metrics||{},contractBlocked=m.contract_red_light!==false||!allSafe;document.getElementById("actionBadge").textContent=allSafe?`BTC ${latest.metrics?.btc_standard?.regime||"資料不足"} · MSTR ${contractBlocked?"禁開":"觀察"}`:"資料或邏輯未通過 · 交易封鎖";document.getElementById("riskBadge").textContent=`MSTR：STRC ${pct(m.strc_discount)}／7 日賣幣 ${m.sale_ratio==null?"未知":num(m.sale_ratio,1)+"x"}`;
+    const m=latest.metrics?.mstr_metrics||{},contractBlocked=m.contract_red_light!==false||!allSafe,saleBasis=String(m.sale_ratio_basis||"").includes("reconciliation_zero")?"對帳推定":"揭露值";document.getElementById("actionBadge").textContent=allSafe?`BTC ${latest.metrics?.btc_standard?.regime||"資料不足"} · MSTR ${contractBlocked?"禁開":"觀察"}`:"資料或邏輯未通過 · 交易封鎖";document.getElementById("riskBadge").textContent=`MSTR：STRC ${pct(m.strc_discount)}／7 日已報告賣幣 ${m.sale_ratio==null?"未知":num(m.sale_ratio,1)+"x（"+saleBasis+"）"}`;
   }catch(error){failClosed(error.message)}finally{busy.forEach(id=>document.getElementById(id)?.setAttribute("aria-busy","false"))}
 }
 loadDashboard();

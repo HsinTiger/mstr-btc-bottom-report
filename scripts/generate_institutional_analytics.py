@@ -346,6 +346,9 @@ def build_exclusive_signals(
     enterprise_ratio = number(mstr.get("enterprise_value_to_btc_nav") or mstr.get("enterprise_mnav"))
     strc_discount = number(mstr.get("strc_discount"))
     sale_ratio = number(mstr.get("sale_ratio"))
+    sale_basis = str(mstr.get("sale_ratio_basis") or "unknown")
+    sale_confidence = str(mstr.get("sale_ratio_confidence") or "none")
+    sale_read = "完整週 SEC 8-K 連續期持幣對帳；不是公司直接揭露 $0" if "reconciliation_zero" in sale_basis else "SEC 8-K 直接揭露或來源備援"
     mstr_return = pct_change(prices.get("mstr_usd"), previous_prices.get("mstr_usd"))
     btc_return = pct_change(prices.get("btc_usd"), previous_prices.get("btc_usd"))
     relative_return = None if mstr_return is None or btc_return is None else mstr_return - btc_return
@@ -369,7 +372,7 @@ def build_exclusive_signals(
         lagging=[
             indicator("普通股市值／普通股淨值 ≤1.0x", fmt_multiple(common_ratio), "pass" if common_ratio is not None and common_ratio <= 1 else "fail", "估值安全邊際"),
             indicator("STRC 折價 ≤5%", fmt_pct(strc_discount), "pass" if strc_discount is not None and strc_discount <= 0.05 else "fail", "優先股市場信任"),
-            indicator("7 日賣幣壓力可觀測且 ≤2x", fmt_multiple(sale_ratio), "unknown" if sale_ratio is None else "pass" if sale_ratio <= 2 else "fail", "固定義務現金壓力"),
+            indicator("7 日已報告賣幣壓力可觀測且 ≤2x", fmt_multiple(sale_ratio), "unknown" if sale_ratio is None else "pass" if sale_ratio <= 2 else "fail", f"{sale_read}｜信心 {sale_confidence}"),
         ],
         next_trigger="普通股市值／普通股淨值降至 1.0x 以下、STRC 折價收斂至 5% 以下，且 7 日賣幣資料恢復可觀測，才重新評估 2.5x 合約。",
         confidence=confidence,

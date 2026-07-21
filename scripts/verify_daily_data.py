@@ -502,7 +502,11 @@ def main() -> int:
         warnings,
     )
     check_observation_freshness("BTC MVRV", observations.get("btc_mvrv_current"), 3, 7, failures, degradations, evidence)
-    check_observation_freshness("Strategy BTC holdings", observations.get("mstr_strategy_btc_holdings"), 14, 45, failures, degradations, evidence)
+    strategy_holdings = observations.get("mstr_sec_btc_holdings_latest") or observations.get("mstr_strategy_btc_holdings")
+    check_observation_freshness("Strategy BTC holdings", strategy_holdings, 14, 45, failures, degradations, evidence)
+    sec_sales = observations.get("mstr_sec_rolling_7d_sales_musd")
+    if sec_sales and sec_sales.get("ok"):
+        check_observation_freshness("Strategy SEC 7d sales", sec_sales, 2, 7, failures, degradations, evidence)
     check_observation_freshness("BMNR treasury holdings", observations.get("bmnr_eth_holdings"), 14, 30, failures, degradations, evidence)
     for ticker in ["mstr", "bmnr", "strc"]:
         check_equity_cross_source(
@@ -580,6 +584,10 @@ def main() -> int:
     bmnr_metrics = snapshot.get("metrics", {}).get("bmnr_metrics", {})
     bmnr_required = [
         "eth_holdings",
+        "btc_holdings",
+        "cash_marketable_musd",
+        "beast_stake_musd",
+        "eightco_stake_musd",
         "bottom_up_gross_treasury_musd",
         "buyback_adjusted_shares_estimate_m",
         "market_cap_to_gross_treasury",
@@ -606,6 +614,9 @@ def main() -> int:
     fields = provenance.get("fields", {})
     manual_risk_keys = ["mstr_btc_holdings", "usd_reserve_musd", "cash_other_musd", "debt_face_musd", "annual_interest_musd", "preferred", "weekly_btc_sales_musd", "common_shares_outstanding_m", "deferred_tax_liability_musd", "prev_pref_notional_musd", "prev_mnav_equity"]
     manual_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") in {"manual", None}]
+    missing_required_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") == "missing_required"]
+    if missing_required_fields:
+        failures.append("required capital-structure sources missing: " + ", ".join(missing_required_fields))
     if manual_fields:
         degradations.append("manual capital-structure inputs: " + ", ".join(manual_fields))
     if provenance.get("status") != "automated":

@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T09:51:26+00:00",
-  "snapshot_generated_at": "2026-07-21T09:26:43+00:00",
+  "generated_at": "2026-07-21T11:33:59+00:00",
+  "snapshot_generated_at": "2026-07-21T11:33:53+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -51,14 +51,14 @@
       "id": "CONTRACT_RED_LIGHT_FAILS_CLOSED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "actual=True, expected=True, sale_ratio=N/A, coverage_months=13.7, strc_discount=12.9%",
+      "evidence": "actual=True, expected=True, sale_ratio=0.00, coverage_months=18.4, strc_discount=12.9%",
       "risk_if_failed": "Missing or adverse capital-stack inputs could silently open the leveraged-trade gate."
     },
     {
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=fail, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 20/100, confidence=低",
+      "evidence": "verification=degraded, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 47/100, confidence=低",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
     },
     {
@@ -79,28 +79,28 @@
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_equity_price_to_nav=1.138x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 20/100",
+      "evidence": "common_equity_price_to_nav=1.110x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 47/100",
       "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
       "id": "COMMON_VALUATION_GATE_DIRECTION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.138x, preferred_distortion_flag=False",
+      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.110x, preferred_distortion_flag=False",
       "risk_if_failed": "A premium above common NAV could be mislabeled as valuation safety."
     },
     {
       "id": "CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.138x, enterprise_value_to_btc_nav=1.040x",
+      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.110x, enterprise_value_to_btc_nav=1.026x",
       "risk_if_failed": "Financing capacity and investor valuation could be collapsed into one misleading green light."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.138x, sats_per_share=240770",
+      "evidence": "equity_mnav=1.110x, sats_per_share=240770",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
@@ -114,14 +114,14 @@
       "id": "SALE_PRESSURE_BLOCKS_LEVERAGED_ADD",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "sale_ratio=N/Ax, contract_red_light=True",
+      "evidence": "sale_ratio=0.00x, contract_red_light=True",
       "risk_if_failed": "Forced-sale pressure could be treated as a dip-buy setup."
     },
     {
       "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "manual_input_provenance=mixed_automated_manual, verification=fail; pass means false-green-light is blocked, not that inputs are fully automated",
+      "evidence": "manual_input_provenance=mixed_automated_manual, verification=degraded; pass means false-green-light is blocked, not that inputs are fully automated",
       "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
     },
     {
@@ -135,7 +135,7 @@
       "id": "RESERVE_COVERAGE_ESCALATES_BELOW_ONE_YEAR",
       "status": "pass",
       "severity": "major",
-      "evidence": "coverage_months=13.7, contract_red_light=True",
+      "evidence": "coverage_months=18.4, contract_red_light=True",
       "risk_if_failed": "Liquidity runway deterioration could be missed in leveraged sizing."
     },
     {
@@ -171,21 +171,21 @@
     {
       "metric": "普通股市值／普通股淨值",
       "threshold": "> 1.00 = 溢價；≤ 1.00 = 折價背景，仍非單獨買進訊號",
-      "current": "1.138x",
+      "current": "1.110x",
       "rationale": "市值除以扣債務、優先股與稅務楔子後的普通股淨值；倍率愈低，估值相對愈便宜。",
       "action": "高於 1.0 禁止宣稱普通股便宜；低於 1.0 仍須通過資料品質與資本結構覆核。"
     },
     {
       "metric": "企業價值／BTC 總值",
       "threshold": "< 1.00 = 企業價值低於 BTC 總值；> 1.00 = 資本飛輪可能仍可運作",
-      "current": "1.040x",
+      "current": "1.026x",
       "rationale": "分子採普通股市值加債務與優先股、再扣現金；與普通股估值是不同問題。",
       "action": "只能判斷企業層溢價與融資飛輪；不可當作普通股便宜的證據。"
     },
     {
       "metric": "每週賣幣壓力倍數",
       "threshold": "> 2.00 is forced-sale pressure red flag",
-      "current": "N/Ax",
+      "current": "0.00x",
       "rationale": "Weekly BTC sales versus economic cushion can turn financing reflexivity from tailwind to headwind.",
       "action": "Block 2.5x tactical adds when above threshold."
     },
@@ -199,7 +199,7 @@
     {
       "metric": "USD reserve coverage",
       "threshold": "< 12 months weakens survivability buffer",
-      "current": "13.7 months",
+      "current": "18.4 months",
       "rationale": "Cash duration matters more than narrative when dividends, interest, or ATM access tighten.",
       "action": "Escalate to risk-off review if coverage drops below one year."
     },
