@@ -1,18 +1,23 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-21T11:33:55+00:00",
+  "verified_at": "2026-07-21T11:45:57+00:00",
   "date": "2026-07-21",
-  "snapshot_generated_at": "2026-07-21T11:33:53+00:00",
-  "market_universe_generated_at": "2026-07-21T11:14:03+00:00",
+  "snapshot_generated_at": "2026-07-21T11:45:55+00:00",
+  "market_universe_generated_at": "2026-07-21T11:45:57+00:00",
   "status": "degraded",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
   "degradations": [
+    "market universe: Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: BTC 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: BTC 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
+    "market universe: ETH 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: ETH 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
     "market universe: BTC ETF 流向僅有第三方單一來源，不作硬觸發",
     "market universe: ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
-    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.92% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-    "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.09% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+    "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.31% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+    "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.37% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
     "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
     "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
     "capital-structure provenance status=mixed_automated_manual",
@@ -20,25 +25,25 @@
     "common_shares_outstanding_m: official input stale 86 days > 45"
   ],
   "warnings": [
-    "STRC equity: 報價基準不同且差距 1.03%，需留意盤前/盤後波動"
+    "STRC equity: 報價基準不同且差距 1.25%，需留意盤前/盤後波動"
   ],
   "evidence": [
-    "market universe quality=degraded score=92 sources=50 age_hours=0.33",
-    "btc_usd_coingecko=66208 from CoinGecko simple price",
-    "btc_usd_coinbase=66224.83 from Coinbase Exchange ticker",
-    "eth_usd_coingecko=1929.38 from CoinGecko simple price",
-    "eth_usd_coinbase=1930.52 from Coinbase Exchange ticker",
+    "market universe quality=degraded score=72 sources=44 age_hours=0.00",
+    "btc_usd_coingecko=66275 from CoinGecko simple price",
+    "btc_usd_coinbase=66300.38 from Coinbase Exchange ticker",
+    "eth_usd_coingecko=1932.69 from CoinGecko simple price",
+    "eth_usd_coinbase=1933.69 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.82 from Yahoo Finance chart",
     "BTC MVRV as_of=2026-07-20 age_days=1",
     "Strategy BTC holdings as_of=2026-07-19 age_days=2",
     "Strategy SEC 7d sales as_of=2026-07-19 age_days=2",
     "BMNR treasury holdings as_of=2026-07-19 age_days=2",
-    "MSTR Yahoo/Nasdaq=97.82/100.7201; basis=regular_market_close/extended_hours_realtime; gap=2.92%",
-    "BMNR Yahoo/Nasdaq=16.63/16.9805; basis=regular_market_close/extended_hours_realtime; gap=2.09%",
-    "STRC Yahoo/Nasdaq=87.1/88.0; basis=regular_market_close/extended_hours_realtime; gap=1.03%",
+    "MSTR Yahoo/Nasdaq=97.82/101.11; basis=regular_market_close/extended_hours_realtime; gap=3.31%",
+    "BMNR Yahoo/Nasdaq=16.63/17.0283; basis=regular_market_close/extended_hours_realtime; gap=2.37%",
+    "STRC Yahoo/Nasdaq=87.1/88.2; basis=regular_market_close/extended_hours_realtime; gap=1.25%",
     "SEC latest form=8-K",
     "BTC standard=偏冷等待區 score=-5.8",
-    "BMNR gross treasury=11786.931164505m market_cap_to_gross=0.8433229814859485 as_of=2026-07-19"
+    "BMNR gross treasury=11805.66491475m market_cap_to_gross=0.841984759350634 as_of=2026-07-19"
   ],
   "structural_context_quality": {
     "status": "degraded",
@@ -50,7 +55,7 @@
       "Public-company treasury aggregation exposes retrieval time rather than upstream filing time"
     ],
     "evidence": [
-      "BTC thesis gold_ratio=0.04618076694376648 stablecoin_supply=308298977292.9011 company_supply_share=0.06406334007711519"
+      "BTC thesis gold_ratio=0.04627253886584587 stablecoin_supply=308298977292.9011 company_supply_share=0.06406334007711519"
     ],
     "verification_scope": "formula integrity, timestamps and declared source semantics; not an independent reconstruction of every upstream dataset"
   },
