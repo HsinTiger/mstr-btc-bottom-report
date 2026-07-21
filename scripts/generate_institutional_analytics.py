@@ -560,7 +560,10 @@ def main() -> int:
     logic_audit = load_json(LOGIC_AUDIT_PATH, {})
     knowledge = load_json(KNOWLEDGE_PATH, {"schema": 0, "nodes": [], "quality": {"status": "missing"}})
     previous = latest_previous(database, snapshot["date"])
-    verification_current = verification.get("date") == snapshot.get("date")
+    verification_current = (
+        verification.get("date") == snapshot.get("date")
+        and verification.get("snapshot_generated_at") == snapshot.get("generated_at")
+    )
     effective_verification = dict(verification)
     if not verification_current:
         effective_verification["status"] = "stale_or_mismatched"
@@ -579,9 +582,11 @@ def main() -> int:
         "schema": 2,
         "date": snapshot["date"],
         "generated_at": now_iso(),
+        "snapshot_generated_at": snapshot.get("generated_at"),
         "quality": {
             "verification_status": effective_verification.get("status"),
-            "verification_date_matches_snapshot": verification_current,
+            "verification_date_matches_snapshot": verification.get("date") == snapshot.get("date"),
+            "verification_bound_to_snapshot": verification_current,
             "confidence": confidence,
             "confidence_score_0_100": score,
             "degradations": effective_verification.get("degradations", []),

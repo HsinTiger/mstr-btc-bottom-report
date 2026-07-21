@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTC 體系儀表板｜日・週・月・回測・交易紀錄</title>
+<meta name="app-section" content="strategy-lab">
+<meta name="app-purpose" content="保存策略規格、版本化研究樣本、回測與個人交易紀錄">
+<meta name="app-update" content="每日資料加版本化研究">
+<title>策略研究室｜規則・回測・交易紀錄</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0d1117;--card:#161b22;--line:#30363d;--tx:#e6edf3;--dim:#8b949e;--g:#3fb950;--r:#f85149;--y:#d29922;--b:#58a6ff;--p:#bc8cff}
@@ -43,6 +46,9 @@ canvas{max-height:340px}
 input,select,textarea{background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:6px;padding:6px 8px;font-size:13px}
 button.act{background:#238636;border:none;color:#fff;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px}
 button.ghost{background:none;border:1px solid var(--line);color:var(--dim);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+.global-nav{position:static;display:flex;gap:10px;padding:9px 18px;overflow-x:auto;white-space:nowrap;background:#10151c;border-bottom:1px solid var(--line)}
+.global-nav a{color:var(--b);text-decoration:none;font-size:12px;font-weight:700}
+.scope-note{width:100%;color:var(--dim);font-size:12px}.scope-note b{color:var(--tx)}
 .formrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:10px}
 .formrow label{font-size:11px;color:var(--dim);display:block;margin-bottom:3px}
 .verdict{border-left:3px solid var(--b);padding:10px 12px;background:#0d419d1a;border-radius:0 8px 8px 0;margin:8px 0}
@@ -74,22 +80,23 @@ h2:first-child{margin-top:0}
 </head>
 <body>
 <header>
-  <h1>🧭 MSTR / BMNR 每日追蹤</h1>
-  <span class="sub"><a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/institutional-ic-memo-v3.md" style="color:#58a6ff;text-decoration:none">IC Memo v3 ↗</a>｜<a href="https://github.com/HsinTiger/mstr-btc-bottom-report/blob/main/btc-trading-system.md" style="color:#58a6ff;text-decoration:none">體系文件 ↗</a>｜<a href="index.html" style="color:#58a6ff;text-decoration:none">主儀表（五維監控）↗</a>｜<a href="daily-extensions.html" style="color:#58a6ff;text-decoration:none">每日延伸 ↗</a>｜<a href="analytics.html" style="color:#58a6ff;text-decoration:none">專業分析 ↗</a>｜數據截至 <b id="genDate"></b>｜<span id="liveState">內嵌數據</span></span>
-  <button class="ghost" onclick="refreshLive()">↻ 抓即時價</button>
+  <h1>🧭 策略研究室</h1>
+  <span class="sub">每日資料截至 <b id="genDate">待驗證</b>｜<span id="liveState">每日資料待驗證</span></span>
+  <div class="scope-note"><b>本專區回答：</b>策略規則、回測、歷史證據與交易紀錄如何對應今天的體系？研究樣本截至 2026-07-05；每日卡片由驗證管線更新；這裡不是今日決策首頁。</div>
 </header>
+<nav class="global-nav" aria-label="全站主要專區"><a href="index.html">今日決策</a><a href="market-monitor.html">市場雷達</a><a href="analytics.html">專業分析</a><a href="dashboard.html">策略研究室</a><a href="daily-extensions.html">每日延伸</a><a href="wiki.html">知識庫</a><a href="site-overview.html">專區總覽</a></nav>
 <nav>
-  <button class="on" data-t="today">今日</button>
-  <button data-t="week">本週</button>
-  <button data-t="month">本月</button>
+  <button data-t="today">規則閘門</button>
+  <button data-t="week">週線研究</button>
+  <button data-t="month">月線研究</button>
   <button data-t="bt">回測</button>
-  <button data-t="logic">邏輯</button>
+  <button class="on" data-t="logic">邏輯規格</button>
   <button data-t="log">交易紀錄</button>
 </nav>
 <main>
 
 <!-- ================= 今日 ================= -->
-<section class="tab on" id="today">
+<section class="tab" id="today">
   <div class="grid g4">
     <div class="card"><h3>今日裁決</h3><div class="big warn" id="topVerdict">載入中</div><div class="mini" id="topVerdictNote">依 BTC regime 與載具紅燈分開判斷</div></div>
     <div class="card"><h3>BTC 狀態機</h3><span class="badge s1" id="stateBadge">載入中</span><div class="mini" id="stateNote" style="margin-top:6px">等待每日標準分與資料覆蓋率</div></div>
@@ -277,7 +284,7 @@ h2:first-child{margin-top:0}
 </section>
 
 <!-- ================= 邏輯 ================= -->
-<section class="tab" id="logic">
+<section class="tab on" id="logic">
   <div class="verdict"><b>機構級決策鏈：</b>IC Memo v3 → L1 數據 → L2 狀態機（S1–S5） → L3 三閘門（紅燈可否決） → L4 執行（大倉現貨 4:1＋小倉 MSTR 2.5x） → L5 紅隊/IC 覆核。<br>
   <span class="mini">鐵則：KOL 是輸入不是答案｜觸發器代替預測｜無證偽條件不進場｜出局風險是唯一紅線｜激進在時機不在規模。</span></div>
   <div class="mini" style="margin:8px 0">依據標籤：<span class="tag" style="color:var(--g)">回測驗證</span> <span class="tag" style="color:var(--b)">KOL共識＋採納</span> <span class="tag" style="color:var(--p)">自有研究</span> <span class="tag" style="color:var(--y)">假說待驗</span></div>
@@ -438,6 +445,17 @@ async function fetchJson(url){
   return response.json();
 }
 
+function requireFresh(value,maxHours,label){
+  const timestamp=new Date(value);
+  if(!value||Number.isNaN(timestamp.getTime())) throw new Error(`${label} 時間戳缺漏或格式錯誤`);
+  const ageHours=(Date.now()-timestamp.getTime())/36e5;
+  if(ageHours < -1 || ageHours > maxHours) throw new Error(`${label} 已過期或時間位於未來`);
+}
+
+function requireCurrentDate(value,label){
+  if(value!==new Date().toISOString().slice(0,10)) throw new Error(`${label} 不是今日資料`);
+}
+
 async function loadDailySnapshot(){
   try{
     const [snap,verify,logic,analytics,history]=await Promise.all([
@@ -447,8 +465,15 @@ async function loadDailySnapshot(){
       fetchJson('data/daily/institutional_analytics.json'),
       fetchJson('data/history.json').catch(()=>null)
     ]);
-    if(snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==1) throw new Error('每日資料 schema 不相容');
+    if(snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2) throw new Error('每日資料 schema 不相容');
     if(!snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date) throw new Error('每日資料跨檔日期不一致');
+    requireCurrentDate(snap.date,'每日快照');
+    if(verify.snapshot_generated_at!==snap.generated_at) throw new Error('驗證報告未綁定目前快照');
+    if(logic.snapshot_generated_at!==snap.generated_at||analytics.snapshot_generated_at!==snap.generated_at) throw new Error('衍生分析未綁定目前快照');
+    requireFresh(snap.generated_at,30,'每日快照');
+    requireFresh(verify.verified_at,30,'驗證報告');
+    requireFresh(logic.generated_at,30,'邏輯稽核');
+    requireFresh(analytics.generated_at,30,'機構分析');
     const m=snap.metrics.mstr_metrics, b=snap.metrics.bmnr_metrics||{}, radar=snap.metrics.market_radar||{}, btcStd=snap.metrics.btc_standard||{};
     const nf=(v,d=2)=>v==null?'N/A':Number(v).toFixed(d);
     const pct=v=>v==null?'N/A':(Number(v)*100).toFixed(1)+'%';
@@ -531,18 +556,6 @@ async function loadDailySnapshot(){
   }
 }
 loadDailySnapshot();
-
-async function refreshLive(){
-  try{
-    const t=await (await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT')).json();
-    let f=C.fng;
-    try{const g=await (await fetch('https://api.alternative.me/fng/?limit=1')).json(); f=+g.data[0].value;}catch(e){}
-    document.getElementById('px').textContent=fmt(+t.price);
-    document.getElementById('fng').textContent=Number.isFinite(f)?Math.round(f):'N/A';
-    document.getElementById('liveState').textContent='即時（Binance）';
-    document.getElementById('liveState').className='pos';
-  }catch(e){ document.getElementById('liveState').textContent='即時抓取失敗，保留已驗證每日資料'; }
-}
 
 // ---- charts ----
 Chart.defaults.color='#8b949e'; Chart.defaults.borderColor='#30363d';
@@ -632,8 +645,8 @@ function render(){
 render();
 
 // ---- 五維溫度史（合併站同源資料；本機直開或無檔案時自動隱藏）----
-fetch('data/history.json').then(r=>r.json()).then(j=>{
-  const s=j.series||j; if(!Array.isArray(s)||!s.length) throw 0;
+fetchJson('data/history.json').then(j=>{
+  const s=j.series||j; if(!Array.isArray(s)||!s.length||s.some(item=>!item.date||!Number.isFinite(Number(item.composite)))) throw new Error('history schema 不相容');
   document.getElementById('histCard').style.display='block';
   line('cHist',s.map(x=>x.date),[
     {label:'整體溫度',data:s.map(x=>x.composite),borderColor:'#58a6ff',w:2},

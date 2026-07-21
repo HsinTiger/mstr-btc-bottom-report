@@ -175,11 +175,19 @@ def main() -> int:
     knowledge = load_json(KNOWLEDGE_PATH, {"status": "missing", "pages": [], "quality": {}})
     market = load_json(MARKET_PATH, {})
     existing = load_json(EXTENSIONS_PATH, {"schema": 2, "items": [], "archive": []})
+    snapshot_generated_at = snapshot.get("generated_at")
+    if not snapshot_generated_at:
+        raise SystemExit("Daily snapshot lineage is missing")
+    if verification.get("snapshot_generated_at") != snapshot_generated_at:
+        raise SystemExit("Verifier is not bound to the current daily snapshot")
+    if analytics.get("snapshot_generated_at") != snapshot_generated_at:
+        raise SystemExit("Institutional analytics is not bound to the current daily snapshot")
     viewpoints = build_viewpoints(analytics, verification, market)
     referenced_slugs = list(dict.fromkeys(slug for view in viewpoints for slug in view.get("wiki_refs", [])))
     today_item = {
         "date": snapshot["date"],
         "generated_at": now_iso(),
+        "snapshot_generated_at": snapshot_generated_at,
         "type": "daily_extension",
         "analysis_mode": "deterministic_with_governed_knowledge_constraints",
         "verification_status": verification.get("status"),
@@ -210,6 +218,7 @@ def main() -> int:
         "schema": 2,
         "updated_at": now_iso(),
         "current_date": snapshot["date"],
+        "snapshot_generated_at": snapshot_generated_at,
         "visible_window": visible + [tomorrow_watch(snapshot, analytics)],
         "items": visible,
         "archive": archive[-730:],

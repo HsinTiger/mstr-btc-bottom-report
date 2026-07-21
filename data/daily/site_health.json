@@ -1,0 +1,706 @@
+{
+  "schema": 1,
+  "generated_at": "2026-07-21T10:01:35+00:00",
+  "status": "fail",
+  "summary": {
+    "active_pages": 7,
+    "archive_pages": 2,
+    "pass": 2,
+    "degraded": 1,
+    "fail": 4,
+    "critical_failures": [
+      "today-decision",
+      "institutional-analysis"
+    ],
+    "critical_surface_failures": [],
+    "critical_data_failures": [
+      "today-decision",
+      "institutional-analysis"
+    ],
+    "degraded_pages": [
+      "market-radar"
+    ]
+  },
+  "pages": [
+    {
+      "id": "today-decision",
+      "path": "index.html",
+      "title": "今日決策",
+      "title_contains": "每日決策儀表板",
+      "lifecycle": "active",
+      "criticality": "critical",
+      "role": "只顯示今天最重要的結論、數字與是否能行動。",
+      "user_question": "今天能不能加大倉現貨、MSTR 2.5 倍合約或 BMNR？",
+      "open_when": "每天第一個打開；先看結論，再決定是否進入其他專區。",
+      "cadence": "每日",
+      "surface_type": "live_decision",
+      "owner_action": "keep",
+      "dependencies": [
+        {
+          "path": "data/daily/latest_snapshot.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 17498,
+          "lineage_source": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:43+00:00",
+          "age_hours": 0.58
+        },
+        {
+          "path": "data/daily/agent_verification_report.json",
+          "required": true,
+          "status": "fail",
+          "bytes": 6198,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:47+00:00",
+          "age_hours": 0.58,
+          "quality": "fail",
+          "reason": "資料品質狀態為 fail"
+        },
+        {
+          "path": "data/daily/institutional_analytics.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 26858,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:27+00:00",
+          "age_hours": 0.17
+        }
+      ],
+      "status": "fail",
+      "surface_status": "pass",
+      "data_status": "fail",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "market-radar",
+      "path": "market-monitor.html",
+      "title": "市場雷達",
+      "title_contains": "跨資產市場雷達",
+      "lifecycle": "active",
+      "criticality": "high",
+      "role": "追蹤 BTC、ETH、衍生品、ETF、DAT、熱門賽道與 BTC 長期論證。",
+      "user_question": "市場槓桿、機構流向與長期貨幣化背景今天有何變化？",
+      "open_when": "首頁結論需要市場結構、輪動或長期論證的第二層證據時。",
+      "cadence": "每 4 小時",
+      "surface_type": "live_market",
+      "owner_action": "keep",
+      "dependencies": [
+        {
+          "path": "data/daily/market_universe.json",
+          "required": true,
+          "status": "degraded",
+          "bytes": 59222,
+          "as_of": "2026-07-21T09:26:47+00:00",
+          "age_hours": 0.58,
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
+        },
+        {
+          "path": "data/daily/market_universe_history.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 3963,
+          "as_of": "2026-07-21T09:26:47+00:00",
+          "age_hours": 0.58
+        }
+      ],
+      "status": "degraded",
+      "surface_status": "pass",
+      "data_status": "degraded",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "institutional-analysis",
+      "path": "analytics.html",
+      "title": "專業分析",
+      "title_contains": "機構分析台",
+      "lifecycle": "active",
+      "criticality": "high",
+      "role": "拆解 BTC regime、MSTR 資本結構、BMNR 財庫估值、敏感度與反證。",
+      "user_question": "首頁結論的完整證據、風險堆疊與估值敏感度是什麼？",
+      "open_when": "準備做重大倉位決策，或需要檢查首頁結論如何形成時。",
+      "cadence": "每日",
+      "surface_type": "live_analysis",
+      "owner_action": "keep",
+      "dependencies": [
+        {
+          "path": "data/daily/institutional_analytics.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 26858,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:27+00:00",
+          "age_hours": 0.17
+        },
+        {
+          "path": "data/daily/logic_audit.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 12229,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:26+00:00",
+          "age_hours": 0.17,
+          "quality": "consistent"
+        },
+        {
+          "path": "data/daily/agent_verification_report.json",
+          "required": true,
+          "status": "fail",
+          "bytes": 6198,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:47+00:00",
+          "age_hours": 0.58,
+          "quality": "fail",
+          "reason": "資料品質狀態為 fail"
+        }
+      ],
+      "status": "fail",
+      "surface_status": "pass",
+      "data_status": "fail",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "daily-extension",
+      "path": "daily-extensions.html",
+      "title": "每日延伸",
+      "title_contains": "每日延伸",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "role": "將已驗證資料與 wiki 知識結合，提供三個延伸觀點及昨天／今天／明天對比。",
+      "user_question": "今天除了既有結論，還有哪三個值得追蹤的新觀點？",
+      "open_when": "完成今日決策後，用來擴充研究假說與明日觀察清單。",
+      "cadence": "每日",
+      "surface_type": "live_research",
+      "owner_action": "keep",
+      "dependencies": [
+        {
+          "path": "data/daily/daily_extensions.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 36634,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:27+00:00",
+          "age_hours": 0.17
+        },
+        {
+          "path": "data/daily/latest_snapshot.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 17498,
+          "lineage_source": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:43+00:00",
+          "age_hours": 0.58
+        },
+        {
+          "path": "data/daily/agent_verification_report.json",
+          "required": true,
+          "status": "fail",
+          "bytes": 6198,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:47+00:00",
+          "age_hours": 0.58,
+          "quality": "fail",
+          "reason": "資料品質狀態為 fail"
+        },
+        {
+          "path": "data/daily/institutional_analytics.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 26858,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:27+00:00",
+          "age_hours": 0.17
+        }
+      ],
+      "status": "fail",
+      "surface_status": "pass",
+      "data_status": "fail",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "strategy-lab",
+      "path": "dashboard.html",
+      "title": "策略研究室",
+      "title_contains": "策略研究室",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "role": "保存完整策略規格、歷史回測、研究樣本與個人交易紀錄；每日卡片由驗證資料覆蓋。",
+      "user_question": "策略規則、歷史證據與交易紀錄如何對應今天的體系？",
+      "open_when": "要檢查模型規則、歷史樣本或維護交易紀錄時；不是每日第一入口。",
+      "cadence": "每日資料＋版本化研究",
+      "surface_type": "mixed_live_and_versioned_research",
+      "research_as_of": "2026-07-05",
+      "owner_action": "reframe",
+      "dependencies": [
+        {
+          "path": "data/daily/latest_snapshot.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 17498,
+          "lineage_source": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:43+00:00",
+          "age_hours": 0.58
+        },
+        {
+          "path": "data/daily/logic_audit.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 12229,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:26+00:00",
+          "age_hours": 0.17,
+          "quality": "consistent"
+        },
+        {
+          "path": "data/daily/agent_verification_report.json",
+          "required": true,
+          "status": "fail",
+          "bytes": 6198,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:26:47+00:00",
+          "age_hours": 0.58,
+          "quality": "fail",
+          "reason": "資料品質狀態為 fail"
+        },
+        {
+          "path": "data/daily/institutional_analytics.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 26858,
+          "lineage": "2026-07-21T09:26:43+00:00",
+          "as_of": "2026-07-21T09:51:27+00:00",
+          "age_hours": 0.17
+        },
+        {
+          "path": "data/history.json",
+          "required": false,
+          "status": "pass",
+          "bytes": 10253
+        }
+      ],
+      "status": "fail",
+      "surface_status": "pass",
+      "data_status": "fail",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "mixed_surface_disclosure",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "knowledge-base",
+      "path": "wiki.html",
+      "title": "投資知識庫",
+      "title_contains": "投資 LLM Wiki",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "role": "保存可重用的概念、標的、來源、假說、反證與最後驗證日期。",
+      "user_question": "某個指標、公司或假說的正式定義與限制是什麼？",
+      "open_when": "看不懂名詞、需要追溯定義，或要深化每日延伸觀點時。",
+      "cadence": "研究變更時",
+      "surface_type": "governed_knowledge",
+      "owner_action": "keep",
+      "dependencies": [
+        {
+          "path": "wiki/manifest.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 5533
+        }
+      ],
+      "status": "pass",
+      "surface_status": "pass",
+      "data_status": "pass",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "site-governance",
+      "path": "site-overview.html",
+      "title": "專區總覽",
+      "title_contains": "專區總覽",
+      "lifecycle": "active",
+      "criticality": "high",
+      "role": "統籌每個專區的任務、資料責任、更新狀態、保留或封存決策。",
+      "user_question": "每個專區有何用途、現在是否健康、我應該何時打開？",
+      "open_when": "不知道該去哪一頁、懷疑頁面失修，或要檢查整個產品狀態時。",
+      "cadence": "每 4 小時＋每日",
+      "surface_type": "product_governance",
+      "owner_action": "keep",
+      "dependencies": [
+        {
+          "path": "data/site_registry.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 10586
+        }
+      ],
+      "status": "pass",
+      "surface_status": "pass",
+      "data_status": "pass",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "purpose_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "cadence_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "primary_navigation",
+          "status": "pass",
+          "reason": null,
+          "missing": []
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ]
+    },
+    {
+      "id": "legacy-leverage-plan",
+      "path": "leverage-2x-plan.html",
+      "title": "舊版 2 倍槓桿計畫",
+      "title_contains": "兩倍槓桿做多計畫",
+      "lifecycle": "archive",
+      "criticality": "low",
+      "role": "保留 2026-06-17 的舊版假設與行為紀錄，不再代表目前 2.5 倍 MSTR 合約體系。",
+      "user_question": "舊版槓桿計畫當時如何思考？",
+      "open_when": "只在回顧歷史決策時。",
+      "cadence": "不更新",
+      "surface_type": "static_archive",
+      "archive_as_of": "2026-06-17",
+      "replacement": "strategy-lab",
+      "owner_action": "archive",
+      "status": "pass",
+      "surface_status": "pass",
+      "data_status": "pass",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "archive_disclosure",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "archive_replacement",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "legacy-spacex-lesson",
+      "path": "spacex-lesson.html",
+      "title": "SpaceX 行為紀錄",
+      "title_contains": "SpaceX IPO",
+      "lifecycle": "archive",
+      "criticality": "low",
+      "role": "保留單次投資行為省思，不屬於 BTC／MSTR／BMNR 每日決策系統。",
+      "user_question": "當時如何處理恐懼與不敢出手？",
+      "open_when": "只在回顧投資心理時。",
+      "cadence": "不更新",
+      "surface_type": "static_archive",
+      "archive_as_of": "2026-06-17",
+      "replacement": "knowledge-base",
+      "owner_action": "archive",
+      "status": "pass",
+      "surface_status": "pass",
+      "data_status": "pass",
+      "checks": [
+        {
+          "name": "page_exists",
+          "status": "pass"
+        },
+        {
+          "name": "title_contract",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "owner_marker",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "archive_disclosure",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "archive_replacement",
+          "status": "pass",
+          "reason": null
+        },
+        {
+          "name": "local_links",
+          "status": "pass",
+          "broken": []
+        }
+      ],
+      "dependencies": []
+    }
+  ],
+  "governance_rules": [
+    "每個 active 專區必須有唯一問題、資料依賴與更新頻率。",
+    "頁面不得用未驗證即時資料覆蓋已驗證每日資料。",
+    "每日資料與歷史研究樣本混放時必須明示兩個日期。",
+    "封存頁不得出現在主要導航，且必須指向目前替代專區。",
+    "缺值、過期、schema 或日期不一致時 fail closed。"
+  ],
+  "publication_mode": "fail_closed_diagnostics_only"
+}

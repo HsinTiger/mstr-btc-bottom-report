@@ -64,11 +64,14 @@ jobs:
           print(f"Market universe valid: quality={data['quality']['status']} sources={len(data.get('sources', []))}")
           PY
 
+      - name: Audit product surfaces and publish fail-closed diagnostics
+        run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
+
       - name: Commit market data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily/market_universe.json data/daily/market_universe_history.json
+          git add data/daily/market_universe.json data/daily/market_universe_history.json data/daily/site_health.json
           if git diff --cached --quiet; then
             echo "No market-universe changes to commit."
           else

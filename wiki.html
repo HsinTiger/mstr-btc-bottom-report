@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>幣圈投資 LLM Wiki</title>
+<meta name="app-section" content="knowledge-base">
+<meta name="app-purpose" content="保存可重用定義、來源、假說、反證與最後驗證日期">
+<meta name="app-update" content="研究變更時">
+<title>投資 LLM Wiki｜定義・來源・反證</title>
 <style>
 :root{--bg:#e7e3da;--surface:#f1eee8;--surface2:#eae6dd;--surface3:#ddd6c9;--border:#d3ccbd;--border2:#beb6a3;
 --text:#44403a;--text2:#736c60;--text3:#9a9183;--ink:#34312b;--blue:#587888;--green:#6b8260;--purple:#8d7e98;--cyan:#6f968d;
@@ -48,6 +51,8 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:0.68rem;color:var(--text3);}
 .legend span{display:flex;align-items:center;gap:4px;} .legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
 .note{padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:0.8rem;}
+.product-nav{display:flex;gap:12px;overflow-x:auto;white-space:nowrap;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border);font-size:.76rem;font-weight:750;}
+.scope{padding:10px 14px;margin:10px 0 14px;border:1px solid var(--border);border-radius:9px;background:var(--surface2);font-size:.78rem;color:var(--text2);}
 /* mobile top bar (hidden on desktop) */
 .topbar{display:none;position:sticky;top:0;z-index:150;align-items:center;gap:12px;padding:11px 16px;background:rgba(241,238,232,0.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
 .topbar .burger{font-size:1.3rem;background:none;border:none;color:var(--text);cursor:pointer;line-height:1;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;}
@@ -70,6 +75,7 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
+<nav class="product-nav" aria-label="全站主要專區"><a href="index.html">今日決策</a><a href="market-monitor.html">市場雷達</a><a href="analytics.html">專業分析</a><a href="dashboard.html">策略研究室</a><a href="daily-extensions.html">每日延伸</a><a href="wiki.html">知識庫</a><a href="site-overview.html">專區總覽</a></nav>
 <div class="topbar">
   <button class="burger" id="burger" aria-label="選單">☰</button>
   <span class="tt">📚 投資 Wiki</span>
@@ -79,6 +85,7 @@ a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;}
   <nav class="side" id="side">
     <div class="logo">📚 幣圈投資 Wiki</div>
     <div class="sub">Karpathy LLM-Wiki 模式</div>
+    <div class="scope"><b>本專區回答：</b>某個指標、公司或假說的正式定義、來源、限制與反證是什麼？</div>
     <input id="search" placeholder="🔍 搜尋頁面…" autocomplete="off">
     <div id="nav"></div>
     <a class="home" href="index.html">← 回決策儀表</a>
@@ -120,10 +127,12 @@ const GCOL={'總述':'#587888','概念':'#8d7e98','標的':'#6b8260','來源':'#
 let PAGES={}, MAN=[], EDGES=[];
 const slugRe=/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
 
-fetch('wiki/manifest.json',{cache:'no-store'}).then(r=>r.json()).then(async m=>{
+fetch('wiki/manifest.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`manifest HTTP ${r.status}`);return r.json()}).then(async m=>{
+  if(m.schema!==1||!Array.isArray(m.pages)||!m.pages.length)throw new Error('知識庫 manifest schema 不相容');
+  if(m.pages.some(p=>!p.slug||!p.path||!p.title||!p.group||!p.status||!p.last_verified))throw new Error('知識庫頁面治理欄位缺漏');
   MAN=m.pages;
   await Promise.all(MAN.map(async p=>{
-    try{ const t=await (await fetch('wiki/'+p.path,{cache:'no-store'})).text();
+    try{ const response=await fetch('wiki/'+p.path,{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const t=await response.text();
       const links=[...t.matchAll(slugRe)].map(x=>x[1]).filter(s=>MAN.some(q=>q.slug===s));
       PAGES[p.slug]={...p,text:t,links:[...new Set(links)]};
     }catch(e){ PAGES[p.slug]={...p,text:'(讀取失敗)',links:[]}; }
@@ -135,7 +144,7 @@ fetch('wiki/manifest.json',{cache:'no-store'}).then(r=>r.json()).then(async m=>{
   window.addEventListener('hashchange',()=>{const s=decodeURIComponent(location.hash.replace('#',''));if(PAGES[s])load(s);});
   const start=decodeURIComponent(location.hash.replace('#',''))||'overview';
   load(PAGES[start]?start:'overview');
-}).catch(e=>{ document.getElementById('pgBody').innerHTML='<div class="note">無法載入 wiki/manifest.json — 請在 GitHub Pages 線上開啟（本機 file:// 會被瀏覽器擋）。</div>'; });
+}).catch(e=>{ document.getElementById('pgBody').innerHTML=`<div class="note"><b>知識庫載入失敗</b><br>${String(e.message||e)}；不把未驗證內容供應給研究流程。</div>`; });
 
 function buildNav(){
   const groups={}; MAN.forEach(p=>{(groups[p.group]=groups[p.group]||[]).push(p);});
@@ -168,11 +177,12 @@ function buildGraph(){
 
 function load(slug){
   const p=PAGES[slug]; if(!p)return; location.hash=slug;
-  let t=p.text.replace(/^---\n[\s\S]*?\n---\n/,'');               // strip frontmatter
+  let t=p.text.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---\r?\n/,'');   // strip frontmatter
   t=t.replace(/^\s*#\s+.+\n/,'');                                  // strip duplicate H1 (pgTitle 已顯示)
   t=t.replace(slugRe,(m,s,al)=>{const tg=PAGES[s];const lbl=al||(tg?tg.title:s);return `<a class="wl" data-slug="${s}">${lbl}</a>`;});
   document.getElementById('pgTitle').textContent=p.title;
-  document.getElementById('pgCrumb').textContent=p.group+' / '+p.path;
+  const verifiedAt=new Date(`${p.last_verified}T00:00:00Z`),stale=Number.isNaN(verifiedAt.getTime())||(Date.now()-verifiedAt.getTime())/864e5>45;
+  document.getElementById('pgCrumb').textContent=p.group+' / '+p.path+' / 最後驗證 '+p.last_verified+(stale?' / ⚠ 已超過 45 日':'');
   const body=document.getElementById('pgBody');
   body.innerHTML=(window.marked?marked.parse(t):('<pre>'+t+'</pre>'));
   body.querySelectorAll('a.wl').forEach(a=>a.onclick=e=>{e.preventDefault();location.hash=a.dataset.slug;});

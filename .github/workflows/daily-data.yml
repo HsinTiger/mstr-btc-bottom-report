@@ -87,6 +87,10 @@ jobs:
           analytics = json.loads(Path("data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
           audit = json.loads(Path("data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
           context = json.loads(Path("data/daily/knowledge_context.json").read_text(encoding="utf-8-sig"))
+          snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+          lineage = snapshot.get("generated_at")
+          if not lineage or analytics.get("snapshot_generated_at") != lineage or audit.get("snapshot_generated_at") != lineage:
+              raise SystemExit("Derived analytics are not bound to the current snapshot")
           required_page_keys = {"slug", "title", "confidence", "last_verified", "quality_flags", "analysis_use", "decision_inputs"}
           if any(not required_page_keys.issubset(page) for page in context.get("pages", [])):
               raise SystemExit("Knowledge context contract is incomplete")
@@ -99,6 +103,9 @@ jobs:
 
       - name: Generate knowledge-backed daily extensions
         run: python scripts/generate_daily_extensions.py
+
+      - name: Audit product surfaces and publish fail-closed diagnostics
+        run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
 
       - name: Commit updated data
         run: |

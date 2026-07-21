@@ -395,6 +395,7 @@ def main() -> None:
         "schema": 1,
         "date": snapshot.get("date"),
         "generated_at": now_iso(),
+        "snapshot_generated_at": snapshot.get("generated_at"),
         "status": status,
         "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
         "summary": {
