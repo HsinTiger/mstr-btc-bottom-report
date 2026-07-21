@@ -9,20 +9,22 @@ permissions:
   contents: write
 
 concurrency:
-  group: daily-verified-data
+  group: governed-data-writer
   cancel-in-progress: false
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
+          ref: main
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
@@ -31,9 +33,14 @@ jobs:
           SEC_USER_AGENT: "mstr-btc-bottom-report/1.0 hsin73@realtek.com"
         run: python scripts/daily_data_pipeline.py
 
+      - name: Collect cross-asset market universe
+        run: python scripts/collect_market_universe.py
+
       - name: Verify with independent data agent
         continue-on-error: true
-        run: python scripts/verify_daily_data.py
+        run: |
+          rm -f data/daily/agent_verification_report.json
+          python scripts/verify_daily_data.py
 
       - name: Enforce verifier artifact freshness
         run: |
@@ -44,6 +51,8 @@ jobs:
           report = json.loads(Path("data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
           if report.get("date") != snapshot.get("date"):
               raise SystemExit("Verifier report is missing or stale for the current snapshot")
+          if report.get("snapshot_generated_at") != snapshot.get("generated_at"):
+              raise SystemExit("Verifier report is not bound to the current snapshot")
           if report.get("status") not in {"pass", "degraded", "fail"}:
               raise SystemExit("Verifier report has an unknown status")
           print(f"Verifier artifact current: {report['date']} status={report['status']}")

@@ -7,7 +7,7 @@
 <title>MSTR / BMNR 每日決策儀表板</title>
 <style>
 :root{--bg:#e8e4dc;--surface:#f5f2ec;--surface2:#ede8df;--border:#d1c9bb;--ink:#302e29;--text:#565148;--muted:#746d62;--red:#8f493e;--green:#4f6c48;--yellow:#7d6426;--blue:#4d6f7d;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-*{box-sizing:border-box}html{-webkit-font-smoothing:antialiased}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.55;font-variant-numeric:tabular-nums}.container{width:min(1060px,calc(100% - 32px));margin:auto;padding:24px 0 64px}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}button,summary,a{outline-offset:3px}
+*{box-sizing:border-box}html{-webkit-font-smoothing:antialiased}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.55;font-variant-numeric:tabular-nums}.container{width:min(1060px,calc(100% - 32px));margin:auto;padding:24px 0 64px}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}button,summary,a{outline-offset:3px}.links a,summary{display:inline-flex;align-items:center;min-height:44px}
 .hero,.section{background:var(--surface);border:1px solid var(--border);border-radius:18px}.hero{padding:30px;margin-bottom:14px}.hero h1{margin:0;font-size:clamp(1.45rem,3vw,2.1rem);letter-spacing:-.035em}.hero p{margin:8px 0;color:var(--text)}.meta{font:700 .73rem/1.4 var(--mono);color:var(--muted)}.badges,.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.badge{border:1px solid var(--border);border-radius:999px;padding:5px 10px;font-size:.72rem;font-weight:800;background:var(--surface2)}.badge.bad{color:var(--red);background:#f3e3df}.badge.warn{color:var(--yellow);background:#f3ead0}.badge.info{color:var(--blue);background:#e2ecef}.links a{font-size:.75rem;font-weight:750}
 .section{padding:24px;margin:14px 0}.heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}.heading h2{margin:0 0 4px;font-size:1.25rem;letter-spacing:-.02em}.heading p{margin:0;color:var(--text);font-size:.84rem}.pill{flex:0 0 auto;border:1px solid var(--border);border-radius:999px;padding:5px 10px;background:var(--surface2);color:var(--muted);font-size:.7rem;font-weight:800}
 .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.summary-card{min-height:172px;padding:17px;border:1px solid var(--border);border-radius:16px;background:var(--surface2);overflow:hidden}.summary-card .label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:var(--muted)}.summary-card .number{margin:12px 0 10px;font:900 clamp(1.55rem,3vw,2rem)/1 var(--mono);letter-spacing:-.05em}.summary-card .read{font-size:.82rem;font-weight:700}.summary-card.bad{color:var(--red);background:#f1ded9}.summary-card.warn{color:var(--yellow);background:#f2e7c7}.summary-card.info{color:var(--blue);background:#dfeaed}.summary-card.good{color:var(--green);background:#dfebda}.quality{margin-top:11px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:.76rem}.quality.bad{color:var(--red);border-color:#c89d94;background:#f2e2de}.quality.good{color:var(--green);border-color:#9fb299;background:#e5eee1}
@@ -25,7 +25,7 @@
     <p>大倉現貨 MSTR / BMNR 4:1 · 小倉 MSTR 2.5 倍月線至年線波段 · 結論先行，紅燈先擋風險</p>
     <div class="meta" id="heroMeta">每日資料載入中…</div>
     <div class="badges"><span class="badge bad" id="actionBadge">今日動作載入中</span><span class="badge warn" id="riskBadge">MSTR 風險載入中</span></div>
-    <nav class="links" aria-label="深入研究"><a href="dashboard.html">完整體系儀表板</a><a href="analytics.html">專業分析層</a><a href="wiki.html">wiki_llm 知識庫</a><a href="daily-extensions.html">每日延伸</a><a href="metrics-spec.md">自算指標說明</a><a href="institutional-ic-memo-v3.md">IC Memo</a></nav>
+    <nav class="links" aria-label="深入研究"><a href="market-monitor.html">跨資產市場雷達</a><a href="dashboard.html">完整體系儀表板</a><a href="analytics.html">專業分析層</a><a href="wiki.html">wiki_llm 知識庫</a><a href="daily-extensions.html">每日延伸</a><a href="metrics-spec.md">自算指標說明</a><a href="institutional-ic-memo-v3.md">IC Memo</a></nav>
   </header>
 
   <section class="section" aria-labelledby="summaryTitle">
@@ -36,22 +36,25 @@
   </section>
 
   <section class="section" aria-labelledby="exclusiveTitle">
-    <div class="heading"><div><h2 id="exclusiveTitle">🧭 我們獨家最在乎</h2><p>把普通股估值、資本結構與每股含幣量拆開，不被官方單一 mNAV 帶著走。</p></div><span class="pill" id="exclusiveCount">—</span></div>
+    <div class="heading"><div><h2 id="exclusiveTitle">🧭 我們獨家最在乎</h2><p>把普通股估值、資本結構與每股含幣量拆開，不被官方單一「市值對比特幣淨資產倍數」帶著走。</p></div><span class="pill" id="exclusiveCount">—</span></div>
     <div class="signal-grid" id="exclusiveSignals" aria-live="polite" aria-busy="true"></div>
   </section>
 
   <section class="section" aria-labelledby="consensusTitle">
-    <div class="heading"><div><h2 id="consensusTitle">🤝 市場強共識</h2><p>至少三種獨立視角；領先訊號發現候選，落後訊號負責確認。</p></div><span class="pill" id="consensusCount">—</span></div>
+    <div class="heading"><div><h2 id="consensusTitle">🤝 市場多維共振</h2><p>依實際票數與信心顯示共振或分歧；領先訊號發現候選，落後訊號負責確認。</p></div><span class="pill" id="consensusCount">—</span></div>
     <div class="signal-grid" id="consensusSignals" aria-live="polite" aria-busy="true"></div>
   </section>
 
   <p class="foot">研究與風險管理用途，不構成投資建議。槓桿與高波動個股可能造成重大虧損。</p>
 </main>
 <script>
-const escapeHtml=value=>String(value??"資料不足").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
-const money=value=>value==null?"資料不足":"$"+Number(value).toLocaleString("en-US",{maximumFractionDigits:0});
-const pct=value=>value==null?"資料不足":(Number(value)*100).toFixed(1)+"%";
-const num=(value,digits=2)=>value==null?"資料不足":Number(value).toFixed(digits);
+const escapeHtml=value=>String(value??"資料不足").trim().toLowerCase()==="nan"?"資料不足":String(value??"資料不足").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+const finite=value=>value!==null&&value!==""&&Number.isFinite(Number(value));
+const money=value=>!finite(value)?"資料不足":"$"+Number(value).toLocaleString("en-US",{maximumFractionDigits:0});
+const pct=value=>!finite(value)?"資料不足":(Number(value)*100).toFixed(1)+"%";
+const num=(value,digits=2)=>!finite(value)?"資料不足":Number(value).toFixed(digits);
+const statusLabel=value=>({pass:"通過",degraded:"有限可用",fail:"失敗",consistent:"一致",inconsistent:"不一致"})[value]||value||"未知";
+const issueLabel=value=>String(value||"請查驗證報告").replace(/^sale_ratio: 缺值$/,"每週賣幣壓力比率缺值").replace("official input stale","官方輸入資料逾時");
 async function fetchJson(path){const response=await fetch(path,{cache:"no-store"});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
 function previousSnapshot(database,currentDate){return(database.snapshots||[]).filter(item=>item.date!==currentDate).sort((a,b)=>String(a.date).localeCompare(String(b.date))).at(-1)||null}
 function summaryCard(item){return`<article class="summary-card ${escapeHtml(item.tone)}"><div class="label">${escapeHtml(item.label)}</div><div class="number">${escapeHtml(item.key_number)}</div><div class="read">${escapeHtml(item.plain_read)}</div></article>`}
@@ -66,15 +69,16 @@ function targetCards(targets,bottom){
   const cards=[
     ["BTC 底部研究假說",btcRange.length===2?`${money(btcRange[0])}–${money(btcRange[1])}`:"已停用",targets?.btc?.plain_read],
     ["MSTR 普通股淨值敏感度",mstrLow!=null&&mstrHigh!=null?`${money(mstrLow)}–${money(mstrHigh)}`:"已停用",targets?.mstr?.plain_read],
-    ["BMNR gross treasury／股",bmnr==null?"資料不足":money(bmnr),targets?.bmnr?.plain_read]
+    ["BMNR 每股財庫資產總值",bmnr==null?"資料不足":money(bmnr),targets?.bmnr?.plain_read]
   ];
   return cards.map(([cap,big,read])=>`<article class="target"><div class="cap">${escapeHtml(cap)}</div><div class="big">${escapeHtml(big)}</div><p>${escapeHtml(read)}</p></article>`).join("")+`<div class="bottom-read"><b>底部判斷：</b>${escapeHtml(bottom?.plain_read)}<br><b>下一觸發：</b>${escapeHtml(bottom?.next_trigger)}</div>`
 }
 function failClosed(message){
   document.getElementById("dailyMeta").textContent=`載入失敗：${message}`;
-  document.getElementById("summaryCards").innerHTML=summaryCard({label:"資料狀態",key_number:"FAIL CLOSED",plain_read:"所有交易動作封鎖；不得沿用舊快照。",tone:"bad"});
+  document.getElementById("summaryCards").innerHTML=summaryCard({label:"資料狀態",key_number:"資料封鎖",plain_read:"所有交易動作封鎖；不得沿用舊快照。",tone:"bad"});
   document.getElementById("exclusiveSignals").innerHTML="";document.getElementById("consensusSignals").innerHTML="";document.getElementById("targetBrief").textContent="資料失敗，不顯示舊估值。";
-  const strip=document.getElementById("qualityStrip");strip.className="quality bad";strip.textContent="必要資料或決策契約未通過。";document.getElementById("actionBadge").textContent="資料失敗 · 全部交易封鎖";
+  document.getElementById("heroMeta").textContent="最新資料未通過驗證，不沿用舊快照。";document.getElementById("exclusiveCount").textContent="封鎖";document.getElementById("consensusCount").textContent="封鎖";
+  const strip=document.getElementById("qualityStrip");strip.className="quality bad";strip.textContent=`必要資料或決策契約未通過：${message}`;document.getElementById("actionBadge").textContent="資料失敗 · 全部交易封鎖";document.getElementById("riskBadge").textContent="風險數字停用 · 待驗證恢復";
 }
 async function loadDashboard(){
   const busy=["summaryCards","exclusiveSignals","consensusSignals"];
@@ -83,9 +87,10 @@ async function loadDashboard(){
     if(latest.schema!==1||database.schema!==1||verify.schema!==1||analytics.schema!==2)throw new Error("schema 不相容");
     if(!latest.date||verify.date!==latest.date||analytics.date!==latest.date)throw new Error("資料日期不一致");
     const brief=analytics.decision_brief;if(!brief?.summary_cards||!brief?.exclusive_signals||!brief?.consensus_signals)throw new Error("決策摘要缺漏");
-    const previous=previousSnapshot(database,latest.date),logicSafe=analytics.quality?.logic_audit_status==="consistent",dateSafe=analytics.quality?.verification_date_matches_snapshot===true,verifySafe=verify.status==="pass",allSafe=logicSafe&&dateSafe&&verifySafe;
+    const previous=previousSnapshot(database,latest.date),logicSafe=analytics.quality?.logic_audit_status==="consistent",dateSafe=analytics.quality?.verification_date_matches_snapshot===true,verifyBound=verify.snapshot_generated_at===latest.generated_at,verifySafe=verify.status==="pass"&&verifyBound,allSafe=logicSafe&&dateSafe&&verifySafe;
+    if(!allSafe){throw new Error(`驗證${statusLabel(verify.status)}／快照綁定${verifyBound?"一致":"不一致"}／日期${dateSafe?"一致":"不一致"}／邏輯${statusLabel(analytics.quality?.logic_audit_status)}｜${issueLabel((verify.failures||[])[0]||(verify.degradations||[])[0])}`)}
     document.getElementById("heroMeta").textContent=`資料日 ${latest.date} · 歷史 ${brief.record_advantage?.historical_snapshots??0} 筆 · 可用知識 ${analytics.quality?.knowledge_nodes??0} 頁 · 模型 ${latest.metrics?.btc_standard?.model_version||"未版本化"}`;
-    document.getElementById("dailyMeta").textContent=`前次對比 ${previous?.date||"無"}｜驗證 ${String(verify.status).toUpperCase()}｜邏輯 ${analytics.quality.logic_audit_status}｜同版可比 ${brief.record_advantage?.comparable_model_observations??0} 筆`;
+    document.getElementById("dailyMeta").textContent=`前次對比 ${previous?.date||"無"}｜驗證${statusLabel(verify.status)}｜邏輯${statusLabel(analytics.quality.logic_audit_status)}｜同版可比 ${brief.record_advantage?.comparable_model_observations??0} 筆`;
     document.getElementById("summaryCards").innerHTML=brief.summary_cards.slice(0,4).map(summaryCard).join("");
     document.getElementById("exclusiveSignals").innerHTML=brief.exclusive_signals.slice(0,3).map(signalCard).join("");
     document.getElementById("consensusSignals").innerHTML=brief.consensus_signals.slice(0,3).map(signalCard).join("");

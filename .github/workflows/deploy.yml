@@ -4,11 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Daily verified data pipeline", "4-hour cross-asset market universe"]
+    types: [completed]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # 強制 JS actions 跑 Node 24，消除 Node 20 淘汰警告
 env:
@@ -20,24 +21,28 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
+          ref: main
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
 
       - name: Clone Quartz v4
-        run: git clone --depth 1 --branch v4 https://github.com/jackyzha0/quartz.git quartz-tmp
+        run: |
+          git clone --filter=blob:none https://github.com/jackyzha0/quartz.git quartz-tmp
+          git -C quartz-tmp checkout --detach d25a6eabf96751ffca56f8a8139272def7a65041
 
       - name: Install Quartz
         working-directory: quartz-tmp
-        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+        run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Inject our wiki content
         run: |
@@ -66,17 +71,20 @@ jobs:
           touch _site/.nojekyll
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: _site
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

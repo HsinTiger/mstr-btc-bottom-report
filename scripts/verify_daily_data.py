@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import math
+import statistics
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -15,6 +16,7 @@ DATA_DIR = ROOT / "data" / "daily"
 RAW_PATH = DATA_DIR / "raw_observations.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 REPORT_PATH = DATA_DIR / "agent_verification_report.json"
+MARKET_UNIVERSE_PATH = DATA_DIR / "market_universe.json"
 
 
 def load_json(path: Path) -> Any:
@@ -65,6 +67,18 @@ def age_days(value: Any) -> int | None:
         except ValueError:
             return None
     return (datetime.now(timezone.utc).date() - parsed).days
+
+
+def age_hours(value: Any) -> float | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return (datetime.now(timezone.utc) - parsed).total_seconds() / 3600
+    except ValueError:
+        return None
 
 
 def check_observation_freshness(
@@ -216,11 +230,120 @@ def assert_close(name: str, expected: Any, actual: Any, failures: list[str], tol
 def main() -> int:
     raw = load_json(RAW_PATH)
     snapshot = load_json(SNAPSHOT_PATH)
+    market_universe = load_json(MARKET_UNIVERSE_PATH) if MARKET_UNIVERSE_PATH.exists() else {}
     observations = obs_map(raw)
     failures: list[str] = []
     warnings: list[str] = []
     degradations: list[str] = []
     evidence: list[str] = []
+
+    if not market_universe:
+        failures.append("market universe artifact missing")
+    else:
+        if market_universe.get("date") != snapshot.get("date"):
+            failures.append(f"market universe date mismatch: {market_universe.get('date')} != {snapshot.get('date')}")
+        universe_age = age_hours(market_universe.get("generated_at"))
+        if universe_age is None:
+            failures.append("market universe generated_at missing or invalid")
+        elif universe_age > 8:
+            failures.append(f"market universe stale {universe_age:.1f}h > 8h")
+        universe_quality = market_universe.get("quality", {})
+        if universe_quality.get("status") == "fail":
+            failures.extend(f"market universe: {item}" for item in universe_quality.get("failures", []))
+        elif universe_quality.get("status") == "degraded":
+            degradations.extend(f"market universe: {item}" for item in universe_quality.get("degradations", []))
+        elif universe_quality.get("status") != "pass":
+            failures.append(f"market universe quality status invalid: {universe_quality.get('status')}")
+        for symbol in ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"]:
+            asset = market_universe.get("assets", {}).get(symbol, {})
+            if as_float(asset.get("price_usd")) is None:
+                failures.append(f"market universe {symbol}: spot price missing")
+            if int(asset.get("source_count") or 0) < 2:
+                failures.append(f"market universe {symbol}: fewer than two spot sources")
+            gap = as_float(asset.get("cross_source_gap"))
+            if gap is not None and gap > 0.02:
+                failures.append(f"market universe {symbol}: spot source gap {gap:.2%} > 2%")
+            source_prices = [as_float(value) for value in asset.get("source_prices", {}).values()]
+            source_prices = [value for value in source_prices if value is not None and value > 0]
+            if len(source_prices) >= 2:
+                assert_close(f"market universe {symbol} median spot", statistics.median(source_prices), asset.get("price_usd"), failures)
+                expected_gap = (max(source_prices) - min(source_prices)) / statistics.mean(source_prices)
+                assert_close(f"market universe {symbol} source gap", expected_gap, gap, failures)
+            if len(source_prices) != int(asset.get("source_count") or 0):
+                failures.append(f"market universe {symbol}: source_count does not match source_prices")
+            for provider, observation in asset.get("source_observations", {}).items():
+                source_age = age_hours(observation.get("as_of"))
+                if source_age is None or source_age > 2:
+                    failures.append(f"market universe {symbol} {provider}: source stale or timestamp missing")
+                if provider == "Binance":
+                    price_usdt = as_float(observation.get("price_usdt"))
+                    usdt_usd = as_float(observation.get("usdt_usd"))
+                    if price_usdt is None or usdt_usd is None:
+                        failures.append(f"market universe {symbol} Binance: USDT/USD normalization inputs missing")
+                    else:
+                        assert_close(f"market universe {symbol} Binance USD normalization", price_usdt * usdt_usd, observation.get("price_usd"), failures)
+                    usdt_age = age_hours(observation.get("usdt_usd_as_of"))
+                    if usdt_age is None or usdt_age > 2:
+                        failures.append(f"market universe {symbol} Binance: USDT/USD normalization rate stale")
+        for symbol in ["BTC", "ETH"]:
+            derivative = market_universe.get("derivatives", {}).get(symbol, {})
+            required_derivatives = {
+                "cross-venue annualized funding": derivative.get("perpetual", {}).get("funding_annualized_median"),
+                "dated futures basis": derivative.get("dated_future", {}).get("annualized_basis"),
+                "options DVOL": derivative.get("options", {}).get("dvol"),
+                "options put/call OI": derivative.get("options", {}).get("put_call_open_interest_ratio"),
+            }
+            for label, value in required_derivatives.items():
+                if as_float(value) is None:
+                    failures.append(f"market universe {symbol}: {label} missing")
+            if int(derivative.get("perpetual", {}).get("funding_source_count") or 0) < 2:
+                failures.append(f"market universe {symbol}: fewer than two perpetual funding venues")
+            perpetual = derivative.get("perpetual", {})
+            annualized_funding = []
+            for venue in ("binance", "bybit"):
+                venue_data = perpetual.get(venue, {})
+                rate = as_float(venue_data.get("funding_rate"))
+                interval = as_float(venue_data.get("funding_interval_hours"))
+                if rate is not None and interval not in (None, 0):
+                    expected_annualized = rate * 24 / interval * 365
+                    assert_close(f"market universe {symbol} {venue} funding annualization", expected_annualized, venue_data.get("funding_annualized"), failures)
+                    annualized_funding.append(expected_annualized)
+            if annualized_funding:
+                assert_close(f"market universe {symbol} median annualized funding", statistics.median(annualized_funding), perpetual.get("funding_annualized_median"), failures)
+            dated = derivative.get("dated_future", {})
+            mark = as_float(dated.get("mark_price_usd"))
+            index = as_float(dated.get("index_price_usd"))
+            days = as_float(dated.get("days_to_delivery"))
+            if mark is not None and index not in (None, 0) and days not in (None, 0):
+                expected_basis = mark / index - 1
+                assert_close(f"market universe {symbol} dated-futures basis", expected_basis, dated.get("basis"), failures)
+                assert_close(f"market universe {symbol} annualized basis", expected_basis * 365 / days, dated.get("annualized_basis"), failures)
+            dated_age = age_hours(dated.get("as_of"))
+            if dated_age is None or dated_age > 2:
+                failures.append(f"market universe {symbol}: dated-futures source stale or timestamp missing")
+            options = derivative.get("options", {})
+            if options.get("contracts_observed") != options.get("open_interest_observed_contracts"):
+                failures.append(f"market universe {symbol}: options OI coverage incomplete")
+            if options.get("contracts_observed") != options.get("volume_observed_contracts"):
+                failures.append(f"market universe {symbol}: options volume coverage incomplete")
+            options_age = age_hours(options.get("as_of"))
+            dvol_age = age_hours(options.get("dvol_as_of"))
+            if options_age is None or options_age > 2:
+                failures.append(f"market universe {symbol}: options source stale or timestamp missing")
+            if dvol_age is None or dvol_age > 3:
+                failures.append(f"market universe {symbol}: DVOL source stale or timestamp missing")
+            call_oi = as_float(options.get("call_open_interest_base"))
+            put_oi = as_float(options.get("put_open_interest_base"))
+            if call_oi not in (None, 0) and put_oi is not None:
+                assert_close(f"market universe {symbol} put/call OI", put_oi / call_oi, options.get("put_call_open_interest_ratio"), failures)
+            if options.get("contract_set") != "inverse_coin_margined_only":
+                failures.append(f"market universe {symbol}: options contract coverage is not explicit")
+        if len(market_universe.get("sources", [])) < 20:
+            degradations.append("market universe: fewer than 20 traceable source records")
+        evidence.append(
+            f"market universe quality={universe_quality.get('status')} score={universe_quality.get('score_0_100')} "
+            f"sources={len(market_universe.get('sources', []))} age_hours={universe_age:.2f}" if universe_age is not None else "market universe age unavailable"
+        )
 
     for required in ["btc_usd_coingecko", "btc_usd_coinbase", "eth_usd_coingecko", "eth_usd_coinbase", "mstr_usd_yahoo"]:
         item = observations.get(required)
@@ -296,7 +419,7 @@ def main() -> int:
     if as_float(radar.get("treasury_avg_bill_rate_pct")) is None:
         degradations.append("macro funding proxy missing")
     etf_status = str(radar.get("etf_flow_status") or "")
-    if etf_status == "automated":
+    if etf_status == "cross_source_verified":
         evidence.append("ETF flow automated and cross-source verified")
     elif etf_status == "automated_third_party_single_source":
         degradations.append("ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified")
@@ -393,6 +516,8 @@ def main() -> int:
         "agent": "daily-data-verifier",
         "verified_at": now_iso(),
         "date": snapshot.get("date"),
+        "snapshot_generated_at": snapshot.get("generated_at"),
+        "market_universe_generated_at": market_universe.get("generated_at"),
         "status": status,
         "failures": failures,
         "degradations": degradations,
@@ -409,6 +534,13 @@ def main() -> int:
             "btc_standard_required_inputs": ["BTC spot cross-source", "BTC 50/200DMA", "BTC MVRV ratio", "Fear & Greed", "ETF flow context"],
             "freshness_limits": {"BTC MVRV": "warn >3d, fail >7d", "Strategy holdings": "warn >14d, fail >45d", "Strategy 7d sales disclosure": "warn >2d, fail >7d", "USD reserve": "warn >30d, fail >120d", "MSTR common shares": "warn >45d, fail >120d", "BMNR holdings": "warn >14d, fail >30d"},
             "not_hard_triggers": ["single-source ETF flow", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
+            "market_universe": {
+                "update_target": "every 4 hours",
+                "fail_if_stale": ">8h",
+                "tracked_assets": ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"],
+                "derivatives": ["Binance/Bybit perpetuals", "Binance quarterly futures", "CME Yahoo proxy", "Deribit options/DVOL"],
+                "coverage_rule": "venue observations remain partial-market context; unknown data never becomes zero",
+            },
         },
     }
     write_json(REPORT_PATH, report)

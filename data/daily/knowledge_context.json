@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-21T05:55:28+00:00",
+  "generated_at": "2026-07-21T07:05:04+00:00",
   "as_of_date": "2026-07-21",
-  "source_manifest": "/home/runner/work/mstr-btc-bottom-report/mstr-btc-bottom-report/wiki/manifest.json",
+  "source_manifest": "C:/work/mstr-btc-bottom-report/wiki/manifest.json",
   "stale_after_days": 30,
   "status": "degraded",
   "usage_policy": {
@@ -18,10 +18,10 @@
     "flag_counts": {
       "missing_confidence": 3,
       "missing_frontmatter": 2,
-      "missing_summary": 12,
+      "missing_summary": 11,
       "missing_updated": 2,
-      "stale": 8,
-      "summary_derived_from_body": 12,
+      "stale": 7,
+      "summary_derived_from_body": 11,
       "unresolved_wikilink": 1
     }
   },
@@ -370,13 +370,13 @@
     {
       "slug": "data-feeds",
       "title": "數據流與權威來源",
-      "summary": "five-dimension-model 各維的權威數據平台（先溯源、再判讀）。每日監控排程（08:00 台北）自動抓取，append 至 ../data/history.json、../monitor-log.md。",
-      "summary_source": "body_derived",
+      "summary": "每日決策資料與四小時跨資產雷達分層更新；現貨要求交叉來源，衍生品保留交易所口徑，ETF 與 DAT 聚合資料不得直接當硬觸發。",
+      "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "low",
-      "updated": "2026-06-14",
-      "last_verified": "2026-06-14",
-      "stale_days": 37,
+      "confidence": "high",
+      "updated": "2026-07-21",
+      "last_verified": "2026-07-21",
+      "stale_days": 0,
       "wikilinks": [
         "five-dimension-model",
         "kol-roster",
@@ -385,11 +385,7 @@
       "source_path": "wiki/sources/data-feeds.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [
-        "missing_summary",
-        "stale",
-        "summary_derived_from_body"
-      ],
+      "quality_flags": [],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
