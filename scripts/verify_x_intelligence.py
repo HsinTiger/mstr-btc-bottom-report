@@ -67,7 +67,7 @@ def main() -> int:
     now = datetime.now(timezone.utc)
     if source.get("schema") != 1:
         failures.append("schema 必須為 1")
-    if generated is None or (now - generated).total_seconds() > 8 * 3600 or generated > now + timedelta(minutes=5):
+    if generated is None or (now - generated).total_seconds() > 30 * 3600 or generated > now + timedelta(minutes=5):
         failures.append("產物時間戳缺漏、過期或位於未來")
     quality = source.get("quality", {})
     if quality.get("api_provider") != "X API" or quality.get("endpoint") != ENDPOINT:

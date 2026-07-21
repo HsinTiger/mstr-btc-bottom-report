@@ -65,13 +65,13 @@
       "role": "把策展 X 帳號的 AI 變現、工程模型、Crypto 與美股消息整理成可驗證的研究背景。",
       "user_question": "過去 48 小時，三類主題有哪些真正值得讀的消息？",
       "open_when": "需要掌握事件與研究線索時；不把社群貼文當成交易硬訊號。",
-      "cadence": "每 4 小時",
+      "cadence": "每日 08:37（台北時間）",
       "surface_type": "context_intelligence",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/daily/x_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 8, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded", "unconfigured"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/x_intelligence_history.json", "timestamp_field": "last_attempt_at", "max_age_hours": 8, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded", "unconfigured"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/x_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 8, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
+        {"path": "data/daily/x_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded", "unconfigured"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/x_intelligence_history.json", "timestamp_field": "last_attempt_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded", "unconfigured"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/x_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
       ]
     },
     {

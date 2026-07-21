@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   workflow_run:
-    workflows: ["Daily verified data pipeline", "4-hour cross-asset market universe", "4-hour curated X intelligence"]
+    workflows: ["Daily verified data pipeline", "4-hour cross-asset market universe", "Daily curated X intelligence"]
     types: [completed]
 
 permissions:
