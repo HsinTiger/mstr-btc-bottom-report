@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T07:05:09+00:00",
+  "generated_at": "2026-07-21T07:08:40+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -85,7 +85,7 @@
       "id": "CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.149x, enterprise_value_to_btc_nav=1.045x",
+      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.149x, enterprise_value_to_btc_nav=1.046x",
       "risk_if_failed": "Financing capacity and investor valuation could be collapsed into one misleading green light."
     },
     {
@@ -170,7 +170,7 @@
     {
       "metric": "企業價值／BTC 總值",
       "threshold": "< 1.00 = 企業價值低於 BTC 總值；> 1.00 = 資本飛輪可能仍可運作",
-      "current": "1.045x",
+      "current": "1.046x",
       "rationale": "分子採普通股市值加債務與優先股、再扣現金；與普通股估值是不同問題。",
       "action": "只能判斷企業層溢價與融資飛輪；不可當作普通股便宜的證據。"
     },
