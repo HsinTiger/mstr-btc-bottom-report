@@ -44,7 +44,8 @@ const actionLabel=value=>({add_2_5x_mstr:'禁止小倉 2.5x 加碼',auto_trade:'
 const rows=(items,render)=>items.length?items.map(render).join(''):'<tr><td class="empty">無資料</td></tr>';
 async function fetchJson(path){const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
 function requireFresh(value,maxHours,label){const timestamp=new Date(value);if(!value||Number.isNaN(timestamp.getTime()))throw new Error(`${label} 時間戳缺漏或格式錯誤`);const ageHours=(Date.now()-timestamp.getTime())/36e5;if(ageHours < -1||ageHours > maxHours)throw new Error(`${label} 已過期或時間位於未來`)}
-function requireCurrentDate(value,label){if(value!==new Date().toISOString().slice(0,10))throw new Error(`${label} 不是今日資料`)}
+function taipeiDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+function requireCurrentDate(value,label){if(value!==taipeiDate())throw new Error(`${label} 不是台北今日資料`)}
 function signalPanel(signal){return `<div class="kpi ${tone(signal.dominant_direction==='bearish'?'bad':'warn')}">${esc(signal.key_number)}</div><div class="read">${esc(signal.plain_read)}</div><div class="divider"></div>${(signal.lenses||[]).map(item=>`<div class="decision"><b>${esc(item.name)}</b><span class="${item.direction==='bullish'?'good':item.direction==='bearish'?'bad':'warn'}">${esc(item.value)}｜${esc(item.read)}</span></div>`).join('')}<div class="tags"><span class="tag">${esc(signal.resonance_status)}</span><span class="tag">信心 ${esc(signal.confidence)}</span></div><h3>下一觸發</h3><div class="read">${esc(signal.next_trigger)}</div>`}
 async function load(){
   const [analytics,logic,snapshot,verify]=await Promise.all([fetchJson('data/daily/institutional_analytics.json'),fetchJson('data/daily/logic_audit.json'),fetchJson('data/daily/latest_snapshot.json'),fetchJson('data/daily/agent_verification_report.json')]);
@@ -55,13 +56,19 @@ async function load(){
   if(analytics.snapshot_generated_at!==snapshot.generated_at||logic.snapshot_generated_at!==snapshot.generated_at)throw new Error('衍生分析未綁定目前快照');
   requireFresh(analytics.generated_at,30,'機構分析');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(snapshot.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');
   const brief=analytics.decision_brief,quality=analytics.quality||{},audit=analytics.logic_audit||{};
+  if(!['pass','degraded','fail'].includes(verify.status))throw new Error('驗證狀態不相容');
+  if(verify.status==='fail'||(verify.failures||[]).length)throw new Error(`驗證失敗：${(verify.failures||[])[0]||'必要資料未通過'}`);
+  if(quality.verification_status!==verify.status||quality.verification_bound_to_snapshot!==true)throw new Error('分析與驗證狀態未綁定同一批次');
+  if(logic.status!=='consistent'||audit.status!=='consistent'||quality.logic_audit_status!=='consistent')throw new Error('決策邏輯未通過一致性稽核');
+  if(!['full','research_only'].includes(quality.publication_mode))throw new Error('分析發布模式不允許顯示決策內容');
   if(!brief||!Array.isArray(brief.summary_cards)||brief.summary_cards.length<4||!brief.bottom_assessment||!brief.conditional_targets||!Array.isArray(brief.exclusive_signals)||brief.exclusive_signals.length<2||!Array.isArray(brief.consensus_signals)||brief.consensus_signals.length<2)throw new Error('機構分析 schema 2 內容不完整');
   const action=brief.summary_cards.find(item=>item.id==='today_action')||brief.summary_cards[0];
   const mstr=brief.exclusive_signals.find(item=>item.id==='mstr_valuation_trust_split');
   const bmnr=brief.exclusive_signals.find(item=>item.id==='bmnr_gross_treasury_discount');
   const bottom=brief.bottom_assessment;
   if(!mstr||!bmnr)throw new Error('獨家估值訊號缺漏');
-  document.getElementById('ticker').innerHTML=`<span class="pill"><b>${esc(analytics.date)}</b> 資料日</span><span class="pill ${tone(quality.verification_status)}"><b>${esc(quality.verification_status)}</b> 資料驗證</span><span class="pill ${tone(audit.status)}"><b>${esc(audit.status)}</b> 邏輯稽核</span><span class="pill"><b>${esc(quality.confidence)}</b> 信心</span><span class="pill"><b>${quality.confidence_score_0_100??'—'}</b>/100 品質</span>`;
+  document.body.dataset.renderStatus=verify.status;document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade=quality.publication_mode==='full'?'true':'false';
+  document.getElementById('ticker').innerHTML=`<span class="pill"><b>${esc(analytics.date)}</b> 資料日</span><span class="pill ${tone(quality.verification_status)}"><b>${esc(quality.verification_status)}</b> 資料驗證</span><span class="pill ${quality.publication_mode==='full'?'good':'warn'}"><b>${quality.publication_mode==='full'?'決策支援':'只供研究'}</b> 發布模式</span><span class="pill ${tone(audit.status)}"><b>${esc(audit.status)}</b> 邏輯稽核</span><span class="pill"><b>${quality.confidence_score_0_100??'—'}</b>/100 規則式資料契約分數</span>`;
   document.getElementById('executive').innerHTML=`<section class="card full"><div class="eyebrow">Investment Committee Read</div><div class="headline ${tone(action.tone)}">${esc(action.key_number)}</div><div class="read">${esc(action.plain_read)}</div><div class="divider"></div><div class="decision"><b>大倉現貨</b><span>${esc(bottom.plain_read)}</span></div><div class="decision"><b>MSTR 2.5x</b><span>${esc(mstr.next_trigger)}</span></div><div class="decision"><b>BMNR 20%</b><span>${esc(bmnr.plain_read)}</span></div></section>`;
   document.getElementById('kpis').innerHTML=brief.summary_cards.slice(0,4).map(item=>`<section class="card quarter"><div class="eyebrow">${esc(item.label)}</div><div class="kpi ${tone(item.tone)}">${esc(item.key_number)}</div><div class="read">${esc(item.plain_read)}</div></section>`).join('');
   document.getElementById('btcPanel').innerHTML=`<div class="kpi warn">${esc(bottom.key_number)}</div><div class="read">${esc(bottom.plain_read)}</div><h3>領先指標</h3>${(bottom.leading_indicators||[]).map(item=>`<div class="decision"><b>${esc(item.name)}</b><span>${esc(item.value)}｜${esc(item.read)}</span></div>`).join('')}<h3>落後確認</h3>${(bottom.lagging_confirmations||[]).map(item=>`<div class="decision"><b>${esc(item.name)}</b><span class="${tone(item.state)}">${esc(item.value)}｜${esc(item.read)}</span></div>`).join('')}<h3>下一觸發</h3><div class="read">${esc(bottom.next_trigger)}</div>`;
@@ -80,7 +87,7 @@ async function load(){
   const falsifyRows=(logic.falsification_watch||[]).map(item=>`<tr><td>${esc(item.hypothesis)}</td><td colspan="3">反證：${esc(item.what_would_disprove)}｜所需證據：${esc(item.required_evidence)}</td></tr>`).join('');
   document.getElementById('thresholds').innerHTML='<tr><th>指標／假說</th><th>今日值</th><th>門檻</th><th>動作／反證</th></tr>'+thresholdRows+falsifyRows;
 }
-load().catch(error=>{document.getElementById('ticker').innerHTML='<span class="pill bad"><b>FAIL CLOSED</b> 必要資料未通過</span>';document.getElementById('executive').innerHTML=`<section class="card full bad"><div class="headline">資料失敗｜所有交易動作封鎖</div><div class="read">${esc(error.message)}；不沿用舊快照。</div></section>`;['kpis','btcPanel','mstrPanel','bmnrPanel','quality','logic','drivers','sensitivity','risk','thresholds'].forEach(id=>{const element=document.getElementById(id);if(element)element.innerHTML='<div class="empty">資料不可用</div>'})});
+load().catch(error=>{document.body.dataset.renderStatus='fail';document.body.dataset.conclusionsVisible='false';document.body.dataset.executionGrade='false';document.getElementById('ticker').innerHTML='<span class="pill bad"><b>FAIL CLOSED</b> 必要資料未通過</span>';document.getElementById('executive').innerHTML=`<section class="card full bad"><div class="headline">資料失敗｜所有交易動作封鎖</div><div class="read">${esc(error.message)}；不沿用舊快照。</div></section>`;['kpis','btcPanel','mstrPanel','bmnrPanel','quality','logic','drivers','sensitivity','risk','thresholds'].forEach(id=>{const element=document.getElementById(id);if(element)element.innerHTML='<div class="empty">資料不可用</div>'})});
 </script>
 </body>
 </html>

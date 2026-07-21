@@ -15,6 +15,7 @@ from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Iterator
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
@@ -86,8 +87,23 @@ def browser_path() -> str:
 
 
 @contextmanager
-def server() -> Iterator[str]:
-    handler = lambda *args, **kwargs: QuietHandler(*args, directory=str(ROOT), **kwargs)
+def server(overrides: dict[str, object] | None = None) -> Iterator[str]:
+    fixture_overrides = overrides or {}
+
+    class FixtureHandler(QuietHandler):
+        def do_GET(self) -> None:
+            path = urlsplit(self.path).path
+            if path in fixture_overrides:
+                payload = json.dumps(fixture_overrides[path], ensure_ascii=False).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+                return
+            super().do_GET()
+
+    handler = lambda *args, **kwargs: FixtureHandler(*args, directory=str(ROOT), **kwargs)
     httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
@@ -146,6 +162,46 @@ def main() -> int:
                         raise RuntimeError(f"必要畫面文字缺漏：{expected}")
                     if markers:
                         raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
+                    if page == "index.html":
+                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
+                        if not status_match:
+                            raise RuntimeError("今日決策缺少可驗證的渲染狀態")
+                        status = status_match.group(1)
+                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
+                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
+                            raise RuntimeError("今日決策品質狀態與結論可見性不一致")
+                        if status in {"pass", "degraded"} and ("載入失敗" in body or "資料封鎖" in body):
+                            raise RuntimeError("可讀資料被錯誤封鎖")
+                    if page == "dashboard.html":
+                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
+                        if not status_match:
+                            raise RuntimeError("策略研究室缺少可驗證的渲染狀態")
+                        status = status_match.group(1)
+                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
+                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
+                            raise RuntimeError("策略研究室品質狀態與每日結論可見性不一致")
+                        if status == "degraded" and "有限可用｜只供研究" not in body:
+                            raise RuntimeError("策略研究室降級狀態未明示只供研究")
+                    if page == "analytics.html":
+                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
+                        if not status_match:
+                            raise RuntimeError("專業分析缺少可驗證的渲染狀態")
+                        status = status_match.group(1)
+                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
+                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
+                            raise RuntimeError("專業分析品質狀態與結論可見性不一致")
+                        if status == "degraded" and ('data-execution-grade="false"' not in dom or "只供研究" not in body):
+                            raise RuntimeError("專業分析降級狀態未阻止執行級解讀")
+                    if page == "daily-extensions.html":
+                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
+                        if not status_match:
+                            raise RuntimeError("每日延伸缺少可驗證的渲染狀態")
+                        status = status_match.group(1)
+                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
+                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
+                            raise RuntimeError("每日延伸品質狀態與觀點可見性不一致")
+                        if status == "degraded" and 'data-execution-grade="false"' not in dom:
+                            raise RuntimeError("每日延伸降級狀態未阻止執行級解讀")
                     if page == "x-intelligence.html":
                         status_match = re.search(r'data-render-status="(pass|degraded|unconfigured|fail)"', dom)
                         if not status_match:
@@ -163,6 +219,68 @@ def main() -> int:
                     results.append({"viewport": viewport, "page": page, "status": "pass"})
                 except (RuntimeError, subprocess.TimeoutExpired) as error:
                     failures.append({"viewport": viewport, "page": page, "error": str(error)})
+    verification = json.loads((ROOT / "data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
+    analytics = json.loads((ROOT / "data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
+    logic = json.loads((ROOT / "data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
+    fixtures = [
+        {
+            "name": "degraded",
+            "verification": {**verification, "status": "degraded", "failures": [], "degradations": ["測試：主要來源受限，備援來源已接手"]},
+            "analytics": {**analytics, "quality": {**analytics.get("quality", {}), "verification_status": "degraded"}},
+            "logic": logic,
+            "expected_status": "degraded",
+            "should_show": True,
+        },
+        {
+            "name": "fail",
+            "verification": {**verification, "status": "fail", "failures": [], "degradations": []},
+            "analytics": {**analytics, "quality": {**analytics.get("quality", {}), "verification_status": "fail"}},
+            "logic": logic,
+            "expected_status": "fail",
+            "should_show": False,
+        },
+        {
+            "name": "logic-mismatch",
+            "verification": verification,
+            "analytics": analytics,
+            "logic": {**logic, "status": "contradiction"},
+            "expected_status": "fail",
+            "should_show": False,
+        },
+    ]
+    for fixture in fixtures:
+        fixture_name = fixture["name"]
+        expected_status = fixture["expected_status"]
+        should_show = fixture["should_show"]
+        overrides = {
+            "/data/daily/agent_verification_report.json": fixture["verification"],
+            "/data/daily/institutional_analytics.json": fixture["analytics"],
+            "/data/daily/logic_audit.json": fixture["logic"],
+        }
+        with tempfile.TemporaryDirectory(prefix=f"quality-gate-{fixture_name}-") as profile, server(overrides) as base_url:
+            for viewport, (width, height) in VIEWPORTS.items():
+                for page in ("index.html", "dashboard.html", "analytics.html", "daily-extensions.html"):
+                    try:
+                        page_profile = Path(profile) / viewport / page.replace(".html", "")
+                        page_profile.mkdir(parents=True, exist_ok=True)
+                        body, dom = rendered_body(browser, str(page_profile), f"{base_url}/{page}", width, height)
+                        if f'data-render-status="{expected_status}"' not in dom:
+                            raise RuntimeError(f"{fixture_name} fixture 未呈現預期狀態 {expected_status}")
+                        if f'data-conclusions-visible="{str(should_show).lower()}"' not in dom:
+                            raise RuntimeError(f"{fixture_name} fixture 結論可見性錯誤")
+                        if should_show and ("載入失敗" in body or "資料封鎖" in body or "每日資料失敗" in body):
+                            raise RuntimeError("degraded fixture 被錯誤封鎖")
+                        if not should_show and page == "index.html" and ("資料封鎖" not in body or "全部交易封鎖" not in body):
+                            raise RuntimeError("首頁故障 fixture 未封鎖交易結論")
+                        if not should_show and page == "dashboard.html" and ("FAIL CLOSED" not in body or "所有交易動作封鎖" not in body or "已封鎖" not in body):
+                            raise RuntimeError("策略研究室故障 fixture 未封鎖每日數字")
+                        if not should_show and page == "analytics.html" and ("FAIL CLOSED" not in body or "所有交易動作封鎖" not in body):
+                            raise RuntimeError("專業分析故障 fixture 未封鎖交易結論")
+                        if not should_show and page == "daily-extensions.html" and ("FAIL CLOSED" not in body or "三個延伸觀點已封鎖" not in body):
+                            raise RuntimeError("每日延伸故障 fixture 未封鎖研究觀點")
+                        results.append({"viewport": viewport, "page": f"{page}:{fixture_name}", "status": "pass"})
+                    except (RuntimeError, subprocess.TimeoutExpired) as error:
+                        failures.append({"viewport": viewport, "page": f"{page}:{fixture_name}", "error": str(error)})
     print(json.dumps({"browser": browser, "checks": len(results), "failures": failures}, ensure_ascii=False))
     return 1 if failures else 0
 

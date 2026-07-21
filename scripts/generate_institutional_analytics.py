@@ -114,7 +114,7 @@ def quality_score(verification: dict[str, Any], provenance: dict[str, Any], expe
     if status not in {"pass", "degraded", "fail"}:
         return 0
     if status == "fail":
-        return 20
+        return 0
     score = 100
     if status == "degraded":
         score -= 15
@@ -240,8 +240,8 @@ def bottom_assessment(snapshot: dict[str, Any], knowledge: dict[str, Any]) -> di
     drawdown = number(radar.get("btc_drawdown_1y_pct"))
 
     confirmations = [
-        indicator("站上 50 日均線", fmt_money(ma50), "pass" if btc is not None and ma50 is not None and btc >= ma50 else "fail", "短中期趨勢先止跌"),
-        indicator("站上 200 日均線", fmt_money(ma200), "pass" if btc is not None and ma200 is not None and btc >= ma200 else "fail", "主要右側趨勢確認"),
+        indicator("站上 50 日均線", fmt_money(ma50), "unknown" if btc is None or ma50 is None else "pass" if btc >= ma50 else "fail", "短中期趨勢先止跌"),
+        indicator("站上 200 日均線", fmt_money(ma200), "unknown" if btc is None or ma200 is None else "pass" if btc >= ma200 else "fail", "主要右側趨勢確認"),
         indicator("至少 45 天未創新低", "尚未自動化", "unknown", "用時間排除短暫反彈；資料未接入前不得計票"),
         indicator("週線形成較高低點", "尚未自動化", "unknown", "用完成週 K 驗證價格結構；資料未接入前不得計票"),
     ]
@@ -279,9 +279,9 @@ def bottom_assessment(snapshot: dict[str, Any], knowledge: dict[str, Any]) -> di
             "knowledge_authorized": hypothesis_authorized,
         },
         "leading_indicators": [
-            indicator("MVRV 比率", fmt_multiple(mvrv), "cold" if mvrv is not None and mvrv <= 1.3 else "neutral", "鏈上估值偏冷"),
-            indicator("恐懼貪婪指數", "資料不足" if fear is None else f"{fear:.0f}", "cold" if fear is not None and fear <= 25 else "neutral", "恐懼可形成機會，但不能單獨抄底"),
-            indicator("距一年高點回撤", fmt_pct(drawdown), "cold" if drawdown is not None and drawdown <= -0.45 else "neutral", "週期回撤已深"),
+            indicator("MVRV 比率", fmt_multiple(mvrv), "unknown" if mvrv is None else "cold" if mvrv <= 1.3 else "neutral", "鏈上估值偏冷"),
+            indicator("恐懼貪婪指數", "資料不足" if fear is None else f"{fear:.0f}", "unknown" if fear is None else "cold" if fear <= 25 else "neutral", "恐懼可形成機會，但不能單獨抄底"),
+            indicator("距一年高點回撤", fmt_pct(drawdown), "unknown" if drawdown is None else "cold" if drawdown <= -0.45 else "neutral", "週期回撤已深"),
         ],
         "lagging_confirmations": confirmations,
         "next_trigger": f"先站回 200 日均線 {fmt_money(ma200)}，再取得至少 45 天未創新低與週線較高低點；目前 {confirmed}/4，單一條件通過不得宣告見底。",
@@ -289,7 +289,7 @@ def bottom_assessment(snapshot: dict[str, Any], knowledge: dict[str, Any]) -> di
         "model_version": btc_standard.get("model_version", "legacy_unversioned"),
         "wiki_refs": knowledge_refs(knowledge, ["target-price", "indicator-regime-change", "two-tranche-plan"]),
         "source_refs": [
-            source("data/daily/latest_snapshot.json", "每日已驗證快照", snapshot.get("date")),
+            source("data/daily/latest_snapshot.json", "每日同批次快照", snapshot.get("date")),
             source("wiki/concepts/target-price.md", "底部區研究假說", "2026-07-21", "internal_hypothesis"),
         ],
     }
@@ -431,9 +431,11 @@ def build_consensus_signals(
     treasury = number(radar.get("treasury_avg_bill_rate_pct"))
     confirmation_items = bottom.get("lagging_confirmations", [])
     confirmed = sum(item.get("state") == "pass" for item in confirmation_items)
+    technical_direction = "unknown" if btc is None or ma50 is None or ma200 is None else "neutral" if btc >= ma50 and btc < ma200 else "bullish" if btc >= ma200 else "bearish"
+    technical_read = "均線必要值缺漏，不判斷多空。" if technical_direction == "unknown" else "已站上 200 日線，主要趨勢完成右側確認。" if technical_direction == "bullish" else "已站上 50 日線但仍低於 200 日線，屬止跌未翻多。" if technical_direction == "neutral" else "仍低於 50 與 200 日線，中期趨勢尚未止跌。"
 
     bottom_lenses = [
-        lens("技術趨勢", "neutral" if btc is not None and ma50 is not None and btc >= ma50 and ma200 is not None and btc < ma200 else "bullish" if btc is not None and ma200 is not None and btc >= ma200 else "bearish", f"50日 {fmt_money(ma50)}／200日 {fmt_money(ma200)}", "已站上 50 日線但仍低於 200 日線，屬止跌未翻多"),
+        lens("技術趨勢", technical_direction, f"50日 {fmt_money(ma50)}／200日 {fmt_money(ma200)}", technical_read),
         lens("鏈上估值", "bullish" if mvrv is not None and mvrv <= 1.3 else "neutral" if mvrv is not None else "unknown", fmt_multiple(mvrv), "MVRV 偏冷，但尚非單獨見底證據"),
         lens("市場情緒", "bullish" if fear is not None and fear <= 25 else "neutral" if fear is not None else "unknown", "資料不足" if fear is None else f"{fear:.0f}", "極度恐懼提供逆向背景，不是買點"),
         lens("週期回撤", "bullish" if drawdown is not None and drawdown <= -0.45 else "neutral" if drawdown is not None else "unknown", fmt_pct(drawdown), "回撤深度接近歷史壓力區，但週期樣本有限"),
@@ -469,7 +471,7 @@ def build_consensus_signals(
         next_trigger=f"價格站穩 {fmt_money(ma200)} 且 ETF 流取得第二來源交叉驗證，才把流動性與趨勢調升為有效共振。",
         confidence="低" if confidence == "低" else "中低",
         wiki_refs_value=knowledge_refs(knowledge, ["data-feeds", "indicator-regime-change", "five-dimension-model"]),
-        source_refs_value=[source("data/daily/latest_snapshot.json", "BTC 市場雷達", snapshot.get("date")), source("data/daily/agent_verification_report.json", "獨立資料驗證", snapshot.get("date"))],
+        source_refs_value=[source("data/daily/latest_snapshot.json", "BTC 市場雷達", snapshot.get("date")), source("data/daily/agent_verification_report.json", "同管線資料契約檢查", snapshot.get("date"))],
     )
     return [bottom_signal, liquidity_signal]
 
@@ -522,14 +524,24 @@ def build_summary_cards(
     metrics = snapshot.get("metrics", {})
     mstr = metrics.get("mstr_metrics", {})
     logic_safe = logic_audit.get("status") == "consistent"
-    contract_blocked = mstr.get("contract_red_light") is not False or not logic_safe
+    verification_status = verification.get("status")
+    verification_failed = verification_status in {"fail", "stale_or_mismatched"}
+    contract_blocked = mstr.get("contract_red_light") is not False or not logic_safe or verification_failed
     btc_target = targets.get("btc", {}).get("research_hypothesis_range", [])
+    if not logic_safe:
+        quality_read = "邏輯稽核未通過；停止所有行動結論。"
+    elif verification_status in {"fail", "stale_or_mismatched"}:
+        quality_read = "驗證失敗；停止所有行動結論，不沿用舊綠燈，也不把缺值當零。"
+    elif verification_status == "degraded":
+        quality_read = "驗證有限可用；結論可供研究，但低信心、單一來源與待更新資料不作加碼觸發。"
+    else:
+        quality_read = "獨立驗證已通過，仍須遵守模型與資料來源限制。"
     return [
         {
             "id": "today_action",
             "label": "今日動作",
-            "key_number": "MSTR 合約禁開" if contract_blocked else "只列觀察",
-            "plain_read": "邏輯稽核未通過，全部交易封鎖。" if not logic_safe else "STRC 折價、賣幣可觀測性與估值閘門尚未同時通過；BTC 偏冷不等於 2.5x 合約可開。" if contract_blocked else "載具紅燈暫時解除，仍需 MSTR/BTC 右側確認與風險額度。",
+            "key_number": "全部交易封鎖" if verification_failed or not logic_safe else "MSTR 合約禁開" if contract_blocked else "只列觀察",
+            "plain_read": "驗證失敗，只發布紅燈診斷；不得沿用舊快照或估值。" if verification_failed else "邏輯稽核未通過，全部交易封鎖。" if not logic_safe else "STRC 折價、賣幣可觀測性與估值閘門尚未同時通過；BTC 偏冷不等於 2.5x 合約可開。" if contract_blocked else "載具紅燈暫時解除，仍需 MSTR/BTC 右側確認與風險額度。",
             "tone": "bad" if contract_blocked else "warn",
         },
         {
@@ -548,10 +560,10 @@ def build_summary_cards(
         },
         {
             "id": "data_quality",
-            "label": "資料可信度",
-            "key_number": f"{quality}/100",
-            "plain_read": "邏輯稽核未通過；停止所有行動結論。" if not logic_safe else "驗證失敗時只供研究；不沿用舊綠燈，也不把缺值當零。" if verification.get("status") != "pass" else "獨立驗證已通過，仍須遵守模型與資料來源限制。",
-            "tone": "bad" if not logic_safe or verification.get("status") in {"fail", "stale_or_mismatched"} else "warn" if verification.get("status") == "degraded" else "good",
+            "label": "規則式資料契約分數",
+            "key_number": "FAIL" if verification_failed else f"{quality}/100",
+            "plain_read": quality_read,
+            "tone": "bad" if not logic_safe or verification_status in {"fail", "stale_or_mismatched"} else "warn" if verification_status == "degraded" else "good",
         },
     ]
 
@@ -575,11 +587,38 @@ def main() -> int:
     score = quality_score(effective_verification, provenance, snapshot.get("date"))
     confidence = confidence_label(score)
     bottom = bottom_assessment(snapshot, knowledge)
-    bottom["decision_grade"] = "research_only" if effective_verification.get("status") != "pass" or bottom.get("model_status") != "validated" else "decision_support"
+    btc_standard = snapshot.get("metrics", {}).get("btc_standard", {})
+    model_validated = bottom.get("model_status") == "validated" and btc_standard.get("calibrated") is True
+    verification_status = effective_verification.get("status")
+    logic_consistent = logic_audit.get("status") == "consistent"
+    publication_mode = "diagnostics_only" if verification_status in {"fail", "stale_or_mismatched"} or not logic_consistent else "research_only" if verification_status != "pass" or not model_validated else "full"
+    bottom["decision_grade"] = "decision_support" if publication_mode == "full" else publication_mode
     targets = conditional_targets(snapshot, bottom)
     exclusive = build_exclusive_signals(snapshot, previous, knowledge, confidence)
     consensus = build_consensus_signals(snapshot, bottom, knowledge, confidence)
     knowledge_quality = knowledge.get("quality", {})
+    summary_cards = build_summary_cards(snapshot, effective_verification, score, bottom, targets, logic_audit)
+    if publication_mode == "diagnostics_only":
+        summary_cards = [summary_cards[0], summary_cards[-1]]
+        bottom = {
+            "status": "blocked",
+            "key_number": "已封鎖",
+            "headline": "驗證失敗，不發布底部判斷",
+            "plain_read": "只保留資料與血緣診斷；不得沿用舊快照。",
+            "next_trigger": "修復必要資料並重新通過同批次驗證。",
+            "decision_grade": "diagnostics_only",
+            "leading_indicators": [],
+            "lagging_confirmations": [],
+        }
+        targets = {
+            "status": "blocked",
+            "btc": {"research_hypothesis_range": [], "plain_read": "驗證失敗，估值區間已封鎖。"},
+            "mstr": {"common_nav_per_share_at_btc_lower": None, "common_nav_per_share_at_btc_upper": None, "plain_read": "驗證失敗，MSTR 敏感度已封鎖。"},
+            "bmnr": {"gross_treasury_value_per_share": None, "indicative_0_8x_to_1_0x": [None, None], "plain_read": "驗證失敗，BMNR 情境已封鎖。"},
+            "assumptions": ["僅發布失敗診斷，不發布決策數字。"],
+        }
+        exclusive = []
+        consensus = []
 
     analytics = {
         "schema": 2,
@@ -588,6 +627,7 @@ def main() -> int:
         "snapshot_generated_at": snapshot.get("generated_at"),
         "quality": {
             "verification_status": effective_verification.get("status"),
+            "publication_mode": publication_mode,
             "verification_date_matches_snapshot": verification.get("date") == snapshot.get("date"),
             "verification_bound_to_snapshot": verification_current,
             "confidence": confidence,
@@ -602,7 +642,7 @@ def main() -> int:
             "logic_contradictions": logic_audit.get("summary", {}).get("contradictions"),
         },
         "decision_brief": {
-            "summary_cards": build_summary_cards(snapshot, effective_verification, score, bottom, targets, logic_audit),
+            "summary_cards": summary_cards,
             "bottom_assessment": bottom,
             "conditional_targets": targets,
             "exclusive_signals": exclusive,

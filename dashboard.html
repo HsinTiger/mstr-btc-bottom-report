@@ -452,8 +452,12 @@ function requireFresh(value,maxHours,label){
   if(ageHours < -1 || ageHours > maxHours) throw new Error(`${label} 已過期或時間位於未來`);
 }
 
+function taipeiDate(){
+  return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+}
+
 function requireCurrentDate(value,label){
-  if(value!==new Date().toISOString().slice(0,10)) throw new Error(`${label} 不是今日資料`);
+  if(value!==taipeiDate()) throw new Error(`${label} 不是台北今日資料`);
 }
 
 async function loadDailySnapshot(){
@@ -474,6 +478,10 @@ async function loadDailySnapshot(){
     requireFresh(verify.verified_at,30,'驗證報告');
     requireFresh(logic.generated_at,30,'邏輯稽核');
     requireFresh(analytics.generated_at,30,'機構分析');
+    if(!['pass','degraded','fail'].includes(verify.status)) throw new Error('驗證狀態不相容');
+    if(verify.status==='fail'||(verify.failures||[]).length) throw new Error(`驗證失敗：${(verify.failures||[])[0]||'必要資料未通過'}`);
+    if(logic.status!=='consistent'||analytics.quality?.logic_audit_status!==logic.status||analytics.logic_audit?.status!==logic.status) throw new Error('決策邏輯交叉欄位未通過一致性稽核');
+    if(analytics.quality?.verification_status!==verify.status||analytics.quality?.verification_bound_to_snapshot!==true) throw new Error('分析與驗證狀態未綁定同一批次');
     const m=snap.metrics.mstr_metrics, b=snap.metrics.bmnr_metrics||{}, radar=snap.metrics.market_radar||{}, btcStd=snap.metrics.btc_standard||{};
     const nf=(v,d=2)=>v==null?'N/A':Number(v).toFixed(d);
     const pct=v=>v==null?'N/A':(Number(v)*100).toFixed(1)+'%';
@@ -483,12 +491,14 @@ async function loadDailySnapshot(){
     const ret30=radar.btc_return_30d_pct;
     const drawdown=radar.btc_drawdown_1y_pct;
     const contractBlocked=m.contract_red_light!==false;
-    const verificationFailed=verify.status==='fail';
+    const verificationDegraded=verify.status==='degraded';
     const vs200dma=btcPx&&radar.btc_200dma?btcPx/radar.btc_200dma-1:null;
     const vs50dma=btcPx&&radar.btc_50dma?btcPx/radar.btc_50dma-1:null;
     const vs200wma=btcPx&&radar.btc_200wma?btcPx/radar.btc_200wma-1:null;
+    document.body.dataset.renderStatus=verify.status;
+    document.body.dataset.conclusionsVisible='true';
     put('genDate',snap.date);
-    put('liveState','每日管線資料','pos');
+    put('liveState',verificationDegraded?'有限可用｜只供研究':'每日管線資料已通過',verificationDegraded?'warn':'pos');
     put('px',btcPx==null?'N/A':money(btcPx));
     put('chg',`7d ${ret7==null?'N/A':(ret7>=0?'+':'')+pct(ret7)}｜30d ${ret30==null?'N/A':(ret30>=0?'+':'')+pct(ret30)}`);
     put('ddv',drawdown==null?'N/A':pct(drawdown),drawdown!=null&&drawdown<=-0.5?'big pos':'big neg');
@@ -505,8 +515,8 @@ async function loadDailySnapshot(){
     const trendBoth=vs200dma!=null&&vs50dma!=null&&vs200dma>=0&&vs50dma>=0;
     put('tma',vs200dma==null||vs50dma==null?'來源缺漏':trendBoth?'✓ 同時站回 50/200DMA':`✗ 50DMA ${pct(vs50dma)}｜200DMA ${pct(vs200dma)}`,trendBoth?'pos':'neg');
     put('frNow','不以單點 funding 作硬觸發','warn');
-    put('topVerdict', verificationFailed?'資料 FAIL｜MSTR 禁開':contractBlocked?'MSTR 禁開':btcStd.regime||'觀察', verificationFailed||contractBlocked?'big neg':'big warn');
-    put('topVerdictNote', `${btcStd.one_line||'BTC 資料不足'}；MSTR 合約${contractBlocked?'維持封鎖':'只進研究清單'}`, 'mini');
+    put('topVerdict', verificationDegraded?(contractBlocked?'資料有限｜MSTR 禁開':'資料有限｜只供研究'):contractBlocked?'MSTR 禁開':btcStd.regime||'觀察', contractBlocked?'big neg':'big warn');
+    put('topVerdictNote', `${verificationDegraded?'驗證有限可用，只供研究；':''}${btcStd.one_line||'BTC 資料不足'}；MSTR 合約${contractBlocked?'維持封鎖':'只進研究清單'}`, 'mini');
     put('stateBadge', btcStd.regime||'資料不足', `badge ${btcStd.tone==='deep_value'?'s3':btcStd.tone==='overheated'?'s1':'s2'}`);
     put('stateNote', `標準分 ${btcStd.score??'—'}｜資料覆蓋 ${btcStd.data_quality?.coverage_ratio==null?'—':Math.round(btcStd.data_quality.coverage_ratio*100)+'%'}｜啟發式模型尚未回測｜ETF 單源不計確認票`, 'mini');
     const commonRatio=m.common_equity_price_to_nav??m.equity_mnav;
@@ -535,7 +545,7 @@ async function loadDailySnapshot(){
     put('contractTriggerNow', contractBlocked?'✗ 紅燈中':'✓ 可研究', contractBlocked?'neg':'warn');
     put('realizedLossNow','來源受限：不作硬觸發','warn');
     const blocked=(logic?.decision?.blocked_actions||[]);
-    const blockContract=blocked.includes('add_2_5x_mstr')||contractBlocked||verificationFailed;
+    const blockContract=blocked.includes('add_2_5x_mstr')||contractBlocked||verificationDegraded;
     document.getElementById('contractGateSummary').innerHTML=blockContract?'<b class="neg">2.5x MSTR \u5408\u7d04\u5f85\u6a5f</b>\uff5c\u7d05\u71c8/\u8cc7\u6599/\u8cc7\u672c\u7d50\u69cb\u4efb\u4e00\u672a\u904e\u5c31\u4e0d\u958b':'<b class="warn">\u53ea\u53ef\u7814\u7a76</b>\uff5c\u4ecd\u9700\u53f3\u5074\u78ba\u8a8d\u8207\u6e05\u7b97\u7de9\u885d';
     const etfUsd=radar.etf_flow_7d_usd;
     const etfStatus=radar.etf_flow_status||'unavailable';
@@ -551,6 +561,15 @@ async function loadDailySnapshot(){
   }catch(e){
     console.error('daily snapshot unavailable',e);
     const putError=(id,text,cls)=>{const el=document.getElementById(id);if(el){el.textContent=text;if(cls)el.className=cls}};
+    document.body.dataset.renderStatus='fail';
+    document.body.dataset.conclusionsVisible='false';
+    for(const id of ['px','chg','ddv','athd','athdays','fng','t54','mvrvNow','tempNow','btc30dCapNow','capitulationOverall','contractTriggerNow','realizedLossNow','frNow','etfFlowNow','tma','confirmMvrvNow','confirmFearNow','strategyGateNow','ibitGateNow','retailGateNow','regGateNow','vma','mav','vwma','wmav','w1','m1','dm1','dm3','dm4','dm4note','dm5','dm5note','dm6','dm7','bmnrGrossMultiple','bmnrGrossPerShare','bmnrStakedRatio','bmnrEthPer1000','bmnrAsOf']) putError(id,'已封鎖','neg');
+    putError('genDate','失敗','neg');
+    putError('stateBadge','資料封鎖','badge s1');
+    putError('stateNote','必要資料未通過，不沿用舊狀態','mini neg');
+    putError('contractGateSummary','2.5x MSTR 合約封鎖','mini neg');
+    putError('icVerdict','BTC 標準裁決已封鎖','verdict neg');
+    putError('dataCoverageNote','每日資料失敗；歷史研究仍可閱讀，但不得用舊快照作今日決策。','note neg');
     putError('topVerdict','資料失敗｜MSTR 禁開','big neg');
     putError('topVerdictNote',`必要資料未載入：${e.message}`,'mini neg');
     putError('liveState','每日資料失敗，不沿用舊值','neg');

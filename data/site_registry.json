@@ -37,6 +37,7 @@
       "dependencies": [
         {"path": "data/daily/latest_snapshot.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true},
         {"path": "data/daily/agent_verification_report.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/logic_audit.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["review"], "fail_values": ["blocked", "contradiction"], "fail_result": "fail"},
         {"path": "data/daily/institutional_analytics.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true}
       ]
     },
@@ -93,7 +94,7 @@
       "owner_action": "keep",
       "dependencies": [
         {"path": "data/daily/institutional_analytics.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true},
-        {"path": "data/daily/logic_audit.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["review"], "fail_values": ["blocked", "contradiction"], "fail_result": "degraded"},
+        {"path": "data/daily/logic_audit.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["review"], "fail_values": ["blocked", "contradiction"], "fail_result": "fail"},
         {"path": "data/daily/agent_verification_report.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
       ]
     },
@@ -114,6 +115,7 @@
         {"path": "data/daily/daily_extensions.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true},
         {"path": "data/daily/latest_snapshot.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true},
         {"path": "data/daily/agent_verification_report.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/logic_audit.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["review"], "fail_values": ["blocked", "contradiction"], "fail_result": "fail"},
         {"path": "data/daily/institutional_analytics.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true}
       ]
     },
@@ -133,7 +135,7 @@
       "owner_action": "reframe",
       "dependencies": [
         {"path": "data/daily/latest_snapshot.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true},
-        {"path": "data/daily/logic_audit.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["review"], "fail_values": ["blocked", "contradiction"], "fail_result": "degraded"},
+        {"path": "data/daily/logic_audit.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["review"], "fail_values": ["blocked", "contradiction"], "fail_result": "fail"},
         {"path": "data/daily/agent_verification_report.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/institutional_analytics.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true},
         {"path": "data/history.json", "required": false}

@@ -59,24 +59,32 @@ const decisionLabel=value=>({block_leveraged_add:'MSTR 合約禁開',research_on
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 async function json(path){const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
 function requireFresh(value,maxHours,label){const timestamp=new Date(value);if(!value||Number.isNaN(timestamp.getTime()))throw new Error(`${label} 時間戳缺漏或格式錯誤`);const ageHours=(Date.now()-timestamp.getTime())/36e5;if(ageHours < -1||ageHours > maxHours)throw new Error(`${label} 已過期或時間位於未來`)}
-function requireCurrentDate(value,label){if(value!==new Date().toISOString().slice(0,10))throw new Error(`${label} 不是今日資料`)}
+function taipeiDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+function requireCurrentDate(value,label){if(value!==taipeiDate())throw new Error(`${label} 不是台北今日資料`)}
 async function load(){
-  const [ext,snap,verify,analytics]=await Promise.all([
+  const [ext,snap,verify,logic,analytics]=await Promise.all([
     json('data/daily/daily_extensions.json'),
     json('data/daily/latest_snapshot.json'),
     json('data/daily/agent_verification_report.json'),
+    json('data/daily/logic_audit.json'),
     json('data/daily/institutional_analytics.json')
   ]);
-  if(ext.schema!==2||snap.schema!==1||verify.schema!==1||analytics.schema!==2)throw new Error('每日資料 schema 不相容');
-  if(!ext.current_date||ext.current_date!==snap.date||verify.date!==snap.date||analytics.date!==snap.date)throw new Error('每日資料跨檔日期不一致');
+  if(ext.schema!==2||snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2)throw new Error('每日資料 schema 不相容');
+  if(!ext.current_date||ext.current_date!==snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date)throw new Error('每日資料跨檔日期不一致');
   requireCurrentDate(ext.current_date,'每日延伸');
   if(verify.snapshot_generated_at!==snap.generated_at)throw new Error('驗證報告未綁定目前快照');
-  if(ext.snapshot_generated_at!==snap.generated_at||analytics.snapshot_generated_at!==snap.generated_at)throw new Error('每日延伸未綁定目前快照');
-  requireFresh(ext.updated_at,30,'每日延伸');requireFresh(snap.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(analytics.generated_at,30,'機構分析');
+  if(ext.snapshot_generated_at!==snap.generated_at||logic.snapshot_generated_at!==snap.generated_at||analytics.snapshot_generated_at!==snap.generated_at)throw new Error('每日延伸未綁定目前快照');
+  requireFresh(ext.updated_at,30,'每日延伸');requireFresh(snap.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(analytics.generated_at,30,'機構分析');
+  if(!['pass','degraded','fail'].includes(verify.status))throw new Error('驗證狀態不相容');
+  if(verify.status==='fail'||(verify.failures||[]).length)throw new Error(`驗證失敗：${(verify.failures||[])[0]||'必要資料未通過'}`);
+  if(analytics.quality?.verification_status!==verify.status||analytics.quality?.verification_bound_to_snapshot!==true)throw new Error('分析與驗證狀態未綁定同一批次');
+  if(logic.status!=='consistent'||analytics.quality?.logic_audit_status!==logic.status||analytics.logic_audit?.status!==logic.status)throw new Error('決策邏輯交叉欄位未通過一致性稽核');
+  if(!['full','research_only'].includes(analytics.quality?.publication_mode))throw new Error('分析發布模式不允許顯示延伸觀點');
   const today=ext.items?.find(x=>x.date===ext.current_date)||ext.items?.at(-1);
   if(!today||!Array.isArray(today.viewpoints)||today.viewpoints.length!==3)throw new Error('今日三個延伸觀點缺漏');
   if(!Array.isArray(ext.visible_window)||ext.visible_window.length!==3)throw new Error('昨天／今天／明天視窗不完整');
   const m=snap.metrics.mstr_metrics, p=snap.metrics.prices;
+  document.body.dataset.renderStatus=verify.status;document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade=analytics.quality.publication_mode==='full'?'true':'false';
   document.getElementById('updated').textContent=`資料日 ${ext.current_date}｜更新 ${new Date(ext.updated_at).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false})}`;
   const action=analytics.decision_brief?.summary_cards?.find(item=>item.id==='today_action');
   document.getElementById('decision').textContent=verify.status==='pass'?decisionLabel(snap.decision.state):`資料驗證${verify.status==='fail'?'失敗':'降級'}｜三個觀點只供研究`;
@@ -94,7 +102,7 @@ async function load(){
   }).join('');
   document.getElementById('wikiInputs').innerHTML=(today.wiki_study_inputs||[]).map(x=>`<li>${esc(x)}</li>`).join('');
 }
-load().catch(err=>{document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="card error"><b>FAIL CLOSED｜本頁資料不可用</b><br>${esc(err.message)}；不沿用舊觀點。</div>`)});
+load().catch(err=>{document.body.dataset.renderStatus='fail';document.body.dataset.conclusionsVisible='false';document.body.dataset.executionGrade='false';document.getElementById('updated').textContent='資料失敗';document.getElementById('decision').textContent='所有交易與延伸結論封鎖';document.getElementById('summary').textContent=`${err.message}；不沿用舊觀點。`;document.getElementById('verifyBox').className='quote error';document.getElementById('verifyBox').textContent='FAIL CLOSED｜只顯示資料診斷';document.getElementById('btcPrice').textContent='已封鎖';document.getElementById('priceLine').textContent='必要資料未通過';document.getElementById('mnavLine').textContent='今日數字已停用';document.getElementById('views').innerHTML='<div class="card error">三個延伸觀點已封鎖</div>';document.getElementById('window').innerHTML='<div class="card error">今日資料失敗，不用舊觀點代替</div>';document.getElementById('wikiInputs').innerHTML='<li>等待資料修復並重新驗證</li>'});
 </script>
 </body>
 </html>

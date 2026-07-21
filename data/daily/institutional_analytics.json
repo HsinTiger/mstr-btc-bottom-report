@@ -1,10 +1,11 @@
 {
   "schema": 2,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T11:45:57+00:00",
+  "generated_at": "2026-07-21T13:41:44+00:00",
   "snapshot_generated_at": "2026-07-21T11:45:55+00:00",
   "quality": {
     "verification_status": "degraded",
+    "publication_mode": "research_only",
     "verification_date_matches_snapshot": true,
     "verification_bound_to_snapshot": true,
     "confidence": "低",
@@ -60,9 +61,9 @@
       },
       {
         "id": "data_quality",
-        "label": "資料可信度",
+        "label": "規則式資料契約分數",
         "key_number": "47/100",
-        "plain_read": "驗證失敗時只供研究；不沿用舊綠燈，也不把缺值當零。",
+        "plain_read": "驗證有限可用；結論可供研究，但低信心、單一來源與待更新資料不作加碼觸發。",
         "tone": "warn"
       }
     ],
@@ -155,7 +156,7 @@
       ],
       "source_refs": [
         {
-          "label": "每日已驗證快照",
+          "label": "每日同批次快照",
           "path": "data/daily/latest_snapshot.json",
           "as_of": "2026-07-21",
           "tier": "internal_derived"
@@ -444,7 +445,7 @@
             "name": "技術趨勢",
             "direction": "neutral",
             "value": "50日 $63,189／200日 $72,927",
-            "read": "已站上 50 日線但仍低於 200 日線，屬止跌未翻多",
+            "read": "已站上 50 日線但仍低於 200 日線，屬止跌未翻多。",
             "independence_key": "技術趨勢"
           },
           {
@@ -547,7 +548,7 @@
         ],
         "source_refs": [
           {
-            "label": "每日已驗證快照",
+            "label": "每日同批次快照",
             "path": "data/daily/latest_snapshot.json",
             "as_of": "2026-07-21",
             "tier": "internal_derived"
@@ -649,7 +650,7 @@
             "tier": "internal_derived"
           },
           {
-            "label": "獨立資料驗證",
+            "label": "同管線資料契約檢查",
             "path": "data/daily/agent_verification_report.json",
             "as_of": "2026-07-21",
             "tier": "internal_derived"

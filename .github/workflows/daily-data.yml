@@ -88,6 +88,7 @@ jobs:
           audit = json.loads(Path("data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
           context = json.loads(Path("data/daily/knowledge_context.json").read_text(encoding="utf-8-sig"))
           snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+          verification = json.loads(Path("data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
           lineage = snapshot.get("generated_at")
           if not lineage or analytics.get("snapshot_generated_at") != lineage or audit.get("snapshot_generated_at") != lineage:
               raise SystemExit("Derived analytics are not bound to the current snapshot")
@@ -96,8 +97,26 @@ jobs:
               raise SystemExit("Knowledge context contract is incomplete")
           summary = analytics.get("decision_brief", {}).get("summary_cards", [])
           action = next((item for item in summary if item.get("id") == "today_action"), {})
-          if audit.get("status") != "consistent" and (action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", "")):
-              raise SystemExit("Unsafe publication: logic audit failed without a fail-closed action card")
+          publication_mode = analytics.get("quality", {}).get("publication_mode")
+          verification_status = verification.get("status")
+          if verification_status == "fail":
+              brief = analytics.get("decision_brief", {})
+              if publication_mode != "diagnostics_only" or action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", ""):
+                  raise SystemExit("Unsafe publication: failed verification did not switch to diagnostics-only")
+              if brief.get("exclusive_signals") or brief.get("consensus_signals"):
+                  raise SystemExit("Unsafe publication: failed verification still exposes decision signals")
+          elif verification_status == "degraded" and publication_mode != "research_only":
+              raise SystemExit("Unsafe publication: degraded verification is not research-only")
+          if audit.get("status") != "consistent":
+              brief = analytics.get("decision_brief", {})
+              if publication_mode != "diagnostics_only" or action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", ""):
+                  raise SystemExit("Unsafe publication: logic audit failed without diagnostics-only publication")
+              if brief.get("exclusive_signals") or brief.get("consensus_signals"):
+                  raise SystemExit("Unsafe publication: failed logic audit still exposes decision signals")
+          btc_model = snapshot.get("metrics", {}).get("btc_standard", {})
+          model_validated = btc_model.get("model_status") == "validated" and btc_model.get("calibrated") is True
+          if not model_validated and "auto_trade" not in audit.get("decision", {}).get("blocked_actions", []):
+              raise SystemExit("Unsafe publication: unvalidated BTC model did not block auto_trade")
           print(f"Safe publication validated: logic={audit.get('status')} knowledge_pages={len(context.get('pages', []))}")
           PY
 

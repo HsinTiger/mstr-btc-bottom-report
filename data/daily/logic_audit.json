@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T11:45:57+00:00",
+  "generated_at": "2026-07-21T13:41:44+00:00",
   "snapshot_generated_at": "2026-07-21T11:45:55+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
-    "passed_invariants": 18,
+    "passed_invariants": 19,
     "failed_invariants": 0,
     "contradictions": 0,
     "blocked_actions": [
@@ -60,6 +60,13 @@
       "severity": "blocking",
       "evidence": "verification=degraded, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 47/100, confidence=低",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
+    },
+    {
+      "id": "UNVALIDATED_MODEL_CANNOT_AUTHORIZE_AUTO_TRADE",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "model_status=heuristic_unbacktested, calibrated=False, auto_trade_blocked=True",
+      "risk_if_failed": "An uncalibrated or unbacktested heuristic could be mistaken for an execution-grade model."
     },
     {
       "id": "VERIFICATION_REPORT_MATCHES_SNAPSHOT_DATE",

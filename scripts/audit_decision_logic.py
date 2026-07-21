@@ -199,6 +199,9 @@ def main() -> None:
     one_line = " | ".join(str(item.get("plain_read", "")) for item in summary_cards)
     tactical_read = f"{today_action.get('key_number', '')} {today_action.get('plain_read', '')}"
     btc_dimensions = btc_standard.get("dimensions", {})
+    btc_model_status = btc_standard.get("model_status", "missing")
+    btc_model_calibrated = btc_standard.get("calibrated") is True
+    btc_model_validated = btc_model_status == "validated" and btc_model_calibrated
     bmnr_quality = bmnr_metrics.get("quality")
     expected_contract_red_light = bool(
         sale_ratio is None
@@ -221,7 +224,7 @@ def main() -> None:
         blocked_actions.add("common_valuation_green_light")
     if not capital_flywheel_gate_ok:
         blocked_actions.add("capital_flywheel_green_light")
-    if verification_status != "pass" or not verification_date_matches or provenance_status != "automated":
+    if verification_status != "pass" or not verification_date_matches or provenance_status != "automated" or not btc_model_validated:
         blocked_actions.add("auto_trade")
     if etf_flow_status != "automated":
         blocked_actions.add("use_etf_flow_as_hard_trigger")
@@ -249,6 +252,13 @@ def main() -> None:
         passed=(verification_status == "pass" and verification_date_matches) or ("auto_trade" in blocked_actions and analytics_confidence not in {"high", "高"}),
         evidence=f"verification={verification_status}, date_matches={verification_date_matches}, headline={headline}, confidence={analytics_confidence}",
         risk_if_failed="Research-grade data could be mistaken for execution-grade signal.",
+    )
+    add_invariant(
+        invariants,
+        rule_id="UNVALIDATED_MODEL_CANNOT_AUTHORIZE_AUTO_TRADE",
+        passed=btc_model_validated or "auto_trade" in blocked_actions,
+        evidence=f"model_status={btc_model_status}, calibrated={btc_model_calibrated}, auto_trade_blocked={'auto_trade' in blocked_actions}",
+        risk_if_failed="An uncalibrated or unbacktested heuristic could be mistaken for an execution-grade model.",
     )
     add_invariant(
         invariants,
