@@ -13,21 +13,31 @@
 ## 腳本分工
 
 1. `scripts/daily_data_pipeline.py`
-   - 抓 BTC：CoinGecko + Coinbase。
+   - 抓 BTC/ETH：CoinGecko + Coinbase，價差由 verifier 交叉檢查。
+   - 抓 BTC 日/週線、50/200DMA、200WMA、MVRV、Fear & Greed、ETF flow，產生五維 BTC 標準分；模型明示為未回測 heuristic。
    - 抓 MSTR/BMNR/STRC：Yahoo Finance chart API。
-   - 嘗試抓 SEC submissions；若來源暫時不可用，保留 error observation，不讓 collector 自行宣稱成功。
+   - 抓 Strategy 官方 purchases ledger；若最新揭露無法覆蓋最近 7 日，賣幣壓力記為「未知」而不是 0，MSTR 合約 fail-closed。
+   - 抓 MSTR SEC companyfacts、最新 10-Q/10-K 封面各類普通股實際流通股數，以及 BMNR 最新 8-K Exhibit 99.1；BMNR 只產生 gross treasury view，不冒充 net NAV。
+   - 有揭露基準日的結構與鏈上資料寫入 `as_of`；所有 observation 均保留 `basis`、`source_tier` 與 `fetched_at`。即時/收盤報價若來源未提供結構日期，不偽造 `as_of`。
    - 產出 `data/daily/raw_observations.json`、`latest_snapshot.json`、`database.json`。
 
 2. `scripts/verify_daily_data.py`
    - 這是資料驗證 sub-agent 的可執行版本。
    - 重讀 raw 與 snapshot，不信任 collector 結論。
-   - 檢查必要來源、BTC 主備價差、衍生指標合理範圍、SEC 手動覆核警示。
+   - 檢查必要來源、BTC/ETH 主備價差、來源時效、衍生指標合理範圍、SEC 手動覆核警示。
+   - 驗證 BTC regime 不得混入 MSTR/BMNR 載具風險；ETF 單源權重不得高於 0.5。
+   - 驗證 BMNR bottom-up gross treasury 與公司 reported total 的差距。
    - 產出 `data/daily/agent_verification_report.json`。
 
 3. `scripts/generate_daily_extensions.py`
    - 結合 `wiki_llm.md` 的概念層與已驗證 snapshot。
    - 產出今天三個延伸觀點。
    - 前端顯示昨天、今天、明天觀察；過期項目移入 `archive`。
+   - archive 依 `date + type` 去重，避免每日執行造成重複累加。
+
+4. `scripts/generate_institutional_analytics.py`
+   - 產生動態投委會結論，不使用固定一句話。
+   - 輸出資料品質 0–100、BTC/MSTR/BMNR 三本帳、MSTR BTC 情境壓測與風險堆疊。
 
 ## 前端資料
 
@@ -37,11 +47,13 @@
 
 ## 驗證政策
 
-- BTC 必須同時有 CoinGecko 與 Coinbase，價差門檻 1.5%。
+- BTC/ETH 必須同時有 CoinGecko 與 Coinbase，價差門檻 1.5%。
 - MSTR 必須有 Yahoo Finance 價格。
-- BMNR/STRC 可缺但降信心。
+- BMNR 價格或官方 treasury 資料缺漏時降信心；BMNR gross assets 不可宣稱為普通股淨 NAV。
+- Coin Metrics MVRV 超過 3 日降級、超過 7 日 fail；Strategy 持倉超過 14 日降級；7 日賣幣揭露超過 7 日即 fail-closed。
+- USD Reserve 超過 30 日降級、120 日 fail；普通股流通股數超過 45 日降級、120 日 fail。
 - SEC/公司公告屬結構性輸入，API 不穩時不自動改 capital structure；保留警示並要求人工覆核。
-- verifier fail 時 GitHub Actions 失敗，不 commit 新前端資料。
+- verifier fail 時仍完成分析並 commit 最新資料與 FAIL 報告，讓前端顯示真實失效原因；所有交易 gate 必須 fail-closed，不得沿用舊綠燈。
 
 ## 注意
 

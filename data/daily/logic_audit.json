@@ -1,16 +1,19 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T02:44:35+00:00",
-  "status": "contradiction",
+  "generated_at": "2026-07-21T04:42:29+00:00",
+  "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
-    "passed_invariants": 10,
+    "passed_invariants": 14,
     "failed_invariants": 0,
-    "contradictions": 1,
+    "contradictions": 0,
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
+      "claim_bmnr_net_nav_discount",
+      "claim_common_equity_cheap",
+      "common_valuation_green_light",
       "treat_mnav_as_green",
       "use_etf_flow_as_hard_trigger"
     ],
@@ -27,102 +30,133 @@
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
+      "claim_bmnr_net_nav_discount",
+      "claim_common_equity_cheap",
+      "common_valuation_green_light",
       "treat_mnav_as_green",
       "use_etf_flow_as_hard_trigger"
     ],
-    "plain_english": "資料驗證降級，或每週賣幣壓力／STRC 折價紅旗還在時，只允許研究與觀察。"
+    "plain_english": "BTC 市場狀態、MSTR 合約紅燈與 BMNR gross-asset 折價分開判斷；資料降級或載具紅旗存在時，只允許研究與觀察。"
   },
   "invariants": [
     {
       "id": "NO_TACTICAL_ADD_WHEN_CONTRACT_RED_LIGHT",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "contract_red_light=True, decision_state=block_leveraged_add, tactical_read=禁止 2.5x 加碼",
       "risk_if_failed": "False green light for the user's 2.5x leveraged MSTR tactical sleeve."
+    },
+    {
+      "id": "CONTRACT_RED_LIGHT_FAILS_CLOSED",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "actual=True, expected=True, sale_ratio=N/A, coverage_months=13.7, strc_discount=12.9%",
+      "risk_if_failed": "Missing or adverse capital-stack inputs could silently open the leveraged-trade gate."
     },
     {
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=degraded, headline=Research-grade only; not auto-trading grade, confidence=medium-low",
+      "evidence": "verification=fail, headline=偏冷等待區｜MSTR 合約封鎖｜BMNR 市值/gross treasury=0.85x, confidence=low",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
     },
     {
-      "id": "M1_BELOW_ONE_BLOCKS_CHEAPNESS_CLAIM",
+      "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.113x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
-      "risk_if_failed": "Common equity may be called cheap while adjusted common NAV is still below threshold."
+      "evidence": "common_equity_price_to_nav=1.161x, headline=偏冷等待區｜MSTR 合約封鎖｜BMNR 市值/gross treasury=0.85x",
+      "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
-      "id": "MNAV_DUAL_GATE_REQUIRED",
+      "id": "COMMON_VALUATION_GATE_DIRECTION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "mnav_gate_ok=True, equity_mnav=1.113x, enterprise_mnav=1.065x, pref_dilution_flag=False",
-      "risk_if_failed": "Official or single-line mNAV could override the self-calculated dual gate."
+      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.161x, preferred_distortion_flag=False",
+      "risk_if_failed": "A premium above common NAV could be mislabeled as valuation safety."
+    },
+    {
+      "id": "CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.161x, enterprise_value_to_btc_nav=1.051x",
+      "risk_if_failed": "Financing capacity and investor valuation could be collapsed into one misleading green light."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.113x, sats_per_share=252693",
+      "evidence": "equity_mnav=1.161x, sats_per_share=240770",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
       "id": "STRC_DISCOUNT_DOWNGRADES_MNAV",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "strc_discount=12.9%, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "strc_discount=12.9%, contract_red_light=True",
       "risk_if_failed": "Headline mNAV could ignore preferred-market capital-stack stress."
     },
     {
       "id": "SALE_PRESSURE_BLOCKS_LEVERAGED_ADD",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "sale_ratio=3.64x, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "sale_ratio=N/Ax, contract_red_light=True",
       "risk_if_failed": "Forced-sale pressure could be treated as a dip-buy setup."
     },
     {
       "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "manual_input_provenance=mixed_automated_manual, verification=degraded; pass means false-green-light is blocked, not that inputs are fully automated",
+      "evidence": "manual_input_provenance=mixed_automated_manual, verification=fail; pass means false-green-light is blocked, not that inputs are fully automated",
       "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
     },
     {
       "id": "ETF_FLOW_NOT_HARD_TRIGGER_UNTIL_AUTOMATED",
       "status": "pass",
       "severity": "major",
-      "evidence": "etf_flow_status=automated_third_party_single_source, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']; single-source ETF data may inform context but remains barred from hard triggers",
+      "evidence": "etf_flow_status=automated_third_party_single_source, counts_as_confirmation=False",
       "risk_if_failed": "Missing ETF-flow automation could still influence hard trading decisions."
     },
     {
       "id": "RESERVE_COVERAGE_ESCALATES_BELOW_ONE_YEAR",
       "status": "pass",
       "severity": "major",
-      "evidence": "coverage_months=13.7, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "evidence": "coverage_months=13.7, contract_red_light=True",
       "risk_if_failed": "Liquidity runway deterioration could be missed in leveraged sizing."
+    },
+    {
+      "id": "BTC_REGIME_EXCLUDES_VEHICLE_RISK",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "btc_dimensions=['ETF 邊際買盤', '估值便宜度', '價格趨勢', '市場情緒', '週期回撤']",
+      "risk_if_failed": "MSTR/BMNR capital-structure stress could distort the BTC market regime score."
+    },
+    {
+      "id": "BMNR_GROSS_ASSETS_NOT_NET_NAV",
+      "status": "pass",
+      "severity": "blocking",
+      "evidence": "bmnr_quality=gross_asset_view_not_net_nav, blocked_actions=['add_2_5x_mstr', 'auto_trade', 'claim_bmnr_net_nav_discount', 'claim_common_equity_cheap', 'common_valuation_green_light', 'treat_mnav_as_green', 'use_etf_flow_as_hard_trigger']",
+      "risk_if_failed": "Gross crypto and cash holdings could be mislabeled as value attributable to common equity."
     }
   ],
   "thresholds": [
     {
-      "metric": "普通股真實安全邊際",
-      "threshold": "< 1.00 blocks common-equity cheapness claims",
-      "current": "1.113x",
-      "rationale": "Below 1.0 means common equity trades through internally adjusted BTC NAV after debt, preferred, cash, and tax inputs.",
-      "action": "Do not frame MSTR common as cheap until provenance and capital stack are reviewed."
+      "metric": "普通股市值／普通股淨值",
+      "threshold": "> 1.00 = 溢價；≤ 1.00 = 折價背景，仍非單獨買進訊號",
+      "current": "1.161x",
+      "rationale": "市值除以扣債務、優先股與稅務楔子後的普通股淨值；倍率愈低，估值相對愈便宜。",
+      "action": "高於 1.0 禁止宣稱普通股便宜；低於 1.0 仍須通過資料品質與資本結構覆核。"
     },
     {
-      "metric": "企業價值安全邊際",
-      "threshold": "< 1.00 would imply enterprise trades below BTC NAV before common-stack haircuts",
-      "current": "1.065x",
-      "rationale": "Separates company-level BTC premium from common-share capital-structure burden.",
-      "action": "只能當背景參考；不可蓋過普通股安全邊際、賣幣壓力、STRC 折價這三個紅旗。"
+      "metric": "企業價值／BTC 總值",
+      "threshold": "< 1.00 = 企業價值低於 BTC 總值；> 1.00 = 資本飛輪可能仍可運作",
+      "current": "1.051x",
+      "rationale": "分子採普通股市值加債務與優先股、再扣現金；與普通股估值是不同問題。",
+      "action": "只能判斷企業層溢價與融資飛輪；不可當作普通股便宜的證據。"
     },
     {
       "metric": "每週賣幣壓力倍數",
       "threshold": "> 2.00 is forced-sale pressure red flag",
-      "current": "3.64x",
+      "current": "N/Ax",
       "rationale": "Weekly BTC sales versus economic cushion can turn financing reflexivity from tailwind to headwind.",
       "action": "Block 2.5x tactical adds when above threshold."
     },
@@ -145,7 +179,7 @@
       "threshold": "< 25 is panic context, not automatic buy signal",
       "current": "25",
       "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
-      "action": "只允許列入研究清單；行動前必須看到普通股安全邊際、賣幣壓力、STRC 折價一起確認。"
+      "action": "只允許列入研究清單；行動前必須看到普通股估值、賣幣壓力、STRC 折價一起確認。"
     },
     {
       "metric": "Treasury bill rate proxy",
@@ -155,12 +189,7 @@
       "action": "Add financing-risk weight when rates rise."
     }
   ],
-  "contradictions": [
-    {
-      "id": "PRICE_REBOUND_WITHOUT_STRUCTURE_REPAIR",
-      "evidence": "mstr_return_1d=3.1%, 普通股真實安全邊際=1.113, 每週賣幣壓力倍數=3.64, STRC 優先股折價=12.9%"
-    }
-  ],
+  "contradictions": [],
   "falsification_watch": [
     {
       "hypothesis": "每週賣幣壓力倍數高於 2，代表融資壓力足以封鎖 2.5 倍 MSTR 小倉加碼。",
@@ -173,8 +202,8 @@
       "required_evidence": "Bid/ask or volume context plus independent preferred-price source."
     },
     {
-      "hypothesis": "普通股真實安全邊際低於 1.0 時，不能直接說 MSTR 普通股便宜，必須額外覆核。",
-      "what_would_disprove": "Reviewed capital inputs show diluted shares, debt, preferred liquidation value, and deferred tax liabilities were overstated.",
+      "hypothesis": "普通股市值／普通股淨值高於 1.0 時，MSTR 普通股相對自算淨值存在溢價。",
+      "what_would_disprove": "Reviewed capital inputs show actual common shares, debt, preferred liquidation value, or deferred tax liabilities were materially overstated, or omitted assets were material.",
       "required_evidence": "SEC filing extraction promoted from manual_seed to reviewed input provenance."
     },
     {

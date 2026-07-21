@@ -1,52 +1,76 @@
 {
   "schema": 1,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T02:44:36+00:00",
+  "generated_at": "2026-07-21T04:42:29+00:00",
   "quality": {
-    "verification_status": "degraded",
-    "confidence": "medium-low",
+    "verification_status": "fail",
+    "confidence": "low",
+    "confidence_score_0_100": 20,
     "degradations": [
+      "Strategy BTC holdings: stale 15 days > 14",
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
-      "BTC standard inputs missing: btc_mvrv_current",
-      "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
-      "capital-structure provenance status=mixed_automated_manual"
+      "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
+      "capital-structure provenance status=mixed_automated_manual",
+      "usd_reserve_musd: official input stale 112 days > 30",
+      "deferred_tax_liability_musd: official input stale 202 days > 150",
+      "common_shares_outstanding_m: official input stale 86 days > 45"
     ],
-    "logic_audit_status": "contradiction",
+    "warnings": [],
+    "automated_capital_structure_fields": [
+      "mstr_btc_holdings",
+      "usd_reserve_musd",
+      "deferred_tax_liability_musd",
+      "common_shares_outstanding_m",
+      "diluted_shares_m",
+      "weekly_btc_sales_musd"
+    ],
+    "manual_capital_structure_fields": [
+      "debt_face_musd",
+      "annual_interest_musd",
+      "preferred"
+    ],
+    "logic_audit_status": "consistent",
     "logic_failed_invariants": 0,
-    "logic_contradictions": 1
+    "logic_contradictions": 0
   },
   "executive_read": {
-    "headline": "Research-grade only; not auto-trading grade",
-    "one_line": "普通股真實安全邊際低於 1.0，且每週賣幣壓力與 STRC 優先股折價仍是紅旗；今天重點是避免追高，不是找理由加碼。"
+    "headline": "偏冷等待區｜MSTR 合約封鎖｜BMNR 市值/gross treasury=0.85x",
+    "one_line": "BTC 採 偏冷等待區 節奏；MSTR 合約封鎖；MSTR 普通股市值/淨值=1.16x（溢價）、企業價值/BTC=1.05x，估值便宜與融資飛輪分開判斷；BMNR 市值/gross treasury=0.85x，但 BMNR 尚非扣負債後淨 NAV；資料品質=fail。",
+    "large_spot_sleeve": "準備買單但等待投降或右側確認，不用預設今日是底",
+    "tactical_mstr_sleeve": "禁止 2.5x 加碼",
+    "bmnr_sleeve": "BMNR 市值大致貼近 gross treasury；重點轉向股數、質押收益與負債口徑"
   },
   "logic_audit": {
-    "status": "contradiction",
-    "plain_english": "資料驗證降級，或每週賣幣壓力／STRC 折價紅旗還在時，只允許研究與觀察。",
+    "status": "consistent",
+    "plain_english": "BTC 市場狀態、MSTR 合約紅燈與 BMNR gross-asset 折價分開判斷；資料降級或載具紅旗存在時，只允許研究與觀察。",
     "blocked_actions": [
       "add_2_5x_mstr",
       "auto_trade",
+      "claim_bmnr_net_nav_discount",
+      "claim_common_equity_cheap",
+      "common_valuation_green_light",
       "treat_mnav_as_green",
       "use_etf_flow_as_hard_trigger"
     ],
     "failed_invariants": 0,
-    "contradictions": 1
+    "contradictions": 0
   },
   "decomposition": {
-    "btc_return_1d": 0.007626464321282889,
+    "btc_return_1d": 0.010792278620677775,
     "mstr_return_1d": 0.03131259884027404,
-    "mstr_minus_btc_1d": 0.023686134518991153,
-    "m1_delta_1d": 0.018240920771711577,
+    "mstr_minus_btc_1d": 0.020520320219596266,
+    "common_equity_price_to_nav_delta_1d": 0.06650108976457525,
     "strc_discount_delta_1d": -0.018099999999999894,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": 0.023686134518991153,
+        "value": 0.020520320219596266,
         "read": "MSTR outperformed BTC; verify it is not short-term reflexivity"
       },
       {
-        "driver": "普通股真實安全邊際變化",
-        "value": 0.018240920771711577,
-        "read": "普通股安全邊際改善"
+        "driver": "普通股市值／普通股淨值變化",
+        "value": 0.06650108976457525,
+        "read": "倍率上升，溢價擴大或淨值惡化"
       },
       {
         "driver": "STRC 優先股折價信任票變化",
@@ -59,49 +83,154 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 52222.684,
-        "equity_mnav_at_current_mstr": 1.7814310002459774
+        "btc_price": 52386.76,
+        "net_value_to_common_musd": 18473.910419,
+        "common_nav_per_current_share": 52.71514509010915,
+        "current_mstr_price_to_common_nav": 1.8556337051295302,
+        "equity_mnav_at_current_mstr": 1.8556337051295302
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 58750.519499999995,
-        "equity_mnav_at_current_mstr": 1.369907152028651
+        "btc_price": 58935.104999999996,
+        "net_value_to_common_musd": 23999.240221374996,
+        "common_nav_per_current_share": 68.4816263383531,
+        "current_mstr_price_to_common_nav": 1.4284123381750933,
+        "equity_mnav_at_current_mstr": 1.4284123381750933
       },
       {
         "btc_shock": 0,
-        "btc_price": 65278.354999999996,
-        "equity_mnav_at_current_mstr": 1.1128341606269754
+        "btc_price": 65483.45,
+        "net_value_to_common_musd": 29524.57002375,
+        "common_nav_per_current_share": 84.24810758659706,
+        "current_mstr_price_to_common_nav": 1.161094329619839,
+        "equity_mnav_at_current_mstr": 1.161094329619839
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 71806.1905,
-        "equity_mnav_at_current_mstr": 0.9369994353160824
+        "btc_price": 72031.795,
+        "net_value_to_common_musd": 35049.899826124994,
+        "common_nav_per_current_share": 100.014588834841,
+        "current_mstr_price_to_common_nav": 0.9780573128339802,
+        "equity_mnav_at_current_mstr": 0.9780573128339802
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 78334.026,
-        "equity_mnav_at_current_mstr": 0.8091488756237387
+        "btc_price": 78580.14,
+        "net_value_to_common_musd": 40575.22962849999,
+        "common_nav_per_current_share": 115.78107008308496,
+        "current_mstr_price_to_common_nav": 0.8448704086929234,
+        "equity_mnav_at_current_mstr": 0.8448704086929234
       }
+    ],
+    "assumptions": [
+      "MSTR 股價與流通股數固定，只對 BTC 現價做靜態衝擊",
+      "遞延稅負債固定採最近 SEC 揭露值，未模擬 BTC 公允價值變動後的稅務重估",
+      "未模擬可轉債轉換、ATM 增發、優先股新發行或回購"
     ]
+  },
+  "btc_analysis": {
+    "schema": 1,
+    "model_status": "heuristic_unbacktested",
+    "intended_horizon": "weekly_to_monthly_regime_context",
+    "score": -6.9,
+    "regime": "偏冷等待區",
+    "tone": "cold_watch",
+    "action": "準備買單但等待投降或右側確認，不用預設今日是底",
+    "one_line": "BTC：偏冷等待區｜準備買單但等待投降或右側確認，不用預設今日是底",
+    "dimensions": {
+      "估值便宜度": -1.2,
+      "價格趨勢": -1.4,
+      "市場情緒": -2.0,
+      "ETF 邊際買盤": 0.3,
+      "週期回撤": -2.0
+    },
+    "dimension_weights": {
+      "估值便宜度": 1.25,
+      "價格趨勢": 1.0,
+      "市場情緒": 0.75,
+      "ETF 邊際買盤": 0.5,
+      "週期回撤": 1.0
+    },
+    "weighted_score_before_normalization": -6.25,
+    "data_quality": {
+      "coverage_ratio": 1.0,
+      "missing_dimensions": [],
+      "etf_flow_weight_capped": true,
+      "etf_flow_counts_as_confirmation": false,
+      "etf_flow_reason": "第三方單一來源，權重固定為 0.5，且不計入右側確認票數"
+    },
+    "signals": {
+      "btc_usd": 65483.45,
+      "btc_vs_200dma_pct": -0.10351459159599308,
+      "btc_vs_50dma_pct": 0.033579895684913375,
+      "btc_1y_drawdown_pct": -0.4814469571133452,
+      "btc_30d_return_pct": 0.01809810546293611,
+      "mvrv_ratio": 1.2327473883123754,
+      "fear_greed": 25.0,
+      "etf_flow_7d_usd": 76000000.0
+    },
+    "implementation_overlays": {
+      "macro_liquidity": {
+        "status": "neutral",
+        "treasury_rate_pct": 3.706,
+        "read": "利率未觸發額外估值降權"
+      },
+      "mstr_vehicle": {
+        "status": "blocked",
+        "sale_pressure_ratio": null,
+        "cash_coverage_months": 13.737877593360997,
+        "strc_discount": 0.129,
+        "read": "BTC 狀態不等於 MSTR 合約放行；載具紅燈獨立判斷"
+      }
+    },
+    "thresholds": {
+      "投降接刀區": "至少 2 個投降條件且標準分 ≤ -6；現貨分批，不自動開 MSTR 合約",
+      "便宜後右側確認區": "至少 4 個右側確認條件且標準分 -4 到 +3；可研究現貨加碼",
+      "偏熱追高區": "標準分 ≥ +6；禁止追價",
+      "偏冷等待區": "總分 ≤ -3 但投降不足；準備但不預設見底"
+    },
+    "limits": [
+      "MVRV-Z、realized loss、Google Trends 無穩定免費官方 API 時不作硬觸發",
+      "ETF flow 目前為第三方單源，只能加權背景，不可單獨放行交易",
+      "BTC 判斷標準只決定現貨節奏；MSTR 合約需另過資本結構紅燈"
+    ]
+  },
+  "bmnr_analysis": {
+    "holdings_as_of": "2026-07-19",
+    "eth_holdings": 5777468.0,
+    "staked_eth_ratio": 0.8510975742314799,
+    "gross_treasury_musd": 11742.235162469999,
+    "gross_treasury_value_per_share": 19.644832954239593,
+    "market_cap_to_gross_treasury": 0.8465330318021893,
+    "gross_treasury_discount": 0.1534669681978107,
+    "reported_crosscheck_gap": 0.020844394764677684,
+    "conclusion": "BMNR 市值大致貼近 gross treasury；重點轉向股數、質押收益與負債口徑",
+    "critical_limit": "未扣除完整負債、優先股與其他或有項目；不可當作普通股淨 NAV"
   },
   "risk_stack": [
     {
       "name": "Automation quality",
-      "severity": "medium",
-      "value": "degraded",
-      "read": "Research-grade only"
+      "severity": "fail",
+      "value": "fail",
+      "read": "Data quality requires review"
     },
     {
-      "name": "普通股真實安全邊際",
-      "severity": "low",
-      "value": "1.11x",
-      "read": "高於 1.0，但仍需檢查紅旗"
+      "name": "BTC 市場狀態",
+      "severity": "opportunity",
+      "value": "-6.9",
+      "read": "BTC：偏冷等待區｜準備買單但等待投降或右側確認，不用預設今日是底"
+    },
+    {
+      "name": "普通股市值／普通股淨值",
+      "severity": "high",
+      "value": "1.16x",
+      "read": "高於 1.0，普通股相對淨值有溢價"
     },
     {
       "name": "每週賣幣壓力倍數",
-      "severity": "high",
-      "value": "3.6x",
-      "read": "高於 2 倍；凍結小倉合約加碼"
+      "severity": "low",
+      "value": "N/Ax",
+      "read": "低於紅線"
     },
     {
       "name": "STRC 優先股折價信任票",
@@ -114,6 +243,12 @@
       "severity": "opportunity",
       "value": "25",
       "read": "Fear helps setup quality; not a buy trigger by itself"
+    },
+    {
+      "name": "BMNR 市值／gross treasury",
+      "severity": "neutral",
+      "value": "0.85x",
+      "read": "只看 gross assets，未扣完整負債與優先股；不可直接稱淨值折價"
     }
   ]
 }

@@ -9,9 +9,9 @@
 :root {
   /* 莫蘭迪簡約色系（warm muted） */
   --bg: #e7e3da; --surface: #f1eee8; --surface2: #eae6dd; --surface3: #ddd6c9;
-  --border: #d3ccbd; --border2: #beb6a3; --text: #44403a; --text2: #736c60; --text3: #9a9183; --ink: #34312b;
-  --blue: #647f8e; --blue2: #587888; --red: #a8695c; --green: #6b8260;
-  --yellow: #9c8038; --purple: #8d7e98; --orange: #a5754f; --cyan: #6f968d;
+  --border: #d3ccbd; --border2: #beb6a3; --text: #44403a; --text2: #625c52; --text3: #6f685e; --ink: #34312b;
+  --blue: #536f7e; --blue2: #496a7a; --red: #8f493e; --green: #506b47;
+  --yellow: #765d1d; --purple: #786785; --orange: #8c5e39; --cyan: #527b72;
   --mono: ui-monospace, 'SF Mono', 'Menlo', 'Roboto Mono', monospace;
   --r: 12px;
 }
@@ -187,6 +187,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   .score .nm { width: 92px; font-size: 0.78rem; }
   .srcbar { gap: 5px; }
   .src { font-size: 0.68rem; }
+  .badge-row .badge:nth-child(n+3) { display:none; }
 }
 </style>
 </head>
@@ -198,8 +199,8 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <div class="sub">大倉現貨 4:1 · 小倉 MSTR 2.5x 合約 · 紅燈先擋風險，再談進攻</div>
   <div class="date" id="heroDate">每日資料載入中 · 每日大字卡 / 1–4 年週期現貨 / 月線到年線 MSTR 合約波段</div>
   <div class="badge-row">
-    <span class="badge badge-red">今日：小倉禁開 · 大倉觀察</span>
-    <span class="badge badge-yellow">MSTR 紅燈：reported BTC sales</span>
+    <span class="badge badge-red" id="actionBadge">今日動作載入中</span>
+    <span class="badge badge-yellow" id="mstrRiskBadge">MSTR 風險載入中</span>
     <span class="badge badge-green">大倉目標：MSTR/BMNR = 4:1</span>
     <span class="badge badge-purple">小倉：MSTR 2.5x 月線/年線波段</span>
     <a class="badge badge-red" href="institutional-ic-memo-v3.md" style="text-decoration:none">🏛️ IC Memo v3（機構級裁決）→</a>
@@ -233,15 +234,15 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <div class="daily-meta" id="dailyMeta">載入今日資料中…</div>
   <div class="decision-wall" id="dailyCoreCards"></div>
 
-  <div class="decision-subhead"><h3>?? 獨家核心指標</h3><div class="hint">每張卡只保留：結論 + 一個數字</div></div>
+  <div class="decision-subhead"><h3>🧭 獨家核心指標</h3><div class="hint">每張卡只保留：結論 + 一個數字</div></div>
   <div class="decision-wall" id="dailyMstrCards"></div>
 
   <h3>📚 兩本帳：不要混用</h3>
   <table>
     <thead><tr><th>帳本</th><th>目標</th><th>工具</th><th>今天狀態</th><th>下一觸發</th></tr></thead>
     <tbody>
-      <tr><td><b>小倉</b></td><td>月線～年線 MSTR 波段</td><td>2.5x MSTR 合約</td><td class="neg">禁開</td><td>紅燈解除＋MSTR/BTC 右側確認＋清算緩衝足夠</td></tr>
-      <tr><td><b>大倉</b></td><td>1–4 年週期</td><td>MSTR + BMNR 現貨 4:1</td><td class="warn">觀察</td><td>S2 投降接刀，或 S4 確認後分批</td></tr>
+      <tr><td><b>小倉</b></td><td>月線～年線 MSTR 波段</td><td>2.5x MSTR 合約</td><td class="neg" id="tacticalState">載入中</td><td id="tacticalNext">紅燈解除＋MSTR/BTC 右側確認＋清算緩衝足夠</td></tr>
+      <tr><td><b>大倉</b></td><td>1–4 年週期</td><td>MSTR + BMNR 現貨 4:1</td><td class="warn" id="coreState">載入中</td><td id="coreNext">依 BTC regime 分批，BMNR 另看 gross treasury 與股數</td></tr>
     </tbody>
   </table>
   <p style="font-size:0.74rem;color:var(--text3)">首頁只放行動訊號；完整推理下鑽到 dashboard、IC Memo、metrics-spec 與 wiki_llm。非投資建議；槓桿與個股波動可能造成重大虧損。</p>
@@ -250,18 +251,18 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 <div class="section">
   <h2>🌡️ 五維共振溫度（−10 投降底 → +10 狂熱頂）</h2>
   <div class="thermo-wrap">
-    <div class="thermo-marker" style="left:35%;"><div class="pin">綜合 ~−3</div><div class="tri"></div></div>
+    <div class="thermo-marker" id="btcScoreMarker" style="left:50%;"><div class="pin" id="btcScoreLabel">載入中</div><div class="tri"></div></div>
     <div class="thermo"></div>
   </div>
   <div class="thermo-labels"><span>−10</span><span>−6 投降</span><span>0</span><span>+6 狂熱</span><span>+10</span></div>
   <div style="margin-top:18px">
-    <div class="score"><div class="nm">🪙 籌碼面</div><div class="track"><div class="pin" style="left:35%"></div></div><div class="tmp neg">−3</div></div>
-    <div class="score"><div class="nm">📈 技術面</div><div class="track"><div class="pin" style="left:40%"></div></div><div class="tmp warn">−2</div></div>
-    <div class="score"><div class="nm">📉 週期遞減</div><div class="track"><div class="pin" style="left:35%"></div></div><div class="tmp neg">−3</div></div>
-    <div class="score"><div class="nm">😱 市場情緒</div><div class="track"><div class="pin" style="left:30%"></div></div><div class="tmp neg">−4</div></div>
-    <div class="score"><div class="nm">🏛️ 基本面</div><div class="track"><div class="pin" style="left:40%"></div></div><div class="tmp warn">−2</div></div>
+    <div class="score"><div class="nm">📐 估值便宜度</div><div class="track"><div class="pin" id="dimValuationPin" style="left:50%"></div></div><div class="tmp" id="dimValuation">—</div></div>
+    <div class="score"><div class="nm">📈 價格趨勢</div><div class="track"><div class="pin" id="dimTrendPin" style="left:50%"></div></div><div class="tmp" id="dimTrend">—</div></div>
+    <div class="score"><div class="nm">😱 市場情緒</div><div class="track"><div class="pin" id="dimSentimentPin" style="left:50%"></div></div><div class="tmp" id="dimSentiment">—</div></div>
+    <div class="score"><div class="nm">🏦 ETF 邊際買盤</div><div class="track"><div class="pin" id="dimEtfPin" style="left:50%"></div></div><div class="tmp" id="dimEtf">—</div></div>
+    <div class="score"><div class="nm">📉 週期回撤</div><div class="track"><div class="pin" id="dimDrawdownPin" style="left:50%"></div></div><div class="tmp" id="dimDrawdown">—</div></div>
   </div>
-  <p style="font-size:0.78rem;margin-top:10px">每維各投一票：<b>便宜/投降為負（該買）</b>，貴/狂熱為正（該賣）。五維同向才極端。現況＝偏便宜、但無一維到投降。</p>
+  <p style="font-size:0.78rem;margin-top:10px" id="btcScoreRead">五維標準分載入中；ETF 為單一第三方來源，權重固定降為 0.5。</p>
 </div>
 
 <div class="section">
@@ -271,14 +272,14 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <div class="d">本輪 BTC 底部推估區（≈ ATH $126k 的 −59% ~ −68%）· 詳見「週期遞減」分頁</div>
   </div>
   <div class="kpi-grid">
-    <div class="kpi"><div class="label">第 1 等份｜投降接刀</div><div class="value warn">等</div><div class="note">任一：BTC≤$54k／MVRV≤1.0／溫度≤−6／普通股安全邊際≤0.6x</div></div>
-    <div class="kpi"><div class="label">第 2 等份｜便宜+確認</div><div class="value warn">等</div><div class="note">全部：ETF連≥10日流入＋站回200日線＋mNAV≥1.0x＋溫度+2~+5</div></div>
+    <div class="kpi"><div class="label">第 1 等份｜投降接刀</div><div class="value warn">等</div><div class="note">BTC-only：5 項投降條件至少 2 項，且標準分 ≤−6</div></div>
+    <div class="kpi"><div class="label">第 2 等份｜便宜+確認</div><div class="value warn">等</div><div class="note">站回 50/200 日線＋MVRV 1–1.5＋F&G 25–65；ETF 單源不計票</div></div>
     <div class="kpi"><div class="label">本業收入 DCA</div><div class="value pos">照跑</div><div class="note">常駐底倉，不在兩等份內</div></div>
     <div class="kpi"><div class="label">貸款子彈</div><div class="value neg">留著</div><div class="note">僵局未解，借錢梭哈＝勸阻</div></div>
   </div>
   <h3>配置 MSTR 80 : BMNR 20（4:1）</h3>
   <div class="donut-wrap">
-    <svg width="120" height="120" viewBox="0 0 130 130" style="flex-shrink:0">
+    <svg width="120" height="120" viewBox="0 0 130 130" style="flex-shrink:0" role="img" aria-label="MSTR 80%、BMNR 20% 配置圖">
       <circle cx="65" cy="65" r="50" fill="none" stroke="var(--surface3)" stroke-width="18"/>
       <circle cx="65" cy="65" r="50" fill="none" stroke="var(--purple)" stroke-width="18" stroke-dasharray="251.3 314.2" transform="rotate(-90 65 65)"/>
       <circle cx="65" cy="65" r="50" fill="none" stroke="var(--green)" stroke-width="18" stroke-dasharray="62.8 314.2" stroke-dashoffset="-251.3" transform="rotate(-90 65 65)"/>
@@ -342,7 +343,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   <p style="font-size:0.83rem">追蹤<b>我們自己的綜合評分</b>隨時間怎麼走——是<b>朝投降底（往下）</b>、<b>朝狂熱頂（往上）</b>，還是<b>卡在僵局（橫盤）</b>。每日監控自動 append 一筆。</p>
   <div class="chart-card">
     <div class="chart-title">綜合溫度走勢（−10 投降底 → +10 狂熱頂）</div>
-    <svg id="trendChart" viewBox="0 0 700 260" width="100%"></svg>
+    <svg id="trendChart" viewBox="0 0 700 260" width="100%" role="img" aria-label="BTC 歷史趨勢圖"></svg>
     <div id="trendNote" style="font-size:0.8rem;color:var(--text2);text-align:center;margin-top:8px">載入中…</div>
   </div>
   <div class="stat-grid" id="trendStats"></div>
@@ -366,7 +367,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
     <div class="stat r"><div class="cap">BTC ETF（4 週）</div><div class="big">−$5.4B</div><div class="sub">邊際買盤在逃</div></div>
     <div class="stat r"><div class="cap">ETH ETF</div><div class="big">流出</div><div class="sub">比 BTC 更弱</div></div>
     <div class="stat y"><div class="cap">永續 funding</div><div class="big">+0.01%</div><div class="sub">剛轉正 · 非過熱</div></div>
-    <div class="stat y"><div class="cap">普通股真實安全邊際</div><div class="big" id="chipMnav">載入</div><div class="sub" id="chipMnavNote">每日資料接線中</div></div>
+    <div class="stat y"><div class="cap">普通股市值／普通股淨值</div><div class="big" id="chipMnav">載入</div><div class="sub" id="chipMnavNote">每日資料接線中</div></div>
     <div class="stat g"><div class="cap">每股比特幣含量</div><div class="big" id="chipSats">載入</div><div class="sub">sats/股 · 自動更新</div></div>
   </div>
   <div class="analysis-box analysis-yellow"><b>判讀：</b>供給端收縮（利多）vs 邊際買盤 ETF 出逃（利空）＝<b>僵局</b>。鯨魚狂買被 ETF 賣壓吸收，價格卡住。籌碼面溫度 <b>−3</b>。</div>
@@ -384,22 +385,22 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
   </div>
   <div class="chart-card">
     <div class="chart-title">📍 BTC 現價 vs 估值帶</div>
-    <svg viewBox="0 0 340 96" width="100%">
+    <svg viewBox="0 0 340 96" width="100%" role="img" aria-label="BTC 現價與 200 日均線估值帶">
       <defs><linearGradient id="bandG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--green)"/><stop offset="50%" stop-color="var(--yellow)"/><stop offset="100%" stop-color="var(--red)"/></linearGradient></defs>
       <rect x="20" y="46" width="300" height="18" rx="9" fill="url(#bandG)" opacity="0.85"/>
-      <line x1="56" y1="42" x2="56" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="56" y="82" text-anchor="middle" class="svg-axis">CVDD $48k</text>
-      <line x1="128" y1="42" x2="128" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="128" y="82" text-anchor="middle" class="svg-axis">已實現 $54k</text>
-      <line x1="270" y1="42" x2="270" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="270" y="82" text-anchor="middle" class="svg-axis">200日 $66k</text>
-      <polygon points="218,30 212,20 224,20" fill="var(--ink)"/><rect x="190" y="6" width="56" height="15" rx="7" fill="var(--surface3)" stroke="var(--border2)"/><text x="218" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現在 $61.5k</text>
+      <line x1="20" y1="42" x2="20" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="20" y="82" text-anchor="start" class="svg-axis">$40k</text>
+      <line x1="320" y1="42" x2="320" y2="68" stroke="var(--ink)" stroke-width="1.5" opacity="0.6"/><text x="320" y="82" text-anchor="end" class="svg-axis">$100k</text>
+      <line id="tech200DmaLine" x1="185" y1="42" x2="185" y2="68" stroke="var(--blue2)" stroke-width="2"/><text id="tech200DmaLabel" x="185" y="94" text-anchor="middle" class="svg-axis">200DMA 載入中</text>
+      <polygon id="techPricePin" points="145,30 139,20 151,20" fill="var(--ink)"/><rect id="techPriceBox" x="113" y="6" width="64" height="15" rx="7" fill="var(--surface3)" stroke="var(--border2)"/><text id="techCurrentPriceLabel" x="145" y="17" text-anchor="middle" class="svg-lbl" style="font-size:10px">現價載入中</text>
     </svg>
   </div>
   <div class="stat-grid">
     <div class="stat y"><div class="cap">MVRV ratio</div><div class="big" id="staticMvrv">接每日資料</div><div class="sub">Coin Metrics；Z-score 免費端點受限</div></div>
     <div class="stat y"><div class="cap">Mayer Multiple</div><div class="big">~1.0</div><div class="sub">底 &lt;0.8 · 頂 &gt;2.4</div></div>
-    <div class="stat y"><div class="cap">200 日均線</div><div class="big">$66k</div><div class="sub">現價在線附近拉鋸</div></div>
+    <div class="stat y"><div class="cap">200 日均線</div><div class="big" id="tech200DmaValue">載入</div><div class="sub" id="tech200DmaRead">等待每日資料</div></div>
     <div class="stat b"><div class="cap">Pi Cycle 頂訊號</div><div class="big">未觸</div><div class="sub">距頂部訊號遠</div></div>
   </div>
-  <div class="analysis-box analysis-yellow"><b>判讀：</b>便宜但<b>未到深值區</b>——現價在已實現價之上、200 日線附近。技術面溫度 <b>−2</b>。</div>
+  <div class="analysis-box analysis-yellow" id="techLiveRead"><b>判讀：</b>等待每日技術資料。</div>
 </div>
 </div>
 
@@ -416,7 +417,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 
   <div class="chart-card">
     <div class="chart-title">↗ 每輪 低→高 漲幅倍數（遞減，對數高度）</div>
-    <svg viewBox="0 0 340 175" width="100%">
+    <svg viewBox="0 0 340 175" width="100%" role="img" aria-label="BTC 週期收益遞減圖">
       <defs><linearGradient id="upG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--green)"/><stop offset="100%" stop-color="#4f6147"/></linearGradient></defs>
       <line x1="24" y1="140" x2="330" y2="140" class="svg-grid"/>
       <rect x="32" y="20" width="50" height="120" rx="3" fill="url(#upG)" opacity="0.55"/><text x="57" y="14" text-anchor="middle" class="svg-lbl" style="font-size:10px">575x</text><text x="57" y="155" text-anchor="middle" class="svg-axis">'11→13</text>
@@ -429,7 +430,7 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 
   <div class="chart-card">
     <div class="chart-title">↘ 每輪 高→低 跌幅（同樣遞減）</div>
-    <svg viewBox="0 0 340 170" width="100%">
+    <svg viewBox="0 0 340 170" width="100%" role="img" aria-label="BTC 市場情緒圖">
       <text x="78" y="28" text-anchor="end" class="svg-axis">2011</text><rect x="84" y="14" width="230" height="22" rx="3" fill="var(--red)" opacity="0.8"/><text x="320" y="28" class="svg-sub" style="fill:var(--ink)">-93%</text>
       <text x="78" y="60" text-anchor="end" class="svg-axis">'14–15</text><rect x="84" y="46" width="213" height="22" rx="3" fill="var(--red)" opacity="0.7"/><text x="303" y="60" class="svg-sub" style="fill:var(--ink)">-86%</text>
       <text x="78" y="92" text-anchor="end" class="svg-axis">2018</text><rect x="84" y="78" width="208" height="22" rx="3" fill="var(--red)" opacity="0.6"/><text x="298" y="92" class="svg-sub" style="fill:var(--ink)">-84%</text>
@@ -592,11 +593,19 @@ svg { display:block; max-width:100%; height:auto; overflow:visible; }
 
 </div>
 <script>
+document.querySelector('.tabs')?.setAttribute('role','tablist');
 document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.setAttribute('role','tab');
+  btn.setAttribute('aria-selected',btn.classList.contains('active')?'true':'false');
+  btn.setAttribute('aria-controls','tab-'+btn.dataset.tab);
+  const panel=document.getElementById('tab-'+btn.dataset.tab);
+  if(panel){ panel.setAttribute('role','tabpanel'); panel.setAttribute('aria-labelledby','tab-'+btn.dataset.tab+'-button'); }
+  btn.id='tab-'+btn.dataset.tab+'-button';
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
     document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
     window.scrollTo({top:0, behavior:'smooth'});
   });
@@ -609,6 +618,11 @@ const num=(v,d=2)=>v==null?'—':Number(v).toFixed(d);
 const pct=v=>v==null?'—':(Number(v)*100).toFixed(1)+'%';
 const signed=(v,d=1,suffix='')=>v==null?'—':(v>0?'+':'')+Number(v).toFixed(d)+suffix;
 const toneClass=t=>t==='good'?'good':t==='bad'?'bad':t==='warn'?'warn':'info';
+async function fetchJson(url){
+  const response=await fetch(url,{cache:'no-store'});
+  if(!response.ok) throw new Error(`${url} HTTP ${response.status}`);
+  return response.json();
+}
 function pickYesterday(database,todayDate){
   const snaps=(database.snapshots||[]).filter(x=>x.date!==todayDate).sort((a,b)=>a.date.localeCompare(b.date));
   return snaps.at(-1)||null;
@@ -626,68 +640,131 @@ function coreCards(today,yday,verify){
   const radar=today.metrics.market_radar||{};
   const btcStd=today.metrics.btc_standard||{};
   const m=today.metrics.mstr_metrics;
+  const b=today.metrics.bmnr_metrics||{};
   const btcChg=delta(p.btc_usd,pm.btc_usd,'rel');
   const mstrChg=delta(p.mstr_usd,pm.mstr_usd,'rel');
   const bmnrChg=delta(p.bmnr_usd,pm.bmnr_usd,'rel');
   const strcChg=delta(p.strc_usd,pm.strc_usd,'rel');
+  const contractUnknown=typeof m.contract_red_light!=='boolean';
+  const contractBlocked=m.contract_red_light!==false;
+  const strcUnknown=m.strc_discount==null;
+  const fearUnknown=radar.fear_greed==null;
   return [
-    card({label:'BTC 今日判斷',value:btcStd.regime||'載入中',tone:btcStd.tone==='deep_value'?'good':btcStd.tone==='overheated'?'bad':'warn',hero:true,read:btcStd.action||'等待每日標準分層'}),
-    card({label:'MSTR 合約動作',value:m.contract_red_light?'禁開':'觀察',tone:m.contract_red_light?'bad':'warn',hero:true,read:m.contract_red_light?'小倉 2.5x 不加碼':'可研究，不追價'}),
-    card({label:'BTC',value:money(p.btc_usd),tone:btcChg>=0?'good':'warn',read:btcChg<0?'底層資產轉弱':'底層資產轉強'}),
-    card({label:'MSTR',value:money(p.mstr_usd),tone:mstrChg>=0?'good':'warn',read:mstrChg<btcChg?'跑輸 BTC':'反彈仍需過結構閘'}),
-    card({label:'BMNR',value:money(p.bmnr_usd),tone:'info',read:bmnrChg<0?'衛星轉弱':'衛星反彈，不升主倉'}),
-    card({label:'STRC',value:money(p.strc_usd),tone:m.strc_discount>0.05?'bad':'good',read:m.strc_discount>0.05?'優先股信任弱':'優先股信任改善'}),
-    card({label:'合約紅燈',value:m.contract_red_light?'ON':'OFF',tone:m.contract_red_light?'bad':'good',read:m.contract_red_light?'禁止小倉加碼':'可等右側確認'}),
+    card({label:'BTC 今日判斷',value:btcStd.score==null?'—':String(btcStd.score),tone:btcStd.tone==='deep_value'?'good':btcStd.tone==='overheated'?'bad':'warn',hero:true,read:`${btcStd.regime||'資料不足'}｜${btcStd.action||'等待每日標準分層'}`}),
+    card({label:'MSTR 合約動作',value:contractUnknown?'資料不足':contractBlocked?'禁開':'觀察',tone:contractBlocked?'bad':'warn',hero:true,read:contractUnknown?'缺值即封鎖，不准假綠燈':contractBlocked?'小倉 2.5x 不加碼':'只可研究，不追價'}),
+    card({label:'BTC',value:money(p.btc_usd),tone:btcChg==null?'warn':btcChg>=0?'good':'warn',read:btcChg==null?'缺昨日可比資料':btcChg<0?'底層資產轉弱':'底層資產轉強'}),
+    card({label:'MSTR',value:money(p.mstr_usd),tone:mstrChg==null?'warn':mstrChg>=0?'good':'warn',read:mstrChg==null||btcChg==null?'缺昨日可比資料':mstrChg<btcChg?'跑輸 BTC':'反彈仍需過結構閘'}),
+    card({label:'BMNR',value:money(p.bmnr_usd),tone:b.market_cap_to_gross_treasury==null?'warn':b.market_cap_to_gross_treasury<1?'good':'info',read:b.market_cap_to_gross_treasury==null?'官方 treasury 資料不足':`市值/gross treasury ${num(b.market_cap_to_gross_treasury,2)}x；不是淨 NAV`}),
+    card({label:'STRC',value:money(p.strc_usd),tone:strcUnknown?'warn':m.strc_discount>0.05?'bad':'good',read:strcUnknown?'折價資料缺漏，禁止放行':m.strc_discount>0.05?'優先股信任弱':'優先股信任改善'}),
+    card({label:'合約紅燈',value:contractUnknown?'UNKNOWN':contractBlocked?'ON':'OFF',tone:contractBlocked?'bad':'good',read:contractUnknown?'缺值即 ON':contractBlocked?'禁止小倉加碼':'可等右側確認'}),
     card({label:'資料驗證',value:(verify?.status||'unknown').toUpperCase(),tone:verify?.status==='pass'?'good':verify?.status==='fail'?'bad':'warn',read:verify?.status==='pass'?'資料完整':verify?.status==='fail'?'停止使用今日資料':'可看不可交易級'}),
-    card({label:'F&G 情緒',value:radar.fear_greed??'—',tone:radar.fear_greed<=25?'good':radar.fear_greed>=70?'bad':'warn',read:radar.fear_greed<=25?'市場恐懼，等觸發':'情緒非投降'}),
+    card({label:'F&G 情緒',value:radar.fear_greed??'—',tone:fearUnknown?'warn':radar.fear_greed<=25?'good':radar.fear_greed>=70?'bad':'warn',read:fearUnknown?'情緒資料缺漏':radar.fear_greed<=25?'市場恐懼，等觸發':'情緒非投降'}),
     card({label:'鏈上手續費',value:radar.btc_fee_fastest_sat_vb==null?'—':radar.btc_fee_fastest_sat_vb+' sat/vB',tone:'info',read:'鏈上壓力 proxy'}),
     card({label:'宏觀資金成本',value:radar.treasury_avg_bill_rate_pct==null?'—':Number(radar.treasury_avg_bill_rate_pct).toFixed(2)+'%',tone:'warn',read:'高利率壓估值'}),
-    card({label:'BTC 標準分',value:btcStd.score==null?'—':String(btcStd.score),tone:btcStd.score<=-5?'good':btcStd.score>=5?'bad':'warn',read:'負分偏冷可準備；正分偏熱防追高'}),
-    card({label:'BTC vs 200DMA',value:btcStd.signals?.btc_vs_200dma_pct==null?'—':pct(btcStd.signals.btc_vs_200dma_pct),tone:btcStd.signals?.btc_vs_200dma_pct>=0?'good':'warn',read:'右側確認核心條件'}),
+    card({label:'BTC 標準分',value:btcStd.score==null?'—':String(btcStd.score),tone:btcStd.score<=-6?'good':btcStd.score>=6?'bad':'warn',read:'負分偏冷可準備；正分偏熱防追高'}),
+    card({label:'BTC vs 200DMA',value:btcStd.signals?.btc_vs_200dma_pct==null?'—':pct(btcStd.signals.btc_vs_200dma_pct),tone:btcStd.signals?.btc_vs_200dma_pct==null?'warn':btcStd.signals.btc_vs_200dma_pct>=0?'good':'warn',read:btcStd.signals?.btc_vs_200dma_pct==null?'趨勢資料缺漏':'右側確認核心條件'}),
     card({label:'BTC MVRV ratio',value:radar.btc_mvrv_current==null?'—':num(radar.btc_mvrv_current,2)+'x',tone:radar.btc_mvrv_current<=1?'good':radar.btc_mvrv_current<=1.3?'warn':'bad',read:'Coin Metrics 免費可驗證；不是 Z-score'}),
     card({label:'ETF Flow',value:radar.etf_flow_7d_usd==null?'來源缺漏':money(radar.etf_flow_7d_usd),tone:'warn',read:'第三方單一來源，只能當背景，不作硬觸發'})
   ].join('');
 }
 function mstrCards(today,yday){
   const m=today.metrics.mstr_metrics;
+  const b=today.metrics.bmnr_metrics||{};
   const manual=today.metrics.manual_inputs||{};
   const provenance=today.metrics.manual_input_provenance||{};
+  const commonRatio=m.common_equity_price_to_nav??m.equity_mnav;
+  const enterpriseRatio=m.enterprise_value_to_btc_nav??m.enterprise_mnav;
   return [
-    card({label:'普通股真實安全邊際',value:num(m.equity_mnav,2)+'x',tone:m.equity_mnav>=1?'good':'bad',read:m.equity_mnav>=1?'安全邊際過關':'還不算便宜'}),
-    card({label:'企業價值安全邊際',value:num(m.enterprise_mnav,2)+'x',tone:m.enterprise_mnav>=1?'warn':'bad',read:m.enterprise_mnav>=1?'只能當對照':'飛輪未重啟'}),
-    card({label:'特別股稀釋污染旗標',value:m.pref_dilution_flag?'ON':'OFF',tone:m.pref_dilution_flag?'bad':'good',read:m.pref_dilution_flag?'安全邊際改善要打折':'今日未觸發'}),
-    card({label:'現金覆蓋月數',value:num(m.coverage_months,1)+'m',tone:m.coverage_months>=12?'good':'bad',read:m.coverage_months>=12?'現金暫時夠':'現金壓力紅燈'}),
-    card({label:'每週賣幣壓力倍數',value:num(m.sale_ratio,1)+'x',tone:m.sale_ratio>2?'bad':m.sale_ratio>1.5?'warn':'good',read:m.sale_ratio>2?'被迫賣幣風險':'未超紅線'}),
+    card({label:'普通股市值／普通股淨值',value:commonRatio==null?'—':num(commonRatio,2)+'x',tone:commonRatio==null?'warn':commonRatio<=1?'good':'bad',read:commonRatio==null?'資料不足，禁止估值結論':commonRatio<=1?'折價背景；不是單獨買點':'高於 1.0x，普通股有溢價'}),
+    card({label:'企業價值／BTC 總值',value:enterpriseRatio==null?'—':num(enterpriseRatio,2)+'x',tone:enterpriseRatio==null?'warn':'info',read:enterpriseRatio==null?'資料不足':enterpriseRatio>=1?'融資飛輪可能仍可運作；不代表便宜':'企業價值低於 BTC 總值'}),
+    card({label:'特別股融資扭曲旗標',value:m.pref_dilution_flag==null?'UNKNOWN':m.pref_dilution_flag?'ON':'OFF',tone:m.pref_dilution_flag==null?'warn':m.pref_dilution_flag?'bad':'good',read:m.pref_dilution_flag==null?'缺值即降級':m.pref_dilution_flag?'Price/NAV 上升可能來自分母縮水':'今日未觸發'}),
+    card({label:'明示固定義務覆蓋月數',value:m.coverage_months==null?'—':num(m.coverage_months,1)+'m',tone:m.coverage_months==null?'warn':m.coverage_months>=12?'good':'bad',read:m.coverage_months==null?'資料不足，合約封鎖':m.coverage_months>=12?'僅覆蓋股息與利息':'低於 12 月紅線'}),
+    card({label:'每週賣幣壓力倍數',value:m.sale_ratio==null?'未知':num(m.sale_ratio,1)+'x',tone:m.sale_ratio==null?'bad':m.sale_ratio>2?'bad':m.sale_ratio>1.5?'warn':'good',read:m.sale_ratio==null?'官方揭露過舊，不得把未知當 0':m.sale_ratio>2?'被迫賣幣風險':'未超紅線'}),
     card({label:'每股比特幣含量',value:Number(m.sats_per_share||0).toLocaleString(),tone:'info',read:'防止假性增厚'}),
-    card({label:'STRC 優先股折價信任票',value:pct(m.strc_discount),tone:m.strc_discount>0.05?'bad':m.strc_discount>0.01?'warn':'good',read:m.strc_discount>0.05?'估值樂觀全部降權':'信任票改善'}),
-    card({label:'GAAP 稅務楔子',value:`$${num(manual.net_deferred_tax_liability_musd||0,0)}M`,tone:'warn',read:'季報必覆核'}),
-    card({label:'資本結構來源狀態',value:(provenance.status||'unknown').replaceAll('_',' '),tone:provenance.status==='automated'?'good':'warn',read:'未全自動前不可視為交易級'})
+    card({label:'STRC 優先股折價信任票',value:pct(m.strc_discount),tone:m.strc_discount==null?'bad':m.strc_discount>0.05?'bad':m.strc_discount>0.01?'warn':'good',read:m.strc_discount==null?'資料缺漏，合約封鎖':m.strc_discount>0.05?'估值樂觀全部降權':'信任票改善'}),
+    card({label:'已揭露遞延稅負債',value:manual.deferred_tax_liability_musd==null?'—':`$${num(manual.deferred_tax_liability_musd,0)}M`,tone:'warn',read:'非淨額；情境壓測固定，季報必覆核'}),
+    card({label:'資本結構來源狀態',value:(provenance.status||'unknown').replaceAll('_',' '),tone:provenance.status==='automated'?'good':'warn',read:'未全自動前不可視為交易級'}),
+    card({label:'BMNR 市值／gross treasury',value:b.market_cap_to_gross_treasury==null?'—':num(b.market_cap_to_gross_treasury,2)+'x',tone:b.market_cap_to_gross_treasury==null?'warn':b.market_cap_to_gross_treasury<0.8?'good':'warn',read:'未扣完整負債與優先股，不等於淨 NAV'}),
+    card({label:'BMNR gross treasury 每股',value:b.gross_treasury_value_per_share==null?'—':money(b.gross_treasury_value_per_share),tone:'info',read:`官方持倉日 ${b.holdings_as_of||'—'}`}),
+    card({label:'BMNR ETH 質押比例',value:b.staked_eth_ratio==null?'—':pct(b.staked_eth_ratio),tone:b.staked_eth_ratio>0.7?'good':'warn',read:'質押收益伴隨流動性與驗證者風險'}),
+    card({label:'BMNR 每千股 ETH',value:b.eth_per_1000_shares==null?'—':num(b.eth_per_1000_shares,2),tone:'info',read:'追蹤回購／增發後的含幣量'})
   ].join('');
 }
 async function loadHomeDailyCards(){
   try{
     const [latest,database,verify]=await Promise.all([
-      fetch('data/daily/latest_snapshot.json',{cache:'no-store'}).then(r=>r.json()),
-      fetch('data/daily/database.json',{cache:'no-store'}).then(r=>r.json()),
-      fetch('data/daily/agent_verification_report.json',{cache:'no-store'}).then(r=>r.json()).catch(()=>null)
+      fetchJson('data/daily/latest_snapshot.json'),
+      fetchJson('data/daily/database.json'),
+      fetchJson('data/daily/agent_verification_report.json')
     ]);
+    if(latest.schema!==1||database.schema!==1||verify.schema!==1) throw new Error('每日資料 schema 不相容');
+    if(!latest.date||verify.date!==latest.date) throw new Error('每日快照與驗證報告日期不一致');
+    if(!latest.metrics?.prices||!latest.metrics?.mstr_metrics||!latest.metrics?.btc_standard) throw new Error('每日快照必要欄位缺漏');
     const yday=pickYesterday(database,latest.date);
-    document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜BTC：${latest.metrics.btc_standard?.one_line||'等待標準分層'}｜昨日對比 ${yday?.date||'無'}`;
+    document.getElementById('dailyMeta').textContent=`資料日 ${latest.date}｜${latest.metrics.btc_standard?.one_line||'BTC：等待標準分層'}｜昨日對比 ${yday?.date||'無'}`;
     document.getElementById('dailyCoreCards').innerHTML=coreCards(latest,yday,verify);
     document.getElementById('dailyMstrCards').innerHTML=mstrCards(latest,yday);
     const heroDate=document.getElementById('heroDate');
     if(heroDate) heroDate.textContent=`v13 · 資料日 ${latest.date} · 每日大字卡 / 1–4 年週期現貨 / 月線到年線 MSTR 合約波段`;
     const m=latest.metrics.mstr_metrics;
+    const btcStd=latest.metrics.btc_standard||{};
+    const contractBlocked=m.contract_red_light!==false;
+    const verificationFailed=verify.status==='fail';
+    const actionBadge=document.getElementById('actionBadge');
+    const mstrRiskBadge=document.getElementById('mstrRiskBadge');
+    if(actionBadge) actionBadge.textContent=`BTC ${btcStd.regime||'資料不足'} · MSTR ${contractBlocked?'禁開':'觀察'}${verificationFailed?' · 資料 FAIL':''}`;
+    if(mstrRiskBadge) mstrRiskBadge.textContent=contractBlocked?`MSTR 紅燈：STRC ${pct(m.strc_discount)}／7日賣幣 ${m.sale_ratio==null?'未知':num(m.sale_ratio,1)+'x'}`:'MSTR 紅燈解除，仍等右側確認';
+    const tacticalState=document.getElementById('tacticalState');
+    const coreState=document.getElementById('coreState');
+    if(tacticalState){ tacticalState.textContent=contractBlocked?'禁開':'研究'; tacticalState.className=contractBlocked?'neg':'warn'; }
+    if(coreState){ coreState.textContent=btcStd.regime||'資料不足'; coreState.className=btcStd.tone==='deep_value'?'pos':'warn'; }
+    const marker=document.getElementById('btcScoreMarker');
+    const scoreLabel=document.getElementById('btcScoreLabel');
+    if(marker&&btcStd.score!=null) marker.style.left=`${Math.max(0,Math.min(100,(Number(btcStd.score)+10)*5))}%`;
+    if(scoreLabel) scoreLabel.textContent=`${btcStd.regime||'—'} ${btcStd.score??'—'}`;
+    const dimMap=[['估值便宜度','dimValuation','dimValuationPin'],['價格趨勢','dimTrend','dimTrendPin'],['市場情緒','dimSentiment','dimSentimentPin'],['ETF 邊際買盤','dimEtf','dimEtfPin'],['週期回撤','dimDrawdown','dimDrawdownPin']];
+    dimMap.forEach(([name,valueId,pinId])=>{
+      const value=btcStd.dimensions?.[name];
+      const valueEl=document.getElementById(valueId), pinEl=document.getElementById(pinId);
+      if(valueEl){ valueEl.textContent=value==null?'—':(value>0?'+'+value:value); valueEl.className=`tmp ${value<=-1?'neg':value>=1?'pos':'warn'}`; }
+      if(pinEl&&value!=null) pinEl.style.left=`${Math.max(0,Math.min(100,(Number(value)+2)*25))}%`;
+    });
+    const btcScoreRead=document.getElementById('btcScoreRead');
+    if(btcScoreRead) btcScoreRead.textContent=`${btcStd.one_line||'資料不足'}｜覆蓋率 ${pct(btcStd.data_quality?.coverage_ratio)}｜ETF 單源權重 0.5`;
     const chipMnav=document.getElementById('chipMnav');
     const chipMnavNote=document.getElementById('chipMnavNote');
     const chipSats=document.getElementById('chipSats');
-    if(chipMnav) chipMnav.textContent=num(m.equity_mnav,2)+'x';
-    if(chipMnavNote) chipMnavNote.textContent=m.equity_mnav>=1?'安全邊際過關':'折價不等於安全，仍需資本結構修復';
+    const commonRatio=m.common_equity_price_to_nav??m.equity_mnav;
+    if(chipMnav) chipMnav.textContent=commonRatio==null?'—':num(commonRatio,2)+'x';
+    if(chipMnavNote) chipMnavNote.textContent=commonRatio==null?'資料不足':commonRatio<=1?'折價背景；不是單獨買點':'普通股相對淨值有溢價';
     if(chipSats) chipSats.textContent=Number(m.sats_per_share||0).toLocaleString();
     const staticMvrv=document.getElementById('staticMvrv');
     if(staticMvrv) staticMvrv.textContent=latest.metrics.market_radar?.btc_mvrv_current?num(latest.metrics.market_radar.btc_mvrv_current,2)+'x':'來源缺漏';
+    const radar=latest.metrics.market_radar||{}, btcPrice=latest.metrics.prices.btc_usd, dma=radar.btc_200dma;
+    const scaleX=value=>Math.max(20,Math.min(320,20+(Number(value)-40000)/60000*300));
+    if(btcPrice!=null){
+      const x=scaleX(btcPrice), pin=document.getElementById('techPricePin'), box=document.getElementById('techPriceBox'), label=document.getElementById('techCurrentPriceLabel');
+      if(pin) pin.setAttribute('points',`${x},30 ${x-6},20 ${x+6},20`);
+      if(box) box.setAttribute('x',String(x-32));
+      if(label){ label.setAttribute('x',String(x)); label.textContent=`現價 ${money(btcPrice)}`; }
+    }
+    if(dma!=null){
+      const x=scaleX(dma), line=document.getElementById('tech200DmaLine'), label=document.getElementById('tech200DmaLabel');
+      if(line){ line.setAttribute('x1',String(x)); line.setAttribute('x2',String(x)); }
+      if(label){ label.setAttribute('x',String(x)); label.textContent=`200DMA ${money(dma)}`; }
+    }
+    const techValue=document.getElementById('tech200DmaValue'), techRead=document.getElementById('tech200DmaRead'), techLiveRead=document.getElementById('techLiveRead');
+    const vs200=btcPrice!=null&&dma?btcPrice/dma-1:null;
+    if(techValue) techValue.textContent=dma==null?'—':money(dma);
+    if(techRead) techRead.textContent=vs200==null?'資料不足':`現價 ${vs200>=0?'高於':'低於'}均線 ${pct(Math.abs(vs200))}`;
+    if(techLiveRead) techLiveRead.innerHTML=vs200==null?'<b>判讀：</b>技術資料不足。':`<b>判讀：</b>BTC 現價${vs200>=0?'站上':'低於'} 200 日均線 <b>${pct(Math.abs(vs200))}</b>；${vs200>=0?'右側趨勢改善仍需其他條件確認':'仍未完成主要右側確認'}。`;
   }catch(e){
     document.getElementById('dailyMeta').textContent=`每日資料載入失敗：${e.message}。請用 GitHub Pages 開啟。`;
+    document.getElementById('dailyCoreCards').innerHTML=card({label:'資料狀態',value:'FAIL CLOSED',tone:'bad',hero:true,read:'必要資料未通過；所有交易動作封鎖'});
+    document.getElementById('dailyMstrCards').innerHTML=card({label:'MSTR 合約',value:'禁開',tone:'bad',read:'資料載入失敗，不保留舊綠燈'});
+    const actionBadge=document.getElementById('actionBadge'), riskBadge=document.getElementById('mstrRiskBadge');
+    if(actionBadge) actionBadge.textContent='資料失敗 · 全部交易封鎖';
+    if(riskBadge) riskBadge.textContent='不得沿用舊快照';
   }
 }
 loadHomeDailyCards();

@@ -1,53 +1,83 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Institutional Analytics?Personal Bloomberg</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>機構分析台｜BTC · MSTR · BMNR</title>
 <style>
-:root{--bg:#0b0f17;--panel:#111827;--panel2:#172033;--line:#2a354c;--text:#e8edf7;--muted:#94a3b8;--red:#f87171;--yellow:#fbbf24;--green:#34d399;--blue:#60a5fa}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#080b11,#111827 45%,#0b1220);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center;background:rgba(8,11,17,.78);position:sticky;top:0;backdrop-filter:blur(14px)}h1{font-size:1.1rem;margin:0}.sub{color:var(--muted);font-size:.82rem}a{color:var(--blue);text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:18px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{grid-column:span 6;background:rgba(17,24,39,.88);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 18px 42px rgba(0,0,0,.22)}.card.full{grid-column:span 12}.kpi{grid-column:span 3}.label{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em}.num{font-size:2rem;font-weight:850;letter-spacing:-.04em;margin:.25rem 0}.read{color:var(--muted);font-size:.9rem;line-height:1.45}.high{color:var(--red)}.medium{color:var(--yellow)}.low,.opportunity{color:var(--green)}.neutral{color:var(--blue)}table{width:100%;border-collapse:collapse;font-size:.86rem}th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:.72rem;text-transform:uppercase}.bar{height:10px;border-radius:999px;background:#263246;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));width:50%}@media(max-width:760px){.card,.kpi{grid-column:span 12}header{display:block}.num{font-size:1.55rem}}
+:root{--bg:#071019;--panel:#0d1823;--panel2:#101f2d;--line:#24384a;--text:#eef5fb;--muted:#8da3b5;--orange:#ff9d2e;--red:#ff6577;--yellow:#ffd166;--green:#45d7a2;--blue:#64b5ff;--cyan:#55d5e8}
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:radial-gradient(circle at 85% 0,#142b3c 0,transparent 34%),linear-gradient(145deg,#050b11,#091521 48%,#071019);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;min-height:100vh}
+a{color:var(--cyan);text-decoration:none}header{position:sticky;top:0;z-index:20;background:rgba(5,11,17,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topbar{max-width:1440px;margin:auto;padding:12px 20px;display:flex;justify-content:space-between;gap:16px;align-items:center}.brand{display:flex;gap:12px;align-items:center}.terminal{background:var(--orange);color:#111;font-weight:900;padding:7px 9px;border-radius:5px;letter-spacing:.08em}.brand h1{font-size:1rem;margin:0}.sub{color:var(--muted);font-size:.76rem}.nav{display:flex;gap:14px;font-size:.8rem;white-space:nowrap}.wrap{max-width:1440px;margin:0 auto;padding:18px 20px 40px}.ticker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.pill{border:1px solid var(--line);background:#0a1520;border-radius:999px;padding:6px 10px;font-size:.72rem;color:var(--muted)}.pill b{color:var(--text)}.pill.warn{border-color:#6e5724;color:var(--yellow)}.pill.bad{border-color:#71333b;color:var(--red)}.pill.good{border-color:#205f4b;color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}.card{grid-column:span 4;background:linear-gradient(160deg,rgba(16,31,45,.96),rgba(10,22,33,.96));border:1px solid var(--line);border-radius:10px;padding:15px;box-shadow:0 16px 42px rgba(0,0,0,.2)}.card.full{grid-column:span 12}.card.half{grid-column:span 6}.card.quarter{grid-column:span 3}.eyebrow{color:var(--orange);font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.headline{font-size:1.45rem;font-weight:850;line-height:1.2;margin:7px 0}.read{color:var(--muted);font-size:.85rem;line-height:1.55}.kpi{font-size:1.85rem;font-weight:900;letter-spacing:-.04em;margin:6px 0}.good{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}.info{color:var(--blue)}h2{font-size:.92rem;margin:0 0 11px}h3{font-size:.8rem;margin:14px 0 7px;color:var(--muted)}.divider{height:1px;background:var(--line);margin:13px 0}.decision{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid rgba(36,56,74,.65)}.decision:last-child{border-bottom:0}.decision b{font-size:.8rem}.scorebar{height:8px;background:#1b2c3b;border-radius:999px;overflow:hidden;margin:8px 0}.scorebar i{height:100%;display:block;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green))}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tag{font-size:.68rem;padding:4px 7px;border:1px solid var(--line);border-radius:4px;color:var(--muted)}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:620px}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--muted);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;background:#0b1722}td.num{text-align:right;font-variant-numeric:tabular-nums}.list{margin:0;padding-left:18px;color:var(--muted);font-size:.8rem;line-height:1.55}.empty{color:var(--muted);font-size:.8rem}.footer{color:var(--muted);font-size:.7rem;margin-top:18px;line-height:1.5}
+@media(max-width:900px){.card,.card.half,.card.quarter{grid-column:span 6}.topbar{align-items:flex-start}.nav{overflow-x:auto;max-width:48vw}}
+@media(max-width:620px){.wrap{padding:12px}.topbar{padding:10px 12px;display:block}.nav{max-width:100%;margin-top:9px}.card,.card.half,.card.quarter{grid-column:span 12}.headline{font-size:1.12rem}.kpi{font-size:1.55rem}.decision{grid-template-columns:1fr;gap:3px}.ticker{gap:5px}.pill{font-size:.66rem}}
 </style>
 </head>
 <body>
-<header><div><h1>Institutional Analytics?Personal Bloomberg</h1><div class="sub">Attribution ? Sensitivity ? Risk stack ? Data confidence</div></div><div class="sub"><a href="index.html">首頁</a>?<a href="dashboard.html">Dashboard</a>?<a href="daily-extensions.html">每日延伸</a></div></header>
+<header><div class="topbar"><div class="brand"><span class="terminal">IC</span><div><h1>機構分析台</h1><div class="sub">BTC regime · MSTR capital stack · BMNR treasury · verification</div></div></div><nav class="nav"><a href="index.html">首頁</a><a href="dashboard.html">策略儀表</a><a href="daily-extensions.html">每日延伸</a><a href="wiki.html">知識庫</a></nav></div></header>
 <main class="wrap">
-  <div class="grid" id="top"></div>
-  <div class="grid" style="margin-top:14px">
-    <section class="card"><h2>邏輯稽核</h2><table id="logic"></table></section>
-    <section class="card"><h2>報酬與訊號歸因</h2><table id="drivers"></table></section>
-    <section class="card"><h2>比特幣價格壓力測試</h2><table id="sensitivity"></table></section>
-    <section class="card"><h2>目前禁止動作</h2><table id="blocked"></table></section>
-    <section class="card full"><h2>風險堆疊</h2><table id="risk"></table></section>
-    <section class="card full"><h2>門檻與反證條件</h2><table id="thresholds"></table></section>
+  <div class="ticker" id="ticker" aria-live="polite"><span class="pill">資料載入中</span></div>
+  <div class="grid" id="executive" aria-live="polite"></div>
+  <div class="grid" id="kpis" style="margin-top:12px"></div>
+  <div class="grid" style="margin-top:12px">
+    <section class="card"><div class="eyebrow">BTC Market Regime</div><h2>比特幣市場狀態</h2><div id="btcPanel"></div></section>
+    <section class="card"><div class="eyebrow">MSTR Vehicle Overlay</div><h2>MSTR 資本結構</h2><div id="mstrPanel"></div></section>
+    <section class="card"><div class="eyebrow">BMNR Gross Treasury</div><h2>BMNR 官方 treasury</h2><div id="bmnrPanel"></div></section>
+    <section class="card half"><div class="eyebrow">Data Governance</div><h2>資料品質與覆蓋</h2><div id="quality"></div></section>
+    <section class="card half"><div class="eyebrow">Decision Guardrails</div><h2>邏輯稽核與禁止動作</h2><div id="logic"></div></section>
+    <section class="card half"><div class="eyebrow">Attribution</div><h2>報酬與訊號歸因</h2><div class="table-wrap"><table id="drivers"></table></div></section>
+    <section class="card half"><div class="eyebrow">Scenario Grid</div><h2>BTC 衝擊下的 MSTR 普通股淨值</h2><div class="table-wrap"><table id="sensitivity"></table></div><div class="read" id="sensitivityNote" style="margin-top:10px"></div></section>
+    <section class="card full"><div class="eyebrow">Risk Stack</div><h2>風險堆疊</h2><div class="table-wrap"><table id="risk"></table></div></section>
+    <section class="card full"><div class="eyebrow">Thresholds & Falsification</div><h2>門檻與反證條件</h2><div class="table-wrap"><table id="thresholds"></table></div></section>
   </div>
+  <div class="footer">本頁為研究與風險治理工具，不是自動下單系統。BMNR 採 gross-asset view；在完整負債、優先股與或有項目完成 reviewed extraction 前，不得稱為普通股淨 NAV。</div>
 </main>
 <script>
-const pct=v=>v==null?'?':(Number(v)*100).toFixed(2)+'%';
-const num=(v,d=2)=>v==null?'?':Number(v).toFixed(d);
-const cls=s=>s==='consistent'||s==='pass'?'low':(s==='blocked'||s==='fail'?'high':'medium');
-const actionLabel=a=>({add_2_5x_mstr:'禁止小倉 2.5x 加碼',auto_trade:'禁止自動交易級結論',claim_common_equity_cheap:'禁止宣稱普通股便宜',mnav_green_light:'禁止估值綠燈',treat_mnav_as_green:'禁止把估值倍率當綠燈',use_etf_flow_as_hard_trigger:'禁止用 ETF flow 當硬觸發'})[a]||a;
+const esc=v=>String(v??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n=(v,d=2)=>v==null?'—':Number(v).toFixed(d);
+const pct=v=>v==null?'—':(Number(v)*100).toFixed(1)+'%';
+const money=v=>v==null?'—':'$'+Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
+const tone=v=>v==='fail'||v==='blocked'||v==='high'?'bad':v==='pass'||v==='consistent'||v==='low'||v==='opportunity'?'good':'warn';
+const actionLabel=a=>({add_2_5x_mstr:'禁止小倉 2.5x 加碼',auto_trade:'禁止自動交易級結論',claim_common_equity_cheap:'禁止宣稱 MSTR 普通股便宜',common_valuation_green_light:'禁止普通股估值綠燈',capital_flywheel_green_light:'禁止資本飛輪綠燈',treat_mnav_as_green:'禁止把估值倍率當綠燈',use_etf_flow_as_hard_trigger:'禁止用 ETF flow 當硬觸發',claim_bmnr_net_nav_discount:'禁止宣稱 BMNR 淨 NAV 折價'})[a]||a;
+const rows=(items,fn)=>items.length?items.map(fn).join(''):'<tr><td class="empty">無資料</td></tr>';
+async function fetchJson(url){const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error(`${url} HTTP ${response.status}`);return response.json()}
 async function load(){
- const a=await fetch('data/daily/institutional_analytics.json',{cache:'no-store'}).then(r=>r.json());
- const logic=await fetch('data/daily/logic_audit.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
- const audit=a.logic_audit||{};
- document.getElementById('top').innerHTML=`
- <div class="card full"><div class="label">今日總結 ? ${a.date}</div><div class="num">${a.executive_read.headline}</div><div class="read">${a.executive_read.one_line}</div></div>
- <div class="card kpi"><div class="label">邏輯稽核</div><div class="num ${cls(audit.status)}">${audit.status||'not_run'}</div><div class="read">${audit.plain_english||'等待每日稽核'}</div></div>
- <div class="card kpi"><div class="label">資料信心</div><div class="num ${a.quality.confidence.includes('low')?'medium':'low'}">${a.quality.confidence}</div><div class="read">${a.quality.verification_status}</div></div>
- <div class="card kpi"><div class="label">MSTR 相對 BTC</div><div class="num ${a.decomposition.mstr_minus_btc_1d<0?'high':'low'}">${pct(a.decomposition.mstr_minus_btc_1d)}</div><div class="read">1 日相對表現</div></div>
- <div class="card kpi"><div class="label">普通股安全邊際變化</div><div class="num ${a.decomposition.m1_delta_1d<0?'high':'low'}">${num(a.decomposition.m1_delta_1d,3)}x</div><div class="read">普通股真實安全邊際的日變化</div></div>`;
- document.getElementById('logic').innerHTML='<tr><th>檢查</th><th>狀態</th><th>解讀</th></tr>'+[
-  ['audit_status', audit.status||'not_run', audit.plain_english||'Logic audit not attached'],
-  ['failed_invariants', audit.failed_invariants??'?', '任何綠燈前，硬規則失敗數必須是 0'],
-  ['contradictions', audit.contradictions??'?', '頁面結論不能和資料互相矛盾']
- ].map(r=>`<tr><td>${r[0]}</td><td class="${cls(r[1])}">${r[1]}</td><td>${r[2]}</td></tr>`).join('');
- document.getElementById('blocked').innerHTML='<tr><th>禁止動作</th><th>為什麼重要</th></tr>'+(audit.blocked_actions||[]).map(x=>`<tr><td class="high">${actionLabel(x)}</td><td>避免假綠燈進入槓桿或過度樂觀結論</td></tr>`).join('');
- document.getElementById('drivers').innerHTML='<tr><th>驅動因素</th><th>數值</th><th>解讀</th></tr>'+a.decomposition.drivers.map(d=>`<tr><td>${d.driver}</td><td>${pct(d.value)}</td><td>${d.read}</td></tr>`).join('');
- document.getElementById('sensitivity').innerHTML='<tr><th>BTC 情境</th><th>BTC 價格</th><th>當前 MSTR 股價下的普通股安全邊際</th></tr>'+a.sensitivity.scenarios.map(s=>`<tr><td>${pct(s.btc_shock)}</td><td>$${Math.round(s.btc_price).toLocaleString()}</td><td>${num(s.equity_mnav_at_current_mstr)}x</td></tr>`).join('');
- document.getElementById('risk').innerHTML='<tr><th>風險</th><th>嚴重度</th><th>數值</th><th>解讀</th></tr>'+a.risk_stack.map(r=>`<tr><td>${r.name}</td><td class="${r.severity}">${r.severity}</td><td>${r.value}</td><td>${r.read}</td></tr>`).join('');
- const thresholdRows=(logic?.thresholds||[]).map(t=>`<tr><td>${t.metric}</td><td>${t.current}</td><td>${t.threshold}</td><td>${t.action}</td></tr>`).join('');
- const falsifyRows=(logic?.falsification_watch||[]).map(f=>`<tr><td>${f.hypothesis}</td><td colspan="3">反證條件：${f.what_would_disprove}</td></tr>`).join('');
- document.getElementById('thresholds').innerHTML='<tr><th>指標／假說</th><th>今日數值</th><th>門檻</th><th>動作／如何反證</th></tr>'+thresholdRows+falsifyRows;
+  const [a,logic,snapshot,verify]=await Promise.all([
+    fetchJson('data/daily/institutional_analytics.json'),
+    fetchJson('data/daily/logic_audit.json'),
+    fetchJson('data/daily/latest_snapshot.json'),
+    fetchJson('data/daily/agent_verification_report.json')
+  ]);
+  if(a.schema!==1||logic.schema!==1||snapshot.schema!==1||verify.schema!==1) throw new Error('每日資料 schema 不相容');
+  if(!a.date||logic.date!==a.date||snapshot.date!==a.date||verify.date!==a.date) throw new Error('每日資料跨檔日期不一致');
+  const btc=a.btc_analysis||{}, m=snapshot.metrics.mstr_metrics||{}, b=a.bmnr_analysis||{}, q=a.quality||{}, audit=a.logic_audit||{};
+  document.getElementById('ticker').innerHTML=`<span class="pill"><b>${esc(a.date)}</b> 資料日</span><span class="pill ${tone(q.verification_status)}"><b>${esc(q.verification_status)}</b> verifier</span><span class="pill ${tone(audit.status)}"><b>${esc(audit.status)}</b> logic</span><span class="pill"><b>${esc(q.confidence)}</b> 信心</span><span class="pill"><b>${q.confidence_score_0_100??'—'}</b>/100 品質分</span>`;
+  document.getElementById('executive').innerHTML=`<section class="card full"><div class="eyebrow">Investment Committee Read</div><div class="headline">${esc(a.executive_read.headline)}</div><div class="read">${esc(a.executive_read.one_line)}</div><div class="divider"></div><div class="decision"><b>大倉現貨</b><span>${esc(a.executive_read.large_spot_sleeve)}</span></div><div class="decision"><b>MSTR 2.5x</b><span>${esc(a.executive_read.tactical_mstr_sleeve)}</span></div><div class="decision"><b>BMNR 20%</b><span>${esc(a.executive_read.bmnr_sleeve)}</span></div></section>`;
+  const scoreTone=btc.score<=-6?'good':btc.score>=6?'bad':'warn';
+  const commonRatio=m.common_equity_price_to_nav??m.equity_mnav;
+  const modelStatus=btc.model_status==='heuristic_unbacktested'?'啟發式模型・尚未回測':btc.model_status||'模型狀態未知';
+  document.getElementById('kpis').innerHTML=`<section class="card quarter"><div class="eyebrow">BTC Standard</div><div class="kpi ${scoreTone}">${n(btc.score,1)}</div><div class="read">${esc(btc.regime)}｜${esc(modelStatus)}</div></section><section class="card quarter"><div class="eyebrow">MSTR Common P/NAV</div><div class="kpi ${commonRatio==null?'warn':commonRatio<=1?'good':'bad'}">${n(commonRatio)}x</div><div class="read">普通股市值／普通股淨值；愈低愈便宜</div></section><section class="card quarter"><div class="eyebrow">BMNR Gross Multiple</div><div class="kpi ${b.market_cap_to_gross_treasury==null?'warn':b.market_cap_to_gross_treasury<1?'good':'warn'}">${n(b.market_cap_to_gross_treasury)}x</div><div class="read">市值／gross treasury；非淨 NAV</div></section><section class="card quarter"><div class="eyebrow">STRC Trust Vote</div><div class="kpi ${m.strc_discount==null?'warn':m.strc_discount>0.05?'bad':'good'}">${pct(m.strc_discount)}</div><div class="read">折價高於 5% 時估值訊號降權</div></section>`;
+  const dims=Object.entries(btc.dimensions||{});
+  document.getElementById('btcPanel').innerHTML=`<div class="kpi ${scoreTone}">${esc(btc.regime)}</div><div class="read">${esc(btc.action)}</div><div class="divider"></div>${dims.map(([name,value])=>`<div class="decision"><b>${esc(name)}</b><span class="${value<0?'good':value>0?'bad':'info'}">${value>0?'+':''}${value}</span></div>`).join('')}<div class="tags"><span class="tag">覆蓋率 ${pct(btc.data_quality?.coverage_ratio)}</span><span class="tag">ETF 權重 0.5</span></div>`;
+  const contractBlocked=m.contract_red_light!==false;
+  document.getElementById('mstrPanel').innerHTML=`<div class="kpi ${contractBlocked?'bad':'warn'}">${contractBlocked?'封鎖':'觀察'}</div><div class="read">BTC 狀態不等於 MSTR 合約放行；缺值一律封鎖。</div><div class="divider"></div><div class="decision"><b>普通股市值／淨值</b><span class="${commonRatio==null?'warn':commonRatio<=1?'good':'bad'}">${n(commonRatio)}x</span></div><div class="decision"><b>企業價值／BTC</b><span>${n(m.enterprise_value_to_btc_nav??m.enterprise_mnav)}x</span></div><div class="decision"><b>7 日賣幣壓力</b><span class="${m.sale_ratio==null?'bad':''}">${m.sale_ratio==null?'未知（不當 0）':n(m.sale_ratio,1)+'x'}</span></div><div class="decision"><b>明示固定義務覆蓋</b><span>${n(m.coverage_months,1)} 個月</span></div><div class="decision"><b>STRC 折價</b><span class="${m.strc_discount==null||m.strc_discount>0.05?'bad':'good'}">${pct(m.strc_discount)}</span></div>`;
+  document.getElementById('bmnrPanel').innerHTML=`<div class="kpi ${b.market_cap_to_gross_treasury==null?'warn':b.market_cap_to_gross_treasury<1?'good':'warn'}">${n(b.market_cap_to_gross_treasury)}x</div><div class="read">${esc(b.conclusion)}</div><div class="divider"></div><div class="decision"><b>官方 ETH</b><span>${Number(b.eth_holdings||0).toLocaleString()}</span></div><div class="decision"><b>質押比例</b><span>${pct(b.staked_eth_ratio)}</span></div><div class="decision"><b>gross treasury/股</b><span>${money(b.gross_treasury_value_per_share)}</span></div><div class="tags"><span class="tag">as of ${esc(b.holdings_as_of)}</span><span class="tag">cross-check ${pct(b.reported_crosscheck_gap)}</span></div>`;
+  const qualityWidth=Math.max(0,Math.min(100,Number(q.confidence_score_0_100||0)));
+  document.getElementById('quality').innerHTML=`<div class="kpi ${qualityWidth>=70?'good':qualityWidth>=50?'warn':'bad'}">${qualityWidth}/100</div><div class="scorebar"><i style="width:${qualityWidth}%"></i></div><div class="read">自動資本結構欄位 ${q.automated_capital_structure_fields?.length||0}；人工欄位 ${q.manual_capital_structure_fields?.length||0}</div><h3>降級原因</h3><ul class="list">${(q.degradations||[]).map(x=>`<li>${esc(x)}</li>`).join('')||'<li>無</li>'}</ul>`;
+  document.getElementById('logic').innerHTML=`<div class="kpi ${tone(audit.status)}">${esc(audit.status||'not_run')}</div><div class="read">${esc(audit.plain_english)}</div><h3>目前禁止</h3><ul class="list">${(audit.blocked_actions||[]).map(x=>`<li>${esc(actionLabel(x))}</li>`).join('')||'<li>無</li>'}</ul>`;
+  document.getElementById('drivers').innerHTML='<tr><th>驅動因素</th><th>數值</th><th>解讀</th></tr>'+rows(a.decomposition.drivers||[],d=>`<tr><td>${esc(d.driver)}</td><td class="num">${pct(d.value)}</td><td>${esc(d.read)}</td></tr>`);
+  document.getElementById('sensitivity').innerHTML='<tr><th>BTC 衝擊</th><th>BTC 價格</th><th>net-to-common</th><th>每股普通股淨值</th><th>現價／淨值</th></tr>'+rows(a.sensitivity.scenarios||[],s=>`<tr><td>${pct(s.btc_shock)}</td><td class="num">${money(s.btc_price)}</td><td class="num">$${n(s.net_value_to_common_musd,0)}M</td><td class="num">${money(s.common_nav_per_current_share)}</td><td class="num">${n(s.current_mstr_price_to_common_nav)}x</td></tr>`);
+  document.getElementById('sensitivityNote').textContent=(a.sensitivity.assumptions||[]).join('｜');
+  document.getElementById('risk').innerHTML='<tr><th>風險</th><th>嚴重度</th><th>數值</th><th>解讀</th></tr>'+rows(a.risk_stack||[],r=>`<tr><td>${esc(r.name)}</td><td class="${tone(r.severity)}">${esc(r.severity)}</td><td>${esc(r.value)}</td><td>${esc(r.read)}</td></tr>`);
+  const thresholdRows=(logic.thresholds||[]).map(t=>`<tr><td>${esc(t.metric)}</td><td>${esc(t.current)}</td><td>${esc(t.threshold)}</td><td>${esc(t.action)}</td></tr>`).join('');
+  const falsifyRows=(logic.falsification_watch||[]).map(f=>`<tr><td>${esc(f.hypothesis)}</td><td colspan="3">反證：${esc(f.what_would_disprove)}｜所需證據：${esc(f.required_evidence)}</td></tr>`).join('');
+  document.getElementById('thresholds').innerHTML='<tr><th>指標／假說</th><th>今日值</th><th>門檻</th><th>動作／反證</th></tr>'+thresholdRows+falsifyRows;
 }
-load().catch(e=>{document.getElementById('top').innerHTML=`<div class="card full">Load failed: ${e.message}</div>`});
+load().catch(error=>{
+  document.getElementById('ticker').innerHTML='<span class="pill bad"><b>FAIL CLOSED</b> 必要資料未通過</span>';
+  document.getElementById('executive').innerHTML=`<section class="card full bad"><div class="headline">資料失敗｜所有交易動作封鎖</div><div class="read">${esc(error.message)}；不沿用舊快照。</div></section>`;
+  ['kpis','btcPanel','mstrPanel','bmnrPanel','quality','logic'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="empty">資料不可用</div>'});
+});
 </script>
-</body></html>
+</body>
+</html>

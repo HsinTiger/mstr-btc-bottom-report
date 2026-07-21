@@ -1,36 +1,49 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-21T02:44:35+00:00",
+  "verified_at": "2026-07-21T04:42:28+00:00",
   "date": "2026-07-21",
-  "status": "degraded",
-  "failures": [],
+  "status": "fail",
+  "failures": [
+    "sale_ratio: 缺值",
+    "weekly_btc_sales_musd: official input stale 15 days > 7"
+  ],
   "degradations": [
+    "Strategy BTC holdings: stale 15 days > 14",
     "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
-    "BTC standard inputs missing: btc_mvrv_current",
-    "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
-    "capital-structure provenance status=mixed_automated_manual"
+    "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
+    "capital-structure provenance status=mixed_automated_manual",
+    "usd_reserve_musd: official input stale 112 days > 30",
+    "deferred_tax_liability_musd: official input stale 202 days > 150",
+    "common_shares_outstanding_m: official input stale 86 days > 45"
   ],
   "warnings": [],
   "evidence": [
-    "btc_usd_coingecko=65257 from CoinGecko simple price",
-    "btc_usd_coinbase=65299.71 from Coinbase Exchange ticker",
+    "btc_usd_coingecko=65470 from CoinGecko simple price",
+    "btc_usd_coinbase=65496.9 from Coinbase Exchange ticker",
+    "eth_usd_coingecko=1921.73 from CoinGecko simple price",
+    "eth_usd_coinbase=1922.75 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.82 from Yahoo Finance chart",
+    "BTC MVRV as_of=2026-07-20 age_days=1",
+    "Strategy BTC holdings as_of=2026-07-06 age_days=15",
+    "BMNR treasury holdings as_of=2026-07-19 age_days=2",
     "MSTR Yahoo/Nasdaq=97.82/97.82; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "BMNR Yahoo/Nasdaq=16.63/16.63; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "STRC Yahoo/Nasdaq=87.1/87.1; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=8-K",
-    "BTC standard=中性拉扯區 score=0"
+    "BTC standard=偏冷等待區 score=-6.9",
+    "BMNR gross treasury=11742.235162469999m market_cap_to_gross=0.8465330318021893 as_of=2026-07-19"
   ],
   "policy": {
     "btc_cross_source_max_gap": "1.5%",
+    "eth_cross_source_max_gap": "1.5%",
     "equity_cross_source_max_gap_same_basis": "2%",
     "equity_mismatched_quote_basis": "degraded, not fail",
     "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
     "required_sources": [
-      "CoinGecko",
-      "Coinbase",
-      "Yahoo Finance"
+      "CoinGecko BTC/ETH",
+      "Coinbase BTC/ETH",
+      "Yahoo Finance MSTR"
     ],
     "degraded_if_missing": [
       "Nasdaq backup quotes",
@@ -46,6 +59,14 @@
       "Fear & Greed",
       "ETF flow context"
     ],
+    "freshness_limits": {
+      "BTC MVRV": "warn >3d, fail >7d",
+      "Strategy holdings": "warn >14d, fail >45d",
+      "Strategy 7d sales disclosure": "warn >2d, fail >7d",
+      "USD reserve": "warn >30d, fail >120d",
+      "MSTR common shares": "warn >45d, fail >120d",
+      "BMNR holdings": "warn >14d, fail >30d"
+    },
     "not_hard_triggers": [
       "single-source ETF flow",
       "realized loss without stable free API",

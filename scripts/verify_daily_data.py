@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import math
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -45,8 +45,49 @@ def obs_map(raw: dict[str, Any]) -> dict[str, Any]:
     return {item["name"]: item for item in raw.get("observations", [])}
 
 
+def unique(items: list[str]) -> list[str]:
+    return list(dict.fromkeys(items))
+
+
 def pct_gap(a: float, b: float) -> float:
     return abs(a - b) / ((abs(a) + abs(b)) / 2)
+
+
+def age_days(value: Any) -> int | None:
+    if not value:
+        return None
+    text = str(value).strip().replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(text).date()
+    except ValueError:
+        try:
+            parsed = date.fromisoformat(text[:10])
+        except ValueError:
+            return None
+    return (datetime.now(timezone.utc).date() - parsed).days
+
+
+def check_observation_freshness(
+    name: str,
+    item: dict[str, Any] | None,
+    warn_after_days: int,
+    fail_after_days: int,
+    failures: list[str],
+    degradations: list[str],
+    evidence: list[str],
+) -> None:
+    if not item or not item.get("ok"):
+        degradations.append(f"{name}: observation unavailable")
+        return
+    age = age_days(item.get("as_of"))
+    if age is None:
+        degradations.append(f"{name}: missing structured as_of date")
+        return
+    evidence.append(f"{name} as_of={item.get('as_of')} age_days={age}")
+    if age > fail_after_days:
+        failures.append(f"{name}: stale {age} days > {fail_after_days}")
+    elif age > warn_after_days:
+        degradations.append(f"{name}: stale {age} days > {warn_after_days}")
 
 
 def check_cross_source(name: str, left: float | None, right: float | None, threshold: float, failures: list[str], warnings: list[str]) -> None:
@@ -133,20 +174,24 @@ def recompute_metrics(snapshot: dict[str, Any]) -> dict[str, float | bool | None
     annual_obligation = annual_div + (as_float(inputs.get("annual_interest_musd")) or 0)
     coverage_months = (as_float(inputs.get("usd_reserve_musd")) or 0) / (annual_obligation / 12) if annual_obligation else None
     weekly_need = annual_obligation / 52 if annual_obligation else None
-    sale_ratio = (as_float(inputs.get("weekly_btc_sales_musd")) or 0) / weekly_need if weekly_need else None
-    sats_per_share = (as_float(inputs.get("mstr_btc_holdings")) or 0) * 1e8 / ((as_float(inputs.get("diluted_shares_m")) or 0) * 1e6) if as_float(inputs.get("diluted_shares_m")) else None
+    weekly_sales = as_float(inputs.get("weekly_btc_sales_musd"))
+    sale_ratio = weekly_sales / weekly_need if weekly_sales is not None and weekly_need else None
+    common_shares = as_float(inputs.get("common_shares_outstanding_m"))
+    sats_per_share = (as_float(inputs.get("mstr_btc_holdings")) or 0) * 1e8 / (common_shares * 1e6) if common_shares else None
     equity_mnav = enterprise_mnav = None
     if btc_px and mstr_px:
         btc_nav_musd = (as_float(inputs.get("mstr_btc_holdings")) or 0) * btc_px / 1e6
-        mkt_cap_musd = (as_float(inputs.get("diluted_shares_m")) or 0) * mstr_px
-        net_to_common = btc_nav_musd + (as_float(inputs.get("usd_reserve_musd")) or 0) + (as_float(inputs.get("cash_other_musd")) or 0) - (as_float(inputs.get("debt_face_musd")) or 0) - pref_total - (as_float(inputs.get("net_deferred_tax_liability_musd")) or 0)
+        mkt_cap_musd = (common_shares or 0) * mstr_px
+        net_to_common = btc_nav_musd + (as_float(inputs.get("usd_reserve_musd")) or 0) + (as_float(inputs.get("cash_other_musd")) or 0) - (as_float(inputs.get("debt_face_musd")) or 0) - pref_total - (as_float(inputs.get("deferred_tax_liability_musd")) or 0)
         equity_mnav = mkt_cap_musd / net_to_common if net_to_common > 0 else None
-        enterprise_mnav = (mkt_cap_musd + (as_float(inputs.get("debt_face_musd")) or 0) + pref_total) / btc_nav_musd if btc_nav_musd else None
+        enterprise_mnav = (mkt_cap_musd + (as_float(inputs.get("debt_face_musd")) or 0) + pref_total - (as_float(inputs.get("usd_reserve_musd")) or 0) - (as_float(inputs.get("cash_other_musd")) or 0)) / btc_nav_musd if btc_nav_musd else None
     pref_dilution_flag = bool(pref_total > (as_float(inputs.get("prev_pref_notional_musd")) or 0) and equity_mnav and equity_mnav > (as_float(inputs.get("prev_mnav_equity")) or 0))
     strc_discount = 1 - strc_px / 100 if strc_px else None
     return {
         "equity_mnav": equity_mnav,
         "enterprise_mnav": enterprise_mnav,
+        "common_valuation_gate_ok": bool(equity_mnav and equity_mnav <= 1 and not pref_dilution_flag),
+        "capital_flywheel_gate_ok": bool(equity_mnav and enterprise_mnav and equity_mnav >= 1 and enterprise_mnav >= 1 and not pref_dilution_flag),
         "pref_dilution_flag": pref_dilution_flag,
         "coverage_months": coverage_months,
         "sale_ratio": sale_ratio,
@@ -177,7 +222,7 @@ def main() -> int:
     degradations: list[str] = []
     evidence: list[str] = []
 
-    for required in ["btc_usd_coingecko", "btc_usd_coinbase", "mstr_usd_yahoo"]:
+    for required in ["btc_usd_coingecko", "btc_usd_coinbase", "eth_usd_coingecko", "eth_usd_coinbase", "mstr_usd_yahoo"]:
         item = observations.get(required)
         if not item or not item.get("ok"):
             failures.append(f"必要來源失敗: {required}")
@@ -192,6 +237,17 @@ def main() -> int:
         failures,
         warnings,
     )
+    check_cross_source(
+        "ETH spot",
+        as_float(observations.get("eth_usd_coingecko", {}).get("value")),
+        as_float(observations.get("eth_usd_coinbase", {}).get("value")),
+        0.015,
+        failures,
+        warnings,
+    )
+    check_observation_freshness("BTC MVRV", observations.get("btc_mvrv_current"), 3, 7, failures, degradations, evidence)
+    check_observation_freshness("Strategy BTC holdings", observations.get("mstr_strategy_btc_holdings"), 14, 45, failures, degradations, evidence)
+    check_observation_freshness("BMNR treasury holdings", observations.get("bmnr_eth_holdings"), 14, 30, failures, degradations, evidence)
     for ticker in ["mstr", "bmnr", "strc"]:
         check_equity_cross_source(
             ticker,
@@ -246,7 +302,7 @@ def main() -> int:
         degradations.append("ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified")
     else:
         degradations.append("ETF flow unavailable; not eligible as hard trigger")
-    btc_required = ["btc_mvrv_current", "btc_200dma", "btc_50dma", "btc_drawdown_1y_pct", "btc_return_30d_pct"]
+    btc_required = ["btc_mvrv_current", "btc_200dma", "btc_50dma", "btc_200wma", "btc_drawdown_1y_pct", "btc_return_7d_pct", "btc_return_30d_pct"]
     missing_btc = [key for key in btc_required if as_float(radar.get(key)) is None]
     if missing_btc:
         degradations.append("BTC standard inputs missing: " + ", ".join(missing_btc))
@@ -255,22 +311,82 @@ def main() -> int:
         failures.append("BTC standard: missing regime or score")
     else:
         evidence.append(f"BTC standard={btc_standard.get('regime')} score={btc_standard.get('score')}")
+        if "MSTR 資本壓力" in btc_standard.get("dimensions", {}):
+            failures.append("BTC standard: vehicle risk must not be mixed into BTC market dimensions")
+        if any(key in btc_standard.get("signals", {}) for key in ["mstr_sale_pressure_ratio", "strc_discount"]):
+            failures.append("BTC standard: vehicle-risk signals must remain outside BTC signal inputs")
+        if as_float(btc_standard.get("dimension_weights", {}).get("ETF 邊際買盤")) not in (None, 0.5):
+            failures.append("BTC standard: single-source ETF flow weight must remain capped at 0.5")
+        coverage_ratio = as_float(btc_standard.get("data_quality", {}).get("coverage_ratio"))
+        if coverage_ratio is None or coverage_ratio < 0.8:
+            degradations.append(f"BTC standard coverage ratio insufficient: {coverage_ratio}")
+
+    bmnr_metrics = snapshot.get("metrics", {}).get("bmnr_metrics", {})
+    bmnr_required = [
+        "eth_holdings",
+        "bottom_up_gross_treasury_musd",
+        "buyback_adjusted_shares_estimate_m",
+        "market_cap_to_gross_treasury",
+        "gross_treasury_value_per_share",
+    ]
+    missing_bmnr = [key for key in bmnr_required if as_float(bmnr_metrics.get(key)) is None]
+    if missing_bmnr:
+        degradations.append("BMNR treasury analytics missing: " + ", ".join(missing_bmnr))
+    else:
+        bmnr_ratio = as_float(bmnr_metrics.get("market_cap_to_gross_treasury"))
+        if bmnr_ratio is not None and not 0 < bmnr_ratio < 10:
+            failures.append(f"BMNR market-cap/gross-treasury ratio out of range: {bmnr_ratio}")
+        bmnr_gap = as_float(bmnr_metrics.get("reported_total_crosscheck_gap"))
+        if bmnr_gap is not None and bmnr_gap > 0.10:
+            degradations.append(f"BMNR bottom-up vs reported holdings gap {bmnr_gap:.2%} > 10%; other assets or marks require review")
+        evidence.append(
+            f"BMNR gross treasury={bmnr_metrics.get('bottom_up_gross_treasury_musd')}m "
+            f"market_cap_to_gross={bmnr_metrics.get('market_cap_to_gross_treasury')} "
+            f"as_of={bmnr_metrics.get('holdings_as_of')}"
+        )
 
     manual = snapshot.get("metrics", {}).get("manual_inputs", {})
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
     fields = provenance.get("fields", {})
-    manual_risk_keys = ["mstr_btc_holdings", "usd_reserve_musd", "cash_other_musd", "debt_face_musd", "annual_interest_musd", "preferred", "weekly_btc_sales_musd", "diluted_shares_m", "net_deferred_tax_liability_musd", "prev_pref_notional_musd", "prev_mnav_equity"]
+    manual_risk_keys = ["mstr_btc_holdings", "usd_reserve_musd", "cash_other_musd", "debt_face_musd", "annual_interest_musd", "preferred", "weekly_btc_sales_musd", "common_shares_outstanding_m", "deferred_tax_liability_musd", "prev_pref_notional_musd", "prev_mnav_equity"]
     manual_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") in {"manual", None}]
     if manual_fields:
         degradations.append("manual capital-structure inputs: " + ", ".join(manual_fields))
     if provenance.get("status") != "automated":
         degradations.append(f"capital-structure provenance status={provenance.get('status', 'missing')}")
+    for field_name, field in fields.items():
+        source_type = str(field.get("source_type") or "")
+        if not source_type.startswith("official_"):
+            continue
+        if field_name == "mstr_btc_holdings":
+            continue
+        age = age_days(field.get("as_of"))
+        if age is None:
+            degradations.append(f"{field_name}: official provenance missing as_of")
+            continue
+        warn_after, fail_after = (14, 45) if field_name == "mstr_btc_holdings" else (150, 240)
+        if field_name == "usd_reserve_musd":
+            warn_after, fail_after = 30, 120
+        if field_name == "common_shares_outstanding_m":
+            warn_after, fail_after = 45, 120
+        if field_name == "weekly_btc_sales_musd":
+            warn_after, fail_after = 2, 7
+        if age > fail_after:
+            failures.append(f"{field_name}: official input stale {age} days > {fail_after}")
+        elif age > warn_after:
+            degradations.append(f"{field_name}: official input stale {age} days > {warn_after}")
     sec_facts = snapshot.get("metrics", {}).get("sec_companyfacts", {})
     sec_diluted = as_float(sec_facts.get("diluted_shares_m"))
     effective_diluted = as_float(manual.get("diluted_shares_m"))
     if sec_diluted is not None and effective_diluted is not None and pct_gap(sec_diluted, effective_diluted) > 0.01:
         failures.append(f"diluted_shares_m: effective input differs from SEC companyfacts by {pct_gap(sec_diluted, effective_diluted):.2%}")
+    if as_float(manual.get("weekly_btc_sales_musd")) is None and metrics.get("contract_red_light") is not True:
+        failures.append("weekly_btc_sales_musd unknown must fail closed for MSTR contract gate")
 
+    failures = unique(failures)
+    degradations = unique(degradations)
+    warnings = unique(warnings)
+    evidence = unique(evidence)
     status = "fail" if failures else ("degraded" if degradations or warnings else "pass")
     report = {
         "schema": 1,
@@ -284,12 +400,14 @@ def main() -> int:
         "evidence": evidence,
         "policy": {
             "btc_cross_source_max_gap": "1.5%",
+            "eth_cross_source_max_gap": "1.5%",
             "equity_cross_source_max_gap_same_basis": "2%",
             "equity_mismatched_quote_basis": "degraded, not fail",
             "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
-            "required_sources": ["CoinGecko", "Coinbase", "Yahoo Finance"],
+            "required_sources": ["CoinGecko BTC/ETH", "Coinbase BTC/ETH", "Yahoo Finance MSTR"],
             "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "cross-source ETF flow verification", "BTC MVRV ratio"],
             "btc_standard_required_inputs": ["BTC spot cross-source", "BTC 50/200DMA", "BTC MVRV ratio", "Fear & Greed", "ETF flow context"],
+            "freshness_limits": {"BTC MVRV": "warn >3d, fail >7d", "Strategy holdings": "warn >14d, fail >45d", "Strategy 7d sales disclosure": "warn >2d, fail >7d", "USD reserve": "warn >30d, fail >120d", "MSTR common shares": "warn >45d, fail >120d", "BMNR holdings": "warn >14d, fail >30d"},
             "not_hard_triggers": ["single-source ETF flow", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
         },
     }

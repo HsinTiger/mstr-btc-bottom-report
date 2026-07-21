@@ -68,34 +68,36 @@ def wiki_signals() -> list[str]:
 
 def build_viewpoints(snapshot: dict[str, Any], verification: dict[str, Any]) -> list[dict[str, str]]:
     metrics = snapshot["metrics"]["mstr_metrics"]
+    btc_standard = snapshot["metrics"].get("btc_standard", {})
+    bmnr = snapshot["metrics"].get("bmnr_metrics", {})
     prices = snapshot["metrics"]["prices"]
     decision = snapshot["decision"]
-    verified = verification.get("status") == "pass"
-    confidence = "高" if verified and not verification.get("warnings") else "中"
+    status = verification.get("status")
+    confidence = "低" if status == "fail" else "中低" if status == "degraded" else "中" if verification.get("warnings") else "高"
 
     return [
         {
-            "title": "結構先於價格：今天不是看 MSTR 漲跌，而是看普通股是否重新拿回安全邊際",
-            "lens": "普通股安全邊際／企業價值安全邊際／特別股稀釋污染",
-            "claim": f"普通股真實安全邊際={fmt(metrics.get('equity_mnav'))}x、企業價值安全邊際={fmt(metrics.get('enterprise_mnav'))}x、特別股稀釋污染旗標={metrics.get('pref_dilution_flag')}；第二等份加碼門檻={metrics.get('mnav_gate_ok')}。",
-            "so_what": "小倉 2.5x 合約只在加碼門檻打開且紅燈解除時討論；否則最多是研究，不是行動訊號。",
-            "study_note": "從 wiki_llm 的估值倍率定義權風險延伸：公司口徑可被融資結構改寫，因此觸發條件必須使用自算的普通股安全邊際與企業價值安全邊際。",
+            "title": "BTC 市場狀態與載具風險必須分開",
+            "lens": "BTC 估值／趨勢／情緒／ETF／週期回撤",
+            "claim": f"BTC 標準分={fmt(btc_standard.get('score'), 1)}、regime={btc_standard.get('regime')}、BTC={fmt(prices.get('btc_usd'), 0)}。",
+            "so_what": btc_standard.get("action", "資料不足，不做方向判斷"),
+            "study_note": "BTC regime 只決定現貨節奏；MSTR 與 BMNR 的資本結構、股數與 senior claims 另設 implementation overlay，避免把載具壓力誤算成 BTC 過熱。",
             "confidence": confidence,
         },
         {
-            "title": "流動性紅燈比便宜更重要：優先股折價是市場對融資機器的信任票",
-            "lens": "現金覆蓋月數／每週賣幣壓力／STRC 優先股折價",
-            "claim": f"現金覆蓋月數={fmt(metrics.get('coverage_months'), 1)}、每週賣幣壓力倍數={fmt(metrics.get('sale_ratio'), 1)}x、STRC 優先股折價={pct(metrics.get('strc_discount'))}。",
+            "title": "MSTR 的 7 日賣幣壓力只看滾動官方事件窗，不沿用舊交易",
+            "lens": "7 日 reported sales／現金覆蓋／STRC 信任票",
+            "claim": f"7 日賣幣壓力倍數={fmt(metrics.get('sale_ratio'), 1)}x、現金覆蓋月數={fmt(metrics.get('coverage_months'), 1)}、STRC 折價={pct(metrics.get('strc_discount'))}。",
             "so_what": f"今日狀態：{decision_label(decision)}；若每週賣幣壓力連續高於 2 倍，或 STRC 優先股折價高於 5%，估值回升也要降權。",
-            "study_note": "從 delayed pro-cyclical 類比延伸：結構性賣壓常先被 senior tranche 吸收，等信任票破裂才同步反映到普通股。",
+            "study_note": "舊版把最近一筆交易絕對值當成每週壓力，會讓 15 天前的賣幣持續污染今日判斷；新版改為官方 ledger 的 rolling 7-day sales。",
             "confidence": confidence,
         },
         {
-            "title": "大倉與小倉分離：MSTR/BMNR 現貨 4:1 看週期，合約只吃低頻確認後的波段",
-            "lens": "Portfolio split",
-            "claim": f"BTC={fmt(prices.get('btc_usd'), 0)}、MSTR={fmt(prices.get('mstr_usd'))}、BMNR={fmt(prices.get('bmnr_usd'))}；資料驗證={verification.get('status')}。",
-            "so_what": "大倉用 1–4 年週期容忍波動；小倉用紅燈/綠燈避免在融資壓力區追多。",
-            "study_note": "從 indicator regime change 延伸：Pi Cycle/MVRV 仍可當背景，但不可凌駕 ETF、公司融資與優先股折價。",
+            "title": "BMNR 折價只能先稱 gross treasury 折價，不能偷換成普通股淨值",
+            "lens": "官方 ETH/BTC 持倉／回購後估計股數／gross treasury",
+            "claim": f"BMNR={fmt(prices.get('bmnr_usd'))}、ETH 持倉={fmt(bmnr.get('eth_holdings'), 0)}、市值/gross treasury={fmt(bmnr.get('market_cap_to_gross_treasury'))}x、質押比例={pct(bmnr.get('staked_eth_ratio'))}。",
+            "so_what": "可用於比較市場定價與明示資產，但完整負債、優先股與或有項目未扣除前，不把折價直接視為安全邊際。",
+            "study_note": "這是大倉 4:1 配置中最重要的新治理規則：MSTR 用 net-to-common 框架，BMNR 暫用 gross-asset 框架，兩者不可用同一個 mNAV 名稱混算。",
             "confidence": confidence,
         },
     ]
@@ -137,7 +139,11 @@ def main() -> int:
     cutoff = date.fromisoformat(snapshot["date"]) - timedelta(days=1)
     visible_dates = {cutoff.isoformat(), snapshot["date"]}
     visible = [item for item in items if item.get("date") in visible_dates]
-    archive = existing.get("archive", []) + [item for item in items if item.get("date") not in visible_dates]
+    archive_candidates = existing.get("archive", []) + [item for item in items if item.get("date") not in visible_dates]
+    archive_by_key: dict[tuple[str, str], dict[str, Any]] = {}
+    for item in archive_candidates:
+        archive_by_key[(str(item.get("date")), str(item.get("type")))] = item
+    archive = sorted(archive_by_key.values(), key=lambda item: item.get("date", ""))
     tomorrow = tomorrow_watch(snapshot)
     output = {
         "schema": 1,

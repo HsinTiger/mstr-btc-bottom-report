@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-mnav_calc.py — 自算 mNAV 與框架觸發指標
+mnav_calc.py — 自算 MSTR 普通股估值與資本結構指標
 用法:
     python mnav_calc.py                # 讀取 inputs.yaml + 自動抓價
     python mnav_calc.py --offline      # 全手動（inputs.yaml 需含價格）
@@ -19,11 +19,11 @@ import urllib.request
 # ---------- 手動輸入區（每週一更新自最新 8-K，每季用 10-Q 回校） ----------
 # 也可外部化為 inputs.yaml；為降低依賴，預設內嵌並標註資料日期。
 INPUTS = {
-    "as_of": "2026-07-05",           # 8-K 資料截止日
+    "as_of": "2026-07-06",           # Strategy holdings 最新官方 ledger 日；各欄位仍須看各自 provenance
     "btc_holdings": 843_775,          # BTC 持倉（顆）
     "usd_reserve_musd": 2_550,        # USD Reserve（百萬美元）
     "cash_other_musd": 0,
-    "net_deferred_tax_liability_musd": 0,  # TODO: 每季用 10-Q/10-K income tax footnote 更新；淨遞延稅資產用負值
+    "deferred_tax_liability_musd": 1_922,  # 2025-12-31 SEC DeferredTaxLiabilities；情境中固定、不稱淨額
     "debt_face_musd": 8_214,          # 可轉債面額合計（10-Q 核實）
     "annual_interest_musd": 34,       # 債務年利息（10-Q 核實）
     # 特別股各系列：清算面額總額（musd）與股息率
@@ -33,10 +33,10 @@ INPUTS = {
         "STRK": {"notional_musd": 2_100, "rate": 0.08},
         "STRD": {"notional_musd": 4_200, "rate": 0.10},
     },
-    "diluted_shares_m": 285.0,        # assumed diluted 股數（百萬）
-    "weekly_btc_sales_musd": 216.0,   # 本週賣幣所得（8-K）
-    "prev_pref_notional_musd": 17_800, # 上期特別股面額合計（M3 旗標用）
-    "prev_mnav_equity": 0.62,          # 上期自算 equity mNAV（M3 旗標用）
+    "common_shares_outstanding_m": 350.448,  # 10-Q/10-K 封面實際流通普通股（百萬）
+    "weekly_btc_sales_musd": None,    # 最新揭露無法覆蓋最近 7 日；未知不得當 0
+    "prev_pref_notional_musd": 17_800, # 上期特別股面額合計（融資扭曲旗標用）
+    "prev_mnav_equity": 0.62,          # 上期普通股 Price/NAV（融資扭曲旗標用）
 }
 
 WEEKLY_OBLIGATION_MUSD = None  # 由年化義務推導，見下
@@ -81,38 +81,38 @@ def main() -> None:
 
     i = INPUTS
     btc_nav = i["btc_holdings"] * btc_px / 1e6           # musd
-    mkt_cap = i["diluted_shares_m"] * mstr_px            # musd
+    mkt_cap = i["common_shares_outstanding_m"] * mstr_px  # musd
     pref_total = sum(s["notional_musd"] for s in i["preferred"].values())
     cash = i["usd_reserve_musd"] + i["cash_other_musd"]
 
-    # M1 equity mNAV（保守）
-    net_to_common = btc_nav + cash - i["debt_face_musd"] - pref_total - i["net_deferred_tax_liability_musd"]
-    m1 = mkt_cap / net_to_common if net_to_common > 0 else float("nan")
+    # 普通股市值／普通股淨值（保守）
+    net_to_common = btc_nav + cash - i["debt_face_musd"] - pref_total - i["deferred_tax_liability_musd"]
+    common_price_to_nav = mkt_cap / net_to_common if net_to_common > 0 else float("nan")
 
-    # M2 enterprise mNAV（官方同構自算版）
-    m2 = (mkt_cap + i["debt_face_musd"] + pref_total) / btc_nav
+    # 企業價值／BTC 總值（官方同構自算版）
+    enterprise_value_to_btc_nav = (mkt_cap + i["debt_face_musd"] + pref_total - cash) / btc_nav
 
-    # M3 特別股稀釋旗標
+    # 特別股融資扭曲旗標
     pref_increased = pref_total > i["prev_pref_notional_musd"]
-    mnav_recovered = (m1 == m1) and m1 > i["prev_mnav_equity"]  # nan-safe
-    m3_flag = pref_increased and mnav_recovered
+    price_to_nav_increased = (common_price_to_nav == common_price_to_nav) and common_price_to_nav > i["prev_mnav_equity"]
+    preferred_distortion_flag = pref_increased and price_to_nav_increased
 
     # M4 覆蓋月數
     annual_div = sum(
         s["notional_musd"] * s["rate"] for s in i["preferred"].values()
     )
     annual_obligation = annual_div + i["annual_interest_musd"]
-    m4 = i["usd_reserve_musd"] / (annual_obligation / 12)
+    coverage_months = i["usd_reserve_musd"] / (annual_obligation / 12)
 
     # M5 週賣幣比值
     weekly_need = annual_obligation / 52
-    m5 = i["weekly_btc_sales_musd"] / weekly_need
+    sale_pressure_ratio = i["weekly_btc_sales_musd"] / weekly_need if i["weekly_btc_sales_musd"] is not None else None
 
     # M6 sats/股
-    m6 = i["btc_holdings"] * 1e8 / (i["diluted_shares_m"] * 1e6)
+    sats_per_share = i["btc_holdings"] * 1e8 / (i["common_shares_outstanding_m"] * 1e6)
 
     # M7 STRC 折價
-    m7 = 1 - strc_px / 100
+    strc_discount = 1 - strc_px / 100
 
     def status(ok: bool, warn: bool = False) -> str:
         return "[OK]" if ok else ("[WARN]" if warn else "[FAIL]")
@@ -122,19 +122,24 @@ def main() -> None:
     print(f"BTC NAV: ${btc_nav/1000:,.1f}B | 特別股面額: ${pref_total/1000:,.1f}B")
     print()
     if net_to_common <= 0:
-        print("M1 equity mNAV: N/A(insolvent-to-common) [FAIL]")
+        print("普通股市值／普通股淨值: N/A(insolvent-to-common) [FAIL]")
     else:
-        print(f"M1 equity mNAV: {m1:.2f}x {status(m1 >= 1.0)}")
-    print(f"M2 enterprise mNAV: {m2:.2f}x {status(m2 >= 1.0)}")
-    print(f"M3 特別股稀釋旗標: {'觸發（mNAV回升訊號打五折）[WARN]' if m3_flag else '未觸發 [OK]'}")
-    print(f"M4 覆蓋月數: {m4:.1f} 月 {status(m4 >= 12)}")
-    print(f"M5 週賣幣比值: {m5:.1f}x (基準 ${weekly_need:.0f}M/週) "
-          f"{status(m5 <= 1.5, warn=m5 <= 2)}")
-    print(f"M6 sats/股: {m6:,.0f}")
-    print(f"M7 STRC 折價: {m7:.1%} {status(m7 <= 0.01, warn=m7 <= 0.05)}")
+        print(f"普通股市值／普通股淨值: {common_price_to_nav:.2f}x {status(common_price_to_nav <= 1.0)}（愈低愈便宜）")
+    print(f"企業價值／BTC 總值: {enterprise_value_to_btc_nav:.2f}x（融資飛輪參考，不是便宜度）")
+    print(f"特別股融資扭曲旗標: {'觸發（Price/NAV 上升可能來自分母縮水）[WARN]' if preferred_distortion_flag else '未觸發 [OK]'}")
+    print(f"明示固定義務覆蓋月數: {coverage_months:.1f} 月 {status(coverage_months >= 12)}")
+    if sale_pressure_ratio is None:
+        print(f"每週賣幣壓力倍數: 未知 (基準 ${weekly_need:.0f}M/週) [FAIL CLOSED]")
+    else:
+        print(f"每週賣幣壓力倍數: {sale_pressure_ratio:.1f}x (基準 ${weekly_need:.0f}M/週) "
+              f"{status(sale_pressure_ratio <= 1.5, warn=sale_pressure_ratio <= 2)}")
+    print(f"每股比特幣含量: {sats_per_share:,.0f} sats")
+    print(f"STRC 優先股折價信任票: {strc_discount:.1%} {status(strc_discount <= 0.01, warn=strc_discount <= 0.05)}")
     print()
-    both_ok = (net_to_common > 0 and m1 >= 1.0 and m2 >= 1.0 and not m3_flag)
-    print(f"第2等份3（雙軌 mNAV>=1 且無稀釋旗標）: {status(both_ok)}")
+    valuation_ok = net_to_common > 0 and common_price_to_nav <= 1.0 and not preferred_distortion_flag
+    flywheel_ok = net_to_common > 0 and common_price_to_nav >= 1.0 and enterprise_value_to_btc_nav >= 1.0 and not preferred_distortion_flag
+    print(f"普通股折價條件: {status(valuation_ok)}")
+    print(f"資本飛輪條件: {status(flywheel_ok)}（不代表普通股便宜）")
     print("※ 年化義務自算: "
           f"${annual_obligation:,.0f}M（股息 ${annual_div:,.0f}M + 利息 {i['annual_interest_musd']}M）")
     print("※ 官網 mNAV 僅供對照，不參與判定。下單前人工核實 EDGAR。")
