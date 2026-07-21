@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "generated_at": "2026-07-21T12:24:32+00:00",
+  "window_hours": 48,
+  "quality": {
+    "status": "unconfigured",
+    "api_provider": "X API",
+    "endpoint": "https://api.x.com/2/tweets/search/recent",
+    "authentication": "missing_secret",
+    "execution_gate_eligible": false,
+    "failures": [],
+    "degradations": [
+      "GitHub Secret X_BEARER_TOKEN 尚未設定；本頁不沿用舊 X 貼文。"
+    ],
+    "method": "curated accounts + bounded pagination + keyword relevance + recency + engagement; reposts excluded"
+  },
+  "summary": {
+    "categories": 3,
+    "posts": 0,
+    "unique_sources": 0
+  },
+  "categories": [
+    {
+      "id": "ai-application-monetization",
+      "title": "AI 應用與變現",
+      "purpose": "追蹤產品採用、企業付費、定價、通路與真正收入證據。",
+      "status": "unconfigured",
+      "source_accounts": [
+        "anthropicai",
+        "cursor_ai",
+        "googledeepmind",
+        "lovable_dev",
+        "microsoftai",
+        "nvidia",
+        "openai",
+        "perplexity_ai",
+        "replit",
+        "vercel"
+      ],
+      "items": []
+    },
+    {
+      "id": "engineering-model-progress",
+      "title": "工程方法與模型進展",
+      "purpose": "追蹤模型能力、評測、訓練、推論成本、工具鏈與可重現工程方法。",
+      "status": "unconfigured",
+      "source_accounts": [
+        "aiatmeta",
+        "anthropicai",
+        "googledeepmind",
+        "huggingface",
+        "karpathy",
+        "mistralai",
+        "nvidiaaidev",
+        "openai",
+        "pytorch",
+        "vllm_project"
+      ],
+      "items": []
+    },
+    {
+      "id": "crypto-us-stocks",
+      "title": "Crypto 與美股",
+      "purpose": "追蹤監管、流動性、ETF、公司事件與市場敘事；不直接作交易硬訊號。",
+      "status": "unconfigured",
+      "source_accounts": [
+        "blackrock",
+        "bloomberg",
+        "coinbase",
+        "coinbaseinsto",
+        "coindesk",
+        "federalreserve",
+        "glassnode",
+        "ishares",
+        "nasdaq",
+        "nyse",
+        "reuters",
+        "secgov",
+        "strategy"
+      ],
+      "items": []
+    }
+  ]
+}

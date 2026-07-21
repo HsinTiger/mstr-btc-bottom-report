@@ -1,0 +1,64 @@
+name: 4-hour curated X intelligence
+
+on:
+  schedule:
+    - cron: "37 */4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: governed-data-writer
+  cancel-in-progress: false
+
+jobs:
+  update-x-intelligence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect official X API intelligence
+        run: python scripts/collect_x_intelligence.py
+
+      - name: Independently verify X artifact
+        id: verify
+        continue-on-error: true
+        run: python scripts/verify_x_intelligence.py
+
+      - name: Audit product surfaces and publish diagnostics
+        run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
+
+      - name: Commit X intelligence data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/daily/x_intelligence.json data/daily/x_intelligence_history.json data/daily/x_intelligence_verification.json data/daily/site_health.json
+          if git diff --cached --quiet; then
+            echo "No X-intelligence changes to commit."
+          else
+            git commit -m "Update curated X intelligence"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Fail workflow after publishing red diagnostics
+        if: steps.verify.outcome == 'failure'
+        run: |
+          echo "X verification failed. Current red diagnostics were committed; green publication remains blocked."
+          exit 1

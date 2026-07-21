@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -19,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
     "index.html": "今天只看四件事",
     "market-monitor.html": "先看四個市場結論",
+    "x-intelligence.html": "三類情報，一頁看完",
     "analytics.html": "多視角證據矩陣",
     "dashboard.html": "邏輯規格",
     "daily-extensions.html": "今天的三個延伸觀點",
@@ -96,7 +98,7 @@ def server() -> Iterator[str]:
         thread.join(timeout=5)
 
 
-def rendered_body(browser: str, profile: str, url: str, width: int, height: int) -> str:
+def rendered_body(browser: str, profile: str, url: str, width: int, height: int) -> tuple[str, str]:
     command = [
         browser,
         "--headless=new",
@@ -118,7 +120,7 @@ def rendered_body(browser: str, profile: str, url: str, width: int, height: int)
         raise RuntimeError(f"Chrome exit {result.returncode}: {result.stderr[-500:]}")
     parser = BodyText()
     parser.feed(result.stdout)
-    return parser.text()
+    return parser.text(), result.stdout
 
 
 def main() -> int:
@@ -134,7 +136,7 @@ def main() -> int:
                         page_profile = Path(profile) / f"{viewport}-{page}-{attempt}"
                         page_profile.mkdir(parents=True, exist_ok=True)
                         try:
-                            body = rendered_body(browser, str(page_profile), f"{base_url}/{page}", width, height)
+                            body, dom = rendered_body(browser, str(page_profile), f"{base_url}/{page}", width, height)
                             break
                         except subprocess.TimeoutExpired:
                             if attempt:
@@ -144,6 +146,18 @@ def main() -> int:
                         raise RuntimeError(f"必要畫面文字缺漏：{expected}")
                     if markers:
                         raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
+                    if page == "x-intelligence.html":
+                        status_match = re.search(r'data-render-status="(pass|degraded|unconfigured|fail)"', dom)
+                        if not status_match:
+                            raise RuntimeError("X 情報缺少可驗證的渲染狀態")
+                        status = status_match.group(1)
+                        if 'data-page-overflow="false"' not in dom:
+                            raise RuntimeError("X 情報發生頁面水平溢位")
+                        if status != "fail" and 'data-category-count="3"' not in dom:
+                            raise RuntimeError("X 情報三分類未完整載入")
+                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
+                        if f'data-feed-visible="{expected_visibility}"' not in dom:
+                            raise RuntimeError("X 情報品質狀態與消息可見性不一致")
                     results.append({"viewport": viewport, "page": page, "status": "pass"})
                 except (RuntimeError, subprocess.TimeoutExpired) as error:
                     failures.append({"viewport": viewport, "page": page, "error": str(error)})
