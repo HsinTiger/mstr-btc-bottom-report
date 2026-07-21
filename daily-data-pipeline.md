@@ -23,9 +23,9 @@
    - 產出 `data/daily/raw_observations.json`、`latest_snapshot.json`、`database.json`。
 
 2. `scripts/collect_market_universe.py`
-   - 現貨：BTC、ETH、HYPE、SOL、BNB、XRP、DOGE，採 CoinGecko＋可用主要交易所交叉；HYPE 永續標記價不計入現貨來源。
-   - 永續：BTC／ETH 的 Binance＋Bybit 資金費率、OI 與成交額。
-   - 期貨：Binance 季度合約年化基差，以及 CME 前月 Yahoo 代理報價。
+   - 現貨：BTC、ETH、HYPE、SOL、BNB、XRP、DOGE，採 CoinGecko、Coinbase、OKX 與可用的 Binance 交叉；USDT 先換算 USD，HYPE 永續標記價不計入現貨來源。
+   - 永續：BTC／ETH 的 Bybit、OKX、Hyperliquid 與可用 Binance 資金費率、未平倉量與成交額；先依各場域週期年化再比較。
+   - 期貨：Deribit 離 90 日最近的掛牌月到期合約年化基差，以及 CME 前月 Yahoo 代理報價。
    - 期權：Deribit 幣本位 DVOL、Put／Call 未平倉量、ATM 隱含波動率、最大痛點集中價與觀測未平倉量；不含 USDC 期權。
    - 機構流：BTC ETF、ETH ETF 可用性、BTC／ETH DAT 公司持倉。
    - 賽道：RWA、Layer 1、DeFi、Meme 市值與 24 小時變化。

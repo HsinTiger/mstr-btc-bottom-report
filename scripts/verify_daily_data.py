@@ -275,16 +275,16 @@ def main() -> int:
                 source_age = age_hours(observation.get("as_of"))
                 if source_age is None or source_age > 2:
                     failures.append(f"market universe {symbol} {provider}: source stale or timestamp missing")
-                if provider == "Binance":
+                if provider in {"Binance", "OKX"}:
                     price_usdt = as_float(observation.get("price_usdt"))
                     usdt_usd = as_float(observation.get("usdt_usd"))
                     if price_usdt is None or usdt_usd is None:
-                        failures.append(f"market universe {symbol} Binance: USDT/USD normalization inputs missing")
+                        failures.append(f"market universe {symbol} {provider}: USDT/USD normalization inputs missing")
                     else:
-                        assert_close(f"market universe {symbol} Binance USD normalization", price_usdt * usdt_usd, observation.get("price_usd"), failures)
+                        assert_close(f"market universe {symbol} {provider} USD normalization", price_usdt * usdt_usd, observation.get("price_usd"), failures)
                     usdt_age = age_hours(observation.get("usdt_usd_as_of"))
                     if usdt_age is None or usdt_age > 2:
-                        failures.append(f"market universe {symbol} Binance: USDT/USD normalization rate stale")
+                        failures.append(f"market universe {symbol} {provider}: USDT/USD normalization rate stale")
         for symbol in ["BTC", "ETH"]:
             derivative = market_universe.get("derivatives", {}).get(symbol, {})
             required_derivatives = {
@@ -300,7 +300,8 @@ def main() -> int:
                 failures.append(f"market universe {symbol}: fewer than two perpetual funding venues")
             perpetual = derivative.get("perpetual", {})
             annualized_funding = []
-            for venue in ("binance", "bybit"):
+            venue_names = perpetual.get("venues_used", [])
+            for venue in venue_names:
                 venue_data = perpetual.get(venue, {})
                 rate = as_float(venue_data.get("funding_rate"))
                 interval = as_float(venue_data.get("funding_interval_hours"))
@@ -308,6 +309,11 @@ def main() -> int:
                     expected_annualized = rate * 24 / interval * 365
                     assert_close(f"market universe {symbol} {venue} funding annualization", expected_annualized, venue_data.get("funding_annualized"), failures)
                     annualized_funding.append(expected_annualized)
+                venue_age = age_hours(venue_data.get("as_of"))
+                if venue_age is None or venue_age > 2:
+                    failures.append(f"market universe {symbol} {venue}: perpetual source stale or timestamp missing")
+            if len(annualized_funding) != int(perpetual.get("funding_source_count") or 0):
+                failures.append(f"market universe {symbol}: funding source count does not match venue data")
             if annualized_funding:
                 assert_close(f"market universe {symbol} median annualized funding", statistics.median(annualized_funding), perpetual.get("funding_annualized_median"), failures)
             dated = derivative.get("dated_future", {})
@@ -538,7 +544,7 @@ def main() -> int:
                 "update_target": "every 4 hours",
                 "fail_if_stale": ">8h",
                 "tracked_assets": ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"],
-                "derivatives": ["Binance/Bybit perpetuals", "Binance quarterly futures", "CME Yahoo proxy", "Deribit options/DVOL"],
+                "derivatives": ["Bybit/OKX/Hyperliquid and available Binance perpetuals", "Deribit near-90-day dated futures", "CME Yahoo proxy", "Deribit options/DVOL"],
                 "coverage_rule": "venue observations remain partial-market context; unknown data never becomes zero",
             },
         },

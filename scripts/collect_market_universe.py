@@ -62,6 +62,11 @@ def age_hours(value: Any) -> float | None:
         return None
 
 
+def millis_iso(value: Any) -> str | None:
+    timestamp = finite(value)
+    return datetime.fromtimestamp(timestamp / 1000, timezone.utc).isoformat() if timestamp is not None else None
+
+
 def finite(value: Any) -> float | None:
     try:
         if value in (None, ""):
@@ -168,13 +173,44 @@ def collect_binance_spot() -> tuple[dict[str, Any], list[dict[str, Any]]]:
                 "usdt_usd_as_of": usdt_as_of,
                 "price_usd": price_usdt * usdt_usd if price_usdt is not None and usdt_usd is not None else None,
                 "change_24h": (finite(row.get("priceChangePercent")) or 0) / 100 if row.get("priceChangePercent") is not None else None,
-                "quote_volume_24h_usd": finite(row.get("quoteVolume")),
+                "quote_volume_24h_usd": finite(row.get("quoteVolume")) * usdt_usd if finite(row.get("quoteVolume")) is not None and usdt_usd is not None else None,
                 "as_of": datetime.fromtimestamp(row_close_time / 1000, timezone.utc).isoformat() if row_close_time else None,
             }
     return result, [
         source("binance_spot", "Binance Spot", url, "primary_market", timestamp, "交易所 USDT 現貨報價；先以 Coinbase USDT/USD 換算美元"),
         source("coinbase_usdt_usd", "Coinbase Exchange", usdt_url, "primary_market", usdt_row.get("time"), "Binance USDT 報價的美元正規化匯率"),
     ]
+
+
+def collect_okx_spot() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    usdt_url = "https://api.exchange.coinbase.com/products/USDT-USD/ticker"
+    usdt_row = fetch_json(usdt_url)
+    usdt_usd = finite(usdt_row.get("price"))
+    usdt_as_of = usdt_row.get("time")
+    result: dict[str, Any] = {}
+    sources: list[dict[str, Any]] = []
+    for symbol in ASSETS:
+        instrument = f"{symbol}-USDT"
+        url = f"https://www.okx.com/api/v5/market/ticker?instId={instrument}"
+        payload = fetch_json(url)
+        row = (payload.get("data") or [{}])[0]
+        if not row:
+            continue
+        price_usdt = finite(row.get("last"))
+        open_24h = finite(row.get("open24h"))
+        timestamp = millis_iso(row.get("ts"))
+        result[symbol] = {
+            "price_usdt": price_usdt,
+            "usdt_usd": usdt_usd,
+            "usdt_usd_as_of": usdt_as_of,
+            "price_usd": price_usdt * usdt_usd if price_usdt is not None and usdt_usd is not None else None,
+            "change_24h": price_usdt / open_24h - 1 if price_usdt is not None and open_24h not in (None, 0) else None,
+            "quote_volume_24h_usd": finite(row.get("volCcy24h")) * usdt_usd if finite(row.get("volCcy24h")) is not None and usdt_usd is not None else None,
+            "as_of": timestamp,
+        }
+        sources.append(source(f"okx_{symbol.lower()}_spot", "OKX Spot", url, "primary_market", timestamp, "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"))
+    sources.append(source("coinbase_usdt_usd_okx", "Coinbase Exchange", usdt_url, "primary_market", usdt_as_of, "OKX USDT 報價的美元正規化匯率"))
+    return result, sources
 
 
 def collect_coinbase_spot() -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -235,101 +271,162 @@ def collect_categories() -> tuple[dict[str, Any], list[dict[str, Any]]]:
 
 def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     pair = f"{symbol}USDT"
-    binance_premium_url = f"https://fapi.binance.com/fapi/v1/premiumIndex?symbol={pair}"
-    binance_oi_url = f"https://fapi.binance.com/fapi/v1/openInterest?symbol={pair}"
-    binance_ticker_url = f"https://fapi.binance.com/fapi/v1/ticker/24hr?symbol={pair}"
-    bybit_url = f"https://api.bybit.com/v5/market/tickers?category=linear&symbol={pair}"
-    bybit_instrument_url = f"https://api.bybit.com/v5/market/instruments-info?category=linear&symbol={pair}"
-    premium = fetch_json(binance_premium_url)
-    oi = fetch_json(binance_oi_url)
-    ticker = fetch_json(binance_ticker_url)
-    bybit_payload = fetch_json(bybit_url)
-    bybit = (bybit_payload.get("result", {}).get("list") or [{}])[0]
-    bybit_instrument_payload = fetch_json(bybit_instrument_url)
-    bybit_instrument = (bybit_instrument_payload.get("result", {}).get("list") or [{}])[0]
-    binance_mark = finite(premium.get("markPrice"))
-    binance_oi_base = finite(oi.get("openInterest"))
-    binance_funding = finite(premium.get("lastFundingRate"))
-    bybit_funding = finite(bybit.get("fundingRate"))
-    binance_interval_hours = 8.0
-    bybit_interval_minutes = finite(bybit_instrument.get("fundingInterval"))
-    bybit_interval_hours = bybit_interval_minutes / 60 if bybit_interval_minutes not in (None, 0) else None
-    binance_funding_annualized = binance_funding * 24 / binance_interval_hours * 365 if binance_funding is not None else None
-    bybit_funding_annualized = bybit_funding * 24 / bybit_interval_hours * 365 if bybit_funding is not None and bybit_interval_hours else None
-    funding_values = [value for value in (binance_funding, bybit_funding) if value is not None]
-    annualized_funding_values = [value for value in (binance_funding_annualized, bybit_funding_annualized) if value is not None]
-    funding_intervals = [value for value in (binance_interval_hours, bybit_interval_hours) if value is not None]
-    funding_interval_consistent = len(funding_intervals) == 2 and len(set(funding_intervals)) == 1
-    result = {
-        "coverage": "Binance USD-M + Bybit linear; partial observable market",
-        "binance": {
-            "mark_price_usd": binance_mark,
-            "index_price_usd": finite(premium.get("indexPrice")),
-            "funding_8h": binance_funding,
-            "funding_rate": binance_funding,
-            "funding_interval_hours": binance_interval_hours,
-            "funding_annualized": binance_funding_annualized,
-            "open_interest_base": binance_oi_base,
-            "open_interest_usd": binance_oi_base * binance_mark if binance_oi_base is not None and binance_mark is not None else None,
-            "volume_24h_usd": finite(ticker.get("quoteVolume")),
-            "as_of": datetime.fromtimestamp((premium.get("time") or 0) / 1000, timezone.utc).isoformat() if premium.get("time") else None,
-        },
-        "bybit": {
-            "mark_price_usd": finite(bybit.get("markPrice")),
-            "index_price_usd": finite(bybit.get("indexPrice")),
-            "funding_8h": bybit_funding if bybit_interval_hours == 8 else None,
-            "funding_rate": bybit_funding,
-            "funding_interval_hours": bybit_interval_hours,
-            "funding_annualized": bybit_funding_annualized,
-            "open_interest_base": finite(bybit.get("openInterest")),
-            "open_interest_usd": finite(bybit.get("openInterestValue")),
-            "volume_24h_usd": finite(bybit.get("turnover24h")),
-            "as_of": datetime.fromtimestamp((bybit_payload.get("time") or 0) / 1000, timezone.utc).isoformat() if bybit_payload.get("time") else None,
-        },
-        "funding_8h_median": statistics.median(funding_values) if funding_interval_consistent and funding_intervals[0] == 8 else None,
-        "funding_annualized_median": statistics.median(annualized_funding_values) if annualized_funding_values else None,
-        "funding_source_count": len(annualized_funding_values),
-        "funding_interval_hours_consistent": funding_interval_consistent,
-        "funding_cross_venue_gap_bps": abs(binance_funding - bybit_funding) * 10_000 if funding_interval_consistent and binance_funding is not None and bybit_funding is not None else None,
-        "funding_annualized_cross_venue_gap_bps": abs(binance_funding_annualized - bybit_funding_annualized) * 10_000 if binance_funding_annualized is not None and bybit_funding_annualized is not None else None,
-        "observed_open_interest_usd": sum(value for value in [binance_oi_base * binance_mark if binance_oi_base is not None and binance_mark is not None else None, finite(bybit.get("openInterestValue"))] if value is not None) or None,
+    venues: dict[str, dict[str, Any]] = {}
+    sources: list[dict[str, Any]] = []
+    venue_errors: list[str] = []
+
+    try:
+        premium_url = f"https://fapi.binance.com/fapi/v1/premiumIndex?symbol={pair}"
+        oi_url = f"https://fapi.binance.com/fapi/v1/openInterest?symbol={pair}"
+        ticker_url = f"https://fapi.binance.com/fapi/v1/ticker/24hr?symbol={pair}"
+        premium = fetch_json(premium_url)
+        oi = fetch_json(oi_url)
+        ticker = fetch_json(ticker_url)
+        mark = finite(premium.get("markPrice"))
+        oi_base = finite(oi.get("openInterest"))
+        rate = finite(premium.get("lastFundingRate"))
+        interval = 8.0
+        as_of = millis_iso(premium.get("time"))
+        venues["binance"] = {
+            "mark_price_usd": mark, "index_price_usd": finite(premium.get("indexPrice")),
+            "funding_rate": rate, "funding_interval_hours": interval,
+            "funding_annualized": rate * 24 / interval * 365 if rate is not None else None,
+            "open_interest_base": oi_base,
+            "open_interest_usd": oi_base * mark if oi_base is not None and mark is not None else None,
+            "volume_24h_usd": finite(ticker.get("quoteVolume")), "as_of": as_of,
+        }
+        sources.append(source(f"binance_{symbol.lower()}_perp", "Binance USD-M Futures", premium_url, "primary_derivatives_market", as_of, "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"))
+    except Exception as exc:
+        venue_errors.append(f"Binance: {type(exc).__name__}: {exc}")
+
+    try:
+        bybit_url = f"https://api.bybit.com/v5/market/tickers?category=linear&symbol={pair}"
+        instrument_url = f"https://api.bybit.com/v5/market/instruments-info?category=linear&symbol={pair}"
+        payload = fetch_json(bybit_url)
+        row = (payload.get("result", {}).get("list") or [{}])[0]
+        instrument = (fetch_json(instrument_url).get("result", {}).get("list") or [{}])[0]
+        rate = finite(row.get("fundingRate"))
+        interval_minutes = finite(instrument.get("fundingInterval"))
+        interval = interval_minutes / 60 if interval_minutes not in (None, 0) else None
+        as_of = millis_iso(payload.get("time"))
+        venues["bybit"] = {
+            "mark_price_usd": finite(row.get("markPrice")), "index_price_usd": finite(row.get("indexPrice")),
+            "funding_rate": rate, "funding_interval_hours": interval,
+            "funding_annualized": rate * 24 / interval * 365 if rate is not None and interval else None,
+            "open_interest_base": finite(row.get("openInterest")), "open_interest_usd": finite(row.get("openInterestValue")),
+            "volume_24h_usd": finite(row.get("turnover24h")), "as_of": as_of,
+        }
+        sources.append(source(f"bybit_{symbol.lower()}_perp", "Bybit Linear", bybit_url, "primary_derivatives_market", as_of, f"永續標記價、指數價、{interval:g} 小時資金費率、未平倉量與 24 小時成交額" if interval else "永續資料；資金費率週期未知"))
+    except Exception as exc:
+        venue_errors.append(f"Bybit: {type(exc).__name__}: {exc}")
+
+    try:
+        instrument = f"{symbol}-USDT-SWAP"
+        ticker_url = f"https://www.okx.com/api/v5/market/ticker?instId={instrument}"
+        mark_url = f"https://www.okx.com/api/v5/public/mark-price?instType=SWAP&instId={instrument}"
+        index_url = f"https://www.okx.com/api/v5/market/index-tickers?instId={symbol}-USDT"
+        oi_url = f"https://www.okx.com/api/v5/public/open-interest?instType=SWAP&instId={instrument}"
+        funding_url = f"https://www.okx.com/api/v5/public/funding-rate?instId={instrument}"
+        ticker = (fetch_json(ticker_url).get("data") or [{}])[0]
+        mark_row = (fetch_json(mark_url).get("data") or [{}])[0]
+        index_row = (fetch_json(index_url).get("data") or [{}])[0]
+        oi_row = (fetch_json(oi_url).get("data") or [{}])[0]
+        funding_row = (fetch_json(funding_url).get("data") or [{}])[0]
+        rate = finite(funding_row.get("settFundingRate"))
+        funding_time = finite(funding_row.get("fundingTime"))
+        previous_funding_time = finite(funding_row.get("prevFundingTime"))
+        interval = (funding_time - previous_funding_time) / 3_600_000 if funding_time is not None and previous_funding_time is not None else None
+        timestamps = [finite(row.get("ts")) for row in (ticker, mark_row, index_row, oi_row, funding_row)]
+        timestamps = [value for value in timestamps if value is not None]
+        as_of = millis_iso(min(timestamps)) if timestamps else None
+        index_price = finite(index_row.get("idxPx"))
+        volume_base = finite(ticker.get("volCcy24h"))
+        venues["okx"] = {
+            "mark_price_usd": finite(mark_row.get("markPx")), "index_price_usd": index_price,
+            "funding_rate": rate, "funding_interval_hours": interval,
+            "funding_annualized": rate * 24 / interval * 365 if rate is not None and interval else None,
+            "open_interest_base": finite(oi_row.get("oiCcy")), "open_interest_usd": finite(oi_row.get("oiUsd")),
+            "volume_24h_usd": volume_base * index_price if volume_base is not None and index_price is not None else None,
+            "as_of": as_of,
+        }
+        sources.append(source(f"okx_{symbol.lower()}_perp", "OKX Linear Swap", funding_url, "primary_derivatives_market", as_of, f"永續標記價、指數價、{interval:g} 小時已結算資金費率、未平倉量與 24 小時成交額" if interval else "永續資料；資金費率週期未知"))
+    except Exception as exc:
+        venue_errors.append(f"OKX: {type(exc).__name__}: {exc}")
+
+    try:
+        hyperliquid_url = "https://api.hyperliquid.xyz/info"
+        payload = fetch_json(hyperliquid_url, data={"type": "metaAndAssetCtxs"})
+        universe = payload[0].get("universe", [])
+        contexts = payload[1]
+        rows = {meta.get("name"): contexts[index] for index, meta in enumerate(universe) if index < len(contexts)}
+        row = rows.get(symbol, {})
+        mark = finite(row.get("markPx"))
+        oi_base = finite(row.get("openInterest"))
+        rate = finite(row.get("funding"))
+        interval = 1.0
+        as_of = now_iso()
+        if mark is None or rate is None:
+            raise ValueError(f"{symbol} perpetual missing")
+        venues["hyperliquid"] = {
+            "mark_price_usd": mark, "index_price_usd": finite(row.get("oraclePx")),
+            "funding_rate": rate, "funding_interval_hours": interval,
+            "funding_annualized": rate * 24 * 365,
+            "open_interest_base": oi_base, "open_interest_usd": oi_base * mark if oi_base is not None else None,
+            "volume_24h_usd": finite(row.get("dayNtlVlm")), "as_of": as_of,
+        }
+        sources.append(source(f"hyperliquid_{symbol.lower()}_perp", "Hyperliquid", hyperliquid_url, "primary_derivatives_market", as_of, "每小時資金費率、標記價、預言機價、未平倉量與 24 小時名目成交額", "retrieval_time"))
+    except Exception as exc:
+        venue_errors.append(f"Hyperliquid: {type(exc).__name__}: {exc}")
+
+    valid_venues = {name: item for name, item in venues.items() if item.get("funding_annualized") is not None}
+    annualized_values = [item["funding_annualized"] for item in valid_venues.values()]
+    intervals = [item.get("funding_interval_hours") for item in valid_venues.values() if item.get("funding_interval_hours") is not None]
+    interval_consistent = len(intervals) >= 2 and len(set(intervals)) == 1
+    raw_rates = [item.get("funding_rate") for item in valid_venues.values() if item.get("funding_rate") is not None]
+    result: dict[str, Any] = {
+        "coverage": "+".join(valid_venues) + "; partial observable venues, not global market",
+        "venues_used": list(valid_venues),
+        "venue_errors": venue_errors,
+        **venues,
+        "funding_8h_median": statistics.median(raw_rates) if interval_consistent and intervals[0] == 8 else None,
+        "funding_annualized_median": statistics.median(annualized_values) if annualized_values else None,
+        "funding_source_count": len(annualized_values),
+        "funding_interval_hours_consistent": interval_consistent,
+        "funding_annualized_cross_venue_gap_bps": (max(annualized_values) - min(annualized_values)) * 10_000 if len(annualized_values) >= 2 else None,
+        "observed_open_interest_usd": sum(item["open_interest_usd"] for item in valid_venues.values() if item.get("open_interest_usd") is not None) or None,
     }
-    sources = [
-        source(f"binance_{symbol.lower()}_perp", "Binance USD-M Futures", binance_premium_url, "primary_derivatives_market", result["binance"]["as_of"], "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"),
-        source(f"bybit_{symbol.lower()}_perp", "Bybit Linear", bybit_url, "primary_derivatives_market", result["bybit"]["as_of"], f"永續標記價、指數價、{bybit_interval_hours:g} 小時資金費率、未平倉量與 24 小時成交額" if bybit_interval_hours else "永續資料；資金費率週期未知"),
-    ]
     return result, sources
 
 
 def collect_dated_future(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    exchange_url = "https://dapi.binance.com/dapi/v1/exchangeInfo"
-    exchange = fetch_json(exchange_url)
-    pair = f"{symbol}USD"
-    contracts = [row for row in exchange.get("symbols", []) if row.get("pair") == pair and row.get("contractType") == "CURRENT_QUARTER" and row.get("contractStatus") == "TRADING"]
+    instruments_url = f"https://www.deribit.com/api/v2/public/get_instruments?currency={symbol}&kind=future&expired=false"
+    instruments = fetch_json(instruments_url).get("result", [])
+    now = datetime.now(timezone.utc)
+    contracts = [row for row in instruments if row.get("settlement_period") == "month" and finite(row.get("expiration_timestamp"))]
+    contracts = [row for row in contracts if datetime.fromtimestamp(row["expiration_timestamp"] / 1000, timezone.utc) > now]
     if not contracts:
-        raise ValueError(f"No current quarterly contract for {pair}")
-    contract = min(contracts, key=lambda row: row.get("deliveryDate") or 9e18)
-    premium_url = f"https://dapi.binance.com/dapi/v1/premiumIndex?symbol={contract['symbol']}"
-    premium = fetch_json(premium_url)
-    if isinstance(premium, list):
-        premium = next((row for row in premium if row.get("symbol") == contract["symbol"]), {})
-    mark = finite(premium.get("markPrice"))
-    index = finite(premium.get("indexPrice"))
-    delivery = datetime.fromtimestamp(contract["deliveryDate"] / 1000, timezone.utc)
+        raise ValueError(f"No dated Deribit future for {symbol}")
+    contract = min(contracts, key=lambda row: abs((datetime.fromtimestamp(row["expiration_timestamp"] / 1000, timezone.utc) - now).total_seconds() / 86400 - 90))
+    ticker_url = "https://www.deribit.com/api/v2/public/ticker?" + urllib.parse.urlencode({"instrument_name": contract["instrument_name"]})
+    ticker = fetch_json(ticker_url).get("result", {})
+    mark = finite(ticker.get("mark_price"))
+    index = finite(ticker.get("index_price"))
+    delivery = datetime.fromtimestamp(contract["expiration_timestamp"] / 1000, timezone.utc)
     days = max((delivery - datetime.now(timezone.utc)).total_seconds() / 86400, 0)
     basis = mark / index - 1 if mark is not None and index not in (None, 0) else None
     result = {
-        "provider": "Binance COIN-M",
-        "contract": contract["symbol"],
+        "provider": "Deribit",
+        "selection_rule": "listed monthly expiry closest to 90 days",
+        "contract": contract["instrument_name"],
         "delivery_date": delivery.date().isoformat(),
         "days_to_delivery": days,
         "mark_price_usd": mark,
         "index_price_usd": index,
         "basis": basis,
         "annualized_basis": basis * 365 / days if basis is not None and days > 0 else None,
-        "as_of": datetime.fromtimestamp((premium.get("time") or 0) / 1000, timezone.utc).isoformat() if premium.get("time") else None,
+        "as_of": millis_iso(ticker.get("timestamp")),
     }
-    return result, [source(f"binance_{symbol.lower()}_quarterly", "Binance COIN-M Futures", premium_url, "primary_derivatives_market", result["as_of"], "當季期貨標記價相對指數價的簡單年化基差")]
+    return result, [source(f"deribit_{symbol.lower()}_dated_future", "Deribit Futures", ticker_url, "primary_derivatives_market", result["as_of"], "最接近 90 天的掛牌月到期期貨；標記價相對指數價的簡單年化基差")]
 
 
 def collect_cme_proxy(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -570,13 +667,13 @@ def analyze(output: dict[str, Any]) -> dict[str, Any]:
         result[symbol] = {
             "funding_state": funding_state,
             "funding_annualized_median": funding,
-            "quarterly_basis_annualized": basis,
+            "dated_future_basis_annualized": basis,
             "dvol": dvol,
             "put_call_open_interest_ratio": put_call,
             "leverage_temperature": leverage_temperature,
             "lenses": [
                 {"name": "永續資金費率", "value": funding, "state": "hot" if funding is not None and funding > 0.15 else "risk_off" if funding is not None and funding < 0 else "neutral"},
-                {"name": "季度期貨年化基差", "value": basis, "state": "hot" if basis is not None and basis > 0.10 else "risk_off" if basis is not None and basis < 0 else "neutral"},
+                {"name": "約三個月到期期貨年化基差", "value": basis, "state": "hot" if basis is not None and basis > 0.10 else "risk_off" if basis is not None and basis < 0 else "neutral"},
                 {"name": "期權隱含波動 DVOL", "value": dvol, "state": "high_risk" if dvol is not None and dvol > (75 if symbol == "BTC" else 95) else "normal" if dvol is not None else "unknown"},
                 {"name": "Put／Call 未平倉比", "value": put_call, "state": "put_heavy" if put_call is not None and put_call > 1 else "call_heavy" if put_call is not None and put_call < 0.7 else "balanced" if put_call is not None else "unknown"},
             ],
@@ -603,27 +700,28 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
                 failures.append(f"{symbol} {provider} 現貨來源時間未知")
             elif provider_age > 2:
                 failures.append(f"{symbol} {provider} 現貨來源逾時 {provider_age:.1f} 小時")
-            if provider == "Binance":
+            if provider in {"Binance", "OKX"}:
                 price_usdt = finite(observation.get("price_usdt"))
                 usdt_usd = finite(observation.get("usdt_usd"))
                 normalized_price = finite(observation.get("price_usd"))
                 usdt_age = age_hours(observation.get("usdt_usd_as_of"))
                 if price_usdt is None or usdt_usd is None or normalized_price is None:
-                    failures.append(f"{symbol} Binance USDT/USD 正規化輸入缺失")
+                    failures.append(f"{symbol} {provider} USDT/USD 正規化輸入缺失")
                 elif abs(price_usdt * usdt_usd - normalized_price) > max(1e-8, normalized_price * 1e-9):
-                    failures.append(f"{symbol} Binance USDT/USD 正規化重算不一致")
+                    failures.append(f"{symbol} {provider} USDT/USD 正規化重算不一致")
                 if usdt_age is None or usdt_age > 2:
-                    failures.append(f"{symbol} Binance USDT/USD 匯率逾時或時間未知")
+                    failures.append(f"{symbol} {provider} USDT/USD 匯率逾時或時間未知")
     for symbol in ("BTC", "ETH"):
         derivative = output.get("derivatives", {}).get(symbol, {})
         if int(derivative.get("perpetual", {}).get("funding_source_count") or 0) < 2:
             failures.append(f"{symbol} 缺少兩個場域的可比資金費率")
-        if derivative.get("perpetual", {}).get("funding_interval_hours_consistent") is not True:
-            degradations.append(f"{symbol} 場域資金費率週期不同；只比較正規化年化值")
-        if derivative.get("perpetual", {}).get("funding_annualized_median") is None:
+        perpetual = derivative.get("perpetual", {})
+        if perpetual.get("funding_annualized_median") is None:
             failures.append(f"{symbol} cross-venue perpetual funding missing")
-        for venue in ("binance", "bybit"):
-            venue_age = age_hours(derivative.get("perpetual", {}).get(venue, {}).get("as_of"))
+        for venue_error in perpetual.get("venue_errors", []):
+            degradations.append(f"{symbol} 永續備援來源失敗：{venue_error}")
+        for venue in perpetual.get("venues_used", []):
+            venue_age = age_hours(perpetual.get(venue, {}).get("as_of"))
             if venue_age is None or venue_age > 2:
                 failures.append(f"{symbol} {venue} 永續來源逾時或時間未知")
         dated_future = derivative.get("dated_future", {})
@@ -694,6 +792,7 @@ def main() -> int:
     collectors: dict[str, Callable[[], tuple[Any, list[dict[str, Any]]]]] = {
         "coingecko": collect_coingecko,
         "binance_spot": collect_binance_spot,
+        "okx_spot": collect_okx_spot,
         "coinbase_spot": collect_coinbase_spot,
         "hyperliquid": collect_hyperliquid,
         "categories": collect_categories,
@@ -724,6 +823,7 @@ def main() -> int:
 
     coingecko = results.get("coingecko", {})
     binance = results.get("binance_spot", {})
+    okx = results.get("okx_spot", {})
     coinbase = results.get("coinbase_spot", {})
     hyperliquid = results.get("hyperliquid", {})
     assets: dict[str, Any] = {}
@@ -731,6 +831,7 @@ def main() -> int:
         provider_prices = {
             "CoinGecko": finite(coingecko.get(symbol, {}).get("price_usd")),
             "Binance": finite(binance.get(symbol, {}).get("price_usd")),
+            "OKX": finite(okx.get(symbol, {}).get("price_usd")),
             "Coinbase": finite(coinbase.get(symbol, {}).get("price_usd")),
         }
         source_observations = {
@@ -741,6 +842,14 @@ def main() -> int:
                 "usdt_usd": finite(binance.get(symbol, {}).get("usdt_usd")),
                 "usdt_usd_as_of": binance.get(symbol, {}).get("usdt_usd_as_of"),
                 "as_of": binance.get(symbol, {}).get("as_of"),
+                "quote_asset": "USDT normalized to USD",
+            },
+            "OKX": {
+                "price_usd": finite(okx.get(symbol, {}).get("price_usd")),
+                "price_usdt": finite(okx.get(symbol, {}).get("price_usdt")),
+                "usdt_usd": finite(okx.get(symbol, {}).get("usdt_usd")),
+                "usdt_usd_as_of": okx.get(symbol, {}).get("usdt_usd_as_of"),
+                "as_of": okx.get(symbol, {}).get("as_of"),
                 "quote_asset": "USDT normalized to USD",
             },
             "Coinbase": {"price_usd": finite(coinbase.get(symbol, {}).get("price_usd")), "as_of": coinbase.get(symbol, {}).get("as_of"), "quote_asset": "USD"},
