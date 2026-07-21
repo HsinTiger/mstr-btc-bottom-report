@@ -1,13 +1,20 @@
 {
   "schema": 2,
   "date": "2026-07-21",
-  "generated_at": "2026-07-21T07:08:40+00:00",
+  "generated_at": "2026-07-21T07:30:45+00:00",
   "quality": {
     "verification_status": "fail",
     "verification_date_matches_snapshot": true,
     "confidence": "低",
     "confidence_score_0_100": 20,
     "degradations": [
+      "market universe: binance_spot: HTTPError: HTTP Error 451: ",
+      "market universe: BTC 永續備援來源失敗：Binance: HTTPError: HTTP Error 451: ",
+      "market universe: BTC 永續備援來源失敗：Bybit: HTTPError: HTTP Error 403: Forbidden",
+      "market universe: ETH 永續備援來源失敗：Binance: HTTPError: HTTP Error 451: ",
+      "market universe: ETH 永續備援來源失敗：Bybit: HTTPError: HTTP Error 403: Forbidden",
+      "market universe: BTC ETF 流向僅有第三方單一來源，不作硬觸發",
+      "market universe: ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
       "Strategy BTC holdings: stale 15 days > 14",
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
       "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
@@ -59,14 +66,14 @@
       "status": "candidate_not_confirmed",
       "key_number": "未確認",
       "headline": "接近長期支撐，但底部尚未確認",
-      "plain_read": "BTC 現價 $65,845，距 200 週均線 4.4%；右側確認 1/4，研究假說區 $40,000–$52,000 尚未觸及。",
-      "current_price": 65845.48000000001,
+      "plain_read": "BTC 現價 $65,905，距 200 週均線 4.5%；右側確認 1/4，研究假說區 $40,000–$52,000 尚未觸及。",
+      "current_price": 65904.545,
       "support_200wma": 63094.54282226563,
       "research_hypothesis": {
         "lower": 40000.0,
         "upper": 52000.0,
         "status": "not_touched",
-        "distance_to_upper": 0.2662592307692311,
+        "distance_to_upper": 0.26739509615384605,
         "classification": "未回測研究假說，不是保證目標",
         "knowledge_authorized": true
       },
@@ -166,23 +173,23 @@
           52000.0
         ],
         "status": "not_touched",
-        "current_price": 65845.48000000001,
+        "current_price": 65904.545,
         "confirmation_level_200dma": 72927.12583984375,
-        "plain_read": "$40,000–$52,000 是未回測底部假說；現價 $65,845 尚未觸及。$72,927 是右側確認門檻，不是獲利目標。"
+        "plain_read": "$40,000–$52,000 是未回測底部假說；現價 $65,905 尚未觸及。$72,927 是右側確認門檻，不是獲利目標。"
       },
       "mstr": {
         "common_nav_per_share_at_btc_lower": 22.89148441454938,
         "common_nav_per_share_at_btc_upper": 51.78394120766697,
-        "common_nav_per_share_at_current_btc": 85.11976893099812,
+        "common_nav_per_share_at_current_btc": 85.26198001103855,
         "plain_read": "若 BTC 落在假說區，按目前股數、現金、債務、優先股與已揭露遞延稅負債靜態估算，MSTR 普通股淨值約 $23–$52／股；不含未來 ATM、稅額變動與其他資產。"
       },
       "bmnr": {
-        "gross_treasury_value_per_share": 19.755486068195943,
+        "gross_treasury_value_per_share": 19.757053041554325,
         "indicative_0_8x_to_1_0x": [
-          15.804388854556755,
-          19.755486068195943
+          15.805642433243461,
+          19.757053041554325
         ],
-        "plain_read": "目前 gross treasury 約 $19.76／股；0.8–1.0x 僅為 $15.80–$19.76 的資產倍率參考，未扣完整負債，不能稱目標價。"
+        "plain_read": "目前 gross treasury 約 $19.76／股；0.8–1.0x 僅為 $15.81–$19.76 的資產倍率參考，未扣完整負債，不能稱目標價。"
       },
       "assumptions": [
         "MSTR 採目前普通股股數、BTC 持倉、現金、債務、優先股清算面額與已揭露遞延稅負債靜態計算。",
@@ -214,14 +221,14 @@
           {
             "name": "融資飛輪",
             "direction": "bullish",
-            "value": "1.05x",
+            "value": "1.04x",
             "read": "企業價值高於 BTC 總值時，增發換幣的反身性仍可能運作；不等於普通股便宜",
             "independence_key": "融資飛輪"
           },
           {
             "name": "相對動能",
             "direction": "bullish",
-            "value": "1.5%",
+            "value": "1.4%",
             "read": "單日跑贏 BTC 只能當先行動能，不能抵銷資本結構紅燈",
             "independence_key": "相對動能"
           }
@@ -234,13 +241,13 @@
         "leading_indicators": [
           {
             "name": "MSTR 相對 BTC 日報酬",
-            "value": "1.5%",
+            "value": "1.4%",
             "state": "improving",
             "read": "股價反身性先行"
           },
           {
             "name": "企業價值／BTC 總值",
-            "value": "1.05x",
+            "value": "1.04x",
             "state": "open",
             "read": "融資飛輪背景，不是便宜度"
           }
@@ -332,7 +339,7 @@
           {
             "name": "持倉交叉驗證",
             "direction": "bullish",
-            "value": "2.6%",
+            "value": "2.7%",
             "read": "由持倉逐項重算與管理層總額差距",
             "independence_key": "持倉交叉驗證"
           },
@@ -376,7 +383,7 @@
         "lagging_confirmations": [
           {
             "name": "持倉重算差距 ≤5%",
-            "value": "2.6%",
+            "value": "2.7%",
             "state": "pass",
             "read": "管理層總額交叉驗證"
           },
@@ -552,8 +559,8 @@
       {
         "id": "btc_liquidity_trend",
         "title": "資金流與長短期趨勢",
-        "key_number": "-9.7%",
-        "plain_read": "BTC 距 200 日均線 -9.7%，距 200 週均線 4.4%；長期支撐靠近，但中期趨勢尚未翻多。",
+        "key_number": "-9.6%",
+        "plain_read": "BTC 距 200 日均線 -9.6%，距 200 週均線 4.5%；長期支撐靠近，但中期趨勢尚未翻多。",
         "lenses": [
           {
             "name": "ETF 邊際買盤",
@@ -572,14 +579,14 @@
           {
             "name": "中期趨勢",
             "direction": "bearish",
-            "value": "-9.7%",
+            "value": "-9.6%",
             "read": "200 日均線是落後但必要的趨勢確認",
             "independence_key": "中期趨勢"
           },
           {
             "name": "長期支撐",
             "direction": "bullish",
-            "value": "4.4%",
+            "value": "4.5%",
             "read": "現價與 200 週均線距離可衡量長期支撐壓力",
             "independence_key": "長期支撐"
           }
