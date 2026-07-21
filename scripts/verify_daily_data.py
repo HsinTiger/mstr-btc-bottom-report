@@ -294,7 +294,7 @@ def main() -> int:
             required_derivatives = {
                 "cross-venue annualized funding": derivative.get("perpetual", {}).get("funding_annualized_median"),
                 "dated futures basis": derivative.get("dated_future", {}).get("annualized_basis"),
-                "options DVOL": derivative.get("options", {}).get("dvol"),
+                "options volatility proxy": derivative.get("options", {}).get("volatility_value"),
                 "options put/call OI": derivative.get("options", {}).get("put_call_open_interest_ratio"),
             }
             for label, value in required_derivatives.items():
@@ -331,23 +331,59 @@ def main() -> int:
             dated_age = age_hours(dated.get("as_of"))
             if dated_age is None or dated_age > 2:
                 failures.append(f"market universe {symbol}: dated-futures source stale or timestamp missing")
+            if dated.get("provider") not in {"Deribit", "OKX"}:
+                failures.append(f"market universe {symbol}: unsupported dated-futures provider")
+            if dated.get("provider") == "OKX" and dated.get("price_basis") != "bid_ask_midpoint_else_last":
+                failures.append(f"market universe {symbol}: OKX dated-futures price basis missing")
             options = derivative.get("options", {})
             if options.get("contracts_observed") != options.get("open_interest_observed_contracts"):
                 failures.append(f"market universe {symbol}: options OI coverage incomplete")
             if options.get("contracts_observed") != options.get("volume_observed_contracts"):
                 failures.append(f"market universe {symbol}: options volume coverage incomplete")
             options_age = age_hours(options.get("as_of"))
-            dvol_age = age_hours(options.get("dvol_as_of"))
+            volatility_age = age_hours(options.get("volatility_as_of"))
             if options_age is None or options_age > 2:
                 failures.append(f"market universe {symbol}: options source stale or timestamp missing")
-            if dvol_age is None or dvol_age > 3:
-                failures.append(f"market universe {symbol}: DVOL source stale or timestamp missing")
+            if volatility_age is None or volatility_age > 3:
+                failures.append(f"market universe {symbol}: options volatility source stale or timestamp missing")
             call_oi = as_float(options.get("call_open_interest_base"))
             put_oi = as_float(options.get("put_open_interest_base"))
             if call_oi not in (None, 0) and put_oi is not None:
                 assert_close(f"market universe {symbol} put/call OI", put_oi / call_oi, options.get("put_call_open_interest_ratio"), failures)
-            if options.get("contract_set") != "inverse_coin_margined_only":
+            if options.get("contract_set") not in {"inverse_coin_margined_only", "okx_coin_margined_options"}:
                 failures.append(f"market universe {symbol}: options contract coverage is not explicit")
+            atm_components = options.get("atm_components", [])
+            atm_values = [as_float(item.get("mark_iv_pct")) for item in atm_components]
+            atm_values = [value for value in atm_values if value is not None]
+            if len(atm_components) != 2 or {item.get("option_type") for item in atm_components} != {"C", "P"} or len(atm_values) != 2:
+                failures.append(f"market universe {symbol}: ATM IV components are incomplete")
+            else:
+                assert_close(f"market universe {symbol} ATM IV mean", statistics.mean(atm_values), options.get("atm_implied_volatility"), failures)
+            if options.get("provider") == "Deribit":
+                if options.get("contract_set") != "inverse_coin_margined_only" or options.get("volatility_metric") != "deribit_dvol" or options.get("volatility_label") != "Deribit 隱含波動率指數":
+                    failures.append(f"market universe {symbol}: Deribit options contract mapping mismatched")
+                assert_close(f"market universe {symbol} Deribit DVOL mapping", options.get("dvol"), options.get("volatility_value"), failures)
+            elif options.get("provider") == "OKX":
+                if options.get("contract_set") != "okx_coin_margined_options" or options.get("volatility_metric") != "okx_atm_mark_iv_near_30d" or options.get("volatility_label") != "OKX 約 30 日 ATM 標記隱含波動率":
+                    failures.append(f"market universe {symbol}: OKX options contract mapping mismatched")
+                expected_filter = {"ct_type": "inverse", "settle_ccy": symbol, "inst_family": f"{symbol}-USD", "state": "live"}
+                if options.get("contract_filter") != expected_filter:
+                    failures.append(f"market universe {symbol}: OKX options contract filter mismatched")
+                contract_counts = options.get("contract_type_counts", {})
+                observed_ids = options.get("observed_contract_ids", [])
+                observed_count = int(options.get("contracts_observed") or 0)
+                if (
+                    int(contract_counts.get("observed_inverse_contracts") or 0) != observed_count
+                    or int(contract_counts.get("eligible_inverse_instruments") or 0) < observed_count
+                    or int(contract_counts.get("excluded_non_inverse_instruments") or 0) < 1
+                    or len(observed_ids) != observed_count
+                    or len(set(observed_ids)) != observed_count
+                    or any("_UM-" in str(contract_id) for contract_id in observed_ids)
+                ):
+                    failures.append(f"market universe {symbol}: OKX options contract-set purity failed")
+                assert_close(f"market universe {symbol} OKX ATM IV mapping", options.get("atm_implied_volatility"), options.get("volatility_value"), failures)
+            else:
+                failures.append(f"market universe {symbol}: unsupported options provider")
         thesis = market_universe.get("btc_thesis", {})
         thesis_quality = thesis.get("quality", {})
         if thesis_quality.get("coverage_status") != "complete":
@@ -649,7 +685,7 @@ def main() -> int:
                 "update_target": "every 4 hours",
                 "fail_if_stale": ">8h",
                 "tracked_assets": ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"],
-                "derivatives": ["Bybit/OKX/Hyperliquid and available Binance perpetuals", "Deribit near-90-day dated futures", "CME Yahoo proxy", "Deribit options/DVOL"],
+                "derivatives": ["Bybit/OKX/Hyperliquid and available Binance perpetuals", "Deribit near-90-day dated futures with OKX fallback", "CME Yahoo proxy", "Deribit DVOL/options with labeled OKX ATM-IV/options fallback"],
                 "coverage_rule": "venue observations remain partial-market context; unknown data never becomes zero",
             },
         },

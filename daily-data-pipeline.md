@@ -25,8 +25,8 @@
 2. `scripts/collect_market_universe.py`
    - 現貨：BTC、ETH、HYPE、SOL、BNB、XRP、DOGE，採 CoinGecko、Coinbase、OKX 與可用的 Binance 交叉；USDT 先換算 USD，HYPE 永續標記價不計入現貨來源。
    - 永續：BTC／ETH 的 Bybit、OKX、Hyperliquid 與可用 Binance 資金費率、未平倉量與成交額；先依各場域週期年化再比較。
-   - 期貨：Deribit 離 90 日最近的掛牌月到期合約年化基差，以及 CME 前月 Yahoo 代理報價。
-   - 期權：Deribit 幣本位 DVOL、Put／Call 未平倉量、ATM 隱含波動率、最大痛點集中價與觀測未平倉量；不含 USDC 期權。
+   - 期貨：優先 Deribit 離 90 日最近掛牌月到期合約；runner 無法存取時改用 OKX 離 90 日最近的幣本位到期合約，另列 CME 前月 Yahoo 代理。
+   - 期權：優先 Deribit 幣本位 DVOL、Put／Call、ATM IV、最大痛點與 OI；runner 無法存取時改用 OKX 幣本位 Put／Call 與近 30 日 ATM 標記 IV。DVOL 與 OKX ATM IV 不串成同一序列。
    - 機構流：BTC ETF、ETH ETF 可用性、BTC／ETH DAT 公司持倉。
    - 賽道：RWA、Layer 1、DeFi、Meme 市值與 24 小時變化。
    - BTC 長期論證：黃金貨幣化比例、穩定幣與 RWA 規模、公開公司持幣滲透／集中度、算力安全及美國主權信用競爭。

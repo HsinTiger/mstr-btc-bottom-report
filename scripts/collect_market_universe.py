@@ -566,7 +566,7 @@ def collect_perpetual(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]
     return result, sources
 
 
-def collect_dated_future(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def _collect_deribit_dated_future(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     instruments_url = f"https://www.deribit.com/api/v2/public/get_instruments?currency={symbol}&kind=future&expired=false"
     instruments = fetch_json(instruments_url).get("result", [])
     now = datetime.now(timezone.utc)
@@ -595,6 +595,65 @@ def collect_dated_future(symbol: str) -> tuple[dict[str, Any], list[dict[str, An
         "as_of": millis_iso(ticker.get("timestamp")),
     }
     return result, [source(f"deribit_{symbol.lower()}_dated_future", "Deribit Futures", ticker_url, "primary_derivatives_market", result["as_of"], "最接近 90 天的掛牌月到期期貨；標記價相對指數價的簡單年化基差")]
+
+
+def _collect_okx_dated_future(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    instruments_url = "https://www.okx.com/api/v5/public/instruments?instType=FUTURES"
+    tickers_url = "https://www.okx.com/api/v5/market/tickers?instType=FUTURES"
+    index_url = f"https://www.okx.com/api/v5/market/index-tickers?instId={symbol}-USD"
+    instruments = fetch_json(instruments_url).get("data", [])
+    tickers = {row.get("instId"): row for row in fetch_json(tickers_url).get("data", [])}
+    index_rows = fetch_json(index_url).get("data", [])
+    now = datetime.now(timezone.utc)
+    contracts = [
+        row for row in instruments
+        if row.get("instFamily") == f"{symbol}-USD"
+        and row.get("state") == "live"
+        and finite(row.get("expTime"))
+        and datetime.fromtimestamp(float(row["expTime"]) / 1000, timezone.utc) > now
+        and row.get("instId") in tickers
+    ]
+    if not contracts or not index_rows:
+        raise ValueError(f"No dated OKX future or index for {symbol}")
+    contract = min(contracts, key=lambda row: abs((datetime.fromtimestamp(float(row["expTime"]) / 1000, timezone.utc) - now).total_seconds() / 86400 - 90))
+    ticker = tickers[contract["instId"]]
+    bid = finite(ticker.get("bidPx"))
+    ask = finite(ticker.get("askPx"))
+    last = finite(ticker.get("last"))
+    future_price = (bid + ask) / 2 if bid is not None and ask is not None else last
+    index = finite(index_rows[0].get("idxPx"))
+    delivery = datetime.fromtimestamp(float(contract["expTime"]) / 1000, timezone.utc)
+    days = max((delivery - datetime.now(timezone.utc)).total_seconds() / 86400, 0)
+    basis = future_price / index - 1 if future_price is not None and index not in (None, 0) else None
+    timestamps = [finite(ticker.get("ts")), finite(index_rows[0].get("ts"))]
+    timestamps = [value for value in timestamps if value is not None]
+    as_of = millis_iso(max(timestamps)) if timestamps else None
+    result = {
+        "provider": "OKX",
+        "selection_rule": "listed coin-margined expiry closest to 90 days",
+        "contract": contract["instId"],
+        "delivery_date": delivery.date().isoformat(),
+        "days_to_delivery": days,
+        "mark_price_usd": future_price,
+        "price_basis": "bid_ask_midpoint_else_last",
+        "index_price_usd": index,
+        "basis": basis,
+        "annualized_basis": basis * 365 / days if basis is not None and days > 0 else None,
+        "as_of": as_of,
+    }
+    return result, [
+        source(f"okx_{symbol.lower()}_dated_future", "OKX Futures", tickers_url, "primary_derivatives_market", as_of, "Deribit 不可用時的備援；最接近 90 天的幣本位到期期貨，買賣中價相對 OKX 指數價的簡單年化基差"),
+        source(f"okx_{symbol.lower()}_index", "OKX Index", index_url, "primary_derivatives_market", as_of, "OKX 到期期貨基差分母"),
+    ]
+
+
+def collect_dated_future(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    try:
+        return _collect_deribit_dated_future(symbol)
+    except Exception as deribit_error:
+        result, sources = _collect_okx_dated_future(symbol)
+        result["fallback_errors"] = [readable_source_error("Deribit 到期期貨", deribit_error)]
+        return result, sources
 
 
 def collect_cme_proxy(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -628,7 +687,7 @@ def parse_option_name(name: str) -> tuple[datetime, float, str] | None:
         return None
 
 
-def collect_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def _collect_deribit_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     summary_url = f"https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency={symbol}&kind=option"
     summaries = fetch_json(summary_url).get("result", [])
     end_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
@@ -698,6 +757,10 @@ def collect_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
         "contract_set": "inverse_coin_margined_only",
         "dvol": dvol,
         "dvol_as_of": dvol_as_of,
+        "volatility_value": dvol,
+        "volatility_metric": "deribit_dvol",
+        "volatility_label": "Deribit 隱含波動率指數",
+        "volatility_as_of": dvol_as_of,
         "put_call_open_interest_ratio": put_oi / call_oi if put_oi is not None and call_oi else None,
         "call_open_interest_base": call_oi,
         "put_open_interest_base": put_oi,
@@ -710,6 +773,15 @@ def collect_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
         "target_expiry": target_expiry.date().isoformat() if target_expiry else None,
         "target_days": (target_expiry - datetime.now(timezone.utc)).total_seconds() / 86400 if target_expiry else None,
         "atm_implied_volatility": statistics.mean(atm_ivs) if atm_ivs else None,
+        "atm_components": [
+            {
+                "instrument": item[3].get("instrument_name"),
+                "option_type": item[2],
+                "strike_usd": item[1],
+                "mark_iv_pct": finite(item[3].get("mark_iv")),
+            }
+            for item in atm_rows
+        ],
         "max_pain_usd": max_pain,
         "max_pain_distance": max_pain / underlying - 1 if max_pain is not None and underlying else None,
         "as_of": options_as_of,
@@ -719,6 +791,163 @@ def collect_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
         source(f"deribit_{symbol.lower()}_options", "Deribit", summary_url, "primary_derivatives_market", result["as_of"], "Deribit 期權未平倉量、隱含波動率、成交額與自算最大痛點集中價"),
         source(f"deribit_{symbol.lower()}_dvol", "Deribit DVOL", dvol_url, "primary_derivatives_market", dvol_as_of, "最近一個完整小時的 Deribit 隱含波動率指數收盤值"),
     ]
+
+
+def parse_okx_option_name(name: str, symbol: str) -> tuple[datetime, float, str] | None:
+    match = re.match(rf"^{re.escape(symbol)}-USD-(\d{{6}})-([0-9.]+)-([CP])$", name)
+    if not match:
+        return None
+    try:
+        expiry = datetime.strptime(match.group(1), "%y%m%d").replace(tzinfo=timezone.utc, hour=8)
+        return expiry, float(match.group(2)), match.group(3)
+    except (ValueError, TypeError):
+        return None
+
+
+def _collect_okx_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    underlying = f"{symbol}-USD"
+    instruments_url = f"https://www.okx.com/api/v5/public/instruments?instType=OPTION&uly={underlying}"
+    summary_url = f"https://www.okx.com/api/v5/public/opt-summary?uly={underlying}"
+    oi_url = f"https://www.okx.com/api/v5/public/open-interest?instType=OPTION&uly={underlying}"
+    tickers_url = f"https://www.okx.com/api/v5/market/tickers?instType=OPTION&uly={underlying}"
+    instruments = fetch_json(instruments_url).get("data", [])
+    eligible_instruments = {
+        row.get("instId"): row
+        for row in instruments
+        if row.get("ctType") == "inverse"
+        and row.get("settleCcy") == symbol
+        and row.get("instFamily") == underlying
+        and row.get("state") == "live"
+    }
+    excluded_linear_count = sum(
+        row.get("ctType") == "linear" or row.get("settleCcy") != symbol or row.get("instFamily") != underlying
+        for row in instruments
+    )
+    summaries = fetch_json(summary_url).get("data", [])
+    oi_by_name = {row.get("instId"): row for row in fetch_json(oi_url).get("data", [])}
+    ticker_by_name = {row.get("instId"): row for row in fetch_json(tickers_url).get("data", [])}
+    now = datetime.now(timezone.utc)
+    parsed = []
+    for summary in summaries:
+        name = str(summary.get("instId", ""))
+        option = parse_okx_option_name(name, symbol)
+        metadata = eligible_instruments.get(name)
+        oi = oi_by_name.get(name)
+        ticker = ticker_by_name.get(name)
+        if metadata is not None and option and option[0] > now and oi is not None and ticker is not None:
+            parsed.append((option[0], option[1], option[2], summary, oi, ticker))
+    if not parsed:
+        raise ValueError(f"No complete OKX option observations for {symbol}")
+
+    calls = [item for item in parsed if item[2] == "C"]
+    puts = [item for item in parsed if item[2] == "P"]
+    call_oi_values = [finite(item[4].get("oiCcy")) for item in calls]
+    put_oi_values = [finite(item[4].get("oiCcy")) for item in puts]
+    call_oi = sum(value for value in call_oi_values if value is not None) if any(value is not None for value in call_oi_values) else None
+    put_oi = sum(value for value in put_oi_values if value is not None) if any(value is not None for value in put_oi_values) else None
+    expiries = sorted({item[0] for item in parsed})
+    target_expiry = min(expiries, key=lambda expiry: abs((expiry - now).total_seconds() / 86400 - 30))
+    target_rows = [item for item in parsed if item[0] == target_expiry]
+    forward_values = [finite(item[3].get("fwdPx")) for item in target_rows]
+    forward_values = [value for value in forward_values if value is not None]
+    forward = statistics.median(forward_values) if forward_values else None
+    atm_rows = []
+    for option_type in ("C", "P"):
+        candidates = [item for item in target_rows if item[2] == option_type and forward is not None]
+        if candidates:
+            atm_rows.append(min(candidates, key=lambda item: abs(item[1] - forward)))
+    atm_vols = [finite(item[3].get("markVol")) for item in atm_rows]
+    atm_vols = [value * 100 for value in atm_vols if value is not None]
+
+    max_pain = None
+    if target_rows:
+        strikes = sorted({item[1] for item in target_rows})
+        pain_by_strike = {}
+        for settlement in strikes:
+            pain = 0.0
+            for _, strike, option_type, _, oi, _ in target_rows:
+                open_interest = finite(oi.get("oiCcy"))
+                if open_interest is None:
+                    continue
+                intrinsic = max(settlement - strike, 0) if option_type == "C" else max(strike - settlement, 0)
+                pain += intrinsic * open_interest
+            pain_by_strike[settlement] = pain
+        max_pain = min(pain_by_strike, key=pain_by_strike.get)
+
+    oi_usd_values = [finite(item[4].get("oiUsd")) for item in parsed]
+    oi_usd_values = [value for value in oi_usd_values if value is not None]
+    volume_usd_values = []
+    timestamps = []
+    for _, _, _, summary, oi, ticker in parsed:
+        volume_base = finite(ticker.get("volCcy24h"))
+        forward_price = finite(summary.get("fwdPx"))
+        if volume_base is not None and forward_price is not None:
+            volume_usd_values.append(volume_base * forward_price)
+        timestamps.extend([finite(summary.get("ts")), finite(oi.get("ts")), finite(ticker.get("ts"))])
+    timestamps = [value for value in timestamps if value is not None]
+    as_of = millis_iso(max(timestamps)) if timestamps else None
+    volatility = statistics.mean(atm_vols) if atm_vols else None
+    result = {
+        "provider": "OKX",
+        "coverage": "OKX BTC/ETH 幣本位期權；Deribit 不可用時的備援，不代表全球期權市場",
+        "contract_set": "okx_coin_margined_options",
+        "contract_filter": {"ct_type": "inverse", "settle_ccy": symbol, "inst_family": underlying, "state": "live"},
+        "contract_type_counts": {
+            "provider_instruments": len(instruments),
+            "eligible_inverse_instruments": len(eligible_instruments),
+            "observed_inverse_contracts": len(parsed),
+            "excluded_non_inverse_instruments": excluded_linear_count,
+        },
+        "observed_contract_ids": [item[3].get("instId") for item in parsed],
+        "dvol": None,
+        "dvol_as_of": None,
+        "volatility_value": volatility,
+        "volatility_metric": "okx_atm_mark_iv_near_30d",
+        "volatility_label": "OKX 約 30 日 ATM 標記隱含波動率",
+        "volatility_as_of": as_of,
+        "put_call_open_interest_ratio": put_oi / call_oi if put_oi is not None and call_oi else None,
+        "call_open_interest_base": call_oi,
+        "put_open_interest_base": put_oi,
+        "observed_open_interest_usd": sum(oi_usd_values) if oi_usd_values else None,
+        "open_interest_usd_basis": "OKX oiUsd 逐合約加總",
+        "volume_24h_usd": sum(volume_usd_values) if volume_usd_values else None,
+        "volume_usd_basis": "OKX volCcy24h × 同到期 fwdPx 的可觀測代理",
+        "contracts_observed": len(parsed),
+        "open_interest_observed_contracts": sum(finite(item[4].get("oiCcy")) is not None for item in parsed),
+        "volume_observed_contracts": sum(finite(item[5].get("volCcy24h")) is not None and finite(item[3].get("fwdPx")) is not None for item in parsed),
+        "target_expiry": target_expiry.date().isoformat(),
+        "target_days": (target_expiry - now).total_seconds() / 86400,
+        "atm_implied_volatility": volatility,
+        "atm_components": [
+            {
+                "instrument": item[3].get("instId"),
+                "option_type": item[2],
+                "strike_usd": item[1],
+                "forward_usd": finite(item[3].get("fwdPx")),
+                "mark_iv_pct": (finite(item[3].get("markVol")) * 100) if finite(item[3].get("markVol")) is not None else None,
+            }
+            for item in atm_rows
+        ],
+        "max_pain_usd": max_pain,
+        "max_pain_distance": max_pain / forward - 1 if max_pain is not None and forward else None,
+        "as_of": as_of,
+        "limits": ["ATM mark IV is not DVOL and must not be joined as the same historical series", "Max pain is descriptive OI concentration, not a price target", "Put/call OI does not identify trade direction or buyer/seller intent"],
+    }
+    return result, [
+        source(f"okx_{symbol.lower()}_option_instruments", "OKX Option Instruments", instruments_url, "primary_derivatives_market", as_of, f"只允許 ctType=inverse、settleCcy={symbol}、instFamily={underlying} 的 live 幣本位期權；線性 USD 結算合約排除"),
+        source(f"okx_{symbol.lower()}_option_summary", "OKX Option Summary", summary_url, "primary_derivatives_market", as_of, "Deribit 不可用時的期權隱含波動率備援；取接近 30 日到期的 ATM Call/Put 標記 IV 平均"),
+        source(f"okx_{symbol.lower()}_option_oi", "OKX Option Open Interest", oi_url, "primary_derivatives_market", as_of, "OKX 幣本位期權 Put/Call 未平倉量與美元名目值"),
+        source(f"okx_{symbol.lower()}_option_tickers", "OKX Option Tickers", tickers_url, "primary_derivatives_market", as_of, "OKX 期權 24 小時成交量代理"),
+    ]
+
+
+def collect_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    try:
+        return _collect_deribit_options(symbol)
+    except Exception as deribit_error:
+        result, sources = _collect_okx_options(symbol)
+        result["fallback_errors"] = [readable_source_error("Deribit 期權", deribit_error)]
+        return result, sources
 
 
 def collect_dat_treasuries(asset: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -823,7 +1052,17 @@ def analyze(output: dict[str, Any]) -> dict[str, Any]:
         funding_state = "crowded_long" if funding is not None and funding > 0.15 else "short_bias" if funding is not None and funding < 0 else "balanced" if funding is not None else "unknown"
         basis = futures.get("annualized_basis")
         put_call = options.get("put_call_open_interest_ratio")
-        dvol = options.get("dvol")
+        volatility = options.get("volatility_value")
+        volatility_metric = options.get("volatility_metric")
+        volatility_state = (
+            "high_risk"
+            if volatility_metric == "deribit_dvol" and volatility is not None and volatility > (75 if symbol == "BTC" else 95)
+            else "normal"
+            if volatility_metric == "deribit_dvol" and volatility is not None
+            else "provider_specific_context"
+            if volatility is not None
+            else "unknown"
+        )
         leverage_temperature = (
             "偏多擁擠"
             if funding is not None and basis is not None and funding > 0.15 and basis > 0.10
@@ -837,13 +1076,14 @@ def analyze(output: dict[str, Any]) -> dict[str, Any]:
             "funding_state": funding_state,
             "funding_annualized_median": funding,
             "dated_future_basis_annualized": basis,
-            "dvol": dvol,
+            "volatility_value": volatility,
+            "volatility_metric": volatility_metric,
             "put_call_open_interest_ratio": put_call,
             "leverage_temperature": leverage_temperature,
             "lenses": [
                 {"name": "永續資金費率", "value": funding, "state": "hot" if funding is not None and funding > 0.15 else "risk_off" if funding is not None and funding < 0 else "neutral"},
                 {"name": "約三個月到期期貨年化基差", "value": basis, "state": "hot" if basis is not None and basis > 0.10 else "risk_off" if basis is not None and basis < 0 else "neutral"},
-                {"name": "期權隱含波動 DVOL", "value": dvol, "state": "high_risk" if dvol is not None and dvol > (75 if symbol == "BTC" else 95) else "normal" if dvol is not None else "unknown"},
+                {"name": options.get("volatility_label") or "期權隱含波動率", "value": volatility, "state": volatility_state},
                 {"name": "Put／Call 未平倉比", "value": put_call, "state": "put_heavy" if put_call is not None and put_call > 1 else "call_heavy" if put_call is not None and put_call < 0.7 else "balanced" if put_call is not None else "unknown"},
             ],
             "plain_read": f"槓桿溫度為「{leverage_temperature}」；期貨基差與期權部位只作擁擠度及風險定價，不直接產生方向交易。",
@@ -1070,22 +1310,26 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
             if venue_age is None or venue_age > 2:
                 failures.append(f"{symbol} {venue} 永續來源逾時或時間未知")
         dated_future = derivative.get("dated_future", {})
+        for fallback_error in dated_future.get("fallback_errors", []):
+            degradations.append(f"{symbol} 到期期貨備援：{fallback_error}")
         if dated_future.get("annualized_basis") is None:
             failures.append(f"{symbol} dated-futures basis missing")
         dated_future_age = age_hours(dated_future.get("as_of"))
         if dated_future_age is None or dated_future_age > 2:
             failures.append(f"{symbol} dated-futures source stale or timestamp missing")
         options = derivative.get("options", {})
-        if options.get("dvol") is None:
-            failures.append(f"{symbol} options DVOL missing")
+        for fallback_error in options.get("fallback_errors", []):
+            degradations.append(f"{symbol} 期權備援：{fallback_error}")
+        if options.get("volatility_value") is None:
+            failures.append(f"{symbol} options volatility proxy missing")
         if options.get("put_call_open_interest_ratio") is None:
             failures.append(f"{symbol} options put/call OI missing")
         options_age = age_hours(options.get("as_of"))
-        dvol_age = age_hours(options.get("dvol_as_of"))
+        volatility_age = age_hours(options.get("volatility_as_of"))
         if options_age is None or options_age > 2:
             failures.append(f"{symbol} options source stale or timestamp missing")
-        if dvol_age is None or dvol_age > 3:
-            failures.append(f"{symbol} DVOL source stale or timestamp missing")
+        if volatility_age is None or volatility_age > 3:
+            failures.append(f"{symbol} options volatility source stale or timestamp missing")
         if options.get("open_interest_observed_contracts") != options.get("contracts_observed"):
             failures.append(f"{symbol} options OI coverage incomplete")
         if options.get("volume_observed_contracts") != options.get("contracts_observed"):
@@ -1121,7 +1365,11 @@ def compact_history(output: dict[str, Any]) -> dict[str, Any]:
         "derivatives": {symbol: {
             "funding_annualized_median": output["derivatives"][symbol]["perpetual"].get("funding_annualized_median"),
             "quarterly_basis_annualized": output["derivatives"][symbol]["dated_future"].get("annualized_basis"),
+            "dated_future_provider": output["derivatives"][symbol]["dated_future"].get("provider"),
             "dvol": output["derivatives"][symbol]["options"].get("dvol"),
+            "volatility_value": output["derivatives"][symbol]["options"].get("volatility_value"),
+            "volatility_metric": output["derivatives"][symbol]["options"].get("volatility_metric"),
+            "options_provider": output["derivatives"][symbol]["options"].get("provider"),
             "put_call_open_interest_ratio": output["derivatives"][symbol]["options"].get("put_call_open_interest_ratio"),
         } for symbol in ("BTC", "ETH")},
         "sectors": {name: item.get("change_24h") for name, item in output["sectors"].items()},
@@ -1269,7 +1517,7 @@ def main() -> int:
             "*_usd": "US dollars",
             "*_ratio|basis|change|distance|gap": "decimal fraction; 0.01 means 1%",
             "funding_*": "decimal fraction for the named interval; annualized fields use simple annualization",
-            "atm_implied_volatility|dvol": "percentage points; 34.5 means 34.5%",
+            "atm_implied_volatility|dvol|volatility_value": "percentage points; 34.5 means 34.5%",
             "open_interest_base": "base-asset units for the named venue",
         },
         "assets": assets,

@@ -165,6 +165,8 @@ market_cap_to_gross_treasury = 回購調整後估計市值 ÷ gross_treasury
 | 美元穩定幣供給／RWA 協議 TVL | DefiLlama Stablecoins／Protocols | — | 四小時；供應商分類 |
 | BTC 算力持續性 | Blockchain.com 180 日 hash-rate | — | 四小時；超過 72 小時降級 |
 | 美國債務／GDP、10 年實質利率 | FRED `GFDEGDQ188S`／`DFII10` | — | 季度／交易日 |
+| BTC／ETH 到期期貨基差 | Deribit 月到期合約 | OKX 幣本位到期合約 | 四小時；依供應商分開標示 |
+| BTC／ETH 期權波動與 Put／Call | Deribit DVOL＋幣本位期權 | OKX 近 30 日 ATM 標記 IV＋幣本位期權 | 四小時；不同波動率定義不得串接 |
 | BMNR ETH/BTC/現金/回購 | SEC EDGAR 8-K Exhibit 99.1（CIK 0001829311） | SEC companyfacts 股數 | 每日抓取 |
 | 官網 mNAV（僅對照用） | strategy.com | — | 每日，記錄與自算企業價值／BTC 總值差異 |
 
