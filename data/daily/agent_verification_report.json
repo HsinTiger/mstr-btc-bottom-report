@@ -1,25 +1,26 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-20T03:16:03+00:00",
-  "date": "2026-07-20",
+  "verified_at": "2026-07-21T02:44:35+00:00",
+  "date": "2026-07-21",
   "status": "degraded",
   "failures": [],
   "degradations": [
     "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
+    "BTC standard inputs missing: btc_mvrv_current",
     "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
     "capital-structure provenance status=mixed_automated_manual"
   ],
   "warnings": [],
   "evidence": [
-    "btc_usd_coingecko=64793 from CoinGecko simple price",
-    "btc_usd_coinbase=64775.56 from Coinbase Exchange ticker",
-    "mstr_usd_yahoo=94.85 from Yahoo Finance chart",
-    "MSTR Yahoo/Nasdaq=94.85/94.85; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
-    "BMNR Yahoo/Nasdaq=15.69/15.69; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
-    "STRC Yahoo/Nasdaq=85.29/85.29; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "btc_usd_coingecko=65257 from CoinGecko simple price",
+    "btc_usd_coinbase=65299.71 from Coinbase Exchange ticker",
+    "mstr_usd_yahoo=97.82 from Yahoo Finance chart",
+    "MSTR Yahoo/Nasdaq=97.82/97.82; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "BMNR Yahoo/Nasdaq=16.63/16.63; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
+    "STRC Yahoo/Nasdaq=87.1/87.1; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=8-K",
-    "BTC standard=便宜後右側確認區 score=0"
+    "BTC standard=中性拉扯區 score=0"
   ],
   "policy": {
     "btc_cross_source_max_gap": "1.5%",

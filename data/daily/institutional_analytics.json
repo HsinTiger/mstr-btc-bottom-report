@@ -1,25 +1,26 @@
 {
   "schema": 1,
-  "date": "2026-07-20",
-  "generated_at": "2026-07-20T03:16:03+00:00",
+  "date": "2026-07-21",
+  "generated_at": "2026-07-21T02:44:36+00:00",
   "quality": {
     "verification_status": "degraded",
     "confidence": "medium-low",
     "degradations": [
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
+      "BTC standard inputs missing: btc_mvrv_current",
       "manual capital-structure inputs: cash_other_musd, debt_face_musd, annual_interest_musd, preferred, prev_pref_notional_musd, prev_mnav_equity",
       "capital-structure provenance status=mixed_automated_manual"
     ],
-    "logic_audit_status": "consistent",
+    "logic_audit_status": "contradiction",
     "logic_failed_invariants": 0,
-    "logic_contradictions": 0
+    "logic_contradictions": 1
   },
   "executive_read": {
     "headline": "Research-grade only; not auto-trading grade",
     "one_line": "普通股真實安全邊際低於 1.0，且每週賣幣壓力與 STRC 優先股折價仍是紅旗；今天重點是避免追高，不是找理由加碼。"
   },
   "logic_audit": {
-    "status": "consistent",
+    "status": "contradiction",
     "plain_english": "資料驗證降級，或每週賣幣壓力／STRC 折價紅旗還在時，只允許研究與觀察。",
     "blocked_actions": [
       "add_2_5x_mstr",
@@ -28,28 +29,28 @@
       "use_etf_flow_as_hard_trigger"
     ],
     "failed_invariants": 0,
-    "contradictions": 0
+    "contradictions": 1
   },
   "decomposition": {
-    "btc_return_1d": -0.00028255043509828326,
-    "mstr_return_1d": 0.0,
-    "mstr_minus_btc_1d": 0.00028255043509828326,
-    "m1_delta_1d": 0.0005841414585627813,
-    "strc_discount_delta_1d": 0.0,
+    "btc_return_1d": 0.007626464321282889,
+    "mstr_return_1d": 0.03131259884027404,
+    "mstr_minus_btc_1d": 0.023686134518991153,
+    "m1_delta_1d": 0.018240920771711577,
+    "strc_discount_delta_1d": -0.018099999999999894,
     "drivers": [
       {
         "driver": "MSTR_vs_BTC",
-        "value": 0.00028255043509828326,
+        "value": 0.023686134518991153,
         "read": "MSTR outperformed BTC; verify it is not short-term reflexivity"
       },
       {
         "driver": "普通股真實安全邊際變化",
-        "value": 0.0005841414585627813,
+        "value": 0.018240920771711577,
         "read": "普通股安全邊際改善"
       },
       {
         "driver": "STRC 優先股折價信任票變化",
-        "value": 0.0,
+        "value": -0.018099999999999894,
         "read": "STRC 折價收斂，市場信任改善"
       }
     ]
@@ -58,28 +59,28 @@
     "scenarios": [
       {
         "btc_shock": -0.2,
-        "btc_price": 51827.424,
-        "equity_mnav_at_current_mstr": 1.7593447536363962
+        "btc_price": 52222.684,
+        "equity_mnav_at_current_mstr": 1.7814310002459774
       },
       {
         "btc_shock": -0.1,
-        "btc_price": 58305.852,
-        "equity_mnav_at_current_mstr": 1.3495506057222626
+        "btc_price": 58750.519499999995,
+        "equity_mnav_at_current_mstr": 1.369907152028651
       },
       {
         "btc_shock": 0,
-        "btc_price": 64784.28,
-        "equity_mnav_at_current_mstr": 1.0945932398552638
+        "btc_price": 65278.354999999996,
+        "equity_mnav_at_current_mstr": 1.1128341606269754
       },
       {
         "btc_shock": 0.1,
-        "btc_price": 71262.708,
-        "equity_mnav_at_current_mstr": 0.9206616582920394
+        "btc_price": 71806.1905,
+        "equity_mnav_at_current_mstr": 0.9369994353160824
       },
       {
         "btc_shock": 0.2,
-        "btc_price": 77741.136,
-        "equity_mnav_at_current_mstr": 0.7944267312274725
+        "btc_price": 78334.026,
+        "equity_mnav_at_current_mstr": 0.8091488756237387
       }
     ]
   },
@@ -93,7 +94,7 @@
     {
       "name": "普通股真實安全邊際",
       "severity": "low",
-      "value": "1.09x",
+      "value": "1.11x",
       "read": "高於 1.0，但仍需檢查紅旗"
     },
     {
@@ -105,14 +106,14 @@
     {
       "name": "STRC 優先股折價信任票",
       "severity": "high",
-      "value": "14.7%",
+      "value": "12.9%",
       "read": "折價太深；所有估值樂觀訊號降權"
     },
     {
       "name": "Sentiment",
-      "severity": "neutral",
-      "value": "29",
-      "read": "Not capitulation sentiment"
+      "severity": "opportunity",
+      "value": "25",
+      "read": "Fear helps setup quality; not a buy trigger by itself"
     }
   ]
 }
