@@ -1,21 +1,21 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-21T07:30:44+00:00",
+  "verified_at": "2026-07-21T07:37:49+00:00",
   "date": "2026-07-21",
-  "snapshot_generated_at": "2026-07-21T07:30:42+00:00",
-  "market_universe_generated_at": "2026-07-21T07:30:44+00:00",
+  "snapshot_generated_at": "2026-07-21T07:37:47+00:00",
+  "market_universe_generated_at": "2026-07-21T07:37:49+00:00",
   "status": "fail",
   "failures": [
     "sale_ratio: 缺值",
     "weekly_btc_sales_musd: official input stale 15 days > 7"
   ],
   "degradations": [
-    "market universe: binance_spot: HTTPError: HTTP Error 451: ",
-    "market universe: BTC 永續備援來源失敗：Binance: HTTPError: HTTP Error 451: ",
-    "market universe: BTC 永續備援來源失敗：Bybit: HTTPError: HTTP Error 403: Forbidden",
-    "market universe: ETH 永續備援來源失敗：Binance: HTTPError: HTTP Error 451: ",
-    "market universe: ETH 永續備援來源失敗：Bybit: HTTPError: HTTP Error 403: Forbidden",
+    "market universe: Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: BTC 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: BTC 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
+    "market universe: ETH 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
+    "market universe: ETH 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
     "market universe: BTC ETF 流向僅有第三方單一來源，不作硬觸發",
     "market universe: ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
     "Strategy BTC holdings: stale 15 days > 14",
@@ -29,10 +29,10 @@
   "warnings": [],
   "evidence": [
     "market universe quality=degraded score=72 sources=37 age_hours=0.00",
-    "btc_usd_coingecko=65895 from CoinGecko simple price",
-    "btc_usd_coinbase=65914.09 from Coinbase Exchange ticker",
-    "eth_usd_coingecko=1933.53 from CoinGecko simple price",
-    "eth_usd_coinbase=1934.14 from Coinbase Exchange ticker",
+    "btc_usd_coingecko=65976 from CoinGecko simple price",
+    "btc_usd_coinbase=66012.03 from Coinbase Exchange ticker",
+    "eth_usd_coingecko=1935.33 from CoinGecko simple price",
+    "eth_usd_coinbase=1936.26 from Coinbase Exchange ticker",
     "mstr_usd_yahoo=97.82 from Yahoo Finance chart",
     "BTC MVRV as_of=2026-07-20 age_days=1",
     "Strategy BTC holdings as_of=2026-07-06 age_days=15",
@@ -42,7 +42,7 @@
     "STRC Yahoo/Nasdaq=87.1/87.1; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=8-K",
     "BTC standard=偏冷等待區 score=-5.9",
-    "BMNR gross treasury=11809.312070595m market_cap_to_gross=0.841724723065869 as_of=2026-07-19"
+    "BMNR gross treasury=11820.654428165002m market_cap_to_gross=0.8409170568877785 as_of=2026-07-19"
   ],
   "policy": {
     "btc_cross_source_max_gap": "1.5%",
