@@ -1,4 +1,4 @@
-name: Daily curated X intelligence
+name: Daily resilient AI intelligence
 
 on:
   schedule:
@@ -22,6 +22,7 @@ jobs:
     timeout-minutes: 15
     env:
       X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -34,32 +35,48 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Collect official X API intelligence
+      - name: Collect official AI feeds and releases
+        id: collect_ai
+        continue-on-error: true
+        run: python scripts/collect_ai_intelligence.py
+
+      - name: Independently verify official AI intelligence
+        id: verify_ai
+        continue-on-error: true
+        run: python scripts/verify_ai_intelligence.py
+
+      - name: Collect optional official X API intelligence
+        id: collect_x
+        continue-on-error: true
         run: python scripts/collect_x_intelligence.py
 
-      - name: Independently verify X artifact
-        id: verify
+      - name: Independently verify optional X artifact
+        id: verify_x
         continue-on-error: true
         run: python scripts/verify_x_intelligence.py
 
       - name: Audit product surfaces and publish diagnostics
         run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
 
-      - name: Commit X intelligence data
+      - name: Commit AI intelligence data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily/x_intelligence.json data/daily/x_intelligence_history.json data/daily/x_intelligence_verification.json data/daily/site_health.json
+          git add data/daily/ai_intelligence.json data/daily/ai_intelligence_history.json data/daily/ai_intelligence_verification.json data/daily/x_intelligence.json data/daily/x_intelligence_history.json data/daily/x_intelligence_verification.json data/daily/site_health.json
           if git diff --cached --quiet; then
-            echo "No X-intelligence changes to commit."
+            echo "No AI-intelligence changes to commit."
           else
-            git commit -m "Update curated X intelligence"
+            git commit -m "Update resilient AI intelligence"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
 
       - name: Fail workflow after publishing red diagnostics
-        if: steps.verify.outcome == 'failure'
+        if: steps.collect_ai.outcome == 'failure' || steps.verify_ai.outcome == 'failure'
         run: |
-          echo "X verification failed. Current red diagnostics were committed; green publication remains blocked."
+          echo "Required multi-source AI verification failed. Current diagnostics were committed; green publication remains blocked."
           exit 1
+
+      - name: Disclose optional X degradation
+        if: steps.collect_x.outcome == 'failure' || steps.verify_x.outcome == 'failure'
+        run: echo "Optional X verification failed; official feeds, releases, and research remain published without X items."

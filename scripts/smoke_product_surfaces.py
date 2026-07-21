@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
     "index.html": "今天只看四件事",
     "market-monitor.html": "先看四個市場結論",
-    "x-intelligence.html": "三類情報，一頁看完",
+    "x-intelligence.html": "每天精進三件事",
     "analytics.html": "多視角證據矩陣",
     "dashboard.html": "邏輯規格",
     "daily-extensions.html": "今天的三個延伸觀點",
@@ -155,6 +155,8 @@ def main() -> int:
                             raise RuntimeError("X 情報發生頁面水平溢位")
                         if status != "fail" and 'data-category-count="3"' not in dom:
                             raise RuntimeError("X 情報三分類未完整載入")
+                        if status != "fail" and 'data-action-count="3"' not in dom:
+                            raise RuntimeError("AI 情報每日三個精進動作未完整載入")
                         expected_visibility = "true" if status in {"pass", "degraded"} else "false"
                         if f'data-feed-visible="{expected_visibility}"' not in dom:
                             raise RuntimeError("X 情報品質狀態與消息可見性不一致")

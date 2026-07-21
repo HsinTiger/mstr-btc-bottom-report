@@ -11,6 +11,9 @@
     "data/daily/daily_extensions.json": {"schema_value": 2, "required_fields": ["current_date", "updated_at", "snapshot_generated_at", "visible_window", "items"], "lineage_field": "snapshot_generated_at"},
     "data/daily/market_universe.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "quality", "assets", "derivatives", "sources"]},
     "data/daily/market_universe_history.json": {"schema_value": 1, "required_fields": ["updated_at"]},
+    "data/daily/ai_intelligence.json": {"schema_value": 1, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.provider", "quality.execution_gate_eligible", "summary.posts", "summary.successful_sources", "source_checks", "daily_actions", "categories"]},
+    "data/daily/ai_intelligence_history.json": {"schema_value": 1, "required_fields": ["last_attempt_at", "quality.status", "items"]},
+    "data/daily/ai_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts", "successful_sources", "daily_actions"]},
     "data/daily/x_intelligence.json": {"schema_value": 1, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.endpoint", "quality.execution_gate_eligible", "summary.posts", "summary.unique_sources", "categories"]},
     "data/daily/x_intelligence_history.json": {"schema_value": 1, "required_fields": ["last_attempt_at", "quality.status", "items"]},
     "data/daily/x_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts"]},
@@ -56,22 +59,23 @@
       ]
     },
     {
-      "id": "x-intelligence",
+      "id": "ai-intelligence",
       "path": "x-intelligence.html",
-      "title": "X 情報",
-      "title_contains": "X 情報",
+      "title": "AI 情報",
+      "title_contains": "AI 情報",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "把策展 X 帳號的 AI 變現、工程模型、Crypto 與美股消息整理成可驗證的研究背景。",
-      "user_question": "過去 48 小時，三類主題有哪些真正值得讀的消息？",
-      "open_when": "需要掌握事件與研究線索時；不把社群貼文當成交易硬訊號。",
+      "role": "以官方 feeds、GitHub Releases 與 arXiv 為主，X 為可選事件雷達，每天提出三個可執行 AI 精進動作。",
+      "user_question": "今天有哪些最新 AI 用法、工程方法與模型進展值得實際測試？",
+      "open_when": "每天想精進 AI 工作流時；先看三個行動，再讀完整消息與來源。",
       "cadence": "每日 08:37（台北時間）",
       "surface_type": "context_intelligence",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/daily/x_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded", "unconfigured"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/x_intelligence_history.json", "timestamp_field": "last_attempt_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded", "unconfigured"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/x_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
+        {"path": "data/daily/ai_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/ai_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/x_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": false},
+        {"path": "data/daily/x_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": false}
       ]
     },
     {
