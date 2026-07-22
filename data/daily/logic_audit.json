@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "date": "2026-07-21",
-  "generated_at": "2026-07-21T13:41:44+00:00",
-  "snapshot_generated_at": "2026-07-21T11:45:55+00:00",
+  "date": "2026-07-22",
+  "generated_at": "2026-07-22T02:42:23+00:00",
+  "snapshot_generated_at": "2026-07-22T02:42:20+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -51,14 +51,14 @@
       "id": "CONTRACT_RED_LIGHT_FAILS_CLOSED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "actual=True, expected=True, sale_ratio=0.00, coverage_months=18.4, strc_discount=12.9%",
+      "evidence": "actual=True, expected=True, sale_ratio=0.00, coverage_months=18.4, strc_discount=11.8%",
       "risk_if_failed": "Missing or adverse capital-stack inputs could silently open the leveraged-trade gate."
     },
     {
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=degraded, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 47/100, confidence=低",
+      "evidence": "verification=degraded, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 49/100, confidence=低",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
     },
     {
@@ -72,7 +72,7 @@
       "id": "VERIFICATION_REPORT_MATCHES_SNAPSHOT_DATE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "snapshot_date=2026-07-21, verification_date=2026-07-21",
+      "evidence": "snapshot_date=2026-07-22, verification_date=2026-07-22",
       "risk_if_failed": "A stale pass report could authorize a newer unverified snapshot."
     },
     {
@@ -86,35 +86,35 @@
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_equity_price_to_nav=1.107x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 47/100",
+      "evidence": "common_equity_price_to_nav=1.152x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 49/100",
       "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
       "id": "COMMON_VALUATION_GATE_DIRECTION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.107x, preferred_distortion_flag=False",
+      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.152x, preferred_distortion_flag=False",
       "risk_if_failed": "A premium above common NAV could be mislabeled as valuation safety."
     },
     {
       "id": "CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.107x, enterprise_value_to_btc_nav=1.025x",
+      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.152x, enterprise_value_to_btc_nav=1.050x",
       "risk_if_failed": "Financing capacity and investor valuation could be collapsed into one misleading green light."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.107x, sats_per_share=240770",
+      "evidence": "equity_mnav=1.152x, sats_per_share=240770",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
       "id": "STRC_DISCOUNT_DOWNGRADES_MNAV",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "strc_discount=12.9%, contract_red_light=True",
+      "evidence": "strc_discount=11.8%, contract_red_light=True",
       "risk_if_failed": "Headline mNAV could ignore preferred-market capital-stack stress."
     },
     {
@@ -178,14 +178,14 @@
     {
       "metric": "普通股市值／普通股淨值",
       "threshold": "> 1.00 = 溢價；≤ 1.00 = 折價背景，仍非單獨買進訊號",
-      "current": "1.107x",
+      "current": "1.152x",
       "rationale": "市值除以扣債務、優先股與稅務楔子後的普通股淨值；倍率愈低，估值相對愈便宜。",
       "action": "高於 1.0 禁止宣稱普通股便宜；低於 1.0 仍須通過資料品質與資本結構覆核。"
     },
     {
       "metric": "企業價值／BTC 總值",
       "threshold": "< 1.00 = 企業價值低於 BTC 總值；> 1.00 = 資本飛輪可能仍可運作",
-      "current": "1.025x",
+      "current": "1.050x",
       "rationale": "分子採普通股市值加債務與優先股、再扣現金；與普通股估值是不同問題。",
       "action": "只能判斷企業層溢價與融資飛輪；不可當作普通股便宜的證據。"
     },
@@ -199,7 +199,7 @@
     {
       "metric": "STRC 優先股折價信任票",
       "threshold": "> 5.0% downgrades all mNAV signals",
-      "current": "12.9%",
+      "current": "11.8%",
       "rationale": "Preferred-stock market is the capital-structure trust vote; a wide discount can invalidate headline mNAV optimism.",
       "action": "Treat mNAV as suspect until preferred market stabilizes."
     },
@@ -213,7 +213,7 @@
     {
       "metric": "Fear & Greed",
       "threshold": "< 25 is panic context, not automatic buy signal",
-      "current": "25",
+      "current": "33",
       "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
       "action": "只允許列入研究清單；行動前必須看到普通股估值、賣幣壓力、STRC 折價一起確認。"
     },

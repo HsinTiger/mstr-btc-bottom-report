@@ -1,15 +1,15 @@
 {
   "schema": 2,
-  "date": "2026-07-21",
-  "generated_at": "2026-07-21T13:41:44+00:00",
-  "snapshot_generated_at": "2026-07-21T11:45:55+00:00",
+  "date": "2026-07-22",
+  "generated_at": "2026-07-22T02:42:23+00:00",
+  "snapshot_generated_at": "2026-07-22T02:42:20+00:00",
   "quality": {
     "verification_status": "degraded",
     "publication_mode": "research_only",
     "verification_date_matches_snapshot": true,
     "verification_bound_to_snapshot": true,
     "confidence": "低",
-    "confidence_score_0_100": 47,
+    "confidence_score_0_100": 49,
     "degradations": [
       "market universe: Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
       "market universe: BTC 永續備援來源失敗：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
@@ -18,17 +18,17 @@
       "market universe: ETH 永續備援來源失敗：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
       "market universe: BTC ETF 流向僅有第三方單一來源，不作硬觸發",
       "market universe: ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
-      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.31% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 2.37% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "BTC MVRV: observation unavailable",
+      "Strategy SEC 7d sales: stale 3 days > 2",
       "ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified",
+      "BTC standard inputs missing: btc_mvrv_current",
       "manual capital-structure inputs: debt_face_musd, annual_interest_musd, preferred",
       "capital-structure provenance status=mixed_automated_manual",
-      "deferred_tax_liability_musd: official input stale 202 days > 150",
-      "common_shares_outstanding_m: official input stale 86 days > 45"
+      "deferred_tax_liability_musd: official input stale 203 days > 150",
+      "common_shares_outstanding_m: official input stale 87 days > 45",
+      "weekly_btc_sales_musd: official input stale 3 days > 2"
     ],
-    "warnings": [
-      "STRC equity: 報價基準不同且差距 1.25%，需留意盤前/盤後波動"
-    ],
+    "warnings": [],
     "knowledge_status": "degraded",
     "knowledge_nodes": 15,
     "knowledge_excluded_nodes": 5,
@@ -62,7 +62,7 @@
       {
         "id": "data_quality",
         "label": "規則式資料契約分數",
-        "key_number": "47/100",
+        "key_number": "49/100",
         "plain_read": "驗證有限可用；結論可供研究，但低信心、單一來源與待更新資料不作加碼觸發。",
         "tone": "warn"
       }
@@ -71,28 +71,28 @@
       "status": "candidate_not_confirmed",
       "key_number": "未確認",
       "headline": "接近長期支撐，但底部尚未確認",
-      "plain_read": "BTC 現價 $66,288，距 200 週均線 5.1%；右側確認 1/4，研究假說區 $40,000–$52,000 尚未觸及。",
-      "current_price": 66287.69,
+      "plain_read": "BTC 現價 $66,339，距 200 週均線 5.1%；右側確認 1/4，研究假說區 $40,000–$52,000 尚未觸及。",
+      "current_price": 66338.995,
       "support_200wma": 63094.54282226563,
       "research_hypothesis": {
         "lower": 40000.0,
         "upper": 52000.0,
         "status": "not_touched",
-        "distance_to_upper": 0.2747632692307693,
+        "distance_to_upper": 0.2757499038461537,
         "classification": "未回測研究假說，不是保證目標",
         "knowledge_authorized": true
       },
       "leading_indicators": [
         {
           "name": "MVRV 比率",
-          "value": "1.23x",
-          "state": "cold",
+          "value": "資料不足",
+          "state": "unknown",
           "read": "鏈上估值偏冷"
         },
         {
           "name": "恐懼貪婪指數",
-          "value": "25",
-          "state": "cold",
+          "value": "33",
+          "state": "neutral",
           "read": "恐懼可形成機會，但不能單獨抄底"
         },
         {
@@ -158,7 +158,7 @@
         {
           "label": "每日同批次快照",
           "path": "data/daily/latest_snapshot.json",
-          "as_of": "2026-07-21",
+          "as_of": "2026-07-22",
           "tier": "internal_derived"
         },
         {
@@ -178,23 +178,23 @@
           52000.0
         ],
         "status": "not_touched",
-        "current_price": 66287.69,
+        "current_price": 66338.995,
         "confirmation_level_200dma": 72927.12583984375,
-        "plain_read": "$40,000–$52,000 是未回測底部假說；現價 $66,288 尚未觸及。$72,927 是右側確認門檻，不是獲利目標。"
+        "plain_read": "$40,000–$52,000 是未回測底部假說；現價 $66,339 尚未觸及。$72,927 是右側確認門檻，不是獲利目標。"
       },
       "mstr": {
         "common_nav_per_share_at_btc_lower": 25.043818785123054,
         "common_nav_per_share_at_btc_upper": 53.93627557824064,
-        "common_nav_per_share_at_current_btc": 88.33681441144546,
+        "common_nav_per_share_at_current_btc": 88.4603417027597,
         "plain_read": "若 BTC 落在假說區，按目前股數、現金、債務、優先股與已揭露遞延稅負債靜態估算，MSTR 普通股淨值約 $25–$54／股；不含未來 ATM、稅額變動與其他資產。"
       },
       "bmnr": {
-        "gross_treasury_value_per_share": 19.75095132698791,
+        "gross_treasury_value_per_share": 19.70819819441502,
         "indicative_0_8x_to_1_0x": [
-          15.800761061590329,
-          19.75095132698791
+          15.766558555532015,
+          19.70819819441502
         ],
-        "plain_read": "目前 gross treasury 約 $19.75／股；0.8–1.0x 僅為 $15.80–$19.75 的資產倍率參考，未扣完整負債，不能稱目標價。"
+        "plain_read": "目前 gross treasury 約 $19.71／股；0.8–1.0x 僅為 $15.77–$19.71 的資產倍率參考，未扣完整負債，不能稱目標價。"
       },
       "assumptions": [
         "MSTR 採目前普通股股數、BTC 持倉、現金、債務、優先股清算面額與已揭露遞延稅負債靜態計算。",
@@ -206,34 +206,34 @@
       {
         "id": "mstr_valuation_trust_split",
         "title": "MSTR 普通股估值與融資信任分離",
-        "key_number": "1.11x",
-        "plain_read": "普通股相對自算淨值為 1.11x，但 STRC 仍折價 12.9%；目前不是『普通股便宜＋融資市場信任』的雙重共振。",
+        "key_number": "1.15x",
+        "plain_read": "普通股相對自算淨值為 1.15x，但 STRC 仍折價 11.8%；目前不是『普通股便宜＋融資市場信任』的雙重共振。",
         "lenses": [
           {
             "name": "普通股估值",
             "direction": "bearish",
-            "value": "1.11x",
+            "value": "1.15x",
             "read": "低於 1.0x 才是普通股折價；目前高於 1.0x 代表溢價",
             "independence_key": "普通股估值"
           },
           {
             "name": "優先股信任",
             "direction": "bearish",
-            "value": "12.9%",
+            "value": "11.8%",
             "read": "STRC 折價超過 5%，表示資本市場要求更高風險補償",
             "independence_key": "優先股信任"
           },
           {
             "name": "融資飛輪",
             "direction": "bullish",
-            "value": "1.03x",
+            "value": "1.05x",
             "read": "企業價值高於 BTC 總值時，增發換幣的反身性仍可能運作；不等於普通股便宜",
             "independence_key": "融資飛輪"
           },
           {
             "name": "相對動能",
             "direction": "bullish",
-            "value": "0.8%",
+            "value": "4.1%",
             "read": "單日跑贏 BTC 只能當先行動能，不能抵銷資本結構紅燈",
             "independence_key": "相對動能"
           }
@@ -246,13 +246,13 @@
         "leading_indicators": [
           {
             "name": "MSTR 相對 BTC 日報酬",
-            "value": "0.8%",
+            "value": "4.1%",
             "state": "improving",
             "read": "股價反身性先行"
           },
           {
             "name": "企業價值／BTC 總值",
-            "value": "1.03x",
+            "value": "1.05x",
             "state": "open",
             "read": "融資飛輪背景，不是便宜度"
           }
@@ -260,13 +260,13 @@
         "lagging_confirmations": [
           {
             "name": "普通股市值／普通股淨值 ≤1.0x",
-            "value": "1.11x",
+            "value": "1.15x",
             "state": "fail",
             "read": "估值安全邊際"
           },
           {
             "name": "STRC 折價 ≤5%",
-            "value": "12.9%",
+            "value": "11.8%",
             "state": "fail",
             "read": "優先股市場信任"
           },
@@ -317,7 +317,7 @@
           {
             "label": "MSTR 自算指標",
             "path": "data/daily/latest_snapshot.json",
-            "as_of": "2026-07-21",
+            "as_of": "2026-07-22",
             "tier": "internal_derived"
           },
           {
@@ -331,20 +331,20 @@
       {
         "id": "bmnr_gross_treasury_discount",
         "title": "BMNR gross treasury 折價與持倉品質",
-        "key_number": "0.84x",
-        "plain_read": "市值約為 gross treasury 的 0.84x；有資產折價背景，但尚未扣完整負債與潛在稀釋，不能稱為淨 NAV 安全邊際。",
+        "key_number": "0.87x",
+        "plain_read": "市值約為 gross treasury 的 0.87x；有資產折價背景，但尚未扣完整負債與潛在稀釋，不能稱為淨 NAV 安全邊際。",
         "lenses": [
           {
             "name": "資產折溢價",
             "direction": "bullish",
-            "value": "0.84x",
+            "value": "0.87x",
             "read": "低於 1.0x 是相對 gross treasury 折價，不是淨 NAV 折價",
             "independence_key": "資產折溢價"
           },
           {
             "name": "持倉交叉驗證",
             "direction": "bullish",
-            "value": "2.6%",
+            "value": "2.4%",
             "read": "由持倉逐項重算與管理層總額差距",
             "independence_key": "持倉交叉驗證"
           },
@@ -358,7 +358,7 @@
           {
             "name": "價格動能",
             "direction": "bullish",
-            "value": "6.0%",
+            "value": "3.6%",
             "read": "單日動能只作先行觀察",
             "independence_key": "價格動能"
           }
@@ -380,7 +380,7 @@
           },
           {
             "name": "BMNR 日報酬",
-            "value": "6.0%",
+            "value": "3.6%",
             "state": "improving",
             "read": "市場先行動能"
           }
@@ -388,7 +388,7 @@
         "lagging_confirmations": [
           {
             "name": "持倉重算差距 ≤5%",
-            "value": "2.6%",
+            "value": "2.4%",
             "state": "pass",
             "read": "管理層總額交叉驗證"
           },
@@ -428,7 +428,7 @@
           {
             "label": "BMNR 持倉與股數重算",
             "path": "data/daily/latest_snapshot.json",
-            "as_of": "2026-07-21",
+            "as_of": "2026-07-22",
             "tier": "official_plus_derived"
           }
         ]
@@ -450,15 +450,15 @@
           },
           {
             "name": "鏈上估值",
-            "direction": "bullish",
-            "value": "1.23x",
+            "direction": "unknown",
+            "value": "資料不足",
             "read": "MVRV 偏冷，但尚非單獨見底證據",
             "independence_key": "鏈上估值"
           },
           {
             "name": "市場情緒",
-            "direction": "bullish",
-            "value": "25",
+            "direction": "neutral",
+            "value": "33",
             "read": "極度恐懼提供逆向背景，不是買點",
             "independence_key": "市場情緒"
           },
@@ -470,22 +470,22 @@
             "independence_key": "週期回撤"
           }
         ],
-        "resonance_count": 3,
-        "resonance_total": 4,
-        "resonance_status": "3/4 偏多共振",
-        "dominant_direction": "bullish",
+        "resonance_count": 2,
+        "resonance_total": 3,
+        "resonance_status": "2/3 中性共振",
+        "dominant_direction": "neutral",
         "hard_gate": null,
         "leading_indicators": [
           {
             "name": "MVRV 比率",
-            "value": "1.23x",
-            "state": "cold",
+            "value": "資料不足",
+            "state": "unknown",
             "read": "鏈上估值偏冷"
           },
           {
             "name": "恐懼貪婪指數",
-            "value": "25",
-            "state": "cold",
+            "value": "33",
+            "state": "neutral",
             "read": "恐懼可形成機會，但不能單獨抄底"
           },
           {
@@ -550,7 +550,7 @@
           {
             "label": "每日同批次快照",
             "path": "data/daily/latest_snapshot.json",
-            "as_of": "2026-07-21",
+            "as_of": "2026-07-22",
             "tier": "internal_derived"
           },
           {
@@ -564,8 +564,8 @@
       {
         "id": "btc_liquidity_trend",
         "title": "資金流與長短期趨勢",
-        "key_number": "-9.1%",
-        "plain_read": "BTC 距 200 日均線 -9.1%，距 200 週均線 5.1%；長期支撐靠近，但中期趨勢尚未翻多。",
+        "key_number": "-9.0%",
+        "plain_read": "BTC 距 200 日均線 -9.0%，距 200 週均線 5.1%；長期支撐靠近，但中期趨勢尚未翻多。",
         "lenses": [
           {
             "name": "ETF 邊際買盤",
@@ -584,7 +584,7 @@
           {
             "name": "中期趨勢",
             "direction": "bearish",
-            "value": "-9.1%",
+            "value": "-9.0%",
             "read": "200 日均線是落後但必要的趨勢確認",
             "independence_key": "中期趨勢"
           },
@@ -646,27 +646,27 @@
           {
             "label": "BTC 市場雷達",
             "path": "data/daily/latest_snapshot.json",
-            "as_of": "2026-07-21",
+            "as_of": "2026-07-22",
             "tier": "internal_derived"
           },
           {
             "label": "同管線資料契約檢查",
             "path": "data/daily/agent_verification_report.json",
-            "as_of": "2026-07-21",
+            "as_of": "2026-07-22",
             "tier": "internal_derived"
           }
         ]
       }
     ],
     "record_advantage": {
-      "historical_snapshots": 7,
+      "historical_snapshots": 8,
       "date_range": [
         "2026-07-07",
-        "2026-07-21"
+        "2026-07-22"
       ],
-      "previous_observation_date": "2026-07-20",
+      "previous_observation_date": "2026-07-21",
       "current_model_version": "2.0.0",
-      "comparable_model_observations": 1,
+      "comparable_model_observations": 2,
       "uses": [
         "計算前次價格變化與 MSTR 相對 BTC 動能",
         "保存每日驗證、資料降級與決策狀態供追溯",

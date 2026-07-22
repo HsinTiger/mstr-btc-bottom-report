@@ -1,52 +1,9 @@
 {
   "schema": 2,
-  "updated_at": "2026-07-21T13:41:45+00:00",
-  "current_date": "2026-07-21",
-  "snapshot_generated_at": "2026-07-21T11:45:55+00:00",
+  "updated_at": "2026-07-22T02:42:23+00:00",
+  "current_date": "2026-07-22",
+  "snapshot_generated_at": "2026-07-22T02:42:20+00:00",
   "visible_window": [
-    {
-      "date": "2026-07-20",
-      "generated_at": "2026-07-20T03:16:03+00:00",
-      "type": "daily_extension",
-      "verification_status": "degraded",
-      "verification_warnings": [],
-      "decision_state": "禁止小倉合約加碼",
-      "decision_state_code": "BLOCK_LEVERAGED_ADD",
-      "viewpoints": [
-        {
-          "title": "結構先於價格：今天不是看 MSTR 漲跌，而是看普通股是否重新拿回安全邊際",
-          "lens": "普通股安全邊際／企業價值安全邊際／特別股稀釋污染",
-          "claim": "普通股真實安全邊際=1.09x、企業價值安全邊際=1.06x、特別股稀釋污染旗標=False；第二等份加碼門檻=True。",
-          "so_what": "小倉 2.5x 合約只在加碼門檻打開且紅燈解除時討論；否則最多是研究，不是行動訊號。",
-          "study_note": "從 wiki_llm 的估值倍率定義權風險延伸：公司口徑可被融資結構改寫，因此觸發條件必須使用自算的普通股安全邊際與企業價值安全邊際。",
-          "confidence": "中"
-        },
-        {
-          "title": "流動性紅燈比便宜更重要：優先股折價是市場對融資機器的信任票",
-          "lens": "現金覆蓋月數／每週賣幣壓力／STRC 優先股折價",
-          "claim": "現金覆蓋月數=13.7、每週賣幣壓力倍數=3.6x、STRC 優先股折價=14.7%。",
-          "so_what": "今日狀態：禁止小倉合約加碼；若每週賣幣壓力連續高於 2 倍，或 STRC 優先股折價高於 5%，估值回升也要降權。",
-          "study_note": "從 delayed pro-cyclical 類比延伸：結構性賣壓常先被 senior tranche 吸收，等信任票破裂才同步反映到普通股。",
-          "confidence": "中"
-        },
-        {
-          "title": "大倉與小倉分離：MSTR/BMNR 現貨 4:1 看週期，合約只吃低頻確認後的波段",
-          "lens": "Portfolio split",
-          "claim": "BTC=64784、MSTR=94.85、BMNR=15.69；資料驗證=degraded。",
-          "so_what": "大倉用 1–4 年週期容忍波動；小倉用紅燈/綠燈避免在融資壓力區追多。",
-          "study_note": "從 indicator regime change 延伸：Pi Cycle/MVRV 仍可當背景，但不可凌駕 ETF、公司融資與優先股折價。",
-          "confidence": "中"
-        }
-      ],
-      "wiki_study_inputs": [
-        "wiki/overview.md: 投資體系總覽。",
-        "wiki/entities/mstr.md: 主攻標的，現貨大倉核心。",
-        "wiki/entities/bmnr.md: 現貨大倉衛星，與 MSTR 比例 1:4。",
-        "wiki/entities/strc-preferred.md: MSTR 資本結構與次級風險。",
-        "wiki/concepts/five-dimension-model.md: 每日追蹤指標框架。",
-        "wiki/concepts/mnav-reflexivity.md: MSTR 折溢價與反身性風險。"
-      ]
-    },
     {
       "date": "2026-07-21",
       "generated_at": "2026-07-21T13:41:45+00:00",
@@ -142,6 +99,97 @@
     },
     {
       "date": "2026-07-22",
+      "generated_at": "2026-07-22T02:42:23+00:00",
+      "snapshot_generated_at": "2026-07-22T02:42:20+00:00",
+      "type": "daily_extension",
+      "analysis_mode": "deterministic_with_governed_knowledge_constraints",
+      "verification_status": "degraded",
+      "verification_warnings": [],
+      "decision_state": "禁止 MSTR 小倉合約加碼",
+      "decision_state_code": "BLOCK_LEVERAGED_ADD",
+      "viewpoints": [
+        {
+          "title": "BTC：BTC 底部候選與右側確認",
+          "lens": "技術＋鏈上估值＋情緒＋週期",
+          "claim": "1/4｜偏冷領先訊號已有多維共振，但右側確認只有 1/4；未站回 200 日均線前，不把反彈寫成底部完成。",
+          "so_what": "先站回 200 日均線 $72,927，再取得至少 45 天未創新低與週線較高低點；目前 1/4，單一條件通過不得宣告見底。",
+          "study_note": "多維檢查：技術趨勢=50日 $63,189／200日 $72,927（已站上 50 日線但仍低於 200 日線，屬止跌未翻多。）；鏈上估值=資料不足（MVRV 偏冷，但尚非單獨見底證據）；市場情緒=33（極度恐懼提供逆向背景，不是買點）；週期回撤=-47.7%（回撤深度接近歷史壓力區，但週期樣本有限）｜長期論證：BTC/黃金代理總值=4.6%；美元穩定幣30日=-1.7%；公開公司樣本持有供給=6.4%；算力仍為90日高點=77.5%；美國債務/GDP=122.6%、10年實質利率=2.35%。這些只檢驗結構假說，不放行短線交易。",
+          "confidence": "低",
+          "resonance": "2/3 中性共振",
+          "wiki_refs": [
+            "target-price",
+            "indicator-regime-change",
+            "two-tranche-plan",
+            "btc-neutral-anchor"
+          ],
+          "source_refs": [
+            "data/daily/latest_snapshot.json",
+            "wiki/concepts/target-price.md",
+            "data/daily/market_universe.json"
+          ]
+        },
+        {
+          "title": "MSTR：MSTR 普通股估值與融資信任分離",
+          "lens": "普通股估值＋資本結構＋相對動能",
+          "claim": "1.15x｜普通股相對自算淨值為 1.15x，但 STRC 仍折價 11.8%；目前不是『普通股便宜＋融資市場信任』的雙重共振。",
+          "so_what": "普通股市值／普通股淨值降至 1.0x 以下、STRC 折價收斂至 5% 以下，且 7 日賣幣資料恢復可觀測，才重新評估 2.5x 合約。",
+          "study_note": "多維檢查：普通股估值=1.15x（低於 1.0x 才是普通股折價；目前高於 1.0x 代表溢價）；優先股信任=11.8%（STRC 折價超過 5%，表示資本市場要求更高風險補償）；融資飛輪=1.05x（企業價值高於 BTC 總值時，增發換幣的反身性仍可能運作；不等於普通股便宜）；相對動能=4.1%（單日跑贏 BTC 只能當先行動能，不能抵銷資本結構紅燈）",
+          "confidence": "低",
+          "resonance": "訊號分歧",
+          "wiki_refs": [
+            "gaap-vs-mnav",
+            "mnav-definition-risk",
+            "delayed-pro-cyclical",
+            "strc-preferred"
+          ],
+          "source_refs": [
+            "data/daily/latest_snapshot.json",
+            "data/inputs/mstr_capital_structure_provenance.json"
+          ]
+        },
+        {
+          "title": "BMNR：BMNR gross treasury 折價與持倉品質",
+          "lens": "gross-assets＋股數含幣量＋質押流動性",
+          "claim": "0.87x｜市值約為 gross treasury 的 0.87x；有資產折價背景，但尚未扣完整負債與潛在稀釋，不能稱為淨 NAV 安全邊際。",
+          "so_what": "下一份 SEC 文件更新股數、負債與潛在稀釋後，重算每千股 ETH 與淨額；若每千股 ETH 下滑，即使折價仍需降權。",
+          "study_note": "多維檢查：資產折溢價=0.87x（低於 1.0x 是相對 gross treasury 折價，不是淨 NAV 折價）；持倉交叉驗證=2.4%（由持倉逐項重算與管理層總額差距）；質押流動性=85.1%（高質押率兼具收益與解鎖、驗證者及流動性風險）；價格動能=3.6%（單日動能只作先行觀察）",
+          "confidence": "低",
+          "resonance": "共振封鎖：完整負債與稀釋尚未解析",
+          "wiki_refs": [
+            "bmnr",
+            "coin-per-share-accretion"
+          ],
+          "source_refs": [
+            "data/daily/latest_snapshot.json"
+          ]
+        }
+      ],
+      "wiki_study_inputs": [
+        "條件式目標價假說｜40,000–52,000 美元是未回測、可證偽的比特幣底部研究假說；觸價不等於見底，仍需獨立領先訊號與右側確認。｜信心 low｜驗證距今 1 天｜wiki/concepts/target-price.md",
+        "鏈上與週期指標的體制轉變｜ETF 與機構託管可能改變已實現市值及四年週期指標的分布；舊門檻必須降權並用價格結構與獨立證據驗證。｜信心 low｜驗證距今 1 天｜wiki/concepts/indicator-regime-change.md",
+        "兩等份本金計畫｜兩等份只用於分批現貨決策；比特幣市場體制、執行條件與 MSTR／BMNR 載具閘門必須分開判斷。｜信心 high｜驗證距今 1 天｜wiki/concepts/two-tranche-plan.md",
+        "比特幣非主權價值錨與中立抵押品論證｜以黃金貨幣化比例、美元穩定幣與 RWA 規模、公開公司持幣、算力安全及主權信用壓力，檢驗 BTC 是否仍在走向非主權價值錨；結構證據不直接等於底部或買點。｜信心 medium｜驗證距今 1 天｜wiki/concepts/btc-neutral-anchor.md",
+        "GAAP、Non-GAAP 與市場價格對淨資產價值｜BTC 總值、GAAP 股東權益與公司自訂 mNAV 是三本不同的帳；普通股估值還要扣債務、優先股與稅務楔子。｜信心 medium｜驗證距今 1 天｜wiki/concepts/gaap-vs-mnav.md",
+        "市場價格對淨資產價值的定義權風險｜公司官方 mNAV 是融資行為變數，定義可受優先股清算面額與發行結構影響；必須與普通股淨值及資本結構壓力分開自算。｜信心 medium｜驗證距今 1 天｜wiki/concepts/mnav-definition-risk.md",
+        "延遲順週期風險｜現金儲備與融資工具只能延後無息 BTC 資產對有息義務的壓力，不能消除折價期的順週期賣壓。｜信心 medium｜驗證距今 1 天｜wiki/concepts/delayed-pro-cyclical.md",
+        "STRC 優先股 (Stretch)｜mstr 發行的變動利率永續特別股。理解它＝理解 MSTR 的反身性安全閥。｜信心 low｜驗證距今 38 天｜wiki/entities/strc-preferred.md",
+        "BMNR (BitMine)｜ETH 財庫公司（Tom Lee），衛星部位（配置 20%）。｜信心 medium｜驗證距今 15 天｜wiki/entities/bmnr.md",
+        "含幣量增厚｜使用者最看重的指標：持有 DAT 是否讓每股對應的幣越來越多。｜信心 low｜驗證距今 38 天｜wiki/concepts/coin-per-share-accretion.md"
+      ],
+      "knowledge_audit": {
+        "status": "degraded",
+        "active_pages": 20,
+        "context_only_pages": 15,
+        "excluded_pages": 5,
+        "usage_policy": {
+          "treat_as_facts": false,
+          "allowed_use": "hypothesis_and_background_context_only",
+          "fact_requirement": "Corroborate with verified daily data or primary-source evidence before factual use."
+        }
+      }
+    },
+    {
+      "date": "2026-07-23",
       "type": "tomorrow_watch",
       "title": "明日只檢查三個可否證觸發",
       "watch_items": [
@@ -152,49 +200,6 @@
     }
   ],
   "items": [
-    {
-      "date": "2026-07-20",
-      "generated_at": "2026-07-20T03:16:03+00:00",
-      "type": "daily_extension",
-      "verification_status": "degraded",
-      "verification_warnings": [],
-      "decision_state": "禁止小倉合約加碼",
-      "decision_state_code": "BLOCK_LEVERAGED_ADD",
-      "viewpoints": [
-        {
-          "title": "結構先於價格：今天不是看 MSTR 漲跌，而是看普通股是否重新拿回安全邊際",
-          "lens": "普通股安全邊際／企業價值安全邊際／特別股稀釋污染",
-          "claim": "普通股真實安全邊際=1.09x、企業價值安全邊際=1.06x、特別股稀釋污染旗標=False；第二等份加碼門檻=True。",
-          "so_what": "小倉 2.5x 合約只在加碼門檻打開且紅燈解除時討論；否則最多是研究，不是行動訊號。",
-          "study_note": "從 wiki_llm 的估值倍率定義權風險延伸：公司口徑可被融資結構改寫，因此觸發條件必須使用自算的普通股安全邊際與企業價值安全邊際。",
-          "confidence": "中"
-        },
-        {
-          "title": "流動性紅燈比便宜更重要：優先股折價是市場對融資機器的信任票",
-          "lens": "現金覆蓋月數／每週賣幣壓力／STRC 優先股折價",
-          "claim": "現金覆蓋月數=13.7、每週賣幣壓力倍數=3.6x、STRC 優先股折價=14.7%。",
-          "so_what": "今日狀態：禁止小倉合約加碼；若每週賣幣壓力連續高於 2 倍，或 STRC 優先股折價高於 5%，估值回升也要降權。",
-          "study_note": "從 delayed pro-cyclical 類比延伸：結構性賣壓常先被 senior tranche 吸收，等信任票破裂才同步反映到普通股。",
-          "confidence": "中"
-        },
-        {
-          "title": "大倉與小倉分離：MSTR/BMNR 現貨 4:1 看週期，合約只吃低頻確認後的波段",
-          "lens": "Portfolio split",
-          "claim": "BTC=64784、MSTR=94.85、BMNR=15.69；資料驗證=degraded。",
-          "so_what": "大倉用 1–4 年週期容忍波動；小倉用紅燈/綠燈避免在融資壓力區追多。",
-          "study_note": "從 indicator regime change 延伸：Pi Cycle/MVRV 仍可當背景，但不可凌駕 ETF、公司融資與優先股折價。",
-          "confidence": "中"
-        }
-      ],
-      "wiki_study_inputs": [
-        "wiki/overview.md: 投資體系總覽。",
-        "wiki/entities/mstr.md: 主攻標的，現貨大倉核心。",
-        "wiki/entities/bmnr.md: 現貨大倉衛星，與 MSTR 比例 1:4。",
-        "wiki/entities/strc-preferred.md: MSTR 資本結構與次級風險。",
-        "wiki/concepts/five-dimension-model.md: 每日追蹤指標框架。",
-        "wiki/concepts/mnav-reflexivity.md: MSTR 折溢價與反身性風險。"
-      ]
-    },
     {
       "date": "2026-07-21",
       "generated_at": "2026-07-21T13:41:45+00:00",
@@ -275,6 +280,97 @@
         "STRC 優先股 (Stretch)｜mstr 發行的變動利率永續特別股。理解它＝理解 MSTR 的反身性安全閥。｜信心 low｜驗證距今 37 天｜wiki/entities/strc-preferred.md",
         "BMNR (BitMine)｜ETH 財庫公司（Tom Lee），衛星部位（配置 20%）。｜信心 medium｜驗證距今 14 天｜wiki/entities/bmnr.md",
         "含幣量增厚｜使用者最看重的指標：持有 DAT 是否讓每股對應的幣越來越多。｜信心 low｜驗證距今 37 天｜wiki/concepts/coin-per-share-accretion.md"
+      ],
+      "knowledge_audit": {
+        "status": "degraded",
+        "active_pages": 20,
+        "context_only_pages": 15,
+        "excluded_pages": 5,
+        "usage_policy": {
+          "treat_as_facts": false,
+          "allowed_use": "hypothesis_and_background_context_only",
+          "fact_requirement": "Corroborate with verified daily data or primary-source evidence before factual use."
+        }
+      }
+    },
+    {
+      "date": "2026-07-22",
+      "generated_at": "2026-07-22T02:42:23+00:00",
+      "snapshot_generated_at": "2026-07-22T02:42:20+00:00",
+      "type": "daily_extension",
+      "analysis_mode": "deterministic_with_governed_knowledge_constraints",
+      "verification_status": "degraded",
+      "verification_warnings": [],
+      "decision_state": "禁止 MSTR 小倉合約加碼",
+      "decision_state_code": "BLOCK_LEVERAGED_ADD",
+      "viewpoints": [
+        {
+          "title": "BTC：BTC 底部候選與右側確認",
+          "lens": "技術＋鏈上估值＋情緒＋週期",
+          "claim": "1/4｜偏冷領先訊號已有多維共振，但右側確認只有 1/4；未站回 200 日均線前，不把反彈寫成底部完成。",
+          "so_what": "先站回 200 日均線 $72,927，再取得至少 45 天未創新低與週線較高低點；目前 1/4，單一條件通過不得宣告見底。",
+          "study_note": "多維檢查：技術趨勢=50日 $63,189／200日 $72,927（已站上 50 日線但仍低於 200 日線，屬止跌未翻多。）；鏈上估值=資料不足（MVRV 偏冷，但尚非單獨見底證據）；市場情緒=33（極度恐懼提供逆向背景，不是買點）；週期回撤=-47.7%（回撤深度接近歷史壓力區，但週期樣本有限）｜長期論證：BTC/黃金代理總值=4.6%；美元穩定幣30日=-1.7%；公開公司樣本持有供給=6.4%；算力仍為90日高點=77.5%；美國債務/GDP=122.6%、10年實質利率=2.35%。這些只檢驗結構假說，不放行短線交易。",
+          "confidence": "低",
+          "resonance": "2/3 中性共振",
+          "wiki_refs": [
+            "target-price",
+            "indicator-regime-change",
+            "two-tranche-plan",
+            "btc-neutral-anchor"
+          ],
+          "source_refs": [
+            "data/daily/latest_snapshot.json",
+            "wiki/concepts/target-price.md",
+            "data/daily/market_universe.json"
+          ]
+        },
+        {
+          "title": "MSTR：MSTR 普通股估值與融資信任分離",
+          "lens": "普通股估值＋資本結構＋相對動能",
+          "claim": "1.15x｜普通股相對自算淨值為 1.15x，但 STRC 仍折價 11.8%；目前不是『普通股便宜＋融資市場信任』的雙重共振。",
+          "so_what": "普通股市值／普通股淨值降至 1.0x 以下、STRC 折價收斂至 5% 以下，且 7 日賣幣資料恢復可觀測，才重新評估 2.5x 合約。",
+          "study_note": "多維檢查：普通股估值=1.15x（低於 1.0x 才是普通股折價；目前高於 1.0x 代表溢價）；優先股信任=11.8%（STRC 折價超過 5%，表示資本市場要求更高風險補償）；融資飛輪=1.05x（企業價值高於 BTC 總值時，增發換幣的反身性仍可能運作；不等於普通股便宜）；相對動能=4.1%（單日跑贏 BTC 只能當先行動能，不能抵銷資本結構紅燈）",
+          "confidence": "低",
+          "resonance": "訊號分歧",
+          "wiki_refs": [
+            "gaap-vs-mnav",
+            "mnav-definition-risk",
+            "delayed-pro-cyclical",
+            "strc-preferred"
+          ],
+          "source_refs": [
+            "data/daily/latest_snapshot.json",
+            "data/inputs/mstr_capital_structure_provenance.json"
+          ]
+        },
+        {
+          "title": "BMNR：BMNR gross treasury 折價與持倉品質",
+          "lens": "gross-assets＋股數含幣量＋質押流動性",
+          "claim": "0.87x｜市值約為 gross treasury 的 0.87x；有資產折價背景，但尚未扣完整負債與潛在稀釋，不能稱為淨 NAV 安全邊際。",
+          "so_what": "下一份 SEC 文件更新股數、負債與潛在稀釋後，重算每千股 ETH 與淨額；若每千股 ETH 下滑，即使折價仍需降權。",
+          "study_note": "多維檢查：資產折溢價=0.87x（低於 1.0x 是相對 gross treasury 折價，不是淨 NAV 折價）；持倉交叉驗證=2.4%（由持倉逐項重算與管理層總額差距）；質押流動性=85.1%（高質押率兼具收益與解鎖、驗證者及流動性風險）；價格動能=3.6%（單日動能只作先行觀察）",
+          "confidence": "低",
+          "resonance": "共振封鎖：完整負債與稀釋尚未解析",
+          "wiki_refs": [
+            "bmnr",
+            "coin-per-share-accretion"
+          ],
+          "source_refs": [
+            "data/daily/latest_snapshot.json"
+          ]
+        }
+      ],
+      "wiki_study_inputs": [
+        "條件式目標價假說｜40,000–52,000 美元是未回測、可證偽的比特幣底部研究假說；觸價不等於見底，仍需獨立領先訊號與右側確認。｜信心 low｜驗證距今 1 天｜wiki/concepts/target-price.md",
+        "鏈上與週期指標的體制轉變｜ETF 與機構託管可能改變已實現市值及四年週期指標的分布；舊門檻必須降權並用價格結構與獨立證據驗證。｜信心 low｜驗證距今 1 天｜wiki/concepts/indicator-regime-change.md",
+        "兩等份本金計畫｜兩等份只用於分批現貨決策；比特幣市場體制、執行條件與 MSTR／BMNR 載具閘門必須分開判斷。｜信心 high｜驗證距今 1 天｜wiki/concepts/two-tranche-plan.md",
+        "比特幣非主權價值錨與中立抵押品論證｜以黃金貨幣化比例、美元穩定幣與 RWA 規模、公開公司持幣、算力安全及主權信用壓力，檢驗 BTC 是否仍在走向非主權價值錨；結構證據不直接等於底部或買點。｜信心 medium｜驗證距今 1 天｜wiki/concepts/btc-neutral-anchor.md",
+        "GAAP、Non-GAAP 與市場價格對淨資產價值｜BTC 總值、GAAP 股東權益與公司自訂 mNAV 是三本不同的帳；普通股估值還要扣債務、優先股與稅務楔子。｜信心 medium｜驗證距今 1 天｜wiki/concepts/gaap-vs-mnav.md",
+        "市場價格對淨資產價值的定義權風險｜公司官方 mNAV 是融資行為變數，定義可受優先股清算面額與發行結構影響；必須與普通股淨值及資本結構壓力分開自算。｜信心 medium｜驗證距今 1 天｜wiki/concepts/mnav-definition-risk.md",
+        "延遲順週期風險｜現金儲備與融資工具只能延後無息 BTC 資產對有息義務的壓力，不能消除折價期的順週期賣壓。｜信心 medium｜驗證距今 1 天｜wiki/concepts/delayed-pro-cyclical.md",
+        "STRC 優先股 (Stretch)｜mstr 發行的變動利率永續特別股。理解它＝理解 MSTR 的反身性安全閥。｜信心 low｜驗證距今 38 天｜wiki/entities/strc-preferred.md",
+        "BMNR (BitMine)｜ETH 財庫公司（Tom Lee），衛星部位（配置 20%）。｜信心 medium｜驗證距今 15 天｜wiki/entities/bmnr.md",
+        "含幣量增厚｜使用者最看重的指標：持有 DAT 是否讓每股對應的幣越來越多。｜信心 low｜驗證距今 38 天｜wiki/concepts/coin-per-share-accretion.md"
       ],
       "knowledge_audit": {
         "status": "degraded",
@@ -510,11 +606,54 @@
         "wiki/concepts/five-dimension-model.md: 每日追蹤指標框架。",
         "wiki/concepts/mnav-reflexivity.md: MSTR 折溢價與反身性風險。"
       ]
+    },
+    {
+      "date": "2026-07-20",
+      "generated_at": "2026-07-20T03:16:03+00:00",
+      "type": "daily_extension",
+      "verification_status": "degraded",
+      "verification_warnings": [],
+      "decision_state": "禁止小倉合約加碼",
+      "decision_state_code": "BLOCK_LEVERAGED_ADD",
+      "viewpoints": [
+        {
+          "title": "結構先於價格：今天不是看 MSTR 漲跌，而是看普通股是否重新拿回安全邊際",
+          "lens": "普通股安全邊際／企業價值安全邊際／特別股稀釋污染",
+          "claim": "普通股真實安全邊際=1.09x、企業價值安全邊際=1.06x、特別股稀釋污染旗標=False；第二等份加碼門檻=True。",
+          "so_what": "小倉 2.5x 合約只在加碼門檻打開且紅燈解除時討論；否則最多是研究，不是行動訊號。",
+          "study_note": "從 wiki_llm 的估值倍率定義權風險延伸：公司口徑可被融資結構改寫，因此觸發條件必須使用自算的普通股安全邊際與企業價值安全邊際。",
+          "confidence": "中"
+        },
+        {
+          "title": "流動性紅燈比便宜更重要：優先股折價是市場對融資機器的信任票",
+          "lens": "現金覆蓋月數／每週賣幣壓力／STRC 優先股折價",
+          "claim": "現金覆蓋月數=13.7、每週賣幣壓力倍數=3.6x、STRC 優先股折價=14.7%。",
+          "so_what": "今日狀態：禁止小倉合約加碼；若每週賣幣壓力連續高於 2 倍，或 STRC 優先股折價高於 5%，估值回升也要降權。",
+          "study_note": "從 delayed pro-cyclical 類比延伸：結構性賣壓常先被 senior tranche 吸收，等信任票破裂才同步反映到普通股。",
+          "confidence": "中"
+        },
+        {
+          "title": "大倉與小倉分離：MSTR/BMNR 現貨 4:1 看週期，合約只吃低頻確認後的波段",
+          "lens": "Portfolio split",
+          "claim": "BTC=64784、MSTR=94.85、BMNR=15.69；資料驗證=degraded。",
+          "so_what": "大倉用 1–4 年週期容忍波動；小倉用紅燈/綠燈避免在融資壓力區追多。",
+          "study_note": "從 indicator regime change 延伸：Pi Cycle/MVRV 仍可當背景，但不可凌駕 ETF、公司融資與優先股折價。",
+          "confidence": "中"
+        }
+      ],
+      "wiki_study_inputs": [
+        "wiki/overview.md: 投資體系總覽。",
+        "wiki/entities/mstr.md: 主攻標的，現貨大倉核心。",
+        "wiki/entities/bmnr.md: 現貨大倉衛星，與 MSTR 比例 1:4。",
+        "wiki/entities/strc-preferred.md: MSTR 資本結構與次級風險。",
+        "wiki/concepts/five-dimension-model.md: 每日追蹤指標框架。",
+        "wiki/concepts/mnav-reflexivity.md: MSTR 折溢價與反身性風險。"
+      ]
     }
   ],
   "knowledge_context": {
     "status": "degraded",
-    "as_of_date": "2026-07-21",
-    "generated_at": "2026-07-21T11:45:57+00:00"
+    "as_of_date": "2026-07-22",
+    "generated_at": "2026-07-22T02:42:22+00:00"
   }
 }
