@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "date": "2026-07-22",
-  "generated_at": "2026-07-22T03:44:55+00:00",
-  "snapshot_generated_at": "2026-07-22T03:22:49+00:00",
+  "generated_at": "2026-07-22T03:46:58+00:00",
+  "snapshot_generated_at": "2026-07-22T03:46:55+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -86,28 +86,28 @@
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_equity_price_to_nav=1.155x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 49/100",
+      "evidence": "common_equity_price_to_nav=1.154x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 49/100",
       "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
       "id": "COMMON_VALUATION_GATE_DIRECTION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.155x, preferred_distortion_flag=False",
+      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.154x, preferred_distortion_flag=False",
       "risk_if_failed": "A premium above common NAV could be mislabeled as valuation safety."
     },
     {
       "id": "CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.155x, enterprise_value_to_btc_nav=1.051x",
+      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.154x, enterprise_value_to_btc_nav=1.051x",
       "risk_if_failed": "Financing capacity and investor valuation could be collapsed into one misleading green light."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.155x, sats_per_share=240770",
+      "evidence": "equity_mnav=1.154x, sats_per_share=240770",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
@@ -178,7 +178,7 @@
     {
       "metric": "普通股市值／普通股淨值",
       "threshold": "> 1.00 = 溢價；≤ 1.00 = 折價背景，仍非單獨買進訊號",
-      "current": "1.155x",
+      "current": "1.154x",
       "rationale": "市值除以扣債務、優先股與稅務楔子後的普通股淨值；倍率愈低，估值相對愈便宜。",
       "action": "高於 1.0 禁止宣稱普通股便宜；低於 1.0 仍須通過資料品質與資本結構覆核。"
     },
