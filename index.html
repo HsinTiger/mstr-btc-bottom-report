@@ -61,7 +61,7 @@ const issueLabel=value=>String(value||"請查驗證報告").replace(/^sale_ratio
 async function fetchJson(path){const response=await fetch(path,{cache:"no-store"});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
 function requireFresh(value,maxHours,label){const timestamp=new Date(value);if(!value||Number.isNaN(timestamp.getTime()))throw new Error(`${label} 時間戳缺漏`);const ageHours=(Date.now()-timestamp.getTime())/36e5;if(ageHours < -1||ageHours > maxHours)throw new Error(`${label} 已過期`)}
 function taipeiDate(){return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date())}
-function requireCurrentDate(value,label){if(value!==taipeiDate())throw new Error(`${label} 不是台北今日資料`)}
+function requireRecentDataDate(value,label){const lagDays=(Date.parse(taipeiDate())-Date.parse(value))/864e5;if(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isInteger(lagDays)||lagDays<0||lagDays>1)throw new Error(`${label} 日期超出今日或昨日容許範圍`);return lagDays}
 function previousSnapshot(database,currentDate){return(database.snapshots||[]).filter(item=>item.date!==currentDate).sort((a,b)=>String(a.date).localeCompare(String(b.date))).at(-1)||null}
 function summaryCard(item){return`<article class="summary-card ${escapeHtml(item.tone)}${item.full?' full':''}"><div class="label">${escapeHtml(item.label)}</div><div class="number">${escapeHtml(item.key_number)}</div><div class="read">${escapeHtml(item.plain_read)}</div></article>`}
 function evidenceList(items){return Array.isArray(items)&&items.length?items.map(item=>`<li><b>${escapeHtml(item.name)}</b> ${escapeHtml(item.value)}｜${escapeHtml(item.read)}</li>`).join(""):"<li>資料不足</li>"}
@@ -93,7 +93,7 @@ async function loadDashboard(){
     const[latest,database,verify,logic,analytics]=await Promise.all([fetchJson("data/daily/latest_snapshot.json"),fetchJson("data/daily/database.json"),fetchJson("data/daily/agent_verification_report.json"),fetchJson("data/daily/logic_audit.json"),fetchJson("data/daily/institutional_analytics.json")]);
     if(latest.schema!==1||database.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2)throw new Error("schema 不相容");
     if(!latest.date||verify.date!==latest.date||logic.date!==latest.date||analytics.date!==latest.date)throw new Error("資料日期不一致");
-    requireCurrentDate(latest.date,'每日快照');requireFresh(latest.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(analytics.generated_at,30,'機構分析');
+    const calendarLagDays=requireRecentDataDate(latest.date,'每日快照');requireFresh(latest.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(analytics.generated_at,30,'機構分析');
     const brief=analytics.decision_brief;if(!brief?.summary_cards||!brief?.exclusive_signals||!brief?.consensus_signals)throw new Error("決策摘要缺漏");
     const previous=previousSnapshot(database,latest.date);
     const logicBound=logic.snapshot_generated_at===latest.generated_at;
@@ -105,17 +105,18 @@ async function loadDashboard(){
     const verificationReadable=["pass","degraded"].includes(verify.status)&&(verify.failures||[]).length===0&&verifyBound;
     const pageReadable=logicSafe&&logicBound&&dateSafe&&analyticsBound&&statusBound&&verificationReadable;
     if(!pageReadable){throw new Error(`驗證${statusLabel(verify.status)}／驗證綁定${verifyBound?"一致":"不一致"}／分析綁定${analyticsBound?"一致":"不一致"}／邏輯綁定${logicBound?"一致":"不一致"}／狀態綁定${statusBound?"一致":"不一致"}／日期${dateSafe?"一致":"不一致"}／邏輯${statusLabel(logic.status)}｜${issueLabel((verify.failures||[])[0]||(verify.degradations||[])[0])}`)}
-    document.body.dataset.renderStatus=verify.status;document.body.dataset.conclusionsVisible="true";
+    const calendarLagged=calendarLagDays>0,effectiveDegraded=verify.status==="degraded"||calendarLagged;
+    document.body.dataset.renderStatus=effectiveDegraded?"degraded":"pass";document.body.dataset.conclusionsVisible="true";document.body.dataset.executionGrade=effectiveDegraded?"false":"true";document.body.dataset.dataDate=latest.date;document.body.dataset.calendarLagDays=String(calendarLagDays);
     document.getElementById("heroMeta").textContent=`資料日 ${latest.date} · 歷史 ${brief.record_advantage?.historical_snapshots??0} 筆 · 可用知識 ${analytics.quality?.knowledge_nodes??0} 頁 · 模型 ${latest.metrics?.btc_standard?.model_version||"未版本化"}`;
-    document.getElementById("dailyMeta").textContent=`前次對比 ${previous?.date||"無"}｜驗證${statusLabel(verify.status)}｜邏輯${statusLabel(analytics.quality.logic_audit_status)}｜同版可比 ${brief.record_advantage?.comparable_model_observations??0} 筆`;
+    document.getElementById("dailyMeta").textContent=`${calendarLagged?"跨日待今日批次｜":""}前次對比 ${previous?.date||"無"}｜驗證${statusLabel(verify.status)}｜邏輯${statusLabel(analytics.quality.logic_audit_status)}｜同版可比 ${brief.record_advantage?.comparable_model_observations??0} 筆`;
     document.getElementById("summaryCards").innerHTML=brief.summary_cards.slice(0,4).map(summaryCard).join("");
     document.getElementById("exclusiveSignals").innerHTML=brief.exclusive_signals.slice(0,3).map(signalCard).join("");
     document.getElementById("consensusSignals").innerHTML=brief.consensus_signals.slice(0,3).map(signalCard).join("");
     document.getElementById("exclusiveCount").textContent=`${Math.min(brief.exclusive_signals.length,3)} 項`;
     document.getElementById("consensusCount").textContent=`${Math.min(brief.consensus_signals.length,3)} 項`;
     document.getElementById("targetBrief").innerHTML=targetCards(brief.conditional_targets,brief.bottom_assessment);
-    const degraded=verify.status==="degraded",strip=document.getElementById("qualityStrip"),qualityIssue=issueLabel((verify.degradations||[])[0]);strip.className=`quality ${degraded?"warn":"good"}`;strip.textContent=degraded?`資料有限可用｜信心 ${analytics.quality.confidence}（${analytics.quality.confidence_score_0_100}/100）｜${qualityIssue}；結論可讀，但低信心、單一來源與待更新資料不作加碼觸發。`:`資料驗證、日期、血緣與邏輯均通過｜資料信心 ${analytics.quality.confidence}`;
-    const m=latest.metrics?.mstr_metrics||{},contractBlocked=m.contract_red_light!==false||(analytics.logic_audit?.blocked_actions||[]).includes("add_2_5x_mstr"),todayAction=brief.summary_cards.find(item=>item.id==="today_action"),saleBasis=String(m.sale_ratio_basis||"").includes("reconciliation_zero")?"對帳推定":"揭露值";document.getElementById("actionBadge").textContent=todayAction?.key_number||`MSTR ${contractBlocked?"合約禁開":"只列觀察"}`;document.getElementById("riskBadge").textContent=`MSTR：STRC ${pct(m.strc_discount)}／7 日已報告賣幣 ${m.sale_ratio==null?"未知":num(m.sale_ratio,1)+"x（"+saleBasis+"）"}`;
+    const strip=document.getElementById("qualityStrip"),qualityIssue=calendarLagged?`目前顯示 ${latest.date} 最近可用批次；${taipeiDate()} 主批次尚未完成`:issueLabel((verify.degradations||[])[0]);strip.className=`quality ${effectiveDegraded?"warn":"good"}`;strip.textContent=effectiveDegraded?`資料有限可用｜信心 ${analytics.quality.confidence}（${analytics.quality.confidence_score_0_100}/100）｜${qualityIssue}；結論可讀，但所有加碼與硬觸發封鎖。`:`資料驗證、日期、血緣與邏輯均通過｜資料信心 ${analytics.quality.confidence}`;
+    const m=latest.metrics?.mstr_metrics||{},contractBlocked=calendarLagged||m.contract_red_light!==false||(analytics.logic_audit?.blocked_actions||[]).includes("add_2_5x_mstr"),todayAction=brief.summary_cards.find(item=>item.id==="today_action"),saleBasis=String(m.sale_ratio_basis||"").includes("reconciliation_zero")?"對帳推定":"揭露值";document.getElementById("actionBadge").textContent=calendarLagged?"跨日待更新 · 不加碼":todayAction?.key_number||`MSTR ${contractBlocked?"合約禁開":"只列觀察"}`;document.getElementById("riskBadge").textContent=`MSTR：STRC ${pct(m.strc_discount)}／7 日已報告賣幣 ${m.sale_ratio==null?"未知":num(m.sale_ratio,1)+"x（"+saleBasis+"）"}`;
   }catch(error){failClosed(error.message)}finally{busy.forEach(id=>document.getElementById(id)?.setAttribute("aria-busy","false"))}
 }
 loadDashboard();

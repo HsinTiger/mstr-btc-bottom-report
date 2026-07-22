@@ -456,8 +456,10 @@ function taipeiDate(){
   return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 }
 
-function requireCurrentDate(value,label){
-  if(value!==taipeiDate()) throw new Error(`${label} 不是台北今日資料`);
+function requireRecentDataDate(value,label){
+  const lagDays=(Date.parse(taipeiDate())-Date.parse(value))/864e5;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isInteger(lagDays)||lagDays<0||lagDays>1) throw new Error(`${label} 日期超出今日或昨日容許範圍`);
+  return lagDays;
 }
 
 async function loadDailySnapshot(){
@@ -471,7 +473,7 @@ async function loadDailySnapshot(){
     ]);
     if(snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2) throw new Error('每日資料 schema 不相容');
     if(!snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date) throw new Error('每日資料跨檔日期不一致');
-    requireCurrentDate(snap.date,'每日快照');
+    const calendarLagDays=requireRecentDataDate(snap.date,'每日快照');
     if(verify.snapshot_generated_at!==snap.generated_at) throw new Error('驗證報告未綁定目前快照');
     if(logic.snapshot_generated_at!==snap.generated_at||analytics.snapshot_generated_at!==snap.generated_at) throw new Error('衍生分析未綁定目前快照');
     requireFresh(snap.generated_at,30,'每日快照');
@@ -490,15 +492,19 @@ async function loadDailySnapshot(){
     const ret7=radar.btc_return_7d_pct;
     const ret30=radar.btc_return_30d_pct;
     const drawdown=radar.btc_drawdown_1y_pct;
-    const contractBlocked=m.contract_red_light!==false;
-    const verificationDegraded=verify.status==='degraded';
+    const calendarLagged=calendarLagDays>0;
+    const contractBlocked=calendarLagged||m.contract_red_light!==false;
+    const verificationDegraded=verify.status==='degraded'||calendarLagged;
     const vs200dma=btcPx&&radar.btc_200dma?btcPx/radar.btc_200dma-1:null;
     const vs50dma=btcPx&&radar.btc_50dma?btcPx/radar.btc_50dma-1:null;
     const vs200wma=btcPx&&radar.btc_200wma?btcPx/radar.btc_200wma-1:null;
-    document.body.dataset.renderStatus=verify.status;
+    document.body.dataset.renderStatus=verificationDegraded?'degraded':'pass';
     document.body.dataset.conclusionsVisible='true';
+    document.body.dataset.executionGrade=verificationDegraded?'false':'true';
+    document.body.dataset.dataDate=snap.date;
+    document.body.dataset.calendarLagDays=String(calendarLagDays);
     put('genDate',snap.date);
-    put('liveState',verificationDegraded?'有限可用｜只供研究':'每日管線資料已通過',verificationDegraded?'warn':'pos');
+    put('liveState',calendarLagged?'跨日待今日批次｜只供研究':verificationDegraded?'有限可用｜只供研究':'每日管線資料已通過',verificationDegraded?'warn':'pos');
     put('px',btcPx==null?'N/A':money(btcPx));
     put('chg',`7d ${ret7==null?'N/A':(ret7>=0?'+':'')+pct(ret7)}｜30d ${ret30==null?'N/A':(ret30>=0?'+':'')+pct(ret30)}`);
     put('ddv',drawdown==null?'N/A':pct(drawdown),drawdown!=null&&drawdown<=-0.5?'big pos':'big neg');
@@ -515,8 +521,8 @@ async function loadDailySnapshot(){
     const trendBoth=vs200dma!=null&&vs50dma!=null&&vs200dma>=0&&vs50dma>=0;
     put('tma',vs200dma==null||vs50dma==null?'來源缺漏':trendBoth?'✓ 同時站回 50/200DMA':`✗ 50DMA ${pct(vs50dma)}｜200DMA ${pct(vs200dma)}`,trendBoth?'pos':'neg');
     put('frNow','不以單點 funding 作硬觸發','warn');
-    put('topVerdict', verificationDegraded?(contractBlocked?'資料有限｜MSTR 禁開':'資料有限｜只供研究'):contractBlocked?'MSTR 禁開':btcStd.regime||'觀察', contractBlocked?'big neg':'big warn');
-    put('topVerdictNote', `${verificationDegraded?'驗證有限可用，只供研究；':''}${btcStd.one_line||'BTC 資料不足'}；MSTR 合約${contractBlocked?'維持封鎖':'只進研究清單'}`, 'mini');
+    put('topVerdict', calendarLagged?'跨日待更新｜不加碼':verificationDegraded?(contractBlocked?'資料有限｜MSTR 禁開':'資料有限｜只供研究'):contractBlocked?'MSTR 禁開':btcStd.regime||'觀察', contractBlocked?'big neg':'big warn');
+    put('topVerdictNote', `${calendarLagged?`目前顯示 ${snap.date} 最近可用批次；${taipeiDate()} 主批次尚未完成。`:verificationDegraded?'驗證有限可用，只供研究；':''}${btcStd.one_line||'BTC 資料不足'}；MSTR 合約${contractBlocked?'維持封鎖':'只進研究清單'}`, 'mini');
     put('stateBadge', btcStd.regime||'資料不足', `badge ${btcStd.tone==='deep_value'?'s3':btcStd.tone==='overheated'?'s1':'s2'}`);
     put('stateNote', `標準分 ${btcStd.score??'—'}｜資料覆蓋 ${btcStd.data_quality?.coverage_ratio==null?'—':Math.round(btcStd.data_quality.coverage_ratio*100)+'%'}｜啟發式模型尚未回測｜ETF 單源不計確認票`, 'mini');
     const commonRatio=m.common_equity_price_to_nav??m.equity_mnav;

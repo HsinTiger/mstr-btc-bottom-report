@@ -60,7 +60,7 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&
 async function json(path){const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
 function requireFresh(value,maxHours,label){const timestamp=new Date(value);if(!value||Number.isNaN(timestamp.getTime()))throw new Error(`${label} 時間戳缺漏或格式錯誤`);const ageHours=(Date.now()-timestamp.getTime())/36e5;if(ageHours < -1||ageHours > maxHours)throw new Error(`${label} 已過期或時間位於未來`)}
 function taipeiDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
-function requireCurrentDate(value,label){if(value!==taipeiDate())throw new Error(`${label} 不是台北今日資料`)}
+function requireRecentDataDate(value,label){const lagDays=(Date.parse(taipeiDate())-Date.parse(value))/864e5;if(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isInteger(lagDays)||lagDays<0||lagDays>1)throw new Error(`${label} 日期超出今日或昨日容許範圍`);return lagDays}
 async function load(){
   const [ext,snap,verify,logic,analytics]=await Promise.all([
     json('data/daily/daily_extensions.json'),
@@ -71,7 +71,7 @@ async function load(){
   ]);
   if(ext.schema!==2||snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2)throw new Error('每日資料 schema 不相容');
   if(!ext.current_date||ext.current_date!==snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date)throw new Error('每日資料跨檔日期不一致');
-  requireCurrentDate(ext.current_date,'每日延伸');
+  const calendarLagDays=requireRecentDataDate(ext.current_date,'每日延伸');
   if(verify.snapshot_generated_at!==snap.generated_at)throw new Error('驗證報告未綁定目前快照');
   if(ext.snapshot_generated_at!==snap.generated_at||logic.snapshot_generated_at!==snap.generated_at||analytics.snapshot_generated_at!==snap.generated_at)throw new Error('每日延伸未綁定目前快照');
   requireFresh(ext.updated_at,30,'每日延伸');requireFresh(snap.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(analytics.generated_at,30,'機構分析');
@@ -84,11 +84,12 @@ async function load(){
   if(!today||!Array.isArray(today.viewpoints)||today.viewpoints.length!==3)throw new Error('今日三個延伸觀點缺漏');
   if(!Array.isArray(ext.visible_window)||ext.visible_window.length!==3)throw new Error('昨天／今天／明天視窗不完整');
   const m=snap.metrics.mstr_metrics, p=snap.metrics.prices;
-  document.body.dataset.renderStatus=verify.status;document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade=analytics.quality.publication_mode==='full'?'true':'false';
-  document.getElementById('updated').textContent=`資料日 ${ext.current_date}｜更新 ${new Date(ext.updated_at).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false})}`;
+  const calendarLagged=calendarLagDays>0,effectiveStatus=verify.status==='degraded'||calendarLagged?'degraded':'pass',effectiveMode=calendarLagged?'research_only':analytics.quality.publication_mode;
+  document.body.dataset.renderStatus=effectiveStatus;document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade=effectiveMode==='full'?'true':'false';document.body.dataset.dataDate=ext.current_date;document.body.dataset.calendarLagDays=String(calendarLagDays);
+  document.getElementById('updated').textContent=`資料日 ${ext.current_date}｜更新 ${new Date(ext.updated_at).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false})}${calendarLagged?'｜跨日待今日批次':''}`;
   const action=analytics.decision_brief?.summary_cards?.find(item=>item.id==='today_action');
-  document.getElementById('decision').textContent=verify.status==='pass'?decisionLabel(snap.decision.state):`資料驗證${verify.status==='fail'?'失敗':'降級'}｜三個觀點只供研究`;
-  document.getElementById('summary').textContent=action?.plain_read||(snap.decision.reasons||[]).join('；');
+  document.getElementById('decision').textContent=calendarLagged?'跨日待更新｜三個觀點只供研究':verify.status==='pass'?decisionLabel(snap.decision.state):`資料驗證${verify.status==='fail'?'失敗':'降級'}｜三個觀點只供研究`;
+  document.getElementById('summary').textContent=calendarLagged?`目前顯示 ${ext.current_date} 最近可用批次；${taipeiDate()} 主批次尚未完成。所有加碼與硬觸發封鎖。`:action?.plain_read||(snap.decision.reasons||[]).join('；');
   const verifyBox=document.getElementById('verifyBox');verifyBox.className=`quote ${verify.status==='fail'?'error':''}`;verifyBox.innerHTML=`資料驗證代理：<b class="${cls(verify.status)}">${esc(verify.status.toUpperCase())}</b>｜降級 ${(verify.degradations||[]).length}｜警告 ${verify.warnings?.length||0}｜失敗 ${verify.failures?.length||0}<br><span class="mini">${esc([...(verify.degradations||[]),...(verify.failures||[])].slice(0,2).join('；')||'資料完整')}</span>`;
   document.getElementById('btcPrice').textContent=`BTC $${fmt(p.btc_usd,0)}`;
   document.getElementById('priceLine').textContent=`MSTR $${fmt(p.mstr_usd)}｜BMNR $${fmt(p.bmnr_usd)}｜STRC $${fmt(p.strc_usd)}`;

@@ -10,7 +10,9 @@ import shutil
 import subprocess
 import tempfile
 import threading
+from copy import deepcopy
 from contextlib import contextmanager
+from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -180,7 +182,7 @@ def main() -> int:
                         expected_visibility = "true" if status in {"pass", "degraded"} else "false"
                         if f'data-conclusions-visible="{expected_visibility}"' not in dom:
                             raise RuntimeError("策略研究室品質狀態與每日結論可見性不一致")
-                        if status == "degraded" and "有限可用｜只供研究" not in body:
+                        if status == "degraded" and 'data-execution-grade="false"' not in dom:
                             raise RuntimeError("策略研究室降級狀態未明示只供研究")
                     if page == "analytics.html":
                         status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
@@ -222,6 +224,37 @@ def main() -> int:
     verification = json.loads((ROOT / "data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
     analytics = json.loads((ROOT / "data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
     logic = json.loads((ROOT / "data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
+    snapshot = json.loads((ROOT / "data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+    extensions = json.loads((ROOT / "data/daily/daily_extensions.json").read_text(encoding="utf-8-sig"))
+    fixture_now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    fixture_yesterday = str((datetime.now(timezone.utc) + timedelta(hours=8)).date() - timedelta(days=1))
+    cross_day_snapshot = {**deepcopy(snapshot), "date": fixture_yesterday, "generated_at": fixture_now}
+    cross_day_verification = {
+        **deepcopy(verification),
+        "date": fixture_yesterday,
+        "verified_at": fixture_now,
+        "snapshot_generated_at": fixture_now,
+        "status": "pass",
+        "failures": [],
+        "degradations": [],
+    }
+    cross_day_logic = {**deepcopy(logic), "date": fixture_yesterday, "generated_at": fixture_now, "snapshot_generated_at": fixture_now, "status": "consistent"}
+    cross_day_analytics = {
+        **deepcopy(analytics),
+        "date": fixture_yesterday,
+        "generated_at": fixture_now,
+        "snapshot_generated_at": fixture_now,
+        "quality": {
+            **deepcopy(analytics.get("quality", {})),
+            "verification_status": "pass",
+            "verification_date_matches_snapshot": True,
+            "verification_bound_to_snapshot": True,
+            "publication_mode": "full",
+            "logic_audit_status": "consistent",
+        },
+        "logic_audit": {**deepcopy(analytics.get("logic_audit", {})), "status": "consistent"},
+    }
+    cross_day_extensions = {**deepcopy(extensions), "current_date": fixture_yesterday, "updated_at": fixture_now, "snapshot_generated_at": fixture_now}
     fixtures = [
         {
             "name": "degraded",
@@ -247,6 +280,19 @@ def main() -> int:
             "expected_status": "fail",
             "should_show": False,
         },
+        {
+            "name": "cross-day-fresh",
+            "verification": cross_day_verification,
+            "analytics": cross_day_analytics,
+            "logic": cross_day_logic,
+            "expected_status": "degraded",
+            "should_show": True,
+            "expected_calendar_lag": "1",
+            "extra_overrides": {
+                "/data/daily/latest_snapshot.json": cross_day_snapshot,
+                "/data/daily/daily_extensions.json": cross_day_extensions,
+            },
+        },
     ]
     for fixture in fixtures:
         fixture_name = fixture["name"]
@@ -257,6 +303,7 @@ def main() -> int:
             "/data/daily/institutional_analytics.json": fixture["analytics"],
             "/data/daily/logic_audit.json": fixture["logic"],
         }
+        overrides.update(fixture.get("extra_overrides", {}))
         with tempfile.TemporaryDirectory(prefix=f"quality-gate-{fixture_name}-") as profile, server(overrides) as base_url:
             for viewport, (width, height) in VIEWPORTS.items():
                 for page in ("index.html", "dashboard.html", "analytics.html", "daily-extensions.html"):
@@ -269,7 +316,9 @@ def main() -> int:
                         if f'data-conclusions-visible="{str(should_show).lower()}"' not in dom:
                             raise RuntimeError(f"{fixture_name} fixture 結論可見性錯誤")
                         if should_show and ("載入失敗" in body or "資料封鎖" in body or "每日資料失敗" in body):
-                            raise RuntimeError("degraded fixture 被錯誤封鎖")
+                            raise RuntimeError("可讀 fixture 被錯誤封鎖")
+                        if fixture.get("expected_calendar_lag") and f'data-calendar-lag-days="{fixture["expected_calendar_lag"]}"' not in dom:
+                            raise RuntimeError(f"{fixture_name} fixture 缺少跨日狀態標記")
                         if not should_show and page == "index.html" and ("資料封鎖" not in body or "全部交易封鎖" not in body):
                             raise RuntimeError("首頁故障 fixture 未封鎖交易結論")
                         if not should_show and page == "dashboard.html" and ("FAIL CLOSED" not in body or "所有交易動作封鎖" not in body or "已封鎖" not in body):
