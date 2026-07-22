@@ -14,6 +14,7 @@ import json
 import math
 import os
 import re
+import statistics
 import sys
 import time
 import gzip
@@ -166,6 +167,26 @@ def collect_coinbase_eth() -> Observation:
     url = "https://api.exchange.coinbase.com/products/ETH-USD/ticker"
     data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
     return obs("eth_usd_coinbase", safe_float(data.get("price")), "Coinbase Exchange ticker", url, as_of=data.get("time"), basis="spot", source_tier="primary_market")
+
+
+def collect_kraken_spot(symbol: str, pair: str) -> Observation:
+    url = f"https://api.kraken.com/0/public/Ticker?{urllib.parse.urlencode({'pair': pair})}"
+    data = fetch_json(url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    if data.get("error"):
+        raise ValueError(f"Kraken {pair}: {data['error']}")
+    row = next(iter((data.get("result") or {}).values()), {})
+    value = safe_float((row.get("c") or [None])[0])
+    return obs(
+        f"{symbol.lower()}_usd_kraken",
+        value,
+        "Kraken Spot ticker",
+        url,
+        ok=value is not None,
+        detail="Kraken Ticker 沒有上游時間戳；以擷取時間作新鮮度依據",
+        as_of=now_iso(),
+        basis="spot_retrieval_time",
+        source_tier="primary_market",
+    )
 
 
 def yahoo_daily_closes(ticker: str, range_: str = "1y", interval: str = "1d") -> tuple[list[dict[str, Any]], str]:
@@ -925,6 +946,33 @@ def selected_price(
     }
 
 
+def verified_spot_price(
+    observations: list[Observation],
+    observation_names: list[str],
+    label: str,
+) -> tuple[float | None, dict[str, Any]]:
+    available: list[tuple[Observation, float]] = []
+    for name in observation_names:
+        item = latest_observation(observations, name)
+        value = safe_float(item.value) if item else None
+        if item and value is not None and value > 0:
+            available.append((item, value))
+    values = [value for _, value in available]
+    verified = len(values) >= 2
+    gap = (max(values) - min(values)) / statistics.mean(values) if len(values) >= 2 else None
+    providers = [item.source for item, _ in available]
+    return statistics.median(values) if verified else None, {
+        "selected_source": "跨來源中位數" if verified else None,
+        "selected_observations": [item.name for item, _ in available],
+        "providers_used": providers,
+        "source_count": len(values),
+        "required_source_count": 2,
+        "cross_source_gap": gap,
+        "max_cross_source_gap": 0.015,
+        "policy": f"{label} 從可用來源池取至少兩個新鮮報價的中位數；任何指定供應商失敗均可替換，價差超過 1.5% 由 verifier 封鎖",
+    }
+
+
 def set_automated_input(
     inputs: dict[str, Any],
     provenance: dict[str, Any],
@@ -1192,12 +1240,16 @@ def build_btc_standards(metrics: dict[str, Any]) -> dict[str, Any]:
 
 
 def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
-    btc_prices = [safe_float(latest_value(observations, n)) for n in ["btc_usd_coingecko", "btc_usd_coinbase"]]
-    btc_prices = [p for p in btc_prices if p is not None]
-    btc_px = sum(btc_prices) / len(btc_prices) if btc_prices else None
-    eth_prices = [safe_float(latest_value(observations, n)) for n in ["eth_usd_coingecko", "eth_usd_coinbase"]]
-    eth_prices = [p for p in eth_prices if p is not None]
-    eth_px = sum(eth_prices) / len(eth_prices) if eth_prices else None
+    btc_px, btc_basis = verified_spot_price(
+        observations,
+        ["btc_usd_coingecko", "btc_usd_coinbase", "btc_usd_kraken"],
+        "BTC",
+    )
+    eth_px, eth_basis = verified_spot_price(
+        observations,
+        ["eth_usd_coingecko", "eth_usd_coinbase", "eth_usd_kraken"],
+        "ETH",
+    )
     mstr_px, mstr_basis = selected_price(observations, "mstr_usd_yahoo", "mstr_usd_nasdaq", "MSTR")
     bmnr_px, bmnr_basis = selected_price(observations, "bmnr_usd_yahoo", "bmnr_usd_nasdaq", "BMNR")
     strc_px, strc_basis = selected_price(observations, "strc_usd_yahoo", "strc_usd_nasdaq", "STRC")
@@ -1277,14 +1329,8 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "strc_usd": strc_px,
         },
         "price_basis": {
-            "btc_usd": {
-                "selected_source": "CoinGecko/Coinbase average",
-                "policy": "BTC 使用 CoinGecko 與 Coinbase 平均值，並由 verifier 檢查兩者差距",
-            },
-            "eth_usd": {
-                "selected_source": "CoinGecko/Coinbase average",
-                "policy": "ETH 使用 CoinGecko 與 Coinbase 平均值，並由 verifier 檢查兩者差距",
-            },
+            "btc_usd": btc_basis,
+            "eth_usd": eth_basis,
             "mstr_usd": mstr_basis,
             "bmnr_usd": bmnr_basis,
             "strc_usd": strc_basis,
@@ -1433,6 +1479,8 @@ def collect_all() -> list[Observation]:
         ("coingecko", collect_coingecko_btc),
         ("coinbase", lambda: [collect_coinbase_btc()]),
         ("coinbase_eth", lambda: [collect_coinbase_eth()]),
+        ("kraken_btc", lambda: [collect_kraken_spot("BTC", "XBTUSD")]),
+        ("kraken_eth", lambda: [collect_kraken_spot("ETH", "ETHUSD")]),
         ("btc_technicals", collect_yahoo_btc_technicals),
         ("mstr_yahoo", lambda: [collect_yahoo_equity("MSTR")]),
         ("bmnr_yahoo", lambda: [collect_yahoo_equity("BMNR")]),

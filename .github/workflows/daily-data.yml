@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test source failover contracts
+        run: python scripts/test_source_failover.py
+
       - name: Collect daily data
         env:
           SEC_USER_AGENT: "mstr-btc-bottom-report/1.0 hsin73@realtek.com"

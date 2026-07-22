@@ -31,6 +31,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test source failover contracts
+        run: python scripts/test_source_failover.py
+
       - name: Collect market universe
         run: python scripts/collect_market_universe.py
 
@@ -47,8 +50,23 @@ jobs:
           generated_at = datetime.fromisoformat(data["generated_at"].replace("Z", "+00:00"))
           if (datetime.now(timezone.utc) - generated_at).total_seconds() > 900:
               raise SystemExit("Market-universe artifact is not from this run")
-          if data.get("quality", {}).get("status") not in {"pass", "degraded", "fail"}:
+          quality = data.get("quality", {})
+          if quality.get("status") not in {"pass", "degraded", "fail"}:
               raise SystemExit("Market-universe quality status is invalid")
+          checks = quality.get("checks")
+          summary = quality.get("validation_summary", {})
+          if not isinstance(checks, list) or not checks or not isinstance(quality.get("source_incidents"), list):
+              raise SystemExit("Market-universe field-level reliability contract is missing")
+          expected_counts = {
+              "total": len(checks),
+              "passed": sum(item.get("status") == "pass" for item in checks),
+              "degraded": sum(item.get("status") == "degraded" for item in checks),
+              "failed": sum(item.get("status") == "fail" for item in checks),
+          }
+          if any(summary.get(key) != value for key, value in expected_counts.items()):
+              raise SystemExit("Market-universe validation summary does not match field checks")
+          if quality.get("status") != "fail" and any(item.get("core") and item.get("status") != "pass" for item in checks):
+              raise SystemExit("A core market field failed without fail-closed status")
           required = {"BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"}
           if not required.issubset(data.get("assets", {})) and data.get("quality", {}).get("status") != "fail":
               raise SystemExit("Tracked asset universe is incomplete")
@@ -61,7 +79,11 @@ jobs:
               raise SystemExit("BTC structural context must never control execution gates")
           if thesis_quality.get("scope") != "structural_context_only":
               raise SystemExit("BTC structural-context scope is invalid")
-          print(f"Market universe valid: quality={data['quality']['status']} sources={len(data.get('sources', []))}")
+          print(
+              f"Market universe valid: quality={quality['status']} "
+              f"core={summary.get('core_passed')}/{summary.get('core_total')} "
+              f"source_incidents={summary.get('source_incident_count')} sources={len(data.get('sources', []))}"
+          )
           PY
 
       - name: Audit product surfaces and publish fail-closed diagnostics

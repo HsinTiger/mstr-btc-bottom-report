@@ -116,6 +116,47 @@ def check_cross_source(name: str, left: float | None, right: float | None, thres
         warnings.append(f"{name}: 來源差距 {gap:.2%} 接近門檻")
 
 
+def check_spot_source_pool(
+    label: str,
+    observation_names: list[str],
+    observations: dict[str, Any],
+    snapshot_price: Any,
+    price_basis: dict[str, Any],
+    failures: list[str],
+    warnings: list[str],
+    evidence: list[str],
+    threshold: float = 0.015,
+) -> None:
+    available: list[tuple[str, dict[str, Any], float]] = []
+    for name in observation_names:
+        item = observations.get(name)
+        value = as_float((item or {}).get("value"))
+        if item and item.get("ok") and value is not None and value > 0:
+            source_age = age_hours(item.get("as_of"))
+            if source_age is None or source_age < -0.25 or source_age > 2:
+                failures.append(f"{label}: {name} 時間戳不可信或逾時")
+                continue
+            available.append((name, item, value))
+    if len(available) < 2:
+        failures.append(f"{label}: 可用來源僅 {len(available)} 個，至少需要 2 個")
+        return
+    values = [value for _, _, value in available]
+    median = statistics.median(values)
+    gap = (max(values) - min(values)) / statistics.mean(values)
+    assert_close(f"{label} source-pool median", median, snapshot_price, failures)
+    assert_close(f"{label} recorded cross-source gap", gap, price_basis.get("cross_source_gap"), failures)
+    if int(price_basis.get("source_count") or 0) != len(available):
+        failures.append(f"{label}: price_basis source_count 與可用來源不一致")
+    if set(price_basis.get("selected_observations") or []) != {name for name, _, _ in available}:
+        failures.append(f"{label}: price_basis 未記錄實際使用的來源池")
+    if gap > threshold:
+        failures.append(f"{label}: 來源池價差 {gap:.2%} > {threshold:.2%}")
+    elif gap > threshold / 2:
+        warnings.append(f"{label}: 來源池價差 {gap:.2%} 接近門檻")
+    providers = ", ".join(str(item.get("source")) for _, item, _ in available)
+    evidence.append(f"{label} median={median} sources={len(available)} [{providers}] gap={gap:.2%}")
+
+
 def detail_field(item: dict[str, Any] | None, key: str) -> str | None:
     detail = str((item or {}).get("detail") or "")
     prefix = f"{key}="
@@ -258,6 +299,24 @@ def main() -> int:
             degradations.extend(f"market universe: {item}" for item in universe_quality.get("degradations", []))
         elif universe_quality.get("status") != "pass":
             failures.append(f"market universe quality status invalid: {universe_quality.get('status')}")
+        quality_checks = universe_quality.get("checks")
+        validation_summary = universe_quality.get("validation_summary", {})
+        if not isinstance(quality_checks, list) or not quality_checks:
+            failures.append("market universe field-level quality checks missing")
+        else:
+            calculated = {
+                "total": len(quality_checks),
+                "passed": sum(item.get("status") == "pass" for item in quality_checks),
+                "degraded": sum(item.get("status") == "degraded" for item in quality_checks),
+                "failed": sum(item.get("status") == "fail" for item in quality_checks),
+            }
+            for key, expected in calculated.items():
+                if int(validation_summary.get(key) or 0) != expected:
+                    failures.append(f"market universe validation_summary {key} mismatch")
+            if any(item.get("core") and item.get("status") == "fail" for item in quality_checks):
+                failures.append("market universe contains failed core field checks")
+        if not isinstance(universe_quality.get("source_incidents"), list):
+            failures.append("market universe source_incidents contract missing")
         for symbol in ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"]:
             asset = market_universe.get("assets", {}).get(symbol, {})
             if as_float(asset.get("price_usd")) is None:
@@ -478,29 +537,30 @@ def main() -> int:
             f"sources={len(market_universe.get('sources', []))} age_hours={universe_age:.2f}" if universe_age is not None else "market universe age unavailable"
         )
 
-    for required in ["btc_usd_coingecko", "btc_usd_coinbase", "eth_usd_coingecko", "eth_usd_coinbase", "mstr_usd_yahoo"]:
-        item = observations.get(required)
-        if not item or not item.get("ok"):
-            failures.append(f"必要來源失敗: {required}")
-        else:
-            evidence.append(f"{required}={item.get('value')} from {item.get('source')}")
-
-    check_cross_source(
+    prices = snapshot.get("metrics", {}).get("prices", {})
+    price_basis = snapshot.get("metrics", {}).get("price_basis", {})
+    check_spot_source_pool(
         "BTC spot",
-        as_float(observations.get("btc_usd_coingecko", {}).get("value")),
-        as_float(observations.get("btc_usd_coinbase", {}).get("value")),
-        0.015,
+        ["btc_usd_coingecko", "btc_usd_coinbase", "btc_usd_kraken"],
+        observations,
+        prices.get("btc_usd"),
+        price_basis.get("btc_usd", {}),
         failures,
         warnings,
+        evidence,
     )
-    check_cross_source(
+    check_spot_source_pool(
         "ETH spot",
-        as_float(observations.get("eth_usd_coingecko", {}).get("value")),
-        as_float(observations.get("eth_usd_coinbase", {}).get("value")),
-        0.015,
+        ["eth_usd_coingecko", "eth_usd_coinbase", "eth_usd_kraken"],
+        observations,
+        prices.get("eth_usd"),
+        price_basis.get("eth_usd", {}),
         failures,
         warnings,
+        evidence,
     )
+    if as_float(prices.get("mstr_usd")) is None:
+        failures.append("MSTR price: Yahoo 與 Nasdaq 備援池皆不可用")
     check_observation_freshness("BTC MVRV", observations.get("btc_mvrv_current"), 3, 7, failures, degradations, evidence)
     strategy_holdings = observations.get("mstr_sec_btc_holdings_latest") or observations.get("mstr_strategy_btc_holdings")
     check_observation_freshness("Strategy BTC holdings", strategy_holdings, 14, 45, failures, degradations, evidence)
@@ -687,7 +747,7 @@ def main() -> int:
             "equity_cross_source_max_gap_same_basis": "2%",
             "equity_mismatched_quote_basis": "degraded, not fail",
             "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
-            "required_sources": ["CoinGecko BTC/ETH", "Coinbase BTC/ETH", "Yahoo Finance MSTR"],
+            "required_sources": ["BTC/ETH 現貨來源池至少 2 個：CoinGecko、Coinbase、Kraken", "MSTR：Yahoo 優先、Nasdaq 備援"],
             "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "cross-source ETF flow verification", "BTC MVRV ratio"],
             "btc_standard_required_inputs": ["BTC spot cross-source", "BTC 50/200DMA", "BTC MVRV ratio", "Fear & Greed", "ETF flow context"],
             "freshness_limits": {"BTC MVRV": "warn >3d, fail >7d", "Strategy holdings": "warn >14d, fail >45d", "Strategy 7d sales disclosure": "warn >2d, fail >7d", "USD reserve": "warn >30d, fail >120d", "MSTR common shares": "warn >45d, fail >120d", "BMNR holdings": "warn >14d, fail >30d"},
@@ -697,7 +757,7 @@ def main() -> int:
                 "fail_if_stale": ">8h",
                 "tracked_assets": ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"],
                 "derivatives": ["Bybit/OKX/Hyperliquid and available Binance perpetuals", "Deribit near-90-day dated futures with OKX fallback", "CME Yahoo proxy", "Deribit DVOL/options with labeled OKX ATM-IV/options fallback"],
-                "coverage_rule": "venue observations remain partial-market context; unknown data never becomes zero",
+                "coverage_rule": "provider failures are incidents, not quality downgrades, when the field still passes source-count, freshness and divergence checks; unknown data never becomes zero",
             },
         },
     }

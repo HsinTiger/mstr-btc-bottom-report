@@ -29,13 +29,13 @@ USER_AGENT = "mstr-btc-bottom-report/market-universe hsin73@realtek.com"
 TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
 
 ASSETS = {
-    "BTC": {"coingecko": "bitcoin", "binance": "BTCUSDT", "coinbase": "BTC-USD"},
-    "ETH": {"coingecko": "ethereum", "binance": "ETHUSDT", "coinbase": "ETH-USD"},
+    "BTC": {"coingecko": "bitcoin", "binance": "BTCUSDT", "coinbase": "BTC-USD", "kraken": "XBTUSD"},
+    "ETH": {"coingecko": "ethereum", "binance": "ETHUSDT", "coinbase": "ETH-USD", "kraken": "ETHUSD"},
     "HYPE": {"coingecko": "hyperliquid", "coinbase": "HYPE-USD", "hyperliquid": "HYPE"},
-    "SOL": {"coingecko": "solana", "binance": "SOLUSDT", "coinbase": "SOL-USD"},
+    "SOL": {"coingecko": "solana", "binance": "SOLUSDT", "coinbase": "SOL-USD", "kraken": "SOLUSD"},
     "BNB": {"coingecko": "binancecoin", "binance": "BNBUSDT"},
-    "XRP": {"coingecko": "ripple", "binance": "XRPUSDT", "coinbase": "XRP-USD"},
-    "DOGE": {"coingecko": "dogecoin", "binance": "DOGEUSDT", "coinbase": "DOGE-USD"},
+    "XRP": {"coingecko": "ripple", "binance": "XRPUSDT", "coinbase": "XRP-USD", "kraken": "XRPUSD"},
+    "DOGE": {"coingecko": "dogecoin", "binance": "DOGEUSDT", "coinbase": "DOGE-USD", "kraken": "XDGUSD"},
 }
 STRUCTURAL_COLLECTOR_NAMES = {"thesis_credit", "thesis_gold", "thesis_hashrate", "thesis_sovereign"}
 
@@ -244,6 +244,40 @@ def collect_coinbase_spot() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         row = fetch_json(url)
         result[symbol] = {"price_usd": finite(row.get("price")), "as_of": row.get("time")}
         sources.append(source(f"coinbase_{symbol.lower()}", "Coinbase Exchange", url, "primary_market", row.get("time"), "交易所 USD 現貨報價"))
+    return result, sources
+
+
+def collect_kraken_spot() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    result: dict[str, Any] = {}
+    sources: list[dict[str, Any]] = []
+    for symbol, config in ASSETS.items():
+        pair = config.get("kraken")
+        if not pair:
+            continue
+        url = f"https://api.kraken.com/0/public/Ticker?{urllib.parse.urlencode({'pair': pair})}"
+        payload = fetch_json(url)
+        if payload.get("error"):
+            raise ValueError(f"Kraken {pair}: {payload['error']}")
+        rows = payload.get("result") or {}
+        row = next(iter(rows.values()), {})
+        price = finite((row.get("c") or [None])[0])
+        open_24h = finite(row.get("o"))
+        timestamp = now_iso()
+        result[symbol] = {
+            "price_usd": price,
+            "change_24h": price / open_24h - 1 if price is not None and open_24h not in (None, 0) else None,
+            "as_of": timestamp,
+            "as_of_basis": "retrieval_time_no_upstream_timestamp",
+        }
+        sources.append(source(
+            f"kraken_{symbol.lower()}_spot",
+            "Kraken Spot",
+            url,
+            "primary_market",
+            timestamp,
+            "交易所 USD 現貨報價；Ticker 未提供上游時間戳，明確使用擷取時間",
+            "retrieval_time_no_upstream_timestamp",
+        ))
     return result, sources
 
 
@@ -1269,91 +1303,197 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
 
 def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
     failures: list[str] = []
-    degradations = list(errors)
+    degradations: list[str] = []
+    source_incidents = list(errors)
+    checks: list[dict[str, Any]] = []
+
+    def add_check(check_id: str, label: str, status: str, detail: str, *, core: bool, observed: int | None = None, required: int | None = None) -> None:
+        checks.append({
+            "check_id": check_id,
+            "label": label,
+            "status": status,
+            "core": core,
+            "observed_source_count": observed,
+            "required_source_count": required,
+            "detail": detail,
+        })
+
     for symbol, asset in output.get("assets", {}).items():
+        check_failures: list[str] = []
         price = finite(asset.get("price_usd"))
         gap = finite(asset.get("cross_source_gap"))
         if price is None or price <= 0:
-            failures.append(f"{symbol} spot price missing")
+            check_failures.append(f"{symbol} spot price missing")
         if int(asset.get("source_count") or 0) < 2 or gap is None:
-            failures.append(f"{symbol} 缺少兩個獨立現貨來源")
+            check_failures.append(f"{symbol} 缺少兩個獨立現貨來源")
         elif gap > 0.02:
-            failures.append(f"{symbol} cross-source spot gap {gap:.2%} > 2%")
+            check_failures.append(f"{symbol} cross-source spot gap {gap:.2%} > 2%")
         for provider, observation in asset.get("source_observations", {}).items():
             provider_age = age_hours(observation.get("as_of"))
             if provider_age is None:
-                failures.append(f"{symbol} {provider} 現貨來源時間未知")
-            elif provider_age > 2:
-                failures.append(f"{symbol} {provider} 現貨來源逾時 {provider_age:.1f} 小時")
+                check_failures.append(f"{symbol} {provider} 現貨來源時間未知")
+            elif provider_age < -0.25 or provider_age > 2:
+                check_failures.append(f"{symbol} {provider} 現貨來源時間不可信或逾時 {provider_age:.1f} 小時")
             if provider in {"Binance", "OKX"}:
                 price_usdt = finite(observation.get("price_usdt"))
                 usdt_usd = finite(observation.get("usdt_usd"))
                 normalized_price = finite(observation.get("price_usd"))
                 usdt_age = age_hours(observation.get("usdt_usd_as_of"))
                 if price_usdt is None or usdt_usd is None or normalized_price is None:
-                    failures.append(f"{symbol} {provider} USDT/USD 正規化輸入缺失")
+                    check_failures.append(f"{symbol} {provider} USDT/USD 正規化輸入缺失")
                 elif abs(price_usdt * usdt_usd - normalized_price) > max(1e-8, normalized_price * 1e-9):
-                    failures.append(f"{symbol} {provider} USDT/USD 正規化重算不一致")
-                if usdt_age is None or usdt_age > 2:
-                    failures.append(f"{symbol} {provider} USDT/USD 匯率逾時或時間未知")
+                    check_failures.append(f"{symbol} {provider} USDT/USD 正規化重算不一致")
+                if usdt_age is None or usdt_age < -0.25 or usdt_age > 2:
+                    check_failures.append(f"{symbol} {provider} USDT/USD 匯率逾時或時間未知")
+        failures.extend(check_failures)
+        source_count = int(asset.get("source_count") or 0)
+        add_check(
+            f"spot_{symbol.lower()}",
+            f"{symbol} 現貨價格",
+            "fail" if check_failures else "pass",
+            "；".join(check_failures) if check_failures else f"{source_count} 個來源中位數；最大跨源價差 {gap:.2%}",
+            core=True,
+            observed=source_count,
+            required=2,
+        )
     for symbol in ("BTC", "ETH"):
         derivative = output.get("derivatives", {}).get(symbol, {})
-        if int(derivative.get("perpetual", {}).get("funding_source_count") or 0) < 2:
-            failures.append(f"{symbol} 缺少兩個場域的可比資金費率")
         perpetual = derivative.get("perpetual", {})
+        perpetual_failures: list[str] = []
+        funding_count = int(perpetual.get("funding_source_count") or 0)
+        if funding_count < 2:
+            perpetual_failures.append(f"{symbol} 缺少兩個場域的可比資金費率")
         if perpetual.get("funding_annualized_median") is None:
-            failures.append(f"{symbol} cross-venue perpetual funding missing")
+            perpetual_failures.append(f"{symbol} cross-venue perpetual funding missing")
         for venue_error in perpetual.get("venue_errors", []):
-            degradations.append(f"{symbol} 永續備援來源失敗：{venue_error}")
+            source_incidents.append(f"{symbol} 永續來源事件：{venue_error}")
         for venue in perpetual.get("venues_used", []):
             venue_age = age_hours(perpetual.get(venue, {}).get("as_of"))
-            if venue_age is None or venue_age > 2:
-                failures.append(f"{symbol} {venue} 永續來源逾時或時間未知")
+            if venue_age is None or venue_age < -0.25 or venue_age > 2:
+                perpetual_failures.append(f"{symbol} {venue} 永續來源逾時或時間未知")
+        failures.extend(perpetual_failures)
+        add_check(
+            f"perpetual_{symbol.lower()}",
+            f"{symbol} 永續合約資金費率",
+            "fail" if perpetual_failures else "pass",
+            "；".join(perpetual_failures) if perpetual_failures else f"{funding_count} 個場域交叉驗證",
+            core=True,
+            observed=funding_count,
+            required=2,
+        )
+
         dated_future = derivative.get("dated_future", {})
         for fallback_error in dated_future.get("fallback_errors", []):
-            degradations.append(f"{symbol} 到期期貨備援：{fallback_error}")
+            source_incidents.append(f"{symbol} 到期期貨來源事件：{fallback_error}")
+        dated_failures: list[str] = []
         if dated_future.get("annualized_basis") is None:
-            failures.append(f"{symbol} dated-futures basis missing")
+            dated_failures.append(f"{symbol} dated-futures basis missing")
         dated_future_age = age_hours(dated_future.get("as_of"))
-        if dated_future_age is None or dated_future_age > 2:
-            failures.append(f"{symbol} dated-futures source stale or timestamp missing")
+        if dated_future_age is None or dated_future_age < -0.25 or dated_future_age > 2:
+            dated_failures.append(f"{symbol} dated-futures source stale or timestamp missing")
+        failures.extend(dated_failures)
+        add_check(
+            f"dated_future_{symbol.lower()}",
+            f"{symbol} 到期期貨基差",
+            "fail" if dated_failures else "pass",
+            "；".join(dated_failures) if dated_failures else f"{dated_future.get('provider')} 主來源或備援契約通過",
+            core=True,
+            observed=1 if not dated_failures else 0,
+            required=1,
+        )
+
         options = derivative.get("options", {})
         for fallback_error in options.get("fallback_errors", []):
-            degradations.append(f"{symbol} 期權備援：{fallback_error}")
+            source_incidents.append(f"{symbol} 期權來源事件：{fallback_error}")
+        options_failures: list[str] = []
         if options.get("volatility_value") is None:
-            failures.append(f"{symbol} options volatility proxy missing")
+            options_failures.append(f"{symbol} options volatility proxy missing")
         if options.get("put_call_open_interest_ratio") is None:
-            failures.append(f"{symbol} options put/call OI missing")
+            options_failures.append(f"{symbol} options put/call OI missing")
         options_age = age_hours(options.get("as_of"))
         volatility_age = age_hours(options.get("volatility_as_of"))
-        if options_age is None or options_age > 2:
-            failures.append(f"{symbol} options source stale or timestamp missing")
-        if volatility_age is None or volatility_age > 3:
-            failures.append(f"{symbol} options volatility source stale or timestamp missing")
+        if options_age is None or options_age < -0.25 or options_age > 2:
+            options_failures.append(f"{symbol} options source stale or timestamp missing")
+        if volatility_age is None or volatility_age < -0.25 or volatility_age > 3:
+            options_failures.append(f"{symbol} options volatility source stale or timestamp missing")
         if options.get("open_interest_observed_contracts") != options.get("contracts_observed"):
-            failures.append(f"{symbol} options OI coverage incomplete")
+            options_failures.append(f"{symbol} options OI coverage incomplete")
         if options.get("volume_observed_contracts") != options.get("contracts_observed"):
-            failures.append(f"{symbol} options volume coverage incomplete")
-    for sector, item in output.get("sectors", {}).items():
-        if finite(item.get("market_cap_usd")) is None or finite(item.get("change_24h")) is None:
-            degradations.append(f"{sector} sector data incomplete")
+            options_failures.append(f"{symbol} options volume coverage incomplete")
+        failures.extend(options_failures)
+        add_check(
+            f"options_{symbol.lower()}",
+            f"{symbol} 期權波動與籌碼",
+            "fail" if options_failures else "pass",
+            "；".join(options_failures) if options_failures else f"{options.get('provider')} 契約集合與計算完整",
+            core=True,
+            observed=1 if not options_failures else 0,
+            required=1,
+        )
+
+    incomplete_sectors = [sector for sector, item in output.get("sectors", {}).items() if finite(item.get("market_cap_usd")) is None or finite(item.get("change_24h")) is None]
+    sector_status = "degraded"
+    sector_detail = f"缺漏：{', '.join(incomplete_sectors)}" if incomplete_sectors else "CoinGecko 供應商分類單一口徑，只作輪動背景"
+    if incomplete_sectors:
+        degradations.append(f"賽道分類資料不完整：{', '.join(incomplete_sectors)}")
+    else:
+        degradations.append("賽道輪動採單一供應商分類，只作背景")
+    add_check("sector_rotation", "熱門賽道輪動", sector_status, sector_detail, core=False, observed=1, required=1)
+
     for asset, item in output.get("dat", {}).items():
         if finite(item.get("total_holdings")) is None:
             degradations.append(f"{asset} DAT aggregate missing")
+            add_check(f"dat_{asset.lower()}", f"{asset} 財庫公司聚合", "degraded", "聚合值缺失，前端必須顯示未知", core=False, observed=0, required=1)
+        else:
+            degradations.append(f"{asset} 財庫公司持倉為單一第三方聚合，只作背景")
+            add_check(f"dat_{asset.lower()}", f"{asset} 財庫公司聚合", "degraded", "CoinGecko 單一聚合，尚未逐公司以官方文件交叉驗證", core=False, observed=1, required=2)
+
     if output.get("etf", {}).get("BTC", {}).get("status") != "cross_source_verified":
         degradations.append("BTC ETF 流向僅有第三方單一來源，不作硬觸發")
     btc_etf_age = age_hours(output.get("etf", {}).get("BTC", {}).get("as_of"))
     if btc_etf_age is None or btc_etf_age > 36:
         degradations.append("BTC ETF 流向底層每日快照逾時或時間未知，因此不顯示數值")
+    btc_etf_verified = output.get("etf", {}).get("BTC", {}).get("status") == "cross_source_verified" and btc_etf_age is not None and btc_etf_age <= 36
+    add_check("etf_btc", "BTC 現貨 ETF 流向", "pass" if btc_etf_verified else "degraded", "已交叉驗證" if btc_etf_verified else "單一第三方來源或逾時時維持背景／未知", core=False, observed=2 if btc_etf_verified else 1, required=2)
+
     if output.get("etf", {}).get("ETH", {}).get("status") != "cross_source_verified":
         degradations.append("ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知")
-    score = max(0, 100 - len(failures) * 25 - len(degradations) * 4)
+    eth_etf_verified = output.get("etf", {}).get("ETH", {}).get("status") == "cross_source_verified"
+    add_check("etf_eth", "ETH 現貨 ETF 流向", "pass" if eth_etf_verified else "degraded", "已交叉驗證" if eth_etf_verified else "沒有穩定免金鑰交叉來源，前端顯示未知", core=False, observed=2 if eth_etf_verified else 0, required=2)
+
+    thesis_quality = output.get("btc_thesis", {}).get("quality", {})
+    thesis_status = thesis_quality.get("status") if thesis_quality.get("status") in {"pass", "degraded", "fail"} else "fail"
+    if thesis_status == "fail":
+        failures.append("BTC 長期結構證據層未通過資料契約")
+    elif thesis_status == "degraded":
+        degradations.append("BTC 長期結構證據層有限可用；不參與交易放行")
+    add_check("btc_structural_thesis", "BTC 長期結構證據", thesis_status, "僅作結構背景，永不控制交易閘門", core=False)
+
+    failures = list(dict.fromkeys(failures))
+    degradations = list(dict.fromkeys(degradations))
+    source_incidents = list(dict.fromkeys(source_incidents))
+    core_checks = [item for item in checks if item["core"]]
+    summary = {
+        "total": len(checks),
+        "passed": sum(item["status"] == "pass" for item in checks),
+        "degraded": sum(item["status"] == "degraded" for item in checks),
+        "failed": sum(item["status"] == "fail" for item in checks),
+        "core_total": len(core_checks),
+        "core_passed": sum(item["status"] == "pass" for item in core_checks),
+        "core_failed": sum(item["status"] == "fail" for item in core_checks),
+        "source_incident_count": len(source_incidents),
+        "fallback_quorum_preserved": not any(item["status"] == "fail" for item in core_checks),
+    }
+    score = max(0, 100 - summary["failed"] * 15 - summary["degraded"] * 3)
     return {
         "status": "fail" if failures else "degraded" if degradations else "pass",
         "score_0_100": score,
         "failures": failures,
         "degradations": degradations,
-        "policy": "缺失或分歧資料維持未知；場域觀測不得外推為全球市場。",
+        "source_incidents": source_incidents,
+        "checks": checks,
+        "validation_summary": summary,
+        "policy": "資料欄位是契約、供應商可替換；來源失敗但備援後仍滿足來源數、新鮮度與價差門檻時，不降低該欄位品質。缺失或分歧資料維持未知。",
     }
 
 
@@ -1402,6 +1542,7 @@ def main() -> int:
         "binance_spot": collect_binance_spot,
         "okx_spot": collect_okx_spot,
         "coinbase_spot": collect_coinbase_spot,
+        "kraken_spot": collect_kraken_spot,
         "hyperliquid": collect_hyperliquid,
         "categories": collect_categories,
         "btc_perpetual": lambda: collect_perpetual("BTC"),
@@ -1435,6 +1576,7 @@ def main() -> int:
                     "binance_spot": "Binance 現貨",
                     "okx_spot": "OKX 現貨",
                     "coinbase_spot": "Coinbase 現貨",
+                    "kraken_spot": "Kraken 現貨",
                     "coingecko": "CoinGecko",
                     "categories": "CoinGecko 賽道分類",
                 }.get(name, name)
@@ -1446,6 +1588,7 @@ def main() -> int:
     binance = results.get("binance_spot", {})
     okx = results.get("okx_spot", {})
     coinbase = results.get("coinbase_spot", {})
+    kraken = results.get("kraken_spot", {})
     hyperliquid = results.get("hyperliquid", {})
     assets: dict[str, Any] = {}
     for symbol in ASSETS:
@@ -1454,6 +1597,13 @@ def main() -> int:
             "Binance": finite(binance.get(symbol, {}).get("price_usd")),
             "OKX": finite(okx.get(symbol, {}).get("price_usd")),
             "Coinbase": finite(coinbase.get(symbol, {}).get("price_usd")),
+            "Kraken": finite(kraken.get(symbol, {}).get("price_usd")),
+        }
+        provider_changes = {
+            "CoinGecko": finite(coingecko.get(symbol, {}).get("change_24h")),
+            "Binance": finite(binance.get(symbol, {}).get("change_24h")),
+            "OKX": finite(okx.get(symbol, {}).get("change_24h")),
+            "Kraken": finite(kraken.get(symbol, {}).get("change_24h")),
         }
         source_observations = {
             "CoinGecko": {"price_usd": finite(coingecko.get(symbol, {}).get("price_usd")), "as_of": coingecko.get(symbol, {}).get("as_of"), "quote_asset": "USD aggregate"},
@@ -1474,16 +1624,30 @@ def main() -> int:
                 "quote_asset": "USDT normalized to USD",
             },
             "Coinbase": {"price_usd": finite(coinbase.get(symbol, {}).get("price_usd")), "as_of": coinbase.get(symbol, {}).get("as_of"), "quote_asset": "USD"},
+            "Kraken": {"price_usd": finite(kraken.get(symbol, {}).get("price_usd")), "as_of": kraken.get(symbol, {}).get("as_of"), "quote_asset": "USD", "as_of_basis": kraken.get(symbol, {}).get("as_of_basis")},
         }
         clean_prices = [value for value in provider_prices.values() if value is not None]
+        clean_changes = [value for value in provider_changes.values() if value is not None]
         base = dict(coingecko.get(symbol, {}))
+        valid_observations = {name: item for name, item in source_observations.items() if item["price_usd"] is not None}
+        observation_times = [item.get("as_of") for item in valid_observations.values() if item.get("as_of")]
         base.update({
             "price_usd": statistics.median(clean_prices) if len(clean_prices) >= 2 else None,
+            "change_24h": statistics.median(clean_changes) if clean_changes else None,
+            "change_24h_sources": {name: value for name, value in provider_changes.items() if value is not None},
             "unverified_reference_price_usd": statistics.median(clean_prices) if clean_prices else None,
             "source_prices": {name: value for name, value in provider_prices.items() if value is not None},
-            "source_observations": {name: item for name, item in source_observations.items() if item["price_usd"] is not None},
+            "source_observations": valid_observations,
             "cross_source_gap": cross_source_gap(clean_prices),
             "source_count": len(clean_prices),
+            "as_of": max(observation_times) if observation_times else None,
+            "price_validation": {
+                "method": "median_of_available_independent_sources",
+                "required_source_count": 2,
+                "observed_source_count": len(clean_prices),
+                "max_cross_source_gap": 0.02,
+                "providers_used": list(valid_observations),
+            },
             "state_24h": state_from_change(base.get("change_24h")),
         })
         assets[symbol] = base
