@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-22T05:31:13+00:00",
+  "verified_at": "2026-07-22T05:46:09+00:00",
   "date": "2026-07-22",
-  "snapshot_generated_at": "2026-07-22T03:46:55+00:00",
-  "market_universe_generated_at": "2026-07-22T05:31:13+00:00",
+  "snapshot_generated_at": "2026-07-22T05:46:08+00:00",
+  "market_universe_generated_at": "2026-07-22T05:46:09+00:00",
   "status": "degraded",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
@@ -25,9 +25,9 @@
   ],
   "warnings": [],
   "evidence": [
-    "market universe quality=degraded score=82 sources=55 age_hours=0.00",
-    "BTC spot median=66275.8 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.08%",
-    "ETH spot median=1933.07 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.12%",
+    "market universe quality=degraded score=82 sources=49 age_hours=0.00",
+    "BTC spot median=65937.6 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.01%",
+    "ETH spot median=1919.88 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.06%",
     "BTC MVRV as_of=2026-07-21 age_days=1",
     "Strategy BTC holdings as_of=2026-07-19 age_days=3",
     "Strategy SEC 7d sales as_of=2026-07-19 age_days=3",
@@ -36,8 +36,8 @@
     "BMNR Yahoo/Nasdaq=17.23/17.23; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "STRC Yahoo/Nasdaq=88.16/88.16; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=8-K",
-    "BTC standard=偏冷等待區 score=-5.1",
-    "BMNR gross treasury=11804.96915736m market_cap_to_gross=0.8724144579572265 as_of=2026-07-19"
+    "BTC standard=偏冷等待區 score=-5.2",
+    "BMNR gross treasury=11728.69434704m market_cap_to_gross=0.878088000581168 as_of=2026-07-19"
   ],
   "structural_context_quality": {
     "status": "degraded",
@@ -49,7 +49,7 @@
       "Public-company treasury aggregation exposes retrieval time rather than upstream filing time"
     ],
     "evidence": [
-      "BTC thesis gold_ratio=0.04537938335010097 stablecoin_supply=308964261350.6336 company_supply_share=0.06406196280241162"
+      "BTC thesis gold_ratio=0.04526713372029818 stablecoin_supply=308964261350.6336 company_supply_share=0.06406196280241162"
     ],
     "verification_scope": "formula integrity, timestamps and declared source semantics; not an independent reconstruction of every upstream dataset"
   },
