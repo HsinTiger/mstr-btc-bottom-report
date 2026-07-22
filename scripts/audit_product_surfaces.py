@@ -56,6 +56,58 @@ def local_links(html: str) -> list[str]:
     return sorted(set(links))
 
 
+def clickable_contract_issues(page_path: str, html: str) -> list[str]:
+    issues: list[str] = []
+    wiki_slugs: set[str] = set()
+    manifest_path = ROOT / "wiki" / "manifest.json"
+    if manifest_path.exists():
+        wiki_slugs = {str(item.get("slug")) for item in load_json(manifest_path).get("pages", []) if item.get("slug")}
+
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html, flags=re.IGNORECASE):
+        if "${" in href or href.startswith(("http://", "https://", "mailto:", "data:", "javascript:")):
+            continue
+        target, _, fragment = href.partition("#")
+        target = target.split("?", 1)[0] or page_path
+        target_path = ROOT / target
+        if not target_path.exists():
+            issues.append(f"連結目標不存在：{href}")
+            continue
+        if not fragment:
+            continue
+        if target == "wiki.html":
+            if fragment not in wiki_slugs:
+                issues.append(f"Wiki fragment 不在 manifest：{href}")
+            continue
+        if target_path.suffix.lower() != ".html":
+            continue
+        target_html = target_path.read_text(encoding="utf-8-sig")
+        if not re.search(rf'(?:id|name)=["\']{re.escape(fragment)}["\']', target_html, flags=re.IGNORECASE):
+            issues.append(f"頁內 fragment 不存在：{href}")
+
+    for attributes in re.findall(r"<button\b([^>]*)>", html, flags=re.IGNORECASE):
+        if not any(re.search(rf"\b{name}=", attributes, flags=re.IGNORECASE) for name in ("id", "data-t", "onclick", "type")):
+            issues.append("button 缺少 id、data-t、onclick 或 type")
+
+    for details in re.findall(r"<details\b[^>]*>(.*?)</details>", html, flags=re.IGNORECASE | re.DOTALL):
+        if not re.search(r"<summary\b[^>]*>.*?</summary>", details, flags=re.IGNORECASE | re.DOTALL):
+            issues.append("details 缺少 summary")
+
+    if page_path == "dashboard.html":
+        tabs = set(re.findall(r'<button\b[^>]*data-t=["\']([^"\']+)["\']', html, flags=re.IGNORECASE))
+        panels = set(re.findall(r'<section\b[^>]*class=["\'][^"\']*\btab\b[^"\']*["\'][^>]*id=["\']([^"\']+)["\']', html, flags=re.IGNORECASE))
+        panels.update(re.findall(r'<section\b[^>]*id=["\']([^"\']+)["\'][^>]*class=["\'][^"\']*\btab\b', html, flags=re.IGNORECASE))
+        if tabs != panels:
+            issues.append(f"Dashboard tab/panel 不一致：tabs={sorted(tabs)} panels={sorted(panels)}")
+        if "document.getElementById(b.dataset.t).classList.add('on')" not in html:
+            issues.append("Dashboard tab 缺少切換 handler")
+
+    if page_path == "wiki.html":
+        for token in ("id=\"burger\"", "id=\"search\"", "location.hash=a.dataset.slug", "location.hash=c.dataset.slug"):
+            if token not in html:
+                issues.append(f"Wiki 互動契約缺漏：{token}")
+    return list(dict.fromkeys(issues))
+
+
 def meta_content(html: str, name: str) -> str | None:
     match = re.search(
         rf'<meta\s+[^>]*name=["\']{re.escape(name)}["\'][^>]*content=["\']([^"\']+)["\']',
@@ -184,6 +236,13 @@ def audit_page(
 
     broken_links = [link for link in local_links(html) if not (ROOT / link).exists()]
     checks.append({"name": "local_links", "status": "pass" if not broken_links else "fail", "broken": broken_links})
+    clickable_issues = clickable_contract_issues(page["path"], html)
+    checks.append({
+        "name": "clickable_contract",
+        "status": "pass" if not clickable_issues else "fail",
+        "reason": None if not clickable_issues else "；".join(clickable_issues[:5]),
+        "issues": clickable_issues,
+    })
 
     dependency_specs = [{**data_contracts.get(item["path"], {}), **item} for item in page.get("dependencies", [])]
     dependency_results = [check_dependency(item, now) for item in dependency_specs]

@@ -290,8 +290,8 @@ def main() -> int:
         universe_age = age_hours(market_universe.get("generated_at"))
         if universe_age is None:
             failures.append("market universe generated_at missing or invalid")
-        elif universe_age > 8:
-            failures.append(f"market universe stale {universe_age:.1f}h > 8h")
+        elif universe_age > 3:
+            failures.append(f"market universe stale {universe_age:.1f}h > 3h")
         universe_quality = market_universe.get("quality", {})
         if universe_quality.get("status") == "fail":
             failures.extend(f"market universe: {item}" for item in universe_quality.get("failures", []))
@@ -317,6 +317,11 @@ def main() -> int:
                 failures.append("market universe contains failed core field checks")
         if not isinstance(universe_quality.get("source_incidents"), list):
             failures.append("market universe source_incidents contract missing")
+        freshness_contract = universe_quality.get("freshness_contract", {})
+        if as_float(freshness_contract.get("artifact_max_age_hours")) != 3:
+            failures.append("market universe artifact freshness contract must be 3 hours")
+        if as_float(freshness_contract.get("volatility_source_max_lag_hours")) != 3:
+            failures.append("market universe volatility lag contract must be 3 hours relative to generated_at")
         for symbol in ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"]:
             asset = market_universe.get("assets", {}).get(symbol, {})
             if as_float(asset.get("price_usd")) is None:
@@ -753,8 +758,8 @@ def main() -> int:
             "freshness_limits": {"BTC MVRV": "warn >3d, fail >7d", "Strategy holdings": "warn >14d, fail >45d", "Strategy 7d sales disclosure": "warn >2d, fail >7d", "USD reserve": "warn >30d, fail >120d", "MSTR common shares": "warn >45d, fail >120d", "BMNR holdings": "warn >14d, fail >30d"},
             "not_hard_triggers": ["single-source ETF flow", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
             "market_universe": {
-                "update_target": "every 4 hours",
-                "fail_if_stale": ">8h",
+                "update_target": "hourly",
+                "fail_if_stale": ">3h",
                 "tracked_assets": ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"],
                 "derivatives": ["Bybit/OKX/Hyperliquid and available Binance perpetuals", "Deribit near-90-day dated futures with OKX fallback", "CME Yahoo proxy", "Deribit DVOL/options with labeled OKX ATM-IV/options fallback"],
                 "coverage_rule": "provider failures are incidents, not quality downgrades, when the field still passes source-count, freshness and divergence checks; unknown data never becomes zero",

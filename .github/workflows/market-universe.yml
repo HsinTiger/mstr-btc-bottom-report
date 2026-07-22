@@ -1,8 +1,8 @@
-name: 4-hour cross-asset market universe
+name: Hourly cross-asset market universe
 
 on:
   schedule:
-    - cron: "17 */4 * * *"
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -57,6 +57,9 @@ jobs:
           summary = quality.get("validation_summary", {})
           if not isinstance(checks, list) or not checks or not isinstance(quality.get("source_incidents"), list):
               raise SystemExit("Market-universe field-level reliability contract is missing")
+          freshness = quality.get("freshness_contract", {})
+          if freshness.get("artifact_max_age_hours") != 3 or freshness.get("volatility_source_max_lag_hours") != 3:
+              raise SystemExit("Market-universe freshness contract is missing or inconsistent")
           expected_counts = {
               "total": len(checks),
               "passed": sum(item.get("status") == "pass" for item in checks),

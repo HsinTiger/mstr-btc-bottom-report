@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-22T03:58:45+00:00",
+  "generated_at": "2026-07-22T05:44:52+00:00",
   "status": "degraded",
   "summary": {
     "active_pages": 8,
@@ -38,19 +38,19 @@
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 18637,
+          "bytes": 19075,
           "lineage_source": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:55+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5237,
+          "bytes": 5344,
           "lineage": "2026-07-22T03:46:55+00:00",
-          "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "as_of": "2026-07-22T05:31:13+00:00",
+          "age_hours": 0.23,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -58,20 +58,20 @@
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12335,
+          "bytes": 12591,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "age_hours": 1.97,
           "quality": "consistent"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 25425,
+          "bytes": 26125,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         }
       ],
       "status": "degraded",
@@ -112,6 +112,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -125,7 +131,7 @@
       "role": "追蹤 BTC、ETH、衍生品、ETF、DAT、熱門賽道與 BTC 長期論證。",
       "user_question": "市場槓桿、機構流向與長期貨幣化背景今天有何變化？",
       "open_when": "首頁結論需要市場結構、輪動或長期論證的第二層證據時。",
-      "cadence": "每 4 小時",
+      "cadence": "每小時",
       "surface_type": "live_market",
       "owner_action": "keep",
       "dependencies": [
@@ -133,9 +139,9 @@
           "path": "data/daily/market_universe.json",
           "required": true,
           "status": "degraded",
-          "bytes": 70436,
-          "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "bytes": 78924,
+          "as_of": "2026-07-22T05:31:13+00:00",
+          "age_hours": 0.23,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -143,9 +149,9 @@
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 7640,
-          "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2
+          "bytes": 7845,
+          "as_of": "2026-07-22T05:31:13+00:00",
+          "age_hours": 0.23
         }
       ],
       "status": "degraded",
@@ -186,6 +192,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -207,35 +219,35 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 27960,
+          "bytes": 28483,
           "as_of": "2026-07-22T03:58:40+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.77,
           "quality": "pass"
         },
         {
           "path": "data/daily/ai_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 609,
+          "bytes": 629,
           "as_of": "2026-07-22T03:58:45+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.77,
           "quality": "pass"
         },
         {
           "path": "data/daily/x_intelligence.json",
           "required": false,
           "status": "pass",
-          "bytes": 2198,
+          "bytes": 2282,
           "as_of": "2026-07-22T03:58:45+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.77
         },
         {
           "path": "data/daily/x_intelligence_verification.json",
           "required": false,
           "status": "pass",
-          "bytes": 683,
+          "bytes": 705,
           "as_of": "2026-07-22T03:58:45+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.77
         }
       ],
       "status": "pass",
@@ -276,6 +288,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -297,29 +315,29 @@
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 25425,
+          "bytes": 26125,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12335,
+          "bytes": 12591,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "age_hours": 1.97,
           "quality": "consistent"
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5237,
+          "bytes": 5344,
           "lineage": "2026-07-22T03:46:55+00:00",
-          "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "as_of": "2026-07-22T05:31:13+00:00",
+          "age_hours": 0.23,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         }
@@ -362,6 +380,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -383,28 +407,28 @@
           "path": "data/daily/daily_extensions.json",
           "required": true,
           "status": "pass",
-          "bytes": 48101,
+          "bytes": 48760,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         },
         {
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 18637,
+          "bytes": 19075,
           "lineage_source": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:55+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5237,
+          "bytes": 5344,
           "lineage": "2026-07-22T03:46:55+00:00",
-          "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "as_of": "2026-07-22T05:31:13+00:00",
+          "age_hours": 0.23,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -412,20 +436,20 @@
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12335,
+          "bytes": 12591,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "age_hours": 1.97,
           "quality": "consistent"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 25425,
+          "bytes": 26125,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         }
       ],
       "status": "degraded",
@@ -466,6 +490,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -488,29 +518,29 @@
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 18637,
+          "bytes": 19075,
           "lineage_source": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:55+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12335,
+          "bytes": 12591,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "age_hours": 1.97,
           "quality": "consistent"
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5237,
+          "bytes": 5344,
           "lineage": "2026-07-22T03:46:55+00:00",
-          "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2,
+          "as_of": "2026-07-22T05:31:13+00:00",
+          "age_hours": 0.23,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -518,16 +548,16 @@
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 25425,
+          "bytes": 26125,
           "lineage": "2026-07-22T03:46:55+00:00",
           "as_of": "2026-07-22T03:46:58+00:00",
-          "age_hours": 0.2
+          "age_hours": 1.97
         },
         {
           "path": "data/history.json",
           "required": false,
           "status": "pass",
-          "bytes": 10002
+          "bytes": 10518
         }
       ],
       "status": "degraded",
@@ -573,6 +603,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -594,7 +630,7 @@
           "path": "wiki/manifest.json",
           "required": true,
           "status": "pass",
-          "bytes": 5411
+          "bytes": 5533
         }
       ],
       "status": "pass",
@@ -635,6 +671,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -648,7 +690,7 @@
       "role": "統籌每個專區的任務、資料責任、更新狀態、保留或封存決策。",
       "user_question": "每個專區有何用途、現在是否健康、我應該何時打開？",
       "open_when": "不知道該去哪一頁、懷疑頁面失修，或要檢查整個產品狀態時。",
-      "cadence": "每 4 小時＋每日",
+      "cadence": "每小時＋每日",
       "surface_type": "product_governance",
       "owner_action": "keep",
       "dependencies": [
@@ -656,7 +698,7 @@
           "path": "data/site_registry.json",
           "required": true,
           "status": "pass",
-          "bytes": 13708
+          "bytes": 13762
         }
       ],
       "status": "pass",
@@ -697,6 +739,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ]
     },
@@ -747,6 +795,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ],
       "dependencies": []
@@ -798,6 +852,12 @@
           "name": "local_links",
           "status": "pass",
           "broken": []
+        },
+        {
+          "name": "clickable_contract",
+          "status": "pass",
+          "reason": null,
+          "issues": []
         }
       ],
       "dependencies": []

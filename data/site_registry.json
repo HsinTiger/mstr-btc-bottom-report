@@ -9,7 +9,7 @@
     "data/daily/institutional_analytics.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality", "decision_brief"], "lineage_field": "snapshot_generated_at"},
     "data/daily/logic_audit.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "status", "decision"], "lineage_field": "snapshot_generated_at"},
     "data/daily/daily_extensions.json": {"schema_value": 2, "required_fields": ["current_date", "updated_at", "snapshot_generated_at", "visible_window", "items"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/market_universe.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "quality", "assets", "derivatives", "sources"]},
+    "data/daily/market_universe.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "quality", "quality.validation_summary", "quality.freshness_contract", "assets", "derivatives", "sources"]},
     "data/daily/market_universe_history.json": {"schema_value": 1, "required_fields": ["updated_at"]},
     "data/daily/ai_intelligence.json": {"schema_value": 1, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.provider", "quality.execution_gate_eligible", "summary.posts", "summary.successful_sources", "source_checks", "daily_actions", "categories"]},
     "data/daily/ai_intelligence_history.json": {"schema_value": 1, "required_fields": ["last_attempt_at", "quality.status", "items"]},
@@ -51,12 +51,12 @@
       "role": "追蹤 BTC、ETH、衍生品、ETF、DAT、熱門賽道與 BTC 長期論證。",
       "user_question": "市場槓桿、機構流向與長期貨幣化背景今天有何變化？",
       "open_when": "首頁結論需要市場結構、輪動或長期論證的第二層證據時。",
-      "cadence": "每 4 小時",
+      "cadence": "每小時",
       "surface_type": "live_market",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/daily/market_universe.json", "timestamp_field": "generated_at", "max_age_hours": 8, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/market_universe_history.json", "timestamp_field": "updated_at", "max_age_hours": 8, "required": true}
+        {"path": "data/daily/market_universe.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/market_universe_history.json", "timestamp_field": "updated_at", "max_age_hours": 3, "required": true}
       ]
     },
     {
@@ -168,7 +168,7 @@
       "role": "統籌每個專區的任務、資料責任、更新狀態、保留或封存決策。",
       "user_question": "每個專區有何用途、現在是否健康、我應該何時打開？",
       "open_when": "不知道該去哪一頁、懷疑頁面失修，或要檢查整個產品狀態時。",
-      "cadence": "每 4 小時＋每日",
+      "cadence": "每小時＋每日",
       "surface_type": "product_governance",
       "owner_action": "keep",
       "dependencies": [

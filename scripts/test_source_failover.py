@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from collect_market_universe import quality_checks
+from collect_market_universe import FRESHNESS_CONTRACT, lag_hours_at, quality_checks
 from daily_data_pipeline import Observation, now_iso, verified_spot_price
 from verify_daily_data import check_spot_source_pool
 
@@ -54,6 +54,7 @@ def market_fixture(source_count: int = 2, gap: float = 0.01) -> dict:
         }
 
     return {
+        "generated_at": timestamp,
         "assets": {
             "BTC": {
                 "price_usd": sum(prices) / len(prices) if source_count >= 2 else None,
@@ -147,13 +148,23 @@ def test_market_single_source_and_divergence_fail() -> None:
     assert divergent["status"] == "fail"
 
 
+def test_freshness_uses_batch_time_not_view_time() -> None:
+    generated_at = "2026-07-22T03:46:58+00:00"
+    completed_dvol = "2026-07-22T02:00:00+00:00"
+    lag = lag_hours_at(generated_at, completed_dvol)
+    assert lag is not None and lag < FRESHNESS_CONTRACT["volatility_source_max_lag_hours"]
+    quality = quality_checks(market_fixture(), [])
+    assert quality["freshness_contract"] == FRESHNESS_CONTRACT
+
+
 def main() -> int:
     test_daily_source_pool()
     test_daily_single_source_fails()
     test_daily_divergence_fails()
     test_market_incident_does_not_downgrade_verified_field()
     test_market_single_source_and_divergence_fail()
-    print("source failover contract tests: PASS (5/5)")
+    test_freshness_uses_batch_time_not_view_time()
+    print("source failover and freshness contract tests: PASS (6/6)")
     return 0
 
 

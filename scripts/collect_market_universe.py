@@ -27,6 +27,22 @@ HISTORY_PATH = DATA_DIR / "market_universe_history.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 USER_AGENT = "mstr-btc-bottom-report/market-universe hsin73@realtek.com"
 TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
+FRESHNESS_CONTRACT = {
+    "artifact_max_age_hours": 3,
+    "spot_source_max_lag_hours": 2,
+    "perpetual_source_max_lag_hours": 2,
+    "dated_future_source_max_lag_hours": 2,
+    "options_source_max_lag_hours": 2,
+    "volatility_source_max_lag_hours": 3,
+    "etf_source_max_lag_hours": 36,
+    "thesis_gold_max_lag_hours": 72,
+    "thesis_credit_max_lag_hours": 8,
+    "thesis_company_max_lag_hours": 8,
+    "thesis_hashrate_max_lag_hours": 72,
+    "thesis_debt_max_lag_hours": 24 * 240,
+    "thesis_real_yield_max_lag_hours": 24 * 10,
+    "timestamp_semantics": "source lag is validated against this artifact's generated_at; artifact age is validated separately against current time",
+}
 
 ASSETS = {
     "BTC": {"coingecko": "bitcoin", "binance": "BTCUSDT", "coinbase": "BTC-USD", "kraken": "XBTUSD"},
@@ -63,6 +79,21 @@ def age_hours(value: Any) -> float | None:
         if parsed.tzinfo is None:
             parsed = parsed.replace(tzinfo=timezone.utc)
         return (datetime.now(timezone.utc) - parsed).total_seconds() / 3600
+    except ValueError:
+        return None
+
+
+def lag_hours_at(reference: Any, value: Any) -> float | None:
+    if not reference or not value:
+        return None
+    try:
+        reference_time = datetime.fromisoformat(str(reference).replace("Z", "+00:00"))
+        observed_time = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if reference_time.tzinfo is None:
+            reference_time = reference_time.replace(tzinfo=timezone.utc)
+        if observed_time.tzinfo is None:
+            observed_time = observed_time.replace(tzinfo=timezone.utc)
+        return (reference_time - observed_time).total_seconds() / 3600
     except ValueError:
         return None
 
@@ -1306,6 +1337,7 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
     degradations: list[str] = []
     source_incidents = list(errors)
     checks: list[dict[str, Any]] = []
+    generated_at = output.get("generated_at")
 
     def add_check(check_id: str, label: str, status: str, detail: str, *, core: bool, observed: int | None = None, required: int | None = None) -> None:
         checks.append({
@@ -1329,21 +1361,21 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         elif gap > 0.02:
             check_failures.append(f"{symbol} cross-source spot gap {gap:.2%} > 2%")
         for provider, observation in asset.get("source_observations", {}).items():
-            provider_age = age_hours(observation.get("as_of"))
-            if provider_age is None:
+            provider_lag = lag_hours_at(generated_at, observation.get("as_of"))
+            if provider_lag is None:
                 check_failures.append(f"{symbol} {provider} 現貨來源時間未知")
-            elif provider_age < -0.25 or provider_age > 2:
-                check_failures.append(f"{symbol} {provider} 現貨來源時間不可信或逾時 {provider_age:.1f} 小時")
+            elif provider_lag < -0.25 or provider_lag > FRESHNESS_CONTRACT["spot_source_max_lag_hours"]:
+                check_failures.append(f"{symbol} {provider} 現貨來源相對批次時間不可信或逾時 {provider_lag:.1f} 小時")
             if provider in {"Binance", "OKX"}:
                 price_usdt = finite(observation.get("price_usdt"))
                 usdt_usd = finite(observation.get("usdt_usd"))
                 normalized_price = finite(observation.get("price_usd"))
-                usdt_age = age_hours(observation.get("usdt_usd_as_of"))
+                usdt_lag = lag_hours_at(generated_at, observation.get("usdt_usd_as_of"))
                 if price_usdt is None or usdt_usd is None or normalized_price is None:
                     check_failures.append(f"{symbol} {provider} USDT/USD 正規化輸入缺失")
                 elif abs(price_usdt * usdt_usd - normalized_price) > max(1e-8, normalized_price * 1e-9):
                     check_failures.append(f"{symbol} {provider} USDT/USD 正規化重算不一致")
-                if usdt_age is None or usdt_age < -0.25 or usdt_age > 2:
+                if usdt_lag is None or usdt_lag < -0.25 or usdt_lag > FRESHNESS_CONTRACT["spot_source_max_lag_hours"]:
                     check_failures.append(f"{symbol} {provider} USDT/USD 匯率逾時或時間未知")
         failures.extend(check_failures)
         source_count = int(asset.get("source_count") or 0)
@@ -1368,8 +1400,8 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         for venue_error in perpetual.get("venue_errors", []):
             source_incidents.append(f"{symbol} 永續來源事件：{venue_error}")
         for venue in perpetual.get("venues_used", []):
-            venue_age = age_hours(perpetual.get(venue, {}).get("as_of"))
-            if venue_age is None or venue_age < -0.25 or venue_age > 2:
+            venue_lag = lag_hours_at(generated_at, perpetual.get(venue, {}).get("as_of"))
+            if venue_lag is None or venue_lag < -0.25 or venue_lag > FRESHNESS_CONTRACT["perpetual_source_max_lag_hours"]:
                 perpetual_failures.append(f"{symbol} {venue} 永續來源逾時或時間未知")
         failures.extend(perpetual_failures)
         add_check(
@@ -1388,8 +1420,8 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         dated_failures: list[str] = []
         if dated_future.get("annualized_basis") is None:
             dated_failures.append(f"{symbol} dated-futures basis missing")
-        dated_future_age = age_hours(dated_future.get("as_of"))
-        if dated_future_age is None or dated_future_age < -0.25 or dated_future_age > 2:
+        dated_future_lag = lag_hours_at(generated_at, dated_future.get("as_of"))
+        if dated_future_lag is None or dated_future_lag < -0.25 or dated_future_lag > FRESHNESS_CONTRACT["dated_future_source_max_lag_hours"]:
             dated_failures.append(f"{symbol} dated-futures source stale or timestamp missing")
         failures.extend(dated_failures)
         add_check(
@@ -1410,11 +1442,11 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
             options_failures.append(f"{symbol} options volatility proxy missing")
         if options.get("put_call_open_interest_ratio") is None:
             options_failures.append(f"{symbol} options put/call OI missing")
-        options_age = age_hours(options.get("as_of"))
-        volatility_age = age_hours(options.get("volatility_as_of"))
-        if options_age is None or options_age < -0.25 or options_age > 2:
+        options_lag = lag_hours_at(generated_at, options.get("as_of"))
+        volatility_lag = lag_hours_at(generated_at, options.get("volatility_as_of"))
+        if options_lag is None or options_lag < -0.25 or options_lag > FRESHNESS_CONTRACT["options_source_max_lag_hours"]:
             options_failures.append(f"{symbol} options source stale or timestamp missing")
-        if volatility_age is None or volatility_age < -0.25 or volatility_age > 3:
+        if volatility_lag is None or volatility_lag < -0.25 or volatility_lag > FRESHNESS_CONTRACT["volatility_source_max_lag_hours"]:
             options_failures.append(f"{symbol} options volatility source stale or timestamp missing")
         if options.get("open_interest_observed_contracts") != options.get("contracts_observed"):
             options_failures.append(f"{symbol} options OI coverage incomplete")
@@ -1450,10 +1482,10 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
 
     if output.get("etf", {}).get("BTC", {}).get("status") != "cross_source_verified":
         degradations.append("BTC ETF 流向僅有第三方單一來源，不作硬觸發")
-    btc_etf_age = age_hours(output.get("etf", {}).get("BTC", {}).get("as_of"))
-    if btc_etf_age is None or btc_etf_age > 36:
+    btc_etf_lag = lag_hours_at(generated_at, output.get("etf", {}).get("BTC", {}).get("as_of"))
+    if btc_etf_lag is None or btc_etf_lag > FRESHNESS_CONTRACT["etf_source_max_lag_hours"]:
         degradations.append("BTC ETF 流向底層每日快照逾時或時間未知，因此不顯示數值")
-    btc_etf_verified = output.get("etf", {}).get("BTC", {}).get("status") == "cross_source_verified" and btc_etf_age is not None and btc_etf_age <= 36
+    btc_etf_verified = output.get("etf", {}).get("BTC", {}).get("status") == "cross_source_verified" and btc_etf_lag is not None and btc_etf_lag <= FRESHNESS_CONTRACT["etf_source_max_lag_hours"]
     add_check("etf_btc", "BTC 現貨 ETF 流向", "pass" if btc_etf_verified else "degraded", "已交叉驗證" if btc_etf_verified else "單一第三方來源或逾時時維持背景／未知", core=False, observed=2 if btc_etf_verified else 1, required=2)
 
     if output.get("etf", {}).get("ETH", {}).get("status") != "cross_source_verified":
@@ -1493,6 +1525,7 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         "source_incidents": source_incidents,
         "checks": checks,
         "validation_summary": summary,
+        "freshness_contract": FRESHNESS_CONTRACT,
         "policy": "資料欄位是契約、供應商可替換；來源失敗但備援後仍滿足來源數、新鮮度與價差門檻時，不降低該欄位品質。缺失或分歧資料維持未知。",
     }
 
@@ -1676,7 +1709,7 @@ def main() -> int:
         "schema": 1,
         "date": today_utc(),
         "generated_at": now_iso(),
-        "update_target": "every_4_hours",
+        "update_target": "hourly",
         "units": {
             "*_usd": "US dollars",
             "*_ratio|basis|change|distance|gap": "decimal fraction; 0.01 means 1%",

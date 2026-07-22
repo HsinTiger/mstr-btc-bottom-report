@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-22T03:46:58+00:00",
+  "verified_at": "2026-07-22T05:31:13+00:00",
   "date": "2026-07-22",
   "snapshot_generated_at": "2026-07-22T03:46:55+00:00",
-  "market_universe_generated_at": "2026-07-22T03:46:58+00:00",
+  "market_universe_generated_at": "2026-07-22T05:31:13+00:00",
   "status": "degraded",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
@@ -25,7 +25,7 @@
   ],
   "warnings": [],
   "evidence": [
-    "market universe quality=degraded score=82 sources=49 age_hours=0.00",
+    "market universe quality=degraded score=82 sources=55 age_hours=0.00",
     "BTC spot median=66275.8 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.08%",
     "ETH spot median=1933.07 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.12%",
     "BTC MVRV as_of=2026-07-21 age_days=1",
@@ -49,7 +49,7 @@
       "Public-company treasury aggregation exposes retrieval time rather than upstream filing time"
     ],
     "evidence": [
-      "BTC thesis gold_ratio=0.04541635738102198 stablecoin_supply=308974294292.35376 company_supply_share=0.06406196280241162"
+      "BTC thesis gold_ratio=0.04537938335010097 stablecoin_supply=308964261350.6336 company_supply_share=0.06406196280241162"
     ],
     "verification_scope": "formula integrity, timestamps and declared source semantics; not an independent reconstruction of every upstream dataset"
   },
@@ -92,8 +92,8 @@
       "macro calendar without official free event API"
     ],
     "market_universe": {
-      "update_target": "every 4 hours",
-      "fail_if_stale": ">8h",
+      "update_target": "hourly",
+      "fail_if_stale": ">3h",
       "tracked_assets": [
         "BTC",
         "ETH",

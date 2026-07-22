@@ -141,6 +141,22 @@ def rendered_body(browser: str, profile: str, url: str, width: int, height: int)
     return parser.text(), result.stdout
 
 
+def shift_datetime_strings(value: object, delta: timedelta) -> object:
+    if isinstance(value, dict):
+        return {key: shift_datetime_strings(item, delta) for key, item in value.items()}
+    if isinstance(value, list):
+        return [shift_datetime_strings(item, delta) for item in value]
+    if isinstance(value, str) and "T" in value:
+        try:
+            parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return (parsed + delta).isoformat()
+        except ValueError:
+            return value
+    return value
+
+
 def main() -> int:
     browser = browser_path()
     failures: list[dict[str, str]] = []
@@ -164,6 +180,10 @@ def main() -> int:
                         raise RuntimeError(f"必要畫面文字缺漏：{expected}")
                     if markers:
                         raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
+                    rendered_links = set(re.findall(r'href="([^"#?]+)', dom, flags=re.IGNORECASE))
+                    missing_navigation = [target for target in PAGES if target not in rendered_links]
+                    if missing_navigation:
+                        raise RuntimeError(f"渲染後主要導航缺漏：{', '.join(missing_navigation)}")
                     if page == "index.html":
                         status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
                         if not status_match:
@@ -174,6 +194,20 @@ def main() -> int:
                             raise RuntimeError("今日決策品質狀態與結論可見性不一致")
                         if status in {"pass", "degraded"} and ("載入失敗" in body or "資料封鎖" in body):
                             raise RuntimeError("可讀資料被錯誤封鎖")
+                    if page == "market-monitor.html":
+                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
+                        if not status_match:
+                            raise RuntimeError("市場雷達缺少可驗證的渲染狀態")
+                        status = status_match.group(1)
+                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
+                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
+                            raise RuntimeError("市場雷達品質狀態與結論可見性不一致")
+                        if status in {"pass", "degraded"} and ("載入失敗" in body or "停止顯示" in body or "資料封鎖" in body):
+                            raise RuntimeError("市場雷達可讀資料被錯誤封鎖")
+                        if status != "fail" and 'data-core-checks="13/13"' not in dom:
+                            raise RuntimeError("市場雷達核心欄位未完整渲染")
+                        if 'data-page-overflow="false"' not in dom:
+                            raise RuntimeError("市場雷達發生頁面水平溢位")
                     if page == "dashboard.html":
                         status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
                         if not status_match:
@@ -221,6 +255,21 @@ def main() -> int:
                     results.append({"viewport": viewport, "page": page, "status": "pass"})
                 except (RuntimeError, subprocess.TimeoutExpired) as error:
                     failures.append({"viewport": viewport, "page": page, "error": str(error)})
+    market_universe = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
+    aged_market = shift_datetime_strings(deepcopy(market_universe), timedelta(hours=-2.5))
+    with tempfile.TemporaryDirectory(prefix="market-freshness-window-") as profile, server({"/data/daily/market_universe.json": aged_market}) as base_url:
+        for viewport, (width, height) in VIEWPORTS.items():
+            try:
+                page_profile = Path(profile) / viewport
+                page_profile.mkdir(parents=True, exist_ok=True)
+                body, dom = rendered_body(browser, str(page_profile), f"{base_url}/market-monitor.html", width, height)
+                if 'data-render-status="degraded"' not in dom or 'data-conclusions-visible="true"' not in dom:
+                    raise RuntimeError("市場雷達 2.5 小時更新窗被錯誤封鎖")
+                if "載入失敗" in body or "停止顯示" in body or "資料封鎖" in body:
+                    raise RuntimeError("市場雷達把批次內合格來源誤判為瀏覽時逾時")
+                results.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "status": "pass"})
+            except (RuntimeError, subprocess.TimeoutExpired) as error:
+                failures.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "error": str(error)})
     verification = json.loads((ROOT / "data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
     analytics = json.loads((ROOT / "data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
     logic = json.loads((ROOT / "data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
