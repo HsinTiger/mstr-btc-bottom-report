@@ -2,8 +2,10 @@
 title: STRC 優先股 (Stretch)
 type: entity
 tags: [strc, preferred, capital-structure]
-updated: 2026-06-14
+updated: 2026-07-22
+last_verified: 2026-07-22
 confidence: high
+summary: STRC 折價是 MSTR 資本結構的市場信任票；超過 5% 時封鎖 2.5 倍 MSTR 合約，不因 BTC 本身偏冷而放行。
 ---
 
 # STRC 優先股 (Stretch)
@@ -11,7 +13,7 @@ confidence: high
 [[mstr]] 發行的變動利率**永續**特別股。理解它＝理解 MSTR 的反身性安全閥。
 
 ## 條款
-- 面額 $100、變動利率（月調 0.25% 以貼 $100，現 ~11.5%）、月配
+- 面額 $100、變動利率、月配；2026-07-22 管線採最新公告年率 **12.0%**。
 - **累積型**（漏配累積複利、董事會可遞延而不違約＝可「拖」）
 - **無到期、公司永不必買回**、**不可轉換**普通股、可被 call
 - 求償順位：高於普通股、低於債券
@@ -23,3 +25,7 @@ confidence: high
 
 ## 結論
 管理層用優先股換掉硬負債，**降低死亡螺旋風險（對普通股是好事）**。博升值該買普通股、非 STRC。`supports` [[mnav-reflexivity]]。
+
+## 今日市場信任票
+
+STRC regular-market close **$88.16**，相對 $100 面額折價 **11.84%**。本站治理門檻為 5%；目前代表優先市場仍要求顯著風險補償，因此 MSTR 2.5 倍合約維持封鎖。

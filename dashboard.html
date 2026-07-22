@@ -128,7 +128,7 @@ h2:first-child{margin-top:0}
     <div class="card">
       <h3>大倉現貨「便宜＋確認」條件</h3>
       <ul class="chk">
-        <li><span>背景：ETF 近 7 日淨流入（單源不計票）</span><span class="warn" id="etfFlowNow">載入中</span></li>
+        <li><span>背景：ETF 近 7 日淨流入（多源驗證，不單獨放行）</span><span class="warn" id="etfFlowNow">載入中</span></li>
         <li><span>① 同時站回 50DMA 與 200DMA</span><span class="neg" id="tma"></span></li>
         <li><span>② MVRV 介於 1.0–1.5</span><span class="neg" id="confirmMvrvNow">載入中</span></li>
         <li><span>③ F&G 介於 25–65</span><span class="warn" id="confirmFearNow">載入中</span></li>
@@ -138,7 +138,7 @@ h2:first-child{margin-top:0}
       <h3>三道閘門</h3>
       <ul class="chk">
         <li><span>機構閘：Strategy BTC monetization / reported BTC sales</span><span class="neg" id="strategyGateNow">載入中</span></li>
-        <li><span>機構閘：ETF flow（單一第三方）</span><span class="warn" id="ibitGateNow">載入中</span></li>
+        <li><span>機構閘：ETF flow（來源池＋發行商核對）</span><span class="warn" id="ibitGateNow">載入中</span></li>
         <li><span>散戶閘：抄底熱度（不作硬觸發）</span><span class="warn" id="retailGateNow">來源受限：不作硬觸發</span></li>
         <li><span>監管閘：48h 事件窗（人工覆核）</span><span class="warn" id="regGateNow">人工覆核：不自動放行</span></li>
       </ul>
@@ -471,7 +471,7 @@ async function loadDailySnapshot(){
       fetchJson('data/daily/institutional_analytics.json'),
       fetchJson('data/history.json').catch(()=>null)
     ]);
-    if(snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2) throw new Error('每日資料 schema 不相容');
+    if(snap.schema!==2||verify.schema!==2||logic.schema!==1||analytics.schema!==2) throw new Error('每日資料 schema 不相容');
     if(!snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date) throw new Error('每日資料跨檔日期不一致');
     const calendarLagDays=requireRecentDataDate(snap.date,'每日快照');
     if(verify.snapshot_generated_at!==snap.generated_at) throw new Error('驗證報告未綁定目前快照');
@@ -524,7 +524,8 @@ async function loadDailySnapshot(){
     put('topVerdict', calendarLagged?'跨日待更新｜不加碼':verificationDegraded?(contractBlocked?'資料有限｜MSTR 禁開':'資料有限｜只供研究'):contractBlocked?'MSTR 禁開':btcStd.regime||'觀察', contractBlocked?'big neg':'big warn');
     put('topVerdictNote', `${calendarLagged?`目前顯示 ${snap.date} 最近可用批次；${taipeiDate()} 主批次尚未完成。`:verificationDegraded?'驗證有限可用，只供研究；':''}${btcStd.one_line||'BTC 資料不足'}；MSTR 合約${contractBlocked?'維持封鎖':'只進研究清單'}`, 'mini');
     put('stateBadge', btcStd.regime||'資料不足', `badge ${btcStd.tone==='deep_value'?'s3':btcStd.tone==='overheated'?'s1':'s2'}`);
-    put('stateNote', `標準分 ${btcStd.score??'—'}｜資料覆蓋 ${btcStd.data_quality?.coverage_ratio==null?'—':Math.round(btcStd.data_quality.coverage_ratio*100)+'%'}｜啟發式模型尚未回測｜ETF 單源不計確認票`, 'mini');
+    const etfVerified=radar.etf_flow_status==='sample_cross_source_verified';
+    put('stateNote', `標準分 ${btcStd.score??'—'}｜資料覆蓋 ${btcStd.data_quality?.coverage_ratio==null?'—':Math.round(btcStd.data_quality.coverage_ratio*100)+'%'}｜啟發式模型尚未回測｜ETF ${etfVerified?'代表性抽樣驗證通過但不單獨放行':'驗證未過，不計入判斷'}`, 'mini');
     const commonRatio=m.common_equity_price_to_nav??m.equity_mnav;
     put('dm1',commonRatio==null?'N/A':nf(commonRatio)+'x',commonRatio==null?'big neg':commonRatio<=1?'big pos':'big neg');
     set('dm3',m.pref_dilution_flag==null?'UNKNOWN':m.pref_dilution_flag?'\u89f8\u767c':'\u672a\u89f8\u767c');
@@ -555,9 +556,9 @@ async function loadDailySnapshot(){
     document.getElementById('contractGateSummary').innerHTML=blockContract?'<b class="neg">2.5x MSTR \u5408\u7d04\u5f85\u6a5f</b>\uff5c\u7d05\u71c8/\u8cc7\u6599/\u8cc7\u672c\u7d50\u69cb\u4efb\u4e00\u672a\u904e\u5c31\u4e0d\u958b':'<b class="warn">\u53ea\u53ef\u7814\u7a76</b>\uff5c\u4ecd\u9700\u53f3\u5074\u78ba\u8a8d\u8207\u6e05\u7b97\u7de9\u885d';
     const etfUsd=radar.etf_flow_7d_usd;
     const etfStatus=radar.etf_flow_status||'unavailable';
-    put('etfFlowNow', etfUsd!=null?`7日 ${money(etfUsd)}（單源、不計票）`:'來源缺漏', 'warn');
+    put('etfFlowNow', etfVerified&&etfUsd!=null?`7日 ${money(etfUsd)}（${radar.etf_flow_source_count||'—'} 個驗證來源）`:'驗證未過，不顯示', 'warn');
     put('strategyGateNow', m.sale_ratio==null?'紅：官方揭露過舊，未知不當 0':m.sale_ratio>2?'\u7d05\uff1a\u6bcf\u9031\u8ce3\u5e63\u58d3\u529b\u904e\u9ad8':'\u9ec3\uff1a\u6301\u7e8c\u89c0\u5bdf', m.sale_ratio==null||m.sale_ratio>2?'neg':'warn');
-    put('ibitGateNow', etfUsd!=null?`${etfStatus}｜7日 ${money(etfUsd)}`:'來源缺漏', 'warn');
+    put('ibitGateNow', etfVerified&&etfUsd!=null?`代表性抽樣驗證｜7日 ${money(etfUsd)}`:`${etfStatus}｜不納入判斷`, 'warn');
     put('retailGateNow','來源受限：Google Trends 不作硬觸發','warn');
     put('regGateNow','人工覆核：重大事件窗不自動放行','warn');
     const verdict=btcStd.one_line || analytics?.executive_read?.one_line || logic?.decision?.plain_english || snap.decision?.state || '\u8f09\u5165\u5b8c\u6210';
@@ -578,7 +579,7 @@ async function loadDailySnapshot(){
     putError('dataCoverageNote','每日資料失敗；歷史研究仍可閱讀，但不得用舊快照作今日決策。','note neg');
     putError('topVerdict','資料失敗｜MSTR 禁開','big neg');
     putError('topVerdictNote',`必要資料未載入：${e.message}`,'mini neg');
-    putError('liveState','每日資料失敗，不沿用舊值','neg');
+    putError('liveState','FAIL CLOSED｜所有交易動作封鎖；每日數字已封鎖，不沿用舊值','neg');
     putError('autoVerify','FAIL CLOSED｜所有交易動作封鎖','note neg');
   }
 }

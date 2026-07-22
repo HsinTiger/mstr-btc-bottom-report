@@ -18,6 +18,14 @@ SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 REPORT_PATH = DATA_DIR / "agent_verification_report.json"
 MARKET_UNIVERSE_PATH = DATA_DIR / "market_universe.json"
 TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
+ETF_REQUIRED_ROSTER = {
+    "BTC": {"ARKB", "BITB", "BRRR", "BTC", "BTCO", "BTCW", "DEFI", "EZBC", "FBTC", "GBTC", "HODL", "IBIT", "MSBT"},
+    "ETH": {"ETH", "ETHA", "ETHE", "ETHV", "ETHW", "EZET", "FETH", "QETH"},
+}
+ETF_MAX_ABS_DAILY_FUND_FLOW_USD = 50_000_000_000
+ETF_MAX_GROSS_DAILY_FLOW_USD = 100_000_000_000
+ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD = 500_000
+ETF_COMPONENT_SUM_RELATIVE_TOLERANCE = 0.001
 
 
 def load_json(path: Path) -> Any:
@@ -50,6 +58,10 @@ def obs_map(raw: dict[str, Any]) -> dict[str, Any]:
 
 def unique(items: list[str]) -> list[str]:
     return list(dict.fromkeys(items))
+
+
+def classify_verification_status(failures: list[str], degradations: list[str]) -> str:
+    return "fail" if failures else "degraded" if degradations else "pass"
 
 
 def pct_gap(a: float, b: float) -> float:
@@ -225,9 +237,11 @@ def recompute_metrics(snapshot: dict[str, Any]) -> dict[str, float | bool | None
     mstr_px = as_float(prices.get("mstr_usd"))
     strc_px = as_float(prices.get("strc_usd"))
     preferred = inputs.get("preferred", {})
-    pref_total = sum(as_float(item.get("notional_musd")) or 0 for item in preferred.values())
-    annual_div = sum((as_float(item.get("notional_musd")) or 0) * (as_float(item.get("rate")) or 0) for item in preferred.values())
-    annual_obligation = annual_div + (as_float(inputs.get("annual_interest_musd")) or 0)
+    preferred_class_total = sum(as_float(item.get("notional_musd")) or 0 for item in preferred.values())
+    pref_total = max(preferred_class_total, as_float(inputs.get("preferred_aggregate_musd")) or 0)
+    maximum_preferred_rate = max((as_float(item.get("rate")) or 0 for item in preferred.values()), default=0)
+    annual_div = sum((as_float(item.get("notional_musd")) or 0) * (as_float(item.get("rate")) or 0) for item in preferred.values()) + max(pref_total - preferred_class_total, 0) * maximum_preferred_rate
+    annual_obligation = annual_div + (as_float(inputs.get("annual_interest_musd")) or 0) + (as_float(inputs.get("other_debt_annual_service_musd")) or 0)
     coverage_months = (as_float(inputs.get("usd_reserve_musd")) or 0) / (annual_obligation / 12) if annual_obligation else None
     weekly_need = annual_obligation / 52 if annual_obligation else None
     weekly_sales = as_float(inputs.get("weekly_btc_sales_musd"))
@@ -269,6 +283,252 @@ def assert_close(name: str, expected: Any, actual: Any, failures: list[str], tol
         failures.append(f"{name}: 重算 {e} != snapshot {a}")
 
 
+def normalized_gap(first: Any, second: Any, *, scale_floor: float = 0.0) -> float | None:
+    first_value = as_float(first)
+    second_value = as_float(second)
+    if first_value is None or second_value is None:
+        return None
+    denominator = max((abs(first_value) + abs(second_value)) / 2, scale_floor)
+    return abs(first_value - second_value) / denominator if denominator else 0.0
+
+
+def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -> dict[str, Any]:
+    errors: list[str] = []
+    components_raw = inputs.get("canonical_components_usd")
+    if not isinstance(components_raw, dict):
+        components_raw = {}
+        errors.append("canonical components missing")
+    components = {str(key): as_float(value) for key, value in components_raw.items()}
+    if any(value is None for value in components.values()):
+        errors.append("canonical components contain non-numeric values")
+    numeric_components = {key: value for key, value in components.items() if value is not None}
+    gross_flow = sum(abs(value) for value in numeric_components.values())
+    component_total = sum(numeric_components.values())
+    reported_total = as_float(inputs.get("canonical_total_usd"))
+    total_difference = abs(component_total - reported_total) if reported_total is not None else None
+    total_tolerance = max(
+        ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD,
+        ETF_COMPONENT_SUM_RELATIVE_TOLERANCE * max(abs(component_total), abs(reported_total or 0)),
+    )
+    total_reconciled = total_difference is not None and total_difference <= total_tolerance
+    expected_tickers_raw = inputs.get("expected_tickers")
+    expected_tickers = {str(ticker) for ticker in expected_tickers_raw} if isinstance(expected_tickers_raw, list) else set()
+    if not expected_tickers:
+        errors.append("expected fund roster missing")
+    if asset in ETF_REQUIRED_ROSTER and not ETF_REQUIRED_ROSTER[asset].issubset(expected_tickers):
+        errors.append("expected fund roster is below the governed minimum")
+    expected_count = len(expected_tickers)
+    if int(as_float(inputs.get("expected_ticker_count")) or 0) != expected_count:
+        errors.append("expected fund roster count mismatch")
+    component_count = sum(ticker in numeric_components for ticker in expected_tickers)
+    completeness = component_count / expected_count if expected_count else None
+
+    official_ticker = str(inputs.get("official_ticker") or "")
+    official_component = numeric_components.get(official_ticker)
+    recorded_official_component = as_float(inputs.get("official_component_usd"))
+    if official_component is None or recorded_official_component != official_component:
+        errors.append("official component does not match canonical roster")
+    official_proxy = as_float(inputs.get("official_proxy_usd"))
+    official_gap = normalized_gap(official_component, official_proxy, scale_floor=100_000_000)
+    official_coverage = abs(official_component) / gross_flow if official_component is not None and gross_flow else None
+
+    backup = inputs.get("backup_sample") if isinstance(inputs.get("backup_sample"), dict) else {}
+    matched_tickers = backup.get("matched_tickers") if isinstance(backup.get("matched_tickers"), list) else []
+    canonical_values = backup.get("canonical_values_usd") if isinstance(backup.get("canonical_values_usd"), dict) else {}
+    backup_values = backup.get("backup_values_usd") if isinstance(backup.get("backup_values_usd"), dict) else {}
+    same_date = bool(inputs.get("canonical_as_of") and backup.get("as_of") == inputs.get("canonical_as_of"))
+    weighted_difference = 0.0
+    weighted_reference = 0.0
+    component_gaps: dict[str, float] = {}
+    matched_canonical_gross = 0.0
+    validation_type = str(backup.get("validation_type") or "")
+    for ticker in matched_tickers:
+        canonical_value = reported_total if validation_type == "same_date_aggregate_total" and ticker == "TOTAL" else numeric_components.get(str(ticker))
+        recorded_canonical = as_float(canonical_values.get(ticker))
+        backup_value = as_float(backup_values.get(ticker))
+        if canonical_value is None or backup_value is None or recorded_canonical != canonical_value:
+            errors.append(f"backup sample {ticker} is not reconstructable")
+            continue
+        gap = normalized_gap(canonical_value, backup_value, scale_floor=100_000_000)
+        if gap is None:
+            errors.append(f"backup sample {ticker} gap missing")
+            continue
+        component_gaps[str(ticker)] = gap
+        weighted_difference += abs(canonical_value - backup_value)
+        weighted_reference += (abs(canonical_value) + abs(backup_value)) / 2
+        matched_canonical_gross += abs(canonical_value)
+    if backup.get("provider") and not matched_tickers:
+        errors.append("backup provider has no matched fund")
+    backup_weighted_gap = weighted_difference / max(weighted_reference, 100_000_000) if component_gaps else None
+    backup_max_gap = max(component_gaps.values()) if component_gaps else None
+    backup_coverage = 1.0 if validation_type == "same_date_aggregate_total" and component_gaps else matched_canonical_gross / gross_flow if gross_flow else None
+    amount_sanity_errors: list[str] = []
+    if any(abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD for value in numeric_components.values()):
+        amount_sanity_errors.append("canonical single-fund daily flow exceeds sanity bound")
+    if gross_flow > ETF_MAX_GROSS_DAILY_FLOW_USD:
+        amount_sanity_errors.append("canonical gross daily flow exceeds sanity bound")
+    if official_proxy is None or abs(official_proxy) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD:
+        amount_sanity_errors.append("official major-fund proxy missing or exceeds sanity bound")
+    if any((value := as_float(raw_value)) is None or abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD for raw_value in backup_values.values()):
+        amount_sanity_errors.append("backup sample amount missing or exceeds sanity bound")
+    source_count = 1 + int(official_proxy is not None) + int(bool(backup.get("provider") and component_gaps and same_date))
+    return {
+        "errors": errors,
+        "canonical_component_sum_usd": component_total,
+        "reported_canonical_total_usd": reported_total,
+        "canonical_total_difference_usd": total_difference,
+        "canonical_total_tolerance_usd": total_tolerance,
+        "canonical_total_reconciled": total_reconciled,
+        "gross_component_flow_usd": gross_flow,
+        "component_count": component_count,
+        "component_completeness": completeness,
+        "official_gap": official_gap,
+        "official_coverage": official_coverage,
+        "backup_same_date": same_date,
+        "backup_weighted_gap": backup_weighted_gap,
+        "backup_max_gap": backup_max_gap,
+        "backup_coverage": backup_coverage,
+        "amount_sanity_pass": not amount_sanity_errors,
+        "amount_sanity_errors": amount_sanity_errors,
+        "validation_source_count": source_count,
+    }
+
+
+def recompute_dat_validation(item: dict[str, Any]) -> dict[str, Any]:
+    validation = item.get("validation") if isinstance(item.get("validation"), dict) else {}
+    base_provider = str(item.get("total_holdings_base_provider") or "")
+    base_total = as_float(item.get("total_holdings_base"))
+    errors: list[str] = []
+    weighted_difference = 0.0
+    weighted_reference = 0.0
+    matched_base_holdings = 0.0
+    maximum_company_gap = 0.0
+    providers: set[str] = set()
+    comparison_count = 0
+    for comparison in validation.get("comparisons", []):
+        values_raw = comparison.get("provider_values") if isinstance(comparison.get("provider_values"), dict) else {}
+        values = {
+            str(provider): value
+            for provider, raw_value in values_raw.items()
+            if (value := as_float(raw_value)) is not None and value >= 0
+        }
+        if base_provider not in values or len(values) < 2:
+            errors.append(f"{comparison.get('symbol')}: comparison lacks base plus independent source")
+            continue
+        base_value = values[base_provider]
+        consensus_values = {
+            provider: value
+            for provider, value in values.items()
+            if provider == base_provider
+            or abs(value - base_value) / max(statistics.median([value, base_value]), 1) <= 0.05
+        }
+        if len(consensus_values) < 2:
+            errors.append(f"{comparison.get('symbol')}: no independent value agrees with the base within 5%")
+            continue
+        outlier_values = {provider: value for provider, value in values.items() if provider not in consensus_values}
+        recorded_consensus = comparison.get("consensus_provider_values") if isinstance(comparison.get("consensus_provider_values"), dict) else {}
+        recorded_outliers = comparison.get("excluded_outlier_provider_values") if isinstance(comparison.get("excluded_outlier_provider_values"), dict) else {}
+        if recorded_consensus != consensus_values or recorded_outliers != outlier_values:
+            errors.append(f"{comparison.get('symbol')}: consensus/outlier classification mismatch")
+        reference = statistics.median(consensus_values.values())
+        company_gap = (max(consensus_values.values()) - min(consensus_values.values())) / reference if reference else 0.0
+        recorded_median = as_float(comparison.get("median_holdings"))
+        if recorded_median is None or abs(recorded_median - reference) > 1e-9 * max(1, abs(reference)):
+            errors.append(f"{comparison.get('symbol')}: recorded median mismatch")
+        recorded_gap = as_float(comparison.get("max_relative_gap"))
+        if recorded_gap is None or abs(recorded_gap - company_gap) > 1e-9 * max(1, abs(company_gap)):
+            errors.append(f"{comparison.get('symbol')}: recorded company gap mismatch")
+        weighted_difference += max(consensus_values.values()) - min(consensus_values.values())
+        weighted_reference += reference
+        matched_base_holdings += base_value
+        maximum_company_gap = max(maximum_company_gap, company_gap)
+        providers.update(consensus_values)
+        comparison_count += 1
+    weighted_gap = weighted_difference / weighted_reference if weighted_reference else None
+    coverage = matched_base_holdings / base_total if base_total else None
+    passed = bool(
+        len(providers) >= 2
+        and comparison_count >= 2
+        and validation.get("official_overlay_complete") is True
+        and coverage is not None
+        and coverage >= 0.60
+        and weighted_gap is not None
+        and weighted_gap <= 0.01
+        and maximum_company_gap <= 0.05
+    )
+    return {
+        "errors": errors,
+        "status": "representative_cross_source_verified" if passed else "quorum_failed",
+        "provider_count": len(providers),
+        "providers": sorted(providers),
+        "matched_company_count": comparison_count,
+        "matched_base_holdings": matched_base_holdings,
+        "representative_coverage_ratio": coverage,
+        "weighted_cross_source_gap": weighted_gap,
+        "maximum_company_gap": maximum_company_gap if comparison_count else None,
+        "excluded_outlier_count": sum(
+            len(comparison.get("excluded_outlier_provider_values", {}))
+            for comparison in validation.get("comparisons", [])
+            if isinstance(comparison.get("excluded_outlier_provider_values"), dict)
+        ),
+    }
+
+
+def recompute_dat_official_overlay(item: dict[str, Any], official_values: dict[str, float]) -> dict[str, Any]:
+    validation = item.get("validation") if isinstance(item.get("validation"), dict) else {}
+    base_provider = str(item.get("total_holdings_base_provider") or "")
+    base_total = as_float(item.get("total_holdings_base"))
+    comparisons = {
+        str(comparison.get("symbol")): comparison
+        for comparison in validation.get("comparisons", [])
+        if comparison.get("symbol")
+    }
+    errors: list[str] = []
+    adjustment = 0.0
+    for symbol, official_value in official_values.items():
+        base_value = as_float(comparisons.get(symbol, {}).get("provider_values", {}).get(base_provider))
+        if base_value is None:
+            errors.append(f"{symbol}: selected base value missing from DAT comparison evidence")
+            continue
+        adjustment += official_value - base_value
+    expected_total = base_total + adjustment if base_total is not None and not errors else None
+    return {
+        "errors": errors,
+        "official_overlay_adjustment": adjustment,
+        "expected_total_holdings": expected_total,
+    }
+
+
+def recompute_sector_validation(item: dict[str, Any]) -> dict[str, Any]:
+    observations = item.get("source_observations") if isinstance(item.get("source_observations"), dict) else {}
+    errors: list[str] = []
+    changes = [as_float(observation.get("change_24h")) for observation in observations.values()]
+    changes = [value for value in changes if value is not None]
+    market_caps = [as_float(observation.get("market_cap_usd")) for observation in observations.values()]
+    market_caps = [value for value in market_caps if value is not None]
+    volumes = [as_float(observation.get("volume_24h_usd")) for observation in observations.values()]
+    volumes = [value for value in volumes if value is not None]
+    gap = max(changes) - min(changes) if len(changes) >= 2 else None
+    if len(changes) < 2:
+        errors.append("fewer than two complete return sources")
+    if len(market_caps) < 2 or len(volumes) < 2:
+        errors.append("fewer than two market-cap or volume sources")
+    if gap is None or gap > 0.01:
+        errors.append("cross-source return gap exceeds 1 percentage point")
+    if len(item.get("constituents", [])) != 5 or item.get("basket_version") != "fixed-basket-v1":
+        errors.append("sector basket roster or version mismatch")
+    for provider, observation in observations.items():
+        source_age = age_hours(observation.get("as_of"))
+        if source_age is None or source_age < -0.25 or source_age > 0.5:
+            errors.append(f"{provider} timestamp outside freshness window")
+    if not errors:
+        assert_close("sector median return", statistics.median(changes), item.get("change_24h"), errors)
+        assert_close("sector median market cap", statistics.median(market_caps), item.get("market_cap_usd"), errors)
+        assert_close("sector median volume", statistics.median(volumes), item.get("volume_24h_usd"), errors)
+        assert_close("sector source gap", gap, item.get("cross_source_gap"), errors)
+    return {"errors": errors, "source_count": len(changes), "gap": gap}
+
+
 def main() -> int:
     raw = load_json(RAW_PATH)
     snapshot = load_json(SNAPSHOT_PATH)
@@ -282,11 +542,24 @@ def main() -> int:
     structural_degradations: list[str] = []
     structural_evidence: list[str] = []
 
+    if raw.get("date") != snapshot.get("date"):
+        failures.append(f"raw/snapshot date mismatch: {raw.get('date')} != {snapshot.get('date')}")
+    if not raw.get("batch_id") or raw.get("batch_id") != snapshot.get("batch_id"):
+        failures.append("raw observations and snapshot are not bound to the same batch_id")
+    if raw.get("generated_at") != snapshot.get("generated_at"):
+        failures.append("raw observations and snapshot generated_at mismatch")
+
     if not market_universe:
         failures.append("market universe artifact missing")
     else:
         if market_universe.get("date") != snapshot.get("date"):
             failures.append(f"market universe date mismatch: {market_universe.get('date')} != {snapshot.get('date')}")
+        if market_universe.get("snapshot_generated_at") != snapshot.get("generated_at"):
+            failures.append("market universe is not bound to the current daily snapshot")
+        if market_universe.get("raw_generated_at") != raw.get("generated_at"):
+            failures.append("market universe is not bound to the current raw observations")
+        if market_universe.get("source_batch_id") != snapshot.get("batch_id") or market_universe.get("raw_batch_id") != raw.get("batch_id"):
+            failures.append("market universe source batch lineage mismatch")
         universe_age = age_hours(market_universe.get("generated_at"))
         if universe_age is None:
             failures.append("market universe generated_at missing or invalid")
@@ -337,6 +610,12 @@ def main() -> int:
                 assert_close(f"market universe {symbol} median spot", statistics.median(source_prices), asset.get("price_usd"), failures)
                 expected_gap = (max(source_prices) - min(source_prices)) / statistics.mean(source_prices)
                 assert_close(f"market universe {symbol} source gap", expected_gap, gap, failures)
+        for sector, item in market_universe.get("sectors", {}).items():
+            sector_check = recompute_sector_validation(item)
+            if sector_check["errors"]:
+                failures.extend(f"market universe sector {sector}: {error}" for error in sector_check["errors"])
+            if item.get("status") != "cross_source_verified":
+                failures.append(f"market universe sector {sector}: status is not cross_source_verified")
             if len(source_prices) != int(asset.get("source_count") or 0):
                 failures.append(f"market universe {symbol}: source_count does not match source_prices")
             for provider, observation in asset.get("source_observations", {}).items():
@@ -448,6 +727,82 @@ def main() -> int:
                 assert_close(f"market universe {symbol} OKX ATM IV mapping", options.get("atm_implied_volatility"), options.get("volatility_value"), failures)
             else:
                 failures.append(f"market universe {symbol}: unsupported options provider")
+        for asset in ("BTC", "ETH"):
+            dat_item = market_universe.get("dat", {}).get(asset, {})
+            dat_recomputed = recompute_dat_validation(dat_item)
+            for error in dat_recomputed["errors"]:
+                failures.append(f"{asset} DAT reconstruction: {error}")
+            validation = dat_item.get("validation", {})
+            for key in (
+                "provider_count",
+                "matched_company_count",
+                "matched_base_holdings",
+                "representative_coverage_ratio",
+                "weighted_cross_source_gap",
+                "maximum_company_gap",
+                "excluded_outlier_count",
+            ):
+                assert_close(f"{asset} DAT {key}", dat_recomputed.get(key), validation.get(key), failures)
+            if sorted(validation.get("providers") or []) != dat_recomputed["providers"]:
+                failures.append(f"{asset} DAT participating provider list mismatch")
+            if dat_item.get("status") != dat_recomputed["status"] or validation.get("status") != dat_recomputed["status"]:
+                failures.append(f"{asset} DAT claimed status does not match independent reconstruction")
+            if int(dat_item.get("source_count") or 0) != dat_recomputed["provider_count"]:
+                failures.append(f"{asset} DAT source_count does not match reconstructed participating providers")
+            official_specs = {
+                "BTC": {"MSTR": ["mstr_sec_btc_holdings_latest"]},
+                "ETH": {"BMNR": ["bmnr_eth_holdings"], "SBET": ["sbet_eth_holdings_equivalent"]},
+            }[asset]
+            comparisons_by_symbol = {
+                str(comparison.get("symbol")): comparison
+                for comparison in validation.get("comparisons", [])
+                if comparison.get("symbol")
+            }
+            canonical_companies = {
+                str(company.get("symbol")): company
+                for company in dat_item.get("companies", [])
+                if company.get("symbol")
+            }
+            official_values: dict[str, float] = {}
+            for symbol, observation_names in official_specs.items():
+                official_observation = next(
+                    (observations.get(name) for name in observation_names if observations.get(name, {}).get("ok")),
+                    None,
+                )
+                official_value = as_float(official_observation.get("value")) if official_observation else None
+                if official_value is None:
+                    failures.append(f"{asset} DAT {symbol}: required raw official observation missing")
+                    continue
+                official_values[symbol] = official_value
+                comparison_value = as_float(
+                    comparisons_by_symbol.get(symbol, {}).get("provider_values", {}).get("SEC official filings")
+                )
+                assert_close(f"{asset} DAT {symbol} raw official binding", official_value, comparison_value, failures)
+                assert_close(
+                    f"{asset} DAT {symbol} official overlay binding",
+                    official_value,
+                    canonical_companies.get(symbol, {}).get("holdings"),
+                    failures,
+                )
+            overlay_recomputed = recompute_dat_official_overlay(dat_item, official_values)
+            for error in overlay_recomputed["errors"]:
+                failures.append(f"{asset} DAT official overlay reconstruction: {error}")
+            assert_close(
+                f"{asset} DAT official overlay adjustment",
+                overlay_recomputed["official_overlay_adjustment"],
+                dat_item.get("official_overlay_adjustment"),
+                failures,
+            )
+            assert_close(
+                f"{asset} DAT official-overlay total",
+                overlay_recomputed["expected_total_holdings"],
+                dat_item.get("total_holdings"),
+                failures,
+            )
+            evidence.append(
+                f"{asset} DAT reconstructed status={dat_recomputed['status']} providers={dat_recomputed['provider_count']} "
+                f"coverage={dat_recomputed['representative_coverage_ratio']} gap={dat_recomputed['weighted_cross_source_gap']}"
+            )
         thesis = market_universe.get("btc_thesis", {})
         thesis_quality = thesis.get("quality", {})
         if thesis_quality.get("coverage_status") != "complete":
@@ -480,10 +835,18 @@ def main() -> int:
 
         credit = thesis.get("digital_dollar_competition", {})
         stablecoin_supply = as_float(credit.get("stablecoin_supply_usd"))
+        stablecoin_prior = as_float(credit.get("stablecoin_supply_30d_ago_usd"))
+        stablecoin_asset_sum = as_float(credit.get("stablecoin_supply_asset_sum_usd"))
         matched_supply = as_float(credit.get("stablecoin_supply_matched_cohort_usd"))
         matched_prior = as_float(credit.get("stablecoin_supply_matched_cohort_30d_ago_usd"))
-        if matched_supply is not None and matched_prior not in (None, 0):
-            assert_close("BTC thesis stablecoin matched-cohort 30d change", matched_supply / matched_prior - 1, credit.get("stablecoin_supply_30d_change"), structural_failures)
+        if stablecoin_supply is not None and stablecoin_prior not in (None, 0):
+            assert_close("BTC thesis timestamped stablecoin 30d change", stablecoin_supply / stablecoin_prior - 1, credit.get("stablecoin_supply_30d_change"), structural_failures)
+        else:
+            structural_failures.append("BTC thesis timestamped stablecoin current/prior values missing")
+        if stablecoin_supply is not None and stablecoin_asset_sum is not None:
+            assert_close("BTC thesis stablecoin asset-sum gap", pct_gap(stablecoin_supply, stablecoin_asset_sum), credit.get("stablecoin_supply_asset_sum_gap"), structural_failures)
+        if matched_supply is None or matched_prior in (None, 0):
+            structural_failures.append("BTC thesis stablecoin matched-cohort evidence missing")
         matched_count = int(credit.get("stablecoin_30d_matched_count") or 0)
         unmatched_count = int(credit.get("stablecoin_30d_unmatched_count") or 0)
         total_count = int(credit.get("usd_stablecoin_count") or 0)
@@ -494,8 +857,27 @@ def main() -> int:
             assert_close("BTC thesis digital anchor share", btc_market_cap / (btc_market_cap + stablecoin_supply), credit.get("btc_share_of_btc_plus_stablecoins"), structural_failures)
         if as_float(credit.get("rwa_protocol_tvl_usd")) is None or int(credit.get("rwa_protocol_count") or 0) < 1:
             structural_degradations.append("BTC thesis RWA protocol coverage missing")
+        btcfi = thesis.get("unmeasured_falsifier", {})
+        btcfi_tvl = as_float(btcfi.get("observable_btcfi_tvl_usd"))
+        btcfi_count = int(btcfi.get("observable_protocol_count") or 0)
+        btcfi_categories = btcfi.get("included_categories", [])
+        if (
+            btcfi_tvl is None
+            or btcfi_tvl <= 0
+            or btcfi_count < 1
+            or sorted(btcfi_categories) != ["Anchor BTC", "Decentralized BTC", "Restaked BTC"]
+            or btcfi.get("status") != "measured_onchain_proxy_global_total_unknown"
+        ):
+            structural_failures.append("BTC thesis BTCFi observable collateral proxy contract is incomplete")
+        credit_max_lag = as_float(
+            market_universe.get("quality", {})
+            .get("freshness_contract", {})
+            .get("thesis_credit_max_lag_hours")
+        )
         credit_age = age_hours(credit.get("as_of"))
-        if credit_age is None or credit_age < -0.25 or credit_age > 8:
+        if credit_max_lag is None or credit_max_lag < 24:
+            structural_failures.append("BTC thesis stablecoin/RWA freshness contract missing or incompatible with daily source cadence")
+        elif credit_age is None or credit_age < -0.25 or credit_age > credit_max_lag:
             structural_degradations.append("BTC thesis stablecoin/RWA retrieval stale or timestamp missing")
 
         company = thesis.get("public_company_adoption", {})
@@ -529,8 +911,12 @@ def main() -> int:
             structural_degradations.append("BTC thesis U.S. debt/GDP stale or timestamp missing")
         if real_yield_age is None or real_yield_age < 0 or real_yield_age > 10:
             structural_degradations.append("BTC thesis U.S. 10-year real yield stale or timestamp missing")
-        if thesis.get("unmeasured_falsifier", {}).get("status") != "unknown_no_complete_public_dataset":
-            structural_failures.append("BTC thesis must preserve unknown global BTC collateral stock")
+        collateral = thesis.get("unmeasured_falsifier", {})
+        if (
+            collateral.get("status") != "measured_onchain_proxy_global_total_unknown"
+            or collateral.get("global_total_status") != "unknown_no_complete_public_dataset"
+        ):
+            structural_failures.append("BTC thesis must distinguish measured onchain BTCFi proxy from unknown global collateral stock")
         structural_evidence.append(
             f"BTC thesis gold_ratio={gold.get('btc_to_gold_market_value_ratio')} "
             f"stablecoin_supply={credit.get('stablecoin_supply_usd')} company_supply_share={company.get('share_of_btc_supply')}"
@@ -571,7 +957,7 @@ def main() -> int:
     check_observation_freshness("Strategy BTC holdings", strategy_holdings, 14, 45, failures, degradations, evidence)
     sec_sales = observations.get("mstr_sec_rolling_7d_sales_musd")
     if sec_sales and sec_sales.get("ok"):
-        check_observation_freshness("Strategy SEC 7d sales", sec_sales, 2, 7, failures, degradations, evidence)
+        check_observation_freshness("Strategy latest complete disclosed week sales", sec_sales, 8, 14, failures, degradations, evidence)
     check_observation_freshness("BMNR treasury holdings", observations.get("bmnr_eth_holdings"), 14, 30, failures, degradations, evidence)
     for ticker in ["mstr", "bmnr", "strc"]:
         check_equity_cross_source(
@@ -620,13 +1006,102 @@ def main() -> int:
         degradations.append("mempool fee proxy missing")
     if as_float(radar.get("treasury_avg_bill_rate_pct")) is None:
         degradations.append("macro funding proxy missing")
-    etf_status = str(radar.get("etf_flow_status") or "")
-    if etf_status == "cross_source_verified":
-        evidence.append("ETF flow automated and cross-source verified")
-    elif etf_status == "automated_third_party_single_source":
-        degradations.append("ETF flow automated from third-party single source; not eligible as hard trigger until cross-source verified")
-    else:
-        degradations.append("ETF flow unavailable; not eligible as hard trigger")
+    for asset, prefix in (("BTC", "etf_flow"), ("ETH", "eth_etf_flow")):
+        etf_status = str(radar.get(f"{prefix}_status") or "")
+        if etf_status != "sample_cross_source_verified":
+            degradations.append(f"{asset} ETF flow sample verification unavailable; not eligible as hard trigger")
+            continue
+        etf_source_count = as_float(radar.get(f"{prefix}_source_count"))
+        component_completeness = as_float(radar.get(f"{prefix}_component_completeness"))
+        etf_official_gap = as_float(radar.get(f"{prefix}_official_major_fund_gap"))
+        etf_official_coverage = as_float(radar.get(f"{prefix}_official_major_fund_coverage"))
+        backup_gap = as_float(radar.get(f"{prefix}_backup_component_gap"))
+        backup_coverage = as_float(radar.get(f"{prefix}_backup_component_coverage"))
+        etf_as_of_age = age_days(radar.get(f"{prefix}_as_of"))
+        if etf_source_count is None or etf_source_count < 3:
+            failures.append(f"{asset} ETF sample verification has insufficient validation sources: {etf_source_count}")
+        if component_completeness is None or component_completeness < 0.95:
+            failures.append(f"{asset} ETF latest fund roster completeness below 95%: {component_completeness}")
+        if etf_official_gap is None or etf_official_gap > 0.05:
+            failures.append(f"{asset} ETF official major-fund gap exceeds 5% or USD 5m: {etf_official_gap}")
+        if etf_official_coverage is None or etf_official_coverage < 0.30:
+            failures.append(f"{asset} ETF official major-fund gross component coverage below 30%: {etf_official_coverage}")
+        if backup_gap is None or backup_gap > 0.05:
+            failures.append(f"{asset} ETF same-date backup sample gap exceeds 5% or USD 5m: {backup_gap}")
+        if backup_coverage is None or backup_coverage < 0.30:
+            failures.append(f"{asset} ETF same-date backup sample gross coverage below 30%: {backup_coverage}")
+        if etf_as_of_age is None or etf_as_of_age < 0 or etf_as_of_age > 5:
+            failures.append(f"{asset} ETF market date stale or missing: age_days={etf_as_of_age}")
+        if any(as_float(radar.get(f"{prefix}_{window}_usd")) is None for window in ("1d", "7d", "30d")):
+            failures.append(f"{asset} ETF rolling windows missing despite sample-verified status")
+        try:
+            validation_inputs = json.loads(str(radar.get(f"{prefix}_validation_inputs_json") or ""))
+        except json.JSONDecodeError:
+            validation_inputs = {}
+            failures.append(f"{asset} ETF offline-reconstructable validation inputs missing")
+        etf_recomputed = recompute_etf_validation(validation_inputs, asset)
+        for error in etf_recomputed["errors"]:
+            failures.append(f"{asset} ETF reconstruction: {error}")
+        if validation_inputs.get("canonical_provider") not in {"The Block", "Blockworks / Trackinsights", "Bitbo"}:
+            failures.append(f"{asset} ETF canonical provider is not an approved fund-component source")
+        if validation_inputs.get("canonical_as_of") != radar.get(f"{prefix}_as_of"):
+            failures.append(f"{asset} ETF canonical date does not match published as_of")
+        canonical_age = age_hours(validation_inputs.get("canonical_updated_at"))
+        if canonical_age is None or canonical_age < -1 or canonical_age > 36:
+            failures.append(f"{asset} ETF canonical source update timestamp is missing or stale")
+        assert_close(f"{asset} ETF recorded component sum", etf_recomputed["canonical_component_sum_usd"], validation_inputs.get("canonical_component_sum_usd"), failures, tolerance=1e-9)
+        assert_close(f"{asset} ETF component/total difference", etf_recomputed["canonical_total_difference_usd"], validation_inputs.get("canonical_total_difference_usd"), failures)
+        assert_close(f"{asset} ETF component/total tolerance", etf_recomputed["canonical_total_tolerance_usd"], validation_inputs.get("canonical_total_tolerance_usd"), failures)
+        if not etf_recomputed["canonical_total_reconciled"] or validation_inputs.get("canonical_total_reconciled") is not True:
+            failures.append(f"{asset} ETF fund components do not reconcile to the reported total within USD 500k or 0.1%")
+        assert_close(f"{asset} ETF gross component flow", etf_recomputed["gross_component_flow_usd"], validation_inputs.get("gross_component_flow_usd"), failures, tolerance=1e-9)
+        assert_close(f"{asset} ETF component count", etf_recomputed["component_count"], validation_inputs.get("component_count"), failures)
+        assert_close(f"{asset} ETF component completeness", etf_recomputed["component_completeness"], component_completeness, failures)
+        assert_close(f"{asset} ETF official normalized gap", etf_recomputed["official_gap"], etf_official_gap, failures)
+        assert_close(f"{asset} ETF official gross coverage", etf_recomputed["official_coverage"], etf_official_coverage, failures)
+        assert_close(f"{asset} ETF backup max component gap", etf_recomputed["backup_max_gap"], backup_gap, failures)
+        assert_close(f"{asset} ETF backup gross coverage", etf_recomputed["backup_coverage"], backup_coverage, failures)
+        assert_close(f"{asset} ETF validation source count", etf_recomputed["validation_source_count"], etf_source_count, failures)
+        backup_sample = validation_inputs.get("backup_sample", {})
+        assert_close(f"{asset} ETF backup weighted gap", etf_recomputed["backup_weighted_gap"], backup_sample.get("normalized_gap"), failures)
+        assert_close(f"{asset} ETF backup recorded max gap", etf_recomputed["backup_max_gap"], backup_sample.get("maximum_component_gap"), failures)
+        if not etf_recomputed["backup_same_date"]:
+            failures.append(f"{asset} ETF backup sample is not from the canonical market date")
+        if int(as_float(validation_inputs.get("validation_source_count")) or 0) != int(etf_recomputed["validation_source_count"]):
+            failures.append(f"{asset} ETF recorded validation source count mismatch")
+        if bool(validation_inputs.get("amount_sanity_pass")) != etf_recomputed["amount_sanity_pass"]:
+            failures.append(f"{asset} ETF amount-sanity claim mismatch")
+        sanity_thresholds = validation_inputs.get("amount_sanity_thresholds", {})
+        if as_float(sanity_thresholds.get("maximum_absolute_single_fund_daily_flow_usd")) != ETF_MAX_ABS_DAILY_FUND_FLOW_USD:
+            failures.append(f"{asset} ETF single-fund sanity threshold mismatch")
+        if as_float(sanity_thresholds.get("maximum_gross_daily_flow_usd")) != ETF_MAX_GROSS_DAILY_FLOW_USD:
+            failures.append(f"{asset} ETF gross-flow sanity threshold mismatch")
+        independently_verified = bool(
+            etf_recomputed["component_completeness"] is not None
+            and etf_recomputed["component_completeness"] >= 0.95
+            and etf_recomputed["official_gap"] is not None
+            and etf_recomputed["official_gap"] <= 0.05
+            and etf_recomputed["official_coverage"] is not None
+            and etf_recomputed["official_coverage"] >= 0.30
+            and etf_recomputed["backup_max_gap"] is not None
+            and etf_recomputed["backup_max_gap"] <= 0.05
+            and etf_recomputed["backup_coverage"] is not None
+            and etf_recomputed["backup_coverage"] >= 0.30
+            and etf_recomputed["validation_source_count"] >= 3
+            and etf_recomputed["canonical_total_reconciled"]
+            and etf_recomputed["amount_sanity_pass"]
+            and not etf_recomputed["errors"]
+        )
+        if not independently_verified:
+            failures.append(f"{asset} ETF sample-verified claim failed independent reconstruction")
+        market_etf = market_universe.get("etf", {}).get(asset, {})
+        if market_etf.get("validation_inputs_json") != radar.get(f"{prefix}_validation_inputs_json"):
+            failures.append(f"{asset} ETF market-universe validation evidence is not bound to the daily snapshot")
+        evidence.append(
+            f"{asset} ETF sample verified validation_sources={etf_source_count} completeness={component_completeness} "
+            f"official_gap={etf_official_gap} official_coverage={etf_official_coverage} "
+            f"backup_gap={backup_gap} backup_coverage={backup_coverage}"
+        )
     btc_required = ["btc_mvrv_current", "btc_200dma", "btc_50dma", "btc_200wma", "btc_drawdown_1y_pct", "btc_return_7d_pct", "btc_return_30d_pct"]
     missing_btc = [key for key in btc_required if as_float(radar.get(key)) is None]
     if missing_btc:
@@ -641,7 +1116,7 @@ def main() -> int:
         if any(key in btc_standard.get("signals", {}) for key in ["mstr_sale_pressure_ratio", "strc_discount"]):
             failures.append("BTC standard: vehicle-risk signals must remain outside BTC signal inputs")
         if as_float(btc_standard.get("dimension_weights", {}).get("ETF 邊際買盤")) not in (None, 0.5):
-            failures.append("BTC standard: single-source ETF flow weight must remain capped at 0.5")
+            failures.append("BTC standard: ETF flow weight must remain capped at 0.5 even after cross-source verification")
         coverage_ratio = as_float(btc_standard.get("data_quality", {}).get("coverage_ratio"))
         if coverage_ratio is None or coverage_ratio < 0.8:
             degradations.append(f"BTC standard coverage ratio insufficient: {coverage_ratio}")
@@ -677,7 +1152,7 @@ def main() -> int:
     manual = snapshot.get("metrics", {}).get("manual_inputs", {})
     provenance = snapshot.get("metrics", {}).get("manual_input_provenance", {})
     fields = provenance.get("fields", {})
-    manual_risk_keys = ["mstr_btc_holdings", "usd_reserve_musd", "cash_other_musd", "debt_face_musd", "annual_interest_musd", "preferred", "weekly_btc_sales_musd", "common_shares_outstanding_m", "deferred_tax_liability_musd", "prev_pref_notional_musd", "prev_mnav_equity"]
+    manual_risk_keys = ["mstr_btc_holdings", "usd_reserve_musd", "cash_other_musd", "debt_face_musd", "annual_interest_musd", "other_debt_annual_service_musd", "preferred", "preferred_aggregate_musd", "weekly_btc_sales_musd", "common_shares_outstanding_m", "deferred_tax_liability_musd", "prev_pref_notional_musd", "prev_mnav_equity"]
     manual_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") in {"manual", None}]
     missing_required_fields = [key for key in manual_risk_keys if fields.get(key, {}).get("source_type") == "missing_required"]
     if missing_required_fields:
@@ -702,7 +1177,9 @@ def main() -> int:
         if field_name == "common_shares_outstanding_m":
             warn_after, fail_after = 45, 120
         if field_name == "weekly_btc_sales_musd":
-            warn_after, fail_after = 2, 7
+            warn_after, fail_after = 8, 14
+        if field_name == "preferred":
+            warn_after, fail_after = 10, 21
         if age > fail_after:
             failures.append(f"{field_name}: official input stale {age} days > {fail_after}")
         elif age > warn_after:
@@ -714,6 +1191,12 @@ def main() -> int:
         failures.append(f"diluted_shares_m: effective input differs from SEC companyfacts by {pct_gap(sec_diluted, effective_diluted):.2%}")
     if as_float(manual.get("weekly_btc_sales_musd")) is None and metrics.get("contract_red_light") is not True:
         failures.append("weekly_btc_sales_musd unknown must fail closed for MSTR contract gate")
+    preferred_class_total = sum(as_float(item.get("notional_musd")) or 0 for item in manual.get("preferred", {}).values())
+    preferred_aggregate = as_float(manual.get("preferred_aggregate_musd"))
+    if preferred_aggregate is None or preferred_aggregate < preferred_class_total:
+        failures.append("preferred aggregate must be present and no lower than the class reconstruction")
+    elif pct_gap(preferred_aggregate, preferred_class_total) > 0.03:
+        failures.append("preferred aggregate and class reconstruction differ by more than 3%")
 
     failures = unique(failures)
     degradations = unique(degradations)
@@ -722,13 +1205,15 @@ def main() -> int:
     structural_failures = unique(structural_failures)
     structural_degradations = unique(structural_degradations)
     structural_evidence = unique(structural_evidence)
-    status = "fail" if failures else ("degraded" if degradations or warnings else "pass")
+    status = classify_verification_status(failures, degradations)
     structural_status = "fail" if structural_failures else ("degraded" if structural_degradations else "pass")
     report = {
-        "schema": 1,
+        "schema": 2,
         "agent": "daily-data-verifier",
         "verified_at": now_iso(),
         "date": snapshot.get("date"),
+        "batch_id": snapshot.get("batch_id"),
+        "raw_generated_at": raw.get("generated_at"),
         "snapshot_generated_at": snapshot.get("generated_at"),
         "market_universe_generated_at": market_universe.get("generated_at"),
         "status": status,
@@ -744,19 +1229,19 @@ def main() -> int:
             "failures": structural_failures,
             "degradations": structural_degradations,
             "evidence": structural_evidence,
-            "verification_scope": "formula integrity, timestamps and declared source semantics; not an independent reconstruction of every upstream dataset",
+            "verification_scope": "independent formula, lineage, ETF evidence and DAT consensus reconstruction; upstream HTTP responses are not all re-fetched",
         },
         "policy": {
             "btc_cross_source_max_gap": "1.5%",
             "eth_cross_source_max_gap": "1.5%",
             "equity_cross_source_max_gap_same_basis": "2%",
-            "equity_mismatched_quote_basis": "degraded, not fail",
+            "equity_mismatched_quote_basis": "1-2% is warning only; above 2% is degraded, never a same-basis hard fail",
             "daily_equity_snapshot_basis": "Yahoo regular-market close preferred; Nasdaq quote is backup/freshness evidence",
             "required_sources": ["BTC/ETH 現貨來源池至少 2 個：CoinGecko、Coinbase、Kraken", "MSTR：Yahoo 優先、Nasdaq 備援"],
             "degraded_if_missing": ["Nasdaq backup quotes", "SEC EDGAR submissions", "automated capital-structure inputs", "cross-source ETF flow verification", "BTC MVRV ratio"],
             "btc_standard_required_inputs": ["BTC spot cross-source", "BTC 50/200DMA", "BTC MVRV ratio", "Fear & Greed", "ETF flow context"],
-            "freshness_limits": {"BTC MVRV": "warn >3d, fail >7d", "Strategy holdings": "warn >14d, fail >45d", "Strategy 7d sales disclosure": "warn >2d, fail >7d", "USD reserve": "warn >30d, fail >120d", "MSTR common shares": "warn >45d, fail >120d", "BMNR holdings": "warn >14d, fail >30d"},
-            "not_hard_triggers": ["single-source ETF flow", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
+            "freshness_limits": {"BTC MVRV": "warn >3d, fail >7d", "Strategy holdings": "warn >14d, fail >45d", "Strategy latest complete disclosed week sales": "warn >8d, fail >14d", "USD reserve": "warn >30d, fail >120d", "MSTR common shares": "warn >45d, fail >120d", "BMNR holdings": "warn >14d, fail >30d"},
+            "not_hard_triggers": ["ETF flow as a standalone dimension even when cross-source verified", "realized loss without stable free API", "Google Trends without official unauthenticated API", "macro calendar without official free event API"],
             "market_universe": {
                 "update_target": "hourly",
                 "fail_if_stale": ">3h",

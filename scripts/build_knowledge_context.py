@@ -416,26 +416,25 @@ def build_knowledge_context(
         raw_pages = []
 
     active_pages: list[dict[str, Any]] = []
-    seen_slugs: set[str] = set()
+    known_slugs: set[str] = set()
     seen_paths: set[str] = set()
     for raw_page in raw_pages:
         if not isinstance(raw_page, dict):
             global_flags.append("manifest_page_invalid")
             continue
-        if str(raw_page.get("status", "")).strip().lower() != "active":
-            continue
         slug = str(raw_page.get("slug") or "").strip()
         path = str(raw_page.get("path") or "").strip()
-        if slug and slug.casefold() in seen_slugs:
+        if slug and slug.casefold() in known_slugs:
             global_flags.append("manifest_duplicate_slug")
         if path and path.casefold() in seen_paths:
             global_flags.append("manifest_duplicate_path")
-        seen_slugs.add(slug.casefold())
+        known_slugs.add(slug.casefold())
         seen_paths.add(path.casefold())
-        active_pages.append(raw_page)
+        if str(raw_page.get("status", "")).strip().lower() == "active":
+            active_pages.append(raw_page)
 
     compiled = [
-        compile_page(page, wiki_dir, seen_slugs, as_of, stale_after_days)
+        compile_page(page, wiki_dir, known_slugs, as_of, stale_after_days)
         for page in active_pages
     ]
     flag_counts = Counter(flag for page in compiled for flag in page["quality_flags"])

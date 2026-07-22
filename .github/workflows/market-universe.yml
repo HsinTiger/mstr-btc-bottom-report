@@ -37,6 +37,31 @@ jobs:
       - name: Collect market universe
         run: python scripts/collect_market_universe.py
 
+      - name: Verify current market artifact
+        continue-on-error: true
+        run: |
+          rm -f data/daily/agent_verification_report.json
+          python scripts/verify_daily_data.py
+
+      - name: Bind verifier to current market artifact
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          market = json.loads(Path("data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
+          snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+          report = json.loads(Path("data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
+          if report.get("market_universe_generated_at") != market.get("generated_at"):
+              raise SystemExit("Verifier report is not bound to the current market universe")
+          if report.get("batch_id") != snapshot.get("batch_id"):
+              raise SystemExit("Verifier report is not bound to the current daily source batch")
+          if report.get("status") not in {"pass", "degraded", "fail"}:
+              raise SystemExit("Verifier report status is invalid")
+          if report.get("status") == "fail":
+              raise SystemExit("Verifier hard failure blocks hourly market publication")
+          print(f"Market verifier current: status={report['status']}")
+          PY
+
       - name: Validate fail-closed market artifact
         run: |
           python - <<'PY'
@@ -96,7 +121,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily/market_universe.json data/daily/market_universe_history.json data/daily/site_health.json
+          git add data/daily/market_universe.json data/daily/market_universe_history.json data/daily/agent_verification_report.json data/daily/site_health.json
           if git diff --cached --quiet; then
             echo "No market-universe changes to commit."
           else

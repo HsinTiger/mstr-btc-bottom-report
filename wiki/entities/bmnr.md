@@ -2,22 +2,26 @@
 title: BMNR (BitMine)
 type: entity
 tags: [bmnr, eth-treasury, equity]
-updated: 2026-06-14
+updated: 2026-07-22
+last_verified: 2026-07-22
 confidence: high
+summary: BMNR 是 ETH 衛星財庫；目前只發布毛資產、市值對毛資產與每千股 ETH，不把未扣完整負債的數字冒充普通股淨 NAV。
 ---
 
 # BMNR (BitMine Immersion)
 
 ETH 財庫公司（Tom Lee），衛星部位（配置 20%）。
 
-## 數據（2026-06）
-- ETH 持倉：**5.54M ETH**（全網 ~4.6%，~87% 已質押）
-- 股價 ~$16、市值 ~$9.2B、股數 ~569M（持續稀釋：121M→493M→570M）
-- **mNAV ~1.0–1.05x（平價，無折價墊）**
-- 質押 MAVAN ~$266M/年 → ETH/股可自然增厚（[[coin-per-share-accretion]]）
+## 已驗證數據（2026-07-22）
+- ETH 持倉：**5,777,468 ETH**；BTC **207 BTC**；質押 **4,917,189 ETH（85.1%）**，as of 2026-07-19。
+- BMNR regular-market close：**$17.23**。
+- SEC 股數 603.226394M；扣除基準日後 5.5M 股買回的估計股數 **597.726394M**。
+- Bottom-up gross treasury：**$11.767B**；估計市值 **$10.299B**；市值／毛資產 **0.875x**，每股毛資產 **$19.69**。
+- 公司 rounded total $11.5B 與 bottom-up 差 **2.29%**，在交叉檢查範圍內。
 
 ## 多空
-- ✅ 質押自償續命、ETH 翻身選擇權、ETH/股有增厚潛力
-- ❌ **500 億股授權（100 倍稀釋）**、平價無墊、track record <1 年、99.8% 壓 ETH（MSCI 剔除風險）、ETH 需求比 BTC 弱（ETF 出逃更兇）
+- ✅ 質押可增加 ETH；買回若持續可改善每股口徑。
+- ❌ 上述 **12.5%** 是毛資產折價，不是歸屬普通股淨 NAV 折價；完整負債、優先項目與或有項目尚未全部扣除。
+- ❌ 股數變動快，任何 ETH／股結論必須綁定股數日期與買回期間。
 
 → 因此壓到 1/4；若 ETH/BTC 止穩可加回 0.35。與 [[mstr]] 是「同一個槓桿加密注」的 BTC/ETH 版，非分散。

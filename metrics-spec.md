@@ -23,7 +23,7 @@ common_equity_price_to_nav = MSTR 普通股市值 ÷ (BTC NAV + 現金及 USD Re
 - `BTC NAV = BTC 持倉 × 現貨價`，只是單一資產線。
 - `GAAP NAV / 股東權益 = BTC 公允價值 + 現金 + 其他資產 − 可轉債 − 淨遞延稅負債 − 其他負債`；優先股若列在權益中，也不代表它屬於普通股。
 - ASU 2023-08 只讓 BTC 這條資產線按公允價值入帳，**沒有**讓整張資產負債表的股東權益等於 BTC NAV。
-- 因此普通股淨值必須扣 `deferred_tax_liability_musd`。目前 SEC 自動來源是 `DeferredTaxLiabilities`，**未證明已扣除遞延稅資產，不稱為淨 DTL**；情境壓測固定使用最近揭露值，不假裝能即時重估稅務楔子。
+- 因此普通股淨值必須扣 `deferred_tax_liability_musd`。SEC 自動來源優先採資產負債表 `DeferredIncomeTaxLiabilitiesNet`，舊 tag 僅作備援；這是已列報負債，不自行把未確認稅務假設塞入估值。
 
 ### 企業價值／BTC 總值（官方同構口徑，自算版）
 
@@ -83,7 +83,7 @@ strc_discount = 1 − STRC 市價/100
 以 `−10`（偏冷／投降）到 `+10`（偏熱／追高）標準化，五維為：MVRV 估值、相對 200DMA 趨勢、Fear & Greed、ETF 邊際流量、1 年週期回撤。各維度以線性函數映射到 `−2…+2` 並截尾：MVRV `1.0→−2、2.2→+2`；200DMA 偏離 `−15%→−2、+15%→+2`；F&G `25→−2、75→+2`；ETF 7 日流量 `−$500M→−2、+$500M→+2`；1 年回撤 `−45%→−2、−10%→+2`。加權和再除以 `2 × 可用權重` 並乘 10。
 
 - BTC 市場分數不得混入 MSTR 或 BMNR 資本結構風險。
-- 權重：估值 `1.25`、趨勢 `1.0`、情緒 `0.75`、ETF `0.5`、回撤 `1.0`。ETF 是第三方單源，不計入右側確認票數；MSTR/BMNR 另列 implementation overlay，不得進入 BTC 投降票數。
+- 權重：估值 `1.25`、趨勢 `1.0`、情緒 `0.75`、ETF `0.5`、回撤 `1.0`。ETF 必須通過完整基金 roster、iShares 官方主要基金與同日獨立備援的三來源契約；即使通過仍只作低權重背景，不得單獨成為右側確認或交易硬觸發。MSTR/BMNR 另列 implementation overlay，不得進入 BTC 投降票數。
 - 資料覆蓋低於 80% 時，狀態只能是「資料不足觀察區」。
 - 模型狀態是 `heuristic_unbacktested`：這是制度化 regime context，不是已證明有 alpha 的預測模型；完成 walk-forward 回測、交易成本與樣本外基準前，不可稱為已驗證訊號。
 
@@ -110,6 +110,9 @@ BTC 在 BTC＋穩定幣中的規模占比
 RWA 協議可觀測總鎖倉價值
 = DefiLlama 分類為 RWA 的各協議 TVL 加總
 
+鏈上 BTCFi 抵押／生息代理
+= DefiLlama 分類為 Anchor BTC、Restaked BTC、Decentralized BTC 的協議 TVL 加總
+
 公開公司持幣滲透率
 = CoinGecko 公開公司 BTC 總持倉 ÷ BTC 流通供給
 
@@ -132,7 +135,7 @@ RWA 協議可觀測總鎖倉價值
 - 黃金代理值是情境模型，不是可投資總市值；情境價不是目標價，也不能把市值增量誤稱為所需淨流入。
 - RWA 只列 DefiLlama `RWA` 類別協議 TVL，不與穩定幣供給相加，避免分類與重複計算風險。
 - 債務／GDP 只作慢速主權信用壓力代理，不能證明 BTC 需求；10 年實質利率是 BTC 無現金流特性的週期機會成本，兩者可能方向相反。
-- 全球 BTC 抵押信用存量目前沒有完整可去重公開資料，必須顯示未知；ETF、DAT 與衍生品 OI 不得冒充抵押採用。
+- 全球 BTC 抵押信用存量目前沒有完整可去重公開資料；首頁改顯示三類 BTCFi 協議 TVL 作「可觀測鏈上代理」，並明示不含中心化借貸、銀行抵押、衍生品保證金與再質押重複計算。ETF、DAT 與衍生品 OI 不得冒充抵押採用。
 - 敘事狀態門檻是未回測的描述性 heuristic：BTC／黃金 `<10%` 為早期、`10–50%` 為規模化、`>=50%` 為接近成熟；算力需同時為 90 日高點 `>=85%` 且 30 日跌幅不超過 `10%` 才稱穩固，低於 90 日高點 `70%` 才稱明顯回落；美國債務／GDP `>=100%` 與 10 年實質利率 `>=2%` 分別標記結構壓力與週期逆風。任一必要值缺漏即為未知。
 - 本層使用獨立 `structural_context_quality`；缺漏、逾時或公式錯誤只能封鎖研究卡，不得降低執行層 `agent_verification_report.status` 或改變任何交易閘門。
 
@@ -154,19 +157,19 @@ market_cap_to_gross_treasury = 回購調整後估計市值 ÷ gross_treasury
 | --- | --- | --- | --- |
 | BTC 持倉、7 日賣幣/買幣、均價 | Strategy purchases 官方 ledger + SEC 8-K | — | 每日抓取、7 日滾動 |
 | USD Reserve 餘額 | 週 8-K 揭露 | 官方新聞稿 | 每週一 |
-| 特別股清算面額（STRF/STRC/STRK/STRD 各系列 outstanding） | 10-Q 資本結構表 + 增發 8-K 累加 | 官網（僅對照） | 每季核對、每週增量 |
+| 特別股清算面額（STRF/STRC/STRE/STRK/STRD 各系列 outstanding） | 10-Q 資本結構表 + 連續週期 8-K ATM 累加 | 8-K 官方聚合優先股總額交叉 | 每季基準、每週增量 |
 | 債務面額與票息（可轉債明細） | 10-Q Notes Payable 附註 | — | 每季 |
 | 普通股實際流通股數 | 最新 10-Q/10-K 封面 inline XBRL，各普通股類別加總 | Nasdaq market cap 反推僅交叉檢查 | 每日抓取；超過 45 日降級 |
 | MSTR / STRF / STRC / STRK / STRD 市價 | Yahoo Finance API | stooq | 每日收盤 |
 | BTC 價格 | CoinGecko API | Coinbase spot | 每日 |
 | ETH 價格 | CoinGecko API | Coinbase spot | 每日 |
 | BTC MVRV | Coin Metrics community API | — | 每日；超過 3 日降級 |
-| 黃金代理總值 | World Gold Council 地上存量 × Yahoo `GC=F` | — | 黃金價四小時；存量年度 |
-| 美元穩定幣供給／RWA 協議 TVL | DefiLlama Stablecoins／Protocols | — | 四小時；供應商分類 |
-| BTC 算力持續性 | Blockchain.com 180 日 hash-rate | — | 四小時；超過 72 小時降級 |
+| 黃金代理總值 | World Gold Council 地上存量 × Yahoo `GC=F` | — | 每小時檢查；上游日線／年度存量 |
+| 美元穩定幣供給／RWA 協議 TVL | DefiLlama Stablecoins／Protocols | — | 每小時檢查；上游日更、36 小時新鮮度契約 |
+| BTC 算力持續性 | Blockchain.com 180 日 hash-rate | — | 每小時檢查；超過 72 小時降級 |
 | 美國債務／GDP、10 年實質利率 | FRED `GFDEGDQ188S`／`DFII10` | — | 季度／交易日 |
-| BTC／ETH 到期期貨基差 | Deribit 月到期合約 | OKX 幣本位到期合約 | 四小時；依供應商分開標示 |
-| BTC／ETH 期權波動與 Put／Call | Deribit DVOL＋幣本位期權 | OKX 近 30 日 ATM 標記 IV＋幣本位期權 | 四小時；不同波動率定義不得串接 |
+| BTC／ETH 到期期貨基差 | Deribit 月到期合約 | OKX 幣本位到期合約 | 每小時；依供應商分開標示 |
+| BTC／ETH 期權波動與 Put／Call | Deribit DVOL＋幣本位期權 | OKX 近 30 日 ATM 標記 IV＋幣本位期權 | 每小時；不同波動率定義不得串接 |
 | BMNR ETH/BTC/現金/回購 | SEC EDGAR 8-K Exhibit 99.1（CIK 0001829311） | SEC companyfacts 股數 | 每日抓取 |
 | 官網 mNAV（僅對照用） | strategy.com | — | 每日，記錄與自算企業價值／BTC 總值差異 |
 

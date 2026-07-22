@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   workflow_run:
-    workflows: ["Daily verified data pipeline", "4-hour cross-asset market universe", "Daily resilient AI intelligence"]
+    workflows: ["Daily verified data pipeline", "Hourly cross-asset market universe", "Daily resilient AI intelligence"]
     types: [completed]
 
 permissions:
@@ -37,6 +37,9 @@ jobs:
 
       - name: Audit product surfaces before fail-closed deploy
         run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
+
+      - name: Install pinned browser smoke dependency
+        run: python -m pip install -r requirements-smoke.txt
 
       - name: Render desktop and mobile smoke tests
         run: python scripts/smoke_product_surfaces.py

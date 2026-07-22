@@ -1,7 +1,11 @@
 {
-  "schema": 1,
+  "schema": 2,
   "date": "2026-07-22",
-  "generated_at": "2026-07-22T11:21:08+00:00",
+  "generated_at": "2026-07-22T11:49:16+00:00",
+  "snapshot_generated_at": "2026-07-22T11:49:09+00:00",
+  "raw_generated_at": "2026-07-22T11:49:09+00:00",
+  "source_batch_id": "2026-07-22T11:49:09+00:00",
+  "raw_batch_id": "2026-07-22T11:49:09+00:00",
   "update_target": "hourly",
   "units": {
     "*_usd": "US dollars",
@@ -12,58 +16,69 @@
   },
   "assets": {
     "BTC": {
-      "price_usd": 65968.93456250001,
-      "change_24h": -0.003259161649926698,
-      "market_cap_usd": 1322817688941.6152,
-      "volume_24h_usd": 32331195372.16664,
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "price_usd": 65982.0,
+      "change_24h": -0.004680678368053149,
+      "market_cap_usd": 1322577119432.728,
+      "volume_24h_usd": 33185160845.070988,
+      "as_of": "2026-07-22T11:49:10.562000+00:00",
       "change_24h_sources": {
-        "CoinGecko": -0.003259161649926698,
-        "OKX": -0.0026853827878744463,
-        "Kraken": -0.008172998134162723
+        "CoinGecko": -0.00464915942358082,
+        "Binance": -0.00443,
+        "OKX": -0.004712197312525479,
+        "Kraken": -0.00772044617713874
       },
-      "unverified_reference_price_usd": 65968.93456250001,
+      "unverified_reference_price_usd": 65982.0,
       "source_prices": {
-        "CoinGecko": 65949.0,
-        "OKX": 65969.769125,
-        "Coinbase": 65982.9,
-        "Kraken": 65968.1
+        "CoinGecko": 65982.0,
+        "Binance": 65976.571784,
+        "OKX": 65977.65065,
+        "Coinbase": 65997.58,
+        "Kraken": 65998.2
       },
       "source_observations": {
         "CoinGecko": {
-          "price_usd": 65949.0,
-          "as_of": "2026-07-22T11:21:03+00:00",
+          "price_usd": 65982.0,
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
+        "Binance": {
+          "price_usd": 65976.571784,
+          "price_usdt": 66045.92,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.003000+00:00",
+          "quote_asset": "USDT normalized to USD"
+        },
         "OKX": {
-          "price_usd": 65969.769125,
-          "price_usdt": 66032.5,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:05.961000+00:00",
+          "price_usd": 65977.65065,
+          "price_usdt": 66047.0,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.562000+00:00",
           "quote_asset": "USDT normalized to USD"
         },
         "Coinbase": {
-          "price_usd": 65982.9,
-          "as_of": "2026-07-22T11:21:04.664420238Z",
+          "price_usd": 65997.58,
+          "as_of": "2026-07-22T11:49:10.392671806Z",
           "quote_asset": "USD"
         },
         "Kraken": {
-          "price_usd": 65968.1,
-          "as_of": "2026-07-22T11:21:06+00:00",
+          "price_usd": 65998.2,
+          "as_of": "2026-07-22T11:49:10+00:00",
           "quote_asset": "USD",
           "as_of_basis": "retrieval_time_no_upstream_timestamp"
         }
       },
-      "cross_source_gap": 0.0005138898648739882,
-      "source_count": 4,
+      "cross_source_gap": 0.0003277677800340673,
+      "source_count": 5,
       "price_validation": {
         "method": "median_of_available_independent_sources",
         "required_source_count": 2,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "max_cross_source_gap": 0.02,
         "providers_used": [
           "CoinGecko",
+          "Binance",
           "OKX",
           "Coinbase",
           "Kraken"
@@ -72,58 +87,69 @@
       "state_24h": "neutral"
     },
     "ETH": {
-      "price_usd": 1926.9937535,
-      "change_24h": -0.00036833256057637777,
-      "market_cap_usd": 232484145112.659,
-      "volume_24h_usd": 9382212217.516733,
-      "as_of": "2026-07-22T11:21:06.569000+00:00",
+      "price_usd": 1925.18,
+      "change_24h": -0.004575071215061068,
+      "market_cap_usd": 232108535877.94724,
+      "volume_24h_usd": 10174550969.005592,
+      "as_of": "2026-07-22T11:49:11+00:00",
       "change_24h_sources": {
-        "CoinGecko": -0.00036833256057637777,
-        "OKX": 2.5921644054349713e-05,
-        "Kraken": -0.0010316921306255944
+        "CoinGecko": -0.004720142430122135,
+        "Binance": -0.00443,
+        "OKX": -0.004905884479330713,
+        "Kraken": -0.0015760523000513116
       },
-      "unverified_reference_price_usd": 1926.9937535,
+      "unverified_reference_price_usd": 1925.18,
       "source_prices": {
-        "CoinGecko": 1926.42,
-        "OKX": 1927.107507,
-        "Coinbase": 1927.67,
-        "Kraken": 1926.88
+        "CoinGecko": 1925.18,
+        "Binance": 1925.0965239999998,
+        "OKX": 1924.9267025000001,
+        "Coinbase": 1925.81,
+        "Kraken": 1925.83
       },
       "source_observations": {
         "CoinGecko": {
-          "price_usd": 1926.42,
-          "as_of": "2026-07-22T11:21:03+00:00",
+          "price_usd": 1925.18,
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
+        "Binance": {
+          "price_usd": 1925.0965239999998,
+          "price_usdt": 1927.12,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:09.991000+00:00",
+          "quote_asset": "USDT normalized to USD"
+        },
         "OKX": {
-          "price_usd": 1927.107507,
-          "price_usdt": 1928.94,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:06.569000+00:00",
+          "price_usd": 1924.9267025000001,
+          "price_usdt": 1926.95,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:09.860000+00:00",
           "quote_asset": "USDT normalized to USD"
         },
         "Coinbase": {
-          "price_usd": 1927.67,
-          "as_of": "2026-07-22T11:21:06.176795519Z",
+          "price_usd": 1925.81,
+          "as_of": "2026-07-22T11:49:10.416102456Z",
           "quote_asset": "USD"
         },
         "Kraken": {
-          "price_usd": 1926.88,
-          "as_of": "2026-07-22T11:21:06+00:00",
+          "price_usd": 1925.83,
+          "as_of": "2026-07-22T11:49:11+00:00",
           "quote_asset": "USD",
           "as_of_basis": "retrieval_time_no_upstream_timestamp"
         }
       },
-      "cross_source_gap": 0.0006486701768968085,
-      "source_count": 4,
+      "cross_source_gap": 0.00046915560934515676,
+      "source_count": 5,
       "price_validation": {
         "method": "median_of_available_independent_sources",
         "required_source_count": 2,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "max_cross_source_gap": 0.02,
         "providers_used": [
           "CoinGecko",
+          "Binance",
           "OKX",
           "Coinbase",
           "Kraken"
@@ -132,42 +158,42 @@
       "state_24h": "neutral"
     },
     "HYPE": {
-      "price_usd": 58.92,
-      "change_24h": -0.06005726230681655,
-      "market_cap_usd": 13103920100.756575,
-      "volume_24h_usd": 408929956.3206235,
-      "as_of": "2026-07-22T11:21:06.166000+00:00",
+      "price_usd": 58.6283755,
+      "change_24h": -0.06741693973295441,
+      "market_cap_usd": 13026872791.11368,
+      "volume_24h_usd": 405126597.73069996,
+      "as_of": "2026-07-22T11:49:10.366900714Z",
       "change_24h_sources": {
-        "CoinGecko": -0.06027742688820788,
-        "OKX": -0.059837097725425226
+        "CoinGecko": -0.06770943777659186,
+        "OKX": -0.06712444168931697
       },
-      "unverified_reference_price_usd": 58.92,
+      "unverified_reference_price_usd": 58.6283755,
       "source_prices": {
-        "CoinGecko": 58.91,
-        "OKX": 58.92696615,
-        "Coinbase": 58.92
+        "CoinGecko": 58.56,
+        "OKX": 58.6283755,
+        "Coinbase": 58.63
       },
       "source_observations": {
         "CoinGecko": {
-          "price_usd": 58.91,
-          "as_of": "2026-07-22T11:21:03+00:00",
+          "price_usd": 58.56,
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
         "OKX": {
-          "price_usd": 58.92696615,
-          "price_usdt": 58.983,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:06.166000+00:00",
+          "price_usd": 58.6283755,
+          "price_usdt": 58.69,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.136000+00:00",
           "quote_asset": "USDT normalized to USD"
         },
         "Coinbase": {
-          "price_usd": 58.92,
-          "as_of": "2026-07-22T11:21:03.647150859Z",
+          "price_usd": 58.63,
+          "as_of": "2026-07-22T11:49:10.366900714Z",
           "quote_asset": "USD"
         }
       },
-      "cross_source_gap": 0.00028795725061727854,
+      "cross_source_gap": 0.0011944144029473237,
       "source_count": 3,
       "price_validation": {
         "method": "median_of_available_independent_sources",
@@ -183,58 +209,69 @@
       "state_24h": "weak"
     },
     "SOL": {
-      "price_usd": 77.63807825,
-      "change_24h": -0.006145966709346862,
-      "market_cap_usd": 45210065293.56951,
-      "volume_24h_usd": 1478416293.4589858,
-      "as_of": "2026-07-22T11:21:07.062000+00:00",
+      "price_usd": 77.56846750000001,
+      "change_24h": -0.00958195864529976,
+      "market_cap_usd": 45166748724.752304,
+      "volume_24h_usd": 1479835221.4943504,
+      "as_of": "2026-07-22T11:49:11+00:00",
       "change_24h_sources": {
-        "CoinGecko": -0.0068878006573773135,
-        "OKX": -0.005883105256426546,
-        "Kraken": -0.006145966709346862
+        "CoinGecko": -0.009853917290599517,
+        "Binance": -0.00931,
+        "OKX": -0.009945174040545735,
+        "Kraken": -0.006530089628681068
       },
-      "unverified_reference_price_usd": 77.63807825,
+      "unverified_reference_price_usd": 77.56846750000001,
       "source_prices": {
-        "CoinGecko": 77.57,
-        "OKX": 77.65615650000001,
-        "Coinbase": 77.66,
-        "Kraken": 77.62
+        "CoinGecko": 77.51,
+        "Binance": 77.56846750000001,
+        "OKX": 77.56846750000001,
+        "Coinbase": 77.57,
+        "Kraken": 77.59
       },
       "source_observations": {
         "CoinGecko": {
-          "price_usd": 77.57,
-          "as_of": "2026-07-22T11:20:52+00:00",
+          "price_usd": 77.51,
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
+        "Binance": {
+          "price_usd": 77.56846750000001,
+          "price_usdt": 77.65,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.612000+00:00",
+          "quote_asset": "USDT normalized to USD"
+        },
         "OKX": {
-          "price_usd": 77.65615650000001,
-          "price_usdt": 77.73,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:07.062000+00:00",
+          "price_usd": 77.56846750000001,
+          "price_usdt": 77.65,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.764000+00:00",
           "quote_asset": "USDT normalized to USD"
         },
         "Coinbase": {
-          "price_usd": 77.66,
-          "as_of": "2026-07-22T11:21:03.514466737Z",
+          "price_usd": 77.57,
+          "as_of": "2026-07-22T11:49:09.359807707Z",
           "quote_asset": "USD"
         },
         "Kraken": {
-          "price_usd": 77.62,
-          "as_of": "2026-07-22T11:21:06+00:00",
+          "price_usd": 77.59,
+          "as_of": "2026-07-22T11:49:11+00:00",
           "quote_asset": "USD",
           "as_of_basis": "retrieval_time_no_upstream_timestamp"
         }
       },
-      "cross_source_gap": 0.0011593973016764119,
-      "source_count": 4,
+      "cross_source_gap": 0.001031441070026227,
+      "source_count": 5,
       "price_validation": {
         "method": "median_of_available_independent_sources",
         "required_source_count": 2,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "max_cross_source_gap": 0.02,
         "providers_used": [
           "CoinGecko",
+          "Binance",
           "OKX",
           "Coinbase",
           "Kraken"
@@ -243,102 +280,124 @@
       "state_24h": "neutral"
     },
     "BNB": {
-      "price_usd": 570.51868,
-      "change_24h": -0.009712506992901963,
-      "market_cap_usd": 75957107362.97289,
-      "volume_24h_usd": 545626180.4177244,
-      "as_of": "2026-07-22T11:21:06.966000+00:00",
+      "price_usd": 570.5702715,
+      "change_24h": -0.01,
+      "market_cap_usd": 75952268629.9735,
+      "volume_24h_usd": 546646720.3538603,
+      "as_of": "2026-07-22T11:49:10.463000+00:00",
       "change_24h_sources": {
-        "CoinGecko": -0.009887993004357772,
-        "OKX": -0.009537020981446154
+        "CoinGecko": -0.010393018344758132,
+        "Binance": -0.01,
+        "OKX": -0.00987697106220764
       },
-      "unverified_reference_price_usd": 570.51868,
+      "unverified_reference_price_usd": 570.5702715,
       "source_prices": {
-        "CoinGecko": 570.38,
-        "OKX": 570.65736
+        "CoinGecko": 570.5,
+        "Binance": 570.5702715,
+        "OKX": 570.80003
       },
       "source_observations": {
         "CoinGecko": {
-          "price_usd": 570.38,
-          "as_of": "2026-07-22T11:21:06+00:00",
+          "price_usd": 570.5,
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
+        "Binance": {
+          "price_usd": 570.5702715,
+          "price_usdt": 571.17,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.077000+00:00",
+          "quote_asset": "USDT normalized to USD"
+        },
         "OKX": {
-          "price_usd": 570.65736,
-          "price_usdt": 571.2,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:06.966000+00:00",
+          "price_usd": 570.80003,
+          "price_usdt": 571.4,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.463000+00:00",
           "quote_asset": "USDT normalized to USD"
         }
       },
-      "cross_source_gap": 0.0004861541080478631,
-      "source_count": 2,
+      "cross_source_gap": 0.0005257933379715083,
+      "source_count": 3,
       "price_validation": {
         "method": "median_of_available_independent_sources",
         "required_source_count": 2,
-        "observed_source_count": 2,
+        "observed_source_count": 3,
         "max_cross_source_gap": 0.02,
         "providers_used": [
           "CoinGecko",
+          "Binance",
           "OKX"
         ]
       },
       "state_24h": "neutral"
     },
     "XRP": {
-      "price_usd": 1.1376092125000001,
-      "change_24h": 0.005673074590660089,
-      "market_cap_usd": 71009310807.60426,
-      "volume_24h_usd": 1310699967.6136634,
-      "as_of": "2026-07-22T11:21:07.260000+00:00",
+      "price_usd": 1.138,
+      "change_24h": 0.0018055321020229178,
+      "market_cap_usd": 71029259984.08736,
+      "volume_24h_usd": 1344845891.4949806,
+      "as_of": "2026-07-22T11:49:11+00:00",
       "change_24h_sources": {
-        "CoinGecko": 0.005673074590660089,
-        "OKX": 0.0061864781263809565,
-        "Kraken": -0.00473477389485466
+        "CoinGecko": 0.0020344676572125143,
+        "Binance": 0.00194,
+        "OKX": 0.0016710642040458357,
+        "Kraken": -0.003990863024128877
       },
-      "unverified_reference_price_usd": 1.1376092125000001,
+      "unverified_reference_price_usd": 1.138,
       "source_prices": {
         "CoinGecko": 1.14,
-        "OKX": 1.1374184250000001,
-        "Coinbase": 1.1378,
-        "Kraken": 1.1372
+        "Binance": 1.137704155,
+        "OKX": 1.137704155,
+        "Coinbase": 1.138,
+        "Kraken": 1.13805
       },
       "source_observations": {
         "CoinGecko": {
           "price_usd": 1.14,
-          "as_of": "2026-07-22T11:21:01+00:00",
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
+        "Binance": {
+          "price_usd": 1.137704155,
+          "price_usdt": 1.1389,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.087000+00:00",
+          "quote_asset": "USDT normalized to USD"
+        },
         "OKX": {
-          "price_usd": 1.1374184250000001,
-          "price_usdt": 1.1385,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:07.260000+00:00",
+          "price_usd": 1.137704155,
+          "price_usdt": 1.1389,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.261000+00:00",
           "quote_asset": "USDT normalized to USD"
         },
         "Coinbase": {
-          "price_usd": 1.1378,
-          "as_of": "2026-07-22T11:21:05.951189880Z",
+          "price_usd": 1.138,
+          "as_of": "2026-07-22T11:49:09.627918263Z",
           "quote_asset": "USD"
         },
         "Kraken": {
-          "price_usd": 1.1372,
-          "as_of": "2026-07-22T11:21:06+00:00",
+          "price_usd": 1.13805,
+          "as_of": "2026-07-22T11:49:11+00:00",
           "quote_asset": "USD",
           "as_of_basis": "retrieval_time_no_upstream_timestamp"
         }
       },
-      "cross_source_gap": 0.002460230794799943,
-      "source_count": 4,
+      "cross_source_gap": 0.002016921564694645,
+      "source_count": 5,
       "price_validation": {
         "method": "median_of_available_independent_sources",
         "required_source_count": 2,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "max_cross_source_gap": 0.02,
         "providers_used": [
           "CoinGecko",
+          "Binance",
           "OKX",
           "Coinbase",
           "Kraken"
@@ -347,58 +406,69 @@
       "state_24h": "neutral"
     },
     "DOGE": {
-      "price_usd": 0.07267393899999999,
-      "change_24h": -0.010471916224670141,
-      "market_cap_usd": 11275205038.067228,
-      "volume_24h_usd": 446239436.7872575,
-      "as_of": "2026-07-22T11:21:07.162000+00:00",
+      "price_usd": 0.072583707,
+      "change_24h": -0.013907788331071941,
+      "market_cap_usd": 11254974167.973232,
+      "volume_24h_usd": 452781624.03957915,
+      "as_of": "2026-07-22T11:49:12+00:00",
       "change_24h_sources": {
-        "CoinGecko": -0.01100103684219048,
-        "OKX": -0.010471916224670141,
-        "Kraken": -0.009364437227046718
+        "CoinGecko": -0.014754975738143924,
+        "Binance": -0.013839999999999998,
+        "OKX": -0.013975576662143885,
+        "Kraken": -0.010719744536843545
       },
-      "unverified_reference_price_usd": 0.07267393899999999,
+      "unverified_reference_price_usd": 0.072583707,
       "source_prices": {
-        "CoinGecko": 0.072657,
-        "OKX": 0.072690878,
-        "Coinbase": 0.07272,
-        "Kraken": 0.0726545
+        "CoinGecko": 0.072536,
+        "Binance": 0.072583707,
+        "OKX": 0.0725936965,
+        "Coinbase": 0.07261,
+        "Kraken": 0.0725551
       },
       "source_observations": {
         "CoinGecko": {
-          "price_usd": 0.072657,
-          "as_of": "2026-07-22T11:20:52+00:00",
+          "price_usd": 0.072536,
+          "as_of": "2026-07-22T11:49:09+00:00",
           "quote_asset": "USD aggregate"
         },
+        "Binance": {
+          "price_usd": 0.072583707,
+          "price_usdt": 0.07266,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.286000+00:00",
+          "quote_asset": "USDT normalized to USD"
+        },
         "OKX": {
-          "price_usd": 0.072690878,
-          "price_usdt": 0.07276,
-          "usdt_usd": 0.99905,
-          "usdt_usd_as_of": "2026-07-22T11:21:03.596500835Z",
-          "as_of": "2026-07-22T11:21:07.162000+00:00",
+          "price_usd": 0.0725936965,
+          "price_usdt": 0.07267,
+          "usdt_usd": 0.99895,
+          "usdt_usd_as_of": "2026-07-22T11:49:03.579784358Z",
+          "as_of": "2026-07-22T11:49:10.260000+00:00",
           "quote_asset": "USDT normalized to USD"
         },
         "Coinbase": {
-          "price_usd": 0.07272,
-          "as_of": "2026-07-22T11:21:05.402855978Z",
+          "price_usd": 0.07261,
+          "as_of": "2026-07-22T11:48:56.734736779Z",
           "quote_asset": "USD"
         },
         "Kraken": {
-          "price_usd": 0.0726545,
-          "as_of": "2026-07-22T11:21:07+00:00",
+          "price_usd": 0.0725551,
+          "as_of": "2026-07-22T11:49:12+00:00",
           "quote_asset": "USD",
           "as_of_basis": "retrieval_time_no_upstream_timestamp"
         }
       },
-      "cross_source_gap": 0.0009012034154455079,
-      "source_count": 4,
+      "cross_source_gap": 0.0010196250161728132,
+      "source_count": 5,
       "price_validation": {
         "method": "median_of_available_independent_sources",
         "required_source_count": 2,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "max_cross_source_gap": 0.02,
         "providers_used": [
           "CoinGecko",
+          "Binance",
           "OKX",
           "Coinbase",
           "Kraken"
@@ -410,62 +480,83 @@
   "derivatives": {
     "BTC": {
       "perpetual": {
-        "coverage": "okx+hyperliquid; partial observable venues, not global market",
+        "coverage": "binance+bybit+okx+hyperliquid; partial observable venues, not global market",
         "venues_used": [
+          "binance",
+          "bybit",
           "okx",
           "hyperliquid"
         ],
-        "venue_errors": [
-          "Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
-          "Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源"
-        ],
+        "venue_errors": [],
+        "binance": {
+          "mark_price_usd": 66014.17831884,
+          "index_price_usd": 66045.61369565,
+          "funding_rate": 1.999e-05,
+          "funding_interval_hours": 8.0,
+          "funding_annualized": 0.02188905,
+          "open_interest_base": 104545.17,
+          "open_interest_usd": 6901463494.753442,
+          "volume_24h_usd": 8556821857.16,
+          "as_of": "2026-07-22T11:49:10+00:00"
+        },
+        "bybit": {
+          "mark_price_usd": 66013.98,
+          "index_price_usd": 66045.23,
+          "funding_rate": 2.5e-06,
+          "funding_interval_hours": 8.0,
+          "funding_annualized": 0.0027375000000000003,
+          "open_interest_base": 55024.465,
+          "open_interest_usd": 3632383932.02,
+          "volume_24h_usd": 3318077799.6742,
+          "as_of": "2026-07-22T11:49:11.322000+00:00"
+        },
         "okx": {
-          "mark_price_usd": 66000.6,
-          "index_price_usd": 66028.7,
+          "mark_price_usd": 66014.6,
+          "index_price_usd": 66047.5,
           "funding_rate": -4.6095462073e-06,
           "funding_interval_hours": 8.0,
           "funding_annualized": -0.0050474530969934995,
-          "open_interest_base": 32239.841700000165,
-          "open_interest_usd": 2127703816.817381,
-          "volume_24h_usd": 5176300306.167489,
-          "as_of": "2026-07-22T11:20:12.512000+00:00"
+          "open_interest_base": 32142.32220000016,
+          "open_interest_usd": 2121878614.2652304,
+          "volume_24h_usd": 5203683497.4635,
+          "as_of": "2026-07-22T11:49:10.562000+00:00"
         },
         "hyperliquid": {
-          "mark_price_usd": 66003.0,
-          "index_price_usd": 66024.0,
+          "mark_price_usd": 66022.0,
+          "index_price_usd": 66045.9,
           "funding_rate": 1.25e-05,
           "funding_interval_hours": 1.0,
           "funding_annualized": 0.10950000000000001,
-          "open_interest_base": 36068.2216600001,
-          "open_interest_usd": 2380610834.2249866,
-          "volume_24h_usd": 1885410363.6677535,
-          "as_of": "2026-07-22T11:21:08+00:00"
+          "open_interest_base": 36050.9830399999,
+          "open_interest_usd": 2380158002.2668734,
+          "volume_24h_usd": 1897698389.654678,
+          "as_of": "2026-07-22T11:49:11+00:00"
         },
         "funding_8h_median": null,
-        "funding_annualized_median": 0.052226273451503255,
-        "funding_source_count": 2,
+        "funding_annualized_median": 0.012313275,
+        "funding_source_count": 4,
         "funding_interval_hours_consistent": false,
         "funding_annualized_cross_venue_gap_bps": 1145.4745309699351,
-        "observed_open_interest_usd": 4508314651.042368
+        "observed_open_interest_usd": 15035884043.305546
       },
       "dated_future": {
         "provider": "Deribit",
         "selection_rule": "listed monthly expiry closest to 90 days",
         "contract": "BTC-25SEP26",
         "delivery_date": "2026-09-25",
-        "days_to_delivery": 64.8603342016088,
-        "mark_price_usd": 66501.42,
-        "index_price_usd": 65979.85,
-        "basis": 0.007904989174725152,
-        "annualized_basis": 0.0444851400211119,
-        "as_of": "2026-07-22T11:21:06.648000+00:00"
+        "days_to_delivery": 64.84083980158566,
+        "mark_price_usd": 66517.3,
+        "index_price_usd": 65995.82,
+        "basis": 0.007901712563007646,
+        "annualized_basis": 0.044480069880699795,
+        "as_of": "2026-07-22T11:49:11.562000+00:00"
       },
       "cme_proxy": {
         "ticker": "BTC=F",
-        "front_month_price_usd": 66095.0,
+        "front_month_price_usd": 66120.0,
         "exchange": "CME",
         "quote_delay_seconds": null,
-        "as_of": "2026-07-22T11:09:39+00:00",
+        "as_of": "2026-07-22T11:37:22+00:00",
         "limitation": "Yahoo front-month proxy; contract roll and delay mean it is context, not an execution price"
       },
       "options": {
@@ -478,35 +569,35 @@
         "volatility_metric": "deribit_dvol",
         "volatility_label": "Deribit 隱含波動率指數",
         "volatility_as_of": "2026-07-22T10:00:00+00:00",
-        "put_call_open_interest_ratio": 0.4405263634017395,
-        "call_open_interest_base": 300674.4,
-        "put_open_interest_base": 132455.0,
-        "observed_open_interest_usd": 28577327737.662,
+        "put_call_open_interest_ratio": 0.4387404404525685,
+        "call_open_interest_base": 302080.2,
+        "put_open_interest_base": 132534.8,
+        "observed_open_interest_usd": 28683933731.350002,
         "open_interest_usd_basis": "逐合約未平倉量 × estimated_delivery_price；若缺值才使用 underlying_price",
-        "volume_24h_usd": 33634969.67,
+        "volume_24h_usd": 36801749.55,
         "contracts_observed": 840,
         "open_interest_observed_contracts": 840,
         "volume_observed_contracts": 840,
         "target_expiry": "2026-08-28",
-        "target_days": 36.86032965767361,
-        "atm_implied_volatility": 36.02,
+        "target_days": 36.840827943668984,
+        "atm_implied_volatility": 36.01,
         "atm_components": [
           {
             "instrument": "BTC-28AUG26-66000-C",
             "option_type": "C",
             "strike_usd": 66000.0,
-            "mark_iv_pct": 36.02
+            "mark_iv_pct": 36.01
           },
           {
             "instrument": "BTC-28AUG26-66000-P",
             "option_type": "P",
             "strike_usd": 66000.0,
-            "mark_iv_pct": 36.02
+            "mark_iv_pct": 36.01
           }
         ],
         "max_pain_usd": 62000.0,
-        "max_pain_distance": -0.06457552021293889,
-        "as_of": "2026-07-22T11:21:05.799000+00:00",
+        "max_pain_distance": -0.06483442591844568,
+        "as_of": "2026-07-22T11:49:09.098000+00:00",
         "limits": [
           "Max pain is a descriptive OI concentration, not a price target",
           "Put/call OI does not identify trade direction or buyer/seller intent"
@@ -515,62 +606,83 @@
     },
     "ETH": {
       "perpetual": {
-        "coverage": "okx+hyperliquid; partial observable venues, not global market",
+        "coverage": "binance+bybit+okx+hyperliquid; partial observable venues, not global market",
         "venues_used": [
+          "binance",
+          "bybit",
           "okx",
           "hyperliquid"
         ],
-        "venue_errors": [
-          "Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
-          "Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源"
-        ],
+        "venue_errors": [],
+        "binance": {
+          "mark_price_usd": 1926.40982171,
+          "index_price_usd": 1927.24604651,
+          "funding_rate": 2.176e-05,
+          "funding_interval_hours": 8.0,
+          "funding_annualized": 0.0238272,
+          "open_interest_base": 2363784.193,
+          "open_interest_usd": 4553617085.798046,
+          "volume_24h_usd": 5478485464.53,
+          "as_of": "2026-07-22T11:49:10+00:00"
+        },
+        "bybit": {
+          "mark_price_usd": 1926.18,
+          "index_price_usd": 1927.15,
+          "funding_rate": 0.0001,
+          "funding_interval_hours": 8.0,
+          "funding_annualized": 0.10950000000000001,
+          "open_interest_base": 826618.66,
+          "open_interest_usd": 1592216330.52,
+          "volume_24h_usd": 1686192165.8827,
+          "as_of": "2026-07-22T11:49:11.322000+00:00"
+        },
         "okx": {
-          "mark_price_usd": 1928.04,
-          "index_price_usd": 1929.0,
+          "mark_price_usd": 1926.11,
+          "index_price_usd": 1927.13,
           "funding_rate": -2.55962269609e-05,
           "funding_interval_hours": 8.0,
           "funding_annualized": -0.0280278685221855,
-          "open_interest_base": 772961.2800000026,
-          "open_interest_usd": 1490269347.840005,
-          "volume_24h_usd": 5604918476.285999,
-          "as_of": "2026-07-22T11:20:12.541000+00:00"
+          "open_interest_base": 773150.5060000027,
+          "open_interest_usd": 1489381671.7482853,
+          "volume_24h_usd": 5567301484.097171,
+          "as_of": "2026-07-22T11:49:10.555000+00:00"
         },
         "hyperliquid": {
-          "mark_price_usd": 1928.5,
-          "index_price_usd": 1928.9,
+          "mark_price_usd": 1926.8,
+          "index_price_usd": 1927.12,
           "funding_rate": 1.25e-05,
           "funding_interval_hours": 1.0,
           "funding_annualized": 0.10950000000000001,
-          "open_interest_base": 1049379.7042000007,
-          "open_interest_usd": 2023728759.5497015,
-          "volume_24h_usd": 679156610.0296195,
-          "as_of": "2026-07-22T11:21:08+00:00"
+          "open_interest_base": 1051150.2008000002,
+          "open_interest_usd": 2025356206.9014404,
+          "volume_24h_usd": 680968291.3992593,
+          "as_of": "2026-07-22T11:49:11+00:00"
         },
         "funding_8h_median": null,
-        "funding_annualized_median": 0.04073606573890726,
-        "funding_source_count": 2,
+        "funding_annualized_median": 0.0666636,
+        "funding_source_count": 4,
         "funding_interval_hours_consistent": false,
         "funding_annualized_cross_venue_gap_bps": 1375.278685221855,
-        "observed_open_interest_usd": 3513998107.3897066
+        "observed_open_interest_usd": 9660571294.967772
       },
       "dated_future": {
         "provider": "Deribit",
         "selection_rule": "listed monthly expiry closest to 90 days",
         "contract": "ETH-25SEP26",
         "delivery_date": "2026-09-25",
-        "days_to_delivery": 64.86033419070601,
-        "mark_price_usd": 1933.56,
-        "index_price_usd": 1927.62,
-        "basis": 0.003081520216640321,
-        "annualized_basis": 0.017341182297436974,
-        "as_of": "2026-07-22T11:21:07.028000+00:00"
+        "days_to_delivery": 64.8408392214699,
+        "mark_price_usd": 1931.6,
+        "index_price_usd": 1925.69,
+        "basis": 0.0030690298023046125,
+        "annualized_basis": 0.01727608543151409,
+        "as_of": "2026-07-22T11:49:11.598000+00:00"
       },
       "cme_proxy": {
         "ticker": "ETH=F",
-        "front_month_price_usd": 1931.0,
+        "front_month_price_usd": 1930.0,
         "exchange": "CME",
         "quote_delay_seconds": null,
-        "as_of": "2026-07-22T11:09:39+00:00",
+        "as_of": "2026-07-22T11:39:02+00:00",
         "limitation": "Yahoo front-month proxy; contract roll and delay mean it is context, not an execution price"
       },
       "options": {
@@ -583,35 +695,35 @@
         "volatility_metric": "deribit_dvol",
         "volatility_label": "Deribit 隱含波動率指數",
         "volatility_as_of": "2026-07-22T10:00:00+00:00",
-        "put_call_open_interest_ratio": 0.5176098331851152,
-        "call_open_interest_base": 1114349.0,
-        "put_open_interest_base": 576798.0,
-        "observed_open_interest_usd": 3259956426.02,
+        "put_call_open_interest_ratio": 0.5180468291020311,
+        "call_open_interest_base": 1114905.0,
+        "put_open_interest_base": 577573.0,
+        "observed_open_interest_usd": 3259357207.62,
         "open_interest_usd_basis": "逐合約未平倉量 × estimated_delivery_price；若缺值才使用 underlying_price",
-        "volume_24h_usd": 5065629.5,
+        "volume_24h_usd": 5100793.69,
         "contracts_observed": 662,
         "open_interest_observed_contracts": 662,
         "volume_observed_contracts": 662,
         "target_expiry": "2026-08-28",
-        "target_days": 36.860328288356484,
-        "atm_implied_volatility": 48.94,
+        "target_days": 36.84082961111111,
+        "atm_implied_volatility": 49.0,
         "atm_components": [
           {
             "instrument": "ETH-28AUG26-1950-C",
             "option_type": "C",
             "strike_usd": 1950.0,
-            "mark_iv_pct": 48.94
+            "mark_iv_pct": 49.0
           },
           {
             "instrument": "ETH-28AUG26-1950-P",
             "option_type": "P",
             "strike_usd": 1950.0,
-            "mark_iv_pct": 48.94
+            "mark_iv_pct": 49.0
           }
         ],
         "max_pain_usd": 1800.0,
-        "max_pain_distance": -0.06719318429153331,
-        "as_of": "2026-07-22T11:21:05.370000+00:00",
+        "max_pain_distance": -0.0663513008838541,
+        "as_of": "2026-07-22T11:49:09.531000+00:00",
         "limits": [
           "Max pain is a descriptive OI concentration, not a price target",
           "Put/call OI does not identify trade direction or buyer/seller intent"
@@ -620,247 +732,856 @@
     },
     "HYPE": {
       "perpetual": {
-        "perp_mark_price_usd": 58.903,
-        "perp_oracle_price_usd": 58.926,
-        "change_24h": -0.061501202938036736,
-        "perp_funding_1h": -6.1218e-06,
-        "perp_open_interest_hype": 22529625.86,
-        "perp_open_interest_usd": 1327062552.03158,
-        "perp_volume_24h_usd": 394813947.32690984,
-        "as_of": "2026-07-22T11:21:06+00:00"
+        "perp_mark_price_usd": 58.618,
+        "perp_oracle_price_usd": 58.6332,
+        "change_24h": -0.06651803487538821,
+        "perp_funding_1h": 1.7675e-06,
+        "perp_open_interest_hype": 22505507.360000007,
+        "perp_open_interest_usd": 1319227830.4284804,
+        "perp_volume_24h_usd": 400555833.39845026,
+        "as_of": "2026-07-22T11:49:10+00:00"
       }
     }
   },
   "etf": {
     "BTC": {
-      "status": "automated_third_party_single_source",
-      "flow_1d_usd": 203000000.0,
-      "flow_7d_usd": 749000000.0,
-      "flow_30d_usd": -1617000000.0,
-      "as_of": "2026-07-22T05:46:08+00:00",
+      "status": "sample_cross_source_verified",
+      "flow_1d_usd": 142200000.0,
+      "flow_7d_usd": 292000000.0,
+      "flow_30d_usd": 188900000.0,
+      "as_of": "2026-07-20",
       "update_frequency": "daily",
-      "source": "WalletPilot via latest_snapshot",
+      "source": "Bitbo with iShares official and same-date backup validation",
+      "source_count": 3,
+      "component_completeness": 1.0,
+      "official_major_fund_gap": 0.004744805687524308,
+      "official_major_fund_coverage": 0.8285312719606466,
+      "backup_component_gap": 0.011945392491467578,
+      "backup_component_coverage": 1.0,
+      "validation_inputs_json": "{\"amount_sanity_errors\": [], \"amount_sanity_pass\": true, \"amount_sanity_thresholds\": {\"maximum_absolute_single_fund_daily_flow_usd\": 50000000000, \"maximum_gross_daily_flow_usd\": 100000000000}, \"backup_sample\": {\"as_of\": \"2026-07-20\", \"backup_values_usd\": {\"FBTC\": 24100000.0, \"IBIT\": 116500000.0}, \"candidate_count\": 3, \"canonical_values_usd\": {\"FBTC\": 24400000.0, \"IBIT\": 117900000.0}, \"component_normalized_gaps\": {\"FBTC\": 0.003, \"IBIT\": 0.011945392491467578}, \"gross_component_coverage\": 1.0, \"matched_tickers\": [\"IBIT\", \"FBTC\"], \"maximum_component_gap\": 0.011945392491467578, \"normalized_gap\": 0.012018381053375752, \"provider\": \"The Block\", \"validation_type\": \"same_date_named_fund_sample\", \"weighted_difference_usd\": 1700000.0, \"weighted_reference_usd\": 141450000.0}, \"canonical_as_of\": \"2026-07-20\", \"canonical_component_sum_usd\": 142300000.0, \"canonical_components_usd\": {\"ARKB\": 0.0, \"BITB\": 0.0, \"BRRR\": -0.0, \"BTC\": 0.0, \"BTCO\": 0.0, \"BTCW\": 0.0, \"DEFI\": 0.0, \"EZBC\": 0.0, \"FBTC\": 24400000.0, \"GBTC\": 0.0, \"HODL\": -0.0, \"IBIT\": 117900000.0, \"MSBT\": 0.0}, \"canonical_provider\": \"Bitbo\", \"canonical_total_difference_usd\": 100000.0, \"canonical_total_reconciled\": true, \"canonical_total_tolerance_usd\": 500000, \"canonical_total_usd\": 142200000.0, \"canonical_updated_at\": \"2026-07-22T11:48:32+00:00\", \"canonical_updated_at_basis\": \"retrieval_time_provider_has_no_update_timestamp\", \"component_completeness\": 1.0, \"component_count\": 13, \"expected_ticker_count\": 13, \"expected_tickers\": [\"ARKB\", \"BITB\", \"BRRR\", \"BTC\", \"BTCO\", \"BTCW\", \"DEFI\", \"EZBC\", \"FBTC\", \"GBTC\", \"HODL\", \"IBIT\", \"MSBT\"], \"gross_component_flow_usd\": 142300000.0, \"latest_published_as_of\": \"2026-07-21\", \"official_component_gross_coverage\": 0.8285312719606466, \"official_component_usd\": 117900000.0, \"official_normalized_gap\": 0.004744805687524308, \"official_proxy_usd\": 117341911.42037426, \"official_ticker\": \"IBIT\", \"selection_policy\": \"latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates\", \"validation_source_count\": 3}",
+      "latest_published_as_of": "2026-07-21",
+      "selection_policy": "latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates",
+      "backup_validation_type": "same_date_named_fund_sample",
+      "validation_scope": "canonical=Bitbo component sum; component_completeness=100.0%; IBIT official holdings-change proxy normalized_gap=0.47% (5% or USD 5m tolerance); official_component_gross_coverage=82.9%; backup=The Block same_date=True sample_gap=1.19% sample_gross_coverage=100.0%; validation_sources=3; market_date=2026-07-20; hard_trigger=false",
+      "source_observations": {
+        "iShares IBIT official holdings": {
+          "flow_1d_usd": null,
+          "official_major_fund_gap": 0.004744805687524308,
+          "as_of": "2026-07-20",
+          "basis": "official_holdings_change_vs_reported_fund_flow",
+          "url": "https://www.ishares.com/varnish-api/blk-one01-product-data/product-data/api/v2/get-product-data?portfolioId=333011&component=holdings.all&asOfDate=20260720"
+        },
+        "The Block": {
+          "flow_1d_usd": 203200000.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-21",
+          "basis": "US_spot_ETF_daily_fund_flows_component_sum",
+          "url": "https://data.tbstat.com/dashboard/markets_structuredproducts_btcspotetfflows_daily_other.json"
+        },
+        "Blockworks / Trackinsights": {
+          "flow_1d_usd": 133211724.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-20",
+          "basis": "provider_labeled_US_spot_ETF_flow_date",
+          "url": "https://blockworks.com/api/studio/dashboard/bitcoin-etfs/visualization/8146/execution?limit=50000&page=1"
+        },
+        "CoinMarketCap ETF": {
+          "flow_1d_usd": 203300000.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-21",
+          "basis": "provider_reported_US_spot_ETF_daily_total_flow",
+          "url": "https://api.coinmarketcap.com/data-api/v3/etf/overview/netflow/chart?category=btc&range=30d&convertId=2781"
+        },
+        "Bitbo": {
+          "flow_1d_usd": 142200000.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-20",
+          "basis": "US_spot_ETF_daily_flow_USD_millions_table",
+          "url": "https://bitbo.io/treasuries/etf-flows/"
+        },
+        "WalletPilot": {
+          "flow_1d_usd": 203000000.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-21",
+          "basis": "provider_rolling_windows_with_fund_level_lastFlowDate",
+          "url": "https://www.walletpilot.com/bitcoin-tracker/etfs"
+        }
+      },
       "hard_trigger": false,
-      "limitation": "第三方單一來源，尚未獨立交叉驗證"
+      "limitation": "多源與官方主要基金持倉變化已交叉驗證；ETF 資金流仍不得單獨放行交易"
     },
     "ETH": {
-      "status": "unavailable_no_stable_keyless_cross_source_feed",
-      "flow_1d_usd": null,
-      "flow_7d_usd": null,
-      "flow_30d_usd": null,
+      "status": "sample_cross_source_verified",
+      "flow_1d_usd": 37500000.0,
+      "flow_7d_usd": 133200000.0,
+      "flow_30d_usd": 18900000.0,
+      "as_of": "2026-07-21",
+      "update_frequency": "daily",
+      "source": "The Block with iShares official and same-date backup validation",
+      "source_count": 3,
+      "component_completeness": 1.0,
+      "official_major_fund_gap": 0.0023945594573501496,
+      "official_major_fund_coverage": 0.775330396475771,
+      "backup_component_gap": 0.0,
+      "backup_component_coverage": 1.0,
+      "validation_inputs_json": "{\"amount_sanity_errors\": [], \"amount_sanity_pass\": true, \"amount_sanity_thresholds\": {\"maximum_absolute_single_fund_daily_flow_usd\": 50000000000, \"maximum_gross_daily_flow_usd\": 100000000000}, \"backup_sample\": {\"as_of\": \"2026-07-21\", \"backup_values_usd\": {\"TOTAL\": 37500000.0}, \"candidate_count\": 1, \"canonical_values_usd\": {\"TOTAL\": 37500000.0}, \"component_normalized_gaps\": {\"TOTAL\": 0.0}, \"gross_component_coverage\": 1.0, \"matched_tickers\": [\"TOTAL\"], \"maximum_component_gap\": 0.0, \"normalized_gap\": 0.0, \"provider\": \"CoinMarketCap ETF\", \"validation_type\": \"same_date_aggregate_total\", \"weighted_difference_usd\": 0.0, \"weighted_reference_usd\": 37500000.0}, \"canonical_as_of\": \"2026-07-21\", \"canonical_component_sum_usd\": 37500000.0, \"canonical_components_usd\": {\"ETH\": 0.0, \"ETHA\": 52800000.0, \"ETHE\": 0.0, \"ETHV\": 0.0, \"ETHW\": 0.0, \"EZET\": 0.0, \"FETH\": -15300000.0, \"QETH\": 0.0}, \"canonical_provider\": \"The Block\", \"canonical_total_difference_usd\": 0.0, \"canonical_total_reconciled\": true, \"canonical_total_tolerance_usd\": 500000, \"canonical_total_usd\": 37500000.0, \"canonical_updated_at\": \"2026-07-22T10:46:49+00:00\", \"canonical_updated_at_basis\": \"provider_update_timestamp\", \"component_completeness\": 1.0, \"component_count\": 8, \"expected_ticker_count\": 8, \"expected_tickers\": [\"ETH\", \"ETHA\", \"ETHE\", \"ETHV\", \"ETHW\", \"EZET\", \"FETH\", \"QETH\"], \"gross_component_flow_usd\": 68100000.0, \"latest_published_as_of\": \"2026-07-21\", \"official_component_gross_coverage\": 0.775330396475771, \"official_component_usd\": 52800000.0, \"official_normalized_gap\": 0.0023945594573501496, \"official_proxy_usd\": 53039455.945735015, \"official_ticker\": \"ETHA\", \"selection_policy\": \"latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates\", \"validation_source_count\": 3}",
+      "latest_published_as_of": "2026-07-21",
+      "selection_policy": "latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates",
+      "backup_validation_type": "same_date_aggregate_total",
+      "validation_scope": "canonical=The Block component sum; component_completeness=100.0%; ETHA official holdings-change proxy normalized_gap=0.24% (5% or USD 5m tolerance); official_component_gross_coverage=77.5%; backup=CoinMarketCap ETF same_date=True sample_gap=0.00% sample_gross_coverage=100.0%; validation_sources=3; market_date=2026-07-21; hard_trigger=false",
+      "source_observations": {
+        "iShares ETHA official holdings": {
+          "flow_1d_usd": null,
+          "official_major_fund_gap": 0.0023945594573501496,
+          "as_of": "2026-07-21",
+          "basis": "official_holdings_change_vs_reported_fund_flow",
+          "url": "https://www.ishares.com/varnish-api/blk-one01-product-data/product-data/api/v2/get-product-data?portfolioId=337614&component=holdings.all&asOfDate=20260721"
+        },
+        "The Block": {
+          "flow_1d_usd": 37500000.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-21",
+          "basis": "US_spot_ETF_daily_fund_flows_component_sum",
+          "url": "https://data.tbstat.com/dashboard/markets_structuredproducts_ethspotetfflows_daily_other.json"
+        },
+        "Blockworks / Trackinsights": {
+          "flow_1d_usd": 38035601.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-20",
+          "basis": "provider_labeled_US_spot_ETF_flow_date",
+          "url": "https://blockworks.com/api/studio/dashboard/ethereum-etfs/visualization/6561/execution?limit=50000&page=1"
+        },
+        "CoinMarketCap ETF": {
+          "flow_1d_usd": 37500000.0,
+          "official_major_fund_gap": null,
+          "as_of": "2026-07-21",
+          "basis": "provider_reported_US_spot_ETF_daily_total_flow",
+          "url": "https://api.coinmarketcap.com/data-api/v3/etf/overview/netflow/chart?category=eth&range=30d&convertId=2781"
+        }
+      },
       "hard_trigger": false,
-      "manual_refs": [
-        "https://farside.co.uk/eth/",
-        "https://www.coinglass.com/etf/ethereum"
-      ],
-      "limitation": "沒有穩定的免金鑰交叉來源，因此維持未知，不以不穩定網頁或未驗證單一數字補值"
+      "limitation": "多源與官方主要基金持倉變化已交叉驗證；ETF 資金流仍不得單獨放行交易"
     }
   },
   "dat": {
     "BTC": {
       "asset": "BTC",
+      "status": "representative_cross_source_verified",
       "total_holdings": 1285045.0097809657,
-      "total_value_usd": 84751962013.58246,
+      "total_holdings_base": 1285045.0097809657,
+      "total_holdings_base_provider": "CoinGecko",
+      "official_overlay_adjustment": 0.0,
+      "total_value_usd": 84651057399.39784,
       "supply_share": 0.061200000000000004,
       "companies": [
         {
           "name": "Strategy",
-          "symbol": "MSTR.US",
+          "symbol": "MSTR",
           "holdings": 843775.0,
-          "current_value_usd": 55649091046.39035,
+          "current_value_usd": 55582835942.339066,
           "supply_share": 0.04018,
-          "holdings_change": 0.0
+          "as_of": "2026-07-19",
+          "as_of_basis": "official_weekly_holdings",
+          "detail": "current_accn=0001193125-26-308369 previous_accn=0001193125-26-301483 period=2026-07-13..2026-07-19 contiguous=True complete_week=True previous_holdings=843775 acquired=0 current_holdings=843775 inferred_sold_btc=0 reported_sales_musd=0.0 sale_basis=complete_week_two_filing_reported_sales_reconciliation_zero",
+          "source_basis": "SEC official overlay",
+          "holdings_change": null
         },
         {
           "name": "Twenty One Capital",
-          "symbol": "XXI.US",
+          "symbol": "XXI",
           "holdings": 43514.0,
-          "current_value_usd": 2869858134.920601,
+          "current_value_usd": 2866441318.117913,
           "supply_share": 0.00207,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Metaplanet",
-          "symbol": "3350.T",
+          "symbol": "3350",
           "holdings": 43000.0,
-          "current_value_usd": 2835958537.518634,
+          "current_value_usd": 2832582081.147912,
           "supply_share": 0.0020499999999999997,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "MARA Holdings",
-          "symbol": "MARA.US",
+          "symbol": "MARA",
           "holdings": 35303.0,
-          "current_value_usd": 2328321959.3027983,
+          "current_value_usd": 2325549888.622436,
           "supply_share": 0.00168,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Bitcoin Standard Treasury Company",
-          "symbol": "CEPO.US",
+          "symbol": "CEPO",
           "holdings": 30021.0,
-          "current_value_usd": 1979960726.8569047,
+          "current_value_usd": 1977603410.6544528,
           "supply_share": 0.0014299999999999998,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Galaxy Digital Holdings Ltd",
-          "symbol": "GLXY.US",
+          "symbol": "GLXY",
           "holdings": 25723.0,
-          "current_value_usd": 1696496778.1532981,
+          "current_value_usd": 1694476950.543436,
           "supply_share": 0.00122,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Bullish",
-          "symbol": "BLSH.US",
+          "symbol": "BLSH",
           "holdings": 23300.0,
-          "current_value_usd": 1536693812.1903296,
+          "current_value_usd": 1534864243.9708455,
           "supply_share": 0.00111,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Strive",
-          "symbol": "ASST.US",
+          "symbol": "ASST",
           "holdings": 19000.0,
-          "current_value_usd": 1253097958.438466,
+          "current_value_usd": 1251606035.8560543,
           "supply_share": 0.0009,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         }
       ],
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "limitation": "CoinGecko 公司財庫單一聚合來源，可能落後官方揭露；差額也可能包含供應商修訂，只作雷達背景",
+      "as_of": "2026-07-22T11:49:14+00:00",
+      "as_of_basis": "latest_provider_retrieval_with_company_specific_official_overlay_dates",
+      "source_count": 4,
+      "source_observations": {
+        "CoinGecko": {
+          "total_holdings": 1285045.0097809657,
+          "company_count": 173,
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp"
+        },
+        "BitcoinTreasuries.net": {
+          "total_holdings": 1237521.0,
+          "company_count": 205,
+          "as_of": "2026-07-22T11:49:12+00:00",
+          "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp"
+        },
+        "Bitbo Bitcoin Treasuries": {
+          "total_holdings": 9917349.6,
+          "company_count": 195,
+          "as_of": "2026-07-22T11:49:14+00:00",
+          "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp"
+        },
+        "SEC official filings": {
+          "total_holdings": 843775.0,
+          "company_count": 1,
+          "as_of": "2026-07-19",
+          "as_of_basis": "company_specific_official_holdings_dates"
+        }
+      },
+      "validation": {
+        "status": "representative_cross_source_verified",
+        "method": "company_intersection_weighted_gap_with_official_major_holder_overlay",
+        "validation_cohort": [
+          "3350",
+          "MARA",
+          "MSTR",
+          "XXI"
+        ],
+        "cohort_policy": "dynamic largest base-universe holders, at least four BTC or two ETH candidates, targeting 75% before cross-source matching; verified matched coverage requires at least two companies and 60%",
+        "provider_count": 4,
+        "providers": [
+          "Bitbo Bitcoin Treasuries",
+          "BitcoinTreasuries.net",
+          "CoinGecko",
+          "SEC official filings"
+        ],
+        "matched_company_count": 4,
+        "matched_base_holdings": 965592.0,
+        "representative_coverage_ratio": 0.7514071434467372,
+        "weighted_cross_source_gap": 0.0010356340980455514,
+        "maximum_company_gap": 0.02832620457184942,
+        "excluded_outlier_count": 2,
+        "thresholds": {
+          "minimum_provider_count": 2,
+          "minimum_matched_company_count": 2,
+          "minimum_representative_coverage_ratio": 0.6,
+          "maximum_weighted_cross_source_gap": 0.01,
+          "maximum_individual_company_gap": 0.05
+        },
+        "comparisons": [
+          {
+            "symbol": "3350",
+            "provider_values": {
+              "CoinGecko": 43000.0,
+              "BitcoinTreasuries.net": 43000.0,
+              "Bitbo Bitcoin Treasuries": 35102.0
+            },
+            "consensus_provider_values": {
+              "CoinGecko": 43000.0,
+              "BitcoinTreasuries.net": 43000.0
+            },
+            "excluded_outlier_provider_values": {
+              "Bitbo Bitcoin Treasuries": 35102.0
+            },
+            "median_holdings": 43000.0,
+            "max_relative_gap": 0.0
+          },
+          {
+            "symbol": "MARA",
+            "provider_values": {
+              "CoinGecko": 35303.0,
+              "BitcoinTreasuries.net": 36303.0,
+              "Bitbo Bitcoin Treasuries": 35303.0
+            },
+            "consensus_provider_values": {
+              "CoinGecko": 35303.0,
+              "BitcoinTreasuries.net": 36303.0,
+              "Bitbo Bitcoin Treasuries": 35303.0
+            },
+            "excluded_outlier_provider_values": {},
+            "median_holdings": 35303.0,
+            "max_relative_gap": 0.02832620457184942
+          },
+          {
+            "symbol": "MSTR",
+            "provider_values": {
+              "CoinGecko": 843775.0,
+              "BitcoinTreasuries.net": 843775.0,
+              "Bitbo Bitcoin Treasuries": 843775.0,
+              "SEC official filings": 843775.0
+            },
+            "consensus_provider_values": {
+              "CoinGecko": 843775.0,
+              "BitcoinTreasuries.net": 843775.0,
+              "Bitbo Bitcoin Treasuries": 843775.0,
+              "SEC official filings": 843775.0
+            },
+            "excluded_outlier_provider_values": {},
+            "median_holdings": 843775.0,
+            "max_relative_gap": 0.0
+          },
+          {
+            "symbol": "XXI",
+            "provider_values": {
+              "CoinGecko": 43514.0,
+              "BitcoinTreasuries.net": 43514.0,
+              "Bitbo Bitcoin Treasuries": 37229.7
+            },
+            "consensus_provider_values": {
+              "CoinGecko": 43514.0,
+              "BitcoinTreasuries.net": 43514.0
+            },
+            "excluded_outlier_provider_values": {
+              "Bitbo Bitcoin Treasuries": 37229.7
+            },
+            "median_holdings": 43514.0,
+            "max_relative_gap": 0.0
+          }
+        ],
+        "universe_total_comparison_permitted": false,
+        "non_base_provider_failure_results": {
+          "Bitbo Bitcoin Treasuries": "representative_cross_source_verified",
+          "BitcoinTreasuries.net": "representative_cross_source_verified",
+          "SEC official filings": "representative_cross_source_verified"
+        },
+        "non_base_provider_failure_tolerant": true,
+        "base_provider_failure_results": {
+          "BitcoinTreasuries.net": "representative_cross_source_verified"
+        },
+        "base_provider_failure_tolerant": true,
+        "official_overlay_complete": true,
+        "official_overlay_unmapped_symbols": [],
+        "official_observation_missing_symbols": [],
+        "base_candidate_results": {
+          "CoinGecko": {
+            "status": "representative_cross_source_verified",
+            "representative_coverage_ratio": 0.7514071434467372,
+            "weighted_cross_source_gap": 0.0010356340980455514
+          },
+          "BitcoinTreasuries.net": {
+            "status": "representative_cross_source_verified",
+            "representative_coverage_ratio": 0.78107118990304,
+            "weighted_cross_source_gap": 0.0010356340980455514
+          }
+        }
+      },
+      "source_incidents": [],
+      "limitation": "CoinGecko 定義聚合 universe，SEC 官方值覆蓋前列公司；交集覆蓋 75.1%、加權差異 0.10%。不同聚合 universe 的全站總量不硬平均。",
       "total_holdings_change": 0.0
     },
     "ETH": {
       "asset": "ETH",
-      "total_holdings": 7788048.905876,
-      "total_value_usd": 15002936611.782465,
-      "supply_share": 0.0645,
+      "status": "representative_cross_source_verified",
+      "total_holdings": 7806074.905876,
+      "total_holdings_base": 7788048.905876,
+      "total_holdings_base_provider": "CoinGecko",
+      "official_overlay_adjustment": 18026.0,
+      "total_value_usd": 15028079831.047207,
+      "supply_share": 0.06464928989456176,
       "companies": [
         {
           "name": "BitMine Immersion",
-          "symbol": "BMNR.US",
+          "symbol": "BMNR",
           "holdings": 5777468.0,
-          "current_value_usd": 11129743434.867653,
+          "current_value_usd": 11122651444.193026,
           "supply_share": 0.047869999999999996,
-          "holdings_change": 0.0
+          "as_of": "2026-07-19",
+          "as_of_basis": "official_holdings",
+          "detail": "form=8-K filed=2026-07-20 accn=0001493152-26-033855 exhibit=ex99-1.htm",
+          "source_basis": "SEC official overlay",
+          "holdings_change": null
         },
         {
           "name": "SharpLink",
-          "symbol": "SBET.US",
-          "holdings": 868699.0,
-          "current_value_usd": 1673466126.0133498,
+          "symbol": "SBET",
+          "holdings": 886725.0,
+          "current_value_usd": 1672399775.63165,
           "supply_share": 0.0072,
-          "holdings_change": 0.0
+          "as_of": "2026-06-28",
+          "as_of_basis": "official_eth_equivalent_components",
+          "detail": "form=8-K filed=2026-06-30 accn=0001493152-26-031202 exhibit=ex99-1.htm native_eth=632719 lseth_eth_equivalent=181299 weeth_eth_equivalent=72707",
+          "source_basis": "SEC official overlay",
+          "holdings_change": null
         },
         {
           "name": "The Ether Machine",
-          "symbol": "ETHM.US",
+          "symbol": "ETHM",
           "holdings": 496712.0,
-          "current_value_usd": 956868496.8951765,
+          "current_value_usd": 956258770.1304457,
           "supply_share": 0.0041199999999999995,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Bit Digital",
-          "symbol": "BTBT.US",
+          "symbol": "BTBT",
           "holdings": 158461.75,
-          "current_value_usd": 305261512.7838249,
+          "current_value_usd": 305066996.9070974,
           "supply_share": 0.00131,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Coinbase Global",
-          "symbol": "COIN.US",
+          "symbol": "COIN",
           "holdings": 150193.0,
-          "current_value_usd": 289332551.1648143,
+          "current_value_usd": 289148185.39153886,
           "supply_share": 0.00124,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "BTCS",
-          "symbol": "BTCS.US",
+          "symbol": "BTCS",
           "holdings": 70787.0,
-          "current_value_usd": 136364433.0914471,
+          "current_value_usd": 136277540.22698036,
           "supply_share": 0.0005899999999999999,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Forum Markets (formerly ETHZilla)",
-          "symbol": "FRMM.US",
+          "symbol": "FRMM",
           "holdings": 69802.0,
-          "current_value_usd": 134466924.13365716,
+          "current_value_usd": 134381240.38204306,
           "supply_share": 0.00058,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         },
         {
           "name": "Galaxy Digital Holdings Ltd",
-          "symbol": "GLXY.US",
+          "symbol": "GLXY",
           "holdings": 61137.0,
-          "current_value_usd": 117774624.52020569,
+          "current_value_usd": 117699577.2791176,
           "supply_share": 0.0005099999999999999,
-          "holdings_change": 0.0
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+          "holdings_change": null
         }
       ],
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "limitation": "CoinGecko 公司財庫單一聚合來源，可能落後官方揭露；差額也可能包含供應商修訂，只作雷達背景",
-      "total_holdings_change": 1050.0
+      "as_of": "2026-07-22T11:49:14+00:00",
+      "as_of_basis": "latest_provider_retrieval_with_company_specific_official_overlay_dates",
+      "source_count": 3,
+      "source_observations": {
+        "CoinGecko": {
+          "total_holdings": 7788048.905876,
+          "company_count": 32,
+          "as_of": "2026-07-22T11:49:11+00:00",
+          "as_of_basis": "retrieval_time_no_company_holdings_timestamp"
+        },
+        "BitcoinTreasuries.net": {
+          "total_holdings": 6930709.6,
+          "company_count": 7,
+          "as_of": "2026-07-22T11:49:14+00:00",
+          "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp"
+        },
+        "SEC official filings": {
+          "total_holdings": 6664193.0,
+          "company_count": 2,
+          "as_of": "2026-07-19",
+          "as_of_basis": "company_specific_official_holdings_dates"
+        }
+      },
+      "validation": {
+        "status": "representative_cross_source_verified",
+        "method": "company_intersection_weighted_gap_with_official_major_holder_overlay",
+        "validation_cohort": [
+          "BMNR",
+          "SBET"
+        ],
+        "cohort_policy": "dynamic largest base-universe holders, at least four BTC or two ETH candidates, targeting 75% before cross-source matching; verified matched coverage requires at least two companies and 60%",
+        "provider_count": 3,
+        "providers": [
+          "BitcoinTreasuries.net",
+          "CoinGecko",
+          "SEC official filings"
+        ],
+        "matched_company_count": 2,
+        "matched_base_holdings": 6646167.0,
+        "representative_coverage_ratio": 0.8533802342953365,
+        "weighted_cross_source_gap": 0.003887192342718766,
+        "maximum_company_gap": 0.020835095435450677,
+        "excluded_outlier_count": 0,
+        "thresholds": {
+          "minimum_provider_count": 2,
+          "minimum_matched_company_count": 2,
+          "minimum_representative_coverage_ratio": 0.6,
+          "maximum_weighted_cross_source_gap": 0.01,
+          "maximum_individual_company_gap": 0.05
+        },
+        "comparisons": [
+          {
+            "symbol": "BMNR",
+            "provider_values": {
+              "CoinGecko": 5777468.0,
+              "BitcoinTreasuries.net": 5770038.0,
+              "SEC official filings": 5777468.0
+            },
+            "consensus_provider_values": {
+              "CoinGecko": 5777468.0,
+              "BitcoinTreasuries.net": 5770038.0,
+              "SEC official filings": 5777468.0
+            },
+            "excluded_outlier_provider_values": {},
+            "median_holdings": 5777468.0,
+            "max_relative_gap": 0.0012860304894808591
+          },
+          {
+            "symbol": "SBET",
+            "provider_values": {
+              "CoinGecko": 868699.0,
+              "BitcoinTreasuries.net": 887174.0,
+              "SEC official filings": 886725.0
+            },
+            "consensus_provider_values": {
+              "CoinGecko": 868699.0,
+              "BitcoinTreasuries.net": 887174.0,
+              "SEC official filings": 886725.0
+            },
+            "excluded_outlier_provider_values": {},
+            "median_holdings": 886725.0,
+            "max_relative_gap": 0.020835095435450677
+          }
+        ],
+        "universe_total_comparison_permitted": false,
+        "non_base_provider_failure_results": {
+          "BitcoinTreasuries.net": "representative_cross_source_verified",
+          "SEC official filings": "representative_cross_source_verified"
+        },
+        "non_base_provider_failure_tolerant": true,
+        "base_provider_failure_results": {
+          "BitcoinTreasuries.net": "representative_cross_source_verified"
+        },
+        "base_provider_failure_tolerant": true,
+        "official_overlay_complete": true,
+        "official_overlay_unmapped_symbols": [],
+        "official_observation_missing_symbols": [],
+        "base_candidate_results": {
+          "CoinGecko": {
+            "status": "representative_cross_source_verified",
+            "representative_coverage_ratio": 0.8533802342953365,
+            "weighted_cross_source_gap": 0.003887192342718766
+          },
+          "BitcoinTreasuries.net": {
+            "status": "representative_cross_source_verified",
+            "representative_coverage_ratio": 0.9605382975503692,
+            "weighted_cross_source_gap": 0.003887192342718766
+          }
+        }
+      },
+      "source_incidents": [],
+      "limitation": "CoinGecko 定義聚合 universe，SEC 官方值覆蓋前列公司；交集覆蓋 85.3%、加權差異 0.39%。不同聚合 universe 的全站總量不硬平均。",
+      "total_holdings_change": 19076.0
     }
   },
   "sectors": {
     "RWA": {
-      "category_id": "real-world-assets-rwa",
-      "market_cap_usd": 65553845492.19991,
-      "change_24h": 0.012675865311194613,
-      "volume_24h_usd": 12944407732.224663,
-      "top_3_coins": [
-        "https://coin-images.coingecko.com/coins/images/68480/small/figure.png",
-        "https://coin-images.coingecko.com/coins/images/100/small/fmpFRHHQ_400x400.jpg",
-        "https://coin-images.coingecko.com/coins/images/877/small/Chainlink_Logo_500.png"
+      "basket_version": "fixed-basket-v1",
+      "constituents": [
+        "ONDO",
+        "LINK",
+        "XLM",
+        "PAXG",
+        "XAUT"
       ],
-      "as_of": "2026-07-22T11:21:06+00:00"
+      "status": "cross_source_verified",
+      "change_24h": 0.01350000011920929,
+      "market_cap_usd": 17743035796.0,
+      "volume_24h_usd": 741072291.8092699,
+      "source_count": 4,
+      "required_source_count": 2,
+      "cross_source_gap": 0.0008369999999999992,
+      "max_cross_source_gap": 0.01,
+      "source_observations": {
+        "CoinGecko": {
+          "change_24h": 0.013063,
+          "as_of": "2026-07-22T11:48:59.101Z",
+          "constituent_count": 5,
+          "market_cap_usd": 19255571023.0,
+          "volume_24h_usd": 820638655.0
+        },
+        "CoinPaprika": {
+          "change_24h": 0.01350000023841858,
+          "as_of": "2026-07-22T11:44:15Z",
+          "constituent_count": 5,
+          "market_cap_usd": 17743035796.0,
+          "volume_24h_usd": 694699775.3932704
+        },
+        "CoinLore": {
+          "change_24h": 0.013500000000000002,
+          "as_of": "2026-07-22T11:46:02+00:00",
+          "constituent_count": 5,
+          "market_cap_usd": 16007709969.91,
+          "volume_24h_usd": 741072291.8092699
+        },
+        "Binance": {
+          "change_24h": 0.0139,
+          "as_of": "2026-07-22T11:49:07.689000+00:00",
+          "constituent_count": 5
+        }
+      },
+      "source_incidents": [],
+      "as_of": "2026-07-22T11:44:15Z"
     },
     "Layer 1": {
-      "category_id": "layer-1",
-      "market_cap_usd": 1867091690564.4866,
-      "change_24h": 0.010894550211205799,
-      "volume_24h_usd": 49497334827.68648,
-      "top_3_coins": [
-        "https://coin-images.coingecko.com/coins/images/1/small/bitcoin.png",
-        "https://coin-images.coingecko.com/coins/images/279/small/ethereum.png",
-        "https://coin-images.coingecko.com/coins/images/825/small/bnb-icon2_2x.png"
+      "basket_version": "fixed-basket-v1",
+      "constituents": [
+        "BTC",
+        "ETH",
+        "BNB",
+        "SOL",
+        "XRP"
       ],
-      "as_of": "2026-07-22T11:21:06+00:00"
+      "status": "cross_source_verified",
+      "change_24h": -0.00481005,
+      "market_cap_usd": 1744878824731.0,
+      "volume_24h_usd": 38444401535.46709,
+      "source_count": 4,
+      "required_source_count": 2,
+      "cross_source_gap": 0.00506999988079071,
+      "max_cross_source_gap": 0.01,
+      "source_observations": {
+        "CoinGecko": {
+          "change_24h": -0.0047201,
+          "as_of": "2026-07-22T11:49:09.420Z",
+          "constituent_count": 5,
+          "market_cap_usd": 1746833932650.0,
+          "volume_24h_usd": 46731039646.0
+        },
+        "CoinPaprika": {
+          "change_24h": -0.00949999988079071,
+          "as_of": "2026-07-22T11:44:15Z",
+          "constituent_count": 5,
+          "market_cap_usd": 1744878824731.0,
+          "volume_24h_usd": 38444401535.46709
+        },
+        "CoinLore": {
+          "change_24h": -0.0049,
+          "as_of": "2026-07-22T11:46:02+00:00",
+          "constituent_count": 5,
+          "market_cap_usd": 1743501982157.5698,
+          "volume_24h_usd": 36291124898.41952
+        },
+        "Binance": {
+          "change_24h": -0.00443,
+          "as_of": "2026-07-22T11:49:11.788000+00:00",
+          "constituent_count": 5
+        }
+      },
+      "source_incidents": [],
+      "as_of": "2026-07-22T11:44:15Z"
     },
     "DeFi": {
-      "category_id": "decentralized-finance-defi",
-      "market_cap_usd": 64558110135.95575,
-      "change_24h": -0.017850133302489895,
-      "volume_24h_usd": 3345668651.310733,
-      "top_3_coins": [
-        "https://coin-images.coingecko.com/coins/images/13442/small/steth_logo.png",
-        "https://coin-images.coingecko.com/coins/images/50882/small/hyperliquid.jpg",
-        "https://coin-images.coingecko.com/coins/images/69134/small/Rain_logo_1_.png"
+      "basket_version": "fixed-basket-v1",
+      "constituents": [
+        "UNI",
+        "AAVE",
+        "LDO",
+        "ENA",
+        "PENDLE"
       ],
-      "as_of": "2026-07-22T11:21:06+00:00"
+      "status": "cross_source_verified",
+      "change_24h": 0.014165,
+      "market_cap_usd": 5277131430.0,
+      "volume_24h_usd": 466403768.4169332,
+      "source_count": 4,
+      "required_source_count": 2,
+      "cross_source_gap": 0.004072900000000001,
+      "max_cross_source_gap": 0.01,
+      "source_observations": {
+        "CoinGecko": {
+          "change_24h": 0.0134271,
+          "as_of": "2026-07-22T11:49:01.231Z",
+          "constituent_count": 5,
+          "market_cap_usd": 5291719629.0,
+          "volume_24h_usd": 559814808.0
+        },
+        "CoinPaprika": {
+          "change_24h": 0.0175,
+          "as_of": "2026-07-22T11:44:15Z",
+          "constituent_count": 5,
+          "market_cap_usd": 5277131430.0,
+          "volume_24h_usd": 466403768.4169332
+        },
+        "CoinLore": {
+          "change_24h": 0.0144,
+          "as_of": "2026-07-22T11:46:02+00:00",
+          "constituent_count": 5,
+          "market_cap_usd": 5077056998.01,
+          "volume_24h_usd": 405740512.3598701
+        },
+        "Binance": {
+          "change_24h": 0.01393,
+          "as_of": "2026-07-22T11:49:09.440000+00:00",
+          "constituent_count": 5
+        }
+      },
+      "source_incidents": [],
+      "as_of": "2026-07-22T11:44:15Z"
     },
     "Meme": {
-      "category_id": "meme-token",
-      "market_cap_usd": 25675685630.07139,
-      "change_24h": -0.000967000079458769,
-      "volume_24h_usd": 22311984185.474,
-      "top_3_coins": [
-        "https://coin-images.coingecko.com/coins/images/5/small/dogecoin.png",
-        "https://coin-images.coingecko.com/coins/images/11939/small/shiba.png",
-        "https://coin-images.coingecko.com/coins/images/53247/small/square-bg-transparent.png"
+      "basket_version": "fixed-basket-v1",
+      "constituents": [
+        "DOGE",
+        "SHIB",
+        "PEPE",
+        "BONK",
+        "WIF"
       ],
-      "as_of": "2026-07-22T11:21:06+00:00"
+      "status": "cross_source_verified",
+      "change_24h": -0.0142975,
+      "market_cap_usd": 15374174858.0,
+      "volume_24h_usd": 586105771.6119181,
+      "source_count": 4,
+      "required_source_count": 2,
+      "cross_source_gap": 0.0029999995708465572,
+      "max_cross_source_gap": 0.01,
+      "source_observations": {
+        "CoinGecko": {
+          "change_24h": -0.014755,
+          "as_of": "2026-07-22T11:49:05.446Z",
+          "constituent_count": 5,
+          "market_cap_usd": 15374174858.0,
+          "volume_24h_usd": 683557997.0
+        },
+        "CoinPaprika": {
+          "change_24h": -0.016699999570846558,
+          "as_of": "2026-07-22T11:44:15Z",
+          "constituent_count": 5,
+          "market_cap_usd": 14900237937.0,
+          "volume_24h_usd": 586105771.6119181
+        },
+        "CoinLore": {
+          "change_24h": -0.0137,
+          "as_of": "2026-07-22T11:46:02+00:00",
+          "constituent_count": 5,
+          "market_cap_usd": 16301714943.9,
+          "volume_24h_usd": 573336169.196882
+        },
+        "Binance": {
+          "change_24h": -0.013839999999999998,
+          "as_of": "2026-07-22T11:49:08.294000+00:00",
+          "constituent_count": 5
+        }
+      },
+      "source_incidents": [],
+      "as_of": "2026-07-22T11:44:15Z"
     }
   },
   "sources": [
+    {
+      "source_id": "binance_btc_perp",
+      "provider": "Binance USD-M Futures",
+      "url": "https://fapi.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT",
+      "source_tier": "primary_derivatives_market",
+      "as_of": "2026-07-22T11:49:10+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
+      "detail": "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"
+    },
+    {
+      "source_id": "binance_eth_perp",
+      "provider": "Binance USD-M Futures",
+      "url": "https://fapi.binance.com/fapi/v1/premiumIndex?symbol=ETHUSDT",
+      "source_tier": "primary_derivatives_market",
+      "as_of": "2026-07-22T11:49:10+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
+      "detail": "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"
+    },
+    {
+      "source_id": "binance_spot",
+      "provider": "Binance Spot",
+      "url": "https://api.binance.com/api/v3/ticker/24hr?symbols=%5B%22BTCUSDT%22%2C%22ETHUSDT%22%2C%22SOLUSDT%22%2C%22BNBUSDT%22%2C%22XRPUSDT%22%2C%22DOGEUSDT%22%5D",
+      "source_tier": "primary_market",
+      "as_of": "2026-07-22T11:49:10.612000+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
+      "detail": "交易所 USDT 現貨報價；先以 Coinbase USDT/USD 換算美元"
+    },
+    {
+      "source_id": "bitbo_btc_dat",
+      "provider": "Bitbo Bitcoin Treasuries public-company table",
+      "url": "https://bitcointreasuries.com/",
+      "source_tier": "independent_treasury_aggregator",
+      "as_of": "2026-07-22T11:49:14+00:00",
+      "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+      "fetched_at": "2026-07-22T11:49:14+00:00",
+      "detail": "195 家具交易代號的公司列；只在公司交集上比較，不平均不同 universe 的總量"
+    },
+    {
+      "source_id": "bitcoin_treasuries_btc_dat",
+      "provider": "BitcoinTreasuries.net public-company table",
+      "url": "https://bitcointreasuries.net/",
+      "source_tier": "independent_treasury_aggregator",
+      "as_of": "2026-07-22T11:49:12+00:00",
+      "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
+      "detail": "205 家公開公司 SSR 表；與其他來源只比較公司交集，不直接比較不同 universe 的全站總量；表格沒有全域持倉日期"
+    },
+    {
+      "source_id": "bitcoin_treasuries_eth_dat",
+      "provider": "BitcoinTreasuries.net public-company table",
+      "url": "https://bitcointreasuries.net/ethereum",
+      "source_tier": "independent_treasury_aggregator",
+      "as_of": "2026-07-22T11:49:14+00:00",
+      "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+      "fetched_at": "2026-07-22T11:49:14+00:00",
+      "detail": "7 家公開公司 SSR 表；與其他來源只比較公司交集，不直接比較不同 universe 的全站總量；表格沒有全域持倉日期"
+    },
     {
       "source_id": "blockchain_hashrate_180d",
       "provider": "Blockchain.com",
@@ -868,17 +1589,97 @@
       "source_tier": "independent_onchain",
       "as_of": "2026-07-21T00:00:00+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "180 日算力序列，用於 30 日變化與相對 90 日高點"
+    },
+    {
+      "source_id": "btc_etf_bitbo",
+      "provider": "Bitbo",
+      "url": "https://bitbo.io/treasuries/etf-flows/",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-20",
+      "as_of_basis": "US_spot_ETF_daily_flow_USD_millions_table",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-20 canonical=True"
+    },
+    {
+      "source_id": "btc_etf_blockworks_trackinsights",
+      "provider": "Blockworks / Trackinsights",
+      "url": "https://blockworks.com/api/studio/dashboard/bitcoin-etfs/visualization/8146/execution?limit=50000&page=1",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-20",
+      "as_of_basis": "provider_labeled_US_spot_ETF_flow_date",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-20 canonical=False"
+    },
+    {
+      "source_id": "btc_etf_coinmarketcap_etf",
+      "provider": "CoinMarketCap ETF",
+      "url": "https://api.coinmarketcap.com/data-api/v3/etf/overview/netflow/chart?category=btc&range=30d&convertId=2781",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-21",
+      "as_of_basis": "provider_reported_US_spot_ETF_daily_total_flow",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-21 canonical=False"
+    },
+    {
+      "source_id": "btc_etf_ishares_ibit_official_holdings",
+      "provider": "iShares IBIT official holdings",
+      "url": "https://www.ishares.com/varnish-api/blk-one01-product-data/product-data/api/v2/get-product-data?portfolioId=333011&component=holdings.all&asOfDate=20260720",
+      "source_tier": "official_issuer_crosscheck",
+      "as_of": "2026-07-20",
+      "as_of_basis": "official_holdings_change_vs_reported_fund_flow",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "canonical=Bitbo component sum; component_completeness=100.0%; IBIT official holdings-change proxy normalized_gap=0.47% (5% or USD 5m tolerance); official_component_gross_coverage=82.9%; backup=The Block same_date=True sample_gap=1.19% sample_gross_coverage=100.0%; validation_sources=3; market_date=2026-07-20; hard_trigger=false"
+    },
+    {
+      "source_id": "btc_etf_the_block",
+      "provider": "The Block",
+      "url": "https://data.tbstat.com/dashboard/markets_structuredproducts_btcspotetfflows_daily_other.json",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-21",
+      "as_of_basis": "US_spot_ETF_daily_fund_flows_component_sum",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-21 canonical=False"
+    },
+    {
+      "source_id": "btc_etf_walletpilot",
+      "provider": "WalletPilot",
+      "url": "https://www.walletpilot.com/bitcoin-tracker/etfs",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-21",
+      "as_of_basis": "provider_rolling_windows_with_fund_level_lastFlowDate",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-21 canonical=False"
+    },
+    {
+      "source_id": "bybit_btc_perp",
+      "provider": "Bybit Linear",
+      "url": "https://api.bybit.com/v5/market/tickers?category=linear&symbol=BTCUSDT",
+      "source_tier": "primary_derivatives_market",
+      "as_of": "2026-07-22T11:49:11.322000+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
+      "detail": "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"
+    },
+    {
+      "source_id": "bybit_eth_perp",
+      "provider": "Bybit Linear",
+      "url": "https://api.bybit.com/v5/market/tickers?category=linear&symbol=ETHUSDT",
+      "source_tier": "primary_derivatives_market",
+      "as_of": "2026-07-22T11:49:11.322000+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
+      "detail": "永續標記價、指數價、8 小時資金費率、未平倉量與 24 小時成交額"
     },
     {
       "source_id": "coinbase_btc",
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/BTC-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:04.664420238Z",
+      "as_of": "2026-07-22T11:49:10.392671806Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USD 現貨報價"
     },
     {
@@ -886,9 +1687,9 @@
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/DOGE-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:05.402855978Z",
+      "as_of": "2026-07-22T11:48:56.734736779Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價"
     },
     {
@@ -896,9 +1697,9 @@
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/ETH-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06.176795519Z",
+      "as_of": "2026-07-22T11:49:10.416102456Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USD 現貨報價"
     },
     {
@@ -906,9 +1707,9 @@
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/HYPE-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:03.647150859Z",
+      "as_of": "2026-07-22T11:49:10.366900714Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價"
     },
     {
@@ -916,19 +1717,29 @@
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/SOL-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:03.514466737Z",
+      "as_of": "2026-07-22T11:49:09.359807707Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價"
+    },
+    {
+      "source_id": "coinbase_usdt_usd",
+      "provider": "Coinbase Exchange",
+      "url": "https://api.exchange.coinbase.com/products/USDT-USD/ticker",
+      "source_tier": "primary_market",
+      "as_of": "2026-07-22T11:49:03.579784358Z",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
+      "detail": "Binance USDT 報價的美元正規化匯率"
     },
     {
       "source_id": "coinbase_usdt_usd_okx",
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/USDT-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:03.596500835Z",
+      "as_of": "2026-07-22T11:49:03.579784358Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "OKX USDT 報價的美元正規化匯率"
     },
     {
@@ -936,9 +1747,9 @@
       "provider": "Coinbase Exchange",
       "url": "https://api.exchange.coinbase.com/products/XRP-USD/ticker",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:05.951189880Z",
+      "as_of": "2026-07-22T11:49:09.627918263Z",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價"
     },
     {
@@ -946,9 +1757,9 @@
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -956,9 +1767,9 @@
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:03+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -966,29 +1777,19 @@
       "provider": "CoinGecko Public Companies Treasury",
       "url": "https://api.coingecko.com/api/v3/companies/public_treasury/bitcoin",
       "source_tier": "third_party_treasury_aggregator",
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
-      "detail": "CoinGecko 公司財庫單一聚合來源，可能落後官方揭露；差額也可能包含供應商修訂，只作雷達背景"
-    },
-    {
-      "source_id": "coingecko_categories",
-      "provider": "CoinGecko Categories",
-      "url": "https://api.coingecko.com/api/v3/coins/categories",
-      "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:06+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
-      "detail": "賽道市值與 24 小時變化；分類由供應商定義"
+      "as_of": "2026-07-22T11:49:11+00:00",
+      "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
+      "detail": "聚合 universe 與長尾 roster；前列公司另以獨立聚合站及 SEC 官方揭露交叉驗證"
     },
     {
       "source_id": "coingecko_doge",
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:20:52+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -996,9 +1797,9 @@
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:03+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -1006,19 +1807,19 @@
       "provider": "CoinGecko Public Companies Treasury",
       "url": "https://api.coingecko.com/api/v3/companies/public_treasury/ethereum",
       "source_tier": "third_party_treasury_aggregator",
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
-      "detail": "CoinGecko 公司財庫單一聚合來源，可能落後官方揭露；差額也可能包含供應商修訂，只作雷達背景"
+      "as_of": "2026-07-22T11:49:11+00:00",
+      "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
+      "detail": "聚合 universe 與長尾 roster；前列公司另以獨立聚合站及 SEC 官方揭露交叉驗證"
     },
     {
       "source_id": "coingecko_hype",
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:03+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -1026,9 +1827,9 @@
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:20:52+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -1036,9 +1837,9 @@
       "provider": "CoinGecko",
       "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Chyperliquid%2Csolana%2Cbinancecoin%2Cripple%2Cdogecoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:01+00:00",
+      "as_of": "2026-07-22T11:49:09+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "spot, market cap, 24h volume and change"
     },
     {
@@ -1046,39 +1847,39 @@
       "provider": "DefiLlama Protocols",
       "url": "https://api.llama.fi/protocols",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
-      "detail": "供應商分類為 RWA 的協議 TVL 加總；不與穩定幣供給相加"
+      "as_of": "2026-07-22T10:13:47+00:00",
+      "as_of_basis": "provider_timestamp_top_five_coverage",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "供應商分類為 RWA 的協議 TVL 加總；前五大歷史時間戳覆蓋 53.5%；另重算三類 BTCFi 可觀測 TVL"
     },
     {
       "source_id": "defillama_usd_stablecoins",
       "provider": "DefiLlama Stablecoins",
-      "url": "https://stablecoins.llama.fi/stablecoins?includePrices=true",
+      "url": "https://stablecoins.llama.fi/stablecoincharts/all",
       "source_tier": "independent_market_aggregator",
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
-      "detail": "美元掛鉤穩定幣供給與 30 日變化；上游未提供統一時間戳"
+      "as_of": "2026-07-22T00:00:00+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "時間戳化 peggedUSD 總供給與 30 日變化；另以逐資產快照重算同源差異"
     },
     {
       "source_id": "deribit_btc_dated_future",
       "provider": "Deribit Futures",
       "url": "https://www.deribit.com/api/v2/public/ticker?instrument_name=BTC-25SEP26",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:06.648000+00:00",
+      "as_of": "2026-07-22T11:49:11.562000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "最接近 90 天的掛牌月到期期貨；標記價相對指數價的簡單年化基差"
     },
     {
       "source_id": "deribit_btc_dvol",
       "provider": "Deribit DVOL",
-      "url": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&start_timestamp=1784546467351&end_timestamp=1784719267351&resolution=3600",
+      "url": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&start_timestamp=1784548151996&end_timestamp=1784720951996&resolution=3600",
       "source_tier": "primary_derivatives_market",
       "as_of": "2026-07-22T10:00:00+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "最近一個完整小時的 Deribit 隱含波動率指數收盤值"
     },
     {
@@ -1086,9 +1887,9 @@
       "provider": "Deribit",
       "url": "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=BTC&kind=option",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:05.799000+00:00",
+      "as_of": "2026-07-22T11:49:09.098000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "Deribit 期權未平倉量、隱含波動率、成交額與自算最大痛點集中價"
     },
     {
@@ -1096,19 +1897,19 @@
       "provider": "Deribit Futures",
       "url": "https://www.deribit.com/api/v2/public/ticker?instrument_name=ETH-25SEP26",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:07.028000+00:00",
+      "as_of": "2026-07-22T11:49:11.598000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "最接近 90 天的掛牌月到期期貨；標記價相對指數價的簡單年化基差"
     },
     {
       "source_id": "deribit_eth_dvol",
       "provider": "Deribit DVOL",
-      "url": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=ETH&start_timestamp=1784546467449&end_timestamp=1784719267449&resolution=3600",
+      "url": "https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=ETH&start_timestamp=1784548151928&end_timestamp=1784720951928&resolution=3600",
       "source_tier": "primary_derivatives_market",
       "as_of": "2026-07-22T10:00:00+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "最近一個完整小時的 Deribit 隱含波動率指數收盤值"
     },
     {
@@ -1116,10 +1917,50 @@
       "provider": "Deribit",
       "url": "https://www.deribit.com/api/v2/public/get_book_summary_by_currency?currency=ETH&kind=option",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:05.370000+00:00",
+      "as_of": "2026-07-22T11:49:09.531000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "Deribit 期權未平倉量、隱含波動率、成交額與自算最大痛點集中價"
+    },
+    {
+      "source_id": "eth_etf_blockworks_trackinsights",
+      "provider": "Blockworks / Trackinsights",
+      "url": "https://blockworks.com/api/studio/dashboard/ethereum-etfs/visualization/6561/execution?limit=50000&page=1",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-20",
+      "as_of_basis": "provider_labeled_US_spot_ETF_flow_date",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-20 canonical=False"
+    },
+    {
+      "source_id": "eth_etf_coinmarketcap_etf",
+      "provider": "CoinMarketCap ETF",
+      "url": "https://api.coinmarketcap.com/data-api/v3/etf/overview/netflow/chart?category=eth&range=30d&convertId=2781",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-21",
+      "as_of_basis": "provider_reported_US_spot_ETF_daily_total_flow",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-21 canonical=False"
+    },
+    {
+      "source_id": "eth_etf_ishares_etha_official_holdings",
+      "provider": "iShares ETHA official holdings",
+      "url": "https://www.ishares.com/varnish-api/blk-one01-product-data/product-data/api/v2/get-product-data?portfolioId=337614&component=holdings.all&asOfDate=20260721",
+      "source_tier": "official_issuer_crosscheck",
+      "as_of": "2026-07-21",
+      "as_of_basis": "official_holdings_change_vs_reported_fund_flow",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "canonical=The Block component sum; component_completeness=100.0%; ETHA official holdings-change proxy normalized_gap=0.24% (5% or USD 5m tolerance); official_component_gross_coverage=77.5%; backup=CoinMarketCap ETF same_date=True sample_gap=0.00% sample_gross_coverage=100.0%; validation_sources=3; market_date=2026-07-21; hard_trigger=false"
+    },
+    {
+      "source_id": "eth_etf_the_block",
+      "provider": "The Block",
+      "url": "https://data.tbstat.com/dashboard/markets_structuredproducts_ethspotetfflows_daily_other.json",
+      "source_tier": "independent_ETF_data_provider",
+      "as_of": "2026-07-21",
+      "as_of_basis": "US_spot_ETF_daily_fund_flows_component_sum",
+      "fetched_at": "2026-07-22T11:49:16+00:00",
+      "detail": "provider_as_of=2026-07-21 canonical=True"
     },
     {
       "source_id": "fred_us_10y_real_yield",
@@ -1128,7 +1969,7 @@
       "source_tier": "official_macro_aggregator",
       "as_of": "2026-07-20",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "美國 10 年期通膨保值公債實質殖利率；FRED 轉載聯準會理事會序列"
     },
     {
@@ -1138,7 +1979,7 @@
       "source_tier": "official_macro_aggregator",
       "as_of": "2026-01-01",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "美國聯邦債務占 GDP，季度結構資料；FRED 轉載 OMB 序列"
     },
     {
@@ -1146,9 +1987,9 @@
       "provider": "Hyperliquid",
       "url": "https://api.hyperliquid.xyz/info",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:08+00:00",
+      "as_of": "2026-07-22T11:49:11+00:00",
       "as_of_basis": "retrieval_time",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "每小時資金費率、標記價、預言機價、未平倉量與 24 小時名目成交額"
     },
     {
@@ -1156,9 +1997,9 @@
       "provider": "Hyperliquid",
       "url": "https://api.hyperliquid.xyz/info",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:08+00:00",
+      "as_of": "2026-07-22T11:49:11+00:00",
       "as_of_basis": "retrieval_time",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "每小時資金費率、標記價、預言機價、未平倉量與 24 小時名目成交額"
     },
     {
@@ -1166,9 +2007,9 @@
       "provider": "Hyperliquid",
       "url": "https://api.hyperliquid.xyz/info",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "as_of": "2026-07-22T11:49:10+00:00",
       "as_of_basis": "retrieval_time",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "HYPE 永續標記價、預言機價、資金費率、未平倉量與名目成交額；不作現貨交叉來源"
     },
     {
@@ -1176,9 +2017,9 @@
       "provider": "Kraken Spot",
       "url": "https://api.kraken.com/0/public/Ticker?pair=XBTUSD",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "as_of": "2026-07-22T11:49:10+00:00",
       "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USD 現貨報價；Ticker 未提供上游時間戳，明確使用擷取時間"
     },
     {
@@ -1186,9 +2027,9 @@
       "provider": "Kraken Spot",
       "url": "https://api.kraken.com/0/public/Ticker?pair=XDGUSD",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:07+00:00",
+      "as_of": "2026-07-22T11:49:12+00:00",
       "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
       "detail": "交易所 USD 現貨報價；Ticker 未提供上游時間戳，明確使用擷取時間"
     },
     {
@@ -1196,9 +2037,9 @@
       "provider": "Kraken Spot",
       "url": "https://api.kraken.com/0/public/Ticker?pair=ETHUSD",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "as_of": "2026-07-22T11:49:11+00:00",
       "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價；Ticker 未提供上游時間戳，明確使用擷取時間"
     },
     {
@@ -1206,9 +2047,9 @@
       "provider": "Kraken Spot",
       "url": "https://api.kraken.com/0/public/Ticker?pair=SOLUSD",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "as_of": "2026-07-22T11:49:11+00:00",
       "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價；Ticker 未提供上游時間戳，明確使用擷取時間"
     },
     {
@@ -1216,9 +2057,9 @@
       "provider": "Kraken Spot",
       "url": "https://api.kraken.com/0/public/Ticker?pair=XRPUSD",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06+00:00",
+      "as_of": "2026-07-22T11:49:11+00:00",
       "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USD 現貨報價；Ticker 未提供上游時間戳，明確使用擷取時間"
     },
     {
@@ -1226,9 +2067,9 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=BNB-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06.966000+00:00",
+      "as_of": "2026-07-22T11:49:10.463000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
     },
     {
@@ -1236,9 +2077,9 @@
       "provider": "OKX Linear Swap",
       "url": "https://www.okx.com/api/v5/public/funding-rate?instId=BTC-USDT-SWAP",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:20:12.512000+00:00",
+      "as_of": "2026-07-22T11:49:10.562000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "永續標記價、指數價、8 小時已結算資金費率、未平倉量與 24 小時成交額"
     },
     {
@@ -1246,9 +2087,9 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=BTC-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:05.961000+00:00",
+      "as_of": "2026-07-22T11:49:10.562000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:06+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
     },
     {
@@ -1256,9 +2097,9 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=DOGE-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:07.162000+00:00",
+      "as_of": "2026-07-22T11:49:10.260000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
     },
     {
@@ -1266,9 +2107,9 @@
       "provider": "OKX Linear Swap",
       "url": "https://www.okx.com/api/v5/public/funding-rate?instId=ETH-USDT-SWAP",
       "source_tier": "primary_derivatives_market",
-      "as_of": "2026-07-22T11:20:12.541000+00:00",
+      "as_of": "2026-07-22T11:49:10.555000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "永續標記價、指數價、8 小時已結算資金費率、未平倉量與 24 小時成交額"
     },
     {
@@ -1276,9 +2117,9 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=ETH-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06.569000+00:00",
+      "as_of": "2026-07-22T11:49:09.860000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
     },
     {
@@ -1286,9 +2127,9 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=HYPE-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:06.166000+00:00",
+      "as_of": "2026-07-22T11:49:10.136000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
     },
     {
@@ -1296,9 +2137,9 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=SOL-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:07.062000+00:00",
+      "as_of": "2026-07-22T11:49:10.764000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
     },
     {
@@ -1306,10 +2147,80 @@
       "provider": "OKX Spot",
       "url": "https://www.okx.com/api/v5/market/ticker?instId=XRP-USDT",
       "source_tier": "primary_market",
-      "as_of": "2026-07-22T11:21:07.260000+00:00",
+      "as_of": "2026-07-22T11:49:10.261000+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:08+00:00",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
       "detail": "交易所 USDT 現貨報價；以 Coinbase USDT/USD 換算美元"
+    },
+    {
+      "source_id": "sec_bmnr_eth_holdings",
+      "provider": "BMNR SEC 8-K exhibit",
+      "url": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226033855/ex99-1.htm",
+      "source_tier": "official_filing",
+      "as_of": "2026-07-19",
+      "as_of_basis": "official_holdings",
+      "fetched_at": "2026-07-22T11:49:14+00:00",
+      "detail": "form=8-K filed=2026-07-20 accn=0001493152-26-033855 exhibit=ex99-1.htm"
+    },
+    {
+      "source_id": "sec_mstr_btc_holdings",
+      "provider": "Strategy SEC 8-K BTC update",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526308369/mstr-20260720.htm",
+      "source_tier": "official_filing",
+      "as_of": "2026-07-19",
+      "as_of_basis": "official_weekly_holdings",
+      "fetched_at": "2026-07-22T11:49:14+00:00",
+      "detail": "current_accn=0001193125-26-308369 previous_accn=0001193125-26-301483 period=2026-07-13..2026-07-19 contiguous=True complete_week=True previous_holdings=843775 acquired=0 current_holdings=843775 inferred_sold_btc=0 reported_sales_musd=0.0 sale_basis=complete_week_two_filing_reported_sales_reconciliation_zero"
+    },
+    {
+      "source_id": "sec_sbet_eth_holdings",
+      "provider": "SBET SEC 8-K exhibit",
+      "url": "https://www.sec.gov/Archives/edgar/data/1981535/000149315226031202/ex99-1.htm",
+      "source_tier": "official_filing",
+      "as_of": "2026-06-28",
+      "as_of_basis": "official_eth_equivalent_components",
+      "fetched_at": "2026-07-22T11:49:14+00:00",
+      "detail": "form=8-K filed=2026-06-30 accn=0001493152-26-031202 exhibit=ex99-1.htm native_eth=632719 lseth_eth_equivalent=181299 weeth_eth_equivalent=72707"
+    },
+    {
+      "source_id": "sector_basket_binance",
+      "provider": "Binance Data API",
+      "url": "https://data-api.binance.vision/api/v3/ticker/24hr?symbols=%5B%22AAVEUSDT%22%2C%22BNBUSDT%22%2C%22BONKUSDT%22%2C%22BTCUSDT%22%2C%22DOGEUSDT%22%2C%22ENAUSDT%22%2C%22ETHUSDT%22%2C%22LDOUSDT%22%2C%22LINKUSDT%22%2C%22ONDOUSDT%22%2C%22PAXGUSDT%22%2C%22PENDLEUSDT%22%2C%22PEPEUSDT%22%2C%22SHIBUSDT%22%2C%22SOLUSDT%22%2C%22UNIUSDT%22%2C%22WIFUSDT%22%2C%22XAUTUSDT%22%2C%22XLMUSDT%22%2C%22XRPUSDT%22%5D",
+      "source_tier": "primary_spot_market",
+      "as_of": "2026-07-22T11:49:07.689000+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
+      "detail": "fixed-basket-v1 成分幣 USDT 現貨 24 小時報酬交叉驗證；不拿單一交易所成交量當全市場"
+    },
+    {
+      "source_id": "sector_basket_coingecko",
+      "provider": "CoinGecko Markets",
+      "url": "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=aave%2Cbinancecoin%2Cbonk%2Cbitcoin%2Cdogecoin%2Cethena%2Cethereum%2Clido-dao%2Cchainlink%2Condo-finance%2Cpax-gold%2Cpendle%2Cpepe%2Cshiba-inu%2Csolana%2Cuniswap%2Cdogwifcoin%2Ctether-gold%2Cstellar%2Cripple&price_change_percentage=24h&per_page=250&page=1",
+      "source_tier": "independent_market_aggregator",
+      "as_of": "2026-07-22T11:48:59.101Z",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:10+00:00",
+      "detail": "fixed-basket-v1 成分幣 24 小時報酬、市值與成交量"
+    },
+    {
+      "source_id": "sector_basket_coinlore",
+      "provider": "CoinLore Tickers",
+      "url": "https://api.coinlore.net/api/tickers/?start=0&limit=100",
+      "source_tier": "independent_market_aggregator",
+      "as_of": "2026-07-22T11:46:02+00:00",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:12+00:00",
+      "detail": "fixed-basket-v1 成分幣 24 小時報酬、市值與成交量；兩頁固定 roster"
+    },
+    {
+      "source_id": "sector_basket_coinpaprika",
+      "provider": "CoinPaprika Tickers",
+      "url": "https://api.coinpaprika.com/v1/tickers?quotes=USD",
+      "source_tier": "independent_market_aggregator",
+      "as_of": "2026-07-22T11:44:15Z",
+      "as_of_basis": "provider_timestamp",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
+      "detail": "fixed-basket-v1 成分幣 24 小時報酬、市值與成交量"
     },
     {
       "source_id": "wgc_above_ground_gold",
@@ -1318,7 +2229,7 @@
       "source_tier": "official_industry_research",
       "as_of": "2025-12-31",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "全球地上黃金存量 219,891 公噸；年度更新"
     },
     {
@@ -1326,9 +2237,9 @@
       "provider": "Yahoo Finance / CME proxy",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/BTC%3DF?range=5d&interval=1d",
       "source_tier": "third_party_market_proxy",
-      "as_of": "2026-07-22T11:09:39+00:00",
+      "as_of": "2026-07-22T11:37:22+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "Yahoo CME 前月代理；可能延遲且受換月影響，不是可成交價格"
     },
     {
@@ -1336,9 +2247,9 @@
       "provider": "Yahoo Finance / CME proxy",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/ETH%3DF?range=5d&interval=1d",
       "source_tier": "third_party_market_proxy",
-      "as_of": "2026-07-22T11:09:39+00:00",
+      "as_of": "2026-07-22T11:39:02+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "Yahoo CME 前月代理；可能延遲且受換月影響，不是可成交價格"
     },
     {
@@ -1346,45 +2257,40 @@
       "provider": "Yahoo Finance / COMEX proxy",
       "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?range=5d&interval=1d",
       "source_tier": "third_party_market_proxy",
-      "as_of": "2026-07-22T11:10:50+00:00",
+      "as_of": "2026-07-22T11:38:54+00:00",
       "as_of_basis": "provider_timestamp",
-      "fetched_at": "2026-07-22T11:21:07+00:00",
+      "fetched_at": "2026-07-22T11:49:11+00:00",
       "detail": "黃金前月期貨代理價格；受延遲與換月影響，不是現貨成交價"
     }
   ],
-  "collector_errors": [
-    "Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源"
-  ],
+  "collector_errors": [],
   "btc_thesis": {
     "framework": "BTC non-sovereign monetary anchor and neutral-collateral thesis",
     "model_policy": "Structural adoption evidence only; never enters the short-horizon BTC bottom score or directly releases a trade gate",
     "quality": {
-      "status": "degraded",
+      "status": "pass",
       "scope": "structural_context_only",
       "coverage_status": "complete",
       "missing": [],
       "failures": [],
-      "degradations": [
-        "Stablecoin and RWA providers expose no uniform upstream observation timestamp",
-        "Public-company treasury aggregation exposes retrieval time rather than upstream filing time"
-      ],
+      "degradations": [],
       "execution_gate_eligible": false
     },
     "gold_monetization": {
-      "btc_market_cap_usd": 1322817688941.6152,
+      "btc_market_cap_usd": 1322577119432.728,
       "btc_supply_used": 20059407.38569737,
       "btc_supply_basis": "coin_metrics_snapshot",
-      "estimated_gold_market_value_usd": 29143258650106.04,
-      "gold_price_proxy_usd_per_troy_oz": 4122.3,
-      "gold_price_as_of": "2026-07-22T11:10:50+00:00",
+      "estimated_gold_market_value_usd": 29150328309919.758,
+      "gold_price_proxy_usd_per_troy_oz": 4123.3,
+      "gold_price_as_of": "2026-07-22T11:38:54+00:00",
       "above_ground_gold_tonnes": 219891.0,
       "above_ground_stock_year": 2025,
-      "btc_to_gold_market_value_ratio": 0.045390177701929775,
+      "btc_to_gold_market_value_ratio": 0.04537091676537514,
       "stage": "仍屬早期貨幣化",
       "scenario_btc_price_usd": {
-        "gold_25pct": 363211.8597741524,
-        "gold_50pct": 726423.7195483048,
-        "gold_100pct": 1452847.4390966096
+        "gold_25pct": 363299.9688054636,
+        "gold_50pct": 726599.9376109272,
+        "gold_100pct": 1453199.8752218543
       },
       "plain_read": "BTC 目前約為黃金代理總值的 4.5%；代表貨幣化空間仍大，但情境價不是預測，也不代表需要等額資金流入。",
       "limits": [
@@ -1392,24 +2298,36 @@
       ]
     },
     "digital_dollar_competition": {
-      "stablecoin_supply_usd": 309129920657.2503,
+      "stablecoin_supply_usd": 306337680242.46,
+      "stablecoin_supply_30d_ago_usd": 312827386962.0,
+      "stablecoin_supply_asset_sum_usd": 309129920657.2503,
+      "stablecoin_supply_asset_sum_gap": 0.009073557765537931,
       "stablecoin_supply_matched_cohort_usd": 307895605910.7905,
       "stablecoin_supply_matched_cohort_30d_ago_usd": 313223237067.75885,
-      "stablecoin_supply_30d_change": -0.01700905465010505,
+      "stablecoin_supply_30d_change": -0.02074532790291883,
       "usd_stablecoin_count": 327,
       "stablecoin_30d_matched_count": 303,
       "stablecoin_30d_unmatched_count": 24,
-      "rwa_protocol_tvl_usd": 25479516464.82398,
+      "rwa_protocol_tvl_usd": 25472465708.014954,
       "rwa_protocol_count": 141,
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "btc_to_stablecoin_market_scale_ratio": 4.279164197788209,
-      "btc_share_of_btc_plus_stablecoins": 0.8105760755804933,
-      "plain_read": "可比美元穩定幣供給近月減少 1.7%；RWA 只有當期規模，不能據此宣稱整體鏈上信用正在擴張。",
+      "btcfi_observable_tvl_usd": 1694313399.871681,
+      "btcfi_protocol_count": 21,
+      "btcfi_categories": [
+        "Anchor BTC",
+        "Decentralized BTC",
+        "Restaked BTC"
+      ],
+      "as_of": "2026-07-22T00:00:00+00:00",
+      "as_of_basis": "provider_timestamped_stablecoin_history_and_top_rwa_protocol_history",
+      "btc_to_stablecoin_market_scale_ratio": 4.317383086487876,
+      "btc_share_of_btc_plus_stablecoins": 0.8119375670823638,
+      "plain_read": "可比美元穩定幣供給近月減少 2.1%；RWA 只有當期規模，不能據此宣稱整體鏈上信用正在擴張。",
       "limits": [
-        "Stablecoin supply is DefiLlama's peggedUSD aggregation, not bank deposits or transaction volume; 30-day change uses only assets with both current and prior-month values",
+        "Stablecoin supply is DefiLlama's timestamped peggedUSD aggregation, not bank deposits or transaction volume; current asset-sum remains an independent same-provider reconciliation",
         "RWA TVL is the sum of protocols classified as RWA by DefiLlama and may contain provider taxonomy or double-counting risk",
-        "Stablecoin and RWA scale are reported separately and are never added together"
+        "RWA freshness is evidenced by timestamped histories for the five largest protocols; the aggregate endpoint itself remains a current snapshot",
+        "Stablecoin and RWA scale are reported separately and are never added together",
+        "BTCFi proxy includes only DefiLlama Anchor BTC, Restaked BTC and Decentralized BTC protocol TVL; it excludes centralized lenders, bank collateral, derivatives margin and rehypothecation"
       ]
     },
     "public_company_adoption": {
@@ -1419,10 +2337,13 @@
       "top_company": "Strategy",
       "top_company_btc": 843775.0,
       "top_company_share_of_observed_holdings": 0.6566112420792329,
-      "as_of": "2026-07-22T11:21:07+00:00",
-      "as_of_basis": "retrieval_time_no_upstream_timestamp",
-      "plain_read": "CoinGecko 公開公司樣本持有約 6.4% BTC 供給；其中最大公司占樣本 65.7%，採用已有規模但集中度仍高。",
-      "limitation": "Only CoinGecko's public-company treasury set; excludes private companies, ETFs, governments, custodians and collateral reuse"
+      "as_of": "2026-07-22T11:49:14+00:00",
+      "as_of_basis": "latest_provider_retrieval_with_company_specific_official_overlay_dates",
+      "source_count": 4,
+      "representative_coverage_ratio": 0.7514071434467372,
+      "weighted_cross_source_gap": 0.0010356340980455514,
+      "plain_read": "公開公司聚合樣本持有約 6.4% BTC 供給；4 個來源以代表性公司交叉驗證，覆蓋聚合值 75.1%、加權差異 0.10%；最大公司仍占樣本 65.7%。",
+      "limitation": "The selected public-company universe excludes private companies, ETFs, governments, custodians and collateral reuse; totals from different universes are never averaged"
     },
     "security_consensus": {
       "hashrate_ths": 872391821.4061922,
@@ -1449,8 +2370,16 @@
     },
     "unmeasured_falsifier": {
       "name": "全球金融機構以 BTC 作抵押品的存量",
-      "status": "unknown_no_complete_public_dataset",
-      "plain_read": "ETF、DAT 與衍生品只能證明持有和金融化，不能證明銀行或全球信用市場已把 BTC 當中立抵押品。"
+      "status": "measured_onchain_proxy_global_total_unknown",
+      "global_total_status": "unknown_no_complete_public_dataset",
+      "observable_btcfi_tvl_usd": 1694313399.871681,
+      "observable_protocol_count": 21,
+      "included_categories": [
+        "Anchor BTC",
+        "Decentralized BTC",
+        "Restaked BTC"
+      ],
+      "plain_read": "可觀測鏈上 BTCFi 三類協議 TVL 約 $1.7B、涵蓋 21 個協議；這是抵押／生息採用代理，仍不含中心化借貸、銀行抵押、衍生品保證金與再質押重複計算。"
     }
   },
   "analysis": {
@@ -1460,29 +2389,29 @@
       "leaders": [
         {
           "symbol": "XRP",
-          "change_24h": 0.005673074590660089
+          "change_24h": 0.0018055321020229178
         },
         {
           "symbol": "ETH",
-          "change_24h": -0.00036833256057637777
+          "change_24h": -0.004575071215061068
         },
         {
           "symbol": "BTC",
-          "change_24h": -0.003259161649926698
+          "change_24h": -0.004680678368053149
         }
       ],
       "laggards": [
         {
           "symbol": "BNB",
-          "change_24h": -0.009712506992901963
+          "change_24h": -0.01
         },
         {
           "symbol": "DOGE",
-          "change_24h": -0.010471916224670141
+          "change_24h": -0.013907788331071941
         },
         {
           "symbol": "HYPE",
-          "change_24h": -0.06005726230681655
+          "change_24h": -0.06741693973295441
         }
       ],
       "plain_read": "追蹤資產中 1/7 上漲；領漲 XRP，只代表 24 小時相對強弱。"
@@ -1490,96 +2419,96 @@
     "sector_rotation": {
       "leaders": [
         {
+          "sector": "DeFi",
+          "change_24h": 0.014165
+        },
+        {
           "sector": "RWA",
-          "change_24h": 0.012675865311194613
+          "change_24h": 0.01350000011920929
         },
         {
           "sector": "Layer 1",
-          "change_24h": 0.010894550211205799
+          "change_24h": -0.00481005
         },
         {
           "sector": "Meme",
-          "change_24h": -0.000967000079458769
-        },
-        {
-          "sector": "DeFi",
-          "change_24h": -0.017850133302489895
+          "change_24h": -0.0142975
         }
       ],
-      "plain_read": "賽道領先為 RWA；CoinGecko 分類口徑只作輪動背景。"
+      "plain_read": "賽道領先為 DeFi；固定代表籃子採至少雙來源同成分重算，只作輪動背景。"
     },
     "relative_strength": {
-      "eth_btc": 0.029210624156349462,
-      "hype_sol": 0.7589059560474115
+      "eth_btc": 0.029177351398866357,
+      "hype_sol": 0.755827430779137
     },
     "asset_rotation": [
       {
         "symbol": "BTC",
-        "price_usd": 65968.93456250001,
-        "change_24h": -0.003259161649926698,
+        "price_usd": 65982.0,
+        "change_24h": -0.004680678368053149,
         "state": "neutral",
         "plain_read": "24 小時屬中性波動，尚未形成明顯輪動優勢。"
       },
       {
         "symbol": "ETH",
-        "price_usd": 1926.9937535,
-        "change_24h": -0.00036833256057637777,
+        "price_usd": 1925.18,
+        "change_24h": -0.004575071215061068,
         "state": "neutral",
         "plain_read": "24 小時屬中性波動，尚未形成明顯輪動優勢。"
       },
       {
         "symbol": "HYPE",
-        "price_usd": 58.92,
-        "change_24h": -0.06005726230681655,
+        "price_usd": 58.6283755,
+        "change_24h": -0.06741693973295441,
         "state": "weak",
         "plain_read": "24 小時相對弱勢；先判斷是個別事件或市場去風險。"
       },
       {
         "symbol": "SOL",
-        "price_usd": 77.63807825,
-        "change_24h": -0.006145966709346862,
+        "price_usd": 77.56846750000001,
+        "change_24h": -0.00958195864529976,
         "state": "neutral",
         "plain_read": "24 小時屬中性波動，尚未形成明顯輪動優勢。"
       },
       {
         "symbol": "BNB",
-        "price_usd": 570.51868,
-        "change_24h": -0.009712506992901963,
+        "price_usd": 570.5702715,
+        "change_24h": -0.01,
         "state": "neutral",
         "plain_read": "24 小時屬中性波動，尚未形成明顯輪動優勢。"
       },
       {
         "symbol": "XRP",
-        "price_usd": 1.1376092125000001,
-        "change_24h": 0.005673074590660089,
+        "price_usd": 1.138,
+        "change_24h": 0.0018055321020229178,
         "state": "neutral",
         "plain_read": "24 小時屬中性波動，尚未形成明顯輪動優勢。"
       },
       {
         "symbol": "DOGE",
-        "price_usd": 0.07267393899999999,
-        "change_24h": -0.010471916224670141,
+        "price_usd": 0.072583707,
+        "change_24h": -0.013907788331071941,
         "state": "neutral",
         "plain_read": "24 小時屬中性波動，尚未形成明顯輪動優勢。"
       }
     ],
     "BTC": {
       "funding_state": "balanced",
-      "funding_annualized_median": 0.052226273451503255,
-      "dated_future_basis_annualized": 0.0444851400211119,
+      "funding_annualized_median": 0.012313275,
+      "dated_future_basis_annualized": 0.044480069880699795,
       "volatility_value": 38.07,
       "volatility_metric": "deribit_dvol",
-      "put_call_open_interest_ratio": 0.4405263634017395,
+      "put_call_open_interest_ratio": 0.4387404404525685,
       "leverage_temperature": "中性偏多",
       "lenses": [
         {
           "name": "永續資金費率",
-          "value": 0.052226273451503255,
+          "value": 0.012313275,
           "state": "neutral"
         },
         {
           "name": "約三個月到期期貨年化基差",
-          "value": 0.0444851400211119,
+          "value": 0.044480069880699795,
           "state": "neutral"
         },
         {
@@ -1589,7 +2518,7 @@
         },
         {
           "name": "Put／Call 未平倉比",
-          "value": 0.4405263634017395,
+          "value": 0.4387404404525685,
           "state": "call_heavy"
         }
       ],
@@ -1597,21 +2526,21 @@
     },
     "ETH": {
       "funding_state": "balanced",
-      "funding_annualized_median": 0.04073606573890726,
-      "dated_future_basis_annualized": 0.017341182297436974,
+      "funding_annualized_median": 0.0666636,
+      "dated_future_basis_annualized": 0.01727608543151409,
       "volatility_value": 51.17,
       "volatility_metric": "deribit_dvol",
-      "put_call_open_interest_ratio": 0.5176098331851152,
+      "put_call_open_interest_ratio": 0.5180468291020311,
       "leverage_temperature": "中性偏多",
       "lenses": [
         {
           "name": "永續資金費率",
-          "value": 0.04073606573890726,
+          "value": 0.0666636,
           "state": "neutral"
         },
         {
           "name": "約三個月到期期貨年化基差",
-          "value": 0.017341182297436974,
+          "value": 0.01727608543151409,
           "state": "neutral"
         },
         {
@@ -1621,7 +2550,7 @@
         },
         {
           "name": "Put／Call 未平倉比",
-          "value": 0.5176098331851152,
+          "value": 0.5180468291020311,
           "state": "call_heavy"
         }
       ],
@@ -1629,42 +2558,38 @@
     }
   },
   "quality": {
-    "status": "degraded",
-    "score_0_100": 82,
+    "status": "pass",
+    "score_0_100": 100,
     "failures": [],
-    "degradations": [
-      "賽道輪動採單一供應商分類，只作背景",
-      "BTC 財庫公司持倉為單一第三方聚合，只作背景",
-      "ETH 財庫公司持倉為單一第三方聚合，只作背景",
-      "BTC ETF 流向僅有第三方單一來源，不作硬觸發",
-      "ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知",
-      "BTC 長期結構證據層有限可用；不參與交易放行"
-    ],
-    "source_incidents": [
-      "Binance 現貨 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
-      "BTC 永續來源事件：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
-      "BTC 永續來源事件：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源",
-      "ETH 永續來源事件：Binance 在此自動化執行環境受地區限制（HTTP 451），已切換備援來源",
-      "ETH 永續來源事件：Bybit 拒絕此自動化執行環境存取（HTTP 403），已切換備援來源"
-    ],
+    "degradations": [],
+    "source_incidents": [],
     "checks": [
+      {
+        "check_id": "daily_snapshot_lineage",
+        "label": "每日快照批次血緣",
+        "status": "pass",
+        "core": true,
+        "observed_source_count": 1,
+        "required_source_count": 1,
+        "detail": "snapshot、raw 與 market universe 共用同一批次"
+      },
       {
         "check_id": "spot_btc",
         "label": "BTC 現貨價格",
         "status": "pass",
         "core": true,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "required_source_count": 2,
-        "detail": "4 個來源中位數；最大跨源價差 0.05%"
+        "detail": "5 個來源中位數；最大跨源價差 0.03%"
       },
       {
         "check_id": "spot_eth",
         "label": "ETH 現貨價格",
         "status": "pass",
         "core": true,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "required_source_count": 2,
-        "detail": "4 個來源中位數；最大跨源價差 0.06%"
+        "detail": "5 個來源中位數；最大跨源價差 0.05%"
       },
       {
         "check_id": "spot_hype",
@@ -1673,52 +2598,52 @@
         "core": true,
         "observed_source_count": 3,
         "required_source_count": 2,
-        "detail": "3 個來源中位數；最大跨源價差 0.03%"
+        "detail": "3 個來源中位數；最大跨源價差 0.12%"
       },
       {
         "check_id": "spot_sol",
         "label": "SOL 現貨價格",
         "status": "pass",
         "core": true,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "required_source_count": 2,
-        "detail": "4 個來源中位數；最大跨源價差 0.12%"
+        "detail": "5 個來源中位數；最大跨源價差 0.10%"
       },
       {
         "check_id": "spot_bnb",
         "label": "BNB 現貨價格",
         "status": "pass",
         "core": true,
-        "observed_source_count": 2,
+        "observed_source_count": 3,
         "required_source_count": 2,
-        "detail": "2 個來源中位數；最大跨源價差 0.05%"
+        "detail": "3 個來源中位數；最大跨源價差 0.05%"
       },
       {
         "check_id": "spot_xrp",
         "label": "XRP 現貨價格",
         "status": "pass",
         "core": true,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "required_source_count": 2,
-        "detail": "4 個來源中位數；最大跨源價差 0.25%"
+        "detail": "5 個來源中位數；最大跨源價差 0.20%"
       },
       {
         "check_id": "spot_doge",
         "label": "DOGE 現貨價格",
         "status": "pass",
         "core": true,
-        "observed_source_count": 4,
+        "observed_source_count": 5,
         "required_source_count": 2,
-        "detail": "4 個來源中位數；最大跨源價差 0.09%"
+        "detail": "5 個來源中位數；最大跨源價差 0.10%"
       },
       {
         "check_id": "perpetual_btc",
         "label": "BTC 永續合約資金費率",
         "status": "pass",
         "core": true,
-        "observed_source_count": 2,
+        "observed_source_count": 4,
         "required_source_count": 2,
-        "detail": "2 個場域交叉驗證"
+        "detail": "4 個場域交叉驗證"
       },
       {
         "check_id": "dated_future_btc",
@@ -1743,9 +2668,9 @@
         "label": "ETH 永續合約資金費率",
         "status": "pass",
         "core": true,
-        "observed_source_count": 2,
+        "observed_source_count": 4,
         "required_source_count": 2,
-        "detail": "2 個場域交叉驗證"
+        "detail": "4 個場域交叉驗證"
       },
       {
         "check_id": "dated_future_eth",
@@ -1768,52 +2693,52 @@
       {
         "check_id": "sector_rotation",
         "label": "熱門賽道輪動",
-        "status": "degraded",
+        "status": "pass",
         "core": false,
-        "observed_source_count": 1,
-        "required_source_count": 1,
-        "detail": "CoinGecko 供應商分類單一口徑，只作輪動背景"
+        "observed_source_count": 4,
+        "required_source_count": 2,
+        "detail": "fixed-basket-v1 至少雙來源同籃子重算通過"
       },
       {
         "check_id": "dat_btc",
         "label": "BTC 財庫公司聚合",
-        "status": "degraded",
+        "status": "pass",
         "core": false,
-        "observed_source_count": 1,
+        "observed_source_count": 4,
         "required_source_count": 2,
-        "detail": "CoinGecko 單一聚合，尚未逐公司以官方文件交叉驗證"
+        "detail": "4 個來源；可比公司覆蓋 75.1%；加權差異 0.10%；排除並明示 2 筆 outlier"
       },
       {
         "check_id": "dat_eth",
         "label": "ETH 財庫公司聚合",
-        "status": "degraded",
+        "status": "pass",
         "core": false,
-        "observed_source_count": 1,
+        "observed_source_count": 3,
         "required_source_count": 2,
-        "detail": "CoinGecko 單一聚合，尚未逐公司以官方文件交叉驗證"
+        "detail": "3 個來源；可比公司覆蓋 85.3%；加權差異 0.39%；排除並明示 0 筆 outlier"
       },
       {
         "check_id": "etf_btc",
         "label": "BTC 現貨 ETF 流向",
-        "status": "degraded",
+        "status": "pass",
         "core": false,
-        "observed_source_count": 1,
-        "required_source_count": 2,
-        "detail": "單一第三方來源或逾時時維持背景／未知"
+        "observed_source_count": 3,
+        "required_source_count": 3,
+        "detail": "3 個驗證來源；基金 roster 100.0%；官方樣本差異 0.47%、覆蓋 82.9%；同日備援基金／總量差異 1.19%、覆蓋 100.0%；市場日落後 2 天"
       },
       {
         "check_id": "etf_eth",
         "label": "ETH 現貨 ETF 流向",
-        "status": "degraded",
+        "status": "pass",
         "core": false,
-        "observed_source_count": 0,
-        "required_source_count": 2,
-        "detail": "沒有穩定免金鑰交叉來源，前端顯示未知"
+        "observed_source_count": 3,
+        "required_source_count": 3,
+        "detail": "3 個驗證來源；基金 roster 100.0%；官方樣本差異 0.24%、覆蓋 77.5%；同日備援基金／總量差異 0.00%、覆蓋 100.0%；市場日落後 1 天"
       },
       {
         "check_id": "btc_structural_thesis",
         "label": "BTC 長期結構證據",
-        "status": "degraded",
+        "status": "pass",
         "core": false,
         "observed_source_count": null,
         "required_source_count": null,
@@ -1821,14 +2746,14 @@
       }
     ],
     "validation_summary": {
-      "total": 19,
-      "passed": 13,
-      "degraded": 6,
+      "total": 20,
+      "passed": 20,
+      "degraded": 0,
       "failed": 0,
-      "core_total": 13,
-      "core_passed": 13,
+      "core_total": 14,
+      "core_passed": 14,
       "core_failed": 0,
-      "source_incident_count": 5,
+      "source_incident_count": 0,
       "fallback_quorum_preserved": true
     },
     "freshness_contract": {
@@ -1838,9 +2763,9 @@
       "dated_future_source_max_lag_hours": 2,
       "options_source_max_lag_hours": 2,
       "volatility_source_max_lag_hours": 3,
-      "etf_source_max_lag_hours": 36,
+      "etf_source_max_lag_days": 5,
       "thesis_gold_max_lag_hours": 72,
-      "thesis_credit_max_lag_hours": 8,
+      "thesis_credit_max_lag_hours": 36,
       "thesis_company_max_lag_hours": 8,
       "thesis_hashrate_max_lag_hours": 72,
       "thesis_debt_max_lag_hours": 5760,

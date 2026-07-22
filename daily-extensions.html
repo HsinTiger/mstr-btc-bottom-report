@@ -69,7 +69,7 @@ async function load(){
     json('data/daily/logic_audit.json'),
     json('data/daily/institutional_analytics.json')
   ]);
-  if(ext.schema!==2||snap.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2)throw new Error('每日資料 schema 不相容');
+  if(ext.schema!==2||snap.schema!==2||verify.schema!==2||logic.schema!==1||analytics.schema!==2)throw new Error('每日資料 schema 不相容');
   if(!ext.current_date||ext.current_date!==snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date)throw new Error('每日資料跨檔日期不一致');
   const calendarLagDays=requireRecentDataDate(ext.current_date,'每日延伸');
   if(verify.snapshot_generated_at!==snap.generated_at)throw new Error('驗證報告未綁定目前快照');

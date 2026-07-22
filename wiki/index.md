@@ -1,7 +1,10 @@
 ---
 title: 目錄
 type: overview
-updated: 2026-06-14
+updated: 2026-07-22
+last_verified: 2026-07-22
+confidence: high
+summary: 投資知識庫導覽；核心分析頁只提供研究脈絡，當日數字與交易狀態一律以已驗證資料產物為準。
 ---
 
 # 幣圈投資 LLM Wiki — 目錄

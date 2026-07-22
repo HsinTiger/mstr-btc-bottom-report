@@ -49,7 +49,7 @@ function requireRecentDataDate(value,label){const lagDays=(Date.parse(taipeiDate
 function signalPanel(signal){return `<div class="kpi ${tone(signal.dominant_direction==='bearish'?'bad':'warn')}">${esc(signal.key_number)}</div><div class="read">${esc(signal.plain_read)}</div><div class="divider"></div>${(signal.lenses||[]).map(item=>`<div class="decision"><b>${esc(item.name)}</b><span class="${item.direction==='bullish'?'good':item.direction==='bearish'?'bad':'warn'}">${esc(item.value)}｜${esc(item.read)}</span></div>`).join('')}<div class="tags"><span class="tag">${esc(signal.resonance_status)}</span><span class="tag">信心 ${esc(signal.confidence)}</span></div><h3>下一觸發</h3><div class="read">${esc(signal.next_trigger)}</div>`}
 async function load(){
   const [analytics,logic,snapshot,verify]=await Promise.all([fetchJson('data/daily/institutional_analytics.json'),fetchJson('data/daily/logic_audit.json'),fetchJson('data/daily/latest_snapshot.json'),fetchJson('data/daily/agent_verification_report.json')]);
-  if(analytics.schema!==2||logic.schema!==1||snapshot.schema!==1||verify.schema!==1)throw new Error('每日資料 schema 不相容');
+  if(analytics.schema!==2||logic.schema!==1||snapshot.schema!==2||verify.schema!==2)throw new Error('每日資料 schema 不相容');
   if(!analytics.date||logic.date!==analytics.date||snapshot.date!==analytics.date||verify.date!==analytics.date)throw new Error('每日資料跨檔日期不一致');
   const calendarLagDays=requireRecentDataDate(analytics.date,'機構分析');
   if(verify.snapshot_generated_at!==snapshot.generated_at)throw new Error('驗證報告未綁定目前快照');

@@ -35,7 +35,7 @@
     <div class="heading"><div><h2 id="summaryTitle">📌 今天只看四件事</h2><p id="dailyMeta">載入今日資料中…</p></div><span class="pill">結論 → 證據 → 下一觸發</span></div>
     <div class="summary-grid" id="summaryCards" aria-live="polite" aria-busy="true"></div>
     <div class="quality" id="qualityStrip">驗證、邏輯與日期總閘門載入中…</div>
-    <details class="method"><summary>展開條件式估值、底部依據與方法限制</summary><div class="targets" id="targetBrief" aria-live="polite">載入估值情境中…</div><ul><li>缺值維持未知，不轉成零，不沿用昨天綠燈。</li><li>BTC、MSTR 合約、BMNR gross-assets 三本帳分開。</li><li>ETF 單一第三方來源只作背景，不計硬確認票。</li><li>Wiki 假說需通過治理並輸出決策輸入，否則停止計算。</li><li>模型版本不同的歷史分數不串接。</li></ul><p><a href="analytics.html">查看完整分析與來源 →</a></p></details>
+    <details class="method"><summary>展開條件式估值、底部依據與方法限制</summary><div class="targets" id="targetBrief" aria-live="polite">載入估值情境中…</div><ul><li>缺值維持未知，不轉成零，不沿用昨天綠燈。</li><li>BTC、MSTR 合約、BMNR gross-assets 三本帳分開。</li><li>ETF 已多源並以發行商持倉核對；資金流這一個維度仍不單獨放行交易。</li><li>Wiki 假說需通過治理並輸出決策輸入，否則停止計算。</li><li>模型版本不同的歷史分數不串接。</li></ul><p><a href="analytics.html">查看完整分析與來源 →</a></p></details>
   </section>
 
   <section class="section" aria-labelledby="exclusiveTitle">
@@ -91,7 +91,7 @@ async function loadDashboard(){
   const busy=["summaryCards","exclusiveSignals","consensusSignals"];
   try{
     const[latest,database,verify,logic,analytics]=await Promise.all([fetchJson("data/daily/latest_snapshot.json"),fetchJson("data/daily/database.json"),fetchJson("data/daily/agent_verification_report.json"),fetchJson("data/daily/logic_audit.json"),fetchJson("data/daily/institutional_analytics.json")]);
-    if(latest.schema!==1||database.schema!==1||verify.schema!==1||logic.schema!==1||analytics.schema!==2)throw new Error("schema 不相容");
+    if(latest.schema!==2||database.schema!==2||verify.schema!==2||logic.schema!==1||analytics.schema!==2)throw new Error("schema 不相容");
     if(!latest.date||verify.date!==latest.date||logic.date!==latest.date||analytics.date!==latest.date)throw new Error("資料日期不一致");
     const calendarLagDays=requireRecentDataDate(latest.date,'每日快照');requireFresh(latest.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(analytics.generated_at,30,'機構分析');
     const brief=analytics.decision_brief;if(!brief?.summary_cards||!brief?.exclusive_signals||!brief?.consensus_signals)throw new Error("決策摘要缺漏");

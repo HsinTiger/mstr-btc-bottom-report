@@ -154,9 +154,9 @@ def build_falsification_watch() -> list[dict[str, Any]]:
             "required_evidence": "agent_verification_report.status == pass plus reviewed provenance.",
         },
         {
-            "hypothesis": "ETF-flow signals are not decision-grade until automated.",
-            "what_would_disprove": "Daily ETF flow feed is sourced, cross-checked, timestamped, and included in verifier evidence.",
-            "required_evidence": "Non-stale ETF source with independent backup and explicit tolerance policy.",
+            "hypothesis": "即使 ETF 資金流已自動化並通過三來源驗證，單一資金流維度仍不足以獨立放行交易。",
+            "what_would_disprove": "經樣本外回測與交易成本檢驗，ETF flow 單因子能穩定改善風險調整後報酬，且不依賴特定市場體制。",
+            "required_evidence": "Walk-forward validation, transaction-cost sensitivity, regime splits, and an owner-approved model contract.",
         },
     ]
 
@@ -226,8 +226,7 @@ def main() -> None:
         blocked_actions.add("capital_flywheel_green_light")
     if verification_status != "pass" or not verification_date_matches or provenance_status != "automated" or not btc_model_validated:
         blocked_actions.add("auto_trade")
-    if etf_flow_status != "automated":
-        blocked_actions.add("use_etf_flow_as_hard_trigger")
+    blocked_actions.add("use_etf_flow_as_hard_trigger")
     if bmnr_quality != "net_to_common_reviewed":
         blocked_actions.add("claim_bmnr_net_nav_discount")
 
@@ -333,10 +332,14 @@ def main() -> None:
     )
     add_invariant(
         invariants,
-        rule_id="ETF_FLOW_NOT_HARD_TRIGGER_UNTIL_AUTOMATED",
-        passed=(etf_flow_status == "automated") or btc_standard.get("data_quality", {}).get("etf_flow_counts_as_confirmation") is False,
+        rule_id="ETF_FLOW_NEVER_STANDALONE_HARD_TRIGGER",
+        passed=(
+            etf_flow_status == "sample_cross_source_verified"
+            and btc_standard.get("data_quality", {}).get("etf_flow_counts_as_confirmation") is False
+            and "use_etf_flow_as_hard_trigger" in blocked_actions
+        ),
         evidence=f"etf_flow_status={etf_flow_status}, counts_as_confirmation={btc_standard.get('data_quality', {}).get('etf_flow_counts_as_confirmation')}",
-        risk_if_failed="Missing ETF-flow automation could still influence hard trading decisions.",
+        risk_if_failed="A verified but uncalibrated ETF-flow context signal could be promoted into a standalone trading trigger.",
         severity="major",
     )
     add_invariant(

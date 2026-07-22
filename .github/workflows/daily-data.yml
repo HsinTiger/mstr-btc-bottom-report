@@ -51,11 +51,16 @@ jobs:
           import json
           from pathlib import Path
           snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+          market = json.loads(Path("data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
           report = json.loads(Path("data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
           if report.get("date") != snapshot.get("date"):
               raise SystemExit("Verifier report is missing or stale for the current snapshot")
           if report.get("snapshot_generated_at") != snapshot.get("generated_at"):
               raise SystemExit("Verifier report is not bound to the current snapshot")
+          if report.get("batch_id") != snapshot.get("batch_id"):
+              raise SystemExit("Verifier report is not bound to the current source batch")
+          if report.get("market_universe_generated_at") != market.get("generated_at"):
+              raise SystemExit("Verifier report is not bound to the current market universe")
           if report.get("status") not in {"pass", "degraded", "fail"}:
               raise SystemExit("Verifier report has an unknown status")
           if report.get("status_scope") != "execution_and_decision_inputs_only":

@@ -7,7 +7,6 @@ import json
 import os
 import re
 import shutil
-import subprocess
 import tempfile
 import threading
 from copy import deepcopy
@@ -18,6 +17,13 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Iterator
 from urllib.parse import urlsplit
+
+try:
+    from playwright.sync_api import Error as PlaywrightError
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+    from playwright.sync_api import sync_playwright
+except ImportError as error:
+    raise SystemExit("缺少 browser smoke 依賴；請先執行 pip install -r requirements-smoke.txt") from error
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
@@ -116,29 +122,56 @@ def server(overrides: dict[str, object] | None = None) -> Iterator[str]:
         thread.join(timeout=5)
 
 
-def rendered_body(browser: str, profile: str, url: str, width: int, height: int) -> tuple[str, str]:
-    command = [
-        browser,
-        "--headless=new",
-        "--disable-gpu",
-        "--disable-dev-shm-usage",
-        "--no-sandbox",
-        "--no-first-run",
-        "--disable-background-networking",
-        "--disable-component-update",
-        "--disable-extensions",
-        f"--user-data-dir={profile}",
-        f"--window-size={width},{height}",
-        "--virtual-time-budget=5000",
-        "--dump-dom",
-        url,
-    ]
-    result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=45)
-    if result.returncode:
-        raise RuntimeError(f"Chrome exit {result.returncode}: {result.stderr[-500:]}")
-    parser = BodyText()
-    parser.feed(result.stdout)
-    return parser.text(), result.stdout
+class BrowserRenderer:
+    def __init__(self, executable_path: str) -> None:
+        self.executable_path = executable_path
+        self.playwright = sync_playwright().start()
+        self.browser = self.playwright.chromium.launch(
+            executable_path=executable_path,
+            headless=True,
+            args=[
+                "--disable-dev-shm-usage",
+                "--no-sandbox",
+                "--disable-background-networking",
+                "--disable-component-update",
+                "--disable-extensions",
+            ],
+        )
+
+    def close(self) -> None:
+        self.browser.close()
+        self.playwright.stop()
+
+    def render(self, url: str, width: int, height: int) -> tuple[str, str, dict[str, int]]:
+        context = self.browser.new_context(viewport={"width": width, "height": height})
+        page = context.new_page()
+        page_errors: list[str] = []
+        page.on("pageerror", lambda error: page_errors.append(str(error)))
+        try:
+            page.goto(url, wait_until="networkidle", timeout=45_000)
+            page.wait_for_timeout(250)
+            if page_errors:
+                raise RuntimeError(f"瀏覽器 JavaScript 錯誤：{page_errors[-1]}")
+            layout = page.evaluate(
+                """() => ({
+                    documentClientWidth: document.documentElement.clientWidth,
+                    documentScrollWidth: document.documentElement.scrollWidth,
+                    bodyClientWidth: document.body.clientWidth,
+                    bodyScrollWidth: document.body.scrollWidth,
+                })"""
+            )
+            return page.locator("body").inner_text(), page.content(), layout
+        finally:
+            context.close()
+
+
+def assert_no_horizontal_overflow(layout: dict[str, int], label: str) -> None:
+    document_overflow = layout["documentScrollWidth"] - layout["documentClientWidth"]
+    body_overflow = layout["bodyScrollWidth"] - layout["bodyClientWidth"]
+    if document_overflow > 1 or body_overflow > 1:
+        raise RuntimeError(
+            f"{label} 水平溢位：document +{document_overflow}px、body +{body_overflow}px"
+        )
 
 
 def shift_datetime_strings(value: object, delta: timedelta) -> object:
@@ -158,7 +191,7 @@ def shift_datetime_strings(value: object, delta: timedelta) -> object:
 
 
 def main() -> int:
-    browser = browser_path()
+    renderer = BrowserRenderer(browser_path())
     failures: list[dict[str, str]] = []
     results: list[dict[str, str]] = []
     with tempfile.TemporaryDirectory(prefix="product-smoke-") as profile, server() as base_url:
@@ -170,9 +203,9 @@ def main() -> int:
                         page_profile = Path(profile) / f"{viewport}-{page}-{attempt}"
                         page_profile.mkdir(parents=True, exist_ok=True)
                         try:
-                            body, dom = rendered_body(browser, str(page_profile), f"{base_url}/{page}", width, height)
+                            body, dom, layout = renderer.render(f"{base_url}/{page}", width, height)
                             break
-                        except subprocess.TimeoutExpired:
+                        except PlaywrightTimeoutError:
                             if attempt:
                                 raise
                     markers = [marker for marker in CRASH_MARKERS if marker in body]
@@ -180,6 +213,7 @@ def main() -> int:
                         raise RuntimeError(f"必要畫面文字缺漏：{expected}")
                     if markers:
                         raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
+                    assert_no_horizontal_overflow(layout, f"{viewport} {page}")
                     rendered_links = set(re.findall(r'href="([^"#?]+)', dom, flags=re.IGNORECASE))
                     missing_navigation = [target for target in PAGES if target not in rendered_links]
                     if missing_navigation:
@@ -204,7 +238,7 @@ def main() -> int:
                             raise RuntimeError("市場雷達品質狀態與結論可見性不一致")
                         if status in {"pass", "degraded"} and ("載入失敗" in body or "停止顯示" in body or "資料封鎖" in body):
                             raise RuntimeError("市場雷達可讀資料被錯誤封鎖")
-                        if status != "fail" and 'data-core-checks="13/13"' not in dom:
+                        if status != "fail" and 'data-core-checks="14/14"' not in dom:
                             raise RuntimeError("市場雷達核心欄位未完整渲染")
                         if 'data-page-overflow="false"' not in dom:
                             raise RuntimeError("市場雷達發生頁面水平溢位")
@@ -253,7 +287,7 @@ def main() -> int:
                         if f'data-feed-visible="{expected_visibility}"' not in dom:
                             raise RuntimeError("X 情報品質狀態與消息可見性不一致")
                     results.append({"viewport": viewport, "page": page, "status": "pass"})
-                except (RuntimeError, subprocess.TimeoutExpired) as error:
+                except (RuntimeError, PlaywrightError) as error:
                     failures.append({"viewport": viewport, "page": page, "error": str(error)})
     market_universe = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
     aged_market = shift_datetime_strings(deepcopy(market_universe), timedelta(hours=-2.5))
@@ -262,13 +296,14 @@ def main() -> int:
             try:
                 page_profile = Path(profile) / viewport
                 page_profile.mkdir(parents=True, exist_ok=True)
-                body, dom = rendered_body(browser, str(page_profile), f"{base_url}/market-monitor.html", width, height)
-                if 'data-render-status="degraded"' not in dom or 'data-conclusions-visible="true"' not in dom:
+                body, dom, layout = renderer.render(f"{base_url}/market-monitor.html", width, height)
+                assert_no_horizontal_overflow(layout, f"{viewport} market-monitor.html:freshness-window")
+                if not re.search(r'data-render-status="(?:pass|degraded)"', dom) or 'data-conclusions-visible="true"' not in dom:
                     raise RuntimeError("市場雷達 2.5 小時更新窗被錯誤封鎖")
                 if "載入失敗" in body or "停止顯示" in body or "資料封鎖" in body:
                     raise RuntimeError("市場雷達把批次內合格來源誤判為瀏覽時逾時")
                 results.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "status": "pass"})
-            except (RuntimeError, subprocess.TimeoutExpired) as error:
+            except (RuntimeError, PlaywrightError) as error:
                 failures.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "error": str(error)})
     verification = json.loads((ROOT / "data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
     analytics = json.loads((ROOT / "data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
@@ -359,7 +394,8 @@ def main() -> int:
                     try:
                         page_profile = Path(profile) / viewport / page.replace(".html", "")
                         page_profile.mkdir(parents=True, exist_ok=True)
-                        body, dom = rendered_body(browser, str(page_profile), f"{base_url}/{page}", width, height)
+                        body, dom, layout = renderer.render(f"{base_url}/{page}", width, height)
+                        assert_no_horizontal_overflow(layout, f"{viewport} {page}:{fixture_name}")
                         if f'data-render-status="{expected_status}"' not in dom:
                             raise RuntimeError(f"{fixture_name} fixture 未呈現預期狀態 {expected_status}")
                         if f'data-conclusions-visible="{str(should_show).lower()}"' not in dom:
@@ -377,9 +413,10 @@ def main() -> int:
                         if not should_show and page == "daily-extensions.html" and ("FAIL CLOSED" not in body or "三個延伸觀點已封鎖" not in body):
                             raise RuntimeError("每日延伸故障 fixture 未封鎖研究觀點")
                         results.append({"viewport": viewport, "page": f"{page}:{fixture_name}", "status": "pass"})
-                    except (RuntimeError, subprocess.TimeoutExpired) as error:
+                    except (RuntimeError, PlaywrightError) as error:
                         failures.append({"viewport": viewport, "page": f"{page}:{fixture_name}", "error": str(error)})
-    print(json.dumps({"browser": browser, "checks": len(results), "failures": failures}, ensure_ascii=False))
+    renderer.close()
+    print(json.dumps({"browser": renderer.executable_path, "checks": len(results), "failures": failures}, ensure_ascii=False))
     return 1 if failures else 0
 
 

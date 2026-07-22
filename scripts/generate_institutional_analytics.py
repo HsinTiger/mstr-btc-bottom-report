@@ -214,7 +214,10 @@ def mstr_common_nav_per_share(snapshot: dict[str, Any], btc_price: float) -> flo
     preferred_values = [number(item.get("notional_musd")) for item in preferred_items.values()]
     if any(value is None for value in preferred_values):
         return None
-    preferred = sum(value for value in preferred_values if value is not None)
+    preferred = max(
+        sum(value for value in preferred_values if value is not None),
+        number(inputs.get("preferred_aggregate_musd")) or 0,
+    )
     net_to_common = (
         required["holdings"] * btc_price / 1_000_000
         + required["cash"]
@@ -455,7 +458,7 @@ def build_consensus_signals(
     )
 
     liquidity_lenses = [
-        lens("ETF 邊際買盤", "bullish" if etf_flow is not None and etf_flow > 0 else "bearish" if etf_flow is not None else "unknown", fmt_money(etf_flow), "7 日淨流為正，但只有第三方單一來源，權重固定 0.5"),
+        lens("ETF 邊際買盤", "bullish" if etf_flow is not None and etf_flow > 0 else "bearish" if etf_flow is not None else "unknown", fmt_money(etf_flow), "7 日淨流已由來源池與官方主要基金持倉核對；仍固定權重 0.5，避免單一維度放行"),
         lens("利率環境", "bearish" if treasury is not None and treasury > 4.5 else "neutral" if treasury is not None else "unknown", "資料不足" if treasury is None else f"{treasury:.2f}%", "高於 4.5% 才額外壓低估值容忍度"),
         lens("中期趨勢", "bullish" if btc is not None and ma200 is not None and btc >= ma200 else "bearish" if btc is not None and ma200 is not None else "unknown", fmt_pct(btc / ma200 - 1) if btc is not None and ma200 else "資料不足", "200 日均線是落後但必要的趨勢確認"),
         lens("長期支撐", "bullish" if btc is not None and ma200w is not None and btc >= ma200w else "bearish" if btc is not None and ma200w is not None else "unknown", fmt_pct(btc / ma200w - 1) if btc is not None and ma200w else "資料不足", "現價與 200 週均線距離可衡量長期支撐壓力"),
@@ -466,7 +469,7 @@ def build_consensus_signals(
         key_number=fmt_pct(btc / ma200 - 1) if btc is not None and ma200 else "資料不足",
         plain_read=f"BTC 距 200 日均線 {fmt_pct(btc / ma200 - 1) if btc is not None and ma200 else '資料不足'}，距 200 週均線 {fmt_pct(btc / ma200w - 1) if btc is not None and ma200w else '資料不足'}；長期支撐靠近，但中期趨勢尚未翻多。",
         lenses=liquidity_lenses,
-        leading=[indicator("ETF 7 日淨流", fmt_money(etf_flow), "background_only", "單源資料只作背景，不計確認票")],
+        leading=[indicator("ETF 7 日淨流", fmt_money(etf_flow), "background_only", "多源資料可作邊際買盤證據，但不單獨形成確認票")],
         lagging=[indicator("站回 200 日均線", fmt_money(ma200), "pass" if btc is not None and ma200 is not None and btc >= ma200 else "fail", "趨勢確認")],
         next_trigger=f"價格站穩 {fmt_money(ma200)} 且 ETF 流取得第二來源交叉驗證，才把流動性與趨勢調升為有效共振。",
         confidence="低" if confidence == "低" else "中低",
@@ -533,7 +536,7 @@ def build_summary_cards(
     elif verification_status in {"fail", "stale_or_mismatched"}:
         quality_read = "驗證失敗；停止所有行動結論，不沿用舊綠燈，也不把缺值當零。"
     elif verification_status == "degraded":
-        quality_read = "驗證有限可用；結論可供研究，但低信心、單一來源與待更新資料不作加碼觸發。"
+        quality_read = "驗證有限可用；結論可供研究，但任何未過來源數、新鮮度、差異或官方性門檻的欄位都不作加碼觸發。"
     else:
         quality_read = "獨立驗證已通過，仍須遵守模型與資料來源限制。"
     return [

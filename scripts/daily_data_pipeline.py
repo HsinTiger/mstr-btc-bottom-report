@@ -38,6 +38,17 @@ SEC_USER_AGENT = os.environ.get(
     "mstr-btc-bottom-report/1.0 hsin73@realtek.com",
 )
 
+ETF_COMPONENT_PROVIDERS = {"The Block", "Blockworks / Trackinsights", "Bitbo"}
+ETF_PROVIDER_PRIORITY = {"The Block": 0, "Blockworks / Trackinsights": 1, "Bitbo": 2}
+ETF_EXPECTED_US_SPOT_TICKERS = {
+    "BTC": {"ARKB", "BITB", "BRRR", "BTC", "BTCO", "BTCW", "DEFI", "EZBC", "FBTC", "GBTC", "HODL", "IBIT", "MSBT"},
+    "ETH": {"ETH", "ETHA", "ETHE", "ETHV", "ETHW", "EZET", "FETH", "QETH"},
+}
+ETF_MAX_ABS_DAILY_FUND_FLOW_USD = 50_000_000_000
+ETF_MAX_GROSS_DAILY_FLOW_USD = 100_000_000_000
+ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD = 500_000
+ETF_COMPONENT_SUM_RELATIVE_TOLERANCE = 0.001
+
 MANUAL_INPUTS = {
     "mstr_btc_holdings": 843_775,
     "usd_reserve_musd": 2_550,
@@ -45,12 +56,14 @@ MANUAL_INPUTS = {
     "deferred_tax_liability_musd": 0,  # fallback only; SEC companyfacts overrides when available
     "debt_face_musd": 8_214,
     "annual_interest_musd": 34,
+    "other_debt_annual_service_musd": 3.6,
     "preferred": {
         "STRF": {"notional_musd": 3_700, "rate": 0.10},
         "STRC": {"notional_musd": 7_800, "rate": 0.12},
         "STRK": {"notional_musd": 2_100, "rate": 0.08},
         "STRD": {"notional_musd": 4_200, "rate": 0.10},
     },
+    "preferred_aggregate_musd": 17_800,
     "common_shares_outstanding_m": 350.448,
     "diluted_shares_m": 285.0,
     "weekly_btc_sales_musd": 216.0,
@@ -410,9 +423,51 @@ def parse_signed_number(text: str) -> float | None:
     return safe_float(cleaned) * multiplier if safe_float(cleaned) is not None else None
 
 
-def collect_walletpilot_etf_flows() -> list[Observation]:
+class EtfFlowTableParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_table = False
+        self.table_done = False
+        self.in_row = False
+        self.in_cell = False
+        self.cell_parts: list[str] = []
+        self.cells: list[str] = []
+        self.rows: list[list[str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        if tag == "table" and not self.table_done and "stats-table" in str(attributes.get("class") or ""):
+            self.in_table = True
+        elif self.in_table and tag == "tr":
+            self.in_row = True
+            self.cells = []
+        elif self.in_row and tag in {"th", "td"}:
+            self.in_cell = True
+            self.cell_parts = []
+
+    def handle_data(self, data: str) -> None:
+        clean = data.strip()
+        if self.in_cell and clean:
+            self.cell_parts.append(clean)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.in_cell and tag in {"th", "td"}:
+            self.cells.append(" ".join(self.cell_parts))
+            self.cell_parts = []
+            self.in_cell = False
+        elif self.in_row and tag == "tr":
+            if self.cells:
+                self.rows.append(self.cells)
+            self.in_row = False
+        elif self.in_table and tag == "table":
+            self.in_table = False
+            self.table_done = True
+
+
+def collect_walletpilot_etf_source() -> dict[str, Any]:
     url = "https://www.walletpilot.com/bitcoin-tracker/etfs"
     html = fetch_text(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "text/html"})
+
     def extract(label: str) -> tuple[float | None, float | None]:
         pattern = rf"{re.escape(label)}</h3>.*?<p[^>]*>([+-]?[0-9,]+) BTC</p>.*?<p[^>]*>([+-]?\$[0-9,.]+[KMB]?)</p>"
         match = re.search(pattern, html, re.DOTALL)
@@ -424,17 +479,725 @@ def collect_walletpilot_etf_flows() -> list[Observation]:
     one_btc, one_usd = extract("1-Day Net Flows")
     seven_btc, seven_usd = extract("7-Day Net Flows")
     thirty_btc, thirty_usd = extract("30-Day Net Flows")
-    status = "automated_third_party_single_source" if one_btc is not None else "unavailable"
-    detail = "source=WalletPilot third_party_single_source hard_trigger=false"
-    return [
-        obs("btc_etf_flow_status", status, "WalletPilot Bitcoin ETF tracker", url, ok=status != "unavailable", detail=detail, basis="rolling_window", source_tier="third_party_single_source"),
-        obs("btc_etf_flow_1d_btc", one_btc, "WalletPilot Bitcoin ETF tracker", url, ok=one_btc is not None, detail=detail, basis="rolling_1d", source_tier="third_party_single_source"),
-        obs("btc_etf_flow_1d_usd", one_usd, "WalletPilot Bitcoin ETF tracker", url, ok=one_usd is not None, detail=detail, basis="rolling_1d", source_tier="third_party_single_source"),
-        obs("btc_etf_flow_7d_btc", seven_btc, "WalletPilot Bitcoin ETF tracker", url, ok=seven_btc is not None, detail=detail, basis="rolling_7d", source_tier="third_party_single_source"),
-        obs("btc_etf_flow_7d_usd", seven_usd, "WalletPilot Bitcoin ETF tracker", url, ok=seven_usd is not None, detail=detail, basis="rolling_7d", source_tier="third_party_single_source"),
-        obs("btc_etf_flow_30d_btc", thirty_btc, "WalletPilot Bitcoin ETF tracker", url, ok=thirty_btc is not None, detail=detail, basis="rolling_30d", source_tier="third_party_single_source"),
-        obs("btc_etf_flow_30d_usd", thirty_usd, "WalletPilot Bitcoin ETF tracker", url, ok=thirty_usd is not None, detail=detail, basis="rolling_30d", source_tier="third_party_single_source"),
+    flow_dates = sorted(set(re.findall(r'lastFlowDate:"(\d{4}-\d{2}-\d{2})T', html)))
+    as_of = flow_dates[-1] if flow_dates else None
+    if one_usd is None or as_of is None:
+        raise ValueError("WalletPilot ETF summary or lastFlowDate missing")
+    return {
+        "provider": "WalletPilot",
+        "url": url,
+        "as_of": as_of,
+        "flow_1d_btc": one_btc,
+        "flow_1d_usd": one_usd,
+        "flow_7d_btc": seven_btc,
+        "flow_7d_usd": seven_usd,
+        "flow_30d_btc": thirty_btc,
+        "flow_30d_usd": thirty_usd,
+        "basis": "provider_rolling_windows_with_fund_level_lastFlowDate",
+    }
+
+
+def collect_bitbo_btc_etf_source() -> dict[str, Any]:
+    url = "https://bitbo.io/treasuries/etf-flows/"
+    retrieved_at = now_iso()
+    parser = EtfFlowTableParser()
+    parser.feed(fetch_text(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "text/html"}))
+    if len(parser.rows) < 2 or parser.rows[0][0] != "Date" or parser.rows[0][-1] != "Totals":
+        raise ValueError("Bitbo ETF flow table schema changed")
+    headers = parser.rows[0]
+    observed_tickers = set(headers[1:-1])
+    expected_tickers = sorted(ETF_EXPECTED_US_SPOT_TICKERS["BTC"] | observed_tickers)
+    rows: list[dict[str, Any]] = []
+    for cells in parser.rows[1:]:
+        if len(cells) != len(headers):
+            continue
+        try:
+            as_of = datetime.strptime(cells[0], "%b %d, %Y").date().isoformat()
+        except ValueError:
+            continue
+        values = {header: safe_float(value) for header, value in zip(headers[1:], cells[1:])}
+        if values.get("Totals") is None:
+            continue
+        rows.append({
+            "date": as_of,
+            "flow_usd": values["Totals"] * 1_000_000,
+            "components_usd": {ticker: value * 1_000_000 for ticker, value in values.items() if ticker != "Totals" and value is not None},
+            "component_count": sum(values.get(ticker) is not None for ticker in expected_tickers),
+            "component_completeness": sum(values.get(ticker) is not None for ticker in expected_tickers) / len(expected_tickers),
+        })
+    rows.sort(key=lambda item: item["date"])
+    if not rows:
+        raise ValueError("Bitbo ETF flow rows missing")
+    return {
+        "provider": "Bitbo",
+        "url": url,
+        "series": rows,
+        "as_of": rows[-1]["date"],
+        "updated_at": retrieved_at,
+        "updated_at_basis": "retrieval_time_provider_has_no_update_timestamp",
+        "expected_tickers": expected_tickers,
+        "basis": "US_spot_ETF_daily_flow_USD_millions_table",
+    }
+
+
+def collect_theblock_etf_source(asset: str) -> dict[str, Any]:
+    slug = "btcspotetfflows" if asset == "BTC" else "ethspotetfflows"
+    url = f"https://data.tbstat.com/dashboard/markets_structuredproducts_{slug}_daily_other.json"
+    payload = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    if payload.get("Frequency") != "Daily" or not isinstance(payload.get("Series"), dict) or not payload["Series"]:
+        raise ValueError(f"The Block {asset} ETF schema changed")
+    rows: dict[str, dict[str, float]] = {}
+    for ticker, series in payload["Series"].items():
+        for point in series.get("Data", []):
+            timestamp = safe_float(point.get("Timestamp"))
+            value = safe_float(point.get("Result"))
+            if timestamp is None or value is None:
+                continue
+            as_of = datetime.fromtimestamp(timestamp, timezone.utc).date().isoformat()
+            rows.setdefault(as_of, {})[ticker] = value
+    if not rows:
+        raise ValueError(f"The Block {asset} ETF daily rows missing")
+    latest_date = max(rows)
+    active_cutoff = (datetime.fromisoformat(latest_date).date() - timedelta(days=7)).isoformat()
+    observed_tickers = {
+        ticker
+        for ticker, series in payload["Series"].items()
+        if any(
+            safe_float(point.get("Timestamp")) is not None
+            and datetime.fromtimestamp(float(point["Timestamp"]), timezone.utc).date().isoformat() >= active_cutoff
+            for point in series.get("Data", [])
+        )
+    }
+    expected_tickers = sorted(ETF_EXPECTED_US_SPOT_TICKERS[asset] | observed_tickers)
+    daily = [
+        {
+            "date": as_of,
+            "flow_usd": sum(components.values()),
+            "components_usd": components,
+            "component_count": len(components),
+            "component_completeness": len(components) / len(expected_tickers) if expected_tickers else 0,
+        }
+        for as_of, components in sorted(rows.items())
     ]
+    updated_at = datetime.fromtimestamp(float(payload.get("UpdatedAt")), timezone.utc).isoformat() if safe_float(payload.get("UpdatedAt")) is not None else None
+    return {
+        "provider": "The Block",
+        "url": url,
+        "series": daily,
+        "as_of": daily[-1]["date"],
+        "updated_at": updated_at,
+        "expected_tickers": expected_tickers,
+        "basis": "US_spot_ETF_daily_fund_flows_component_sum",
+    }
+
+
+def collect_blockworks_etf_source(asset: str) -> dict[str, Any]:
+    contract = {
+        "BTC": ("bitcoin-etfs", "8146", "6528", "date", "type_spot_unitedstates_flow_usd", "crypto_asset"),
+        "ETH": ("ethereum-etfs", "6561", "6558", "dt", "country_unitedstates_flow_usd", "ticker"),
+    }[asset]
+    dashboard, visualization_id, ticker_visualization_id, date_key, flow_key, ticker_key = contract
+    url = f"https://blockworks.com/api/studio/dashboard/{dashboard}/visualization/{visualization_id}/execution?limit=50000&page=1"
+    payload = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    retrieved_at = now_iso()
+    ticker_url = f"https://blockworks.com/api/studio/dashboard/{dashboard}/visualization/{ticker_visualization_id}/execution?limit=50000&page=1"
+    ticker_payload = fetch_json(ticker_url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    components_by_date: dict[str, dict[str, float]] = {}
+    for row in ticker_payload.get("data", []):
+        as_of = str(row.get("dt") or "")[:10]
+        ticker = str(row.get(ticker_key) or "").strip().upper()
+        if asset == "BTC" and ticker == "FBTC (USD)":
+            ticker = "FBTC"
+        value = safe_float(row.get("type_spot_flow_usd"))
+        if as_of and ticker in ETF_EXPECTED_US_SPOT_TICKERS[asset] and value is not None:
+            components_by_date.setdefault(as_of, {})[ticker] = value
+    latest_component_date = max(components_by_date, default=None)
+    active_cutoff = (
+        datetime.fromisoformat(latest_component_date).date() - timedelta(days=7)
+    ).isoformat() if latest_component_date else None
+    observed_tickers = {
+        ticker
+        for as_of, components in components_by_date.items()
+        if active_cutoff is not None and as_of >= active_cutoff
+        for ticker in components
+    }
+    expected_tickers = sorted(ETF_EXPECTED_US_SPOT_TICKERS[asset] | observed_tickers)
+    rows = [
+        {
+            "date": str(row.get(date_key) or "")[:10],
+            "flow_usd": safe_float(row.get(flow_key)),
+            "components_usd": components_by_date.get(str(row.get(date_key) or "")[:10], {}),
+            "component_count": len(components_by_date.get(str(row.get(date_key) or "")[:10], {})),
+            "component_completeness": (
+                len(components_by_date.get(str(row.get(date_key) or "")[:10], {})) / len(expected_tickers)
+                if expected_tickers else 0
+            ),
+        }
+        for row in payload.get("data", [])
+        if row.get(date_key) and safe_float(row.get(flow_key)) is not None
+    ]
+    rows.sort(key=lambda item: item["date"])
+    if not rows:
+        raise ValueError(f"Blockworks {asset} ETF rows missing")
+    return {
+        "provider": "Blockworks / Trackinsights",
+        "url": url,
+        "ticker_url": ticker_url,
+        "series": rows,
+        "as_of": rows[-1]["date"],
+        "updated_at": retrieved_at,
+        "updated_at_basis": "retrieval_time_provider_has_no_update_timestamp",
+        "expected_tickers": expected_tickers,
+        "basis": "provider_labeled_US_spot_ETF_flow_date",
+    }
+
+
+def collect_coinmarketcap_etf_source(asset: str) -> dict[str, Any]:
+    category = asset.lower()
+    url = f"https://api.coinmarketcap.com/data-api/v3/etf/overview/netflow/chart?category={category}&range=30d&convertId=2781"
+    payload = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    points = payload.get("data", {}).get("points", [])
+    rows = []
+    for point in points:
+        timestamp = safe_float(point.get("timestamp"))
+        value = safe_float(point.get("value"))
+        if timestamp is None or value is None:
+            continue
+        rows.append({
+            "date": datetime.fromtimestamp(timestamp / 1000, timezone.utc).date().isoformat(),
+            "flow_usd": value,
+            "components_usd": {},
+        })
+    rows.sort(key=lambda item: item["date"])
+    if not rows:
+        raise ValueError(f"CoinMarketCap {asset} ETF net-flow chart missing")
+    return {
+        "provider": "CoinMarketCap ETF",
+        "url": url,
+        "series": rows,
+        "as_of": rows[-1]["date"],
+        "updated_at": now_iso(),
+        "updated_at_basis": "api_response_retrieval_time",
+        "basis": "provider_reported_US_spot_ETF_daily_total_flow",
+    }
+
+
+def ishares_holding(asset: str, as_of: str) -> dict[str, Any]:
+    portfolio_id = "333011" if asset == "BTC" else "337614"
+    date_token = as_of.replace("-", "")
+    url = (
+        "https://www.ishares.com/varnish-api/blk-one01-product-data/product-data/api/v2/get-product-data?"
+        + urllib.parse.urlencode({"portfolioId": portfolio_id, "component": "holdings.all", "asOfDate": date_token})
+    )
+    payload = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+    points = payload.get("componentsByNameMap", {}).get("holdings", {}).get("containersByNameMap", {}).get("all", {}).get("dataPointsByNameMap", {})
+    tickers = points.get("ticker", {}).get("value", [])
+    units = points.get("unitsHeld", {}).get("value", [])
+    market_values = points.get("marketValue", {}).get("value", [])
+    if not isinstance(tickers, list) or not isinstance(units, list) or not isinstance(market_values, list):
+        raise ValueError(f"iShares {asset} holding not published for {as_of}")
+    try:
+        index = tickers.index(asset)
+        units_held = safe_float(units[index])
+        market_value = safe_float(market_values[index])
+    except (ValueError, IndexError):
+        units_held = market_value = None
+    provider_date = str(points.get("asOfDate", {}).get("value") or "")
+    if units_held is None or market_value is None or provider_date != date_token:
+        raise ValueError(f"iShares {asset} holding missing for {as_of}")
+    return {"units": units_held, "market_value_usd": market_value, "as_of": as_of, "url": url}
+
+
+def prior_ishares_holding(asset: str, as_of: str) -> dict[str, Any]:
+    current_date = datetime.fromisoformat(as_of).date()
+    for offset in range(1, 8):
+        candidate = (current_date - timedelta(days=offset)).isoformat()
+        try:
+            return ishares_holding(asset, candidate)
+        except Exception:
+            continue
+    raise ValueError(f"iShares {asset} prior holding date missing within 7 calendar days")
+
+
+def rolling_calendar_flow(rows: list[dict[str, Any]], days: int) -> float | None:
+    if not rows:
+        return None
+    latest = datetime.fromisoformat(rows[-1]["date"]).date()
+    cutoff = latest - timedelta(days=days - 1)
+    values = [safe_float(row.get("flow_usd")) for row in rows if datetime.fromisoformat(row["date"]).date() >= cutoff]
+    clean = [value for value in values if value is not None]
+    return sum(clean) if clean else None
+
+
+def relative_difference(first: float | None, second: float | None, *, scale_floor: float = 0.0) -> float | None:
+    if first is None or second is None:
+        return None
+    denominator = max((abs(first) + abs(second)) / 2, scale_floor)
+    return abs(first - second) / denominator if denominator else 0.0
+
+
+def etf_quorum_passes(
+    canonical_provider: str | None,
+    component_completeness: float | None,
+    official_gap: float | None,
+    official_component_coverage: float | None,
+    backup_component_gap: float | None,
+    backup_component_coverage: float | None,
+    backup_same_date: bool,
+    canonical_total_reconciled: bool,
+    amount_sanity_pass: bool,
+    validation_source_count: int,
+    updated_age_hours: float | None,
+    market_age_days: int,
+) -> bool:
+    return bool(
+        canonical_provider in ETF_COMPONENT_PROVIDERS
+        and component_completeness is not None
+        and component_completeness >= 0.95
+        and official_gap is not None
+        and official_gap <= 0.05
+        and official_component_coverage is not None
+        and official_component_coverage >= 0.30
+        and backup_component_gap is not None
+        and backup_component_gap <= 0.05
+        and backup_component_coverage is not None
+        and backup_component_coverage >= 0.30
+        and backup_same_date
+        and canonical_total_reconciled
+        and amount_sanity_pass
+        and validation_source_count >= 3
+        and updated_age_hours is not None
+        and -1 <= updated_age_hours <= 36
+        and 0 <= market_age_days <= 5
+    )
+
+
+def etf_backup_sample_validation(
+    asset: str,
+    canonical_provider: str,
+    latest: dict[str, Any],
+    providers: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    validation_cohort = {"BTC": ["IBIT", "FBTC"], "ETH": ["ETHA"]}[asset]
+    canonical_components = latest.get("components_usd", {})
+    gross_component_flow = sum(abs(safe_float(value) or 0) for value in canonical_components.values())
+    candidates: list[dict[str, Any]] = []
+    for provider_name, provider in providers.items():
+        if provider_name == canonical_provider or not provider.get("series"):
+            continue
+        backup_latest = next(
+            (row for row in reversed(provider["series"]) if row.get("date") == latest.get("date")),
+            None,
+        )
+        if backup_latest is None:
+            continue
+        backup_components = backup_latest.get("components_usd", {})
+        matched = [
+            ticker
+            for ticker in validation_cohort
+            if safe_float(canonical_components.get(ticker)) is not None and safe_float(backup_components.get(ticker)) is not None
+        ]
+        if not matched:
+            canonical_total = safe_float(latest.get("flow_usd"))
+            backup_total = safe_float(backup_latest.get("flow_usd"))
+            total_gap = relative_difference(canonical_total, backup_total, scale_floor=100_000_000)
+            if canonical_total is None or backup_total is None or total_gap is None:
+                continue
+            candidates.append({
+                "provider": provider_name,
+                "validation_type": "same_date_aggregate_total",
+                "as_of": backup_latest.get("date"),
+                "matched_tickers": ["TOTAL"],
+                "canonical_values_usd": {"TOTAL": canonical_total},
+                "backup_values_usd": {"TOTAL": backup_total},
+                "weighted_difference_usd": abs(canonical_total - backup_total),
+                "weighted_reference_usd": (abs(canonical_total) + abs(backup_total)) / 2,
+                "normalized_gap": total_gap,
+                "component_normalized_gaps": {"TOTAL": total_gap},
+                "maximum_component_gap": total_gap,
+                "gross_component_coverage": 1.0,
+            })
+            continue
+        component_gaps = {
+            ticker: relative_difference(
+                float(canonical_components[ticker]),
+                float(backup_components[ticker]),
+                scale_floor=100_000_000,
+            )
+            for ticker in matched
+        }
+        weighted_difference = sum(abs(float(canonical_components[ticker]) - float(backup_components[ticker])) for ticker in matched)
+        weighted_reference = sum(
+            (abs(float(canonical_components[ticker])) + abs(float(backup_components[ticker]))) / 2
+            for ticker in matched
+        )
+        gap = weighted_difference / max(weighted_reference, 100_000_000)
+        coverage = sum(abs(float(canonical_components[ticker])) for ticker in matched) / gross_component_flow if gross_component_flow else None
+        candidates.append({
+            "provider": provider_name,
+            "validation_type": "same_date_named_fund_sample",
+            "as_of": backup_latest.get("date"),
+            "matched_tickers": matched,
+            "canonical_values_usd": {ticker: float(canonical_components[ticker]) for ticker in matched},
+            "backup_values_usd": {ticker: float(backup_components[ticker]) for ticker in matched},
+            "weighted_difference_usd": weighted_difference,
+            "weighted_reference_usd": weighted_reference,
+            "normalized_gap": gap,
+            "component_normalized_gaps": component_gaps,
+            "maximum_component_gap": max(component_gaps.values()) if component_gaps else None,
+            "gross_component_coverage": coverage,
+        })
+    selected = min(
+        candidates,
+        key=lambda item: (-(item["gross_component_coverage"] or 0), item["maximum_component_gap"], item["normalized_gap"]),
+    ) if candidates else {
+        "provider": None,
+        "validation_type": None,
+        "as_of": None,
+        "matched_tickers": [],
+        "canonical_values_usd": {},
+        "backup_values_usd": {},
+        "weighted_difference_usd": None,
+        "weighted_reference_usd": None,
+        "normalized_gap": None,
+        "component_normalized_gaps": {},
+        "maximum_component_gap": None,
+        "gross_component_coverage": None,
+    }
+    selected["candidate_count"] = len(candidates)
+    return selected
+
+
+def select_etf_canonical_provider(providers: dict[str, dict[str, Any]]) -> dict[str, Any] | None:
+    candidates = []
+    for provider in providers.values():
+        if provider.get("provider") not in ETF_COMPONENT_PROVIDERS or not provider.get("series"):
+            continue
+        latest = provider["series"][-1]
+        if not latest.get("date") or not latest.get("components_usd") or not provider.get("expected_tickers"):
+            continue
+        candidates.append(provider)
+    if not candidates:
+        return None
+    latest_date = max(provider["series"][-1]["date"] for provider in candidates)
+    same_date = [provider for provider in candidates if provider["series"][-1]["date"] == latest_date]
+    return min(
+        same_date,
+        key=lambda provider: (
+            -(safe_float(provider["series"][-1].get("component_completeness")) or 0),
+            ETF_PROVIDER_PRIORITY.get(str(provider.get("provider")), 99),
+        ),
+    )
+
+
+def etf_amount_sanity(latest: dict[str, Any], official_proxy: float | None, backup: dict[str, Any]) -> tuple[bool, list[str]]:
+    errors: list[str] = []
+    components = [safe_float(value) for value in latest.get("components_usd", {}).values()]
+    backup_components = [safe_float(value) for value in backup.get("backup_values_usd", {}).values()]
+    if not components or any(value is None for value in components):
+        errors.append("canonical component amount missing")
+    else:
+        clean_components = [value for value in components if value is not None]
+        if any(abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD for value in clean_components):
+            errors.append("canonical single-fund daily flow exceeds sanity bound")
+        if sum(abs(value) for value in clean_components) > ETF_MAX_GROSS_DAILY_FLOW_USD:
+            errors.append("canonical gross daily flow exceeds sanity bound")
+    if official_proxy is None or abs(official_proxy) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD:
+        errors.append("official major-fund proxy missing or exceeds sanity bound")
+    if any(value is None or abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD for value in backup_components):
+        errors.append("backup sample amount missing or exceeds sanity bound")
+    return not errors, errors
+
+
+def evaluate_etf_candidate(
+    asset: str,
+    canonical: dict[str, Any],
+    rows: list[dict[str, Any]],
+    index: int,
+    providers: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    latest = rows[index]
+    previous = rows[index - 1] if index >= 1 else None
+    largest_ticker = "IBIT" if asset == "BTC" else "ETHA"
+    official_component = safe_float(latest.get("components_usd", {}).get(largest_ticker))
+    gross_component_flow = sum(abs(safe_float(value) or 0) for value in latest.get("components_usd", {}).values())
+    official_component_coverage = abs(official_component) / gross_component_flow if official_component is not None and gross_component_flow else None
+    official_proxy = None
+    official_gap = None
+    official_url = None
+    errors: list[str] = []
+    if previous and official_component is not None:
+        try:
+            current_holding = ishares_holding(asset, latest["date"])
+            prior_holding = prior_ishares_holding(asset, latest["date"])
+            if prior_holding["as_of"] != previous["date"]:
+                raise ValueError(
+                    f"canonical prior date {previous['date']} differs from official prior holding date {prior_holding['as_of']}"
+                )
+            unit_price = current_holding["market_value_usd"] / current_holding["units"] if current_holding["units"] else None
+            official_proxy = (current_holding["units"] - prior_holding["units"]) * unit_price if unit_price is not None else None
+            official_gap = relative_difference(official_component, official_proxy, scale_floor=100_000_000)
+            official_url = current_holding["url"]
+        except Exception as exc:
+            errors.append(f"iShares {largest_ticker} {latest['date']} 官方持倉驗證失敗：{type(exc).__name__}")
+    backup_validation = etf_backup_sample_validation(asset, str(canonical.get("provider")), latest, providers)
+    backup_component_gap = safe_float(backup_validation.get("maximum_component_gap"))
+    backup_component_coverage = safe_float(backup_validation.get("gross_component_coverage"))
+    backup_same_date = backup_validation.get("as_of") == latest.get("date")
+    amount_sanity_pass, amount_sanity_errors = etf_amount_sanity(latest, official_proxy, backup_validation)
+    errors.extend(f"{asset} ETF 金額合理性檢查失敗：{item}" for item in amount_sanity_errors)
+    validation_source_count = 1 + int(official_proxy is not None) + int(backup_validation.get("provider") is not None)
+    canonical_total = safe_float(latest.get("flow_usd"))
+    canonical_component_sum = sum(safe_float(value) or 0 for value in latest.get("components_usd", {}).values())
+    canonical_total_difference = abs(canonical_component_sum - canonical_total) if canonical_total is not None else None
+    canonical_total_tolerance = max(
+        ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD,
+        ETF_COMPONENT_SUM_RELATIVE_TOLERANCE * max(abs(canonical_component_sum), abs(canonical_total or 0)),
+    )
+    canonical_total_reconciled = canonical_total_difference is not None and canonical_total_difference <= canonical_total_tolerance
+    if not canonical_total_reconciled:
+        errors.append("canonical total does not reconcile to fund components within the rounding contract")
+    updated_age = None
+    if canonical.get("updated_at"):
+        try:
+            updated_age = (datetime.now(timezone.utc) - datetime.fromisoformat(canonical["updated_at"].replace("Z", "+00:00"))).total_seconds() / 3600
+        except ValueError:
+            updated_age = None
+    market_age = (datetime.now(timezone.utc).date() - datetime.fromisoformat(latest["date"]).date()).days
+    component_count = int(latest.get("component_count") or len(latest.get("components_usd", {})))
+    component_completeness = safe_float(latest.get("component_completeness"))
+    verified = bool(
+        official_component is not None
+        and official_proxy is not None
+        and etf_quorum_passes(
+            canonical.get("provider"),
+            component_completeness,
+            official_gap,
+            official_component_coverage,
+            backup_component_gap,
+            backup_component_coverage,
+            backup_same_date,
+            canonical_total_reconciled,
+            amount_sanity_pass,
+            validation_source_count,
+            updated_age,
+            market_age,
+        )
+    )
+    return {
+        "latest": latest,
+        "component_count": component_count,
+        "component_completeness": component_completeness,
+        "largest_ticker": largest_ticker,
+        "official_component": official_component,
+        "gross_component_flow": gross_component_flow,
+        "official_component_coverage": official_component_coverage,
+        "official_proxy": official_proxy,
+        "official_gap": official_gap,
+        "official_url": official_url,
+        "backup_validation": backup_validation,
+        "backup_component_gap": backup_component_gap,
+        "backup_component_coverage": backup_component_coverage,
+        "backup_same_date": backup_same_date,
+        "amount_sanity_pass": amount_sanity_pass,
+        "amount_sanity_errors": amount_sanity_errors,
+        "validation_source_count": validation_source_count,
+        "canonical_component_sum_usd": canonical_component_sum,
+        "canonical_total_difference_usd": canonical_total_difference,
+        "canonical_total_tolerance_usd": canonical_total_tolerance,
+        "canonical_total_reconciled": canonical_total_reconciled,
+        "verified": verified,
+        "errors": errors,
+    }
+
+
+def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]], incidents: list[str]) -> list[Observation]:
+    canonical_candidates = [
+        provider for provider in providers.values()
+        if provider.get("provider") in ETF_COMPONENT_PROVIDERS and provider.get("series") and provider.get("expected_tickers")
+    ]
+    if not canonical_candidates:
+        return [obs(f"{asset.lower()}_etf_flow_status", "unavailable", "ETF source pool", "", ok=False, detail="；".join(incidents))]
+    evaluated: list[tuple[dict[str, Any], dict[str, Any]]] = []
+    for candidate in canonical_candidates:
+        candidate_rows = candidate["series"]
+        for index in range(len(candidate_rows) - 1, max(0, len(candidate_rows) - 6) - 1, -1):
+            if index < 1 or (safe_float(candidate_rows[index].get("component_completeness")) or 0) < 0.95:
+                continue
+            evaluated.append((candidate, evaluate_etf_candidate(asset, candidate, candidate_rows, index, providers)))
+    verified_candidates = [item for item in evaluated if item[1]["verified"]]
+    if verified_candidates:
+        canonical, selected = max(
+            verified_candidates,
+            key=lambda item: (
+                item[1]["latest"]["date"],
+                safe_float(item[1].get("component_completeness")) or 0,
+                -ETF_PROVIDER_PRIORITY.get(str(item[0].get("provider")), 99),
+            ),
+        )
+    else:
+        canonical = select_etf_canonical_provider(providers)
+        if not canonical:
+            return [obs(f"{asset.lower()}_etf_flow_status", "unavailable", "ETF source pool", "", ok=False, detail="；".join(incidents))]
+        rows = canonical["series"]
+        selected = evaluate_etf_candidate(asset, canonical, rows, len(rows) - 1, providers) if len(rows) >= 2 else None
+    if selected is None:
+        return [obs(f"{asset.lower()}_etf_flow_status", "unavailable", "ETF source pool", canonical.get("url", ""), ok=False, detail="ETF history lacks a prior market date")]
+    rows = canonical["series"]
+    latest_published_date = max(
+        (provider["series"][-1]["date"] for provider in providers.values() if provider.get("series") and provider["series"][-1].get("date")),
+        default=rows[-1]["date"],
+    )
+    if selected["latest"]["date"] != latest_published_date:
+        incidents.append(
+            f"{asset} ETF 最新發布日 {latest_published_date} 尚未完成官方 T+1／完整 roster 驗證；改用最近完整驗證日 {selected['latest']['date']}"
+        )
+    elif not selected["verified"]:
+        incidents.extend(selected["errors"])
+    latest = selected["latest"]
+    component_count = selected["component_count"]
+    expected_ticker_count = len(canonical.get("expected_tickers", []))
+    component_completeness = selected["component_completeness"]
+    largest_ticker = selected["largest_ticker"]
+    official_proxy = selected["official_proxy"]
+    official_gap = selected["official_gap"]
+    official_component = selected["official_component"]
+    gross_component_flow = selected["gross_component_flow"]
+    official_component_coverage = selected["official_component_coverage"]
+    official_url = selected["official_url"]
+    backup_validation = selected["backup_validation"]
+    backup_component_gap = selected["backup_component_gap"]
+    backup_component_coverage = selected["backup_component_coverage"]
+    backup_same_date = selected["backup_same_date"]
+    amount_sanity_pass = selected["amount_sanity_pass"]
+    amount_sanity_errors = selected["amount_sanity_errors"]
+    validation_source_count = selected["validation_source_count"]
+    total = safe_float(latest.get("flow_usd"))
+    verified = selected["verified"]
+    status = "sample_cross_source_verified" if verified else "quorum_failed"
+    scope = (
+        f"canonical={canonical.get('provider')} component sum; component_completeness={component_completeness:.1%}; "
+        f"{largest_ticker} official holdings-change proxy normalized_gap={official_gap:.2%} "
+        f"(5% or USD 5m tolerance); official_component_gross_coverage={official_component_coverage:.1%}; "
+        f"backup={backup_validation.get('provider')} same_date={backup_same_date} "
+        f"sample_gap={backup_component_gap:.2%} sample_gross_coverage={backup_component_coverage:.1%}; "
+        f"validation_sources={validation_source_count}; "
+        f"market_date={latest['date']}; hard_trigger=false"
+        if official_gap is not None
+        and official_component_coverage is not None
+        and backup_component_gap is not None
+        and backup_component_coverage is not None
+        and component_completeness is not None
+        else f"canonical={canonical.get('provider')}; ETF sample validation incomplete; validation_sources={validation_source_count}; hard_trigger=false"
+    )
+    source_tier = "sample_cross_source_verified" if verified else "multi_source_unverified"
+    url = canonical.get("url") or ""
+    verified_rows = [row for row in rows if row.get("date") and row["date"] <= latest["date"]]
+    backup_basis = (
+        "same_date_aggregate_total_normalized_gap"
+        if backup_validation.get("validation_type") == "same_date_aggregate_total"
+        else "same_date_named_fund_sample_max_normalized_gap"
+    )
+    observations = [
+        obs(f"{asset.lower()}_etf_flow_status", status, "ETF source pool", url, ok=verified, detail=scope, as_of=latest["date"], basis="cross_source_validation_status", source_tier=source_tier),
+        obs(f"{asset.lower()}_etf_flow_1d_usd", total, canonical.get("provider", "ETF source pool"), url, ok=verified and total is not None, detail=scope, as_of=latest["date"], basis="daily_US_spot_ETF_component_sum", source_tier=source_tier),
+        obs(f"{asset.lower()}_etf_flow_7d_usd", rolling_calendar_flow(verified_rows, 7), canonical.get("provider", "ETF source pool"), url, ok=verified, detail=scope, as_of=latest["date"], basis="rolling_7_calendar_days_US_spot_ETF_component_sum", source_tier=source_tier),
+        obs(f"{asset.lower()}_etf_flow_30d_usd", rolling_calendar_flow(verified_rows, 30), canonical.get("provider", "ETF source pool"), url, ok=verified, detail=scope, as_of=latest["date"], basis="rolling_30_calendar_days_US_spot_ETF_component_sum", source_tier=source_tier),
+        obs(f"{asset.lower()}_etf_flow_source_count", validation_source_count, "ETF source pool", url, ok=validation_source_count >= 3, detail=scope, as_of=latest["date"], basis="canonical_plus_official_plus_same_date_sample_source_count", source_tier=source_tier),
+        obs(f"{asset.lower()}_etf_component_completeness", component_completeness, canonical.get("provider", "ETF source pool"), url, ok=component_completeness is not None and component_completeness >= 0.95, detail=scope, as_of=latest["date"], basis="latest_date_observed_tickers_divided_by_expected_tickers", source_tier=source_tier),
+        obs(f"{asset.lower()}_etf_official_major_fund_gap", official_gap, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_gap is not None and official_gap <= 0.05, detail=scope, as_of=latest["date"], basis="official_holdings_change_vs_reported_fund_flow", source_tier="official_issuer_crosscheck"),
+        obs(f"{asset.lower()}_etf_official_major_fund_coverage", official_component_coverage, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_component_coverage is not None and official_component_coverage >= 0.30, detail=scope, as_of=latest["date"], basis="official_major_fund_share_of_gross_absolute_component_flows", source_tier="official_issuer_crosscheck"),
+        obs(f"{asset.lower()}_etf_backup_component_gap", backup_component_gap, str(backup_validation.get("provider") or "ETF backup sample"), providers.get(str(backup_validation.get("provider")), {}).get("url", url), ok=backup_component_gap is not None and backup_component_gap <= 0.05, detail=scope, as_of=latest["date"], basis=backup_basis, source_tier="cross_source_sample_validation"),
+        obs(f"{asset.lower()}_etf_backup_component_coverage", backup_component_coverage, str(backup_validation.get("provider") or "ETF backup sample"), providers.get(str(backup_validation.get("provider")), {}).get("url", url), ok=backup_component_coverage is not None and backup_component_coverage >= 0.30, detail=scope, as_of=latest["date"], basis="same_date_named_fund_sample_share_of_gross_absolute_component_flows", source_tier="cross_source_sample_validation"),
+        obs(f"{asset.lower()}_etf_validation_inputs_json", json.dumps({
+            "canonical_provider": canonical.get("provider"),
+            "canonical_as_of": latest.get("date"),
+            "latest_published_as_of": latest_published_date,
+            "selection_policy": "latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates",
+            "canonical_updated_at": canonical.get("updated_at"),
+            "canonical_updated_at_basis": canonical.get("updated_at_basis") or "provider_update_timestamp",
+            "canonical_total_usd": total,
+            "canonical_component_sum_usd": selected["canonical_component_sum_usd"],
+            "canonical_total_difference_usd": selected["canonical_total_difference_usd"],
+            "canonical_total_tolerance_usd": selected["canonical_total_tolerance_usd"],
+            "canonical_total_reconciled": selected["canonical_total_reconciled"],
+            "canonical_components_usd": latest.get("components_usd", {}),
+            "gross_component_flow_usd": gross_component_flow,
+            "component_count": component_count,
+            "expected_ticker_count": expected_ticker_count,
+            "expected_tickers": canonical.get("expected_tickers", []),
+            "component_completeness": component_completeness,
+            "official_ticker": largest_ticker,
+            "official_component_usd": official_component,
+            "official_proxy_usd": official_proxy,
+            "official_normalized_gap": official_gap,
+            "official_component_gross_coverage": official_component_coverage,
+            "backup_sample": backup_validation,
+            "amount_sanity_pass": amount_sanity_pass,
+            "amount_sanity_errors": amount_sanity_errors,
+            "amount_sanity_thresholds": {
+                "maximum_absolute_single_fund_daily_flow_usd": ETF_MAX_ABS_DAILY_FUND_FLOW_USD,
+                "maximum_gross_daily_flow_usd": ETF_MAX_GROSS_DAILY_FLOW_USD,
+            },
+            "validation_source_count": validation_source_count,
+        }, ensure_ascii=False, sort_keys=True), "ETF validation inputs", url, ok=verified, detail=scope, as_of=latest["date"], basis="offline_reconstructable_validation_inputs", source_tier="internal_validation"),
+        obs(f"{asset.lower()}_etf_official_major_fund_flow_proxy_usd", official_proxy, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_proxy is not None, detail=scope, as_of=latest["date"], basis="holdings_unit_change_times_latest_reported_unit_value", source_tier="official_issuer_crosscheck"),
+    ]
+    for provider_name, provider in providers.items():
+        provider_latest = provider.get("series", [])[-1] if provider.get("series") else {}
+        observations.append(obs(
+            f"{asset.lower()}_etf_provider_{re.sub(r'[^a-z0-9]+', '_', provider_name.lower()).strip('_')}_1d_usd",
+            safe_float(provider_latest.get("flow_usd")),
+            provider_name,
+            provider.get("url", ""),
+            ok=safe_float(provider_latest.get("flow_usd")) is not None,
+            detail=f"provider_as_of={provider_latest.get('date')} canonical={provider_name == canonical.get('provider')}",
+            as_of=provider_latest.get("date"),
+            basis=provider.get("basis"),
+            source_tier="independent_ETF_data_provider",
+        ))
+    if incidents:
+        observations.append(obs(f"{asset.lower()}_etf_source_incidents", "；".join(incidents), "ETF source pool", url, detail=scope, as_of=latest["date"], basis="source_incident_log", source_tier="internal_validation"))
+    return observations
+
+
+def collect_verified_etf_flows() -> list[Observation]:
+    observations: list[Observation] = []
+    for asset in ("BTC", "ETH"):
+        providers: dict[str, dict[str, Any]] = {}
+        incidents: list[str] = []
+        collectors = [
+            ("The Block", lambda asset=asset: collect_theblock_etf_source(asset)),
+            ("Blockworks / Trackinsights", lambda asset=asset: collect_blockworks_etf_source(asset)),
+            ("CoinMarketCap ETF", lambda asset=asset: collect_coinmarketcap_etf_source(asset)),
+        ]
+        if asset == "BTC":
+            collectors.extend([
+                ("Bitbo", collect_bitbo_btc_etf_source),
+                ("WalletPilot", collect_walletpilot_etf_source),
+            ])
+        for provider_name, collector in collectors:
+            last_error: Exception | None = None
+            for attempt in range(1, 4):
+                try:
+                    provider = collector()
+                    if provider.get("series"):
+                        providers[provider_name] = provider
+                    elif asset == "BTC" and provider_name == "WalletPilot":
+                        providers[provider_name] = {
+                            **provider,
+                            "series": [{"date": provider["as_of"], "flow_usd": provider["flow_1d_usd"], "components_usd": {}}],
+                        }
+                    last_error = None
+                    break
+                except Exception as exc:
+                    last_error = exc
+                    if attempt < 3:
+                        time.sleep(attempt)
+            if last_error is not None:
+                incidents.append(f"{provider_name} {asset} ETF 來源失敗：{type(last_error).__name__}")
+        observations.extend(build_etf_flow_observations(asset, providers, incidents))
+    return observations
 
 
 def latest_sec_fact(
@@ -465,7 +1228,7 @@ def collect_mstr_sec_companyfacts() -> list[Observation]:
     stockholders_equity, equity_detail, equity_as_of = latest_sec_fact(facts, "StockholdersEquity", "USD", True)
     pref_div, pref_div_detail, pref_div_as_of = latest_sec_fact(facts, "DividendsPreferredStock", "USD", False)
     pref_cash_div, pref_cash_div_detail, pref_cash_div_as_of = latest_sec_fact(facts, "DividendsPreferredStockCash", "USD", False)
-    deferred_tax_liability, dtl_detail, dtl_as_of = latest_sec_fact(facts, "DeferredTaxLiabilities", "USD", True)
+    deferred_tax_liability, dtl_detail, dtl_as_of = latest_sec_fact(facts, "DeferredIncomeTaxLiabilitiesNet", "USD", True)
     return [
         obs("mstr_sec_cash_musd", cash / 1e6 if cash is not None else None, "SEC companyfacts", url, ok=cash is not None, detail=cash_detail, as_of=cash_as_of, basis="quarter_end", source_tier="official_filing"),
         obs("mstr_sec_diluted_shares_m", diluted / 1e6 if diluted is not None else None, "SEC companyfacts", url, ok=diluted is not None, detail=diluted_detail, as_of=diluted_as_of, basis="quarter_weighted_average", source_tier="official_filing"),
@@ -618,6 +1381,70 @@ def collect_bmnr_sec_treasury() -> list[Observation]:
         obs("bmnr_latest_8k_date", latest_8k["filing_date"], "SEC submissions API", submissions_url, detail=filing_detail, as_of=latest_8k["filing_date"], basis="filing_date", source_tier="official_filing"),
     ]
 
+
+def collect_sbet_sec_treasury() -> list[Observation]:
+    cik = "0001981535"
+    submissions_url = f"https://data.sec.gov/submissions/CIK{cik}.json"
+    submissions = fetch_json(submissions_url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+    recent = submissions.get("filings", {}).get("recent", {})
+    candidates = []
+    for form, filing_date, accession, primary in zip(
+        recent.get("form", []),
+        recent.get("filingDate", []),
+        recent.get("accessionNumber", []),
+        recent.get("primaryDocument", []),
+    ):
+        if form == "8-K" and all([filing_date, accession, primary]):
+            candidates.append({"filing_date": filing_date, "accession": accession, "primary": primary})
+        if len(candidates) >= 12:
+            break
+
+    for filing in candidates:
+        accession_compact = filing["accession"].replace("-", "")
+        archive_base = f"https://www.sec.gov/Archives/edgar/data/1981535/{accession_compact}"
+        index_url = f"{archive_base}/index.json"
+        index_data = fetch_json(index_url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "application/json"})
+        files = [item.get("name", "") for item in index_data.get("directory", {}).get("item", [])]
+        exhibits = [name for name in files if re.fullmatch(r"ex99[^/]*\.htm", name, re.IGNORECASE)]
+        for exhibit_name in exhibits or [filing["primary"]]:
+            exhibit_url = f"{archive_base}/{exhibit_name}"
+            exhibit_html = fetch_text(exhibit_url, headers={"User-Agent": SEC_USER_AGENT, "Accept": "text/html"})
+            plain = html.unescape(re.sub(r"<[^>]+>", " ", exhibit_html))
+            plain = re.sub(r"\s+", " ", plain)
+            components = re.search(
+                r"Total ETH holdings held as of\s+([A-Z][a-z]+ \d{1,2}, \d{4}),?\s+were comprised of\s+"
+                r"([\d,]+)\s+native ETH,\s+([\d,]+)\s+ETH as-if redeemed from LsETH\s+and\s+"
+                r"([\d,]+)\s+ETH as-if redeemed from weETH",
+                plain,
+                flags=re.IGNORECASE,
+            )
+            if not components:
+                continue
+            holdings_as_of = parse_press_release_date(components.group(1)) or filing["filing_date"]
+            native_eth = safe_float(components.group(2).replace(",", ""))
+            lseth_equivalent = safe_float(components.group(3).replace(",", ""))
+            weeth_equivalent = safe_float(components.group(4).replace(",", ""))
+            if None in (native_eth, lseth_equivalent, weeth_equivalent):
+                continue
+            total_equivalent = native_eth + lseth_equivalent + weeth_equivalent
+            headline = re.search(r"Total ETH holdings\s*\d*\s+increased to\s+([\d,]+)", plain, flags=re.IGNORECASE)
+            headline_total = safe_float(headline.group(1).replace(",", "")) if headline else None
+            if headline_total is not None and abs(headline_total - total_equivalent) > 1:
+                raise ValueError("SBET SEC ETH component sum does not match headline total")
+            detail = (
+                f"form=8-K filed={filing['filing_date']} accn={filing['accession']} exhibit={exhibit_name} "
+                f"native_eth={native_eth:.0f} lseth_eth_equivalent={lseth_equivalent:.0f} "
+                f"weeth_eth_equivalent={weeth_equivalent:.0f}"
+            )
+            return [
+                obs("sbet_eth_holdings_equivalent", total_equivalent, "SBET SEC 8-K exhibit", exhibit_url, detail=detail, as_of=holdings_as_of, basis="official_eth_equivalent_components", source_tier="official_filing"),
+                obs("sbet_native_eth", native_eth, "SBET SEC 8-K exhibit", exhibit_url, detail=detail, as_of=holdings_as_of, basis="official_native_eth", source_tier="official_filing"),
+                obs("sbet_lseth_eth_equivalent", lseth_equivalent, "SBET SEC 8-K exhibit", exhibit_url, detail=detail, as_of=holdings_as_of, basis="official_redemption_value_eth_equivalent", source_tier="official_filing"),
+                obs("sbet_weeth_eth_equivalent", weeth_equivalent, "SBET SEC 8-K exhibit", exhibit_url, detail=detail, as_of=holdings_as_of, basis="official_redemption_value_eth_equivalent", source_tier="official_filing"),
+            ]
+        time.sleep(0.12)
+    raise ValueError("No recent SBET 8-K exhibit contained a parseable ETH-equivalent holdings disclosure")
+
 def collect_strategy_purchases() -> list[Observation]:
     url = "https://www.strategy.com/purchases"
     html = fetch_text(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "text/html"})
@@ -668,6 +1495,8 @@ def collect_strategy_purchases() -> list[Observation]:
         obs("mstr_strategy_latest_purchase_usd_m", (safe_float(latest.get("total_purchase_price")) or 0) / 1e6, "Strategy purchases page", url, ok=latest.get("total_purchase_price") is not None, detail=detail, as_of=latest.get("date_of_purchase"), basis="latest_event", source_tier="official_company"),
         obs("mstr_strategy_average_cost", safe_float(latest.get("average_price")), "Strategy purchases page", url, ok=latest.get("average_price") is not None, detail=detail, as_of=latest.get("date_of_purchase"), basis="latest_official_ledger", source_tier="official_company"),
         obs("mstr_strategy_latest_purchase_date", latest.get("date_of_purchase"), "Strategy purchases page", url, ok=bool(latest.get("date_of_purchase")), detail=detail, as_of=latest.get("date_of_purchase"), basis="latest_event", source_tier="official_company"),
+        obs("mstr_strategy_basic_shares_outstanding_m", (safe_float(latest.get("basic_shares_outstanding")) or 0) / 1e6, "Strategy purchases page", url, ok=latest.get("basic_shares_outstanding") is not None, detail=detail, as_of=latest.get("date_of_purchase"), basis="point_in_time_basic_shares_outstanding", source_tier="official_company"),
+        obs("mstr_strategy_assumed_diluted_shares_m", (safe_float(latest.get("assumed_diluted_shares_outstanding")) or 0) / 1e6, "Strategy purchases page", url, ok=latest.get("assumed_diluted_shares_outstanding") is not None, detail=detail, as_of=latest.get("date_of_purchase"), basis="company_defined_assumed_diluted_shares", source_tier="official_company"),
         obs("mstr_strategy_rolling_7d_sales_musd", rolling_sales_musd, "Strategy purchases page", url, ok=rolling_sales_musd is not None, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_sales", source_tier="official_company_derived"),
         obs("mstr_strategy_rolling_7d_purchases_musd", rolling_purchases_musd, "Strategy purchases page", url, ok=rolling_purchases_musd is not None, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_purchases", source_tier="official_company_derived"),
         obs("mstr_strategy_rolling_7d_net_btc", rolling_net_btc, "Strategy purchases page", url, ok=rolling_net_btc is not None, detail=rolling_detail, as_of=latest_date.isoformat(), basis="rolling_7d_reported_net_change", source_tier="official_company_derived"),
@@ -710,6 +1539,50 @@ class SecTableParser(HTMLParser):
                 self.tables.append(self.current_table)
 
 
+class SecTableMatrixParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.tables: list[list[list[str]]] = []
+        self.table_depth = 0
+        self.row_depth = 0
+        self.cell_depth = 0
+        self.current_table: list[list[str]] = []
+        self.current_row: list[str] = []
+        self.current_cell: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "table":
+            if self.table_depth == 0:
+                self.current_table = []
+            self.table_depth += 1
+        elif tag == "tr" and self.table_depth:
+            if self.row_depth == 0:
+                self.current_row = []
+            self.row_depth += 1
+        elif tag in {"td", "th"} and self.table_depth:
+            if self.cell_depth == 0:
+                self.current_cell = []
+            self.cell_depth += 1
+
+    def handle_data(self, data: str) -> None:
+        if self.cell_depth:
+            self.current_cell.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in {"td", "th"} and self.cell_depth:
+            self.cell_depth -= 1
+            if self.cell_depth == 0:
+                self.current_row.append(" ".join(" ".join(self.current_cell).split()))
+        elif tag == "tr" and self.row_depth:
+            self.row_depth -= 1
+            if self.row_depth == 0 and any(self.current_row):
+                self.current_table.append(self.current_row)
+        elif tag == "table" and self.table_depth:
+            self.table_depth -= 1
+            if self.table_depth == 0:
+                self.tables.append(self.current_table)
+
+
 def parse_sec_date(value: str) -> str | None:
     match = re.search(r"([A-Z][a-z]+ \d{1,2}, \d{4})", value)
     if not match:
@@ -718,6 +1591,261 @@ def parse_sec_date(value: str) -> str | None:
         return datetime.strptime(match.group(1), "%B %d, %Y").date().isoformat()
     except ValueError:
         return None
+
+
+def sec_table_numbers(row: list[str]) -> list[float]:
+    values: list[float] = []
+    for cell in row:
+        stripped = cell.strip()
+        negative = stripped.startswith("(") and stripped.endswith(")")
+        match = re.fullmatch(r"[\$€]?\s*\(?\s*([\d,]+(?:\.\d+)?)\s*\)?", stripped)
+        if match:
+            value = float(match.group(1).replace(",", ""))
+            values.append(-value if negative else value)
+    return values
+
+
+def parse_mstr_periodic_capital_structure(html_text: str, filing: dict[str, str]) -> dict[str, Any]:
+    parser = SecTableMatrixParser()
+    parser.feed(html_text)
+    debt_principal_thousand = None
+    other_debt_principal_thousand = None
+    quarterly_interest_thousand = None
+    deferred_tax_liability_thousand = None
+    preferred: dict[str, dict[str, float]] = {}
+    balance_as_of = None
+
+    for table in parser.tables:
+        flattened = " | ".join(cell for row in table for cell in row)
+        if "Outstanding Principal Amount" in flattened and "Net Carrying Value" in flattened:
+            total_row = next((row for row in table if row and row[0] == "Total"), None)
+            numbers = sec_table_numbers(total_row or [])
+            if numbers:
+                debt_principal_thousand = numbers[0]
+        if "Other long- term secured debt" in flattened and "Payments due by period" in flattened:
+            total_row = next((row for row in table if row and row[0] == "Total"), None)
+            numbers = sec_table_numbers(total_row or [])
+            if len(numbers) >= 2:
+                other_debt_principal_thousand = numbers[-2]
+        if "Contractual Interest Expense" in flattened and "Amortization of Issuance Costs" in flattened:
+            total_row = next((row for row in table if row and row[0] == "Total"), None)
+            numbers = sec_table_numbers(total_row or [])
+            if numbers:
+                multiplier = 4 if "Three Months Ended" in flattened else 1
+                quarterly_interest_thousand = numbers[0] * multiplier
+        if "Deferred tax liabilities" in flattened and "Total liabilities" in flattened:
+            dtl_row = next((row for row in table if row and row[0] == "Deferred tax liabilities"), None)
+            numbers = sec_table_numbers(dtl_row or [])
+            if numbers:
+                deferred_tax_liability_thousand = numbers[0]
+        if "Aggregate Liquidation Preference as of" in flattened and "Dividend Rate Per Annum" in flattened:
+            symbols = [cell.split()[0] for cell in table[0] if re.fullmatch(r"STR[A-Z] Stock", cell)]
+            notional_row = next((row for row in table if row and row[0].startswith("Aggregate Liquidation Preference as of")), None)
+            rate_row = next((row for row in table if row and row[0].startswith("Dividend Rate Per Annum as of")), None)
+            notionals = [value / 1000 for value in sec_table_numbers((notional_row or [])[1:])]
+            rates = [float(match.group(1)) / 100 for cell in (rate_row or [])[1:] if (match := re.fullmatch(r"([\d.]+)\s*%", cell.strip()))]
+            if len(symbols) == len(notionals) == len(rates):
+                preferred = {symbol: {"notional_musd": notional, "rate": rate} for symbol, notional, rate in zip(symbols, notionals, rates)}
+            date_match = re.search(r"as of ([A-Z][a-z]+ \d{1,2}, \d{4})", (notional_row or [""])[0])
+            balance_as_of = parse_press_release_date(date_match.group(1)) if date_match else None
+
+    plain_text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", html_text)).split())
+    service_match = re.search(r"\$([\d.]+) million due monthly in principal and interest related to our other long-term secured debt", plain_text, flags=re.IGNORECASE)
+    other_debt_annual_service_musd = float(service_match.group(1)) * 12 if service_match else None
+    if None in (debt_principal_thousand, other_debt_principal_thousand, quarterly_interest_thousand, deferred_tax_liability_thousand, other_debt_annual_service_musd) or not preferred or not balance_as_of:
+        raise ValueError("Latest Strategy 10-Q/10-K capital-structure tables were incomplete")
+    return {
+        "filing": filing,
+        "as_of": balance_as_of,
+        "debt_face_musd": (debt_principal_thousand + other_debt_principal_thousand) / 1000,
+        "annual_interest_musd": quarterly_interest_thousand / 1000,
+        "other_debt_annual_service_musd": other_debt_annual_service_musd,
+        "deferred_tax_liability_musd": deferred_tax_liability_thousand / 1000,
+        "preferred": preferred,
+    }
+
+
+def parse_strategy_atm_periods(html_text: str) -> list[dict[str, Any]]:
+    parser = SecTableMatrixParser()
+    parser.feed(html_text)
+    periods: list[dict[str, Any]] = []
+    for table in parser.tables:
+        flattened = " | ".join(cell for row in table for cell in row)
+        if "Shares Sold" not in flattened or "During Period" not in flattened:
+            continue
+        period_match = re.search(r"During Period ([A-Z][a-z]+ \d{1,2}, \d{4}) to ([A-Z][a-z]+ \d{1,2}, \d{4})", flattened)
+        if not period_match:
+            continue
+        shares_sold: dict[str, float] = {}
+        for row in table:
+            if not row or row[0] not in {"STRF Stock", "STRC Stock", "STRE Stock", "STRK Stock", "STRD Stock", "MSTR Stock"}:
+                continue
+            symbol = row[0].split()[0]
+            shares = next((float(cell.replace(",", "")) for cell in row[1:] if re.fullmatch(r"[\d,]+", cell.strip())), 0.0)
+            shares_sold[symbol] = shares
+        periods.append({
+            "start": parse_press_release_date(period_match.group(1)),
+            "end": parse_press_release_date(period_match.group(2)),
+            "shares_sold": shares_sold,
+        })
+
+    plain_text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", html_text)).split())
+    no_sales = re.search(
+        r"during the period between ([A-Z][a-z]+ \d{1,2}, \d{4}) and ([A-Z][a-z]+ \d{1,2}, \d{4}), Strategy did not sell any shares",
+        plain_text,
+        flags=re.IGNORECASE,
+    )
+    if no_sales:
+        periods.append({
+            "start": parse_press_release_date(no_sales.group(1)),
+            "end": parse_press_release_date(no_sales.group(2)),
+            "shares_sold": {},
+        })
+    return periods
+
+
+def parse_strategy_capital_update(html_text: str) -> dict[str, float]:
+    plain_text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", html_text)).split())
+    result: dict[str, float] = {}
+    rate_matches = re.findall(r"regular dividend rate per annum.*?(?:to|at)\s+([\d.]+)%", plain_text, flags=re.IGNORECASE)
+    if rate_matches:
+        result["strc_rate"] = float(rate_matches[-1]) / 100
+    repurchase = re.search(r"repurchase of \$([\d.]+) billion aggregate principal amount of (?:its )?0% Convertible Senior Notes due 2029", plain_text, flags=re.IGNORECASE)
+    if repurchase:
+        result["zero_coupon_debt_repurchase_musd"] = float(repurchase.group(1)) * 1000
+    debt_total = re.search(r"has \$([\d.]+) billion aggregate principal amount of convertible notes", plain_text, flags=re.IGNORECASE)
+    if debt_total:
+        result["official_convertible_debt_total_musd"] = float(debt_total.group(1)) * 1000
+    preferred_total = re.search(r"(?:has|and) \$([\d.]+) billion aggregate notional amount of preferred stock outstanding", plain_text, flags=re.IGNORECASE)
+    if preferred_total:
+        result["official_preferred_total_musd"] = float(preferred_total.group(1)) * 1000
+    return result
+
+
+def collect_mstr_sec_capital_structure() -> list[Observation]:
+    submissions_url = "https://data.sec.gov/submissions/CIK0001050446.json"
+    headers = {"User-Agent": SEC_USER_AGENT, "Accept-Encoding": "gzip, deflate"}
+    submissions = fetch_json(submissions_url, headers=headers)
+    recent = submissions.get("filings", {}).get("recent", {})
+    filings = [
+        {"form": form, "filing_date": filing_date, "accession": accession, "document": document}
+        for form, filing_date, accession, document in zip(
+            recent.get("form", []), recent.get("filingDate", []), recent.get("accessionNumber", []), recent.get("primaryDocument", [])
+        )
+        if all([form, filing_date, accession, document])
+    ]
+    periodic = next((item for item in filings if item["form"] in {"10-Q", "10-K"}), None)
+    if not periodic:
+        raise ValueError("Latest Strategy 10-Q/10-K was not found")
+    periodic_url = f"https://www.sec.gov/Archives/edgar/data/1050446/{periodic['accession'].replace('-', '')}/{periodic['document']}"
+    periodic_html = fetch_text(periodic_url, headers={**headers, "Accept": "text/html"})
+    base = parse_mstr_periodic_capital_structure(periodic_html, {**periodic, "url": periodic_url})
+    base_date = datetime.fromisoformat(base["as_of"]).date()
+    periods: dict[tuple[str, str], dict[str, Any]] = {}
+    updates: list[tuple[str, dict[str, float]]] = []
+
+    for filing in filings:
+        if filing["form"] != "8-K" or filing["filing_date"] < base["as_of"]:
+            continue
+        filing_url = f"https://www.sec.gov/Archives/edgar/data/1050446/{filing['accession'].replace('-', '')}/{filing['document']}"
+        filing_html = fetch_text(filing_url, headers={**headers, "Accept": "text/html"})
+        for period in parse_strategy_atm_periods(filing_html):
+            if period.get("start") and period.get("end"):
+                periods[(period["start"], period["end"])] = period
+        update = parse_strategy_capital_update(filing_html)
+        if update:
+            updates.append((filing["filing_date"], update))
+        if "Capital Structure Update" in filing_html:
+            base_url = filing_url.rsplit("/", 1)[0] + "/"
+            exhibit_links = re.findall(r'href=["\']([^"\']*ex99[^"\']*)["\']', filing_html, flags=re.IGNORECASE)
+            for link in exhibit_links[:2]:
+                exhibit_html = fetch_text(urllib.parse.urljoin(base_url, html.unescape(link)), headers={**headers, "Accept": "text/html"})
+                exhibit_update = parse_strategy_capital_update(exhibit_html)
+                if exhibit_update:
+                    updates.append((filing["filing_date"], exhibit_update))
+        time.sleep(0.11)
+
+    post_balance_periods = sorted(
+        [period for period in periods.values() if period["start"] and datetime.fromisoformat(period["start"]).date() > base_date],
+        key=lambda item: item["start"],
+    )
+    if not post_balance_periods:
+        raise ValueError("No post-quarter Strategy ATM periods were available")
+    expected = base_date + timedelta(days=1)
+    for period in post_balance_periods:
+        start = datetime.fromisoformat(period["start"]).date()
+        end = datetime.fromisoformat(period["end"]).date()
+        if start > expected:
+            raise ValueError(f"Strategy ATM period gap {expected.isoformat()}..{(start - timedelta(days=1)).isoformat()}")
+        if end >= expected:
+            expected = end + timedelta(days=1)
+    latest_period_end = max(period["end"] for period in post_balance_periods)
+    preferred = copy.deepcopy(base["preferred"])
+    for period in post_balance_periods:
+        for symbol in preferred:
+            shares_sold = safe_float(period.get("shares_sold", {}).get(symbol)) or 0
+            if symbol == "STRE" and shares_sold:
+                raise ValueError("STRE ATM issuance requires an official EUR/USD conversion contract")
+            preferred[symbol]["notional_musd"] += shares_sold * 100 / 1e6
+
+    purchases_url = "https://www.strategy.com/purchases"
+    purchases_html = fetch_text(purchases_url, headers={"User-Agent": "Mozilla/5.0", "Accept": "text/html"})
+    purchases_match = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', purchases_html)
+    if not purchases_match:
+        raise ValueError("Strategy purchases __NEXT_DATA__ missing for common-share roll-forward")
+    purchase_rows = json.loads(purchases_match.group(1)).get("props", {}).get("pageProps", {}).get("bitcoinData", [])
+    latest_purchase = max(purchase_rows, key=lambda row: row.get("date_of_purchase") or "", default={})
+    common_baseline = safe_float(latest_purchase.get("basic_shares_outstanding"))
+    common_baseline_date = str(latest_purchase.get("date_of_purchase") or "")
+    if common_baseline is None or not common_baseline_date:
+        raise ValueError("Strategy point-in-time basic shares missing")
+    subsequent_common_issuance = sum(
+        safe_float(period.get("shares_sold", {}).get("MSTR")) or 0
+        for period in post_balance_periods
+        if period["start"] >= common_baseline_date
+    )
+    current_common_shares_m = (common_baseline + subsequent_common_issuance) / 1e6
+
+    latest_rate = next((update["strc_rate"] for _, update in sorted(updates, reverse=True) if update.get("strc_rate") is not None), None)
+    if latest_rate is not None and "STRC" in preferred:
+        preferred["STRC"]["rate"] = latest_rate
+    repurchase = max((update.get("zero_coupon_debt_repurchase_musd", 0) for _, update in updates), default=0)
+    debt_update_date = max(
+        date for date, update in updates
+        if update.get("zero_coupon_debt_repurchase_musd") is not None and update.get("official_convertible_debt_total_musd") is not None
+    )
+    official_debt = next((update["official_convertible_debt_total_musd"] for _, update in sorted(updates, reverse=True) if update.get("official_convertible_debt_total_musd") is not None), None)
+    official_preferred = next((update["official_preferred_total_musd"] for _, update in sorted(updates, reverse=True) if update.get("official_preferred_total_musd") is not None), None)
+    if repurchase <= 0 or official_debt is None or official_preferred is None:
+        raise ValueError("Strategy capital update did not provide debt repurchase and aggregate cross-checks")
+    debt_face_musd = base["debt_face_musd"] - repurchase
+    reconstructed_preferred = sum(item["notional_musd"] for item in preferred.values())
+    convertible_debt = debt_face_musd - 40.193
+    debt_gap = relative_difference(convertible_debt, official_debt)
+    preferred_gap = relative_difference(reconstructed_preferred, official_preferred)
+    if debt_gap is None or debt_gap > 0.02 or preferred_gap is None or preferred_gap > 0.03:
+        raise ValueError(f"Capital-structure reconstruction gap debt={debt_gap} preferred={preferred_gap}")
+    detail = (
+        f"base_accn={base['filing']['accession']} base_as_of={base['as_of']} atm_periods={len(post_balance_periods)} "
+        f"latest_atm_period={latest_period_end} zero_coupon_repurchase_musd={repurchase:.3f} "
+        f"official_debt_gap={debt_gap:.4%} class_to_official_preferred_gap={preferred_gap:.4%} "
+        f"common_baseline={common_baseline:.0f}@{common_baseline_date} subsequent_common_issuance={subsequent_common_issuance:.0f}"
+    )
+    observations = [
+        obs("mstr_sec_debt_face_musd", debt_face_musd, "SEC 10-Q plus subsequent 8-K capital updates", periodic_url, detail=detail, as_of=base["as_of"], basis="quarterly_face_debt_less_completed_zero_coupon_repurchase", source_tier="official_filing_derived"),
+        obs("mstr_sec_annual_interest_musd", base["annual_interest_musd"], "SEC 10-Q contractual interest table", periodic_url, detail=detail, as_of=base["as_of"], basis="annualized_convertible_contractual_cash_interest", source_tier="official_filing_derived"),
+        obs("mstr_sec_other_debt_annual_service_musd", base["other_debt_annual_service_musd"], "SEC 10-Q contractual obligations disclosure", periodic_url, detail=detail, as_of=base["as_of"], basis="monthly_principal_and_interest_times_twelve", source_tier="official_filing_derived"),
+        obs("mstr_sec_balance_sheet_dtl_musd", base["deferred_tax_liability_musd"], "SEC 10-Q balance sheet", periodic_url, detail=detail, as_of=base["as_of"], basis="deferred_income_tax_liabilities_net", source_tier="official_filing"),
+        obs("mstr_sec_atm_adjusted_common_shares_m", current_common_shares_m, "Strategy point-in-time basic shares plus subsequent SEC 8-K ATM ledger", purchases_url, detail=detail, as_of=latest_period_end, basis="official_basic_shares_plus_contiguous_subsequent_atm_issuance", source_tier="official_filing_derived"),
+        obs("mstr_sec_preferred_notional_total_musd", reconstructed_preferred, "SEC 10-Q preferred table plus weekly 8-K ATM ledger", periodic_url, detail=detail, as_of=latest_period_end, basis="class_liquidation_preference_plus_contiguous_atm_issuance", source_tier="official_filing_derived"),
+        obs("mstr_sec_preferred_official_aggregate_musd", official_preferred, "Strategy SEC 8-K capital-structure update plus subsequent no-issuance ledger", periodic_url, detail=detail, as_of=latest_period_end, basis="rounded_official_aggregate_carried_forward_by_contiguous_atm_ledger", source_tier="official_filing_derived"),
+    ]
+    for symbol, item in preferred.items():
+        observations.extend([
+            obs(f"mstr_sec_preferred_{symbol.lower()}_notional_musd", item["notional_musd"], "SEC 10-Q preferred table plus weekly 8-K ATM ledger", periodic_url, detail=detail, as_of=latest_period_end, basis="class_liquidation_preference_plus_contiguous_atm_issuance", source_tier="official_filing_derived"),
+            obs(f"mstr_sec_preferred_{symbol.lower()}_rate", item["rate"], "SEC 10-Q and latest 8-K dividend declaration", periodic_url, detail=detail, as_of=latest_period_end, basis="latest_declared_annual_dividend_rate", source_tier="official_filing"),
+        ])
+    return observations
 
 
 def integer_cells(cells: list[str]) -> list[float]:
@@ -1021,19 +2149,50 @@ def build_effective_inputs(observations: list[Observation]) -> tuple[dict[str, A
     sec_weekly_reserve = latest_observation(observations, "mstr_sec_usd_reserve_settled_floor_musd")
     sec_weekly_reserve_gross = latest_observation(observations, "mstr_sec_usd_reserve_gross_musd")
     sec_common_shares = latest_observation(observations, "mstr_sec_common_shares_outstanding_m")
+    atm_adjusted_common_shares = latest_observation(observations, "mstr_sec_atm_adjusted_common_shares_m")
+    strategy_basic_shares = latest_observation(observations, "mstr_strategy_basic_shares_outstanding_m")
     sec_diluted = latest_observation(observations, "mstr_sec_diluted_shares_m")
-    sec_dtl = latest_observation(observations, "mstr_sec_deferred_tax_liability_musd")
+    sec_dtl = latest_observation(observations, "mstr_sec_deferred_tax_liability_musd") or latest_observation(observations, "mstr_sec_balance_sheet_dtl_musd")
     strategy_btc = latest_observation(observations, "mstr_sec_btc_holdings_latest") or latest_observation(observations, "mstr_strategy_btc_holdings")
     strategy_weekly_sales = latest_observation(observations, "mstr_sec_rolling_7d_sales_musd") or latest_observation(observations, "mstr_strategy_rolling_7d_sales_musd")
     reserve_observation = sec_weekly_reserve or sec_weekly_reserve_gross or sec_cash
     reserve_confidence = "high" if sec_weekly_reserve else "medium" if sec_weekly_reserve_gross else "low"
     set_automated_input(inputs, provenance, "usd_reserve_musd", reserve_observation, "Strategy SEC 8-K conservative floor; gross disclosed reserve fallback; SEC companyfacts last resort", "official_filing_derived", reserve_confidence)
-    set_automated_input(inputs, provenance, "common_shares_outstanding_m", sec_common_shares, "SEC filing cover EntityCommonStockSharesOutstanding across share classes", "official_filing_inline_xbrl")
+    set_automated_input(inputs, provenance, "common_shares_outstanding_m", atm_adjusted_common_shares or strategy_basic_shares or sec_common_shares, "Strategy official point-in-time basic shares plus subsequent SEC ATM issuance; filing cover fallback", "official_filing_derived")
     set_automated_input(inputs, provenance, "diluted_shares_m", sec_diluted, "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding", "official_filing_structured", "medium")
-    set_automated_input(inputs, provenance, "deferred_tax_liability_musd", sec_dtl, "SEC companyfacts DeferredTaxLiabilities", "official_filing_structured")
+    set_automated_input(inputs, provenance, "deferred_tax_liability_musd", sec_dtl, "SEC DeferredIncomeTaxLiabilitiesNet; latest balance-sheet parser fallback", "official_filing_structured")
     set_automated_input(inputs, provenance, "mstr_btc_holdings", strategy_btc, "Strategy SEC 8-K BTC update; official purchases page fallback", "official_filing_disclosure")
     sales_confidence = "medium" if strategy_weekly_sales and "reconciliation_zero" in str(strategy_weekly_sales.basis) else "high"
     set_automated_input(inputs, provenance, "weekly_btc_sales_musd", strategy_weekly_sales, "Strategy SEC 8-K complete-week reported-sales reconciliation; official purchases ledger fallback", "official_filing_derived", sales_confidence, allow_none=True)
+    set_automated_input(inputs, provenance, "debt_face_musd", latest_observation(observations, "mstr_sec_debt_face_musd"), "SEC 10-Q face debt less completed subsequent repurchases", "official_filing_derived")
+    set_automated_input(inputs, provenance, "annual_interest_musd", latest_observation(observations, "mstr_sec_annual_interest_musd"), "SEC 10-Q contractual interest expense annualized", "official_filing_derived")
+    set_automated_input(inputs, provenance, "other_debt_annual_service_musd", latest_observation(observations, "mstr_sec_other_debt_annual_service_musd"), "SEC 10-Q monthly principal and interest obligation annualized", "official_filing_derived")
+    set_automated_input(inputs, provenance, "preferred_aggregate_musd", latest_observation(observations, "mstr_sec_preferred_official_aggregate_musd"), "Strategy official aggregate preferred notional carried forward only across contiguous no-issuance periods", "official_filing_derived", "medium")
+    preferred: dict[str, dict[str, float]] = {}
+    preferred_observations: list[Observation] = []
+    for symbol in ("STRF", "STRC", "STRE", "STRK", "STRD"):
+        notional = latest_observation(observations, f"mstr_sec_preferred_{symbol.lower()}_notional_musd")
+        rate = latest_observation(observations, f"mstr_sec_preferred_{symbol.lower()}_rate")
+        notional_value = safe_float(notional.value) if notional else None
+        rate_value = safe_float(rate.value) if rate else None
+        if None in (notional_value, rate_value):
+            preferred = {}
+            break
+        preferred[symbol] = {"notional_musd": notional_value, "rate": rate_value}
+        preferred_observations.extend([notional, rate])
+    if preferred and preferred_observations:
+        inputs["preferred"] = preferred
+        latest_preferred = max(preferred_observations, key=lambda item: item.as_of or "")
+        provenance.setdefault("fields", {})["preferred"] = {
+            "source_type": "official_filing_derived",
+            "source_ref": "SEC 10-Q class liquidation preferences plus contiguous weekly 8-K ATM ledger and latest dividend declaration",
+            "detail": latest_preferred.detail,
+            "as_of": latest_preferred.as_of,
+            "fetched_at": latest_preferred.fetched_at,
+            "basis": "class_liquidation_preference_plus_contiguous_atm_issuance",
+            "source_tier": "official_filing_derived",
+            "confidence": "medium",
+        }
     provenance.setdefault("fields", {})["cash_other_musd"] = {
         "source_type": "policy_assumption",
         "source_ref": "Conservative valuation policy",
@@ -1053,7 +2212,7 @@ def build_effective_inputs(observations: list[Observation]) -> tuple[dict[str, A
         previous_date = previous.get("date")
         previous_inputs = previous.get("metrics", {}).get("manual_inputs", {})
         previous_metrics = previous.get("metrics", {}).get("mstr_metrics", {})
-        previous_pref_total = sum(
+        previous_pref_total = safe_float(previous_inputs.get("preferred_aggregate_musd")) or sum(
             safe_float(item.get("notional_musd")) or 0
             for item in previous_inputs.get("preferred", {}).values()
         )
@@ -1078,6 +2237,9 @@ def build_effective_inputs(observations: list[Observation]) -> tuple[dict[str, A
         )
         set_automated_input(inputs, provenance, "prev_pref_notional_musd", previous_pref_obs, "Prior daily snapshot preferred total", "derived_prior_snapshot")
         set_automated_input(inputs, provenance, "prev_mnav_equity", previous_mnav_obs, "Prior daily snapshot equity mNAV", "derived_prior_snapshot")
+    risk_keys = ("mstr_btc_holdings", "usd_reserve_musd", "debt_face_musd", "annual_interest_musd", "other_debt_annual_service_musd", "preferred", "preferred_aggregate_musd", "common_shares_outstanding_m", "weekly_btc_sales_musd", "deferred_tax_liability_musd")
+    field_types = [provenance.get("fields", {}).get(key, {}).get("source_type") for key in risk_keys]
+    provenance["status"] = "automated" if all(source_type not in {None, "manual", "missing_required"} for source_type in field_types) else "mixed_automated_manual"
     return inputs, provenance
 
 
@@ -1199,7 +2361,7 @@ def build_btc_standards(metrics: dict[str, Any]) -> dict[str, Any]:
             "missing_dimensions": missing_dimensions,
             "etf_flow_weight_capped": True,
             "etf_flow_counts_as_confirmation": False,
-            "etf_flow_reason": "第三方單一來源，權重固定為 0.5，且不計入右側確認票數",
+            "etf_flow_reason": "多源與官方主要基金持倉已交叉驗證；仍固定為 0.5，避免單一資金流維度直接放行交易",
         },
         "signals": {
             "btc_usd": btc,
@@ -1233,7 +2395,7 @@ def build_btc_standards(metrics: dict[str, Any]) -> dict[str, Any]:
         },
         "limits": [
             "MVRV-Z、realized loss、Google Trends 無穩定免費官方 API 時不作硬觸發",
-            "ETF flow 目前為第三方單源，只能加權背景，不可單獨放行交易",
+            "ETF flow 已多源驗證，但資金流本身仍不可單獨放行交易",
             "BTC 判斷標準只決定現貨節奏；MSTR 合約需另過資本結構紅燈",
         ],
     }
@@ -1255,9 +2417,11 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
     strc_px, strc_basis = selected_price(observations, "strc_usd_yahoo", "strc_usd_nasdaq", "STRC")
 
     inputs, input_provenance = build_effective_inputs(observations)
-    pref_total = sum(item["notional_musd"] for item in inputs["preferred"].values())
-    annual_div = sum(item["notional_musd"] * item["rate"] for item in inputs["preferred"].values())
-    annual_obligation = annual_div + inputs["annual_interest_musd"]
+    preferred_class_total = sum(item["notional_musd"] for item in inputs["preferred"].values())
+    pref_total = max(preferred_class_total, safe_float(inputs.get("preferred_aggregate_musd")) or 0)
+    maximum_preferred_rate = max(item["rate"] for item in inputs["preferred"].values())
+    annual_div = sum(item["notional_musd"] * item["rate"] for item in inputs["preferred"].values()) + max(pref_total - preferred_class_total, 0) * maximum_preferred_rate
+    annual_obligation = annual_div + inputs["annual_interest_musd"] + inputs["other_debt_annual_service_musd"]
     coverage_months = inputs["usd_reserve_musd"] / (annual_obligation / 12)
     weekly_need = annual_obligation / 52
     weekly_sales = safe_float(inputs.get("weekly_btc_sales_musd"))
@@ -1356,12 +2520,31 @@ def compute_metrics(observations: list[Observation]) -> dict[str, Any]:
             "btc_supply_current": safe_float(latest_value(observations, "btc_supply_current")),
             "btc_market_cap_coinmetrics_usd": safe_float(latest_value(observations, "btc_market_cap_coinmetrics_usd")),
             "etf_flow_status": latest_value(observations, "btc_etf_flow_status") or "unavailable",
-            "etf_flow_1d_btc": safe_float(latest_value(observations, "btc_etf_flow_1d_btc")),
+            "etf_flow_as_of": latest_observation(observations, "btc_etf_flow_1d_usd").as_of if latest_observation(observations, "btc_etf_flow_1d_usd") else None,
+            "etf_flow_source_count": safe_float(latest_value(observations, "btc_etf_flow_source_count")),
+            "etf_flow_component_completeness": safe_float(latest_value(observations, "btc_etf_component_completeness")),
+            "etf_flow_official_major_fund_gap": safe_float(latest_value(observations, "btc_etf_official_major_fund_gap")),
+            "etf_flow_official_major_fund_coverage": safe_float(latest_value(observations, "btc_etf_official_major_fund_coverage")),
+            "etf_flow_backup_component_gap": safe_float(latest_value(observations, "btc_etf_backup_component_gap")),
+            "etf_flow_backup_component_coverage": safe_float(latest_value(observations, "btc_etf_backup_component_coverage")),
+            "etf_flow_validation_inputs_json": latest_value(observations, "btc_etf_validation_inputs_json"),
+            "etf_flow_validation_scope": latest_observation(observations, "btc_etf_flow_status").detail if latest_observation(observations, "btc_etf_flow_status") else None,
             "etf_flow_1d_usd": safe_float(latest_value(observations, "btc_etf_flow_1d_usd")),
-            "etf_flow_7d_btc": safe_float(latest_value(observations, "btc_etf_flow_7d_btc")),
             "etf_flow_7d_usd": safe_float(latest_value(observations, "btc_etf_flow_7d_usd")),
-            "etf_flow_30d_btc": safe_float(latest_value(observations, "btc_etf_flow_30d_btc")),
             "etf_flow_30d_usd": safe_float(latest_value(observations, "btc_etf_flow_30d_usd")),
+            "eth_etf_flow_status": latest_value(observations, "eth_etf_flow_status") or "unavailable",
+            "eth_etf_flow_as_of": latest_observation(observations, "eth_etf_flow_1d_usd").as_of if latest_observation(observations, "eth_etf_flow_1d_usd") else None,
+            "eth_etf_flow_source_count": safe_float(latest_value(observations, "eth_etf_flow_source_count")),
+            "eth_etf_flow_component_completeness": safe_float(latest_value(observations, "eth_etf_component_completeness")),
+            "eth_etf_flow_official_major_fund_gap": safe_float(latest_value(observations, "eth_etf_official_major_fund_gap")),
+            "eth_etf_flow_official_major_fund_coverage": safe_float(latest_value(observations, "eth_etf_official_major_fund_coverage")),
+            "eth_etf_flow_backup_component_gap": safe_float(latest_value(observations, "eth_etf_backup_component_gap")),
+            "eth_etf_flow_backup_component_coverage": safe_float(latest_value(observations, "eth_etf_backup_component_coverage")),
+            "eth_etf_flow_validation_inputs_json": latest_value(observations, "eth_etf_validation_inputs_json"),
+            "eth_etf_flow_validation_scope": latest_observation(observations, "eth_etf_flow_status").detail if latest_observation(observations, "eth_etf_flow_status") else None,
+            "eth_etf_flow_1d_usd": safe_float(latest_value(observations, "eth_etf_flow_1d_usd")),
+            "eth_etf_flow_7d_usd": safe_float(latest_value(observations, "eth_etf_flow_7d_usd")),
+            "eth_etf_flow_30d_usd": safe_float(latest_value(observations, "eth_etf_flow_30d_usd")),
             "automation_limits": {
                 "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
                 "realized_loss": "Glassnode/CheckOnChain realized-loss series is not available as a stable free API; not used as a hard trigger.",
@@ -1493,13 +2676,15 @@ def collect_all() -> list[Observation]:
         ("hashrate", lambda: [collect_blockchain_hashrate()]),
         ("treasury", lambda: [collect_treasury_average_rate()]),
         ("coinmetrics", collect_coinmetrics_btc_cycle),
-        ("etf_flow", collect_walletpilot_etf_flows),
+        ("etf_flow", collect_verified_etf_flows),
         ("sec", collect_sec_submissions),
         ("sec_facts", collect_mstr_sec_companyfacts),
         ("mstr_cover_shares", collect_mstr_cover_shares),
+        ("mstr_sec_capital_structure", collect_mstr_sec_capital_structure),
         ("strategy_purchases", collect_strategy_purchases),
         ("strategy_sec_btc_updates", collect_strategy_sec_btc_updates),
         ("bmnr_sec_treasury", collect_bmnr_sec_treasury),
+        ("sbet_sec_treasury", collect_sbet_sec_treasury),
     ]
     observations: list[Observation] = []
     for name, collector in collectors:
@@ -1532,23 +2717,27 @@ def upsert_database(snapshot: dict[str, Any]) -> dict[str, Any]:
     snapshots.append(normalize_snapshot(snapshot))
     snapshots.sort(key=lambda item: item.get("date", ""))
     database["snapshots"] = snapshots[-730:]
+    database["schema"] = 2
     database["updated_at"] = now_iso()
     return database
 
 
 def main() -> int:
     observations = collect_all()
+    batch_generated_at = now_iso()
     raw = {
-        "schema": 1,
+        "schema": 2,
         "date": today_utc(),
-        "generated_at": now_iso(),
+        "generated_at": batch_generated_at,
+        "batch_id": batch_generated_at,
         "observations": [item.to_dict() for item in observations],
     }
     metrics = compute_metrics(observations)
     snapshot = {
-        "schema": 1,
+        "schema": 2,
         "date": today_utc(),
-        "generated_at": now_iso(),
+        "generated_at": batch_generated_at,
+        "batch_id": batch_generated_at,
         "metrics": metrics,
         "decision": score_snapshot(metrics),
         "source_count": sum(1 for item in observations if item.ok),

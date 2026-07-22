@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "date": "2026-07-22",
-  "generated_at": "2026-07-22T05:46:10+00:00",
-  "snapshot_generated_at": "2026-07-22T05:46:08+00:00",
+  "generated_at": "2026-07-22T11:50:24+00:00",
+  "snapshot_generated_at": "2026-07-22T11:49:09+00:00",
   "status": "consistent",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
@@ -51,14 +51,14 @@
       "id": "CONTRACT_RED_LIGHT_FAILS_CLOSED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "actual=True, expected=True, sale_ratio=0.00, coverage_months=18.4, strc_discount=11.8%",
+      "evidence": "actual=True, expected=True, sale_ratio=0.00, coverage_months=20.1, strc_discount=11.8%",
       "risk_if_failed": "Missing or adverse capital-stack inputs could silently open the leveraged-trade gate."
     },
     {
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=degraded, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 49/100, confidence=低",
+      "evidence": "verification=pass, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 98/100, confidence=高",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
     },
     {
@@ -79,35 +79,35 @@
       "id": "STRUCTURAL_CONTEXT_CANNOT_CONTROL_EXECUTION_GATE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "structural_status=degraded, execution_gate_eligible=False, main_scope=execution_and_decision_inputs_only, structural_scope=structural_context_only",
+      "evidence": "structural_status=pass, execution_gate_eligible=False, main_scope=execution_and_decision_inputs_only, structural_scope=structural_context_only",
       "risk_if_failed": "Long-horizon thesis data could incorrectly block or release a short-horizon execution gate."
     },
     {
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_equity_price_to_nav=1.165x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 49/100",
+      "evidence": "common_equity_price_to_nav=1.062x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 98/100",
       "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
       "id": "COMMON_VALUATION_GATE_DIRECTION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.165x, preferred_distortion_flag=False",
+      "evidence": "common_valuation_gate_ok=False, common_equity_price_to_nav=1.062x, preferred_distortion_flag=False",
       "risk_if_failed": "A premium above common NAV could be mislabeled as valuation safety."
     },
     {
       "id": "CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.165x, enterprise_value_to_btc_nav=1.057x",
+      "evidence": "capital_flywheel_gate_ok=True, common_price_to_nav=1.062x, enterprise_value_to_btc_nav=1.041x",
       "risk_if_failed": "Financing capacity and investor valuation could be collapsed into one misleading green light."
     },
     {
       "id": "COMMON_EQUITY_NAV_POSITIVE_OR_BLOCKED",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "equity_mnav=1.165x, sats_per_share=240770",
+      "evidence": "equity_mnav=1.062x, sats_per_share=222535",
       "risk_if_failed": "MSTR common could be treated as investable while net value to common is non-positive or uncomputable."
     },
     {
@@ -128,21 +128,21 @@
       "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "manual_input_provenance=mixed_automated_manual, verification=degraded; pass means false-green-light is blocked, not that inputs are fully automated",
+      "evidence": "manual_input_provenance=automated, verification=pass; pass means false-green-light is blocked, not that inputs are fully automated",
       "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
     },
     {
-      "id": "ETF_FLOW_NOT_HARD_TRIGGER_UNTIL_AUTOMATED",
+      "id": "ETF_FLOW_NEVER_STANDALONE_HARD_TRIGGER",
       "status": "pass",
       "severity": "major",
-      "evidence": "etf_flow_status=automated_third_party_single_source, counts_as_confirmation=False",
-      "risk_if_failed": "Missing ETF-flow automation could still influence hard trading decisions."
+      "evidence": "etf_flow_status=sample_cross_source_verified, counts_as_confirmation=False",
+      "risk_if_failed": "A verified but uncalibrated ETF-flow context signal could be promoted into a standalone trading trigger."
     },
     {
       "id": "RESERVE_COVERAGE_ESCALATES_BELOW_ONE_YEAR",
       "status": "pass",
       "severity": "major",
-      "evidence": "coverage_months=18.4, contract_red_light=True",
+      "evidence": "coverage_months=20.1, contract_red_light=True",
       "risk_if_failed": "Liquidity runway deterioration could be missed in leveraged sizing."
     },
     {
@@ -163,7 +163,7 @@
       "id": "KNOWLEDGE_CONTEXT_NEVER_PROMOTED_DIRECTLY_TO_FACT",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "knowledge_status=degraded, treat_as_facts=False",
+      "evidence": "knowledge_status=ok, treat_as_facts=False",
       "risk_if_failed": "Stale or unverified Wiki hypotheses could be presented as current market facts."
     },
     {
@@ -178,14 +178,14 @@
     {
       "metric": "普通股市值／普通股淨值",
       "threshold": "> 1.00 = 溢價；≤ 1.00 = 折價背景，仍非單獨買進訊號",
-      "current": "1.165x",
+      "current": "1.062x",
       "rationale": "市值除以扣債務、優先股與稅務楔子後的普通股淨值；倍率愈低，估值相對愈便宜。",
       "action": "高於 1.0 禁止宣稱普通股便宜；低於 1.0 仍須通過資料品質與資本結構覆核。"
     },
     {
       "metric": "企業價值／BTC 總值",
       "threshold": "< 1.00 = 企業價值低於 BTC 總值；> 1.00 = 資本飛輪可能仍可運作",
-      "current": "1.057x",
+      "current": "1.041x",
       "rationale": "分子採普通股市值加債務與優先股、再扣現金；與普通股估值是不同問題。",
       "action": "只能判斷企業層溢價與融資飛輪；不可當作普通股便宜的證據。"
     },
@@ -206,7 +206,7 @@
     {
       "metric": "USD reserve coverage",
       "threshold": "< 12 months weakens survivability buffer",
-      "current": "18.4 months",
+      "current": "20.1 months",
       "rationale": "Cash duration matters more than narrative when dividends, interest, or ATM access tighten.",
       "action": "Escalate to risk-off review if coverage drops below one year."
     },
@@ -248,9 +248,9 @@
       "required_evidence": "agent_verification_report.status == pass plus reviewed provenance."
     },
     {
-      "hypothesis": "ETF-flow signals are not decision-grade until automated.",
-      "what_would_disprove": "Daily ETF flow feed is sourced, cross-checked, timestamped, and included in verifier evidence.",
-      "required_evidence": "Non-stale ETF source with independent backup and explicit tolerance policy."
+      "hypothesis": "即使 ETF 資金流已自動化並通過三來源驗證，單一資金流維度仍不足以獨立放行交易。",
+      "what_would_disprove": "經樣本外回測與交易成本檢驗，ETF flow 單因子能穩定改善風險調整後報酬，且不依賴特定市場體制。",
+      "required_evidence": "Walk-forward validation, transaction-cost sensitivity, regime splits, and an owner-approved model contract."
     }
   ]
 }

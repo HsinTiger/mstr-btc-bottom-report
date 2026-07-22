@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import math
 import csv
+import html
 import io
 import re
 import statistics
@@ -17,6 +18,7 @@ import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Callable
 
@@ -25,6 +27,7 @@ DATA_DIR = ROOT / "data" / "daily"
 OUTPUT_PATH = DATA_DIR / "market_universe.json"
 HISTORY_PATH = DATA_DIR / "market_universe_history.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
+RAW_PATH = DATA_DIR / "raw_observations.json"
 USER_AGENT = "mstr-btc-bottom-report/market-universe hsin73@realtek.com"
 TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
 FRESHNESS_CONTRACT = {
@@ -34,9 +37,9 @@ FRESHNESS_CONTRACT = {
     "dated_future_source_max_lag_hours": 2,
     "options_source_max_lag_hours": 2,
     "volatility_source_max_lag_hours": 3,
-    "etf_source_max_lag_hours": 36,
+    "etf_source_max_lag_days": 5,
     "thesis_gold_max_lag_hours": 72,
-    "thesis_credit_max_lag_hours": 8,
+    "thesis_credit_max_lag_hours": 36,
     "thesis_company_max_lag_hours": 8,
     "thesis_hashrate_max_lag_hours": 72,
     "thesis_debt_max_lag_hours": 24 * 240,
@@ -55,12 +58,21 @@ ASSETS = {
 }
 STRUCTURAL_COLLECTOR_NAMES = {"thesis_credit", "thesis_gold", "thesis_hashrate", "thesis_sovereign"}
 
-SECTORS = {
-    "RWA": "real-world-assets-rwa",
-    "Layer 1": "layer-1",
-    "DeFi": "decentralized-finance-defi",
-    "Meme": "meme-token",
+SECTOR_BASKETS = {
+    "RWA": ["ONDO", "LINK", "XLM", "PAXG", "XAUT"],
+    "Layer 1": ["BTC", "ETH", "BNB", "SOL", "XRP"],
+    "DeFi": ["UNI", "AAVE", "LDO", "ENA", "PENDLE"],
+    "Meme": ["DOGE", "SHIB", "PEPE", "BONK", "WIF"],
 }
+SECTOR_BASKET_VERSION = "fixed-basket-v1"
+SECTOR_COINGECKO_IDS = {
+    "ONDO": "ondo-finance", "LINK": "chainlink", "XLM": "stellar", "PAXG": "pax-gold", "XAUT": "tether-gold",
+    "BTC": "bitcoin", "ETH": "ethereum", "BNB": "binancecoin", "SOL": "solana", "XRP": "ripple",
+    "UNI": "uniswap", "AAVE": "aave", "LDO": "lido-dao", "ENA": "ethena", "PENDLE": "pendle",
+    "DOGE": "dogecoin", "SHIB": "shiba-inu", "PEPE": "pepe", "BONK": "bonk", "WIF": "dogwifcoin",
+}
+SECTOR_SOURCE_MAX_LAG_HOURS = 0.25
+SECTOR_MAX_RETURN_GAP = 0.01
 
 
 def now_iso() -> str:
@@ -79,6 +91,17 @@ def age_hours(value: Any) -> float | None:
         if parsed.tzinfo is None:
             parsed = parsed.replace(tzinfo=timezone.utc)
         return (datetime.now(timezone.utc) - parsed).total_seconds() / 3600
+    except ValueError:
+        return None
+
+
+def calendar_day_lag(reference: Any, value: Any) -> int | None:
+    if not reference or not value:
+        return None
+    try:
+        reference_date = datetime.fromisoformat(str(reference).replace("Z", "+00:00")).date()
+        observed_date = datetime.fromisoformat(str(value).replace("Z", "+00:00")).date()
+        return (reference_date - observed_date).days
     except ValueError:
         return None
 
@@ -136,6 +159,156 @@ def fetch_text(url: str, *, timeout: int = 25) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/csv,text/html,*/*"})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         return response.read().decode("utf-8", "replace")
+
+
+class TreasuryTableParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_holders = False
+        self.in_table = False
+        self.in_row = False
+        self.in_cell = False
+        self.in_company_link = False
+        self.in_badge = False
+        self.cells: list[str] = []
+        self.cell_parts: list[str] = []
+        self.rows: list[dict[str, Any]] = []
+        self.row_slug: str | None = None
+        self.row_name_parts: list[str] = []
+        self.row_badges: list[str] = []
+        self.company_cell_index: int | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        if attributes.get("id") == "holders":
+            self.in_holders = True
+        if self.in_holders and tag == "table" and attributes.get("data-slot") == "table" and not self.in_table:
+            self.in_table = True
+        if not self.in_table:
+            return
+        if tag == "tr":
+            self.in_row = True
+            self.cells = []
+            self.row_slug = None
+            self.row_name_parts = []
+            self.row_badges = []
+            self.company_cell_index = None
+        elif self.in_row and tag == "td":
+            self.in_cell = True
+            self.cell_parts = []
+        elif self.in_cell and tag == "a" and str(attributes.get("href") or "").startswith("/public-companies/"):
+            if self.row_slug is None:
+                self.row_slug = str(attributes["href"])
+                self.company_cell_index = len(self.cells)
+                self.in_company_link = True
+        elif self.in_cell and tag == "span" and attributes.get("data-slot") == "badge":
+            self.in_badge = True
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.in_table and tag == "a":
+            self.in_company_link = False
+        elif self.in_table and tag == "span":
+            self.in_badge = False
+        elif self.in_table and self.in_row and tag == "td":
+            self.cells.append(re.sub(r"\s+", " ", " ".join(self.cell_parts)).strip())
+            self.cell_parts = []
+            self.in_cell = False
+        elif self.in_table and self.in_row and tag == "tr":
+            if self.row_slug and self.company_cell_index is not None:
+                company_cell = self.cells[self.company_cell_index] if self.company_cell_index < len(self.cells) else ""
+                ticker = next((item for item in self.row_badges if re.fullmatch(r"[A-Z0-9.]{1,10}", item)), None)
+                if ticker is None:
+                    ticker = next(
+                        (item for item in reversed(company_cell.split()) if re.fullmatch(r"[A-Z0-9.]{1,10}", item)),
+                        None,
+                    )
+                holdings_cell_index = self.company_cell_index + 1
+                holdings_text = self.cells[holdings_cell_index] if holdings_cell_index < len(self.cells) else ""
+                match = re.search(r"([\d,]+(?:\.\d+)?)", holdings_text)
+                holdings = finite(match.group(1).replace(",", "")) if match else None
+                if ticker and holdings is not None:
+                    self.rows.append({
+                        "name": re.sub(r"\s+", " ", " ".join(self.row_name_parts)).strip(),
+                        "symbol": ticker,
+                        "holdings": holdings,
+                        "detail_path": self.row_slug,
+                    })
+            self.in_row = False
+        elif self.in_table and tag == "table":
+            self.in_table = False
+        elif self.in_holders and tag == "section":
+            self.in_holders = False
+
+    def handle_data(self, data: str) -> None:
+        if not self.in_cell:
+            return
+        clean = data.strip()
+        if clean:
+            self.cell_parts.append(clean)
+            if self.in_company_link:
+                self.row_name_parts.append(clean)
+            if self.in_badge:
+                self.row_badges.append(clean)
+
+
+class BitboTreasuryTableParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_row = False
+        self.in_cell = False
+        self.cell_class = ""
+        self.cell_parts: list[str] = []
+        self.cells: dict[str, str] = {}
+        self.rows: list[dict[str, Any]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        if tag == "tr":
+            self.in_row = True
+            self.cells = {}
+        elif self.in_row and tag == "td":
+            self.in_cell = True
+            classes = str(attributes.get("class") or "").split()
+            self.cell_class = classes[0] if classes else f"unnamed-{len(self.cells)}"
+            self.cell_parts = []
+
+    def handle_data(self, data: str) -> None:
+        clean = data.strip()
+        if self.in_cell and clean:
+            self.cell_parts.append(clean)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.in_cell and tag == "td":
+            self.cells[self.cell_class] = re.sub(r"\s+", " ", " ".join(self.cell_parts)).strip()
+            self.in_cell = False
+            self.cell_class = ""
+            self.cell_parts = []
+        elif self.in_row and tag == "tr":
+            symbol = self.cells.get("td-symbol", "").split(":")[0].strip().upper()
+            holdings_match = re.search(r"[\d,]+(?:\.\d+)?", self.cells.get("td-company_btc", ""))
+            holdings = finite(holdings_match.group(0).replace(",", "")) if holdings_match else None
+            if symbol and holdings is not None:
+                self.rows.append({
+                    "name": self.cells.get("td-company", ""),
+                    "symbol": symbol,
+                    "holdings": holdings,
+                })
+            self.in_row = False
+            self.cells = {}
+
+
+class PlainTextParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+
+    def handle_data(self, data: str) -> None:
+        clean = data.strip()
+        if clean:
+            self.parts.append(clean)
+
+    def text(self) -> str:
+        return re.sub(r"\s+", " ", " ".join(self.parts)).strip()
 
 
 def load_json(path: Path, default: Any) -> Any:
@@ -336,28 +509,162 @@ def collect_hyperliquid() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     return result, [source("hyperliquid_hype", "Hyperliquid", url, "primary_derivatives_market", result["HYPE"]["as_of"], "HYPE 永續標記價、預言機價、資金費率、未平倉量與名目成交額；不作現貨交叉來源", "retrieval_time")]
 
 
-def collect_categories() -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    url = "https://api.coingecko.com/api/v3/coins/categories"
-    rows = fetch_json(url)
-    by_id = {row.get("id"): row for row in rows}
-    result = {}
-    for label, category_id in SECTORS.items():
-        row = by_id.get(category_id, {})
+def compute_sector_baskets(provider_assets: dict[str, dict[str, dict[str, Any]]], provider_errors: list[str] | None = None) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for label, constituents in SECTOR_BASKETS.items():
+        observations: dict[str, dict[str, Any]] = {}
+        for provider, assets in provider_assets.items():
+            rows = [assets.get(symbol) for symbol in constituents]
+            if any(not row or finite(row.get("change_24h")) is None or not row.get("as_of") for row in rows):
+                continue
+            changes = [finite(row.get("change_24h")) for row in rows]
+            market_caps = [finite(row.get("market_cap_usd")) for row in rows]
+            volumes = [finite(row.get("volume_24h_usd")) for row in rows]
+            observation = {
+                "change_24h": statistics.median(value for value in changes if value is not None),
+                "as_of": min(str(row["as_of"]) for row in rows),
+                "constituent_count": len(rows),
+            }
+            if all(value is not None for value in market_caps):
+                observation["market_cap_usd"] = sum(value for value in market_caps if value is not None)
+            if all(value is not None for value in volumes):
+                observation["volume_24h_usd"] = sum(value for value in volumes if value is not None)
+            observations[provider] = observation
+        changes = [item["change_24h"] for item in observations.values()]
+        gap = max(changes) - min(changes) if len(changes) >= 2 else None
+        market_caps = [item["market_cap_usd"] for item in observations.values() if finite(item.get("market_cap_usd")) is not None]
+        volumes = [item["volume_24h_usd"] for item in observations.values() if finite(item.get("volume_24h_usd")) is not None]
+        verified = len(changes) >= 2 and gap is not None and gap <= SECTOR_MAX_RETURN_GAP and len(market_caps) >= 2 and len(volumes) >= 2
         result[label] = {
-            "category_id": category_id,
-            "market_cap_usd": finite(row.get("market_cap")),
-            "change_24h": (finite(row.get("market_cap_change_24h")) or 0) / 100 if row.get("market_cap_change_24h") is not None else None,
-            "volume_24h_usd": finite(row.get("volume_24h")),
-            "top_3_coins": row.get("top_3_coins", [])[:3],
-            "as_of": now_iso(),
+            "basket_version": SECTOR_BASKET_VERSION,
+            "constituents": constituents,
+            "status": "cross_source_verified" if verified else "unavailable",
+            "change_24h": statistics.median(changes) if verified else None,
+            "market_cap_usd": statistics.median(market_caps) if verified else None,
+            "volume_24h_usd": statistics.median(volumes) if verified else None,
+            "source_count": len(observations),
+            "required_source_count": 2,
+            "cross_source_gap": gap,
+            "max_cross_source_gap": SECTOR_MAX_RETURN_GAP,
+            "source_observations": observations,
+            "source_incidents": provider_errors or [],
+            "as_of": min((item["as_of"] for item in observations.values()), default=None),
         }
-    return result, [source("coingecko_categories", "CoinGecko Categories", url, "independent_market_aggregator", now_iso(), "賽道市值與 24 小時變化；分類由供應商定義", "retrieval_time_no_upstream_timestamp")]
+    return result
+
+
+def collect_categories() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    symbols = sorted({symbol for constituents in SECTOR_BASKETS.values() for symbol in constituents})
+    provider_assets: dict[str, dict[str, dict[str, Any]]] = {}
+    provider_errors: list[str] = []
+    sources: list[dict[str, Any]] = []
+
+    coingecko_url = "https://api.coingecko.com/api/v3/coins/markets?" + urllib.parse.urlencode({
+        "vs_currency": "usd",
+        "ids": ",".join(SECTOR_COINGECKO_IDS[symbol] for symbol in symbols),
+        "price_change_percentage": "24h",
+        "per_page": "250",
+        "page": "1",
+    })
+    try:
+        rows = fetch_json(coingecko_url)
+        id_to_symbol = {identifier: symbol for symbol, identifier in SECTOR_COINGECKO_IDS.items()}
+        assets = {}
+        for row in rows:
+            symbol = id_to_symbol.get(row.get("id"))
+            if not symbol or age_hours(row.get("last_updated")) is None or age_hours(row.get("last_updated")) > SECTOR_SOURCE_MAX_LAG_HOURS:
+                continue
+            assets[symbol] = {
+                "change_24h": (finite(row.get("price_change_percentage_24h")) or 0) / 100 if row.get("price_change_percentage_24h") is not None else None,
+                "market_cap_usd": finite(row.get("market_cap")),
+                "volume_24h_usd": finite(row.get("total_volume")),
+                "as_of": row.get("last_updated"),
+            }
+        provider_assets["CoinGecko"] = assets
+        sources.append(source("sector_basket_coingecko", "CoinGecko Markets", coingecko_url, "independent_market_aggregator", min((item["as_of"] for item in assets.values()), default=None), f"{SECTOR_BASKET_VERSION} 成分幣 24 小時報酬、市值與成交量", "provider_timestamp"))
+    except Exception as exc:
+        provider_errors.append(readable_source_error("CoinGecko sector basket", exc))
+
+    paprika_url = "https://api.coinpaprika.com/v1/tickers?quotes=USD"
+    try:
+        rows = fetch_json(paprika_url)
+        by_symbol = {str(row.get("symbol") or "").upper(): row for row in sorted(rows, key=lambda item: finite(item.get("rank")) or 999999, reverse=True)}
+        assets = {}
+        for symbol in symbols:
+            row = by_symbol.get(symbol, {})
+            quote = row.get("quotes", {}).get("USD", {})
+            as_of = row.get("last_updated")
+            if age_hours(as_of) is None or age_hours(as_of) > SECTOR_SOURCE_MAX_LAG_HOURS:
+                continue
+            assets[symbol] = {
+                "change_24h": (finite(quote.get("percent_change_24h")) or 0) / 100 if quote.get("percent_change_24h") is not None else None,
+                "market_cap_usd": finite(quote.get("market_cap")),
+                "volume_24h_usd": finite(quote.get("volume_24h")),
+                "as_of": as_of,
+            }
+        provider_assets["CoinPaprika"] = assets
+        sources.append(source("sector_basket_coinpaprika", "CoinPaprika Tickers", paprika_url, "independent_market_aggregator", min((item["as_of"] for item in assets.values()), default=None), f"{SECTOR_BASKET_VERSION} 成分幣 24 小時報酬、市值與成交量", "provider_timestamp"))
+    except Exception as exc:
+        provider_errors.append(readable_source_error("CoinPaprika sector basket", exc))
+
+    coinlore_urls = [
+        "https://api.coinlore.net/api/tickers/?start=0&limit=100",
+        "https://api.coinlore.net/api/tickers/?start=100&limit=100",
+    ]
+    try:
+        payloads = [fetch_json(url) for url in coinlore_urls]
+        rows = [row for payload in payloads for row in payload.get("data", [])]
+        timestamps = [finite(payload.get("info", {}).get("time")) for payload in payloads]
+        timestamp = min(value for value in timestamps if value is not None)
+        as_of = datetime.fromtimestamp(timestamp, timezone.utc).isoformat()
+        by_symbol = {str(row.get("symbol") or "").upper(): row for row in rows}
+        assets = {}
+        for symbol in symbols:
+            row = by_symbol.get(symbol, {})
+            if age_hours(as_of) is None or age_hours(as_of) > SECTOR_SOURCE_MAX_LAG_HOURS:
+                continue
+            assets[symbol] = {
+                "change_24h": (finite(row.get("percent_change_24h")) or 0) / 100 if row.get("percent_change_24h") is not None else None,
+                "market_cap_usd": finite(row.get("market_cap_usd")),
+                "volume_24h_usd": finite(row.get("volume24")),
+                "as_of": as_of,
+            }
+        provider_assets["CoinLore"] = assets
+        sources.append(source("sector_basket_coinlore", "CoinLore Tickers", coinlore_urls[0], "independent_market_aggregator", as_of, f"{SECTOR_BASKET_VERSION} 成分幣 24 小時報酬、市值與成交量；兩頁固定 roster", "provider_timestamp"))
+    except Exception as exc:
+        provider_errors.append(readable_source_error("CoinLore sector basket", exc))
+
+    binance_symbols = [f"{symbol}USDT" for symbol in symbols]
+    binance_url = "https://data-api.binance.vision/api/v3/ticker/24hr?" + urllib.parse.urlencode({"symbols": json.dumps(binance_symbols, separators=(",", ":"))})
+    try:
+        rows = fetch_json(binance_url)
+        assets = {}
+        for row in rows:
+            symbol = str(row.get("symbol") or "").removesuffix("USDT")
+            close_time = finite(row.get("closeTime"))
+            as_of = datetime.fromtimestamp(close_time / 1000, timezone.utc).isoformat() if close_time is not None else None
+            if symbol not in symbols or age_hours(as_of) is None or age_hours(as_of) > SECTOR_SOURCE_MAX_LAG_HOURS:
+                continue
+            assets[symbol] = {
+                "change_24h": (finite(row.get("priceChangePercent")) or 0) / 100 if row.get("priceChangePercent") is not None else None,
+                "market_cap_usd": None,
+                "volume_24h_usd": None,
+                "as_of": as_of,
+            }
+        provider_assets["Binance"] = assets
+        sources.append(source("sector_basket_binance", "Binance Data API", binance_url, "primary_spot_market", min((item["as_of"] for item in assets.values()), default=None), f"{SECTOR_BASKET_VERSION} 成分幣 USDT 現貨 24 小時報酬交叉驗證；不拿單一交易所成交量當全市場", "provider_timestamp"))
+    except Exception as exc:
+        provider_errors.append(readable_source_error("Binance sector basket", exc))
+
+    return compute_sector_baskets(provider_assets, provider_errors), sources
 
 
 def collect_stablecoin_and_rwa_credit() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     stablecoin_url = "https://stablecoins.llama.fi/stablecoins?includePrices=true"
+    stablecoin_chart_url = "https://stablecoins.llama.fi/stablecoincharts/all"
     protocols_url = "https://api.llama.fi/protocols"
     stablecoin_payload = fetch_json(stablecoin_url)
+    stablecoin_chart = fetch_json(stablecoin_chart_url)
     protocols = fetch_json(protocols_url)
 
     usd_assets = [item for item in stablecoin_payload.get("peggedAssets", []) if item.get("pegType") == "peggedUSD"]
@@ -370,35 +677,94 @@ def collect_stablecoin_and_rwa_credit() -> tuple[dict[str, Any], list[dict[str, 
     matched_assets = [(current_value, prior_value) for current_value, prior_value in matched_assets if current_value is not None and prior_value is not None]
     matched_current = sum(current_value for current_value, _ in matched_assets)
     matched_prior_month = sum(prior_value for _, prior_value in matched_assets)
+    chart_rows = sorted(
+        [row for row in stablecoin_chart if finite(row.get("date")) is not None and finite(row.get("totalCirculatingUSD", {}).get("peggedUSD")) is not None],
+        key=lambda row: finite(row.get("date")) or 0,
+    )
+    if not chart_rows:
+        raise ValueError("DefiLlama stablecoin timestamped history is empty")
+    latest_chart = chart_rows[-1]
+    latest_timestamp = int(float(latest_chart["date"]))
+    prior_target = latest_timestamp - 30 * 86400
+    prior_chart = min(chart_rows, key=lambda row: abs(int(float(row["date"])) - prior_target))
+    chart_current = finite(latest_chart.get("totalCirculatingUSD", {}).get("peggedUSD"))
+    chart_prior = finite(prior_chart.get("totalCirculatingUSD", {}).get("peggedUSD"))
+    stablecoin_as_of = datetime.fromtimestamp(latest_timestamp, timezone.utc).isoformat()
 
     rwa_protocols = [item for item in protocols if item.get("category") == "RWA" and finite(item.get("tvl")) is not None]
     rwa_protocols.sort(key=lambda item: finite(item.get("tvl")) or 0, reverse=True)
     rwa_tvl = sum(finite(item.get("tvl")) or 0 for item in rwa_protocols)
+    timestamped_rwa_tvl = 0.0
+    rwa_timestamps: list[str] = []
+    for protocol in rwa_protocols[:5]:
+        slug = protocol.get("slug")
+        if not slug:
+            continue
+        try:
+            detail = fetch_json(f"https://api.llama.fi/protocol/{urllib.parse.quote(str(slug))}")
+            history = detail.get("tvl", [])
+            latest = history[-1] if history else {}
+            timestamp = finite(latest.get("date"))
+            if timestamp is None:
+                continue
+            rwa_timestamps.append(datetime.fromtimestamp(timestamp, timezone.utc).isoformat())
+            timestamped_rwa_tvl += finite(protocol.get("tvl")) or 0
+        except Exception:
+            continue
+    if not rwa_timestamps:
+        raise ValueError("DefiLlama top RWA protocol timestamps are unavailable")
+    rwa_as_of = min(rwa_timestamps)
+    btcfi_categories = {"Anchor BTC", "Restaked BTC", "Decentralized BTC"}
+    btcfi_protocols = [
+        {
+            "name": item.get("name"),
+            "category": item.get("category"),
+            "tvl_usd": finite(item.get("tvl")),
+        }
+        for item in protocols
+        if item.get("category") in btcfi_categories and finite(item.get("tvl")) is not None
+    ]
+    btcfi_protocols.sort(key=lambda item: item["tvl_usd"] or 0, reverse=True)
+    btcfi_tvl = sum(item["tvl_usd"] or 0 for item in btcfi_protocols)
+    if not btcfi_protocols or btcfi_tvl <= 0:
+        raise ValueError("DefiLlama BTCFi collateral/productive-BTC proxy is unavailable")
     result = {
-        "stablecoin_supply_usd": current or None,
+        "stablecoin_supply_usd": chart_current,
+        "stablecoin_supply_30d_ago_usd": chart_prior,
+        "stablecoin_supply_asset_sum_usd": current or None,
         "stablecoin_supply_matched_cohort_usd": matched_current or None,
         "stablecoin_supply_matched_cohort_30d_ago_usd": matched_prior_month or None,
-        "stablecoin_supply_30d_change": matched_current / matched_prior_month - 1 if matched_current and matched_prior_month else None,
+        "stablecoin_supply_30d_change": chart_current / chart_prior - 1 if chart_current and chart_prior else None,
+        "stablecoin_supply_asset_sum_gap": cross_source_gap([value for value in (current, chart_current) if value is not None]),
         "usd_stablecoin_count": len(usd_assets),
         "stablecoin_30d_matched_count": len(matched_assets),
         "stablecoin_30d_unmatched_count": len(usd_assets) - len(matched_assets),
         "rwa_protocol_tvl_usd": rwa_tvl or None,
         "rwa_protocol_count": len(rwa_protocols),
+        "rwa_timestamp_coverage": timestamped_rwa_tvl / rwa_tvl if rwa_tvl else None,
         "rwa_top_protocols": [
             {"name": item.get("name"), "tvl_usd": finite(item.get("tvl"))}
             for item in rwa_protocols[:5]
         ],
-        "as_of": now_iso(),
-        "as_of_basis": "retrieval_time_no_upstream_timestamp",
+        "btcfi_observable_tvl_usd": btcfi_tvl,
+        "btcfi_protocol_count": len(btcfi_protocols),
+        "btcfi_categories": sorted(btcfi_categories),
+        "btcfi_protocols": btcfi_protocols,
+        "as_of": min(stablecoin_as_of, rwa_as_of),
+        "stablecoin_as_of": stablecoin_as_of,
+        "rwa_top_protocols_as_of": rwa_as_of,
+        "as_of_basis": "provider_timestamped_stablecoin_history_and_top_rwa_protocol_history",
         "limitations": [
-            "Stablecoin supply is DefiLlama's peggedUSD aggregation, not bank deposits or transaction volume; 30-day change uses only assets with both current and prior-month values",
+            "Stablecoin supply is DefiLlama's timestamped peggedUSD aggregation, not bank deposits or transaction volume; current asset-sum remains an independent same-provider reconciliation",
             "RWA TVL is the sum of protocols classified as RWA by DefiLlama and may contain provider taxonomy or double-counting risk",
+            "RWA freshness is evidenced by timestamped histories for the five largest protocols; the aggregate endpoint itself remains a current snapshot",
             "Stablecoin and RWA scale are reported separately and are never added together",
+            "BTCFi proxy includes only DefiLlama Anchor BTC, Restaked BTC and Decentralized BTC protocol TVL; it excludes centralized lenders, bank collateral, derivatives margin and rehypothecation",
         ],
     }
     return result, [
-        source("defillama_usd_stablecoins", "DefiLlama Stablecoins", stablecoin_url, "independent_market_aggregator", result["as_of"], "美元掛鉤穩定幣供給與 30 日變化；上游未提供統一時間戳", "retrieval_time_no_upstream_timestamp"),
-        source("defillama_rwa_protocols", "DefiLlama Protocols", protocols_url, "independent_market_aggregator", result["as_of"], "供應商分類為 RWA 的協議 TVL 加總；不與穩定幣供給相加", "retrieval_time_no_upstream_timestamp"),
+        source("defillama_usd_stablecoins", "DefiLlama Stablecoins", stablecoin_chart_url, "independent_market_aggregator", stablecoin_as_of, "時間戳化 peggedUSD 總供給與 30 日變化；另以逐資產快照重算同源差異", "provider_timestamp"),
+        source("defillama_rwa_protocols", "DefiLlama Protocols", protocols_url, "independent_market_aggregator", rwa_as_of, f"供應商分類為 RWA 的協議 TVL 加總；前五大歷史時間戳覆蓋 {result['rwa_timestamp_coverage']:.1%}；另重算三類 BTCFi 可觀測 TVL", "provider_timestamp_top_five_coverage"),
     ]
 
 
@@ -1015,31 +1381,504 @@ def collect_options(symbol: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
         return result, sources
 
 
+def normalize_treasury_symbol(value: Any) -> str:
+    symbol = str(value or "").split(".")[0].upper().strip()
+    return {"MPJPY": "3350"}.get(symbol, symbol)
+
+
+def collect_bitcoin_treasuries(asset: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    url = "https://bitcointreasuries.net/" if asset == "BTC" else "https://bitcointreasuries.net/ethereum"
+    page = fetch_text(url, timeout=40)
+    parser = TreasuryTableParser()
+    parser.feed(page)
+    rows = parser.rows
+    minimum_rows = 20 if asset == "BTC" else 2
+    if len(rows) < minimum_rows:
+        raise ValueError(f"BitcoinTreasuries {asset} table schema changed: rows={len(rows)}")
+    as_of = now_iso()
+    companies = {
+        normalize_treasury_symbol(row["symbol"]): {
+            **row,
+            "symbol": normalize_treasury_symbol(row["symbol"]),
+            "as_of": as_of,
+            "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+        }
+        for row in rows
+        if normalize_treasury_symbol(row.get("symbol")) and finite(row.get("holdings")) is not None
+    }
+    detail = (
+        f"{len(companies)} 家公開公司 SSR 表；與其他來源只比較公司交集，"
+        "不直接比較不同 universe 的全站總量；表格沒有全域持倉日期"
+    )
+    result = {
+        "provider": "BitcoinTreasuries.net",
+        "asset": asset,
+        "total_holdings": sum(finite(item.get("holdings")) or 0 for item in companies.values()),
+        "companies": companies,
+        "as_of": as_of,
+        "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+        "universe_company_count": len(companies),
+    }
+    return result, [source(
+        f"bitcoin_treasuries_{asset.lower()}_dat",
+        "BitcoinTreasuries.net public-company table",
+        url,
+        "independent_treasury_aggregator",
+        as_of,
+        detail,
+        result["as_of_basis"],
+    )]
+
+
+def collect_bitbo_btc_treasuries() -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    url = "https://bitcointreasuries.com/"
+    parser = BitboTreasuryTableParser()
+    parser.feed(fetch_text(url, timeout=40))
+    if len(parser.rows) < 20:
+        raise ValueError(f"Bitbo BTC treasury table schema changed: rows={len(parser.rows)}")
+    as_of = now_iso()
+    companies = {
+        normalize_treasury_symbol(row["symbol"]): {
+            **row,
+            "symbol": normalize_treasury_symbol(row["symbol"]),
+            "as_of": as_of,
+            "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+        }
+        for row in parser.rows
+        if normalize_treasury_symbol(row.get("symbol")) and finite(row.get("holdings")) is not None
+    }
+    result = {
+        "provider": "Bitbo Bitcoin Treasuries",
+        "asset": "BTC",
+        "total_holdings": sum(finite(item.get("holdings")) or 0 for item in companies.values()),
+        "companies": companies,
+        "as_of": as_of,
+        "as_of_basis": "retrieval_time_table_without_global_holdings_timestamp",
+        "universe_company_count": len(companies),
+    }
+    return result, [source(
+        "bitbo_btc_dat",
+        "Bitbo Bitcoin Treasuries public-company table",
+        url,
+        "independent_treasury_aggregator",
+        as_of,
+        f"{len(companies)} 家具交易代號的公司列；只在公司交集上比較，不平均不同 universe 的總量",
+        result["as_of_basis"],
+    )]
+
+
+def official_dat_observations(asset: str) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]], list[str]]:
+    raw = load_json(RAW_PATH, {"observations": []})
+    observations = {item.get("name"): item for item in raw.get("observations", []) if item.get("ok")}
+    requested = {
+        "BTC": {
+            "MSTR": ["mstr_sec_btc_holdings_latest"],
+        },
+        "ETH": {
+            "BMNR": ["bmnr_eth_holdings"],
+            "SBET": ["sbet_eth_holdings_equivalent"],
+        },
+    }[asset]
+    companies: dict[str, dict[str, Any]] = {}
+    sources: list[dict[str, Any]] = []
+    incidents: list[str] = []
+    for symbol, names in requested.items():
+        observation = next((observations.get(name) for name in names if observations.get(name)), None)
+        if not observation or finite(observation.get("value")) is None:
+            incidents.append(f"{symbol} SEC 官方持倉尚未取得")
+            continue
+        observation_age = age_hours(observation.get("as_of"))
+        if observation_age is None or observation_age < -24 or observation_age > 24 * 45:
+            incidents.append(f"{symbol} SEC 官方持倉日期未知或超過 45 天，已排除於 DAT quorum")
+            continue
+        companies[symbol] = {
+            "name": symbol,
+            "symbol": symbol,
+            "holdings": finite(observation.get("value")),
+            "as_of": observation.get("as_of"),
+            "as_of_basis": observation.get("basis") or "official_filing",
+            "detail": observation.get("detail"),
+        }
+        sources.append(source(
+            f"sec_{symbol.lower()}_{asset.lower()}_holdings",
+            str(observation.get("source") or f"{symbol} SEC filing"),
+            str(observation.get("url") or "https://www.sec.gov/edgar/search/"),
+            "official_filing",
+            observation.get("as_of"),
+            str(observation.get("detail") or "官方公司持倉揭露"),
+            str(observation.get("basis") or "official_filing"),
+        ))
+    return companies, sources, incidents
+
+
+def dat_cross_source_validation(
+    asset: str,
+    provider_companies: dict[str, dict[str, dict[str, Any]]],
+    base_provider: str,
+    base_total: float | None,
+    *,
+    provider_totals: dict[str, float | None] | None = None,
+    assess_resilience: bool = True,
+) -> dict[str, Any]:
+    ranked_base = sorted(
+        (
+            (symbol, value)
+            for symbol, item in provider_companies.get(base_provider, {}).items()
+            if (value := finite(item.get("holdings"))) is not None and value >= 0
+        ),
+        key=lambda pair: pair[1],
+        reverse=True,
+    )
+    validation_cohort: set[str] = set()
+    cohort_holdings = 0.0
+    cohort_target = (base_total or 0) * 0.75
+    minimum_cohort_companies = 4 if asset == "BTC" else 2
+    for symbol, holdings in ranked_base[:8]:
+        validation_cohort.add(symbol)
+        cohort_holdings += holdings
+        if len(validation_cohort) >= minimum_cohort_companies and cohort_holdings >= cohort_target:
+            break
+    symbols = sorted(validation_cohort & set(provider_companies.get(base_provider, {})))
+    comparisons: list[dict[str, Any]] = []
+    weighted_difference = 0.0
+    weighted_reference = 0.0
+    matched_base_holdings = 0.0
+    maximum_company_gap = 0.0
+    for symbol in symbols:
+        values = {
+            provider: finite(companies.get(symbol, {}).get("holdings"))
+            for provider, companies in provider_companies.items()
+        }
+        values = {provider: value for provider, value in values.items() if value is not None and value >= 0}
+        if base_provider not in values or len(values) < 2:
+            continue
+        base_value = values[base_provider]
+        consensus_values = {
+            provider: value
+            for provider, value in values.items()
+            if provider == base_provider
+            or abs(value - base_value) / max(statistics.median([value, base_value]), 1) <= 0.05
+        }
+        if len(consensus_values) < 2:
+            continue
+        outlier_values = {provider: value for provider, value in values.items() if provider not in consensus_values}
+        reference = statistics.median(consensus_values.values())
+        gap = (max(consensus_values.values()) - min(consensus_values.values())) / reference if reference else 0.0
+        maximum_company_gap = max(maximum_company_gap, gap)
+        weighted_difference += max(consensus_values.values()) - min(consensus_values.values())
+        weighted_reference += reference
+        matched_base_holdings += base_value
+        comparisons.append({
+            "symbol": symbol,
+            "provider_values": values,
+            "consensus_provider_values": consensus_values,
+            "excluded_outlier_provider_values": outlier_values,
+            "median_holdings": reference,
+            "max_relative_gap": gap,
+        })
+    weighted_gap = weighted_difference / weighted_reference if weighted_reference else None
+    coverage_ratio = matched_base_holdings / base_total if base_total else None
+    participating_providers = sorted({provider for comparison in comparisons for provider in comparison["consensus_provider_values"]})
+    source_count = len(participating_providers)
+    passed = bool(
+        source_count >= 2
+        and len(comparisons) >= 2
+        and coverage_ratio is not None
+        and coverage_ratio >= 0.60
+        and weighted_gap is not None
+        and weighted_gap <= 0.01
+        and maximum_company_gap <= 0.05
+    )
+    result = {
+        "status": "representative_cross_source_verified" if passed else "quorum_failed",
+        "method": "company_intersection_weighted_gap_with_official_major_holder_overlay",
+        "validation_cohort": sorted(validation_cohort),
+        "cohort_policy": "dynamic largest base-universe holders, at least four BTC or two ETH candidates, targeting 75% before cross-source matching; verified matched coverage requires at least two companies and 60%",
+        "provider_count": source_count,
+        "providers": participating_providers,
+        "matched_company_count": len(comparisons),
+        "matched_base_holdings": matched_base_holdings,
+        "representative_coverage_ratio": coverage_ratio,
+        "weighted_cross_source_gap": weighted_gap,
+        "maximum_company_gap": maximum_company_gap,
+        "excluded_outlier_count": sum(len(comparison["excluded_outlier_provider_values"]) for comparison in comparisons),
+        "thresholds": {
+            "minimum_provider_count": 2,
+            "minimum_matched_company_count": 2,
+            "minimum_representative_coverage_ratio": 0.60,
+            "maximum_weighted_cross_source_gap": 0.01,
+            "maximum_individual_company_gap": 0.05,
+        },
+        "comparisons": comparisons,
+        "universe_total_comparison_permitted": False,
+    }
+    if assess_resilience:
+        non_base_results = {
+            provider: dat_cross_source_validation(
+                asset,
+                {name: companies for name, companies in provider_companies.items() if name != provider},
+                base_provider,
+                base_total,
+                provider_totals=provider_totals,
+                assess_resilience=False,
+            )["status"]
+            for provider in participating_providers
+            if provider != base_provider
+        }
+        result["non_base_provider_failure_results"] = non_base_results
+        result["non_base_provider_failure_tolerant"] = bool(non_base_results) and all(
+            status == "representative_cross_source_verified" for status in non_base_results.values()
+        )
+        totals = provider_totals or {
+            provider: sum(finite(item.get("holdings")) or 0 for item in companies.values())
+            for provider, companies in provider_companies.items()
+        }
+        aggregate_providers = [provider for provider in ("CoinGecko", "BitcoinTreasuries.net") if provider in provider_companies]
+        base_failure_results = {
+            alternate: dat_cross_source_validation(
+                asset,
+                {name: companies for name, companies in provider_companies.items() if name != base_provider},
+                alternate,
+                finite(totals.get(alternate)),
+                provider_totals=totals,
+                assess_resilience=False,
+            )["status"]
+            for alternate in aggregate_providers
+            if alternate != base_provider
+        }
+        result["base_provider_failure_results"] = base_failure_results
+        result["base_provider_failure_tolerant"] = bool(base_failure_results) and all(
+            status == "representative_cross_source_verified" for status in base_failure_results.values()
+        )
+    return result
+
+
+def apply_official_dat_overlays(
+    base_provider: str,
+    base_companies: dict[str, dict[str, Any]],
+    official_companies: dict[str, dict[str, Any]],
+) -> tuple[dict[str, dict[str, Any]], float, list[str]]:
+    canonical_companies = {symbol: dict(item) for symbol, item in base_companies.items()}
+    overlay_adjustment = 0.0
+    incidents: list[str] = []
+    for symbol, official in official_companies.items():
+        previous = finite(canonical_companies.get(symbol, {}).get("holdings"))
+        official_value = finite(official.get("holdings"))
+        if official_value is None:
+            continue
+        if previous is None:
+            incidents.append(f"{symbol} 官方持倉無法唯一映射到 {base_provider} universe，未加入總量或前列公司")
+            continue
+        overlay_adjustment += official_value - previous
+        canonical_companies[symbol] = {
+            **canonical_companies[symbol],
+            **official,
+            "name": canonical_companies[symbol].get("name") or official.get("name"),
+            "source_basis": "SEC official overlay",
+        }
+    return canonical_companies, overlay_adjustment, incidents
+
+
+def enforce_official_overlay_contract(
+    validation: dict[str, Any],
+    base_companies: dict[str, dict[str, Any]],
+    official_companies: dict[str, dict[str, Any]],
+    required_symbols: set[str] | None = None,
+) -> list[str]:
+    unmapped_symbols = sorted(set(official_companies) - set(base_companies))
+    missing_symbols = sorted((required_symbols or set()) - set(official_companies))
+    validation["official_overlay_complete"] = not unmapped_symbols and not missing_symbols
+    validation["official_overlay_unmapped_symbols"] = unmapped_symbols
+    validation["official_observation_missing_symbols"] = missing_symbols
+    if unmapped_symbols or missing_symbols:
+        validation["status"] = "quorum_failed"
+        validation["status_reason"] = "required official company evidence is missing or absent from the selected aggregate universe"
+    return unmapped_symbols
+
+
+def select_dat_base_provider(provider_payloads: dict[str, dict[str, Any]]) -> str | None:
+    return next((
+        provider
+        for provider in ("CoinGecko", "BitcoinTreasuries.net")
+        if provider in provider_payloads
+        and finite(provider_payloads[provider].get("total_holdings")) is not None
+        and provider_payloads[provider].get("companies")
+    ), None)
+
+
+def select_dat_validated_base(
+    asset: str,
+    provider_payloads: dict[str, dict[str, Any]],
+    official_companies: dict[str, dict[str, Any]],
+) -> tuple[str | None, dict[str, Any]]:
+    provider_companies = {
+        provider: payload.get("companies", {})
+        for provider, payload in provider_payloads.items()
+        if payload.get("companies")
+    }
+    provider_totals = {provider: finite(payload.get("total_holdings")) for provider, payload in provider_payloads.items()}
+    required_official_symbols = {"MSTR"} if asset == "BTC" else {"BMNR", "SBET"}
+    evaluations: list[tuple[str, dict[str, Any]]] = []
+    for provider in ("CoinGecko", "BitcoinTreasuries.net"):
+        payload = provider_payloads.get(provider, {})
+        base_total = finite(payload.get("total_holdings"))
+        if base_total is None or not payload.get("companies"):
+            continue
+        validation = dat_cross_source_validation(
+            asset,
+            provider_companies,
+            provider,
+            base_total,
+            provider_totals=provider_totals,
+        )
+        enforce_official_overlay_contract(validation, payload["companies"], official_companies, required_official_symbols)
+        evaluations.append((provider, validation))
+    if not evaluations:
+        return None, {}
+    passing = [item for item in evaluations if item[1].get("status") == "representative_cross_source_verified"]
+    selected_provider, selected_validation = min(
+        passing or evaluations,
+        key=lambda item: (
+            0 if item[0] == "CoinGecko" else 1,
+            -(finite(item[1].get("representative_coverage_ratio")) or 0),
+            finite(item[1].get("weighted_cross_source_gap")) if finite(item[1].get("weighted_cross_source_gap")) is not None else math.inf,
+        ),
+    )
+    selected_validation["base_candidate_results"] = {
+        provider: {
+            "status": validation.get("status"),
+            "representative_coverage_ratio": validation.get("representative_coverage_ratio"),
+            "weighted_cross_source_gap": validation.get("weighted_cross_source_gap"),
+        }
+        for provider, validation in evaluations
+    }
+    return selected_provider, selected_validation
+
+
 def collect_dat_treasuries(asset: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     coin = "bitcoin" if asset == "BTC" else "ethereum"
-    url = f"https://api.coingecko.com/api/v3/companies/public_treasury/{coin}"
-    payload = fetch_json(url)
-    companies = []
-    company_rows = sorted(payload.get("companies", []), key=lambda row: finite(row.get("total_holdings")) or 0, reverse=True)
-    for row in company_rows[:8]:
-        companies.append({
-            "name": row.get("name"),
-            "symbol": row.get("symbol"),
-            "holdings": finite(row.get("total_holdings")),
-            "current_value_usd": finite(row.get("total_current_value_usd")),
-            "supply_share": (finite(row.get("percentage_of_total_supply")) or 0) / 100 if row.get("percentage_of_total_supply") is not None else None,
-        })
+    coingecko_url = f"https://api.coingecko.com/api/v3/companies/public_treasury/{coin}"
+    provider_payloads: dict[str, dict[str, Any]] = {}
+    sources: list[dict[str, Any]] = []
+    incidents: list[str] = []
+
+    try:
+        payload = fetch_json(coingecko_url)
+        fetched_at = now_iso()
+        coingecko_companies = {
+            normalize_treasury_symbol(row.get("symbol")): {
+                "name": row.get("name"),
+                "symbol": normalize_treasury_symbol(row.get("symbol")),
+                "holdings": finite(row.get("total_holdings")),
+                "current_value_usd": finite(row.get("total_current_value_usd")),
+                "supply_share": (finite(row.get("percentage_of_total_supply")) or 0) / 100 if row.get("percentage_of_total_supply") is not None else None,
+                "as_of": fetched_at,
+                "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+            }
+            for row in payload.get("companies", [])
+            if normalize_treasury_symbol(row.get("symbol")) and finite(row.get("total_holdings")) is not None
+        }
+        provider_payloads["CoinGecko"] = {
+            "companies": coingecko_companies,
+            "total_holdings": finite(payload.get("total_holdings")),
+            "total_value_usd": finite(payload.get("total_value_usd")),
+            "supply_share": (finite(payload.get("market_cap_dominance")) or 0) / 100 if payload.get("market_cap_dominance") is not None else None,
+            "as_of": fetched_at,
+            "as_of_basis": "retrieval_time_no_company_holdings_timestamp",
+        }
+        sources.append(source(
+            f"coingecko_{asset.lower()}_dat",
+            "CoinGecko Public Companies Treasury",
+            coingecko_url,
+            "third_party_treasury_aggregator",
+            fetched_at,
+            "聚合 universe 與長尾 roster；前列公司另以獨立聚合站及 SEC 官方揭露交叉驗證",
+            "retrieval_time_no_company_holdings_timestamp",
+        ))
+    except Exception as exc:
+        incidents.append(readable_source_error(f"CoinGecko {asset} DAT", exc))
+
+    try:
+        bitcoin_treasuries, provider_sources = collect_bitcoin_treasuries(asset)
+        provider_payloads["BitcoinTreasuries.net"] = bitcoin_treasuries
+        sources.extend(provider_sources)
+    except Exception as exc:
+        incidents.append(readable_source_error(f"BitcoinTreasuries.net {asset} DAT", exc))
+
+    if asset == "BTC":
+        try:
+            bitbo_treasuries, provider_sources = collect_bitbo_btc_treasuries()
+            provider_payloads["Bitbo Bitcoin Treasuries"] = bitbo_treasuries
+            sources.extend(provider_sources)
+        except Exception as exc:
+            incidents.append(readable_source_error("Bitbo BTC DAT", exc))
+
+    official_companies, official_sources, official_incidents = official_dat_observations(asset)
+    if official_companies:
+        provider_payloads["SEC official filings"] = {
+            "companies": official_companies,
+            "total_holdings": sum(finite(item.get("holdings")) or 0 for item in official_companies.values()),
+            "as_of": max((item.get("as_of") for item in official_companies.values() if item.get("as_of")), default=None),
+            "as_of_basis": "company_specific_official_holdings_dates",
+        }
+    sources.extend(official_sources)
+    incidents.extend(official_incidents)
+
+    base_provider, validation = select_dat_validated_base(asset, provider_payloads, official_companies)
+    if not base_provider:
+        raise ValueError(f"{asset} DAT has no aggregate provider")
+    base = provider_payloads[base_provider]
+    base_companies = base.get("companies", {})
+    base_total = finite(base.get("total_holdings"))
+    canonical_companies, overlay_adjustment, overlay_incidents = apply_official_dat_overlays(
+        base_provider,
+        base_companies,
+        official_companies,
+    )
+    incidents.extend(overlay_incidents)
+    verified_total = base_total + overlay_adjustment if base_total is not None else None
+    total_value_usd = finite(base.get("total_value_usd"))
+    if total_value_usd is not None and base_total and verified_total is not None:
+        total_value_usd *= verified_total / base_total
+    supply_share = finite(base.get("supply_share"))
+    if supply_share is not None and base_total and verified_total is not None:
+        supply_share *= verified_total / base_total
+    companies = sorted(canonical_companies.values(), key=lambda row: finite(row.get("holdings")) or 0, reverse=True)[:8]
+    as_of = max((payload.get("as_of") for payload in provider_payloads.values() if payload.get("as_of")), default=now_iso())
+    coverage = finite(validation.get("representative_coverage_ratio"))
+    weighted_gap = finite(validation.get("weighted_cross_source_gap"))
     result = {
         "asset": asset,
-        "total_holdings": finite(payload.get("total_holdings")),
-        "total_value_usd": finite(payload.get("total_value_usd")),
-        "supply_share": (finite(payload.get("market_cap_dominance")) or 0) / 100 if payload.get("market_cap_dominance") is not None else None,
+        "status": validation["status"],
+        "total_holdings": verified_total,
+        "total_holdings_base": base_total,
+        "total_holdings_base_provider": base_provider,
+        "official_overlay_adjustment": overlay_adjustment,
+        "total_value_usd": total_value_usd,
+        "supply_share": supply_share,
         "companies": companies,
-        "as_of": now_iso(),
-        "as_of_basis": "retrieval_time_no_upstream_timestamp",
-        "limitation": "CoinGecko 公司財庫單一聚合來源，可能落後官方揭露；差額也可能包含供應商修訂，只作雷達背景",
+        "as_of": as_of,
+        "as_of_basis": "latest_provider_retrieval_with_company_specific_official_overlay_dates",
+        "source_count": validation["provider_count"],
+        "source_observations": {
+            provider: {
+                "total_holdings": finite(payload.get("total_holdings")),
+                "company_count": len(payload.get("companies", {})),
+                "as_of": payload.get("as_of"),
+                "as_of_basis": payload.get("as_of_basis"),
+            }
+            for provider, payload in provider_payloads.items()
+        },
+        "validation": validation,
+        "source_incidents": incidents,
+        "limitation": (
+            f"{base_provider} 定義聚合 universe，SEC 官方值覆蓋前列公司；交集覆蓋 {coverage:.1%}、"
+            f"加權差異 {weighted_gap:.2%}。不同聚合 universe 的全站總量不硬平均。"
+            if coverage is not None and weighted_gap is not None
+            else "來源 quorum 或可比公司覆蓋不足；不得把不同聚合 universe 的全站總量硬平均。"
+        ),
     }
-    return result, [source(f"coingecko_{asset.lower()}_dat", "CoinGecko Public Companies Treasury", url, "third_party_treasury_aggregator", result["as_of"], result["limitation"], result["as_of_basis"])]
+    return result, sources
 
 
 def cross_source_gap(values: list[float]) -> float | None:
@@ -1084,7 +1923,7 @@ def analyze(output: dict[str, Any]) -> dict[str, Any]:
         },
         "sector_rotation": {
             "leaders": [{"sector": name, "change_24h": change} for name, change in sector_rank],
-            "plain_read": f"賽道領先為 {sector_rank[0][0] if sector_rank else '未知'}；CoinGecko 分類口徑只作輪動背景。",
+            "plain_read": f"賽道領先為 {sector_rank[0][0] if sector_rank else '未知'}；固定代表籃子採至少雙來源同成分重算，只作輪動背景。",
         },
         "relative_strength": {
             "eth_btc": assets.get("ETH", {}).get("price_usd") / assets.get("BTC", {}).get("price_usd") if assets.get("ETH", {}).get("price_usd") and assets.get("BTC", {}).get("price_usd") else None,
@@ -1172,7 +2011,9 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
     sovereign = inputs.get("sovereign", {})
     gold_market_value = finite(gold.get("estimated_gold_market_value_usd"))
     stablecoin_supply = finite(credit.get("stablecoin_supply_usd"))
-    public_company_holdings = finite(output.get("dat", {}).get("BTC", {}).get("total_holdings"))
+    btc_dat = output.get("dat", {}).get("BTC", {})
+    btc_dat_validation = btc_dat.get("validation", {})
+    public_company_holdings = finite(btc_dat.get("total_holdings"))
     observed_companies = output.get("dat", {}).get("BTC", {}).get("companies", [])
     top_company = max(observed_companies, key=lambda item: finite(item.get("holdings")) or 0, default={})
     top_company_holdings = finite(top_company.get("holdings"))
@@ -1231,6 +2072,7 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
         "stablecoin_supply": stablecoin_supply,
         "stablecoin_supply_30d_change": finite(credit.get("stablecoin_supply_30d_change")),
         "rwa_protocol_tvl": finite(credit.get("rwa_protocol_tvl_usd")),
+        "btcfi_observable_tvl": finite(credit.get("btcfi_observable_tvl_usd")),
         "public_company_holdings": public_company_holdings,
         "public_company_supply_share": public_company_supply_share,
         "top_company_concentration": top_company_concentration,
@@ -1281,6 +2123,9 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
         },
         "digital_dollar_competition": {
             "stablecoin_supply_usd": stablecoin_supply,
+            "stablecoin_supply_30d_ago_usd": finite(credit.get("stablecoin_supply_30d_ago_usd")),
+            "stablecoin_supply_asset_sum_usd": finite(credit.get("stablecoin_supply_asset_sum_usd")),
+            "stablecoin_supply_asset_sum_gap": finite(credit.get("stablecoin_supply_asset_sum_gap")),
             "stablecoin_supply_matched_cohort_usd": finite(credit.get("stablecoin_supply_matched_cohort_usd")),
             "stablecoin_supply_matched_cohort_30d_ago_usd": finite(credit.get("stablecoin_supply_matched_cohort_30d_ago_usd")),
             "stablecoin_supply_30d_change": finite(credit.get("stablecoin_supply_30d_change")),
@@ -1289,6 +2134,9 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
             "stablecoin_30d_unmatched_count": credit.get("stablecoin_30d_unmatched_count"),
             "rwa_protocol_tvl_usd": finite(credit.get("rwa_protocol_tvl_usd")),
             "rwa_protocol_count": credit.get("rwa_protocol_count"),
+            "btcfi_observable_tvl_usd": finite(credit.get("btcfi_observable_tvl_usd")),
+            "btcfi_protocol_count": credit.get("btcfi_protocol_count"),
+            "btcfi_categories": credit.get("btcfi_categories", []),
             "as_of": credit.get("as_of"),
             "as_of_basis": credit.get("as_of_basis"),
             "btc_to_stablecoin_market_scale_ratio": btc_to_stablecoin,
@@ -1309,10 +2157,23 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
             "top_company": top_company.get("name"),
             "top_company_btc": top_company_holdings,
             "top_company_share_of_observed_holdings": top_company_concentration,
-            "as_of": output.get("dat", {}).get("BTC", {}).get("as_of"),
-            "as_of_basis": output.get("dat", {}).get("BTC", {}).get("as_of_basis"),
-            "plain_read": f"CoinGecko 公開公司樣本持有約 {public_company_supply_share:.1%} BTC 供給；其中最大公司占樣本 {top_company_concentration:.1%}，採用已有規模但集中度仍高。" if public_company_supply_share is not None and top_company_concentration is not None else "公開公司財庫資料不足。",
-            "limitation": "Only CoinGecko's public-company treasury set; excludes private companies, ETFs, governments, custodians and collateral reuse",
+            "as_of": btc_dat.get("as_of"),
+            "as_of_basis": btc_dat.get("as_of_basis"),
+            "source_count": btc_dat.get("source_count"),
+            "representative_coverage_ratio": btc_dat_validation.get("representative_coverage_ratio"),
+            "weighted_cross_source_gap": btc_dat_validation.get("weighted_cross_source_gap"),
+            "plain_read": (
+                f"公開公司聚合樣本持有約 {public_company_supply_share:.1%} BTC 供給；"
+                f"{btc_dat_validation.get('provider_count', 0)} 個來源以代表性公司交叉驗證，覆蓋聚合值 "
+                f"{btc_dat_validation.get('representative_coverage_ratio', 0):.1%}、加權差異 "
+                f"{btc_dat_validation.get('weighted_cross_source_gap', 0):.2%}；最大公司仍占樣本 "
+                f"{top_company_concentration:.1%}。"
+                if public_company_supply_share is not None
+                and top_company_concentration is not None
+                and btc_dat_validation.get("status") == "representative_cross_source_verified"
+                else "公開公司財庫資料不足或交叉驗證未通過。"
+            ),
+            "limitation": "The selected public-company universe excludes private companies, ETFs, governments, custodians and collateral reuse; totals from different universes are never averaged",
         },
         "security_consensus": {
             **hashrate,
@@ -1326,8 +2187,18 @@ def build_btc_thesis(output: dict[str, Any], snapshot: dict[str, Any], inputs: d
         },
         "unmeasured_falsifier": {
             "name": "全球金融機構以 BTC 作抵押品的存量",
-            "status": "unknown_no_complete_public_dataset",
-            "plain_read": "ETF、DAT 與衍生品只能證明持有和金融化，不能證明銀行或全球信用市場已把 BTC 當中立抵押品。",
+            "status": "measured_onchain_proxy_global_total_unknown",
+            "global_total_status": "unknown_no_complete_public_dataset",
+            "observable_btcfi_tvl_usd": finite(credit.get("btcfi_observable_tvl_usd")),
+            "observable_protocol_count": credit.get("btcfi_protocol_count"),
+            "included_categories": credit.get("btcfi_categories", []),
+            "plain_read": (
+                f"可觀測鏈上 BTCFi 三類協議 TVL 約 ${credit['btcfi_observable_tvl_usd'] / 1e9:.1f}B、"
+                f"涵蓋 {credit.get('btcfi_protocol_count', 0)} 個協議；這是抵押／生息採用代理，"
+                "仍不含中心化借貸、銀行抵押、衍生品保證金與再質押重複計算。"
+                if finite(credit.get("btcfi_observable_tvl_usd")) is not None
+                else "BTCFi 可觀測代理缺漏；不得用 ETF、DAT 或衍生品未平倉量冒充全球抵押採用。"
+            ),
         },
     }
 
@@ -1349,6 +2220,29 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
             "required_source_count": required,
             "detail": detail,
         })
+
+    source_batch_id = output.get("source_batch_id")
+    snapshot_generated_at = output.get("snapshot_generated_at")
+    raw_generated_at = output.get("raw_generated_at")
+    raw_batch_id = output.get("raw_batch_id")
+    lineage_ok = bool(
+        source_batch_id
+        and source_batch_id == raw_batch_id
+        and snapshot_generated_at
+        and raw_generated_at
+        and snapshot_generated_at == raw_generated_at
+    )
+    if not lineage_ok:
+        failures.append("每日快照、原始觀測與市場層批次血緣不一致")
+    add_check(
+        "daily_snapshot_lineage",
+        "每日快照批次血緣",
+        "pass" if lineage_ok else "fail",
+        "snapshot、raw 與 market universe 共用同一批次" if lineage_ok else "批次 ID 或生成時間缺漏／不一致",
+        core=True,
+        observed=1 if lineage_ok else 0,
+        required=1,
+    )
 
     for symbol, asset in output.get("assets", {}).items():
         check_failures: list[str] = []
@@ -1463,35 +2357,94 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
             required=1,
         )
 
-    incomplete_sectors = [sector for sector, item in output.get("sectors", {}).items() if finite(item.get("market_cap_usd")) is None or finite(item.get("change_24h")) is None]
-    sector_status = "degraded"
-    sector_detail = f"缺漏：{', '.join(incomplete_sectors)}" if incomplete_sectors else "CoinGecko 供應商分類單一口徑，只作輪動背景"
+    incomplete_sectors = [sector for sector, item in output.get("sectors", {}).items() if item.get("status") != "cross_source_verified" or finite(item.get("market_cap_usd")) is None or finite(item.get("change_24h")) is None]
+    sector_status = "degraded" if incomplete_sectors else "pass"
+    sector_detail = f"缺漏或分歧：{', '.join(incomplete_sectors)}" if incomplete_sectors else f"{SECTOR_BASKET_VERSION} 至少雙來源同籃子重算通過"
     if incomplete_sectors:
-        degradations.append(f"賽道分類資料不完整：{', '.join(incomplete_sectors)}")
-    else:
-        degradations.append("賽道輪動採單一供應商分類，只作背景")
-    add_check("sector_rotation", "熱門賽道輪動", sector_status, sector_detail, core=False, observed=1, required=1)
+        degradations.append(f"賽道固定籃子資料不完整或跨源分歧：{', '.join(incomplete_sectors)}")
+    sector_source_count = min((item.get("source_count", 0) for item in output.get("sectors", {}).values()), default=0)
+    add_check("sector_rotation", "熱門賽道輪動", sector_status, sector_detail, core=False, observed=sector_source_count, required=2)
 
     for asset, item in output.get("dat", {}).items():
+        for incident in item.get("source_incidents", []):
+            source_incidents.append(f"{asset} DAT 來源事件：{incident}")
+        validation = item.get("validation", {})
+        dat_verified = (
+            finite(item.get("total_holdings")) is not None
+            and item.get("status") == "representative_cross_source_verified"
+            and validation.get("provider_count", 0) >= 2
+            and validation.get("matched_company_count", 0) >= 2
+            and validation.get("official_overlay_complete") is True
+            and finite(validation.get("representative_coverage_ratio")) is not None
+            and validation["representative_coverage_ratio"] >= 0.60
+            and finite(validation.get("weighted_cross_source_gap")) is not None
+            and validation["weighted_cross_source_gap"] <= 0.01
+            and finite(validation.get("maximum_company_gap")) is not None
+            and validation["maximum_company_gap"] <= 0.05
+        )
         if finite(item.get("total_holdings")) is None:
             degradations.append(f"{asset} DAT aggregate missing")
             add_check(f"dat_{asset.lower()}", f"{asset} 財庫公司聚合", "degraded", "聚合值缺失，前端必須顯示未知", core=False, observed=0, required=1)
+        elif dat_verified:
+            add_check(
+                f"dat_{asset.lower()}",
+                f"{asset} 財庫公司聚合",
+                "pass",
+                f"{validation['provider_count']} 個來源；可比公司覆蓋 {validation['representative_coverage_ratio']:.1%}；加權差異 {validation['weighted_cross_source_gap']:.2%}；排除並明示 {validation.get('excluded_outlier_count', 0)} 筆 outlier",
+                core=False,
+                observed=validation["provider_count"],
+                required=2,
+            )
         else:
-            degradations.append(f"{asset} 財庫公司持倉為單一第三方聚合，只作背景")
-            add_check(f"dat_{asset.lower()}", f"{asset} 財庫公司聚合", "degraded", "CoinGecko 單一聚合，尚未逐公司以官方文件交叉驗證", core=False, observed=1, required=2)
+            degradations.append(f"{asset} DAT 來源 quorum、代表性覆蓋或差異門檻未通過")
+            add_check(
+                f"dat_{asset.lower()}",
+                f"{asset} 財庫公司聚合",
+                "degraded",
+                "至少需要 2 個來源、2 家可比公司、60% 代表性覆蓋、加權差異不高於 1%、單公司差異不高於 5%，且官方公司必須可映射",
+                core=False,
+                observed=validation.get("provider_count", 0),
+                required=2,
+            )
 
-    if output.get("etf", {}).get("BTC", {}).get("status") != "cross_source_verified":
-        degradations.append("BTC ETF 流向僅有第三方單一來源，不作硬觸發")
-    btc_etf_lag = lag_hours_at(generated_at, output.get("etf", {}).get("BTC", {}).get("as_of"))
-    if btc_etf_lag is None or btc_etf_lag > FRESHNESS_CONTRACT["etf_source_max_lag_hours"]:
-        degradations.append("BTC ETF 流向底層每日快照逾時或時間未知，因此不顯示數值")
-    btc_etf_verified = output.get("etf", {}).get("BTC", {}).get("status") == "cross_source_verified" and btc_etf_lag is not None and btc_etf_lag <= FRESHNESS_CONTRACT["etf_source_max_lag_hours"]
-    add_check("etf_btc", "BTC 現貨 ETF 流向", "pass" if btc_etf_verified else "degraded", "已交叉驗證" if btc_etf_verified else "單一第三方來源或逾時時維持背景／未知", core=False, observed=2 if btc_etf_verified else 1, required=2)
-
-    if output.get("etf", {}).get("ETH", {}).get("status") != "cross_source_verified":
-        degradations.append("ETH ETF 流向沒有穩定的免金鑰交叉來源，因此顯示未知")
-    eth_etf_verified = output.get("etf", {}).get("ETH", {}).get("status") == "cross_source_verified"
-    add_check("etf_eth", "ETH 現貨 ETF 流向", "pass" if eth_etf_verified else "degraded", "已交叉驗證" if eth_etf_verified else "沒有穩定免金鑰交叉來源，前端顯示未知", core=False, observed=2 if eth_etf_verified else 0, required=2)
+    for asset in ("BTC", "ETH"):
+        item = output.get("etf", {}).get(asset, {})
+        lag_days = calendar_day_lag(generated_at, item.get("as_of"))
+        source_count = int(item.get("source_count") or 0)
+        component_completeness = finite(item.get("component_completeness"))
+        official_gap = finite(item.get("official_major_fund_gap"))
+        official_coverage = finite(item.get("official_major_fund_coverage"))
+        backup_gap = finite(item.get("backup_component_gap"))
+        backup_coverage = finite(item.get("backup_component_coverage"))
+        required_values = [finite(item.get(key)) for key in ("flow_1d_usd", "flow_7d_usd", "flow_30d_usd")]
+        verified = bool(
+            item.get("status") == "sample_cross_source_verified"
+            and lag_days is not None
+            and 0 <= lag_days <= FRESHNESS_CONTRACT["etf_source_max_lag_days"]
+            and source_count >= 3
+            and component_completeness is not None
+            and component_completeness >= 0.95
+            and official_gap is not None
+            and official_gap <= 0.05
+            and official_coverage is not None
+            and official_coverage >= 0.30
+            and backup_gap is not None
+            and backup_gap <= 0.05
+            and backup_coverage is not None
+            and backup_coverage >= 0.30
+            and all(value is not None for value in required_values)
+        )
+        if not verified:
+            degradations.append(f"{asset} ETF 流向來源 quorum、官方主要基金差異或交易日新鮮度未通過")
+        add_check(
+            f"etf_{asset.lower()}",
+            f"{asset} 現貨 ETF 流向",
+            "pass" if verified else "degraded",
+            f"{source_count} 個驗證來源；基金 roster {component_completeness:.1%}；官方樣本差異 {official_gap:.2%}、覆蓋 {official_coverage:.1%}；同日備援基金／總量差異 {backup_gap:.2%}、覆蓋 {backup_coverage:.1%}；市場日落後 {lag_days} 天" if verified else "至少 3 個驗證來源、基金 roster 95%、官方與同日備援基金／總量差異不高於 5% 或 500 萬美元、各覆蓋 gross flow 30%、市場日不超過 5 天",
+            core=False,
+            observed=source_count,
+            required=3,
+        )
 
     thesis_quality = output.get("btc_thesis", {}).get("quality", {})
     thesis_status = thesis_quality.get("status") if thesis_quality.get("status") in {"pass", "degraded", "fail"} else "fail"
@@ -1546,8 +2499,25 @@ def compact_history(output: dict[str, Any]) -> dict[str, Any]:
             "put_call_open_interest_ratio": output["derivatives"][symbol]["options"].get("put_call_open_interest_ratio"),
         } for symbol in ("BTC", "ETH")},
         "sectors": {name: item.get("change_24h") for name, item in output["sectors"].items()},
+        "etf": {asset: {
+            "status": item.get("status"),
+            "flow_1d_usd": item.get("flow_1d_usd"),
+            "flow_7d_usd": item.get("flow_7d_usd"),
+            "flow_30d_usd": item.get("flow_30d_usd"),
+            "as_of": item.get("as_of"),
+            "source_count": item.get("source_count"),
+            "component_completeness": item.get("component_completeness"),
+            "official_major_fund_gap": item.get("official_major_fund_gap"),
+            "official_major_fund_coverage": item.get("official_major_fund_coverage"),
+            "backup_component_gap": item.get("backup_component_gap"),
+            "backup_component_coverage": item.get("backup_component_coverage"),
+        } for asset, item in output["etf"].items()},
         "dat": {asset: {
             "total_holdings": item.get("total_holdings"),
+            "status": item.get("status"),
+            "source_count": item.get("source_count"),
+            "representative_coverage_ratio": item.get("validation", {}).get("representative_coverage_ratio"),
+            "weighted_cross_source_gap": item.get("validation", {}).get("weighted_cross_source_gap"),
             "companies": {company.get("symbol"): company.get("holdings") for company in item.get("companies", []) if company.get("symbol")},
         } for asset, item in output["dat"].items()},
         "btc_thesis": {
@@ -1687,9 +2657,47 @@ def main() -> int:
 
     snapshot = load_json(SNAPSHOT_PATH, {})
     radar = snapshot.get("metrics", {}).get("market_radar", {})
+    def etf_validation_inputs(prefix: str) -> dict[str, Any]:
+        try:
+            parsed = json.loads(str(radar.get(f"{prefix}_validation_inputs_json") or ""))
+            return parsed if isinstance(parsed, dict) else {}
+        except json.JSONDecodeError:
+            return {}
+    btc_etf_inputs = etf_validation_inputs("etf_flow")
+    eth_etf_inputs = etf_validation_inputs("eth_etf_flow")
     btc_etf_status = radar.get("etf_flow_status", "unavailable")
-    btc_etf_as_of = snapshot.get("generated_at")
-    btc_etf_fresh = age_hours(btc_etf_as_of) is not None and age_hours(btc_etf_as_of) <= 36
+    btc_etf_as_of = radar.get("etf_flow_as_of")
+    btc_etf_day_lag = calendar_day_lag(now_iso(), btc_etf_as_of)
+    btc_etf_fresh = btc_etf_day_lag is not None and 0 <= btc_etf_day_lag <= FRESHNESS_CONTRACT["etf_source_max_lag_days"]
+    eth_etf_status = radar.get("eth_etf_flow_status", "unavailable")
+    eth_etf_as_of = radar.get("eth_etf_flow_as_of")
+    eth_etf_day_lag = calendar_day_lag(now_iso(), eth_etf_as_of)
+    eth_etf_fresh = eth_etf_day_lag is not None and 0 <= eth_etf_day_lag <= FRESHNESS_CONTRACT["etf_source_max_lag_days"]
+    raw_daily = load_json(RAW_PATH, {"observations": []})
+    etf_provider_observations: dict[str, dict[str, Any]] = {"BTC": {}, "ETH": {}}
+    for item in raw_daily.get("observations", []):
+        match = re.fullmatch(r"(btc|eth)_etf_provider_(.+)_1d_usd", str(item.get("name") or ""))
+        official_match = re.fullmatch(r"(btc|eth)_etf_official_major_fund_gap", str(item.get("name") or ""))
+        if (not match and not official_match) or not item.get("ok"):
+            continue
+        asset = (match or official_match).group(1).upper()
+        provider = str(item.get("source") or (match.group(2) if match else "official issuer"))
+        etf_provider_observations[asset][provider] = {
+            "flow_1d_usd": finite(item.get("value")) if match else None,
+            "official_major_fund_gap": finite(item.get("value")) if official_match else None,
+            "as_of": item.get("as_of"),
+            "basis": item.get("basis"),
+            "url": item.get("url"),
+        }
+        sources.append(source(
+            f"{asset.lower()}_etf_{re.sub(r'[^a-z0-9]+', '_', provider.lower()).strip('_')}",
+            provider,
+            str(item.get("url") or ""),
+            str(item.get("source_tier") or "independent_ETF_data_provider"),
+            item.get("as_of"),
+            str(item.get("detail") or "ETF provider observation"),
+            str(item.get("basis") or "provider_reported"),
+        ))
     history = load_json(HISTORY_PATH, {"schema": 1, "updated_at": None, "items": []})
     previous_items = sorted([item for item in history.get("items", []) if item.get("date") != today_utc()], key=lambda item: item.get("date", ""))
     previous = previous_items[-1] if previous_items else {}
@@ -1706,9 +2714,13 @@ def main() -> int:
             company["holdings_change"] = current_holding - prior_holding if current_holding is not None and prior_holding is not None else None
 
     output: dict[str, Any] = {
-        "schema": 1,
+        "schema": 2,
         "date": today_utc(),
         "generated_at": now_iso(),
+        "snapshot_generated_at": snapshot.get("generated_at"),
+        "raw_generated_at": raw_daily.get("generated_at"),
+        "source_batch_id": snapshot.get("batch_id"),
+        "raw_batch_id": raw_daily.get("batch_id"),
         "update_target": "hourly",
         "units": {
             "*_usd": "US dollars",
@@ -1731,18 +2743,44 @@ def main() -> int:
                 "flow_30d_usd": finite(radar.get("etf_flow_30d_usd")) if btc_etf_fresh else None,
                 "as_of": btc_etf_as_of,
                 "update_frequency": "daily",
-                "source": "WalletPilot via latest_snapshot",
+                "source": f"{btc_etf_inputs.get('canonical_provider') or 'fund-component provider'} with iShares official and same-date backup validation",
+                "source_count": int(finite(radar.get("etf_flow_source_count")) or 0),
+                "component_completeness": finite(radar.get("etf_flow_component_completeness")),
+                "official_major_fund_gap": finite(radar.get("etf_flow_official_major_fund_gap")),
+                "official_major_fund_coverage": finite(radar.get("etf_flow_official_major_fund_coverage")),
+                "backup_component_gap": finite(radar.get("etf_flow_backup_component_gap")),
+                "backup_component_coverage": finite(radar.get("etf_flow_backup_component_coverage")),
+                "validation_inputs_json": radar.get("etf_flow_validation_inputs_json"),
+                "latest_published_as_of": btc_etf_inputs.get("latest_published_as_of"),
+                "selection_policy": btc_etf_inputs.get("selection_policy"),
+                "backup_validation_type": btc_etf_inputs.get("backup_sample", {}).get("validation_type"),
+                "validation_scope": radar.get("etf_flow_validation_scope"),
+                "source_observations": etf_provider_observations["BTC"],
                 "hard_trigger": False,
-                "limitation": "第三方單一來源，尚未獨立交叉驗證",
+                "limitation": "多源與官方主要基金持倉變化已交叉驗證；ETF 資金流仍不得單獨放行交易",
             },
             "ETH": {
-                "status": "unavailable_no_stable_keyless_cross_source_feed",
-                "flow_1d_usd": None,
-                "flow_7d_usd": None,
-                "flow_30d_usd": None,
+                "status": eth_etf_status,
+                "flow_1d_usd": finite(radar.get("eth_etf_flow_1d_usd")) if eth_etf_fresh else None,
+                "flow_7d_usd": finite(radar.get("eth_etf_flow_7d_usd")) if eth_etf_fresh else None,
+                "flow_30d_usd": finite(radar.get("eth_etf_flow_30d_usd")) if eth_etf_fresh else None,
+                "as_of": eth_etf_as_of,
+                "update_frequency": "daily",
+                "source": f"{eth_etf_inputs.get('canonical_provider') or 'fund-component provider'} with iShares official and same-date backup validation",
+                "source_count": int(finite(radar.get("eth_etf_flow_source_count")) or 0),
+                "component_completeness": finite(radar.get("eth_etf_flow_component_completeness")),
+                "official_major_fund_gap": finite(radar.get("eth_etf_flow_official_major_fund_gap")),
+                "official_major_fund_coverage": finite(radar.get("eth_etf_flow_official_major_fund_coverage")),
+                "backup_component_gap": finite(radar.get("eth_etf_flow_backup_component_gap")),
+                "backup_component_coverage": finite(radar.get("eth_etf_flow_backup_component_coverage")),
+                "validation_inputs_json": radar.get("eth_etf_flow_validation_inputs_json"),
+                "latest_published_as_of": eth_etf_inputs.get("latest_published_as_of"),
+                "selection_policy": eth_etf_inputs.get("selection_policy"),
+                "backup_validation_type": eth_etf_inputs.get("backup_sample", {}).get("validation_type"),
+                "validation_scope": radar.get("eth_etf_flow_validation_scope"),
+                "source_observations": etf_provider_observations["ETH"],
                 "hard_trigger": False,
-                "manual_refs": ["https://farside.co.uk/eth/", "https://www.coinglass.com/etf/ethereum"],
-                "limitation": "沒有穩定的免金鑰交叉來源，因此維持未知，不以不穩定網頁或未驗證單一數字補值",
+                "limitation": "多源與官方主要基金持倉變化已交叉驗證；ETF 資金流仍不得單獨放行交易",
             },
         },
         "dat": dat,
@@ -1765,7 +2803,7 @@ def main() -> int:
     items = [item for item in history.get("items", []) if item.get("date") != output["date"]]
     items.append(compact_history(output))
     items.sort(key=lambda item: item.get("date", ""))
-    history.update({"schema": 1, "updated_at": now_iso(), "items": items[-730:]})
+    history.update({"schema": 2, "updated_at": now_iso(), "items": items[-730:]})
     write_json(HISTORY_PATH, history)
     print(json.dumps({
         "output": str(OUTPUT_PATH),
