@@ -1,20 +1,16 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-23T03:55:44+00:00",
-  "status": "fail",
+  "generated_at": "2026-07-24T02:43:36+00:00",
+  "status": "pass",
   "summary": {
     "active_pages": 8,
     "archive_pages": 2,
-    "pass": 7,
+    "pass": 8,
     "degraded": 0,
-    "fail": 1,
-    "critical_failures": [
-      "market-radar"
-    ],
+    "fail": 0,
+    "critical_failures": [],
     "critical_surface_failures": [],
-    "critical_data_failures": [
-      "market-radar"
-    ],
+    "critical_data_failures": [],
     "degraded_pages": []
   },
   "pages": [
@@ -36,39 +32,39 @@
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 28152,
-          "lineage_source": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:49:09+00:00",
-          "age_hours": 16.11
+          "bytes": 28080,
+          "lineage_source": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:32+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "pass",
-          "bytes": 4958,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:22+00:00",
-          "age_hours": 16.09,
+          "bytes": 4873,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:35+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12452,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:24+00:00",
-          "age_hours": 16.09,
+          "bytes": 12355,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0,
           "quality": "consistent"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 24158,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:25+00:00",
-          "age_hours": 16.09
+          "bytes": 24025,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "pass",
@@ -135,25 +131,24 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "fail",
-          "bytes": 115616,
-          "as_of": "2026-07-22T11:49:16+00:00",
-          "age_hours": 16.11,
-          "reason": "超過新鮮度契約"
+          "status": "pass",
+          "bytes": 109921,
+          "as_of": "2026-07-24T02:43:35+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
-          "status": "fail",
-          "bytes": 8966,
-          "as_of": "2026-07-22T11:49:16+00:00",
-          "age_hours": 16.11,
-          "reason": "超過新鮮度契約"
+          "status": "pass",
+          "bytes": 14113,
+          "as_of": "2026-07-24T02:43:35+00:00",
+          "age_hours": 0.0
         }
       ],
-      "status": "fail",
+      "status": "pass",
       "surface_status": "pass",
-      "data_status": "fail",
+      "data_status": "pass",
       "checks": [
         {
           "name": "page_exists",
@@ -218,7 +213,7 @@
           "status": "pass",
           "bytes": 28036,
           "as_of": "2026-07-23T03:55:40+00:00",
-          "age_hours": 0.0,
+          "age_hours": 22.8,
           "quality": "pass"
         },
         {
@@ -227,7 +222,7 @@
           "status": "pass",
           "bytes": 609,
           "as_of": "2026-07-23T03:55:44+00:00",
-          "age_hours": 0.0,
+          "age_hours": 22.8,
           "quality": "pass"
         },
         {
@@ -236,7 +231,7 @@
           "status": "pass",
           "bytes": 2198,
           "as_of": "2026-07-23T03:55:44+00:00",
-          "age_hours": 0.0
+          "age_hours": 22.8
         },
         {
           "path": "data/daily/x_intelligence_verification.json",
@@ -244,7 +239,7 @@
           "status": "pass",
           "bytes": 683,
           "as_of": "2026-07-23T03:55:44+00:00",
-          "age_hours": 0.0
+          "age_hours": 22.8
         }
       ],
       "status": "pass",
@@ -312,29 +307,29 @@
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 24158,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:25+00:00",
-          "age_hours": 16.09
+          "bytes": 24025,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12452,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:24+00:00",
-          "age_hours": 16.09,
+          "bytes": 12355,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0,
           "quality": "consistent"
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "pass",
-          "bytes": 4958,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:22+00:00",
-          "age_hours": 16.09,
+          "bytes": 4873,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:35+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],
@@ -403,48 +398,48 @@
           "path": "data/daily/daily_extensions.json",
           "required": true,
           "status": "pass",
-          "bytes": 48611,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:26+00:00",
-          "age_hours": 16.09
+          "bytes": 48592,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 28152,
-          "lineage_source": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:49:09+00:00",
-          "age_hours": 16.11
+          "bytes": 28080,
+          "lineage_source": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:32+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "pass",
-          "bytes": 4958,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:22+00:00",
-          "age_hours": 16.09,
+          "bytes": 4873,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:35+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12452,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:24+00:00",
-          "age_hours": 16.09,
+          "bytes": 12355,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0,
           "quality": "consistent"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 24158,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:25+00:00",
-          "age_hours": 16.09
+          "bytes": 24025,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "pass",
@@ -513,45 +508,45 @@
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 28152,
-          "lineage_source": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:49:09+00:00",
-          "age_hours": 16.11
+          "bytes": 28080,
+          "lineage_source": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:32+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
           "status": "pass",
-          "bytes": 12452,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:24+00:00",
-          "age_hours": 16.09,
+          "bytes": 12355,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0,
           "quality": "consistent"
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "pass",
-          "bytes": 4958,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:22+00:00",
-          "age_hours": 16.09,
+          "bytes": 4873,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:35+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 24158,
-          "lineage": "2026-07-22T11:49:09+00:00",
-          "as_of": "2026-07-22T11:50:25+00:00",
-          "age_hours": 16.09
+          "bytes": 24025,
+          "lineage": "2026-07-24T02:43:32+00:00",
+          "as_of": "2026-07-24T02:43:36+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/history.json",
           "required": false,
           "status": "pass",
-          "bytes": 10252
+          "bytes": 10503
         }
       ],
       "status": "pass",
@@ -864,5 +859,5 @@
     "封存頁不得出現在主要導航，且必須指向目前替代專區。",
     "缺值、過期、schema 或日期不一致時 fail closed。"
   ],
-  "publication_mode": "fail_closed_diagnostics_only"
+  "publication_mode": "normal"
 }
