@@ -1,25 +1,21 @@
 {
   "schema": 2,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-25T18:09:54+00:00",
+  "verified_at": "2026-07-25T19:36:11+00:00",
   "date": "2026-07-25",
   "batch_id": "2026-07-25T18:09:07+00:00",
   "raw_generated_at": "2026-07-25T18:09:07+00:00",
   "snapshot_generated_at": "2026-07-25T18:09:07+00:00",
-  "market_universe_generated_at": "2026-07-25T18:09:54+00:00",
-  "status": "degraded",
+  "market_universe_generated_at": "2026-07-25T19:36:11+00:00",
+  "status": "pass",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
-  "degradations": [
-    "market universe: 賽道固定籃子資料不完整或跨源分歧：Meme",
-    "market universe sector Meme: cross-source return gap exceeds 1 percentage point",
-    "market universe sector Meme: status is not cross_source_verified"
-  ],
+  "degradations": [],
   "warnings": [],
   "evidence": [
     "BTC DAT reconstructed status=representative_cross_source_verified providers=4 coverage=0.7514071434467372 gap=0.0010356340980455514",
     "ETH DAT reconstructed status=representative_cross_source_verified providers=3 coverage=0.8533802342953365 gap=0.003887192342718766",
-    "market universe quality=degraded score=97 sources=68 age_hours=0.00",
+    "market universe quality=pass score=100 sources=68 age_hours=0.00",
     "BTC spot median=64297.2 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.04%",
     "ETH spot median=1872.33 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.09%",
     "BTC MVRV as_of=2026-07-24 age_days=1",
@@ -42,7 +38,7 @@
     "failures": [],
     "degradations": [],
     "evidence": [
-      "BTC thesis gold_ratio=0.04481450202978063 stablecoin_supply=306915908754.28 company_supply_share=0.06405764173808617"
+      "BTC thesis gold_ratio=0.04486370863693116 stablecoin_supply=306883143370.92 company_supply_share=0.06405764173808617"
     ],
     "verification_scope": "independent formula, lineage, ETF evidence and DAT consensus reconstruction; upstream HTTP responses are not all re-fetched"
   },
