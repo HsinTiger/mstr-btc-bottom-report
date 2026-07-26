@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 import daily_data_pipeline as daily_pipeline
 
 from collect_market_universe import (
@@ -511,31 +513,41 @@ def test_etf_selects_latest_fully_verified_market_date() -> None:
             "component_count": len(roster),
             "component_completeness": 1.0,
         }
+    # 日期必須相對今天生成，不可寫死。etf_quorum_passes 的閘門之一是
+    # `0 <= market_age_days <= 5`（見 daily_data_pipeline.etf_quorum_passes），
+    # 所以任何寫死的 fixture 日期都會在 6 天後變成必炸的時間炸彈——
+    # 2026-07-22 寫入的 2026-07-20 就是這樣在 07-25/26 引爆，整條 hourly
+    # workflow 卡在第一步、市場資料停更、前端因資料過期封鎖、Pages 部署連帶失敗。
+    # 相對結構才是這個測試要驗的東西：T+1 官方持倉未發布 → 回退到 T 仍可驗證。
+    today = datetime.now(timezone.utc).date()
+    d_t1 = (today - timedelta(days=1)).isoformat()     # T+1：官方持倉尚未發布
+    d_target = (today - timedelta(days=2)).isoformat()  # T  ：預期被選中（age=2，穩在 5 天內）
+    d_prior = (today - timedelta(days=5)).isoformat()   # 前一次官方持倉基準
     providers = {
         "The Block": {
             "provider": "The Block",
             "url": "https://fixture.invalid/theblock",
             "updated_at": now_iso(),
             "expected_tickers": roster,
-            "series": [row("2026-07-17", 0.0), row("2026-07-20", 50_000_000.0), row("2026-07-21", 70_000_000.0)],
+            "series": [row(d_prior, 0.0), row(d_target, 50_000_000.0), row(d_t1, 70_000_000.0)],
         },
         "CoinMarketCap ETF": {
             "provider": "CoinMarketCap ETF",
             "url": "https://fixture.invalid/cmc",
             "series": [
-                {"date": "2026-07-20", "flow_usd": 50_000_000.0, "components_usd": {}},
-                {"date": "2026-07-21", "flow_usd": 70_000_000.0, "components_usd": {}},
+                {"date": d_target, "flow_usd": 50_000_000.0, "components_usd": {}},
+                {"date": d_t1, "flow_usd": 70_000_000.0, "components_usd": {}},
             ],
         },
     }
     original_current = daily_pipeline.ishares_holding
     original_prior = daily_pipeline.prior_ishares_holding
     def fake_current(asset: str, as_of: str) -> dict:
-        if as_of == "2026-07-21":
+        if as_of == d_t1:
             raise ValueError("official T+1 holding not published")
         return {"units": 2_000_000.0, "market_value_usd": 2_000_000_000.0, "as_of": as_of, "url": "https://fixture.invalid/ishares"}
     def fake_prior(asset: str, as_of: str) -> dict:
-        return {"units": 1_950_000.0, "market_value_usd": 1_950_000_000.0, "as_of": "2026-07-17", "url": "https://fixture.invalid/ishares"}
+        return {"units": 1_950_000.0, "market_value_usd": 1_950_000_000.0, "as_of": d_prior, "url": "https://fixture.invalid/ishares"}
     daily_pipeline.ishares_holding = fake_current
     daily_pipeline.prior_ishares_holding = fake_prior
     try:
@@ -545,7 +557,7 @@ def test_etf_selects_latest_fully_verified_market_date() -> None:
         daily_pipeline.prior_ishares_holding = original_prior
     status = next(item for item in observations if item.name == "eth_etf_flow_status")
     assert status.value == "sample_cross_source_verified"
-    assert status.as_of == "2026-07-20"
+    assert status.as_of == d_target
 
 
 def test_verifier_recomputes_etf_evidence() -> None:
