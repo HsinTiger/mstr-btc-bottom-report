@@ -1,24 +1,27 @@
 {
   "schema": 2,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-26T06:12:14+00:00",
+  "verified_at": "2026-07-26T06:50:34+00:00",
   "date": "2026-07-26",
   "batch_id": "2026-07-26T06:11:21+00:00",
   "raw_generated_at": "2026-07-26T06:11:21+00:00",
   "snapshot_generated_at": "2026-07-26T06:11:21+00:00",
-  "market_universe_generated_at": "2026-07-26T06:12:14+00:00",
+  "market_universe_generated_at": "2026-07-26T06:50:34+00:00",
   "status": "degraded",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
   "degradations": [
+    "market universe: 賽道固定籃子資料不完整或跨源分歧：Meme",
     "market universe: BTC ETF 流向來源 quorum、官方主要基金差異或交易日新鮮度未通過",
+    "market universe sector Meme: cross-source return gap exceeds 1 percentage point",
+    "market universe sector Meme: status is not cross_source_verified",
     "BTC ETF flow sample verification unavailable; not eligible as hard trigger"
   ],
   "warnings": [],
   "evidence": [
     "BTC DAT reconstructed status=representative_cross_source_verified providers=4 coverage=0.7514071434467372 gap=0.0010356340980455514",
     "ETH DAT reconstructed status=representative_cross_source_verified providers=3 coverage=0.8533802342953365 gap=0.003887192342718766",
-    "market universe quality=degraded score=97 sources=67 age_hours=0.00",
+    "market universe quality=degraded score=94 sources=67 age_hours=0.00",
     "BTC spot median=64321.72 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.01%",
     "ETH spot median=1881.44 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.07%",
     "BTC MVRV as_of=2026-07-25 age_days=1",
@@ -40,7 +43,7 @@
     "failures": [],
     "degradations": [],
     "evidence": [
-      "BTC thesis gold_ratio=0.04484091536459699 stablecoin_supply=306755276302.0 company_supply_share=0.06405626470836846"
+      "BTC thesis gold_ratio=0.04485014055560456 stablecoin_supply=306745944216.71 company_supply_share=0.06405626470836846"
     ],
     "verification_scope": "independent formula, lineage, ETF evidence and DAT consensus reconstruction; upstream HTTP responses are not all re-fetched"
   },
