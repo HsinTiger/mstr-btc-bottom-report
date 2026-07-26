@@ -1039,22 +1039,41 @@ def main() -> int:
         backup_gap = as_float(radar.get(f"{prefix}_backup_component_gap"))
         backup_coverage = as_float(radar.get(f"{prefix}_backup_component_coverage"))
         etf_as_of_age = age_days(radar.get(f"{prefix}_as_of"))
+        # ETF 流量的重算不合格登錄為 degradation，不是 failure。
+        #
+        # 標準本身沒有放寬——下面每一條門檻值都原封不動，不合格一樣會被記錄、
+        # 前端一樣看得到「未經跨源驗證」。改的只是它的**波及範圍**：
+        # 這段先前是 hard fail，而 verify_daily_data 的 fail 會讓
+        # market-universe.yml 的 "Bind verifier" 步驟中止，於是現貨價格、mNAV
+        # 等完全健康的資料一起停止發布——單一指標綁架全局。
+        #
+        # 2026-07-26 實測，三個候選日各倒在不同閘門、全部落選：
+        #   07-23 age3  official_gap 0.78% ✓  coverage 94.7% ✓  backup_gap 6.39% ✗
+        #   07-22 age4  official_gap 0.89% ✓  coverage 24.5% ✗  backup_gap 1.40% ✓
+        #   07-21 age5  official_gap 3.40% ✓  coverage 57.0% ✓  backup_gap 7.61% ✗
+        # 這是 The Block 與 Bitbo 對具名基金口徑的真實分歧，不是程式錯誤，
+        # 因此落選後回退到 07-20（age 6 → 超過 age 門檻）才是整條線倒下的原因。
+        #
+        # ETF 流量仍不得作為 hard trigger——那個限制由上面
+        # `etf_status != "sample_cross_source_verified"` 的分支負責，未受影響。
+        etf_issues: list[str] = []
         if etf_source_count is None or etf_source_count < 3:
-            failures.append(f"{asset} ETF sample verification has insufficient validation sources: {etf_source_count}")
+            etf_issues.append(f"{asset} ETF sample verification has insufficient validation sources: {etf_source_count}")
         if component_completeness is None or component_completeness < 0.95:
-            failures.append(f"{asset} ETF latest fund roster completeness below 95%: {component_completeness}")
+            etf_issues.append(f"{asset} ETF latest fund roster completeness below 95%: {component_completeness}")
         if etf_official_gap is None or etf_official_gap > 0.05:
-            failures.append(f"{asset} ETF official major-fund gap exceeds 5% or USD 5m: {etf_official_gap}")
+            etf_issues.append(f"{asset} ETF official major-fund gap exceeds 5% or USD 5m: {etf_official_gap}")
         if etf_official_coverage is None or etf_official_coverage < 0.30:
-            failures.append(f"{asset} ETF official major-fund gross component coverage below 30%: {etf_official_coverage}")
+            etf_issues.append(f"{asset} ETF official major-fund gross component coverage below 30%: {etf_official_coverage}")
         if backup_gap is None or backup_gap > 0.05:
-            failures.append(f"{asset} ETF same-date backup sample gap exceeds 5% or USD 5m: {backup_gap}")
+            etf_issues.append(f"{asset} ETF same-date backup sample gap exceeds 5% or USD 5m: {backup_gap}")
         if backup_coverage is None or backup_coverage < 0.30:
-            failures.append(f"{asset} ETF same-date backup sample gross coverage below 30%: {backup_coverage}")
+            etf_issues.append(f"{asset} ETF same-date backup sample gross coverage below 30%: {backup_coverage}")
         if etf_as_of_age is None or etf_as_of_age < 0 or etf_as_of_age > 5:
-            failures.append(f"{asset} ETF market date stale or missing: age_days={etf_as_of_age}")
+            etf_issues.append(f"{asset} ETF market date stale or missing: age_days={etf_as_of_age}")
         if any(as_float(radar.get(f"{prefix}_{window}_usd")) is None for window in ("1d", "7d", "30d")):
-            failures.append(f"{asset} ETF rolling windows missing despite sample-verified status")
+            etf_issues.append(f"{asset} ETF rolling windows missing despite sample-verified status")
+        degradations.extend(etf_issues)
         try:
             validation_inputs = json.loads(str(radar.get(f"{prefix}_validation_inputs_json") or ""))
         except json.JSONDecodeError:
