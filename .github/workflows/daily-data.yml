@@ -113,8 +113,15 @@ jobs:
                   raise SystemExit("Unsafe publication: failed verification did not switch to diagnostics-only")
               if brief.get("exclusive_signals") or brief.get("consensus_signals"):
                   raise SystemExit("Unsafe publication: failed verification still exposes decision signals")
-          elif verification_status == "degraded" and publication_mode != "research_only":
-              raise SystemExit("Unsafe publication: degraded verification is not research-only")
+          elif verification_status == "degraded" and publication_mode not in {"research_only", "diagnostics_only"}:
+              # diagnostics_only 比 research_only 更保守（它連決策訊號都不揭露），
+              # 所以在 degraded 之下採用它是合規的，不是違規。
+              # 這兩者會同時出現：generate_institutional_analytics 在
+              # `not logic_consistent` 時就升級成 diagnostics_only，與 verification
+              # 狀態是否 degraded 無關。2026-07-26 實測即為此組合——
+              # logic_audit status=review / failed_invariants=1 → diagnostics_only，
+              # 而 verification=degraded，舊條件把「更嚴格」判成「不安全」而中止發布。
+              raise SystemExit(f"Unsafe publication: degraded verification is {publication_mode}, expected research_only or stricter")
           if audit.get("status") != "consistent":
               brief = analytics.get("decision_brief", {})
               if publication_mode != "diagnostics_only" or action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", ""):
