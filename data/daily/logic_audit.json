@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "date": "2026-07-25",
-  "generated_at": "2026-07-25T18:09:15+00:00",
-  "snapshot_generated_at": "2026-07-25T18:09:07+00:00",
-  "status": "consistent",
+  "date": "2026-07-26",
+  "generated_at": "2026-07-26T06:11:28+00:00",
+  "snapshot_generated_at": "2026-07-26T06:11:21+00:00",
+  "status": "review",
   "purpose": "Prevent false green lights by checking data quality, capital-structure stress, and decision-language consistency.",
   "summary": {
-    "passed_invariants": 19,
-    "failed_invariants": 0,
+    "passed_invariants": 18,
+    "failed_invariants": 1,
     "contradictions": 0,
     "blocked_actions": [
       "add_2_5x_mstr",
@@ -56,7 +56,7 @@
       "id": "DEGRADED_DATA_CANNOT_BE_AUTO_TRADING_GRADE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "verification=pass, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 100/100, confidence=高",
+      "evidence": "verification=degraded, date_matches=True, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 77/100, confidence=中",
       "risk_if_failed": "Research-grade data could be mistaken for execution-grade signal."
     },
     {
@@ -70,7 +70,7 @@
       "id": "VERIFICATION_REPORT_MATCHES_SNAPSHOT_DATE",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "snapshot_date=2026-07-25, verification_date=2026-07-25",
+      "evidence": "snapshot_date=2026-07-26, verification_date=2026-07-26",
       "risk_if_failed": "A stale pass report could authorize a newer unverified snapshot."
     },
     {
@@ -84,7 +84,7 @@
       "id": "COMMON_PRICE_TO_NAV_ABOVE_ONE_BLOCKS_CHEAPNESS_CLAIM",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "common_equity_price_to_nav=0.994x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 100/100",
+      "evidence": "common_equity_price_to_nav=0.994x, headline=MSTR 合約禁開 | 未確認 | $40k–$52k | 77/100",
       "risk_if_failed": "Common equity may be called cheap while it trades above adjusted net value to common."
     },
     {
@@ -126,14 +126,14 @@
       "id": "MANUAL_PROVENANCE_FORCES_DEGRADED_STATUS",
       "status": "pass",
       "severity": "blocking",
-      "evidence": "manual_input_provenance=automated, verification=pass; pass means false-green-light is blocked, not that inputs are fully automated",
+      "evidence": "manual_input_provenance=automated, verification=degraded; pass means false-green-light is blocked, not that inputs are fully automated",
       "risk_if_failed": "Manual capital-stack seeds could be displayed as fully verified data."
     },
     {
       "id": "ETF_FLOW_NEVER_STANDALONE_HARD_TRIGGER",
-      "status": "pass",
+      "status": "fail",
       "severity": "major",
-      "evidence": "etf_flow_status=sample_cross_source_verified, counts_as_confirmation=False",
+      "evidence": "etf_flow_status=unavailable, counts_as_confirmation=False",
       "risk_if_failed": "A verified but uncalibrated ETF-flow context signal could be promoted into a standalone trading trigger."
     },
     {
@@ -211,7 +211,7 @@
     {
       "metric": "Fear & Greed",
       "threshold": "< 25 is panic context, not automatic buy signal",
-      "current": "27",
+      "current": "26",
       "rationale": "Sentiment can mark opportunity only when structure and verification are clean.",
       "action": "只允許列入研究清單；行動前必須看到普通股估值、賣幣壓力、STRC 折價一起確認。"
     },
