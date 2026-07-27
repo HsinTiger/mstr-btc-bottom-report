@@ -1,0 +1,259 @@
+{
+  "schema": 1,
+  "verified_at": "2026-07-27T09:48:41+00:00",
+  "history_generated_at": "2026-07-27T09:48:37+00:00",
+  "snapshot_generated_at": "2026-07-27T09:48:24+00:00",
+  "status": "pass",
+  "failures": [],
+  "degradations": [],
+  "checks": [
+    {
+      "asset": "BTC",
+      "status": "pass",
+      "canonical_provider": "Yahoo Finance",
+      "source_count": 3,
+      "canonical_bars": 730,
+      "current_price_anchor_gap": 0.0015350523344817878,
+      "comparison": {
+        "overlap_bars": 720,
+        "median_close_gap": 0.0001693767856112547,
+        "p95_close_gap": 0.0009178091207811822,
+        "maximum_close_gap": 0.005098383611178332,
+        "period_return_gaps": {
+          "1": 7.472331029934054e-05,
+          "5": 0.00015276442212042163,
+          "21": 0.0007876737136975898,
+          "63": 8.969211590337256e-05
+        },
+        "latest_date_gap_days": 0
+      },
+      "comparison_provider": "Kraken",
+      "comparisons": {
+        "Kraken": {
+          "overlap_bars": 720,
+          "median_close_gap": 0.0001693767856112547,
+          "p95_close_gap": 0.0009178091207811822,
+          "maximum_close_gap": 0.005098383611178332,
+          "period_return_gaps": {
+            "1": 7.472331029934054e-05,
+            "5": 0.00015276442212042163,
+            "21": 0.0007876737136975898,
+            "63": 8.969211590337256e-05
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        },
+        "Coinbase": {
+          "overlap_bars": 349,
+          "median_close_gap": 0.00022641338555935426,
+          "p95_close_gap": 0.0008323851459401137,
+          "maximum_close_gap": 0.0029136956874105924,
+          "period_return_gaps": {
+            "1": 0.0002679939205898485,
+            "5": 0.00015172481482761402,
+            "21": 0.0005144077298915306,
+            "63": 6.661455726020282e-05
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        }
+      },
+      "failures": [],
+      "degradations": []
+    },
+    {
+      "asset": "ETH",
+      "status": "pass",
+      "canonical_provider": "Yahoo Finance",
+      "source_count": 3,
+      "canonical_bars": 730,
+      "current_price_anchor_gap": 0.00575339426815262,
+      "comparison": {
+        "overlap_bars": 720,
+        "median_close_gap": 0.000232853927087022,
+        "p95_close_gap": 0.001083764771934881,
+        "maximum_close_gap": 0.005746911682450453,
+        "period_return_gaps": {
+          "1": 5.079653830009079e-05,
+          "5": 1.6694583565790566e-05,
+          "21": 0.0008720457470967613,
+          "63": 0.0002650101932851756
+        },
+        "latest_date_gap_days": 0
+      },
+      "comparison_provider": "Kraken",
+      "comparisons": {
+        "Kraken": {
+          "overlap_bars": 720,
+          "median_close_gap": 0.000232853927087022,
+          "p95_close_gap": 0.001083764771934881,
+          "maximum_close_gap": 0.005746911682450453,
+          "period_return_gaps": {
+            "1": 5.079653830009079e-05,
+            "5": 1.6694583565790566e-05,
+            "21": 0.0008720457470967613,
+            "63": 0.0002650101932851756
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        },
+        "Coinbase": {
+          "overlap_bars": 349,
+          "median_close_gap": 0.00022760633947177232,
+          "p95_close_gap": 0.0009662683902575607,
+          "maximum_close_gap": 0.0038209220156492987,
+          "period_return_gaps": {
+            "1": 0.00016094720460668732,
+            "5": 0.0005730758391775392,
+            "21": 0.00100290778059553,
+            "63": 5.638909188943053e-05
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        }
+      },
+      "failures": [],
+      "degradations": []
+    },
+    {
+      "asset": "MSTR",
+      "status": "pass",
+      "canonical_provider": "Yahoo Finance",
+      "source_count": 2,
+      "canonical_bars": 501,
+      "current_price_anchor_gap": 1.997441612064526e-08,
+      "comparison": {
+        "overlap_bars": 501,
+        "median_close_gap": 1.8501108392614534e-08,
+        "p95_close_gap": 4.5094314688344396e-08,
+        "maximum_close_gap": 3.953497064331746e-05,
+        "period_return_gaps": {
+          "1": 9.164070280398562e-09,
+          "5": 3.756809308086417e-09,
+          "21": 8.963645936610476e-09,
+          "63": 1.4378581325580342e-08
+        },
+        "latest_date_gap_days": 0
+      },
+      "comparison_provider": "Nasdaq",
+      "comparisons": {
+        "Nasdaq": {
+          "overlap_bars": 501,
+          "median_close_gap": 1.8501108392614534e-08,
+          "p95_close_gap": 4.5094314688344396e-08,
+          "maximum_close_gap": 3.953497064331746e-05,
+          "period_return_gaps": {
+            "1": 9.164070280398562e-09,
+            "5": 3.756809308086417e-09,
+            "21": 8.963645936610476e-09,
+            "63": 1.4378581325580342e-08
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        }
+      },
+      "failures": [],
+      "degradations": []
+    },
+    {
+      "asset": "BMNR",
+      "status": "pass",
+      "canonical_provider": "Yahoo Finance",
+      "source_count": 2,
+      "canonical_bars": 285,
+      "current_price_anchor_gap": 2.4158943569194284e-09,
+      "comparison": {
+        "overlap_bars": 285,
+        "median_close_gap": 2.2639152571118033e-08,
+        "p95_close_gap": 4.4356944006669266e-08,
+        "maximum_close_gap": 1.584261452297023e-05,
+        "period_return_gaps": {
+          "1": 1.1053453596865381e-08,
+          "5": 2.4483375327122303e-08,
+          "21": 3.9493757153508113e-08,
+          "63": 1.7339532032423222e-09
+        },
+        "latest_date_gap_days": 0
+      },
+      "comparison_provider": "Nasdaq",
+      "comparisons": {
+        "Nasdaq": {
+          "overlap_bars": 285,
+          "median_close_gap": 2.2639152571118033e-08,
+          "p95_close_gap": 4.4356944006669266e-08,
+          "maximum_close_gap": 1.584261452297023e-05,
+          "period_return_gaps": {
+            "1": 1.1053453596865381e-08,
+            "5": 2.4483375327122303e-08,
+            "21": 3.9493757153508113e-08,
+            "63": 1.7339532032423222e-09
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        }
+      },
+      "failures": [],
+      "degradations": []
+    },
+    {
+      "asset": "STRC",
+      "status": "pass",
+      "canonical_provider": "Yahoo Finance",
+      "source_count": 2,
+      "canonical_bars": 248,
+      "current_price_anchor_gap": 2.4586872430348925e-08,
+      "comparison": {
+        "overlap_bars": 248,
+        "median_close_gap": 1.8577621989662335e-08,
+        "p95_close_gap": 3.695740686327216e-08,
+        "maximum_close_gap": 4.530071080354631e-08,
+        "period_return_gaps": {
+          "1": 4.251004881439258e-09,
+          "5": 1.4111641633007821e-08,
+          "21": 7.511359378931104e-08,
+          "63": 3.4812396854100314e-08
+        },
+        "latest_date_gap_days": 0
+      },
+      "comparison_provider": "Nasdaq",
+      "comparisons": {
+        "Nasdaq": {
+          "overlap_bars": 248,
+          "median_close_gap": 1.8577621989662335e-08,
+          "p95_close_gap": 3.695740686327216e-08,
+          "maximum_close_gap": 4.530071080354631e-08,
+          "period_return_gaps": {
+            "1": 4.251004881439258e-09,
+            "5": 1.4111641633007821e-08,
+            "21": 7.511359378931104e-08,
+            "63": 3.4812396854100314e-08
+          },
+          "latest_date_gap_days": 0,
+          "status": "pass",
+          "failures": []
+        }
+      },
+      "failures": [],
+      "degradations": []
+    }
+  ],
+  "policy": {
+    "core_assets": [
+      "BMNR",
+      "BTC",
+      "ETH",
+      "MSTR"
+    ],
+    "minimum_sources": 2,
+    "median_close_gap_max": 0.01,
+    "p95_close_gap_max": 0.03,
+    "horizon_return_gap_max": 0.05,
+    "research_only": true
+  }
+}

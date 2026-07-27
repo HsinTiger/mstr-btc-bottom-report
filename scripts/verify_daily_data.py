@@ -1282,7 +1282,7 @@ def main() -> int:
         "snapshot_generated_at": snapshot.get("generated_at"),
         "market_universe_generated_at": market_universe.get("generated_at"),
         "status": status,
-        "status_scope": "execution_and_decision_inputs_only",
+        "status_scope": "verified_market_inputs_only",
         "failures": failures,
         "degradations": degradations,
         "warnings": warnings,

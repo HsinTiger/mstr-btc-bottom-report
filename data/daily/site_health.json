@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-27T07:53:49+00:00",
+  "generated_at": "2026-07-27T09:48:47+00:00",
   "status": "degraded",
   "summary": {
     "active_pages": 8,
@@ -12,66 +12,48 @@
     "critical_surface_failures": [],
     "critical_data_failures": [],
     "degraded_pages": [
-      "today-decision",
+      "market-overview",
       "market-radar",
-      "institutional-analysis",
-      "daily-extension",
-      "strategy-lab"
+      "timescale-analysis",
+      "insight-journal",
+      "history-lab"
     ]
   },
   "pages": [
     {
-      "id": "today-decision",
+      "id": "market-overview",
       "path": "index.html",
-      "title": "今日決策",
-      "title_contains": "每日決策儀表板",
+      "title": "四週期總覽",
+      "title_contains": "四週期市場情報台",
       "lifecycle": "active",
       "criticality": "critical",
-      "role": "只顯示今天最重要的結論、數字與是否能行動。",
-      "user_question": "今天能不能加大倉現貨、MSTR 2.5 倍合約或 BMNR？",
-      "open_when": "每天第一個打開；先看結論，再決定是否進入其他專區。",
+      "role": "用大字卡顯示日線、週線、月線、季線趨勢、變化、同步程度與獨家背離觀點。",
+      "user_question": "四個週期各在走什麼趨勢，哪些證據共振或背離？",
+      "open_when": "每天第一個打開；先看四週期結論，再進入證據或時序專區。",
       "cadence": "每日",
-      "surface_type": "live_decision",
-      "owner_action": "keep",
+      "surface_type": "live_timescale_overview",
+      "owner_action": "redesign",
       "dependencies": [
         {
-          "path": "data/daily/latest_snapshot.json",
-          "required": true,
-          "status": "pass",
-          "bytes": 28026,
-          "lineage_source": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:25+00:00",
-          "age_hours": 2.06
-        },
-        {
-          "path": "data/daily/agent_verification_report.json",
+          "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5122,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
+          "bytes": 35115,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
         {
-          "path": "data/daily/logic_audit.json",
+          "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 12815,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
-          "quality": "consistent"
-        },
-        {
-          "path": "data/daily/institutional_analytics.json",
-          "required": true,
-          "status": "pass",
-          "bytes": 24397,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06
+          "bytes": 3665,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:46+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         }
       ],
       "status": "degraded",
@@ -138,33 +120,35 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "pass",
-          "bytes": 109928,
-          "as_of": "2026-07-27T07:53:49+00:00",
+          "status": "degraded",
+          "bytes": 114340,
+          "as_of": "2026-07-27T09:48:35+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "pass",
-          "bytes": 318,
-          "as_of": "2026-07-27T07:53:49+00:00",
+          "status": "degraded",
+          "bytes": 848,
+          "as_of": "2026-07-27T09:48:36+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 29487,
-          "as_of": "2026-07-27T07:53:49+00:00",
+          "bytes": 30218,
+          "as_of": "2026-07-27T09:48:35+00:00",
           "age_hours": 0.0
         }
       ],
       "status": "degraded",
       "surface_status": "degraded",
-      "data_status": "pass",
+      "data_status": "degraded",
       "checks": [
         {
           "name": "page_exists",
@@ -232,35 +216,35 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 28017,
+          "bytes": 28540,
           "as_of": "2026-07-27T04:23:44+00:00",
-          "age_hours": 3.5,
+          "age_hours": 5.42,
           "quality": "pass"
         },
         {
           "path": "data/daily/ai_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 609,
+          "bytes": 629,
           "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 3.5,
+          "age_hours": 5.42,
           "quality": "pass"
         },
         {
           "path": "data/daily/x_intelligence.json",
           "required": false,
           "status": "pass",
-          "bytes": 2198,
+          "bytes": 2282,
           "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 3.5
+          "age_hours": 5.42
         },
         {
           "path": "data/daily/x_intelligence_verification.json",
           "required": false,
           "status": "pass",
-          "bytes": 683,
+          "bytes": 705,
           "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 3.5
+          "age_hours": 5.42
         }
       ],
       "status": "pass",
@@ -311,48 +295,57 @@
       ]
     },
     {
-      "id": "institutional-analysis",
+      "id": "timescale-analysis",
       "path": "analytics.html",
-      "title": "專業分析",
-      "title_contains": "機構分析台",
+      "title": "週期分析",
+      "title_contains": "四週期趨勢分析",
       "lifecycle": "active",
       "criticality": "high",
-      "role": "拆解 BTC regime、MSTR 資本結構、BMNR 財庫估值、敏感度與反證。",
-      "user_question": "首頁結論的完整證據、風險堆疊與估值敏感度是什麼？",
-      "open_when": "準備做重大倉位決策，或需要檢查首頁結論如何形成時。",
+      "role": "拆解四週期的技術、廣度、槓桿、流向、情緒、資本結構與反證。",
+      "user_question": "四週期結論由哪些獨立視角構成，資料對帳是否通過？",
+      "open_when": "首頁出現共振或背離，需要查看完整證據與限制時。",
       "cadence": "每日",
-      "surface_type": "live_analysis",
-      "owner_action": "keep",
+      "surface_type": "live_timescale_analysis",
+      "owner_action": "redesign",
       "dependencies": [
         {
-          "path": "data/daily/institutional_analytics.json",
-          "required": true,
-          "status": "pass",
-          "bytes": 24397,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06
-        },
-        {
-          "path": "data/daily/logic_audit.json",
-          "required": true,
-          "status": "pass",
-          "bytes": 12815,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
-          "quality": "consistent"
-        },
-        {
-          "path": "data/daily/agent_verification_report.json",
+          "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5122,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
+          "bytes": 35115,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
+        },
+        {
+          "path": "data/daily/timescale_intelligence_verification.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 3665,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:46+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
+        },
+        {
+          "path": "data/daily/timescale_data_verification.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 8278,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:41+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
+        },
+        {
+          "path": "data/daily/timescale_intelligence_history.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 22186,
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -403,66 +396,47 @@
       ]
     },
     {
-      "id": "daily-extension",
+      "id": "insight-journal",
       "path": "daily-extensions.html",
-      "title": "每日延伸",
-      "title_contains": "每日延伸",
+      "title": "洞察日誌",
+      "title_contains": "洞察日誌",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "將已驗證資料與 wiki 知識結合，提供三個延伸觀點及昨天／今天／明天對比。",
-      "user_question": "今天除了既有結論，還有哪三個值得追蹤的新觀點？",
-      "open_when": "完成今日決策後，用來擴充研究假說與明日觀察清單。",
+      "role": "保存每日獨家觀點、前次變化、反證條件與同日 revisions。",
+      "user_question": "今天哪些觀點新增或改變，下一次要用什麼證據驗證？",
+      "open_when": "想追蹤觀點如何隨時間修正，而不是只看當日快照時。",
       "cadence": "每日",
-      "surface_type": "live_research",
-      "owner_action": "keep",
+      "surface_type": "append_only_insight_ledger",
+      "owner_action": "redesign",
       "dependencies": [
         {
-          "path": "data/daily/daily_extensions.json",
-          "required": true,
-          "status": "pass",
-          "bytes": 65657,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06
-        },
-        {
-          "path": "data/daily/latest_snapshot.json",
-          "required": true,
-          "status": "pass",
-          "bytes": 28026,
-          "lineage_source": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:25+00:00",
-          "age_hours": 2.06
-        },
-        {
-          "path": "data/daily/agent_verification_report.json",
+          "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5122,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
+          "bytes": 35115,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
         {
-          "path": "data/daily/logic_audit.json",
+          "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 12815,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
-          "quality": "consistent"
+          "bytes": 3665,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:46+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
-          "path": "data/daily/institutional_analytics.json",
+          "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 24397,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06
+          "bytes": 22186,
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -513,64 +487,57 @@
       ]
     },
     {
-      "id": "strategy-lab",
+      "id": "history-lab",
       "path": "dashboard.html",
-      "title": "策略研究室",
-      "title_contains": "策略研究室",
+      "title": "時序研究",
+      "title_contains": "時間序列研究室",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "保存完整策略規格、歷史回測、研究樣本與個人交易紀錄；每日卡片由驗證資料覆蓋。",
-      "user_question": "策略規則、歷史證據與交易紀錄如何對應今天的體系？",
-      "open_when": "要檢查模型規則、歷史樣本或維護交易紀錄時；不是每日第一入口。",
-      "cadence": "每日資料＋版本化研究",
-      "surface_type": "mixed_live_and_versioned_research",
-      "research_as_of": "2026-07-05",
-      "owner_action": "reframe",
+      "role": "檢視雙來源原始價格、標準化曲線、四週期數字矩陣與歷史 revisions。",
+      "user_question": "分析背後的原始時序、跨來源差異與歷史沉澱是否可信？",
+      "open_when": "需要稽核資料、比較價格路徑或追溯歷次觀察時。",
+      "cadence": "每日＋append-only revisions",
+      "surface_type": "time_series_research",
+      "owner_action": "redesign",
       "dependencies": [
         {
-          "path": "data/daily/latest_snapshot.json",
+          "path": "data/daily/timescale_price_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 28026,
-          "lineage_source": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:25+00:00",
-          "age_hours": 2.06
+          "bytes": 1408114,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:37+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
-          "path": "data/daily/logic_audit.json",
+          "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 12815,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
-          "quality": "consistent"
+          "bytes": 8278,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:41+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
-          "path": "data/daily/agent_verification_report.json",
+          "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5122,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06,
+          "bytes": 35115,
+          "lineage": "2026-07-27T09:48:24+00:00",
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
         {
-          "path": "data/daily/institutional_analytics.json",
+          "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 24397,
-          "lineage": "2026-07-27T05:50:25+00:00",
-          "as_of": "2026-07-27T05:50:28+00:00",
-          "age_hours": 2.06
-        },
-        {
-          "path": "data/history.json",
-          "required": false,
-          "status": "pass",
-          "bytes": 11260
+          "bytes": 22186,
+          "as_of": "2026-07-27T09:48:45+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -606,11 +573,6 @@
           "status": "pass",
           "reason": null,
           "missing": []
-        },
-        {
-          "name": "mixed_surface_disclosure",
-          "status": "pass",
-          "reason": null
         },
         {
           "name": "local_links",
@@ -634,7 +596,7 @@
       "criticality": "medium",
       "role": "保存可重用的概念、標的、來源、假說、反證與最後驗證日期。",
       "user_question": "某個指標、公司或假說的正式定義與限制是什麼？",
-      "open_when": "看不懂名詞、需要追溯定義，或要深化每日延伸觀點時。",
+      "open_when": "看不懂名詞、需要追溯定義，或要深化洞察日誌觀點時。",
       "cadence": "研究變更時",
       "surface_type": "governed_knowledge",
       "owner_action": "keep",
@@ -643,7 +605,7 @@
           "path": "wiki/manifest.json",
           "required": true,
           "status": "pass",
-          "bytes": 5423
+          "bytes": 5601
         }
       ],
       "status": "pass",
@@ -696,8 +658,8 @@
     {
       "id": "site-governance",
       "path": "site-overview.html",
-      "title": "專區總覽",
-      "title_contains": "專區總覽",
+      "title": "系統治理",
+      "title_contains": "系統治理",
       "lifecycle": "active",
       "criticality": "high",
       "role": "統籌每個專區的任務、資料責任、更新狀態、保留或封存決策。",
@@ -711,7 +673,7 @@
           "path": "data/site_registry.json",
           "required": true,
           "status": "pass",
-          "bytes": 14307
+          "bytes": 15305
         }
       ],
       "status": "pass",
@@ -774,7 +736,7 @@
       "cadence": "不更新",
       "surface_type": "static_archive",
       "archive_as_of": "2026-06-17",
-      "replacement": "strategy-lab",
+      "replacement": "history-lab",
       "owner_action": "archive",
       "status": "pass",
       "surface_status": "pass",

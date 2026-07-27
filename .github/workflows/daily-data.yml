@@ -31,6 +31,9 @@ jobs:
       - name: Test source failover contracts
         run: python scripts/test_source_failover.py
 
+      - name: Test four-horizon analysis contracts
+        run: python scripts/test_timescale_intelligence.py
+
       - name: Collect daily data
         env:
           SEC_USER_AGENT: "mstr-btc-bottom-report/1.0 hsin73@realtek.com"
@@ -41,6 +44,12 @@ jobs:
 
       - name: Independently verify current market universe
         run: python scripts/verify_market_universe.py
+
+      - name: Collect dual-source completed price history
+        run: python scripts/collect_timescale_data.py
+
+      - name: Verify multi-source price history
+        run: python scripts/verify_timescale_data.py
 
       - name: Verify with independent data agent
         continue-on-error: true
@@ -66,7 +75,7 @@ jobs:
               raise SystemExit("Verifier report is not bound to the current market universe")
           if report.get("status") not in {"pass", "degraded", "fail"}:
               raise SystemExit("Verifier report has an unknown status")
-          if report.get("status_scope") != "execution_and_decision_inputs_only":
+          if report.get("status_scope") != "verified_market_inputs_only":
               raise SystemExit("Verifier main status scope is invalid")
           structural = report.get("structural_context_quality", {})
           if structural.get("status") not in {"pass", "degraded", "fail"}:
@@ -81,65 +90,42 @@ jobs:
       - name: Compile guarded Wiki context
         run: python scripts/build_knowledge_context.py
 
-      - name: Generate institutional analytics
-        run: python scripts/generate_institutional_analytics.py
+      - name: Generate four-horizon market intelligence
+        run: python scripts/generate_timescale_intelligence.py
 
-      - name: Audit decision logic
-        run: python scripts/audit_decision_logic.py
+      - name: Verify four-horizon math, lineage, and scope
+        run: python scripts/verify_timescale_intelligence.py
 
-      - name: Attach logic audit to analytics
-        run: python scripts/generate_institutional_analytics.py
-
-      - name: Validate fail-closed decision publication
+      - name: Validate analysis-only publication contract
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          analytics = json.loads(Path("data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
-          audit = json.loads(Path("data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
+          analysis = json.loads(Path("data/daily/timescale_intelligence.json").read_text(encoding="utf-8-sig"))
+          analysis_verification = json.loads(Path("data/daily/timescale_intelligence_verification.json").read_text(encoding="utf-8-sig"))
+          history = json.loads(Path("data/daily/timescale_intelligence_history.json").read_text(encoding="utf-8-sig"))
           context = json.loads(Path("data/daily/knowledge_context.json").read_text(encoding="utf-8-sig"))
           snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
-          verification = json.loads(Path("data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
-          lineage = snapshot.get("generated_at")
-          if not lineage or analytics.get("snapshot_generated_at") != lineage or audit.get("snapshot_generated_at") != lineage:
-              raise SystemExit("Derived analytics are not bound to the current snapshot")
+          if analysis.get("snapshot_generated_at") != snapshot.get("generated_at"):
+              raise SystemExit("Four-horizon analysis is not bound to the current snapshot")
+          if analysis_verification.get("analysis_generated_at") != analysis.get("generated_at") or analysis_verification.get("status") != "pass":
+              raise SystemExit("Four-horizon analysis verification is missing or failed")
+          if analysis.get("quality", {}).get("execution_gate_eligible") is not False:
+              raise SystemExit("Research analysis must never be execution-gate eligible")
+          mode = analysis.get("quality", {}).get("publication_mode")
+          if mode not in {"analysis_only", "diagnostics_only"}:
+              raise SystemExit("Four-horizon publication mode is invalid")
+          if mode == "analysis_only" and set(analysis.get("horizons", {})) != {"daily", "weekly", "monthly", "quarterly"}:
+              raise SystemExit("Analysis-only publication does not contain all four horizons")
+          if mode == "diagnostics_only" and (analysis.get("horizons") or analysis.get("exclusive_insights")):
+              raise SystemExit("Diagnostics-only publication exposes conclusions")
+          if not history.get("items") or history["items"][-1].get("generated_at") != analysis.get("generated_at"):
+              raise SystemExit("Append-only history is not bound to the current analysis")
           required_page_keys = {"slug", "title", "confidence", "last_verified", "quality_flags", "analysis_use", "decision_inputs"}
           if any(not required_page_keys.issubset(page) for page in context.get("pages", [])):
               raise SystemExit("Knowledge context contract is incomplete")
-          summary = analytics.get("decision_brief", {}).get("summary_cards", [])
-          action = next((item for item in summary if item.get("id") == "today_action"), {})
-          publication_mode = analytics.get("quality", {}).get("publication_mode")
-          verification_status = verification.get("status")
-          if verification_status == "fail":
-              brief = analytics.get("decision_brief", {})
-              if publication_mode != "diagnostics_only" or action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", ""):
-                  raise SystemExit("Unsafe publication: failed verification did not switch to diagnostics-only")
-              if brief.get("exclusive_signals") or brief.get("consensus_signals"):
-                  raise SystemExit("Unsafe publication: failed verification still exposes decision signals")
-          elif verification_status == "degraded" and publication_mode not in {"research_only", "diagnostics_only"}:
-              # diagnostics_only 比 research_only 更保守（它連決策訊號都不揭露），
-              # 所以在 degraded 之下採用它是合規的，不是違規。
-              # 這兩者會同時出現：generate_institutional_analytics 在
-              # `not logic_consistent` 時就升級成 diagnostics_only，與 verification
-              # 狀態是否 degraded 無關。2026-07-26 實測即為此組合——
-              # logic_audit status=review / failed_invariants=1 → diagnostics_only，
-              # 而 verification=degraded，舊條件把「更嚴格」判成「不安全」而中止發布。
-              raise SystemExit(f"Unsafe publication: degraded verification is {publication_mode}, expected research_only or stricter")
-          if audit.get("status") != "consistent":
-              brief = analytics.get("decision_brief", {})
-              if publication_mode != "diagnostics_only" or action.get("tone") != "bad" or "封鎖" not in action.get("plain_read", ""):
-                  raise SystemExit("Unsafe publication: logic audit failed without diagnostics-only publication")
-              if brief.get("exclusive_signals") or brief.get("consensus_signals"):
-                  raise SystemExit("Unsafe publication: failed logic audit still exposes decision signals")
-          btc_model = snapshot.get("metrics", {}).get("btc_standard", {})
-          model_validated = btc_model.get("model_status") == "validated" and btc_model.get("calibrated") is True
-          if not model_validated and "auto_trade" not in audit.get("decision", {}).get("blocked_actions", []):
-              raise SystemExit("Unsafe publication: unvalidated BTC model did not block auto_trade")
-          print(f"Safe publication validated: logic={audit.get('status')} knowledge_pages={len(context.get('pages', []))}")
+          print(f"Analysis-only publication validated: mode={mode} horizons={len(analysis.get('horizons', {}))} knowledge_pages={len(context.get('pages', []))}")
           PY
-
-      - name: Generate knowledge-backed daily extensions
-        run: python scripts/generate_daily_extensions.py
 
       - name: Audit product surfaces and publish fail-closed diagnostics
         run: python scripts/audit_product_surfaces.py --allow-fail-closed-data

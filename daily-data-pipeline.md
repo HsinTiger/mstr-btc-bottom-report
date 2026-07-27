@@ -2,7 +2,7 @@
 
 ## 目的
 
-每天自動更新 MSTR/BTC/BMNR/STRC 決策資料；另以每小時管線更新 BTC／ETH 衍生品、ETF、DAT 與熱門資產／賽道。所有資料先抓取、再驗證，最後才生成前端 JSON。
+每天自動更新 BTC／ETH／MSTR／BMNR／STRC 資料，建立雙來源完成日 K、日／週／月／季趨勢、跨資產相對強弱與 append-only 洞察歷史；另以每小時管線更新衍生品、ETF、DAT 與熱門資產／賽道。所有資料先抓取、再驗證，最後才生成 analysis-only 前端 JSON。
 
 ## GitHub Actions
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render active product pages in Chrome before deployment and reject broken surfaces."""
+"""Render every active page and verify live, stale, and failed-analysis states."""
 
 from __future__ import annotations
 
@@ -9,13 +9,12 @@ import re
 import shutil
 import tempfile
 import threading
-from copy import deepcopy
 from contextlib import contextmanager
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
-from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Iterator
+from typing import Any, Iterator
 from urllib.parse import urlsplit
 
 try:
@@ -27,71 +26,24 @@ except ImportError as error:
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
-    "index.html": "今天只看四件事",
+    "index.html": "日／週／月／季一眼看懂",
     "market-monitor.html": "先看四個市場結論",
+    "analytics.html": "週期證據矩陣",
+    "dashboard.html": "近一年標準化價格",
+    "daily-extensions.html": "今天最值得追蹤的觀點",
     "x-intelligence.html": "每天精進三件事",
-    "analytics.html": "多視角證據矩陣",
-    "dashboard.html": "邏輯規格",
-    "daily-extensions.html": "今天的三個延伸觀點",
     "wiki.html": "最後驗證",
     "site-overview.html": "頁面程式",
 }
+ANALYSIS_PAGES = {"index.html", "analytics.html", "dashboard.html", "daily-extensions.html"}
+STATUS_PAGES = ANALYSIS_PAGES | {"market-monitor.html", "x-intelligence.html"}
 VIEWPORTS = {"desktop": (1440, 1000), "mobile": (390, 844)}
-CRASH_MARKERS = (
-    "Cannot read properties",
-    "治理資料失敗",
-    "知識庫載入失敗",
-    "ReferenceError",
-    "SyntaxError",
-)
+CRASH_MARKERS = ("Cannot read properties", "治理資料失敗", "知識庫載入失敗", "ReferenceError", "SyntaxError")
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, format: str, *args: object) -> None:
         return
-
-
-class BodyText(HTMLParser):
-    def __init__(self) -> None:
-        super().__init__()
-        self.skip_depth = 0
-        self.parts: list[str] = []
-
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        if tag in {"script", "style"}:
-            self.skip_depth += 1
-
-    def handle_endtag(self, tag: str) -> None:
-        if tag in {"script", "style"} and self.skip_depth:
-            self.skip_depth -= 1
-
-    def handle_data(self, data: str) -> None:
-        if not self.skip_depth:
-            self.parts.append(data)
-
-    def text(self) -> str:
-        return " ".join(" ".join(self.parts).split())
-
-
-def browser_path() -> str:
-    candidates = [
-        shutil.which(name)
-        for name in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome")
-    ]
-    if os.name == "nt":
-        candidates.extend(
-            str(path)
-            for path in (
-                Path(os.environ.get("PROGRAMFILES", "")) / "Google/Chrome/Application/chrome.exe",
-                Path(os.environ.get("PROGRAMFILES(X86)", "")) / "Google/Chrome/Application/chrome.exe",
-                Path(os.environ.get("LOCALAPPDATA", "")) / "Google/Chrome/Application/chrome.exe",
-            )
-            if path.is_file()
-        )
-    browser = next((candidate for candidate in candidates if candidate and Path(candidate).is_file()), None)
-    if not browser:
-        raise SystemExit("Chrome/Chromium executable not found")
-    return browser
 
 
 @contextmanager
@@ -129,13 +81,7 @@ class BrowserRenderer:
         self.browser = self.playwright.chromium.launch(
             executable_path=executable_path,
             headless=True,
-            args=[
-                "--disable-dev-shm-usage",
-                "--no-sandbox",
-                "--disable-background-networking",
-                "--disable-component-update",
-                "--disable-extensions",
-            ],
+            args=["--disable-dev-shm-usage", "--no-sandbox", "--disable-background-networking", "--disable-extensions"],
         )
 
     def close(self) -> None:
@@ -150,339 +96,164 @@ class BrowserRenderer:
         try:
             page.goto(url, wait_until="networkidle", timeout=45_000)
             page_name = Path(urlsplit(url).path).name
-            if page_name in {
-                "index.html",
-                "market-monitor.html",
-                "x-intelligence.html",
-                "analytics.html",
-                "dashboard.html",
-                "daily-extensions.html",
-            }:
+            if page_name in STATUS_PAGES:
                 page.wait_for_function(
-                    """() => ['pass', 'degraded', 'fail'].includes(
+                    """() => ['pass','degraded','unconfigured','fail'].includes(
                         document.body.dataset.renderStatus || document.documentElement.dataset.renderStatus
                     )""",
-                    timeout=10_000,
+                    timeout=12_000,
                 )
             else:
-                page.wait_for_timeout(250)
+                page.wait_for_timeout(300)
             if page_errors:
                 raise RuntimeError(f"瀏覽器 JavaScript 錯誤：{page_errors[-1]}")
-            layout = page.evaluate(
-                """() => ({
-                    documentClientWidth: document.documentElement.clientWidth,
-                    documentScrollWidth: document.documentElement.scrollWidth,
-                    bodyClientWidth: document.body.clientWidth,
-                    bodyScrollWidth: document.body.scrollWidth,
-                })"""
-            )
+            layout = page.evaluate("""() => ({
+                documentClientWidth: document.documentElement.clientWidth,
+                documentScrollWidth: document.documentElement.scrollWidth,
+                bodyClientWidth: document.body.clientWidth,
+                bodyScrollWidth: document.body.scrollWidth,
+            })""")
             return page.locator("body").inner_text(), page.content(), layout
         finally:
             context.close()
+
+
+def browser_path() -> str:
+    candidates = [shutil.which(name) for name in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome")]
+    if os.name == "nt":
+        candidates.extend(
+            str(path)
+            for path in (
+                Path(os.environ.get("PROGRAMFILES", "")) / "Google/Chrome/Application/chrome.exe",
+                Path(os.environ.get("PROGRAMFILES(X86)", "")) / "Google/Chrome/Application/chrome.exe",
+                Path(os.environ.get("LOCALAPPDATA", "")) / "Google/Chrome/Application/chrome.exe",
+            )
+            if path.is_file()
+        )
+    executable = next((candidate for candidate in candidates if candidate and Path(candidate).is_file()), None)
+    if not executable:
+        raise SystemExit("Chrome/Chromium executable not found")
+    return executable
 
 
 def assert_no_horizontal_overflow(layout: dict[str, int], label: str) -> None:
     document_overflow = layout["documentScrollWidth"] - layout["documentClientWidth"]
     body_overflow = layout["bodyScrollWidth"] - layout["bodyClientWidth"]
     if document_overflow > 1 or body_overflow > 1:
-        raise RuntimeError(
-            f"{label} 水平溢位：document +{document_overflow}px、body +{body_overflow}px"
-        )
+        raise RuntimeError(f"{label} 水平溢位：document +{document_overflow}px、body +{body_overflow}px")
 
 
-def shift_datetime_strings(value: object, delta: timedelta) -> object:
-    if isinstance(value, dict):
-        return {key: shift_datetime_strings(item, delta) for key, item in value.items()}
-    if isinstance(value, list):
-        return [shift_datetime_strings(item, delta) for item in value]
-    if isinstance(value, str) and "T" in value:
-        try:
-            parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-            if parsed.tzinfo is None:
-                parsed = parsed.replace(tzinfo=timezone.utc)
-            return (parsed + delta).isoformat()
-        except ValueError:
-            return value
-    return value
+def render_status(dom: str) -> str | None:
+    match = re.search(r'data-render-status="(pass|degraded|unconfigured|fail)"', dom)
+    return match.group(1) if match else None
+
+
+def shift_time(value: str, hours: float) -> str:
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    return (parsed + timedelta(hours=hours)).isoformat()
+
+
+def validate_base_page(
+    page_name: str,
+    expected_text: str,
+    body: str,
+    dom: str,
+    layout: dict[str, int],
+    live_values: list[str],
+    viewport: str,
+) -> None:
+    if expected_text not in body:
+        raise RuntimeError(f"必要畫面文字缺漏：{expected_text}")
+    markers = [marker for marker in CRASH_MARKERS if marker in body]
+    if markers:
+        raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
+    missing_values = [value for value in live_values if value not in body]
+    if missing_values:
+        raise RuntimeError(f"資料未渲染：{', '.join(missing_values)}")
+    assert_no_horizontal_overflow(layout, f"{viewport} {page_name}")
+    links = set(re.findall(r'href="([^"#?]+)', dom, flags=re.IGNORECASE))
+    missing_navigation = [target for target in PAGES if target not in links]
+    if missing_navigation:
+        raise RuntimeError(f"主要導航缺漏：{', '.join(missing_navigation)}")
+    if page_name in ANALYSIS_PAGES:
+        status = render_status(dom)
+        if status not in {"pass", "degraded"}:
+            raise RuntimeError(f"分析頁狀態不可讀：{status}")
+        if 'data-conclusions-visible="true"' not in dom or 'data-execution-grade="false"' not in dom:
+            raise RuntimeError("分析頁未維持 analysis-only 可讀契約")
+    if page_name == "market-monitor.html":
+        status = render_status(dom)
+        if status not in {"pass", "degraded"} or 'data-conclusions-visible="true"' not in dom:
+            raise RuntimeError("即時市場品質契約未通過")
+        if 'data-core-checks="14/14"' not in dom or 'data-page-overflow="false"' not in dom:
+            raise RuntimeError("即時市場核心欄位或版面契約未通過")
+    if page_name == "x-intelligence.html":
+        status = render_status(dom)
+        if status not in {"pass", "degraded", "unconfigured"}:
+            raise RuntimeError("AI 情報狀態不可讀")
+        if 'data-category-count="3"' not in dom or 'data-action-count="3"' not in dom:
+            raise RuntimeError("AI 情報三分類或三個行動未完整載入")
 
 
 def main() -> int:
     renderer = BrowserRenderer(browser_path())
     failures: list[dict[str, str]] = []
     results: list[dict[str, str]] = []
-    snapshot = json.loads((ROOT / "data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
-    market_universe = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
-    prices = snapshot.get("metrics", {}).get("prices", {})
-    mstr_metrics = snapshot.get("metrics", {}).get("mstr_metrics", {})
-    live_value_expectations = {
-        "index.html": [
-            str(snapshot.get("date")),
-            f"{float(mstr_metrics['common_equity_price_to_nav']):.2f}x",
-        ],
-        "market-monitor.html": [
-            f"${float(market_universe['assets']['BTC']['price_usd']):,.2f}",
-            f"${float(market_universe['assets']['ETH']['price_usd']):,.2f}",
-        ],
-        "analytics.html": [
-            str(snapshot.get("date")),
-            f"${float(prices['btc_usd']):,.0f}",
-            f"{float(mstr_metrics['common_equity_price_to_nav']):.2f}x",
-        ],
-        "dashboard.html": [str(snapshot.get("date"))],
-        "daily-extensions.html": [
-            str(snapshot.get("date")),
-            f"BTC ${float(prices['btc_usd']):,.0f}",
-            f"MSTR ${float(prices['mstr_usd']):,.2f}",
-            f"BMNR ${float(prices['bmnr_usd']):,.2f}",
-        ],
+    analysis = json.loads((ROOT / "data/daily/timescale_intelligence.json").read_text(encoding="utf-8-sig"))
+    analysis_verification = json.loads((ROOT / "data/daily/timescale_intelligence_verification.json").read_text(encoding="utf-8-sig"))
+    market = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
+    daily_key = analysis["horizons"]["daily"]["key_number"]
+    first_insight = analysis["exclusive_insights"][0]["title"]
+    live_values = {
+        "index.html": [analysis["date"], daily_key, first_insight],
+        "market-monitor.html": [f"${market['assets']['BTC']['price_usd']:,.2f}", f"${market['assets']['ETH']['price_usd']:,.2f}"],
+        "analytics.html": [analysis["date"], daily_key, first_insight],
+        "dashboard.html": [analysis["date"], str(analysis["record_advantage"]["observations"])],
+        "daily-extensions.html": [analysis["date"], first_insight],
     }
     with tempfile.TemporaryDirectory(prefix="product-smoke-") as profile, server() as base_url:
         for viewport, (width, height) in VIEWPORTS.items():
-            for page, expected in PAGES.items():
+            for page_name, expected_text in PAGES.items():
                 try:
-                    body = ""
                     for attempt in range(2):
-                        page_profile = Path(profile) / f"{viewport}-{page}-{attempt}"
-                        page_profile.mkdir(parents=True, exist_ok=True)
                         try:
-                            body, dom, layout = renderer.render(f"{base_url}/{page}", width, height)
+                            body, dom, layout = renderer.render(f"{base_url}/{page_name}", width, height)
                             break
                         except PlaywrightTimeoutError:
                             if attempt:
                                 raise
-                    markers = [marker for marker in CRASH_MARKERS if marker in body]
-                    if expected not in body:
-                        raise RuntimeError(f"必要畫面文字缺漏：{expected}")
-                    if markers:
-                        raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
-                    missing_live_values = [
-                        value for value in live_value_expectations.get(page, []) if value not in body
-                    ]
-                    if missing_live_values:
-                        raise RuntimeError(f"即時資料未渲染：{', '.join(missing_live_values)}")
-                    assert_no_horizontal_overflow(layout, f"{viewport} {page}")
-                    rendered_links = set(re.findall(r'href="([^"#?]+)', dom, flags=re.IGNORECASE))
-                    missing_navigation = [target for target in PAGES if target not in rendered_links]
-                    if missing_navigation:
-                        raise RuntimeError(f"渲染後主要導航缺漏：{', '.join(missing_navigation)}")
-                    if page == "index.html":
-                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
-                        if not status_match:
-                            raise RuntimeError("今日決策缺少可驗證的渲染狀態")
-                        status = status_match.group(1)
-                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
-                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
-                            raise RuntimeError("今日決策品質狀態與結論可見性不一致")
-                        if status in {"pass", "degraded"} and ("載入失敗" in body or "資料封鎖" in body):
-                            raise RuntimeError("可讀資料被錯誤封鎖")
-                    if page == "market-monitor.html":
-                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
-                        if not status_match:
-                            raise RuntimeError("市場雷達缺少可驗證的渲染狀態")
-                        status = status_match.group(1)
-                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
-                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
-                            raise RuntimeError("市場雷達品質狀態與結論可見性不一致")
-                        if status in {"pass", "degraded"} and (
-                            "載入失敗" in body
-                            or "本區所有數字已封鎖" in body
-                            or "最新資料不可用" in body
-                        ):
-                            raise RuntimeError("市場雷達可讀資料被錯誤封鎖")
-                        if status != "fail" and 'data-core-checks="14/14"' not in dom:
-                            raise RuntimeError("市場雷達核心欄位未完整渲染")
-                        if 'data-page-overflow="false"' not in dom:
-                            raise RuntimeError("市場雷達發生頁面水平溢位")
-                    if page == "dashboard.html":
-                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
-                        if not status_match:
-                            raise RuntimeError("策略研究室缺少可驗證的渲染狀態")
-                        status = status_match.group(1)
-                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
-                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
-                            raise RuntimeError("策略研究室品質狀態與每日結論可見性不一致")
-                        if status == "degraded" and 'data-execution-grade="false"' not in dom:
-                            raise RuntimeError("策略研究室降級狀態未明示只供研究")
-                    if page == "analytics.html":
-                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
-                        if not status_match:
-                            raise RuntimeError("專業分析缺少可驗證的渲染狀態")
-                        status = status_match.group(1)
-                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
-                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
-                            raise RuntimeError("專業分析品質狀態與結論可見性不一致")
-                        if status == "degraded" and ('data-execution-grade="false"' not in dom or "只供研究" not in body):
-                            raise RuntimeError("專業分析降級狀態未阻止執行級解讀")
-                    if page == "daily-extensions.html":
-                        status_match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
-                        if not status_match:
-                            raise RuntimeError("每日延伸缺少可驗證的渲染狀態")
-                        status = status_match.group(1)
-                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
-                        if f'data-conclusions-visible="{expected_visibility}"' not in dom:
-                            raise RuntimeError("每日延伸品質狀態與觀點可見性不一致")
-                        if status == "degraded" and 'data-execution-grade="false"' not in dom:
-                            raise RuntimeError("每日延伸降級狀態未阻止執行級解讀")
-                    if page == "x-intelligence.html":
-                        status_match = re.search(r'data-render-status="(pass|degraded|unconfigured|fail)"', dom)
-                        if not status_match:
-                            raise RuntimeError("X 情報缺少可驗證的渲染狀態")
-                        status = status_match.group(1)
-                        if 'data-page-overflow="false"' not in dom:
-                            raise RuntimeError("X 情報發生頁面水平溢位")
-                        if status != "fail" and 'data-category-count="3"' not in dom:
-                            raise RuntimeError("X 情報三分類未完整載入")
-                        if status != "fail" and 'data-action-count="3"' not in dom:
-                            raise RuntimeError("AI 情報每日三個精進動作未完整載入")
-                        expected_visibility = "true" if status in {"pass", "degraded"} else "false"
-                        if f'data-feed-visible="{expected_visibility}"' not in dom:
-                            raise RuntimeError("X 情報品質狀態與消息可見性不一致")
-                    results.append({"viewport": viewport, "page": page, "status": "pass"})
+                    validate_base_page(page_name, expected_text, body, dom, layout, live_values.get(page_name, []), viewport)
+                    results.append({"viewport": viewport, "page": page_name, "status": "pass"})
                 except (RuntimeError, PlaywrightError) as error:
-                    failures.append({"viewport": viewport, "page": page, "error": str(error)})
-    market_generated_at = datetime.fromisoformat(market_universe["generated_at"].replace("Z", "+00:00"))
-    freshness_target = datetime.now(timezone.utc) - timedelta(hours=2.5)
-    aged_market = shift_datetime_strings(deepcopy(market_universe), freshness_target - market_generated_at)
-    with tempfile.TemporaryDirectory(prefix="market-freshness-window-") as profile, server({"/data/daily/market_universe.json": aged_market}) as base_url:
-        for viewport, (width, height) in VIEWPORTS.items():
-            try:
-                page_profile = Path(profile) / viewport
-                page_profile.mkdir(parents=True, exist_ok=True)
-                body, dom, layout = renderer.render(f"{base_url}/market-monitor.html", width, height)
-                assert_no_horizontal_overflow(layout, f"{viewport} market-monitor.html:freshness-window")
-                if not re.search(r'data-render-status="(?:pass|degraded)"', dom) or 'data-conclusions-visible="true"' not in dom:
-                    raise RuntimeError("市場雷達 2.5 小時更新窗被錯誤封鎖")
-                if "載入失敗" in body or "本區所有數字已封鎖" in body or "最新資料不可用" in body:
-                    raise RuntimeError("市場雷達把批次內合格來源誤判為瀏覽時逾時")
-                results.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "status": "pass"})
-            except (RuntimeError, PlaywrightError) as error:
-                failures.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "error": str(error)})
-    verification = json.loads((ROOT / "data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
-    analytics = json.loads((ROOT / "data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
-    logic = json.loads((ROOT / "data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
-    extensions = json.loads((ROOT / "data/daily/daily_extensions.json").read_text(encoding="utf-8-sig"))
-    fixture_now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-    fixture_yesterday = str((datetime.now(timezone.utc) + timedelta(hours=8)).date() - timedelta(days=1))
-    cross_day_snapshot = {**deepcopy(snapshot), "date": fixture_yesterday, "generated_at": fixture_now}
-    cross_day_verification = {
-        **deepcopy(verification),
-        "date": fixture_yesterday,
-        "verified_at": fixture_now,
-        "snapshot_generated_at": fixture_now,
-        "status": "pass",
-        "failures": [],
-        "degradations": [],
-    }
-    cross_day_logic = {**deepcopy(logic), "date": fixture_yesterday, "generated_at": fixture_now, "snapshot_generated_at": fixture_now, "status": "consistent"}
-    cross_day_analytics = {
-        **deepcopy(analytics),
-        "date": fixture_yesterday,
-        "generated_at": fixture_now,
-        "snapshot_generated_at": fixture_now,
-        "quality": {
-            **deepcopy(analytics.get("quality", {})),
-            "verification_status": "pass",
-            "verification_date_matches_snapshot": True,
-            "verification_bound_to_snapshot": True,
-            "publication_mode": "full",
-            "logic_audit_status": "consistent",
-        },
-        "logic_audit": {**deepcopy(analytics.get("logic_audit", {})), "status": "consistent"},
-    }
-    cross_day_extensions = deepcopy(extensions)
-    extension_date_delta = (
-        datetime.fromisoformat(fixture_yesterday).date()
-        - datetime.fromisoformat(extensions["current_date"]).date()
-    )
-    for collection_name in ("visible_window", "items"):
-        for item in cross_day_extensions.get(collection_name, []):
-            if item.get("date"):
-                item["date"] = (
-                    datetime.fromisoformat(item["date"]).date() + extension_date_delta
-                ).isoformat()
-    cross_day_extensions.update(
-        {
-            "current_date": fixture_yesterday,
-            "updated_at": fixture_now,
-            "snapshot_generated_at": fixture_now,
-        }
-    )
+                    failures.append({"viewport": viewport, "page": page_name, "error": str(error)})
+
+    failed_verification = {**deepcopy(analysis_verification), "status": "fail", "failures": ["fixture failure"]}
+    stale_analysis = deepcopy(analysis)
+    stale_analysis["generated_at"] = shift_time(analysis["generated_at"], -31)
+    stale_verification = {**deepcopy(analysis_verification), "analysis_generated_at": stale_analysis["generated_at"]}
     fixtures = [
-        {
-            "name": "degraded",
-            "verification": {**verification, "status": "degraded", "failures": [], "degradations": ["測試：主要來源受限，備援來源已接手"]},
-            "analytics": {**analytics, "quality": {**analytics.get("quality", {}), "verification_status": "degraded"}},
-            "logic": logic,
-            "expected_status": "degraded",
-            "should_show": True,
-        },
-        {
-            "name": "fail",
-            "verification": {**verification, "status": "fail", "failures": [], "degradations": []},
-            "analytics": {**analytics, "quality": {**analytics.get("quality", {}), "verification_status": "fail"}},
-            "logic": logic,
-            "expected_status": "fail",
-            "should_show": False,
-        },
-        {
-            "name": "logic-mismatch",
-            "verification": verification,
-            "analytics": analytics,
-            "logic": {**logic, "status": "contradiction"},
-            "expected_status": "fail",
-            "should_show": False,
-        },
-        {
-            "name": "cross-day-fresh",
-            "verification": cross_day_verification,
-            "analytics": cross_day_analytics,
-            "logic": cross_day_logic,
-            "expected_status": "degraded",
-            "should_show": True,
-            "expected_calendar_lag": "1",
-            "extra_overrides": {
-                "/data/daily/latest_snapshot.json": cross_day_snapshot,
-                "/data/daily/daily_extensions.json": cross_day_extensions,
-            },
-        },
+        ("verification-fail", {
+            "/data/daily/timescale_intelligence_verification.json": failed_verification,
+        }),
+        ("stale-analysis", {
+            "/data/daily/timescale_intelligence.json": stale_analysis,
+            "/data/daily/timescale_intelligence_verification.json": stale_verification,
+        }),
     ]
-    for fixture in fixtures:
-        fixture_name = fixture["name"]
-        expected_status = fixture["expected_status"]
-        should_show = fixture["should_show"]
-        overrides = {
-            "/data/daily/agent_verification_report.json": fixture["verification"],
-            "/data/daily/institutional_analytics.json": fixture["analytics"],
-            "/data/daily/logic_audit.json": fixture["logic"],
-        }
-        overrides.update(fixture.get("extra_overrides", {}))
-        with tempfile.TemporaryDirectory(prefix=f"quality-gate-{fixture_name}-") as profile, server(overrides) as base_url:
+    for fixture_name, overrides in fixtures:
+        with server(overrides) as base_url:
             for viewport, (width, height) in VIEWPORTS.items():
-                for page in ("index.html", "dashboard.html", "analytics.html", "daily-extensions.html"):
+                for page_name in ANALYSIS_PAGES:
                     try:
-                        page_profile = Path(profile) / viewport / page.replace(".html", "")
-                        page_profile.mkdir(parents=True, exist_ok=True)
-                        body, dom, layout = renderer.render(f"{base_url}/{page}", width, height)
-                        assert_no_horizontal_overflow(layout, f"{viewport} {page}:{fixture_name}")
-                        if f'data-render-status="{expected_status}"' not in dom:
-                            raise RuntimeError(f"{fixture_name} fixture 未呈現預期狀態 {expected_status}")
-                        if f'data-conclusions-visible="{str(should_show).lower()}"' not in dom:
-                            raise RuntimeError(f"{fixture_name} fixture 結論可見性錯誤")
-                        if should_show and ("載入失敗" in body or "資料封鎖" in body or "每日資料失敗" in body):
-                            raise RuntimeError("可讀 fixture 被錯誤封鎖")
-                        if fixture.get("expected_calendar_lag") and f'data-calendar-lag-days="{fixture["expected_calendar_lag"]}"' not in dom:
-                            raise RuntimeError(f"{fixture_name} fixture 缺少跨日狀態標記")
-                        if not should_show and page == "index.html" and ("資料封鎖" not in body or "全部交易封鎖" not in body):
-                            raise RuntimeError("首頁故障 fixture 未封鎖交易結論")
-                        if not should_show and page == "dashboard.html" and ("FAIL CLOSED" not in body or "所有交易動作封鎖" not in body or "已封鎖" not in body):
-                            raise RuntimeError("策略研究室故障 fixture 未封鎖每日數字")
-                        if not should_show and page == "analytics.html" and ("FAIL CLOSED" not in body or "所有交易動作封鎖" not in body):
-                            raise RuntimeError("專業分析故障 fixture 未封鎖交易結論")
-                        if not should_show and page == "daily-extensions.html" and ("FAIL CLOSED" not in body or "三個延伸觀點已封鎖" not in body):
-                            raise RuntimeError("每日延伸故障 fixture 未封鎖研究觀點")
-                        results.append({"viewport": viewport, "page": f"{page}:{fixture_name}", "status": "pass"})
+                        body, dom, layout = renderer.render(f"{base_url}/{page_name}", width, height)
+                        assert_no_horizontal_overflow(layout, f"{viewport} {page_name}:{fixture_name}")
+                        if render_status(dom) != "fail" or 'data-conclusions-visible="false"' not in dom:
+                            raise RuntimeError(f"{fixture_name} 未 fail closed")
+                        if "封鎖" not in body and "不可用" not in body:
+                            raise RuntimeError(f"{fixture_name} 未顯示清楚診斷")
+                        results.append({"viewport": viewport, "page": f"{page_name}:{fixture_name}", "status": "pass"})
                     except (RuntimeError, PlaywrightError) as error:
-                        failures.append({"viewport": viewport, "page": f"{page}:{fixture_name}", "error": str(error)})
+                        failures.append({"viewport": viewport, "page": f"{page_name}:{fixture_name}", "error": str(error)})
     renderer.close()
     print(json.dumps({"browser": renderer.executable_path, "checks": len(results), "failures": failures}, ensure_ascii=False))
     return 1 if failures else 0

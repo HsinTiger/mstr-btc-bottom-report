@@ -1,109 +1,33 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="app-section" content="daily-extension" />
-<meta name="app-purpose" content="用已驗證資料與知識庫提出三個延伸觀點及三日對比" />
-<meta name="app-update" content="每日" />
-<title>每日延伸｜MSTR/BTC 研究</title>
-<style>
-:root{--bg:#080b12;--panel:#101827;--panel2:#0d1320;--text:#eaf0ff;--muted:#8fa0bd;--line:#24314a;--blue:#58a6ff;--green:#3fb950;--yellow:#d29922;--red:#f85149;--purple:#bc8cff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#17233a 0,#080b12 42%,#05070c 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",Arial,sans-serif;line-height:1.55}
-a{color:var(--blue);text-decoration:none}header{position:sticky;top:0;z-index:5;display:flex;gap:14px;align-items:center;justify-content:space-between;padding:16px 18px;background:rgba(8,11,18,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}h1{font-size:1.1rem;margin:0}.sub{color:var(--muted);font-size:.82rem}.wrap{max-width:1180px;margin:0 auto;padding:18px}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.card{background:linear-gradient(180deg,rgba(16,24,39,.95),rgba(9,14,24,.95));border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 36px rgba(0,0,0,.22)}.card h2,.card h3{margin:.1rem 0 .65rem}.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:#0d1320;color:var(--muted);font-size:.78rem}.ok{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.view{border-left:4px solid var(--blue)}.view:nth-child(2){border-left-color:var(--yellow)}.view:nth-child(3){border-left-color:var(--purple)}.label{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.big{font-size:1.75rem;font-weight:800;margin:.25rem 0}.mini{font-size:.88rem;color:var(--muted)}.quote{padding:10px 12px;border-radius:12px;background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.25);margin-top:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.day{min-height:160px}.day.today{border-color:rgba(63,185,80,.65)}ul{margin:.35rem 0 0;padding-left:1.1rem}li{margin:.3rem 0}.src{font-size:.78rem;color:var(--muted);word-break:break-word}.error{border-color:rgba(248,81,73,.45);background:rgba(248,81,73,.08)}footer{padding:20px;color:var(--muted);font-size:.78rem;text-align:center}@media(max-width:820px){header{align-items:flex-start;flex-direction:column}.hero,.grid,.three{grid-template-columns:1fr}.wrap{padding:12px}.big{font-size:1.45rem}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="app-section" content="insight-journal">
+  <meta name="app-purpose" content="保存每日獨家觀點、變化、反證與四週期狀態對比。">
+  <meta name="app-update" content="每日完成 K 棒後更新">
+  <title>洞察日誌｜市場觀點如何隨時間修正</title>
+  <link rel="stylesheet" href="assets/intelligence.css">
 </head>
 <body>
-<header>
-  <div><h1>每日延伸｜資料驗證後的三個觀點</h1><div class="sub">本專區回答：今天除了既有結論，還有哪三個值得追蹤的新觀點？</div></div>
-  <nav class="sub" aria-label="全站主要專區"><a href="index.html">今日決策</a> ｜ <a href="market-monitor.html">市場雷達</a> ｜ <a href="x-intelligence.html">AI 情報</a> ｜ <a href="analytics.html">專業分析</a> ｜ <a href="dashboard.html">策略研究室</a> ｜ <a href="daily-extensions.html">每日延伸</a> ｜ <a href="wiki.html">知識庫</a> ｜ <a href="site-overview.html">專區總覽</a></nav>
-</header>
-<main class="wrap">
-  <section class="hero">
-    <div class="card">
-      <span class="pill" id="updated">載入中</span>
-      <h2 id="decision">等待資料</h2>
-      <div class="mini" id="summary">每日 GitHub Actions 會抓資料、驗證、產出三個延伸觀點。</div>
-      <div class="quote" id="verifyBox">驗證代理狀態載入中。</div>
-    </div>
-    <div class="card">
-      <h3>今日核心數據</h3>
-      <div class="big" id="btcPrice">—</div>
-      <div class="mini" id="priceLine">BTC / MSTR / BMNR / STRC</div>
-      <div class="mini" id="mnavLine" style="margin-top:8px">普通股安全邊際／企業價值安全邊際／現金覆蓋／賣幣壓力／STRC 信任票</div>
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:14px">
-    <h2>今天的三個延伸觀點</h2>
-    <div class="grid" id="views"></div>
-  </section>
-
-  <section class="card" style="margin-top:14px">
-    <h2>昨天 / 今天 / 明天 對比</h2>
-    <div class="three" id="window"></div>
-  </section>
-
-  <section class="card" style="margin-top:14px">
-    <h2>wiki_llm study inputs</h2>
-    <div class="mini">每日觀點會明確引用我們知識庫的概念層，不讓數據變成無脈絡的雜訊。</div>
-    <ul id="wikiInputs"></ul>
-  </section>
+<header class="hero"><div class="shell"><div class="hero-grid"><div><div class="eyebrow">Daily Insight Ledger</div><h1>洞察日誌</h1><p><b>本專區回答：</b>今天新增或改變了哪些獨家觀點？它們的證據、反證與前一個相異日期相比有何不同？</p></div><div class="hero-stat"><span class="label">今日觀點</span><strong id="insightCount">—</strong><span class="mini" id="updated">載入中</span></div></div><nav class="nav" aria-label="全站主要專區"><a href="index.html">四週期總覽</a><a href="market-monitor.html">即時市場</a><a href="analytics.html">週期分析</a><a href="dashboard.html">時序研究</a><a class="active" href="daily-extensions.html">洞察日誌</a><a href="x-intelligence.html">AI 情報</a><a href="wiki.html">知識庫</a><a href="site-overview.html">系統治理</a></nav><div class="quality" id="quality">載入洞察 ledger…</div></div></header>
+<main class="shell">
+  <section class="section"><div class="section-head"><div><h2>今天最值得追蹤的觀點</h2><p>不是靈感作文；每項都綁數字、證據、前次變化與反證。</p></div><span class="pill">Analysis-only</span></div><div class="grid grid-3" id="todayInsights"></div></section>
+  <section class="section"><div class="section-head"><div><h2>四週期狀態變化</h2><p>最近三個相異日期並排，避免把同日 rerun 誤認為新市場訊號。</p></div><span class="pill">Distinct dates</span></div><div class="grid grid-3" id="comparison"></div></section>
+  <section class="section"><div class="section-head"><div><h2>歷次修訂</h2><p>同日資料刷新保留 supersedes；不靜默覆蓋先前觀察。</p></div><span class="pill">Revision trail</span></div><div class="table-wrap"><table id="revisions"></table></div></section>
 </main>
-<footer>非投資建議。自動化資料可能延遲或缺漏；重大倉位調整前仍需人工覆核 SEC/公司公告與券商成交資料。</footer>
+<footer class="footer shell">洞察日誌只保存研究判讀與反證，不產生交易建議。</footer>
 <script>
-const fmt=(v,d=2)=>v===null||v===undefined||Number.isNaN(Number(v))?'N/A':Number(v).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
-const pct=v=>v===null||v===undefined?'N/A':(Number(v)*100).toFixed(1)+'%';
-const cls=s=>s==='pass'?'ok':(s==='fail'?'bad':'warn');
-const decisionLabel=value=>({block_leveraged_add:'MSTR 合約禁開',research_only:'只供研究',observe:'持續觀察'})[value]||value||'資料不足';
-const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const esc=value=>String(value??'—').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const pct=value=>value==null?'—':`${Number(value)>=0?'+':''}${(Number(value)*100).toFixed(1)}%`;
 async function json(path){const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
-function requireFresh(value,maxHours,label){const timestamp=new Date(value);if(!value||Number.isNaN(timestamp.getTime()))throw new Error(`${label} 時間戳缺漏或格式錯誤`);const ageHours=(Date.now()-timestamp.getTime())/36e5;if(ageHours < -1||ageHours > maxHours)throw new Error(`${label} 已過期或時間位於未來`)}
-function taipeiDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
-function requireRecentDataDate(value,label){const lagDays=(Date.parse(taipeiDate())-Date.parse(value))/864e5;if(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isInteger(lagDays)||lagDays<0||lagDays>1)throw new Error(`${label} 日期超出今日或昨日容許範圍`);return lagDays}
-async function load(){
-  const [ext,snap,verify,logic,analytics]=await Promise.all([
-    json('data/daily/daily_extensions.json'),
-    json('data/daily/latest_snapshot.json'),
-    json('data/daily/agent_verification_report.json'),
-    json('data/daily/logic_audit.json'),
-    json('data/daily/institutional_analytics.json')
-  ]);
-  if(ext.schema!==2||snap.schema!==2||verify.schema!==2||logic.schema!==1||analytics.schema!==2)throw new Error('每日資料 schema 不相容');
-  if(!ext.current_date||ext.current_date!==snap.date||verify.date!==snap.date||logic.date!==snap.date||analytics.date!==snap.date)throw new Error('每日資料跨檔日期不一致');
-  const calendarLagDays=requireRecentDataDate(ext.current_date,'每日延伸');
-  if(verify.snapshot_generated_at!==snap.generated_at)throw new Error('驗證報告未綁定目前快照');
-  if(ext.snapshot_generated_at!==snap.generated_at||logic.snapshot_generated_at!==snap.generated_at||analytics.snapshot_generated_at!==snap.generated_at)throw new Error('每日延伸未綁定目前快照');
-  requireFresh(ext.updated_at,30,'每日延伸');requireFresh(snap.generated_at,30,'每日快照');requireFresh(verify.verified_at,30,'驗證報告');requireFresh(logic.generated_at,30,'邏輯稽核');requireFresh(analytics.generated_at,30,'機構分析');
-  if(!['pass','degraded','fail'].includes(verify.status))throw new Error('驗證狀態不相容');
-  if(verify.status==='fail'||(verify.failures||[]).length)throw new Error(`驗證失敗：${(verify.failures||[])[0]||'必要資料未通過'}`);
-  if(analytics.quality?.verification_status!==verify.status||analytics.quality?.verification_bound_to_snapshot!==true)throw new Error('分析與驗證狀態未綁定同一批次');
-  if(logic.status!=='consistent'||analytics.quality?.logic_audit_status!==logic.status||analytics.logic_audit?.status!==logic.status)throw new Error('決策邏輯交叉欄位未通過一致性稽核');
-  if(!['full','research_only'].includes(analytics.quality?.publication_mode))throw new Error('分析發布模式不允許顯示延伸觀點');
-  const today=ext.items?.find(x=>x.date===ext.current_date)||ext.items?.at(-1);
-  if(!today||!Array.isArray(today.viewpoints)||today.viewpoints.length!==3)throw new Error('今日三個延伸觀點缺漏');
-  if(!Array.isArray(ext.visible_window)||ext.visible_window.length!==3)throw new Error('昨天／今天／明天視窗不完整');
-  const m=snap.metrics.mstr_metrics, p=snap.metrics.prices;
-  const calendarLagged=calendarLagDays>0,effectiveStatus=verify.status==='degraded'||calendarLagged?'degraded':'pass',effectiveMode=calendarLagged?'research_only':analytics.quality.publication_mode;
-  document.body.dataset.renderStatus=effectiveStatus;document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade=effectiveMode==='full'?'true':'false';document.body.dataset.dataDate=ext.current_date;document.body.dataset.calendarLagDays=String(calendarLagDays);
-  document.getElementById('updated').textContent=`資料日 ${ext.current_date}｜更新 ${new Date(ext.updated_at).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false})}${calendarLagged?'｜跨日待今日批次':''}`;
-  const action=analytics.decision_brief?.summary_cards?.find(item=>item.id==='today_action');
-  document.getElementById('decision').textContent=calendarLagged?'跨日待更新｜三個觀點只供研究':verify.status==='pass'?decisionLabel(snap.decision.state):`資料驗證${verify.status==='fail'?'失敗':'降級'}｜三個觀點只供研究`;
-  document.getElementById('summary').textContent=calendarLagged?`目前顯示 ${ext.current_date} 最近可用批次；${taipeiDate()} 主批次尚未完成。所有加碼與硬觸發封鎖。`:action?.plain_read||(snap.decision.reasons||[]).join('；');
-  const verifyBox=document.getElementById('verifyBox');verifyBox.className=`quote ${verify.status==='fail'?'error':''}`;verifyBox.innerHTML=`資料驗證代理：<b class="${cls(verify.status)}">${esc(verify.status.toUpperCase())}</b>｜降級 ${(verify.degradations||[]).length}｜警告 ${verify.warnings?.length||0}｜失敗 ${verify.failures?.length||0}<br><span class="mini">${esc([...(verify.degradations||[]),...(verify.failures||[])].slice(0,2).join('；')||'資料完整')}</span>`;
-  document.getElementById('btcPrice').textContent=`BTC $${fmt(p.btc_usd,0)}`;
-  document.getElementById('priceLine').textContent=`MSTR $${fmt(p.mstr_usd)}｜BMNR $${fmt(p.bmnr_usd)}｜STRC $${fmt(p.strc_usd)}`;
-  const saleBasis=String(m.sale_ratio_basis||'').includes('reconciliation_zero')?'完整週對帳推定':'直接揭露';
-  document.getElementById('mnavLine').textContent=`普通股安全邊際 ${fmt(m.equity_mnav)}x｜企業價值安全邊際 ${fmt(m.enterprise_mnav)}x｜保守儲備覆蓋 ${fmt(m.coverage_months,1)}月｜7日已報告賣幣壓力 ${fmt(m.sale_ratio,1)}x（${saleBasis}）｜STRC 信任票 ${pct(m.strc_discount)}`;
-  document.getElementById('views').innerHTML=today.viewpoints.map(v=>`<article class="card view"><div class="label">${esc(v.lens)}｜信心 ${esc(v.confidence)}</div><h3>${esc(v.title)}</h3><p><b>主張：</b>${esc(v.claim)}</p><p><b>重要性：</b>${esc(v.so_what)}</p><div class="quote"><b>研究：</b>${esc(v.study_note)}</div></article>`).join('');
-  document.getElementById('window').innerHTML=(ext.visible_window||[]).map(item=>{
-    if(item.type==='tomorrow_watch') return `<article class="card day"><div class="label">明天 ${esc(item.date)}</div><h3>${esc(item.title)}</h3><ul>${(item.watch_items||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></article>`;
-    const first=item.viewpoints?.[0]; const dayCls=item.date===ext.current_date?' today':'';
-    return `<article class="card day${dayCls}"><div class="label">${item.date===ext.current_date?'今天':'昨天'} ${esc(item.date)}</div><h3>${esc(item.decision_state||'—')}</h3><p>${esc(first?.title||'尚無資料')}</p><div class="mini">驗證：${esc(item.verification_status)}</div></article>`;
-  }).join('');
-  document.getElementById('wikiInputs').innerHTML=(today.wiki_study_inputs||[]).map(x=>`<li>${esc(x)}</li>`).join('');
-}
-load().catch(err=>{document.body.dataset.renderStatus='fail';document.body.dataset.conclusionsVisible='false';document.body.dataset.executionGrade='false';document.getElementById('updated').textContent='資料失敗';document.getElementById('decision').textContent='所有交易與延伸結論封鎖';document.getElementById('summary').textContent=`${err.message}；不沿用舊觀點。`;document.getElementById('verifyBox').className='quote error';document.getElementById('verifyBox').textContent='FAIL CLOSED｜只顯示資料診斷';document.getElementById('btcPrice').textContent='已封鎖';document.getElementById('priceLine').textContent='必要資料未通過';document.getElementById('mnavLine').textContent='今日數字已停用';document.getElementById('views').innerHTML='<div class="card error">三個延伸觀點已封鎖</div>';document.getElementById('window').innerHTML='<div class="card error">今日資料失敗，不用舊觀點代替</div>';document.getElementById('wikiInputs').innerHTML='<li>等待資料修復並重新驗證</li>'});
+function fresh(value,maxHours){const stamp=new Date(value);if(!value||Number.isNaN(stamp.getTime())||(Date.now()-stamp.getTime())/36e5>maxHours)throw new Error('洞察分析已過期或時間戳無效')}
+function insight(item){return `<article class="card"><div class="label">${esc(item.title)}｜信心 ${esc(item.confidence)}</div><div class="number">${esc(item.key_number)}</div><div class="read">${esc(item.claim)}</div><div class="change">${esc(item.what_changed)}</div><ul class="evidence">${(item.evidence||[]).map(value=>`<li>${esc(value)}</li>`).join('')}</ul><div class="falsifier">下一次驗證：${esc(item.falsifier)}</div></article>`}
+function distinctLatest(items){const result=[];const seen=new Set;for(const item of [...items].reverse()){if(item.date&&!seen.has(item.date)){seen.add(item.date);result.push(item)}if(result.length===3)break}return result.reverse()}
+function dayCard(item,index,total){const label=index===total-1?'今天':index===total-2?'前一觀察日':'更早';return `<article class="card"><div class="label">${label}｜${esc(item.date)}｜r${esc(item.revision)}</div><div class="headline">${esc(item.alignment?.dominant_state)}</div>${['daily','weekly','monthly','quarterly'].map(key=>`<div class="metric" style="margin-top:7px"><b>${esc(item.horizons?.[key]?.status)}</b><span>${key}｜BTC ${pct(item.horizons?.[key]?.btc_return)}</span></div>`).join('')}</article>`}
+function fail(message){document.body.dataset.renderStatus='fail';document.body.dataset.conclusionsVisible='false';document.body.dataset.executionGrade='false';document.getElementById('quality').className='quality fail';document.getElementById('quality').textContent=`資料封鎖：${message}`;document.getElementById('todayInsights').innerHTML='<div class="empty">洞察不可用，不沿用舊觀點。</div>'}
+async function load(){try{const[analysis,verification,history]=await Promise.all([json('data/daily/timescale_intelligence.json'),json('data/daily/timescale_intelligence_verification.json'),json('data/daily/timescale_intelligence_history.json')]);if(verification.status!=='pass'||verification.analysis_generated_at!==analysis.generated_at)throw new Error('洞察分析未通過獨立驗證');fresh(analysis.generated_at,30);if(analysis.quality?.status==='fail')throw new Error('核心分析資料失敗');const degraded=analysis.quality.status==='degraded';document.body.dataset.renderStatus=degraded?'degraded':'pass';document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade='false';document.body.dataset.dataDate=analysis.date;document.getElementById('quality').className=`quality ${degraded?'degraded':'pass'}`;document.getElementById('quality').textContent=`資料日 ${analysis.date}｜洞察驗證 PASS｜${analysis.record_advantage.distinct_dates} 個相異日期｜不足 20 日前不發布統計分位`;document.getElementById('insightCount').textContent=(analysis.exclusive_insights||[]).length;document.getElementById('updated').textContent=new Date(analysis.generated_at).toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false});document.getElementById('todayInsights').innerHTML=(analysis.exclusive_insights||[]).slice(0,3).map(insight).join('');const days=distinctLatest(history.items||[]);document.getElementById('comparison').innerHTML=days.length?days.map((item,index)=>dayCard(item,index,days.length)).join(''):'<div class="empty">第一筆觀察已建立，等待下一個相異日期。</div>';document.getElementById('revisions').innerHTML='<tr><th>日期</th><th>Revision</th><th>Generated at</th><th>修訂說明</th><th>Supersedes</th><th>狀態</th></tr>'+(history.items||[]).slice().reverse().slice(0,30).map(item=>`<tr><td>${esc(item.date)}</td><td>r${esc(item.revision)}</td><td>${esc(item.generated_at)}</td><td>${esc(item.revision_note||'舊版紀錄未附說明')}</td><td>${esc(item.supersedes_generated_at||'—')}</td><td>${esc(item.alignment?.dominant_state)}</td></tr>`).join('')}catch(error){fail(error.message)}}
+load();
 </script>
 </body>
 </html>
