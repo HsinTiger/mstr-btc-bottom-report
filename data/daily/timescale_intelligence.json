@@ -1,24 +1,22 @@
 {
   "schema": 1,
   "date": "2026-07-27",
-  "generated_at": "2026-07-27T09:48:45+00:00",
-  "snapshot_generated_at": "2026-07-27T09:48:24+00:00",
-  "market_universe_generated_at": "2026-07-27T09:48:35+00:00",
-  "price_history_generated_at": "2026-07-27T09:48:37+00:00",
+  "generated_at": "2026-07-27T09:51:41+00:00",
+  "snapshot_generated_at": "2026-07-27T09:51:37+00:00",
+  "market_universe_generated_at": "2026-07-27T09:51:39+00:00",
+  "price_history_generated_at": "2026-07-27T09:51:39+00:00",
   "quality": {
     "status": "degraded",
     "publication_mode": "analysis_only",
     "execution_gate_eligible": false,
     "failures": [],
     "degradations": [
-      "market universe: 賽道固定籃子資料不完整或跨源分歧：DeFi, Meme",
+      "market universe: 賽道固定籃子資料不完整或跨源分歧：DeFi",
       "market universe: BTC ETF 流向來源 quorum、官方主要基金差異或交易日新鮮度未通過",
       "market universe sector DeFi: cross-source return gap exceeds 1 percentage point",
       "market universe sector DeFi: status is not cross_source_verified",
-      "market universe sector Meme: cross-source return gap exceeds 1 percentage point",
-      "market universe sector Meme: status is not cross_source_verified",
-      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.28% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
-      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 6.12% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "MSTR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 3.38% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
+      "BMNR equity: Yahoo=regular_market_close、Nasdaq=extended_hours_realtime 報價基準不同，差距 6.14% 不列為硬失敗；每日快照以 Yahoo regular-market close 為主，Nasdaq 作延伸時段/備援檢查",
       "BTC ETF flow sample verification unavailable; not eligible as hard trigger"
     ],
     "lineage_bound": true,
@@ -98,7 +96,7 @@
         {
           "name": "衍生品擁擠",
           "direction": "mixed",
-          "key_number": "+7.9%",
+          "key_number": "+7.7%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid"
         },
@@ -178,7 +176,7 @@
         "return_acceleration": -0.06009004056943856,
         "distance_from_fast_average": 0.005207191632345287,
         "distance_from_slow_average": 0.0322405186648036,
-        "trend_r_squared": 0.7108669932086275,
+        "trend_r_squared": 0.7108669932086276,
         "realized_volatility_annualized": 0.3006144404238248,
         "range_position": 0.4462655873650766,
         "drawdown_from_range_high": -0.11408791097278681
@@ -373,7 +371,7 @@
         "distance_from_fast_average": 0.005207191632345287,
         "distance_from_slow_average": 0.0322405186648036,
         "trend_return": 0.09336689314328117,
-        "trend_r_squared": 0.7108669932086275,
+        "trend_r_squared": 0.7108669932086276,
         "realized_volatility_annualized": 0.3006144404238248,
         "range_position": 0.4462655873650766,
         "drawdown_from_range_high": -0.11408791097278681,
@@ -830,7 +828,7 @@
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF 3 源未過",
-      "claim": "BTC 週線 -1.8%、ETF 3 個來源仍未通過 quorum、永續資金費率年化 +7.9%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 -1.8%、ETF 3 個來源仍未通過 quorum、永續資金費率年化 +7.7%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -863,7 +861,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 9,
+    "observations": 10,
     "distinct_dates": 1,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
