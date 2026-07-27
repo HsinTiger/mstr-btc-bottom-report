@@ -1,49 +1,54 @@
 {
   "schema": 2,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-26T06:50:34+00:00",
-  "date": "2026-07-26",
-  "batch_id": "2026-07-26T06:11:21+00:00",
-  "raw_generated_at": "2026-07-26T06:11:21+00:00",
-  "snapshot_generated_at": "2026-07-26T06:11:21+00:00",
-  "market_universe_generated_at": "2026-07-26T06:50:34+00:00",
+  "verified_at": "2026-07-27T02:59:13+00:00",
+  "date": "2026-07-27",
+  "batch_id": "2026-07-27T02:59:07+00:00",
+  "raw_generated_at": "2026-07-27T02:59:07+00:00",
+  "snapshot_generated_at": "2026-07-27T02:59:07+00:00",
+  "market_universe_generated_at": "2026-07-27T02:59:13+00:00",
   "status": "degraded",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
   "degradations": [
     "market universe: 賽道固定籃子資料不完整或跨源分歧：Meme",
     "market universe: BTC ETF 流向來源 quorum、官方主要基金差異或交易日新鮮度未通過",
+    "market universe: BTC 長期結構證據層有限可用；不參與交易放行",
     "market universe sector Meme: cross-source return gap exceeds 1 percentage point",
     "market universe sector Meme: status is not cross_source_verified",
-    "BTC ETF flow sample verification unavailable; not eligible as hard trigger"
+    "BTC MVRV: observation unavailable",
+    "BTC ETF flow sample verification unavailable; not eligible as hard trigger",
+    "BTC standard inputs missing: btc_mvrv_current",
+    "BTC standard coverage ratio insufficient: 0.6"
   ],
   "warnings": [],
   "evidence": [
     "BTC DAT reconstructed status=representative_cross_source_verified providers=4 coverage=0.7514071434467372 gap=0.0010356340980455514",
     "ETH DAT reconstructed status=representative_cross_source_verified providers=3 coverage=0.8533802342953365 gap=0.003887192342718766",
-    "market universe quality=degraded score=94 sources=67 age_hours=0.00",
-    "BTC spot median=64321.72 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.01%",
-    "ETH spot median=1881.44 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.07%",
-    "BTC MVRV as_of=2026-07-25 age_days=1",
-    "Strategy BTC holdings as_of=2026-07-19 age_days=7",
-    "Strategy latest complete disclosed week sales as_of=2026-07-19 age_days=7",
-    "BMNR treasury holdings as_of=2026-07-19 age_days=7",
+    "market universe quality=degraded score=91 sources=67 age_hours=0.00",
+    "BTC spot median=65125.3 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.01%",
+    "ETH spot median=1941.45 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.02%",
+    "Strategy BTC holdings as_of=2026-07-19 age_days=8",
+    "Strategy latest complete disclosed week sales as_of=2026-07-19 age_days=8",
+    "BMNR treasury holdings as_of=2026-07-19 age_days=8",
     "MSTR Yahoo/Nasdaq=91.67/91.67; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "BMNR Yahoo/Nasdaq=15.79/15.79; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "STRC Yahoo/Nasdaq=86.885/86.885; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=144",
     "ETH ETF sample verified validation_sources=3.0 completeness=1.0 official_gap=0.0007700518932920881 official_coverage=0.36324786324786323 backup_gap=0.0 backup_coverage=1.0",
-    "BTC standard=偏冷等待區 score=-8.2",
-    "BMNR gross treasury=11506.27398996m market_cap_to_gross=0.8202568241896011 as_of=2026-07-19"
+    "BTC standard=資料不足觀察區 score=-8.2",
+    "BMNR gross treasury=11853.1461857m market_cap_to_gross=0.7962527090610267 as_of=2026-07-19"
   ],
   "structural_context_quality": {
-    "status": "pass",
+    "status": "degraded",
     "scope": "structural_context_only",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [],
+    "degradations": [
+      "BTC supply uses market-cap/price fallback instead of the primary on-chain snapshot"
+    ],
     "evidence": [
-      "BTC thesis gold_ratio=0.04485014055560456 stablecoin_supply=306745944216.71 company_supply_share=0.06405626470836846"
+      "BTC thesis gold_ratio=0.04509997826336872 stablecoin_supply=122373928343.48 company_supply_share=0.06405930990320259"
     ],
     "verification_scope": "independent formula, lineage, ETF evidence and DAT consensus reconstruction; upstream HTTP responses are not all re-fetched"
   },

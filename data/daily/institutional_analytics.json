@@ -1,18 +1,25 @@
 {
   "schema": 2,
-  "date": "2026-07-26",
-  "generated_at": "2026-07-26T06:11:28+00:00",
-  "snapshot_generated_at": "2026-07-26T06:11:21+00:00",
+  "date": "2026-07-27",
+  "generated_at": "2026-07-27T02:59:13+00:00",
+  "snapshot_generated_at": "2026-07-27T02:59:07+00:00",
   "quality": {
     "verification_status": "degraded",
     "publication_mode": "diagnostics_only",
     "verification_date_matches_snapshot": true,
     "verification_bound_to_snapshot": true,
-    "confidence": "中",
-    "confidence_score_0_100": 77,
+    "confidence": "中低",
+    "confidence_score_0_100": 61,
     "degradations": [
+      "market universe: 賽道固定籃子資料不完整或跨源分歧：Meme",
       "market universe: BTC ETF 流向來源 quorum、官方主要基金差異或交易日新鮮度未通過",
-      "BTC ETF flow sample verification unavailable; not eligible as hard trigger"
+      "market universe: BTC 長期結構證據層有限可用；不參與交易放行",
+      "market universe sector Meme: cross-source return gap exceeds 1 percentage point",
+      "market universe sector Meme: status is not cross_source_verified",
+      "BTC MVRV: observation unavailable",
+      "BTC ETF flow sample verification unavailable; not eligible as hard trigger",
+      "BTC standard inputs missing: btc_mvrv_current",
+      "BTC standard coverage ratio insufficient: 0.6"
     ],
     "warnings": [],
     "knowledge_status": "ok",
@@ -34,7 +41,7 @@
       {
         "id": "data_quality",
         "label": "規則式資料契約分數",
-        "key_number": "77/100",
+        "key_number": "61/100",
         "plain_read": "邏輯稽核未通過；停止所有行動結論。",
         "tone": "bad"
       }
@@ -75,14 +82,14 @@
     "exclusive_signals": [],
     "consensus_signals": [],
     "record_advantage": {
-      "historical_snapshots": 11,
+      "historical_snapshots": 12,
       "date_range": [
         "2026-07-07",
-        "2026-07-26"
+        "2026-07-27"
       ],
-      "previous_observation_date": "2026-07-25",
+      "previous_observation_date": "2026-07-26",
       "current_model_version": "2.0.0",
-      "comparable_model_observations": 5,
+      "comparable_model_observations": 6,
       "uses": [
         "計算前次價格變化與 MSTR 相對 BTC 動能",
         "保存每日驗證、資料降級與決策狀態供追溯",
