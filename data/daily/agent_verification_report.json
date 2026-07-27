@@ -1,19 +1,17 @@
 {
   "schema": 2,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-27T05:28:56+00:00",
+  "verified_at": "2026-07-27T05:50:28+00:00",
   "date": "2026-07-27",
-  "batch_id": "2026-07-27T05:28:43+00:00",
-  "raw_generated_at": "2026-07-27T05:28:43+00:00",
-  "snapshot_generated_at": "2026-07-27T05:28:43+00:00",
-  "market_universe_generated_at": "2026-07-27T05:28:54+00:00",
+  "batch_id": "2026-07-27T05:50:25+00:00",
+  "raw_generated_at": "2026-07-27T05:50:25+00:00",
+  "snapshot_generated_at": "2026-07-27T05:50:25+00:00",
+  "market_universe_generated_at": "2026-07-27T05:50:27+00:00",
   "status": "degraded",
   "status_scope": "execution_and_decision_inputs_only",
   "failures": [],
   "degradations": [
-    "market universe: 賽道固定籃子資料不完整或跨源分歧：DeFi, Meme",
-    "market universe sector DeFi: cross-source return gap exceeds 1 percentage point",
-    "market universe sector DeFi: status is not cross_source_verified",
+    "market universe: 賽道固定籃子資料不完整或跨源分歧：Meme",
     "market universe sector Meme: cross-source return gap exceeds 1 percentage point",
     "market universe sector Meme: status is not cross_source_verified"
   ],
@@ -21,9 +19,9 @@
   "evidence": [
     "BTC DAT reconstructed status=representative_cross_source_verified providers=4 coverage=0.7514071434467372 gap=0.0010356340980455514",
     "ETH DAT reconstructed status=representative_cross_source_verified providers=3 coverage=0.8533802342953365 gap=0.003887192342718766",
-    "market universe quality=degraded score=97 sources=74 age_hours=0.00",
-    "BTC spot median=65343.8 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.02%",
-    "ETH spot median=1956.98 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.02%",
+    "market universe quality=degraded score=97 sources=68 age_hours=0.00",
+    "BTC spot median=65300.1 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.02%",
+    "ETH spot median=1957.55 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.02%",
     "BTC MVRV as_of=2026-07-26 age_days=1",
     "Strategy BTC holdings as_of=2026-07-19 age_days=8",
     "Strategy latest complete disclosed week sales as_of=2026-07-19 age_days=8",
@@ -32,10 +30,10 @@
     "BMNR Yahoo/Nasdaq=15.79/15.79; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "STRC Yahoo/Nasdaq=86.885/86.885; basis=regular_market_close/regular_or_delayed_quote; gap=0.00%",
     "SEC latest form=144",
-    "BTC ETF sample verified validation_sources=3.0 completeness=1.0 official_gap=0.006993554987119414 official_coverage=0.9471733086190918 backup_gap=0.049428935731531974 backup_coverage=1.0",
+    "BTC ETF sample verified validation_sources=3.0 completeness=1.0 official_gap=0.006504204055813898 official_coverage=0.9471488178025035 backup_gap=0.049428935731531974 backup_coverage=1.0",
     "ETH ETF sample verified validation_sources=3.0 completeness=1.0 official_gap=0.0007700518932920881 official_coverage=0.36324786324786323 backup_gap=0.0 backup_coverage=1.0",
     "BTC standard=偏冷等待區 score=-5.6",
-    "BMNR gross treasury=11942.91549324m market_cap_to_gross=0.7902676500224932 as_of=2026-07-19"
+    "BMNR gross treasury=11946.1996041m market_cap_to_gross=0.7900503987913272 as_of=2026-07-19"
   ],
   "structural_context_quality": {
     "status": "pass",
@@ -44,7 +42,7 @@
     "failures": [],
     "degradations": [],
     "evidence": [
-      "BTC thesis gold_ratio=0.045285906680407745 stablecoin_supply=306254409854.7 company_supply_share=0.06405480791525776"
+      "BTC thesis gold_ratio=0.045295708150445535 stablecoin_supply=306254409854.7 company_supply_share=0.06405480791525776"
     ],
     "verification_scope": "independent formula, lineage, ETF evidence and DAT consensus reconstruction; upstream HTTP responses are not all re-fetched"
   },
