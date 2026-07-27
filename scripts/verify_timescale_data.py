@@ -228,8 +228,8 @@ def main() -> int:
     print(json.dumps({
         "output": str(OUTPUT_PATH),
         "status": report["status"],
-        "failures": len(report["failures"]),
-        "degradations": len(report["degradations"]),
+        "failures": report["failures"],
+        "degradations": report["degradations"],
     }, ensure_ascii=False))
     return 1 if report["status"] == "fail" else 0
 
