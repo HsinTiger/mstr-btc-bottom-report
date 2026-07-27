@@ -18,6 +18,7 @@
 | `analytics.html` | 四週期多視角證據、跨資產矩陣與資料對帳 |
 | `dashboard.html` | 原始價格路徑、標準化曲線與歷史 revisions |
 | `daily-extensions.html` | 每日洞察、前次變化與反證 ledger |
+| `x-intelligence.html` | AI 應用與變現、工程方法、模型進展三類官方情報與每日三個行動 |
 | `wiki.html` | 指標、公司與假說的治理知識庫 |
 | `site-overview.html` | 頁面責任、資料健康與生命週期治理 |
 

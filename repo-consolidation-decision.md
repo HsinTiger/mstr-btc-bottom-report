@@ -29,7 +29,7 @@
 | 機構級 IC memo | `institutional-ic-memo-v3.md` |
 | 合約波段策略 | `contract-swing-strategy-v2.md` |
 | 主交易體系 | `btc-trading-system.md` |
-| 監控紀錄 | `monitor-log.md`、`data/history.json` |
+| 監控紀錄 | `monitor-log.md`、`data/daily/timescale_price_history.json`、`data/daily/timescale_intelligence_history.json` |
 
 ## 後續操作建議
 

@@ -6,9 +6,6 @@
   "data_contracts": {
     "data/daily/latest_snapshot.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "batch_id", "metrics"], "lineage_source_field": "generated_at"},
     "data/daily/agent_verification_report.json": {"schema_value": 2, "required_fields": ["date", "verified_at", "batch_id", "snapshot_generated_at", "market_universe_generated_at", "status"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/institutional_analytics.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality", "decision_brief"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/logic_audit.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "status", "decision"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/daily_extensions.json": {"schema_value": 2, "required_fields": ["current_date", "updated_at", "snapshot_generated_at", "visible_window", "items"], "lineage_field": "snapshot_generated_at"},
     "data/daily/market_universe.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "snapshot_generated_at", "source_batch_id", "quality", "quality.validation_summary", "quality.freshness_contract", "assets", "derivatives", "etf", "dat", "sources"]},
     "data/daily/market_universe_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "market_date", "market_generated_at", "status", "failures", "degradations"]},
     "data/daily/market_universe_history.json": {"schema_value": 2, "required_fields": ["updated_at"]},
@@ -20,11 +17,8 @@
     "data/daily/ai_intelligence.json": {"schema_value": 1, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.provider", "quality.execution_gate_eligible", "summary.posts", "summary.successful_sources", "source_checks", "daily_actions", "categories"]},
     "data/daily/ai_intelligence_history.json": {"schema_value": 1, "required_fields": ["last_attempt_at", "quality.status", "items"]},
     "data/daily/ai_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts", "successful_sources", "daily_actions"]},
-    "data/daily/x_intelligence.json": {"schema_value": 1, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.endpoint", "quality.execution_gate_eligible", "summary.posts", "summary.unique_sources", "categories"]},
-    "data/daily/x_intelligence_history.json": {"schema_value": 1, "required_fields": ["last_attempt_at", "quality.status", "items"]},
-    "data/daily/x_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts"]},
-    "wiki/manifest.json": {"schema_value": 1, "required_fields": ["updated", "pages"]},
-    "data/history.json": {"required_fields": ["series"]}
+    "data/daily/site_health.json": {"schema_value": 1, "required_fields": ["generated_at", "status", "summary", "pages"]},
+    "wiki/manifest.json": {"schema_value": 1, "required_fields": ["updated", "pages"]}
   },
   "pages": [
     {
@@ -71,7 +65,7 @@
       "title_contains": "AI 情報",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "以官方 feeds、GitHub Releases 與 arXiv 為主，X 為可選事件雷達，每天提出三個可執行 AI 精進動作。",
+      "role": "以官方 feeds、GitHub Releases 與 arXiv 維護 AI 應用與變現、工程方法、模型進展三類情報，每天提出三個可執行精進動作。",
       "user_question": "今天有哪些最新 AI 用法、工程方法與模型進展值得實際測試？",
       "open_when": "每天想精進 AI 工作流時；先看三個行動，再讀完整消息與來源。",
       "cadence": "每日 08:37（台北時間）",
@@ -79,9 +73,7 @@
       "owner_action": "keep",
       "dependencies": [
         {"path": "data/daily/ai_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/ai_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/x_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": false},
-        {"path": "data/daily/x_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": false}
+        {"path": "data/daily/ai_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
       ]
     },
     {
@@ -140,6 +132,7 @@
         {"path": "data/daily/timescale_price_history.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/timescale_data_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/timescale_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/timescale_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/timescale_intelligence_history.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true}
       ]
     },
@@ -174,40 +167,9 @@
       "surface_type": "product_governance",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/site_registry.json", "required": true}
+        {"path": "data/site_registry.json", "required": true},
+        {"path": "data/daily/site_health.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
       ]
-    },
-    {
-      "id": "legacy-leverage-plan",
-      "path": "leverage-2x-plan.html",
-      "title": "舊版 2 倍槓桿計畫",
-      "title_contains": "兩倍槓桿做多計畫",
-      "lifecycle": "archive",
-      "criticality": "low",
-      "role": "保留 2026-06-17 的舊版假設與行為紀錄，不再代表目前 2.5 倍 MSTR 合約體系。",
-      "user_question": "舊版槓桿計畫當時如何思考？",
-      "open_when": "只在回顧歷史決策時。",
-      "cadence": "不更新",
-      "surface_type": "static_archive",
-      "archive_as_of": "2026-06-17",
-      "replacement": "history-lab",
-      "owner_action": "archive"
-    },
-    {
-      "id": "legacy-spacex-lesson",
-      "path": "spacex-lesson.html",
-      "title": "SpaceX 行為紀錄",
-      "title_contains": "SpaceX IPO",
-      "lifecycle": "archive",
-      "criticality": "low",
-      "role": "保留單次投資行為省思，不屬於 BTC／MSTR／BMNR 每日決策系統。",
-      "user_question": "當時如何處理恐懼與不敢出手？",
-      "open_when": "只在回顧投資心理時。",
-      "cadence": "不更新",
-      "surface_type": "static_archive",
-      "archive_as_of": "2026-06-17",
-      "replacement": "knowledge-base",
-      "owner_action": "archive"
     }
   ]
 }

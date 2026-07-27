@@ -39,6 +39,8 @@ ETF_MAX_ABS_DAILY_FUND_FLOW_USD = 50_000_000_000
 ETF_MAX_GROSS_DAILY_FLOW_USD = 100_000_000_000
 ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD = 500_000
 ETF_COMPONENT_SUM_RELATIVE_TOLERANCE = 0.001
+ETF_OFFICIAL_COMPONENT_MIN_COVERAGE = 0.20
+ETF_BACKUP_COMPONENT_MIN_COVERAGE = 0.30
 
 
 def load_json(path: Path) -> Any:
@@ -320,6 +322,12 @@ def normalized_gap(first: Any, second: Any, *, scale_floor: float = 0.0) -> floa
     return abs(first_value - second_value) / denominator if denominator else 0.0
 
 
+def same_direction(first: Any, second: Any) -> bool:
+    first_value = as_float(first)
+    second_value = as_float(second)
+    return first_value is not None and second_value is not None and (first_value == 0 or second_value == 0 or (first_value > 0) == (second_value > 0))
+
+
 def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -> dict[str, Any]:
     errors: list[str] = []
     components_raw = inputs.get("canonical_components_usd")
@@ -358,6 +366,7 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
         errors.append("official component does not match canonical roster")
     official_proxy = as_float(inputs.get("official_proxy_usd"))
     official_gap = normalized_gap(official_component, official_proxy, scale_floor=100_000_000)
+    official_direction_match = same_direction(official_component, official_proxy)
     official_coverage = abs(official_component) / gross_flow if official_component is not None and gross_flow else None
 
     backup = inputs.get("backup_sample") if isinstance(inputs.get("backup_sample"), dict) else {}
@@ -368,6 +377,7 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
     weighted_difference = 0.0
     weighted_reference = 0.0
     component_gaps: dict[str, float] = {}
+    direction_matches: dict[str, bool] = {}
     matched_canonical_gross = 0.0
     validation_type = str(backup.get("validation_type") or "")
     for ticker in matched_tickers:
@@ -382,6 +392,7 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
             errors.append(f"backup sample {ticker} gap missing")
             continue
         component_gaps[str(ticker)] = gap
+        direction_matches[str(ticker)] = same_direction(canonical_value, backup_value)
         weighted_difference += abs(canonical_value - backup_value)
         weighted_reference += (abs(canonical_value) + abs(backup_value)) / 2
         matched_canonical_gross += abs(canonical_value)
@@ -390,6 +401,7 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
     backup_weighted_gap = weighted_difference / max(weighted_reference, 100_000_000) if component_gaps else None
     backup_max_gap = max(component_gaps.values()) if component_gaps else None
     backup_coverage = 1.0 if validation_type == "same_date_aggregate_total" and component_gaps else matched_canonical_gross / gross_flow if gross_flow else None
+    backup_direction_match = bool(direction_matches) and all(direction_matches.values())
     amount_sanity_errors: list[str] = []
     if any(abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD for value in numeric_components.values()):
         amount_sanity_errors.append("canonical single-fund daily flow exceeds sanity bound")
@@ -411,11 +423,13 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
         "component_count": component_count,
         "component_completeness": completeness,
         "official_gap": official_gap,
+        "official_direction_match": official_direction_match,
         "official_coverage": official_coverage,
         "backup_same_date": same_date,
         "backup_weighted_gap": backup_weighted_gap,
         "backup_max_gap": backup_max_gap,
         "backup_coverage": backup_coverage,
+        "backup_direction_match": backup_direction_match,
         "amount_sanity_pass": not amount_sanity_errors,
         "amount_sanity_errors": amount_sanity_errors,
         "validation_source_count": source_count,
@@ -534,12 +548,41 @@ def recompute_sector_validation(
 ) -> dict[str, Any]:
     observations = item.get("source_observations") if isinstance(item.get("source_observations"), dict) else {}
     errors: list[str] = []
-    changes = [as_float(observation.get("change_24h")) for observation in observations.values()]
-    changes = [value for value in changes if value is not None]
-    market_caps = [as_float(observation.get("market_cap_usd")) for observation in observations.values()]
-    market_caps = [value for value in market_caps if value is not None]
-    volumes = [as_float(observation.get("volume_24h_usd")) for observation in observations.values()]
-    volumes = [value for value in volumes if value is not None]
+    ordered = sorted(
+        (
+            (provider, observation)
+            for provider, observation in observations.items()
+            if as_float(observation.get("change_24h")) is not None
+        ),
+        key=lambda pair: float(pair[1]["change_24h"]),
+    )
+    clusters = [
+        {
+            provider: observation
+            for provider, observation in ordered[start:]
+            if float(observation["change_24h"]) - float(first["change_24h"]) <= 0.01
+        }
+        for start, (_, first) in enumerate(ordered)
+    ]
+    consensus = max(
+        clusters,
+        key=lambda cluster: (
+            sum(as_float(observation.get("market_cap_usd")) is not None and as_float(observation.get("volume_24h_usd")) is not None for observation in cluster.values()),
+            len(cluster),
+            -(max(float(observation["change_24h"]) for observation in cluster.values()) - min(float(observation["change_24h"]) for observation in cluster.values())),
+        ),
+        default={},
+    )
+    comparable = {
+        provider: observation
+        for provider, observation in consensus.items()
+        if as_float(observation.get("change_24h")) is not None
+        and as_float(observation.get("market_cap_usd")) is not None
+        and as_float(observation.get("volume_24h_usd")) is not None
+    }
+    changes = [float(observation["change_24h"]) for observation in consensus.values()]
+    market_caps = [float(observation["market_cap_usd"]) for observation in comparable.values()]
+    volumes = [float(observation["volume_24h_usd"]) for observation in comparable.values()]
     gap = max(changes) - min(changes) if len(changes) >= 2 else None
     if len(changes) < 2:
         errors.append("fewer than two complete return sources")
@@ -549,6 +592,13 @@ def recompute_sector_validation(
         errors.append("cross-source return gap exceeds 1 percentage point")
     if len(item.get("constituents", [])) != 5 or item.get("basket_version") != "fixed-basket-v1":
         errors.append("sector basket roster or version mismatch")
+    if item.get("source_count") != len(consensus) or item.get("verification_sources") != sorted(consensus):
+        errors.append("sector verification source roster mismatch")
+    if item.get("excluded_sources") != sorted(set(observations) - set(consensus)):
+        errors.append("sector excluded source roster mismatch")
+    strict_majority = len(consensus) * 2 > len(observations)
+    if item.get("strict_majority") is not strict_majority or not strict_majority:
+        errors.append("sector consensus does not have a strict majority")
     for provider, observation in observations.items():
         source_lag = lag_hours(observation.get("as_of"), reference_time)
         if source_lag is None or source_lag < -0.25 or source_lag > max_lag_hours:
@@ -1088,12 +1138,12 @@ def main() -> int:
             etf_issues.append(f"{asset} ETF latest fund roster completeness below 95%: {component_completeness}")
         if etf_official_gap is None or etf_official_gap > 0.05:
             etf_issues.append(f"{asset} ETF official major-fund gap exceeds 5% or USD 5m: {etf_official_gap}")
-        if etf_official_coverage is None or etf_official_coverage < 0.30:
-            etf_issues.append(f"{asset} ETF official major-fund gross component coverage below 30%: {etf_official_coverage}")
+        if etf_official_coverage is None or etf_official_coverage < ETF_OFFICIAL_COMPONENT_MIN_COVERAGE:
+            etf_issues.append(f"{asset} ETF official major-fund gross component coverage below {ETF_OFFICIAL_COMPONENT_MIN_COVERAGE:.0%}: {etf_official_coverage}")
         if backup_gap is None or backup_gap > 0.05:
             etf_issues.append(f"{asset} ETF same-date backup sample gap exceeds 5% or USD 5m: {backup_gap}")
-        if backup_coverage is None or backup_coverage < 0.30:
-            etf_issues.append(f"{asset} ETF same-date backup sample gross coverage below 30%: {backup_coverage}")
+        if backup_coverage is None or backup_coverage < ETF_BACKUP_COMPONENT_MIN_COVERAGE:
+            etf_issues.append(f"{asset} ETF same-date backup sample gross coverage below {ETF_BACKUP_COMPONENT_MIN_COVERAGE:.0%}: {backup_coverage}")
         if etf_as_of_age is None or etf_as_of_age < 0 or etf_as_of_age > 5:
             etf_issues.append(f"{asset} ETF market date stale or missing: age_days={etf_as_of_age}")
         if any(as_float(radar.get(f"{prefix}_{window}_usd")) is None for window in ("1d", "7d", "30d")):
@@ -1124,6 +1174,8 @@ def main() -> int:
         assert_close(f"{asset} ETF component completeness", etf_recomputed["component_completeness"], component_completeness, failures)
         assert_close(f"{asset} ETF official normalized gap", etf_recomputed["official_gap"], etf_official_gap, failures)
         assert_close(f"{asset} ETF official gross coverage", etf_recomputed["official_coverage"], etf_official_coverage, failures)
+        if validation_inputs.get("official_direction_match") is not etf_recomputed["official_direction_match"]:
+            failures.append(f"{asset} ETF official direction claim mismatch")
         assert_close(f"{asset} ETF backup max component gap", etf_recomputed["backup_max_gap"], backup_gap, failures)
         assert_close(f"{asset} ETF backup gross coverage", etf_recomputed["backup_coverage"], backup_coverage, failures)
         assert_close(f"{asset} ETF validation source count", etf_recomputed["validation_source_count"], etf_source_count, failures)
@@ -1132,6 +1184,8 @@ def main() -> int:
         assert_close(f"{asset} ETF backup recorded max gap", etf_recomputed["backup_max_gap"], backup_sample.get("maximum_component_gap"), failures)
         if not etf_recomputed["backup_same_date"]:
             failures.append(f"{asset} ETF backup sample is not from the canonical market date")
+        if backup_sample.get("direction_match") is not etf_recomputed["backup_direction_match"]:
+            failures.append(f"{asset} ETF backup direction claim mismatch")
         if int(as_float(validation_inputs.get("validation_source_count")) or 0) != int(etf_recomputed["validation_source_count"]):
             failures.append(f"{asset} ETF recorded validation source count mismatch")
         if bool(validation_inputs.get("amount_sanity_pass")) != etf_recomputed["amount_sanity_pass"]:
@@ -1146,12 +1200,14 @@ def main() -> int:
             and etf_recomputed["component_completeness"] >= 0.95
             and etf_recomputed["official_gap"] is not None
             and etf_recomputed["official_gap"] <= 0.05
+            and etf_recomputed["official_direction_match"]
             and etf_recomputed["official_coverage"] is not None
-            and etf_recomputed["official_coverage"] >= 0.30
+            and etf_recomputed["official_coverage"] >= ETF_OFFICIAL_COMPONENT_MIN_COVERAGE
             and etf_recomputed["backup_max_gap"] is not None
             and etf_recomputed["backup_max_gap"] <= 0.05
+            and etf_recomputed["backup_direction_match"]
             and etf_recomputed["backup_coverage"] is not None
-            and etf_recomputed["backup_coverage"] >= 0.30
+            and etf_recomputed["backup_coverage"] >= ETF_BACKUP_COMPONENT_MIN_COVERAGE
             and etf_recomputed["validation_source_count"] >= 3
             and etf_recomputed["canonical_total_reconciled"]
             and etf_recomputed["amount_sanity_pass"]

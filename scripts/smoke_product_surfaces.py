@@ -98,7 +98,7 @@ class BrowserRenderer:
             page_name = Path(urlsplit(url).path).name
             if page_name in STATUS_PAGES:
                 page.wait_for_function(
-                    """() => ['pass','degraded','unconfigured','fail'].includes(
+                    """() => ['pass','degraded','fail'].includes(
                         document.body.dataset.renderStatus || document.documentElement.dataset.renderStatus
                     )""",
                     timeout=12_000,
@@ -144,7 +144,7 @@ def assert_no_horizontal_overflow(layout: dict[str, int], label: str) -> None:
 
 
 def render_status(dom: str) -> str | None:
-    match = re.search(r'data-render-status="(pass|degraded|unconfigured|fail)"', dom)
+    match = re.search(r'data-render-status="(pass|degraded|fail)"', dom)
     return match.group(1) if match else None
 
 
@@ -189,7 +189,7 @@ def validate_base_page(
             raise RuntimeError("即時市場核心欄位或版面契約未通過")
     if page_name == "x-intelligence.html":
         status = render_status(dom)
-        if status not in {"pass", "degraded", "unconfigured"}:
+        if status not in {"pass", "degraded"}:
             raise RuntimeError("AI 情報狀態不可讀")
         if 'data-category-count="3"' not in dom or 'data-action-count="3"' not in dom:
             raise RuntimeError("AI 情報三分類或三個行動未完整載入")

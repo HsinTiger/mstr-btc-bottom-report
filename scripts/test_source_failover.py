@@ -225,13 +225,47 @@ def test_sector_basket_quorum_survives_one_provider_failure() -> None:
     for failed_provider in complete:
         sectors = compute_sector_baskets({provider: assets for provider, assets in complete.items() if provider != failed_provider}, [f"{failed_provider} unavailable"])
         assert all(item["status"] == "cross_source_verified" for item in sectors.values())
-        assert all(item["source_count"] == 3 for item in sectors.values())
+
+
+def test_sector_exchange_only_outlier_does_not_override_aggregate_consensus() -> None:
+    complete = sector_provider_fixture(providers=3)
+    complete["Binance"] = {
+        symbol: {"change_24h": 0.25, "as_of": "2026-07-27T00:00:00+00:00"}
+        for symbol in next(iter(complete.values()))
+    }
+    sectors = compute_sector_baskets(complete)
+    assert all(item["status"] == "cross_source_verified" for item in sectors.values())
+    assert all("Binance" not in item["verification_sources"] for item in sectors.values())
+    assert all(item["source_count"] == 3 for item in sectors.values())
+
+
+def test_sector_single_aggregate_outlier_is_disclosed_and_excluded() -> None:
+    complete = sector_provider_fixture(providers=4)
+    for row in complete["CoinGecko"].values():
+        row["change_24h"] = 0.20
+    sectors = compute_sector_baskets(complete)
+    assert all(item["status"] == "cross_source_verified" for item in sectors.values())
+    assert all(item["excluded_sources"] == ["CoinGecko"] for item in sectors.values())
+
+
+def test_sector_even_split_has_no_strict_majority() -> None:
+    fixture = sector_provider_fixture(providers=4)
+    for index, assets in enumerate(fixture.values()):
+        for row in assets.values():
+            row["change_24h"] = 0.10 if index < 2 else -0.10
+    sectors = compute_sector_baskets(fixture)
+    assert all(item["status"] == "unavailable" for item in sectors.values())
+    assert all(item["strict_majority"] is False for item in sectors.values())
 
 
 def test_sector_basket_single_source_and_divergence_do_not_publish() -> None:
     single = compute_sector_baskets(sector_provider_fixture(providers=1))
     assert all(item["change_24h"] is None for item in single.values())
-    divergent = compute_sector_baskets(sector_provider_fixture(providers=3, divergence=0.02))
+    divergent_fixture = sector_provider_fixture(providers=3)
+    for change, assets in zip((0.00, 0.02, 0.04), divergent_fixture.values()):
+        for row in assets.values():
+            row["change_24h"] = change
+    divergent = compute_sector_baskets(divergent_fixture)
     assert all(item["status"] == "unavailable" for item in divergent.values())
 
 
@@ -451,8 +485,10 @@ def etf_quorum(**overrides: object) -> bool:
         "canonical_provider": "The Block",
         "component_completeness": 1.0,
         "official_gap": 0.01,
+        "official_direction_match": True,
         "official_component_coverage": 0.60,
         "backup_component_gap": 0.01,
+        "backup_direction_match": True,
         "backup_component_coverage": 0.60,
         "backup_same_date": True,
         "canonical_total_reconciled": True,
@@ -474,8 +510,11 @@ def test_etf_quorum_accepts_verified_fallback_canonical() -> None:
 def test_etf_quorum_rejects_missing_backup_or_official_divergence() -> None:
     assert not etf_quorum(validation_source_count=2)
     assert not etf_quorum(official_gap=0.06)
-    assert not etf_quorum(official_component_coverage=0.20)
+    assert not etf_quorum(official_direction_match=False)
+    assert etf_quorum(official_component_coverage=0.20)
+    assert not etf_quorum(official_component_coverage=0.19)
     assert not etf_quorum(backup_component_gap=None)
+    assert not etf_quorum(backup_direction_match=False)
     assert not etf_quorum(canonical_provider="summary-only provider")
 
 
@@ -530,6 +569,21 @@ def test_etf_backup_accepts_same_date_aggregate_total() -> None:
     assert result["validation_type"] == "same_date_aggregate_total"
     assert result["gross_component_coverage"] == 1.0
     assert result["maximum_component_gap"] == 0.004
+
+
+def test_etf_backup_rejects_opposite_flow_direction() -> None:
+    result = etf_backup_sample_validation(
+        "BTC",
+        "The Block",
+        {"date": "2026-07-21", "flow_usd": 2_000_000.0, "components_usd": {"IBIT": 400_000.0, "FBTC": 1_600_000.0}},
+        {
+            "The Block": {},
+            "CoinMarketCap ETF": {"series": [{"date": "2026-07-21", "flow_usd": -2_000_000.0, "components_usd": {}}]},
+        },
+    )
+    assert result["maximum_component_gap"] <= 0.05
+    assert result["direction_match"] is False
+    assert not etf_quorum(backup_component_gap=result["maximum_component_gap"], backup_direction_match=result["direction_match"])
 
 
 def test_etf_selects_latest_fully_verified_market_date() -> None:
@@ -674,6 +728,9 @@ def main() -> int:
         test_freshness_uses_batch_time_not_view_time,
         test_warning_only_does_not_degrade_verified_batch,
         test_sector_basket_quorum_survives_one_provider_failure,
+        test_sector_exchange_only_outlier_does_not_override_aggregate_consensus,
+        test_sector_single_aggregate_outlier_is_disclosed_and_excluded,
+        test_sector_even_split_has_no_strict_majority,
         test_sector_basket_single_source_and_divergence_do_not_publish,
         test_verifier_recomputes_sector_claim,
         test_coinmetrics_uses_latest_non_null_metric_row,
@@ -694,6 +751,7 @@ def main() -> int:
         test_etf_backup_requires_same_market_date,
         test_etf_backup_rejects_extreme_same_fund_amount,
         test_etf_backup_accepts_same_date_aggregate_total,
+        test_etf_backup_rejects_opposite_flow_direction,
         test_etf_selects_latest_fully_verified_market_date,
         test_verifier_recomputes_etf_evidence,
         test_verifier_recomputes_dat_claim,

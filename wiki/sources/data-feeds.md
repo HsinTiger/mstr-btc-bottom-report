@@ -49,7 +49,8 @@ summary: 每日決策資料與每小時跨資產雷達分層更新；現貨要�
 這一層對應 [[btc-neutral-anchor]]，只作長期結構背景，不進入 [[five-dimension-model]] 的底部標準分。
 
 ## 內部產物（raw/ 層）
-- `../data/history.json` — 五維綜合溫度時間序列（前端「歷史趨勢」繪圖）
+- `../data/daily/timescale_price_history.json` — 多來源完整日 K 與日／週／月／季時序基礎
+- `../data/daily/timescale_intelligence_history.json` — append-only 洞察與同日 revision
 - `../monitor-log.md` — 每日完整報告追加
 - `../raw/kol-subtitles/` — KOL 影片字幕（[[kol-roster]]）
 - `../data-snapshot-2026-06-08.md` — 早期價格/持倉快照

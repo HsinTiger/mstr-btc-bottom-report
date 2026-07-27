@@ -33,10 +33,16 @@ CATEGORIES: list[dict[str, Any]] = [
         "terms": ["agent", "api", "app", "product", "enterprise", "customer", "pricing", "launch", "release", "developer", "codex", "chatgpt", "business", "workflow", "tool", "slack"],
     },
     {
-        "id": "engineering-model-progress",
-        "title": "工程方法與模型進展",
-        "purpose": "追蹤模型、評測、推論、訓練、框架與可重現的開源工程進展。",
-        "terms": ["model", "benchmark", "eval", "inference", "training", "reasoning", "research", "framework", "library", "release", "gpu", "performance", "latency", "open source", "weights", "agent"],
+        "id": "engineering-methods",
+        "title": "工程方法",
+        "purpose": "追蹤代理工作流、評測、推論、框架、效能與可重現的開源工程做法。",
+        "terms": ["agent", "eval", "inference", "framework", "library", "release", "gpu", "performance", "latency", "open source", "workflow", "sdk", "tool"],
+    },
+    {
+        "id": "model-progress",
+        "title": "模型進展",
+        "purpose": "追蹤模型能力、訓練、推理、權重、研究方法與基準限制。",
+        "terms": ["model", "benchmark", "eval", "inference", "training", "reasoning", "research", "weights", "architecture", "multimodal", "pretraining", "post-training"],
     },
 ]
 
@@ -44,13 +50,13 @@ SOURCES: list[dict[str, Any]] = [
     {"key": "openai-news", "label": "OpenAI News", "kind": "official_feed", "category_id": "ai-application-monetization", "url": "https://openai.com/news/rss.xml", "tier": "官方公司", "weight": 1.00},
     {"key": "google-ai-blog", "label": "Google AI Blog", "kind": "official_feed", "category_id": "ai-application-monetization", "url": "https://blog.google/technology/ai/rss/", "tier": "官方公司", "weight": 0.98},
     {"key": "cursor-changelog", "label": "Cursor Changelog", "kind": "official_feed", "category_id": "ai-application-monetization", "url": "https://www.cursor.com/changelog/rss.xml", "allowed_hosts": ["www.cursor.com", "cursor.com"], "tier": "官方產品", "weight": 0.96},
-    {"key": "vercel-ai-releases", "label": "Vercel AI SDK Releases", "kind": "github_release", "category_id": "ai-application-monetization", "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8", "tier": "官方開源專案", "weight": 0.95},
-    {"key": "deepmind-blog", "label": "Google DeepMind Blog", "kind": "official_feed", "category_id": "engineering-model-progress", "url": "https://deepmind.google/blog/rss.xml", "tier": "官方研究", "weight": 1.00},
-    {"key": "nvidia-developer", "label": "NVIDIA Developer Blog", "kind": "official_feed", "category_id": "engineering-model-progress", "url": "https://developer.nvidia.com/blog/feed/", "tier": "官方工程", "weight": 0.97},
-    {"key": "huggingface-blog", "label": "Hugging Face Blog", "kind": "official_feed", "category_id": "engineering-model-progress", "url": "https://huggingface.co/blog/feed.xml", "tier": "官方平台", "weight": 0.94},
-    {"key": "vllm-releases", "label": "vLLM Releases", "kind": "github_release", "category_id": "engineering-model-progress", "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8", "tier": "官方開源專案", "weight": 0.95},
-    {"key": "transformers-releases", "label": "Transformers Releases", "kind": "github_release", "category_id": "engineering-model-progress", "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8", "tier": "官方開源專案", "weight": 0.95},
-    {"key": "arxiv-ai", "label": "arXiv cs.AI 最新研究", "kind": "preprint_feed", "category_id": "engineering-model-progress", "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending", "allowed_hosts": ["export.arxiv.org", "arxiv.org"], "tier": "未同儕審查研究", "weight": 0.72},
+    {"key": "vercel-ai-releases", "label": "Vercel AI SDK Releases", "kind": "github_release", "category_id": "engineering-methods", "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8", "tier": "官方開源專案", "weight": 0.95},
+    {"key": "nvidia-developer", "label": "NVIDIA Developer Blog", "kind": "official_feed", "category_id": "engineering-methods", "url": "https://developer.nvidia.com/blog/feed/", "tier": "官方工程", "weight": 0.97},
+    {"key": "vllm-releases", "label": "vLLM Releases", "kind": "github_release", "category_id": "engineering-methods", "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8", "tier": "官方開源專案", "weight": 0.95},
+    {"key": "transformers-releases", "label": "Transformers Releases", "kind": "github_release", "category_id": "engineering-methods", "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8", "tier": "官方開源專案", "weight": 0.95},
+    {"key": "deepmind-blog", "label": "Google DeepMind Blog", "kind": "official_feed", "category_id": "model-progress", "url": "https://deepmind.google/blog/rss.xml", "tier": "官方研究", "weight": 1.00},
+    {"key": "huggingface-blog", "label": "Hugging Face Blog", "kind": "official_feed", "category_id": "model-progress", "url": "https://huggingface.co/blog/feed.xml", "tier": "官方平台", "weight": 0.94},
+    {"key": "arxiv-ai", "label": "arXiv cs.AI 最新研究", "kind": "preprint_feed", "category_id": "model-progress", "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending", "allowed_hosts": ["export.arxiv.org", "arxiv.org"], "tier": "未同儕審查研究", "weight": 0.72},
 ]
 
 

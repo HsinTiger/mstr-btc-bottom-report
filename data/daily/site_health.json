@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-27T11:42:04+00:00",
+  "generated_at": "2026-07-27T11:51:52+00:00",
   "status": "degraded",
   "summary": {
     "active_pages": 8,
-    "archive_pages": 2,
+    "archive_pages": 0,
     "pass": 3,
     "degraded": 5,
     "fail": 0,
@@ -13,10 +13,10 @@
     "critical_data_failures": [],
     "degraded_pages": [
       "market-overview",
-      "market-radar",
       "timescale-analysis",
       "insight-journal",
-      "history-lab"
+      "history-lab",
+      "site-governance"
     ]
   },
   "pages": [
@@ -38,10 +38,10 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 34075,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 34480,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -49,10 +49,10 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 3665,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:42+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],
@@ -120,35 +120,33 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 106109,
-          "as_of": "2026-07-27T11:42:04+00:00",
-          "age_hours": 0.0,
-          "quality": "degraded",
-          "reason": "資料品質狀態為 degraded"
+          "status": "pass",
+          "bytes": 119648,
+          "as_of": "2026-07-27T11:51:30+00:00",
+          "age_hours": 0.01,
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 484,
-          "as_of": "2026-07-27T11:42:04+00:00",
-          "age_hours": 0.0,
-          "quality": "degraded",
-          "reason": "資料品質狀態為 degraded"
+          "status": "pass",
+          "bytes": 332,
+          "as_of": "2026-07-27T11:51:31+00:00",
+          "age_hours": 0.01,
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 29409,
-          "as_of": "2026-07-27T11:42:04+00:00",
-          "age_hours": 0.0
+          "bytes": 30316,
+          "as_of": "2026-07-27T11:51:30+00:00",
+          "age_hours": 0.01
         }
       ],
-      "status": "degraded",
-      "surface_status": "degraded",
-      "data_status": "degraded",
+      "status": "pass",
+      "surface_status": "pass",
+      "data_status": "pass",
       "checks": [
         {
           "name": "page_exists",
@@ -190,11 +188,6 @@
           "status": "pass",
           "reason": null,
           "issues": []
-        },
-        {
-          "name": "dependency_wired:data/daily/market_universe_verification.json",
-          "status": "degraded",
-          "reason": "頁面未直接引用已登記依賴；需確認是否經其他產物間接供應"
         }
       ]
     },
@@ -205,7 +198,7 @@
       "title_contains": "AI 情報",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "以官方 feeds、GitHub Releases 與 arXiv 為主，X 為可選事件雷達，每天提出三個可執行 AI 精進動作。",
+      "role": "以官方 feeds、GitHub Releases 與 arXiv 維護 AI 應用與變現、工程方法、模型進展三類情報，每天提出三個可執行精進動作。",
       "user_question": "今天有哪些最新 AI 用法、工程方法與模型進展值得實際測試？",
       "open_when": "每天想精進 AI 工作流時；先看三個行動，再讀完整消息與來源。",
       "cadence": "每日 08:37（台北時間）",
@@ -216,35 +209,19 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 28017,
-          "as_of": "2026-07-27T04:23:44+00:00",
-          "age_hours": 7.31,
+          "bytes": 35155,
+          "as_of": "2026-07-27T11:51:43+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/ai_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 609,
-          "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 7.3,
+          "bytes": 648,
+          "as_of": "2026-07-27T11:51:51+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
-        },
-        {
-          "path": "data/daily/x_intelligence.json",
-          "required": false,
-          "status": "pass",
-          "bytes": 2198,
-          "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 7.3
-        },
-        {
-          "path": "data/daily/x_intelligence_verification.json",
-          "required": false,
-          "status": "pass",
-          "bytes": 683,
-          "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 7.3
         }
       ],
       "status": "pass",
@@ -312,10 +289,10 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 34075,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 34480,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -323,29 +300,29 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 3665,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:42+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 8020,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 8279,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:35+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 24257,
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84
+          "bytes": 33142,
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -413,10 +390,10 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 34075,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 34480,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -424,19 +401,19 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 3665,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:42+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 24257,
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84
+          "bytes": 33142,
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -504,40 +481,50 @@
           "path": "data/daily/timescale_price_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 1362482,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:39+00:00",
-          "age_hours": 1.84,
+          "bytes": 1408114,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:32+00:00",
+          "age_hours": 0.01,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 8020,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 8279,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:35+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 34075,
-          "lineage": "2026-07-27T09:51:37+00:00",
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84,
+          "bytes": 34480,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
+        },
+        {
+          "path": "data/daily/timescale_intelligence_verification.json",
+          "required": true,
+          "status": "pass",
+          "bytes": 3665,
+          "lineage": "2026-07-27T11:51:20+00:00",
+          "as_of": "2026-07-27T11:51:42+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 24257,
-          "as_of": "2026-07-27T09:51:41+00:00",
-          "age_hours": 1.84
+          "bytes": 33142,
+          "as_of": "2026-07-27T11:51:40+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -605,7 +592,7 @@
           "path": "wiki/manifest.json",
           "required": true,
           "status": "pass",
-          "bytes": 5423
+          "bytes": 5601
         }
       ],
       "status": "pass",
@@ -673,12 +660,22 @@
           "path": "data/site_registry.json",
           "required": true,
           "status": "pass",
-          "bytes": 15092
+          "bytes": 13137
+        },
+        {
+          "path": "data/daily/site_health.json",
+          "required": true,
+          "status": "degraded",
+          "bytes": 24988,
+          "as_of": "2026-07-27T11:42:04+00:00",
+          "age_hours": 0.16,
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         }
       ],
-      "status": "pass",
+      "status": "degraded",
       "surface_status": "pass",
-      "data_status": "pass",
+      "data_status": "degraded",
       "checks": [
         {
           "name": "page_exists",
@@ -722,120 +719,6 @@
           "issues": []
         }
       ]
-    },
-    {
-      "id": "legacy-leverage-plan",
-      "path": "leverage-2x-plan.html",
-      "title": "舊版 2 倍槓桿計畫",
-      "title_contains": "兩倍槓桿做多計畫",
-      "lifecycle": "archive",
-      "criticality": "low",
-      "role": "保留 2026-06-17 的舊版假設與行為紀錄，不再代表目前 2.5 倍 MSTR 合約體系。",
-      "user_question": "舊版槓桿計畫當時如何思考？",
-      "open_when": "只在回顧歷史決策時。",
-      "cadence": "不更新",
-      "surface_type": "static_archive",
-      "archive_as_of": "2026-06-17",
-      "replacement": "history-lab",
-      "owner_action": "archive",
-      "status": "pass",
-      "surface_status": "pass",
-      "data_status": "pass",
-      "checks": [
-        {
-          "name": "page_exists",
-          "status": "pass"
-        },
-        {
-          "name": "title_contract",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "owner_marker",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "archive_disclosure",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "archive_replacement",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "local_links",
-          "status": "pass",
-          "broken": []
-        },
-        {
-          "name": "clickable_contract",
-          "status": "pass",
-          "reason": null,
-          "issues": []
-        }
-      ],
-      "dependencies": []
-    },
-    {
-      "id": "legacy-spacex-lesson",
-      "path": "spacex-lesson.html",
-      "title": "SpaceX 行為紀錄",
-      "title_contains": "SpaceX IPO",
-      "lifecycle": "archive",
-      "criticality": "low",
-      "role": "保留單次投資行為省思，不屬於 BTC／MSTR／BMNR 每日決策系統。",
-      "user_question": "當時如何處理恐懼與不敢出手？",
-      "open_when": "只在回顧投資心理時。",
-      "cadence": "不更新",
-      "surface_type": "static_archive",
-      "archive_as_of": "2026-06-17",
-      "replacement": "knowledge-base",
-      "owner_action": "archive",
-      "status": "pass",
-      "surface_status": "pass",
-      "data_status": "pass",
-      "checks": [
-        {
-          "name": "page_exists",
-          "status": "pass"
-        },
-        {
-          "name": "title_contract",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "owner_marker",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "archive_disclosure",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "archive_replacement",
-          "status": "pass",
-          "reason": null
-        },
-        {
-          "name": "local_links",
-          "status": "pass",
-          "broken": []
-        },
-        {
-          "name": "clickable_contract",
-          "status": "pass",
-          "reason": null,
-          "issues": []
-        }
-      ],
-      "dependencies": []
     }
   ],
   "governance_rules": [

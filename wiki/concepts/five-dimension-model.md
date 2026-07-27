@@ -28,4 +28,4 @@ summary: 以鏈上估值、趨勢、情緒、ETF 邊際資金與週期回撤描�
 - 市場價格對淨資產價值倍率不屬於本模型。對 MSTR 而言，普通股市值／普通股淨值倍率愈低才是相對便宜；倍率高於 1.0 倍是溢價，最多表示溢價融資飛輪可能恢復，不代表安全邊際改善。
 - 分數落在 −10 至 −6 只代表偏冷背景，落在 +2 至 +5 只代表轉暖背景；仍須依 [[two-tranche-plan]] 的獨立價格結構、事件證據與載具閘門執行。
 
-歷史走勢記錄於 `../data/history.json`，前端「歷史趨勢」分頁繪圖。
+歷史價格與觀點 revision 分別記錄於 `../data/daily/timescale_price_history.json` 與 `../data/daily/timescale_intelligence_history.json`，由「時序研究」與「洞察日誌」呈現。

@@ -48,6 +48,8 @@ ETF_MAX_ABS_DAILY_FUND_FLOW_USD = 50_000_000_000
 ETF_MAX_GROSS_DAILY_FLOW_USD = 100_000_000_000
 ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD = 500_000
 ETF_COMPONENT_SUM_RELATIVE_TOLERANCE = 0.001
+ETF_OFFICIAL_COMPONENT_MIN_COVERAGE = 0.20
+ETF_BACKUP_COMPONENT_MIN_COVERAGE = 0.30
 
 MANUAL_INPUTS = {
     "mstr_btc_holdings": 843_775,
@@ -751,12 +753,18 @@ def relative_difference(first: float | None, second: float | None, *, scale_floo
     return abs(first - second) / denominator if denominator else 0.0
 
 
+def same_direction(first: float | None, second: float | None) -> bool:
+    return first is not None and second is not None and (first == 0 or second == 0 or (first > 0) == (second > 0))
+
+
 def etf_quorum_passes(
     canonical_provider: str | None,
     component_completeness: float | None,
     official_gap: float | None,
+    official_direction_match: bool,
     official_component_coverage: float | None,
     backup_component_gap: float | None,
+    backup_direction_match: bool,
     backup_component_coverage: float | None,
     backup_same_date: bool,
     canonical_total_reconciled: bool,
@@ -771,12 +779,14 @@ def etf_quorum_passes(
         and component_completeness >= 0.95
         and official_gap is not None
         and official_gap <= 0.05
+        and official_direction_match
         and official_component_coverage is not None
-        and official_component_coverage >= 0.30
+        and official_component_coverage >= ETF_OFFICIAL_COMPONENT_MIN_COVERAGE
         and backup_component_gap is not None
         and backup_component_gap <= 0.05
+        and backup_direction_match
         and backup_component_coverage is not None
-        and backup_component_coverage >= 0.30
+        and backup_component_coverage >= ETF_BACKUP_COMPONENT_MIN_COVERAGE
         and backup_same_date
         and canonical_total_reconciled
         and amount_sanity_pass
@@ -831,6 +841,7 @@ def etf_backup_sample_validation(
                 "component_normalized_gaps": {"TOTAL": total_gap},
                 "maximum_component_gap": total_gap,
                 "gross_component_coverage": 1.0,
+                "direction_match": same_direction(canonical_total, backup_total),
             })
             continue
         component_gaps = {
@@ -861,6 +872,7 @@ def etf_backup_sample_validation(
             "component_normalized_gaps": component_gaps,
             "maximum_component_gap": max(component_gaps.values()) if component_gaps else None,
             "gross_component_coverage": coverage,
+            "direction_match": all(same_direction(float(canonical_components[ticker]), float(backup_components[ticker])) for ticker in matched),
         })
     selected = min(
         candidates,
@@ -878,6 +890,7 @@ def etf_backup_sample_validation(
         "component_normalized_gaps": {},
         "maximum_component_gap": None,
         "gross_component_coverage": None,
+        "direction_match": False,
     }
     selected["candidate_count"] = len(candidates)
     return selected
@@ -939,6 +952,7 @@ def evaluate_etf_candidate(
     official_component_coverage = abs(official_component) / gross_component_flow if official_component is not None and gross_component_flow else None
     official_proxy = None
     official_gap = None
+    official_direction_match = False
     official_url = None
     errors: list[str] = []
     if previous and official_component is not None:
@@ -952,12 +966,14 @@ def evaluate_etf_candidate(
             unit_price = current_holding["market_value_usd"] / current_holding["units"] if current_holding["units"] else None
             official_proxy = (current_holding["units"] - prior_holding["units"]) * unit_price if unit_price is not None else None
             official_gap = relative_difference(official_component, official_proxy, scale_floor=100_000_000)
+            official_direction_match = same_direction(official_component, official_proxy)
             official_url = current_holding["url"]
         except Exception as exc:
             errors.append(f"iShares {largest_ticker} {latest['date']} 官方持倉驗證失敗：{type(exc).__name__}")
     backup_validation = etf_backup_sample_validation(asset, str(canonical.get("provider")), latest, providers)
     backup_component_gap = safe_float(backup_validation.get("maximum_component_gap"))
     backup_component_coverage = safe_float(backup_validation.get("gross_component_coverage"))
+    backup_direction_match = backup_validation.get("direction_match") is True
     backup_same_date = backup_validation.get("as_of") == latest.get("date")
     amount_sanity_pass, amount_sanity_errors = etf_amount_sanity(latest, official_proxy, backup_validation)
     errors.extend(f"{asset} ETF 金額合理性檢查失敗：{item}" for item in amount_sanity_errors)
@@ -988,8 +1004,10 @@ def evaluate_etf_candidate(
             canonical.get("provider"),
             component_completeness,
             official_gap,
+            official_direction_match,
             official_component_coverage,
             backup_component_gap,
+            backup_direction_match,
             backup_component_coverage,
             backup_same_date,
             canonical_total_reconciled,
@@ -1009,10 +1027,12 @@ def evaluate_etf_candidate(
         "official_component_coverage": official_component_coverage,
         "official_proxy": official_proxy,
         "official_gap": official_gap,
+        "official_direction_match": official_direction_match,
         "official_url": official_url,
         "backup_validation": backup_validation,
         "backup_component_gap": backup_component_gap,
         "backup_component_coverage": backup_component_coverage,
+        "backup_direction_match": backup_direction_match,
         "backup_same_date": backup_same_date,
         "amount_sanity_pass": amount_sanity_pass,
         "amount_sanity_errors": amount_sanity_errors,
@@ -1079,10 +1099,12 @@ def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]]
     official_component = selected["official_component"]
     gross_component_flow = selected["gross_component_flow"]
     official_component_coverage = selected["official_component_coverage"]
+    official_direction_match = selected["official_direction_match"]
     official_url = selected["official_url"]
     backup_validation = selected["backup_validation"]
     backup_component_gap = selected["backup_component_gap"]
     backup_component_coverage = selected["backup_component_coverage"]
+    backup_direction_match = selected["backup_direction_match"]
     backup_same_date = selected["backup_same_date"]
     amount_sanity_pass = selected["amount_sanity_pass"]
     amount_sanity_errors = selected["amount_sanity_errors"]
@@ -1092,9 +1114,9 @@ def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]]
     status = "sample_cross_source_verified" if verified else "quorum_failed"
     scope = (
         f"canonical={canonical.get('provider')} component sum; component_completeness={component_completeness:.1%}; "
-        f"{largest_ticker} official holdings-change proxy normalized_gap={official_gap:.2%} "
+        f"{largest_ticker} official holdings-change proxy normalized_gap={official_gap:.2%} direction_match={official_direction_match} "
         f"(5% or USD 5m tolerance); official_component_gross_coverage={official_component_coverage:.1%}; "
-        f"backup={backup_validation.get('provider')} same_date={backup_same_date} "
+        f"backup={backup_validation.get('provider')} same_date={backup_same_date} direction_match={backup_direction_match} "
         f"sample_gap={backup_component_gap:.2%} sample_gross_coverage={backup_component_coverage:.1%}; "
         f"validation_sources={validation_source_count}; "
         f"market_date={latest['date']}; hard_trigger=false"
@@ -1120,10 +1142,10 @@ def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]]
         obs(f"{asset.lower()}_etf_flow_30d_usd", rolling_calendar_flow(verified_rows, 30), canonical.get("provider", "ETF source pool"), url, ok=verified, detail=scope, as_of=latest["date"], basis="rolling_30_calendar_days_US_spot_ETF_component_sum", source_tier=source_tier),
         obs(f"{asset.lower()}_etf_flow_source_count", validation_source_count, "ETF source pool", url, ok=validation_source_count >= 3, detail=scope, as_of=latest["date"], basis="canonical_plus_official_plus_same_date_sample_source_count", source_tier=source_tier),
         obs(f"{asset.lower()}_etf_component_completeness", component_completeness, canonical.get("provider", "ETF source pool"), url, ok=component_completeness is not None and component_completeness >= 0.95, detail=scope, as_of=latest["date"], basis="latest_date_observed_tickers_divided_by_expected_tickers", source_tier=source_tier),
-        obs(f"{asset.lower()}_etf_official_major_fund_gap", official_gap, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_gap is not None and official_gap <= 0.05, detail=scope, as_of=latest["date"], basis="official_holdings_change_vs_reported_fund_flow", source_tier="official_issuer_crosscheck"),
-        obs(f"{asset.lower()}_etf_official_major_fund_coverage", official_component_coverage, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_component_coverage is not None and official_component_coverage >= 0.30, detail=scope, as_of=latest["date"], basis="official_major_fund_share_of_gross_absolute_component_flows", source_tier="official_issuer_crosscheck"),
-        obs(f"{asset.lower()}_etf_backup_component_gap", backup_component_gap, str(backup_validation.get("provider") or "ETF backup sample"), providers.get(str(backup_validation.get("provider")), {}).get("url", url), ok=backup_component_gap is not None and backup_component_gap <= 0.05, detail=scope, as_of=latest["date"], basis=backup_basis, source_tier="cross_source_sample_validation"),
-        obs(f"{asset.lower()}_etf_backup_component_coverage", backup_component_coverage, str(backup_validation.get("provider") or "ETF backup sample"), providers.get(str(backup_validation.get("provider")), {}).get("url", url), ok=backup_component_coverage is not None and backup_component_coverage >= 0.30, detail=scope, as_of=latest["date"], basis="same_date_named_fund_sample_share_of_gross_absolute_component_flows", source_tier="cross_source_sample_validation"),
+        obs(f"{asset.lower()}_etf_official_major_fund_gap", official_gap, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_gap is not None and official_gap <= 0.05 and official_direction_match, detail=scope, as_of=latest["date"], basis="official_holdings_change_vs_reported_fund_flow", source_tier="official_issuer_crosscheck"),
+        obs(f"{asset.lower()}_etf_official_major_fund_coverage", official_component_coverage, f"iShares {largest_ticker} official holdings", official_url or url, ok=official_component_coverage is not None and official_component_coverage >= ETF_OFFICIAL_COMPONENT_MIN_COVERAGE, detail=scope, as_of=latest["date"], basis="official_major_fund_share_of_gross_absolute_component_flows", source_tier="official_issuer_crosscheck"),
+        obs(f"{asset.lower()}_etf_backup_component_gap", backup_component_gap, str(backup_validation.get("provider") or "ETF backup sample"), providers.get(str(backup_validation.get("provider")), {}).get("url", url), ok=backup_component_gap is not None and backup_component_gap <= 0.05 and backup_direction_match, detail=scope, as_of=latest["date"], basis=backup_basis, source_tier="cross_source_sample_validation"),
+        obs(f"{asset.lower()}_etf_backup_component_coverage", backup_component_coverage, str(backup_validation.get("provider") or "ETF backup sample"), providers.get(str(backup_validation.get("provider")), {}).get("url", url), ok=backup_component_coverage is not None and backup_component_coverage >= ETF_BACKUP_COMPONENT_MIN_COVERAGE, detail=scope, as_of=latest["date"], basis="same_date_named_fund_sample_share_of_gross_absolute_component_flows", source_tier="cross_source_sample_validation"),
         obs(f"{asset.lower()}_etf_validation_inputs_json", json.dumps({
             "canonical_provider": canonical.get("provider"),
             "canonical_as_of": latest.get("date"),
@@ -1146,6 +1168,7 @@ def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]]
             "official_component_usd": official_component,
             "official_proxy_usd": official_proxy,
             "official_normalized_gap": official_gap,
+            "official_direction_match": official_direction_match,
             "official_component_gross_coverage": official_component_coverage,
             "backup_sample": backup_validation,
             "amount_sanity_pass": amount_sanity_pass,

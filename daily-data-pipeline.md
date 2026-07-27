@@ -41,21 +41,21 @@
    - 驗證 BMNR bottom-up gross treasury 與公司 reported total 的差距。
    - 產出 `data/daily/agent_verification_report.json`。
 
-4. `scripts/generate_daily_extensions.py`
-   - 結合 `wiki_llm.md` 的概念層與已驗證 snapshot。
-   - 產出今天三個延伸觀點。
-   - 前端顯示昨天、今天、明天觀察；過期項目移入 `archive`。
-   - archive 依 `date + type` 去重，避免每日執行造成重複累加。
+4. `scripts/collect_timescale_data.py` 與 `scripts/verify_timescale_data.py`
+   - 收集 BTC、ETH、MSTR、BMNR 的多來源完整日 K。
+   - 驗證來源差異、完成 K 棒、歷史排序與目前快照血緣。
 
-5. `scripts/generate_institutional_analytics.py`
-   - 產生動態投委會結論，不使用固定一句話。
-   - 輸出資料品質 0–100、BTC/MSTR/BMNR 三本帳、MSTR BTC 情境壓測與風險堆疊。
+5. `scripts/generate_timescale_intelligence.py` 與 `scripts/verify_timescale_intelligence.py`
+   - 產生日線、週線、月線、季線的多視角趨勢與背離分析。
+   - 獨立重算數學、資料血緣與 analysis-only 契約。
+   - 同日 revision 與相異日期觀點寫入 append-only 歷史，不沿用已失效結論。
 
 ## 前端資料
 
-- `daily-extensions.html`：每日三觀點、昨天/今天/明天對比、wiki study inputs。
-- `dashboard.html`：新增 daily data JSON 與驗證代理報告入口。
-- `index.html`：新增每日延伸入口。
+- `index.html`：四週期結論、大數字與獨家背離觀點。
+- `analytics.html`：四週期完整證據與資料對帳。
+- `dashboard.html`：原始時序、標準化價格與歷史 revisions。
+- `daily-extensions.html`：每日觀點變化與反證 ledger。
 - `market-monitor.html`：跨資產現貨、衍生品、ETF、DAT 與賽道輪動。
 
 ## 驗證政策

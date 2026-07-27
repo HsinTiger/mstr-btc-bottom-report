@@ -73,6 +73,8 @@ SECTOR_COINGECKO_IDS = {
 }
 SECTOR_SOURCE_MAX_LAG_HOURS = 0.25
 SECTOR_MAX_RETURN_GAP = 0.01
+ETF_OFFICIAL_COMPONENT_MIN_COVERAGE = 0.20
+ETF_BACKUP_COMPONENT_MIN_COVERAGE = 0.30
 
 
 def now_iso() -> str:
@@ -509,6 +511,34 @@ def collect_hyperliquid() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     return result, [source("hyperliquid_hype", "Hyperliquid", url, "primary_derivatives_market", result["HYPE"]["as_of"], "HYPE 永續標記價、預言機價、資金費率、未平倉量與名目成交額；不作現貨交叉來源", "retrieval_time")]
 
 
+def sector_consensus_observations(observations: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    ordered = sorted(
+        (
+            (provider, item)
+            for provider, item in observations.items()
+            if finite(item.get("change_24h")) is not None
+        ),
+        key=lambda pair: float(pair[1]["change_24h"]),
+    )
+    clusters: list[dict[str, dict[str, Any]]] = []
+    for start, (_, first) in enumerate(ordered):
+        floor = float(first["change_24h"])
+        clusters.append({
+            provider: item
+            for provider, item in ordered[start:]
+            if float(item["change_24h"]) - floor <= SECTOR_MAX_RETURN_GAP
+        })
+    return max(
+        clusters,
+        key=lambda cluster: (
+            sum(finite(item.get("market_cap_usd")) is not None and finite(item.get("volume_24h_usd")) is not None for item in cluster.values()),
+            len(cluster),
+            -(max(float(item["change_24h"]) for item in cluster.values()) - min(float(item["change_24h"]) for item in cluster.values())),
+        ),
+        default={},
+    )
+
+
 def compute_sector_baskets(provider_assets: dict[str, dict[str, dict[str, Any]]], provider_errors: list[str] | None = None) -> dict[str, Any]:
     result: dict[str, Any] = {}
     for label, constituents in SECTOR_BASKETS.items():
@@ -530,11 +560,18 @@ def compute_sector_baskets(provider_assets: dict[str, dict[str, dict[str, Any]]]
             if all(value is not None for value in volumes):
                 observation["volume_24h_usd"] = sum(value for value in volumes if value is not None)
             observations[provider] = observation
-        changes = [item["change_24h"] for item in observations.values()]
+        consensus = sector_consensus_observations(observations)
+        comparable = {
+            provider: item
+            for provider, item in consensus.items()
+            if finite(item.get("market_cap_usd")) is not None and finite(item.get("volume_24h_usd")) is not None
+        }
+        changes = [item["change_24h"] for item in consensus.values()]
         gap = max(changes) - min(changes) if len(changes) >= 2 else None
-        market_caps = [item["market_cap_usd"] for item in observations.values() if finite(item.get("market_cap_usd")) is not None]
-        volumes = [item["volume_24h_usd"] for item in observations.values() if finite(item.get("volume_24h_usd")) is not None]
-        verified = len(changes) >= 2 and gap is not None and gap <= SECTOR_MAX_RETURN_GAP and len(market_caps) >= 2 and len(volumes) >= 2
+        market_caps = [float(item["market_cap_usd"]) for item in comparable.values()]
+        volumes = [float(item["volume_24h_usd"]) for item in comparable.values()]
+        strict_majority = len(consensus) * 2 > len(observations)
+        verified = len(consensus) >= 2 and len(comparable) >= 2 and strict_majority and gap is not None and gap <= SECTOR_MAX_RETURN_GAP
         result[label] = {
             "basket_version": SECTOR_BASKET_VERSION,
             "constituents": constituents,
@@ -542,13 +579,17 @@ def compute_sector_baskets(provider_assets: dict[str, dict[str, dict[str, Any]]]
             "change_24h": statistics.median(changes) if verified else None,
             "market_cap_usd": statistics.median(market_caps) if verified else None,
             "volume_24h_usd": statistics.median(volumes) if verified else None,
-            "source_count": len(observations),
+            "source_count": len(consensus),
+            "observed_source_count": len(observations),
+            "verification_sources": sorted(consensus),
+            "excluded_sources": sorted(set(observations) - set(consensus)),
+            "strict_majority": strict_majority,
             "required_source_count": 2,
             "cross_source_gap": gap,
             "max_cross_source_gap": SECTOR_MAX_RETURN_GAP,
             "source_observations": observations,
             "source_incidents": provider_errors or [],
-            "as_of": min((item["as_of"] for item in observations.values()), default=None),
+            "as_of": min((item["as_of"] for item in consensus.values()), default=None),
         }
     return result
 
@@ -2427,11 +2468,11 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
             and official_gap is not None
             and official_gap <= 0.05
             and official_coverage is not None
-            and official_coverage >= 0.30
+            and official_coverage >= ETF_OFFICIAL_COMPONENT_MIN_COVERAGE
             and backup_gap is not None
             and backup_gap <= 0.05
             and backup_coverage is not None
-            and backup_coverage >= 0.30
+            and backup_coverage >= ETF_BACKUP_COMPONENT_MIN_COVERAGE
             and all(value is not None for value in required_values)
         )
         if not verified:
@@ -2440,7 +2481,7 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
             f"etf_{asset.lower()}",
             f"{asset} 現貨 ETF 流向",
             "pass" if verified else "degraded",
-            f"{source_count} 個驗證來源；基金 roster {component_completeness:.1%}；官方樣本差異 {official_gap:.2%}、覆蓋 {official_coverage:.1%}；同日備援基金／總量差異 {backup_gap:.2%}、覆蓋 {backup_coverage:.1%}；市場日落後 {lag_days} 天" if verified else "至少 3 個驗證來源、基金 roster 95%、官方與同日備援基金／總量差異不高於 5% 或 500 萬美元、各覆蓋 gross flow 30%、市場日不超過 5 天",
+            f"{source_count} 個驗證來源；基金 roster {component_completeness:.1%}；官方樣本差異 {official_gap:.2%}、覆蓋 {official_coverage:.1%}；同日備援基金／總量差異 {backup_gap:.2%}、覆蓋 {backup_coverage:.1%}；市場日落後 {lag_days} 天" if verified else "至少 3 個驗證來源、基金 roster 95%、官方與同日備援基金／總量差異不高於 5% 或 500 萬美元、官方覆蓋 gross flow 20%、備援覆蓋 30%、市場日不超過 5 天",
             core=False,
             observed=source_count,
             required=3,

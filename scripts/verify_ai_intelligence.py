@@ -158,7 +158,7 @@ def main() -> int:
             failures.append("AI 情報 pass 與分類筆數或品質原因矛盾")
     elif source_status == "degraded":
         if not quality.get("degradations") or any(count == 0 for count in category_counts.values()):
-            failures.append("AI 情報 degraded 必須有原因且兩類皆有內容")
+            failures.append("AI 情報 degraded 必須有原因且所有分類皆有內容")
         degradations.extend(str(item) for item in quality.get("degradations", []))
     elif source_status == "fail":
         failures.extend(str(item) for item in quality.get("failures", []) or ["AI 多來源收集失敗"])
