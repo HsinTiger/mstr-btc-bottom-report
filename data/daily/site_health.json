@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-27T04:23:48+00:00",
+  "generated_at": "2026-07-27T05:29:11+00:00",
   "status": "degraded",
   "summary": {
     "active_pages": 8,
@@ -38,41 +38,40 @@
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 25423,
-          "lineage_source": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:07+00:00",
-          "age_hours": 1.41
+          "bytes": 28529,
+          "lineage_source": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:43+00:00",
+          "age_hours": 0.01
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5173,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T04:08:52+00:00",
-          "age_hours": 0.25,
+          "bytes": 5398,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:56+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 12235,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41,
-          "quality": "review",
-          "reason": "資料品質狀態為 review"
+          "status": "pass",
+          "bytes": 13079,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:07+00:00",
+          "age_hours": 0.0,
+          "quality": "consistent"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 4585,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41
+          "bytes": 25254,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:08+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -140,9 +139,19 @@
           "path": "data/daily/market_universe.json",
           "required": true,
           "status": "degraded",
-          "bytes": 106287,
-          "as_of": "2026-07-27T04:08:52+00:00",
-          "age_hours": 0.25,
+          "bytes": 118186,
+          "as_of": "2026-07-27T05:28:54+00:00",
+          "age_hours": 0.0,
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
+        },
+        {
+          "path": "data/daily/market_universe_verification.json",
+          "required": true,
+          "status": "degraded",
+          "bytes": 686,
+          "as_of": "2026-07-27T05:28:55+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -150,13 +159,13 @@
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 29417,
-          "as_of": "2026-07-27T04:08:52+00:00",
-          "age_hours": 0.25
+          "bytes": 30314,
+          "as_of": "2026-07-27T05:28:54+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
-      "surface_status": "pass",
+      "surface_status": "degraded",
       "data_status": "degraded",
       "checks": [
         {
@@ -199,6 +208,11 @@
           "status": "pass",
           "reason": null,
           "issues": []
+        },
+        {
+          "name": "dependency_wired:data/daily/market_universe_verification.json",
+          "status": "degraded",
+          "reason": "頁面未直接引用已登記依賴；需確認是否經其他產物間接供應"
         }
       ]
     },
@@ -220,35 +234,35 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 28017,
+          "bytes": 28540,
           "as_of": "2026-07-27T04:23:44+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.09,
           "quality": "pass"
         },
         {
           "path": "data/daily/ai_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 609,
+          "bytes": 629,
           "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.09,
           "quality": "pass"
         },
         {
           "path": "data/daily/x_intelligence.json",
           "required": false,
           "status": "pass",
-          "bytes": 2198,
+          "bytes": 2282,
           "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.09
         },
         {
           "path": "data/daily/x_intelligence_verification.json",
           "required": false,
           "status": "pass",
-          "bytes": 683,
+          "bytes": 705,
           "as_of": "2026-07-27T04:23:48+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.09
         }
       ],
       "status": "pass",
@@ -316,30 +330,29 @@
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 4585,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41
+          "bytes": 25254,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:08+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 12235,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41,
-          "quality": "review",
-          "reason": "資料品質狀態為 review"
+          "status": "pass",
+          "bytes": 13079,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:07+00:00",
+          "age_hours": 0.0,
+          "quality": "consistent"
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5173,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T04:08:52+00:00",
-          "age_hours": 0.25,
+          "bytes": 5398,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:56+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         }
@@ -409,50 +422,49 @@
           "path": "data/daily/daily_extensions.json",
           "required": true,
           "status": "pass",
-          "bytes": 51824,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41
+          "bytes": 66558,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:09+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 25423,
-          "lineage_source": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:07+00:00",
-          "age_hours": 1.41
+          "bytes": 28529,
+          "lineage_source": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:43+00:00",
+          "age_hours": 0.01
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5173,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T04:08:52+00:00",
-          "age_hours": 0.25,
+          "bytes": 5398,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:56+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 12235,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41,
-          "quality": "review",
-          "reason": "資料品質狀態為 review"
+          "status": "pass",
+          "bytes": 13079,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:07+00:00",
+          "age_hours": 0.0,
+          "quality": "consistent"
         },
         {
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 4585,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41
+          "bytes": 25254,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:08+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "degraded",
@@ -521,30 +533,29 @@
           "path": "data/daily/latest_snapshot.json",
           "required": true,
           "status": "pass",
-          "bytes": 25423,
-          "lineage_source": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:07+00:00",
-          "age_hours": 1.41
+          "bytes": 28529,
+          "lineage_source": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:43+00:00",
+          "age_hours": 0.01
         },
         {
           "path": "data/daily/logic_audit.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 12235,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41,
-          "quality": "review",
-          "reason": "資料品質狀態為 review"
+          "status": "pass",
+          "bytes": 13079,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:07+00:00",
+          "age_hours": 0.0,
+          "quality": "consistent"
         },
         {
           "path": "data/daily/agent_verification_report.json",
           "required": true,
           "status": "degraded",
-          "bytes": 5173,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T04:08:52+00:00",
-          "age_hours": 0.25,
+          "bytes": 5398,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:28:56+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -552,16 +563,16 @@
           "path": "data/daily/institutional_analytics.json",
           "required": true,
           "status": "pass",
-          "bytes": 4585,
-          "lineage": "2026-07-27T02:59:07+00:00",
-          "as_of": "2026-07-27T02:59:13+00:00",
-          "age_hours": 1.41
+          "bytes": 25254,
+          "lineage": "2026-07-27T05:28:43+00:00",
+          "as_of": "2026-07-27T05:29:08+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/history.json",
           "required": false,
           "status": "pass",
-          "bytes": 11260
+          "bytes": 11840
         }
       ],
       "status": "degraded",
@@ -634,7 +645,7 @@
           "path": "wiki/manifest.json",
           "required": true,
           "status": "pass",
-          "bytes": 5423
+          "bytes": 5601
         }
       ],
       "status": "pass",
@@ -702,7 +713,7 @@
           "path": "data/site_registry.json",
           "required": true,
           "status": "pass",
-          "bytes": 13876
+          "bytes": 14520
         }
       ],
       "status": "pass",

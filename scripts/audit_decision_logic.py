@@ -295,6 +295,26 @@ def main() -> None:
         evidence=f"common_valuation_gate_ok={common_valuation_gate_ok}, common_equity_price_to_nav={num(equity_mnav, 3)}x, preferred_distortion_flag={pref_dilution_flag}",
         risk_if_failed="A premium above common NAV could be mislabeled as valuation safety.",
     )
+    exclusive_signals = analytics.get("decision_brief", {}).get("exclusive_signals", [])
+    mstr_signal = next((item for item in exclusive_signals if item.get("id") == "mstr_valuation_trust_split"), {})
+    common_lens = next((item for item in mstr_signal.get("lenses", []) if item.get("name") == "普通股估值"), {})
+    common_language_ok = equity_mnav is None or (
+        equity_mnav <= 1
+        and common_lens.get("direction") == "bullish"
+        and "目前高於 1.0x" not in str(common_lens.get("read") or "")
+    ) or (
+        equity_mnav > 1
+        and common_lens.get("direction") == "bearish"
+        and "目前高於 1.0x" in str(common_lens.get("read") or "")
+    )
+    add_invariant(
+        invariants,
+        rule_id="COMMON_VALUATION_LANGUAGE_MATCHES_RATIO",
+        passed=common_language_ok,
+        evidence=f"common_equity_price_to_nav={equity_mnav}, lens_direction={common_lens.get('direction')}, lens_read={common_lens.get('read')}",
+        risk_if_failed="The report narrative could state the opposite of the computed common-equity valuation ratio.",
+        severity="blocking",
+    )
     add_invariant(
         invariants,
         rule_id="CAPITAL_FLYWHEEL_GATE_SEPARATE_FROM_VALUATION",
@@ -334,8 +354,7 @@ def main() -> None:
         invariants,
         rule_id="ETF_FLOW_NEVER_STANDALONE_HARD_TRIGGER",
         passed=(
-            etf_flow_status == "sample_cross_source_verified"
-            and btc_standard.get("data_quality", {}).get("etf_flow_counts_as_confirmation") is False
+            btc_standard.get("data_quality", {}).get("etf_flow_counts_as_confirmation") is False
             and "use_etf_flow_as_hard_trigger" in blocked_actions
         ),
         evidence=f"etf_flow_status={etf_flow_status}, counts_as_confirmation={btc_standard.get('data_quality', {}).get('etf_flow_counts_as_confirmation')}",

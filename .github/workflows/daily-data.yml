@@ -39,6 +39,9 @@ jobs:
       - name: Collect cross-asset market universe
         run: python scripts/collect_market_universe.py
 
+      - name: Independently verify current market universe
+        run: python scripts/verify_market_universe.py
+
       - name: Verify with independent data agent
         continue-on-error: true
         run: |

@@ -149,7 +149,23 @@ class BrowserRenderer:
         page.on("pageerror", lambda error: page_errors.append(str(error)))
         try:
             page.goto(url, wait_until="networkidle", timeout=45_000)
-            page.wait_for_timeout(250)
+            page_name = Path(urlsplit(url).path).name
+            if page_name in {
+                "index.html",
+                "market-monitor.html",
+                "x-intelligence.html",
+                "analytics.html",
+                "dashboard.html",
+                "daily-extensions.html",
+            }:
+                page.wait_for_function(
+                    """() => ['pass', 'degraded', 'fail'].includes(
+                        document.body.dataset.renderStatus || document.documentElement.dataset.renderStatus
+                    )""",
+                    timeout=10_000,
+                )
+            else:
+                page.wait_for_timeout(250)
             if page_errors:
                 raise RuntimeError(f"瀏覽器 JavaScript 錯誤：{page_errors[-1]}")
             layout = page.evaluate(
@@ -194,6 +210,32 @@ def main() -> int:
     renderer = BrowserRenderer(browser_path())
     failures: list[dict[str, str]] = []
     results: list[dict[str, str]] = []
+    snapshot = json.loads((ROOT / "data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+    market_universe = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
+    prices = snapshot.get("metrics", {}).get("prices", {})
+    mstr_metrics = snapshot.get("metrics", {}).get("mstr_metrics", {})
+    live_value_expectations = {
+        "index.html": [
+            str(snapshot.get("date")),
+            f"{float(mstr_metrics['common_equity_price_to_nav']):.2f}x",
+        ],
+        "market-monitor.html": [
+            f"${float(market_universe['assets']['BTC']['price_usd']):,.2f}",
+            f"${float(market_universe['assets']['ETH']['price_usd']):,.2f}",
+        ],
+        "analytics.html": [
+            str(snapshot.get("date")),
+            f"${float(prices['btc_usd']):,.0f}",
+            f"{float(mstr_metrics['common_equity_price_to_nav']):.2f}x",
+        ],
+        "dashboard.html": [str(snapshot.get("date"))],
+        "daily-extensions.html": [
+            str(snapshot.get("date")),
+            f"BTC ${float(prices['btc_usd']):,.0f}",
+            f"MSTR ${float(prices['mstr_usd']):,.2f}",
+            f"BMNR ${float(prices['bmnr_usd']):,.2f}",
+        ],
+    }
     with tempfile.TemporaryDirectory(prefix="product-smoke-") as profile, server() as base_url:
         for viewport, (width, height) in VIEWPORTS.items():
             for page, expected in PAGES.items():
@@ -213,6 +255,11 @@ def main() -> int:
                         raise RuntimeError(f"必要畫面文字缺漏：{expected}")
                     if markers:
                         raise RuntimeError(f"發現崩潰文字：{', '.join(markers)}")
+                    missing_live_values = [
+                        value for value in live_value_expectations.get(page, []) if value not in body
+                    ]
+                    if missing_live_values:
+                        raise RuntimeError(f"即時資料未渲染：{', '.join(missing_live_values)}")
                     assert_no_horizontal_overflow(layout, f"{viewport} {page}")
                     rendered_links = set(re.findall(r'href="([^"#?]+)', dom, flags=re.IGNORECASE))
                     missing_navigation = [target for target in PAGES if target not in rendered_links]
@@ -236,7 +283,11 @@ def main() -> int:
                         expected_visibility = "true" if status in {"pass", "degraded"} else "false"
                         if f'data-conclusions-visible="{expected_visibility}"' not in dom:
                             raise RuntimeError("市場雷達品質狀態與結論可見性不一致")
-                        if status in {"pass", "degraded"} and ("載入失敗" in body or "停止顯示" in body or "資料封鎖" in body):
+                        if status in {"pass", "degraded"} and (
+                            "載入失敗" in body
+                            or "本區所有數字已封鎖" in body
+                            or "最新資料不可用" in body
+                        ):
                             raise RuntimeError("市場雷達可讀資料被錯誤封鎖")
                         if status != "fail" and 'data-core-checks="14/14"' not in dom:
                             raise RuntimeError("市場雷達核心欄位未完整渲染")
@@ -289,8 +340,9 @@ def main() -> int:
                     results.append({"viewport": viewport, "page": page, "status": "pass"})
                 except (RuntimeError, PlaywrightError) as error:
                     failures.append({"viewport": viewport, "page": page, "error": str(error)})
-    market_universe = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
-    aged_market = shift_datetime_strings(deepcopy(market_universe), timedelta(hours=-2.5))
+    market_generated_at = datetime.fromisoformat(market_universe["generated_at"].replace("Z", "+00:00"))
+    freshness_target = datetime.now(timezone.utc) - timedelta(hours=2.5)
+    aged_market = shift_datetime_strings(deepcopy(market_universe), freshness_target - market_generated_at)
     with tempfile.TemporaryDirectory(prefix="market-freshness-window-") as profile, server({"/data/daily/market_universe.json": aged_market}) as base_url:
         for viewport, (width, height) in VIEWPORTS.items():
             try:
@@ -300,7 +352,7 @@ def main() -> int:
                 assert_no_horizontal_overflow(layout, f"{viewport} market-monitor.html:freshness-window")
                 if not re.search(r'data-render-status="(?:pass|degraded)"', dom) or 'data-conclusions-visible="true"' not in dom:
                     raise RuntimeError("市場雷達 2.5 小時更新窗被錯誤封鎖")
-                if "載入失敗" in body or "停止顯示" in body or "資料封鎖" in body:
+                if "載入失敗" in body or "本區所有數字已封鎖" in body or "最新資料不可用" in body:
                     raise RuntimeError("市場雷達把批次內合格來源誤判為瀏覽時逾時")
                 results.append({"viewport": viewport, "page": "market-monitor.html:freshness-window", "status": "pass"})
             except (RuntimeError, PlaywrightError) as error:
@@ -308,7 +360,6 @@ def main() -> int:
     verification = json.loads((ROOT / "data/daily/agent_verification_report.json").read_text(encoding="utf-8-sig"))
     analytics = json.loads((ROOT / "data/daily/institutional_analytics.json").read_text(encoding="utf-8-sig"))
     logic = json.loads((ROOT / "data/daily/logic_audit.json").read_text(encoding="utf-8-sig"))
-    snapshot = json.loads((ROOT / "data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
     extensions = json.loads((ROOT / "data/daily/daily_extensions.json").read_text(encoding="utf-8-sig"))
     fixture_now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     fixture_yesterday = str((datetime.now(timezone.utc) + timedelta(hours=8)).date() - timedelta(days=1))
@@ -338,7 +389,24 @@ def main() -> int:
         },
         "logic_audit": {**deepcopy(analytics.get("logic_audit", {})), "status": "consistent"},
     }
-    cross_day_extensions = {**deepcopy(extensions), "current_date": fixture_yesterday, "updated_at": fixture_now, "snapshot_generated_at": fixture_now}
+    cross_day_extensions = deepcopy(extensions)
+    extension_date_delta = (
+        datetime.fromisoformat(fixture_yesterday).date()
+        - datetime.fromisoformat(extensions["current_date"]).date()
+    )
+    for collection_name in ("visible_window", "items"):
+        for item in cross_day_extensions.get(collection_name, []):
+            if item.get("date"):
+                item["date"] = (
+                    datetime.fromisoformat(item["date"]).date() + extension_date_delta
+                ).isoformat()
+    cross_day_extensions.update(
+        {
+            "current_date": fixture_yesterday,
+            "updated_at": fixture_now,
+            "snapshot_generated_at": fixture_now,
+        }
+    )
     fixtures = [
         {
             "name": "degraded",

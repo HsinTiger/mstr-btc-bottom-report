@@ -107,6 +107,21 @@ def age_hours(value: Any) -> float | None:
         return None
 
 
+def lag_hours(value: Any, reference: Any) -> float | None:
+    if not value or not reference:
+        return None
+    try:
+        observed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        reference_time = datetime.fromisoformat(str(reference).replace("Z", "+00:00"))
+        if observed.tzinfo is None:
+            observed = observed.replace(tzinfo=timezone.utc)
+        if reference_time.tzinfo is None:
+            reference_time = reference_time.replace(tzinfo=timezone.utc)
+        return (reference_time - observed).total_seconds() / 3600
+    except ValueError:
+        return None
+
+
 def check_observation_freshness(
     name: str,
     item: dict[str, Any] | None,
@@ -512,7 +527,11 @@ def recompute_dat_official_overlay(item: dict[str, Any], official_values: dict[s
     }
 
 
-def recompute_sector_validation(item: dict[str, Any]) -> dict[str, Any]:
+def recompute_sector_validation(
+    item: dict[str, Any],
+    reference_time: Any,
+    max_lag_hours: float,
+) -> dict[str, Any]:
     observations = item.get("source_observations") if isinstance(item.get("source_observations"), dict) else {}
     errors: list[str] = []
     changes = [as_float(observation.get("change_24h")) for observation in observations.values()]
@@ -531,8 +550,8 @@ def recompute_sector_validation(item: dict[str, Any]) -> dict[str, Any]:
     if len(item.get("constituents", [])) != 5 or item.get("basket_version") != "fixed-basket-v1":
         errors.append("sector basket roster or version mismatch")
     for provider, observation in observations.items():
-        source_age = age_hours(observation.get("as_of"))
-        if source_age is None or source_age < -0.25 or source_age > 0.5:
+        source_lag = lag_hours(observation.get("as_of"), reference_time)
+        if source_lag is None or source_lag < -0.25 or source_lag > max_lag_hours:
             errors.append(f"{provider} timestamp outside freshness window")
     if not errors:
         assert_close("sector median return", statistics.median(changes), item.get("change_24h"), errors)
@@ -608,6 +627,12 @@ def main() -> int:
             failures.append("market universe artifact freshness contract must be 3 hours")
         if as_float(freshness_contract.get("volatility_source_max_lag_hours")) != 3:
             failures.append("market universe volatility lag contract must be 3 hours relative to generated_at")
+        market_generated_at = market_universe.get("generated_at")
+        spot_max_lag = as_float(freshness_contract.get("spot_source_max_lag_hours")) or 2
+        perpetual_max_lag = as_float(freshness_contract.get("perpetual_source_max_lag_hours")) or 2
+        dated_future_max_lag = as_float(freshness_contract.get("dated_future_source_max_lag_hours")) or 2
+        options_max_lag = as_float(freshness_contract.get("options_source_max_lag_hours")) or 2
+        volatility_max_lag = as_float(freshness_contract.get("volatility_source_max_lag_hours")) or 3
         for symbol in ["BTC", "ETH", "HYPE", "SOL", "BNB", "XRP", "DOGE"]:
             asset = market_universe.get("assets", {}).get(symbol, {})
             if as_float(asset.get("price_usd")) is None:
@@ -623,25 +648,11 @@ def main() -> int:
                 assert_close(f"market universe {symbol} median spot", statistics.median(source_prices), asset.get("price_usd"), failures)
                 expected_gap = (max(source_prices) - min(source_prices)) / statistics.mean(source_prices)
                 assert_close(f"market universe {symbol} source gap", expected_gap, gap, failures)
-        for sector, item in market_universe.get("sectors", {}).items():
-            # 成分定義因聚合商而異的板塊：各家收錄的幣種本來就不同（CoinGecko 的
-            # DeFi 籃子 != CoinPaprika 的），所以「跨源報酬差 < 1pp」是一個永遠
-            # 不可能通過的條件，不是資料異常。這類板塊降級為 degraded 並標記為
-            # 未經跨源驗證，不再 hard fail 擋住整條發布線。
-            # 核心資產（BTC/ETH 現貨、ETF、期貨）的嚴格跨源驗證完全不受影響。
-            sector_bucket = COMPOSITION_DIVERGENT_SECTORS.get(sector.lower())
-            sector_check = recompute_sector_validation(item)
-            if sector_check["errors"]:
-                target = degradations if sector_bucket else failures
-                target.extend(f"market universe sector {sector}: {error}" for error in sector_check["errors"])
-            if item.get("status") != "cross_source_verified":
-                message = f"market universe sector {sector}: status is not cross_source_verified"
-                (degradations if sector_bucket else failures).append(message)
             if len(source_prices) != int(asset.get("source_count") or 0):
                 failures.append(f"market universe {symbol}: source_count does not match source_prices")
             for provider, observation in asset.get("source_observations", {}).items():
-                source_age = age_hours(observation.get("as_of"))
-                if source_age is None or source_age > 2:
+                source_lag = lag_hours(observation.get("as_of"), market_generated_at)
+                if source_lag is None or source_lag < -0.25 or source_lag > spot_max_lag:
                     failures.append(f"market universe {symbol} {provider}: source stale or timestamp missing")
                 if provider in {"Binance", "OKX"}:
                     price_usdt = as_float(observation.get("price_usdt"))
@@ -650,9 +661,23 @@ def main() -> int:
                         failures.append(f"market universe {symbol} {provider}: USDT/USD normalization inputs missing")
                     else:
                         assert_close(f"market universe {symbol} {provider} USD normalization", price_usdt * usdt_usd, observation.get("price_usd"), failures)
-                    usdt_age = age_hours(observation.get("usdt_usd_as_of"))
-                    if usdt_age is None or usdt_age > 2:
+                    usdt_lag = lag_hours(observation.get("usdt_usd_as_of"), market_generated_at)
+                    if usdt_lag is None or usdt_lag < -0.25 or usdt_lag > spot_max_lag:
                         failures.append(f"market universe {symbol} {provider}: USDT/USD normalization rate stale")
+        for sector, item in market_universe.get("sectors", {}).items():
+            # 成分定義因聚合商而異的板塊：各家收錄的幣種本來就不同（CoinGecko 的
+            # DeFi 籃子 != CoinPaprika 的），所以「跨源報酬差 < 1pp」是一個永遠
+            # 不可能通過的條件，不是資料異常。這類板塊降級為 degraded 並標記為
+            # 未經跨源驗證，不再 hard fail 擋住整條發布線。
+            # 核心資產（BTC/ETH 現貨、ETF、期貨）的嚴格跨源驗證完全不受影響。
+            sector_bucket = COMPOSITION_DIVERGENT_SECTORS.get(sector.lower())
+            sector_check = recompute_sector_validation(item, market_generated_at, spot_max_lag)
+            if sector_check["errors"]:
+                target = degradations if sector_bucket else failures
+                target.extend(f"market universe sector {sector}: {error}" for error in sector_check["errors"])
+            if item.get("status") != "cross_source_verified":
+                message = f"market universe sector {sector}: status is not cross_source_verified"
+                (degradations if sector_bucket else failures).append(message)
         for symbol in ["BTC", "ETH"]:
             derivative = market_universe.get("derivatives", {}).get(symbol, {})
             required_derivatives = {
@@ -677,8 +702,8 @@ def main() -> int:
                     expected_annualized = rate * 24 / interval * 365
                     assert_close(f"market universe {symbol} {venue} funding annualization", expected_annualized, venue_data.get("funding_annualized"), failures)
                     annualized_funding.append(expected_annualized)
-                venue_age = age_hours(venue_data.get("as_of"))
-                if venue_age is None or venue_age > 2:
+                venue_lag = lag_hours(venue_data.get("as_of"), market_generated_at)
+                if venue_lag is None or venue_lag < -0.25 or venue_lag > perpetual_max_lag:
                     failures.append(f"market universe {symbol} {venue}: perpetual source stale or timestamp missing")
             if len(annualized_funding) != int(perpetual.get("funding_source_count") or 0):
                 failures.append(f"market universe {symbol}: funding source count does not match venue data")
@@ -692,8 +717,8 @@ def main() -> int:
                 expected_basis = mark / index - 1
                 assert_close(f"market universe {symbol} dated-futures basis", expected_basis, dated.get("basis"), failures)
                 assert_close(f"market universe {symbol} annualized basis", expected_basis * 365 / days, dated.get("annualized_basis"), failures)
-            dated_age = age_hours(dated.get("as_of"))
-            if dated_age is None or dated_age > 2:
+            dated_lag = lag_hours(dated.get("as_of"), market_generated_at)
+            if dated_lag is None or dated_lag < -0.25 or dated_lag > dated_future_max_lag:
                 failures.append(f"market universe {symbol}: dated-futures source stale or timestamp missing")
             if dated.get("provider") not in {"Deribit", "OKX"}:
                 failures.append(f"market universe {symbol}: unsupported dated-futures provider")
@@ -704,11 +729,11 @@ def main() -> int:
                 failures.append(f"market universe {symbol}: options OI coverage incomplete")
             if options.get("contracts_observed") != options.get("volume_observed_contracts"):
                 failures.append(f"market universe {symbol}: options volume coverage incomplete")
-            options_age = age_hours(options.get("as_of"))
-            volatility_age = age_hours(options.get("volatility_as_of"))
-            if options_age is None or options_age > 2:
+            options_lag = lag_hours(options.get("as_of"), market_generated_at)
+            volatility_lag = lag_hours(options.get("volatility_as_of"), market_generated_at)
+            if options_lag is None or options_lag < -0.25 or options_lag > options_max_lag:
                 failures.append(f"market universe {symbol}: options source stale or timestamp missing")
-            if volatility_age is None or volatility_age > 3:
+            if volatility_lag is None or volatility_lag < -0.25 or volatility_lag > volatility_max_lag:
                 failures.append(f"market universe {symbol}: options volatility source stale or timestamp missing")
             call_oi = as_float(options.get("call_open_interest_base"))
             put_oi = as_float(options.get("put_open_interest_base"))

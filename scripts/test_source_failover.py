@@ -237,9 +237,40 @@ def test_sector_basket_single_source_and_divergence_do_not_publish() -> None:
 
 def test_verifier_recomputes_sector_claim() -> None:
     item = compute_sector_baskets(sector_provider_fixture(providers=3))["RWA"]
-    assert not recompute_sector_validation(item)["errors"]
+    reference_time = now_iso()
+    assert not recompute_sector_validation(item, reference_time, 2)["errors"]
     item["change_24h"] = 0.5
-    assert recompute_sector_validation(item)["errors"]
+    assert recompute_sector_validation(item, reference_time, 2)["errors"]
+
+
+def test_coinmetrics_uses_latest_non_null_metric_row() -> None:
+    original_fetch_json = daily_pipeline.fetch_json
+    daily_pipeline.fetch_json = lambda *args, **kwargs: {
+        "data": [
+            {
+                "time": "2026-07-25T00:00:00.000000000Z",
+                "PriceUSD": "64000",
+                "CapMVRVCur": "1.21",
+                "SplyCur": "20000000",
+                "CapMrktCurUSD": "1280000000000",
+            },
+            {
+                "time": "2026-07-26T00:00:00.000000000Z",
+                "PriceUSD": "65000",
+                "CapMVRVCur": None,
+                "SplyCur": "20001000",
+                "CapMrktCurUSD": "1300000000000",
+            },
+        ]
+    }
+    try:
+        observations = {item.name: item for item in daily_pipeline.collect_coinmetrics_btc_cycle()}
+    finally:
+        daily_pipeline.fetch_json = original_fetch_json
+    assert observations["btc_mvrv_current"].value == 1.21
+    assert observations["btc_mvrv_current"].as_of == "2026-07-25"
+    assert observations["btc_price_coinmetrics_usd"].value == 65000.0
+    assert observations["btc_price_coinmetrics_usd"].as_of == "2026-07-26"
 
 
 def test_strategy_capital_update_and_no_sale_period_parsers() -> None:
@@ -645,6 +676,7 @@ def main() -> int:
         test_sector_basket_quorum_survives_one_provider_failure,
         test_sector_basket_single_source_and_divergence_do_not_publish,
         test_verifier_recomputes_sector_claim,
+        test_coinmetrics_uses_latest_non_null_metric_row,
         test_strategy_capital_update_and_no_sale_period_parsers,
         test_treasury_table_parser_ignores_css_angle_brackets,
         test_bitbo_treasury_parser_extracts_symbol_and_holdings,

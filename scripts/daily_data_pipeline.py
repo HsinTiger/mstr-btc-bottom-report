@@ -397,14 +397,29 @@ def collect_coinmetrics_btc_cycle() -> list[Observation]:
     })
     data = fetch_json(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
     rows = data.get("data") or []
-    latest = rows[-1] if rows else {}
-    detail = f"time={latest.get('time')} metrics={metrics}"
-    as_of = str(latest.get("time") or "")[:10] or None
+
+    def metric_observation(name: str, metric: str) -> Observation:
+        selected = next((row for row in reversed(rows) if safe_float(row.get(metric)) is not None), {})
+        value = safe_float(selected.get(metric))
+        as_of = str(selected.get("time") or "")[:10] or None
+        detail = f"time={selected.get('time')} metric={metric}; latest_non_null_metric_row"
+        return obs(
+            name,
+            value,
+            "Coin Metrics community API",
+            url,
+            ok=value is not None,
+            detail=detail,
+            as_of=as_of,
+            basis="daily_network_metric",
+            source_tier="independent_onchain",
+        )
+
     return [
-        obs("btc_price_coinmetrics_usd", safe_float(latest.get("PriceUSD")), "Coin Metrics community API", url, ok=latest.get("PriceUSD") is not None, detail=detail, as_of=as_of, basis="daily_network_metric", source_tier="independent_onchain"),
-        obs("btc_mvrv_current", safe_float(latest.get("CapMVRVCur")), "Coin Metrics community API", url, ok=latest.get("CapMVRVCur") is not None, detail=detail, as_of=as_of, basis="daily_network_metric", source_tier="independent_onchain"),
-        obs("btc_supply_current", safe_float(latest.get("SplyCur")), "Coin Metrics community API", url, ok=latest.get("SplyCur") is not None, detail=detail, as_of=as_of, basis="daily_network_metric", source_tier="independent_onchain"),
-        obs("btc_market_cap_coinmetrics_usd", safe_float(latest.get("CapMrktCurUSD")), "Coin Metrics community API", url, ok=latest.get("CapMrktCurUSD") is not None, detail=detail, as_of=as_of, basis="daily_network_metric", source_tier="independent_onchain"),
+        metric_observation("btc_price_coinmetrics_usd", "PriceUSD"),
+        metric_observation("btc_mvrv_current", "CapMVRVCur"),
+        metric_observation("btc_supply_current", "SplyCur"),
+        metric_observation("btc_market_cap_coinmetrics_usd", "CapMrktCurUSD"),
     ]
 
 

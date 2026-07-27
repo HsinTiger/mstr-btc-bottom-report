@@ -355,9 +355,21 @@ def build_exclusive_signals(
     mstr_return = pct_change(prices.get("mstr_usd"), previous_prices.get("mstr_usd"))
     btc_return = pct_change(prices.get("btc_usd"), previous_prices.get("btc_usd"))
     relative_return = None if mstr_return is None or btc_return is None else mstr_return - btc_return
+    common_ratio_read = (
+        "目前低於或等於 1.0x，普通股相對自算淨值呈折價；仍須獨立檢查優先股與融資壓力"
+        if common_ratio is not None and common_ratio <= 1
+        else "目前高於 1.0x，普通股相對自算淨值呈溢價"
+        if common_ratio is not None
+        else "普通股估值資料不足"
+    )
+    common_ratio_trigger = (
+        "普通股市值／普通股淨值維持在 1.0x 以下"
+        if common_ratio is not None and common_ratio <= 1
+        else "普通股市值／普通股淨值降至 1.0x 以下"
+    )
 
     mstr_lenses = [
-        lens("普通股估值", "bullish" if common_ratio is not None and common_ratio <= 1 else "bearish" if common_ratio is not None else "unknown", fmt_multiple(common_ratio), "低於 1.0x 才是普通股折價；目前高於 1.0x 代表溢價"),
+        lens("普通股估值", "bullish" if common_ratio is not None and common_ratio <= 1 else "bearish" if common_ratio is not None else "unknown", fmt_multiple(common_ratio), common_ratio_read),
         lens("優先股信任", "bullish" if strc_discount is not None and strc_discount <= 0.05 else "bearish" if strc_discount is not None else "unknown", fmt_pct(strc_discount), "STRC 折價超過 5%，表示資本市場要求更高風險補償"),
         lens("融資飛輪", "bullish" if enterprise_ratio is not None and enterprise_ratio >= 1 else "bearish" if enterprise_ratio is not None else "unknown", fmt_multiple(enterprise_ratio), "企業價值高於 BTC 總值時，增發換幣的反身性仍可能運作；不等於普通股便宜"),
         lens("相對動能", "bullish" if relative_return is not None and relative_return > 0 else "bearish" if relative_return is not None else "unknown", fmt_pct(relative_return), "單日跑贏 BTC 只能當先行動能，不能抵銷資本結構紅燈"),
@@ -377,7 +389,7 @@ def build_exclusive_signals(
             indicator("STRC 折價 ≤5%", fmt_pct(strc_discount), "pass" if strc_discount is not None and strc_discount <= 0.05 else "fail", "優先股市場信任"),
             indicator("7 日已報告賣幣壓力可觀測且 ≤2x", fmt_multiple(sale_ratio), "unknown" if sale_ratio is None else "pass" if sale_ratio <= 2 else "fail", f"{sale_read}｜信心 {sale_confidence}"),
         ],
-        next_trigger="普通股市值／普通股淨值降至 1.0x 以下、STRC 折價收斂至 5% 以下，且 7 日賣幣資料恢復可觀測，才重新評估 2.5x 合約。",
+        next_trigger=f"{common_ratio_trigger}、STRC 折價收斂至 5% 以下，且 7 日賣幣資料維持可觀測，才重新評估 2.5x 合約。",
         confidence=confidence,
         wiki_refs_value=knowledge_refs(knowledge, ["gaap-vs-mnav", "mnav-definition-risk", "delayed-pro-cyclical", "strc-preferred"]),
         source_refs_value=[source("data/daily/latest_snapshot.json", "MSTR 自算指標", snapshot.get("date")), source("data/inputs/mstr_capital_structure_provenance.json", "資本結構來源")],
