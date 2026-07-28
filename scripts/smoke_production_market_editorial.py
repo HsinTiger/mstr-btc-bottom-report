@@ -11,9 +11,6 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-from playwright.sync_api import sync_playwright
-
-
 def fetch_json(url: str) -> dict[str, Any]:
     request = urllib.request.Request(url, headers={"User-Agent": "mstr-btc-bottom-report/production-canary"})
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -58,6 +55,8 @@ def validate_json_binding(
 
 
 def main() -> int:
+    from playwright.sync_api import sync_playwright
+
     base_url = os.environ.get("BASE_URL", "https://hsintiger.github.io/mstr-btc-bottom-report").rstrip("/")
     expected_commit = os.environ.get("EXPECTED_COMMIT")
     expected_editorial_hash = os.environ.get("EXPECTED_EDITORIAL_HASH")
