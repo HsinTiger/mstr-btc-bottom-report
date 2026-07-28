@@ -1,17 +1,19 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-28T12:16:39+00:00",
-  "status": "pass",
+  "generated_at": "2026-07-28T14:43:40+00:00",
+  "status": "degraded",
   "summary": {
     "active_pages": 9,
     "archive_pages": 0,
-    "pass": 9,
-    "degraded": 0,
+    "pass": 8,
+    "degraded": 1,
     "fail": 0,
     "critical_failures": [],
     "critical_surface_failures": [],
     "critical_data_failures": [],
-    "degraded_pages": []
+    "degraded_pages": [
+      "market-radar"
+    ]
   },
   "pages": [
     {
@@ -35,7 +37,7 @@
           "bytes": 33218,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -45,7 +47,7 @@
           "bytes": 3524,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         }
       ],
@@ -113,33 +115,35 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "pass",
-          "bytes": 111081,
-          "as_of": "2026-07-28T12:16:39+00:00",
+          "status": "degraded",
+          "bytes": 111056,
+          "as_of": "2026-07-28T14:43:39+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "pass",
-          "bytes": 318,
-          "as_of": "2026-07-28T12:16:39+00:00",
+          "status": "degraded",
+          "bytes": 595,
+          "as_of": "2026-07-28T14:43:39+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 34596,
-          "as_of": "2026-07-28T12:16:39+00:00",
+          "bytes": 34577,
+          "as_of": "2026-07-28T14:43:39+00:00",
           "age_hours": 0.0
         }
       ],
-      "status": "pass",
+      "status": "degraded",
       "surface_status": "pass",
-      "data_status": "pass",
+      "data_status": "degraded",
       "checks": [
         {
           "name": "page_exists",
@@ -204,7 +208,7 @@
           "status": "pass",
           "bytes": 41180,
           "as_of": "2026-07-28T12:15:35+00:00",
-          "age_hours": 0.02,
+          "age_hours": 2.47,
           "quality": "pass"
         },
         {
@@ -213,7 +217,7 @@
           "status": "pass",
           "bytes": 14124,
           "as_of": "2026-07-28T12:15:35+00:00",
-          "age_hours": 0.02,
+          "age_hours": 2.47,
           "quality": "pass"
         }
       ],
@@ -284,7 +288,7 @@
           "status": "pass",
           "bytes": 51496,
           "as_of": "2026-07-28T07:38:04+00:00",
-          "age_hours": 4.64,
+          "age_hours": 7.09,
           "quality": "pass"
         },
         {
@@ -293,7 +297,7 @@
           "status": "pass",
           "bytes": 900,
           "as_of": "2026-07-28T07:38:08+00:00",
-          "age_hours": 4.64,
+          "age_hours": 7.09,
           "quality": "pass"
         }
       ],
@@ -365,7 +369,7 @@
           "bytes": 33218,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -375,7 +379,7 @@
           "bytes": 3524,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -385,7 +389,7 @@
           "bytes": 8017,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -394,7 +398,7 @@
           "status": "pass",
           "bytes": 42871,
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13
+          "age_hours": 3.58
         }
       ],
       "status": "pass",
@@ -465,7 +469,7 @@
           "bytes": 33218,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -475,7 +479,7 @@
           "bytes": 3524,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -484,7 +488,7 @@
           "status": "pass",
           "bytes": 42871,
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13
+          "age_hours": 3.58
         }
       ],
       "status": "pass",
@@ -555,7 +559,7 @@
           "bytes": 1363168,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:40+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -565,7 +569,7 @@
           "bytes": 8017,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -575,7 +579,7 @@
           "bytes": 33218,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -585,7 +589,7 @@
           "bytes": 3524,
           "lineage": "2026-07-28T11:08:01+00:00",
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13,
+          "age_hours": 3.58,
           "quality": "pass"
         },
         {
@@ -594,7 +598,7 @@
           "status": "pass",
           "bytes": 42871,
           "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 1.13
+          "age_hours": 3.58
         }
       ],
       "status": "pass",
@@ -736,9 +740,9 @@
           "path": "data/daily/site_health.json",
           "required": true,
           "status": "pass",
-          "bytes": 22771,
-          "as_of": "2026-07-28T12:15:35+00:00",
-          "age_hours": 0.02
+          "bytes": 22773,
+          "as_of": "2026-07-28T12:16:39+00:00",
+          "age_hours": 2.45
         }
       ],
       "status": "pass",
