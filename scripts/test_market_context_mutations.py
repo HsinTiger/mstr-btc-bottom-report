@@ -60,7 +60,15 @@ def main() -> int:
     mark_provider_failed(equity_self_check, "Yahoo ^GSPC")
     expect_status("yahoo-fred-self-check", equity_self_check, "degraded")
 
-    print("market context mutation tests: PASS (4/4)")
+    m2_math = copy.deepcopy(SOURCE)
+    m2_math["macro"]["liquidity"]["m2_money_stock_yoy_change"] += 0.01
+    expect_status("m2-yoy-math", m2_math, "fail")
+
+    fake_liquidity_resonance = copy.deepcopy(SOURCE)
+    fake_liquidity_resonance["macro"]["liquidity"]["dollar_liquidity_resonance"]["state"] = "擴張共振"
+    expect_status("fake-dollar-liquidity-resonance", fake_liquidity_resonance, "fail")
+
+    print("market context mutation tests: PASS (6/6)")
     return 0
 
 

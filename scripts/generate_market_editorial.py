@@ -360,28 +360,38 @@ def build_briefs(
     oil = macro.get("oil", {})
     net_liquidity = finite(liquidity.get("net_liquidity_million_usd"))
     net_change = finite(liquidity.get("net_liquidity_30d_change"))
+    m2_yoy = finite(liquidity.get("m2_money_stock_yoy_change"))
+    m2_3m_annualized = finite(liquidity.get("m2_money_stock_3m_annualized_change"))
+    reserve_change = finite(liquidity.get("reserve_balances_30d_change"))
+    reserve_balance = finite(liquidity.get("reserve_balances_million_usd"))
+    liquidity_state = liquidity.get("dollar_liquidity_resonance", {}).get("state", "不同頻率分歧")
     fed_funds = finite(macro.get("rates", {}).get("fed_funds_pct"))
     dollar_change = finite(equities.get("broad_dollar", {}).get("change_30d"))
     oil_change = finite(oil.get("wti_spot_30d_change"))
     if oil_change is None:
         oil_change = finite(oil.get("wti_future_proxy_30d_change"))
     oil_source_count = sum(finite(value) is not None for value in (oil.get("wti_spot_usd"), oil.get("wti_future_proxy_usd")))
-    liquidity_headline = "流動性與美元尚未給出單邊答案" if direction(net_change, 0.01) != direction(dollar_change, 0.01, inverse=True) else "美元與系統流動性正在形成同向壓力"
+    liquidity_headline = {
+        "擴張共振": "美元流動性三個頻率正形成擴張共振",
+        "收縮共振": "美元流動性三個頻率正形成收縮共振",
+    }.get(liquidity_state, "M2、銀行準備金與 Fed 淨流動性仍在分歧")
     liquidity_items = [
         evidence("net-liquidity", "聯準會資產減財政部現金與隔夜逆回購", net_liquidity, compact_usd(net_liquidity * 1e6 if net_liquidity is not None else None), signed_pct(net_change) + "／30 日", liquidity.get("as_of"), direction(net_change, 0.01), 3, [source("Fed H.4.1／NY Fed／Treasury", "market-intelligence.html#liquidity-fed-oil")], "跨頻率合成，保留最慢組件 as_of；不是即時可交易流動性。", "美元流動性"),
+        evidence("m2-money-stock-yoy", "美國 M2 貨幣供給年增率", m2_yoy, signed_pct(m2_yoy), "三個月年化 " + signed_pct(m2_3m_annualized), liquidity.get("m2_money_stock_as_of"), direction(m2_yoy, 0.01), 1, [source("Federal Reserve M2SL via FRED", "https://fred.stlouisfed.org/series/M2SL")], "M2 是月頻慢速背景，適合辨識廣義貨幣擴張，不拿來判斷單日行情。", "廣義貨幣"),
+        evidence("bank-reserves-30d", "美國銀行準備金 30 日變化", reserve_change, signed_pct(reserve_change), "餘額 " + compact_usd(reserve_balance * 1e6 if reserve_balance is not None else None), liquidity.get("reserve_balances_as_of"), direction(reserve_change, 0.01), 1, [source("Federal Reserve WRESBAL via FRED", "https://fred.stlouisfed.org/series/WRESBAL")], "銀行準備金比 M2 更接近金融體系可用美元，但仍不是加密市場專屬資金流。", "銀行體系流動性"),
         evidence("fed-funds", "有效聯邦資金利率", fed_funds, f"{fed_funds:.2f}%" if fed_funds is not None else "—", "政策資金成本", macro.get("rates", {}).get("fed_funds_as_of"), direction((4.0 - fed_funds) if fed_funds is not None else None, 0.25), 1, [source("Federal Reserve via FRED", "https://fred.stlouisfed.org/series/DFF")], "利率決定無收益資產的機會成本。", "聯準會"),
         evidence("broad-dollar", "廣義美元指數 30 日變化", dollar_change, signed_pct(dollar_change), compact_number(finite(equities.get("broad_dollar", {}).get("value")), 1), equities.get("broad_dollar", {}).get("as_of"), direction(dollar_change, 0.01, inverse=True), 1, [source("Federal Reserve via FRED", "https://fred.stlouisfed.org/series/DTWEXBGS")], "美元走強通常收緊全球金融條件。", "美元"),
         evidence("wti-oil", "西德州原油 30 日變化", oil_change, signed_pct(oil_change), f"${finite(oil.get('wti_spot_usd')):.2f}/桶" if finite(oil.get("wti_spot_usd")) is not None else "期貨代理", oil.get("wti_spot_as_of") or oil.get("wti_future_proxy_as_of"), direction(oil_change, 0.08, inverse=True), oil_source_count, [source("EIA via FRED／CL 期貨代理", "https://fred.stlouisfed.org/series/DCOILWTICO")], "油價上行可能抬高通膨尾部風險，延後寬鬆預期。", "通膨"),
     ]
     liquidity_brief = finish_brief(
         "liquidity-fed-oil", "宏觀流動性、聯準會與原油", liquidity_headline,
-        f"淨流動性約 {compact_usd(net_liquidity * 1e6 if net_liquidity is not None else None)}、30 日 {signed_pct(net_change)}；美元 {signed_pct(dollar_change)}、WTI {signed_pct(oil_change)}。",
+        f"Fed 淨流動性 30 日 {signed_pct(net_change)}、銀行準備金 30 日 {signed_pct(reserve_change)}、M2 年增 {signed_pct(m2_yoy)}；三票判定為「{liquidity_state}」。",
         "常見解讀是聯準會資產增加就必然利多 BTC，或油價上升就必然利空風險資產。",
-        "本站同時看 Fed 資產、TGA、逆回購、美元與油價；只有資金供給、融資成本與通膨約束同向，才稱為宏觀共振。",
+        "本站把 M2 當慢速背景、銀行準備金當金融體系脈衝、Fed 淨流動性當政策資產負債表脈衝；三者先投票，再看美元與油價是否抵銷。",
         "油價上升若推高通膨預期，可能透過債券殖利率與美元再次收緊流動性，而不是直接作用在 BTC。",
-        "今天先看流動性是否真的進入市場，再看美元和油價是否抵銷這個效果。",
-        "若淨流動性持續增加、美元轉弱且油價壓力回落，『宏觀仍分歧』假說失效。",
-        liquidity_items, pages, abs(net_change or 0) * 10 + abs(dollar_change or 0) * 10 + abs(oil_change or 0) * 3,
+        "今天先看 M2、銀行準備金與 Fed 淨流動性是否共振，再用美元、利率與油價判斷傳導是否被抵銷。",
+        "若 M2、銀行準備金與 Fed 淨流動性轉為兩票以上反向，且美元同步確認，當前流動性假說失效。",
+        liquidity_items, pages, abs(net_change or 0) * 10 + abs(reserve_change or 0) * 10 + abs(m2_yoy or 0) * 5 + abs(dollar_change or 0) * 10 + abs(oil_change or 0) * 3,
     )
 
     credit = macro.get("credit", {})

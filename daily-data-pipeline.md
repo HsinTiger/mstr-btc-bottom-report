@@ -52,7 +52,8 @@
    - 同日 revision 與相異日期觀點寫入 append-only 歷史，不沿用已失效結論。
 
 6. `scripts/collect_market_context.py` 與 `scripts/verify_market_context.py`
-   - 收集 Fed H.4.1、紐約聯儲逆回購、財政部 TGA、Treasury 殖利率曲線、FRED 信用／利率／原油／美股，以及 Congress.gov、Federal Register、SEC 等政策來源。
+   - 收集 Fed H.4.1、M2 貨幣供給、銀行準備金、紐約聯儲逆回購、財政部 TGA、Treasury 殖利率曲線、FRED 信用／利率／原油／美股，以及 Congress.gov、Federal Register、SEC 等政策來源。
+   - 美元流動性不使用單一黑箱分數：Fed 淨流動性 30 日、銀行準備金 30 日與 M2 年增各一票，另外保留 M2 三個月年化變化作轉折參考。
    - BTC 鏈上使用 Blockchain.com＋Blockchair／mempool.space；ETH 以 PublicNode、1RPC、Flashbots 區塊高度與抽樣區塊 hash 對帳。
    - 每個欄位保留原始 `as_of`；不同更新頻率不以抓取時間偽裝為同一日資料。
 

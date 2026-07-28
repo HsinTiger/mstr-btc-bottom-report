@@ -33,6 +33,8 @@ USER_AGENT = "mstr-btc-bottom-report/market-context hsin73@realtek.com"
 
 FRED_SERIES = {
     "fed_assets": "WALCL",
+    "m2_money_stock": "M2SL",
+    "reserve_balances": "WRESBAL",
     "fed_funds": "DFF",
     "treasury_2y": "DGS2",
     "treasury_10y": "DGS10",
@@ -168,6 +170,8 @@ def row_summary(rows: list[tuple[date, float]], *, unit: str, percent_change: bo
     latest_day, latest = rows[-1]
     prior_7 = value_on_or_before(rows, latest_day - timedelta(days=7))
     prior_30 = value_on_or_before(rows, latest_day - timedelta(days=30))
+    prior_90 = value_on_or_before(rows, latest_day - timedelta(days=90))
+    prior_365 = value_on_or_before(rows, latest_day - timedelta(days=365))
 
     def delta(prior: tuple[date, float] | None) -> float | None:
         if prior is None or prior[1] == 0:
@@ -182,8 +186,14 @@ def row_summary(rows: list[tuple[date, float]], *, unit: str, percent_change: bo
         "prior_7d_as_of": prior_7[0].isoformat() if prior_7 else None,
         "prior_30d_value": prior_30[1] if prior_30 else None,
         "prior_30d_as_of": prior_30[0].isoformat() if prior_30 else None,
+        "prior_90d_value": prior_90[1] if prior_90 else None,
+        "prior_90d_as_of": prior_90[0].isoformat() if prior_90 else None,
+        "prior_365d_value": prior_365[1] if prior_365 else None,
+        "prior_365d_as_of": prior_365[0].isoformat() if prior_365 else None,
         "change_7d": delta(prior_7),
         "change_30d": delta(prior_30),
+        "change_90d": delta(prior_90),
+        "change_365d": delta(prior_365),
         "change_mode": "percent" if percent_change else "absolute",
     }
 
@@ -198,9 +208,11 @@ def collect_fred() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             url = f"https://fred.stlouisfed.org/series/{series}"
             try:
                 rows, fetch_url = future.result()
-                percent_change = name in {"fed_assets", "wti_spot", "sp500", "nasdaq", "vix", "broad_dollar"}
+                percent_change = name in {"fed_assets", "m2_money_stock", "reserve_balances", "wti_spot", "sp500", "nasdaq", "vix", "broad_dollar"}
                 unit = {
                     "fed_assets": "million_usd",
+                    "m2_money_stock": "billion_usd_seasonally_adjusted",
+                    "reserve_balances": "million_usd",
                     "fed_funds": "percent",
                     "treasury_2y": "percent",
                     "treasury_10y": "percent",
@@ -737,6 +749,35 @@ def collect_macro() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     prior_rrp = finite(direct.get("rrp", {}).get("prior_30d_value"))
     prior_net = prior_fed_assets - prior_tga - prior_rrp / 1_000_000 if None not in {prior_fed_assets, prior_tga, prior_rrp} else None
     current_net = fed_assets - tga - rrp / 1_000_000 if fed_assets is not None and tga is not None and rrp is not None else None
+    m2 = fred.get("m2_money_stock", {})
+    m2_value = finite(m2.get("value"))
+    m2_yoy = finite(m2.get("change_365d"))
+    m2_90d = finite(m2.get("change_90d"))
+    m2_3m_annualized = (1 + m2_90d) ** 4 - 1 if m2_90d is not None and m2_90d > -1 else None
+    reserves = fred.get("reserve_balances", {})
+    reserve_value = finite(reserves.get("value"))
+    reserve_30d = finite(reserves.get("change_30d"))
+    net_30d = current_net / prior_net - 1 if current_net is not None and prior_net not in (None, 0) else None
+
+    def liquidity_vote(value: float | None, threshold: float = 0.01) -> str:
+        if value is None or abs(value) < threshold:
+            return "neutral"
+        return "positive" if value > 0 else "negative"
+
+    liquidity_votes = {
+        "fed_net_liquidity_30d": liquidity_vote(net_30d),
+        "bank_reserve_balances_30d": liquidity_vote(reserve_30d),
+        "m2_money_stock_yoy": liquidity_vote(m2_yoy),
+    }
+    positive_votes = sum(value == "positive" for value in liquidity_votes.values())
+    negative_votes = sum(value == "negative" for value in liquidity_votes.values())
+    neutral_votes = sum(value == "neutral" for value in liquidity_votes.values())
+    if positive_votes >= 2 and negative_votes == 0:
+        liquidity_state = "擴張共振"
+    elif negative_votes >= 2 and positive_votes == 0:
+        liquidity_state = "收縮共振"
+    else:
+        liquidity_state = "不同頻率分歧"
     liquidity = {
         "fed_assets_million_usd": fed_assets,
         "fed_assets_as_of": fred.get("fed_assets", {}).get("as_of"),
@@ -749,7 +790,7 @@ def collect_macro() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         "rrp_usd": rrp,
         "rrp_as_of": direct.get("rrp", {}).get("as_of"),
         "net_liquidity_million_usd": current_net,
-        "net_liquidity_30d_change": current_net / prior_net - 1 if current_net is not None and prior_net not in (None, 0) else None,
+        "net_liquidity_30d_change": net_30d,
         "prior_net_liquidity_million_usd": prior_net,
         "prior_net_liquidity_as_of": min(filter(None, [prior_fed_assets_as_of, direct.get("tga", {}).get("prior_30d_as_of"), direct.get("rrp", {}).get("prior_30d_as_of")]), default=None),
         "prior_component_as_of": {
@@ -759,6 +800,24 @@ def collect_macro() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         },
         "as_of": min(filter(None, [fred.get("fed_assets", {}).get("as_of"), direct.get("tga", {}).get("as_of"), direct.get("rrp", {}).get("as_of")]), default=None),
         "formula": "Fed total assets (million USD) - TGA closing balance (million USD) - ON RRP accepted amount converted to million USD",
+        "m2_money_stock_billion_usd": m2_value,
+        "m2_money_stock_as_of": m2.get("as_of"),
+        "m2_money_stock_yoy_change": m2_yoy,
+        "m2_money_stock_3m_annualized_change": m2_3m_annualized,
+        "m2_money_stock_prior_365d_value": finite(m2.get("prior_365d_value")),
+        "m2_money_stock_prior_90d_value": finite(m2.get("prior_90d_value")),
+        "reserve_balances_million_usd": reserve_value,
+        "reserve_balances_as_of": reserves.get("as_of"),
+        "reserve_balances_30d_change": reserve_30d,
+        "reserve_balances_prior_30d_value": finite(reserves.get("prior_30d_value")),
+        "dollar_liquidity_resonance": {
+            "state": liquidity_state,
+            "positive_votes": positive_votes,
+            "negative_votes": negative_votes,
+            "neutral_votes": neutral_votes,
+            "components": liquidity_votes,
+            "method": "Fed 淨流動性 30 日、銀行準備金 30 日與 M2 年增各一票；只判方向共振，不混成黑箱指數",
+        },
     }
     curve = direct.get("treasury_curve", {})
     direct_treasury_2y = finite(curve.get("treasury_2y"))
@@ -818,7 +877,7 @@ def collect_macro() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         equities["sp500"] is not None and equities["sp500_independent_check"] is not None,
         equities["nasdaq"] is not None and equities["nasdaq_independent_check"] is not None,
     )
-    status = "pass" if liquidity["net_liquidity_million_usd"] is not None and rates["treasury_10y_pct"] is not None and equities["sp500"] and all(independent_pairs) else "degraded"
+    status = "pass" if liquidity["net_liquidity_million_usd"] is not None and liquidity["m2_money_stock_yoy_change"] is not None and liquidity["reserve_balances_30d_change"] is not None and rates["treasury_10y_pct"] is not None and equities["sp500"] and all(independent_pairs) else "degraded"
     return {
         "status": status,
         "liquidity": liquidity,

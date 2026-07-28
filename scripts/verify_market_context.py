@@ -89,6 +89,8 @@ def verify(source: dict[str, Any]) -> dict[str, Any]:
 
     independent_pairs = {
         "fed_assets": source_pass("FRED WALCL") and source_pass("Federal Reserve H.4.1"),
+        "m2_official": source_pass("FRED M2SL"),
+        "reserve_balances_official": source_pass("FRED WRESBAL"),
         "treasury_10y": source_pass("FRED DGS10") and source_pass("U.S. Treasury"),
         "sp500": source_pass("FRED SP500") and source_pass("Yahoo ^GSPC"),
         "nasdaq": source_pass("FRED NASDAQCOM") and source_pass("Yahoo ^IXIC"),
@@ -111,6 +113,44 @@ def verify(source: dict[str, Any]) -> dict[str, Any]:
     net_change = finite(liquidity.get("net_liquidity_30d_change"))
     expected_net_change = net / prior_net - 1 if net is not None and prior_net not in (None, 0) else None
     check("net_liquidity_change_math", expected_net_change is not None and net_change is not None and abs(expected_net_change - net_change) < 1e-12, "淨流動性 30 日變化重算不一致")
+    m2_value = finite(liquidity.get("m2_money_stock_billion_usd"))
+    m2_prior_365 = finite(liquidity.get("m2_money_stock_prior_365d_value"))
+    m2_prior_90 = finite(liquidity.get("m2_money_stock_prior_90d_value"))
+    m2_yoy = finite(liquidity.get("m2_money_stock_yoy_change"))
+    m2_3m_annualized = finite(liquidity.get("m2_money_stock_3m_annualized_change"))
+    expected_m2_yoy = m2_value / m2_prior_365 - 1 if m2_value is not None and m2_prior_365 not in (None, 0) else None
+    expected_m2_3m = (m2_value / m2_prior_90) ** 4 - 1 if m2_value is not None and m2_prior_90 not in (None, 0) else None
+    check("m2_yoy_math", expected_m2_yoy is not None and m2_yoy is not None and abs(expected_m2_yoy - m2_yoy) < 1e-12, "M2 年增率重算不一致")
+    check("m2_3m_annualized_math", expected_m2_3m is not None and m2_3m_annualized is not None and abs(expected_m2_3m - m2_3m_annualized) < 1e-12, "M2 三個月年化變化重算不一致")
+    reserve_value = finite(liquidity.get("reserve_balances_million_usd"))
+    reserve_prior = finite(liquidity.get("reserve_balances_prior_30d_value"))
+    reserve_change = finite(liquidity.get("reserve_balances_30d_change"))
+    expected_reserve_change = reserve_value / reserve_prior - 1 if reserve_value is not None and reserve_prior not in (None, 0) else None
+    check("reserve_balances_change_math", expected_reserve_change is not None and reserve_change is not None and abs(expected_reserve_change - reserve_change) < 1e-12, "銀行準備金 30 日變化重算不一致")
+
+    def liquidity_vote(value: float | None, threshold: float = 0.01) -> str:
+        if value is None or abs(value) < threshold:
+            return "neutral"
+        return "positive" if value > 0 else "negative"
+
+    expected_components = {
+        "fed_net_liquidity_30d": liquidity_vote(net_change),
+        "bank_reserve_balances_30d": liquidity_vote(reserve_change),
+        "m2_money_stock_yoy": liquidity_vote(m2_yoy),
+    }
+    positive_votes = sum(value == "positive" for value in expected_components.values())
+    negative_votes = sum(value == "negative" for value in expected_components.values())
+    neutral_votes = sum(value == "neutral" for value in expected_components.values())
+    expected_state = "擴張共振" if positive_votes >= 2 and negative_votes == 0 else "收縮共振" if negative_votes >= 2 and positive_votes == 0 else "不同頻率分歧"
+    expected_resonance = {
+        "state": expected_state,
+        "positive_votes": positive_votes,
+        "negative_votes": negative_votes,
+        "neutral_votes": neutral_votes,
+        "components": expected_components,
+        "method": "Fed 淨流動性 30 日、銀行準備金 30 日與 M2 年增各一票；只判方向共振，不混成黑箱指數",
+    }
+    check("dollar_liquidity_resonance", liquidity.get("dollar_liquidity_resonance") == expected_resonance, "美元流動性共振票數或方向不可重算")
     assets_gap = relative_gap(fed_assets, h41_assets)
     check("fed_assets_cross_source", assets_gap is not None and assets_gap <= 0.02 and abs(assets_gap - finite(liquidity.get("fed_assets_cross_source_gap"))) < 1e-9, "Fed 總資產跨來源差異超過 2%")
     component_dates = [liquidity.get("fed_assets_as_of"), liquidity.get("tga_as_of"), liquidity.get("rrp_as_of")]
@@ -121,7 +161,7 @@ def verify(source: dict[str, Any]) -> dict[str, Any]:
     h41_observed = parse_time(liquidity.get("h41_assets_as_of"))
     h41_released = parse_time(liquidity.get("h41_release_date"))
     check("h41_observation_date", liquidity.get("h41_assets_as_of") == liquidity.get("fed_assets_as_of") and h41_observed is not None and h41_released is not None and h41_released >= h41_observed, "H.4.1 觀測日與發布日語意錯誤")
-    for field, maximum in (("fed_assets_as_of", 14), ("h41_assets_as_of", 14), ("tga_as_of", 10), ("rrp_as_of", 10)):
+    for field, maximum in (("fed_assets_as_of", 14), ("h41_assets_as_of", 14), ("tga_as_of", 10), ("rrp_as_of", 10), ("m2_money_stock_as_of", 120), ("reserve_balances_as_of", 14)):
         age = age_days(liquidity.get(field))
         check(f"fresh:{field}", age is not None and -1 <= age <= maximum, f"{field} 超過 {maximum} 日新鮮度契約")
 

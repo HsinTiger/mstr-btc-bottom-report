@@ -57,7 +57,7 @@ summary: 每日四週期與市場總編、每小時跨資產雷達分層更新�
 | 加密法案與政策 | Congress.gov、Federal Register、SEC、Federal Reserve、White House | 提案、新聞稿、正式規則與生效法律分層；事件數不等於政策利多 |
 | BTC 鏈上 | Blockchain.com、Blockchair、mempool.space、Coin Metrics | 交易數與算力做跨來源差異；MVRV 只作估值背景 |
 | ETH 鏈上 | PublicNode、1RPC、Flashbots；LlamaRPC 為額外備援 | 至少雙 RPC 高度差不超過 3，抽樣區塊 hash 與交易數須一致；抽樣不冒充全日總量 |
-| 美元流動性與聯準會 | Fed H.4.1／FRED、NY Fed RRP、Treasury FiscalData TGA | 淨流動性逐組件保留 `as_of`，以最慢組件日期呈現，不偽裝即時 |
+| 美元流動性與聯準會 | Fed H.4.1／FRED `WALCL`、`M2SL`、`WRESBAL`、NY Fed RRP、Treasury FiscalData TGA | Fed 淨流動性看 30 日政策脈衝、銀行準備金看金融體系脈衝、美國廣義貨幣供給看月頻慢速背景；廣義貨幣資料可容許 120 日但必須顯示原始 `as_of`，三者只投票判斷共振，不混成黑箱指數 |
 | 原油、信用與債券 | FRED WTI／Yahoo `CL=F`、ICE BofA OAS、Treasury XML／FRED | 現貨油與期貨只比方向；HYG／IEF 只作 OAS 失效時的備援代理 |
 | 美股與波動率 | FRED SP500／NASDAQCOM／VIXCLS、Yahoo 同標的核對 | 同標的才比較 level；VIX 只描述避險定價，不是方向預測器 |
 

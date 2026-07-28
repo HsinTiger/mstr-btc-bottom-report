@@ -163,6 +163,8 @@ def verify(
             "crypto-breadth": positive_assets / tracked if tracked else None,
             "btc-perp-funding": finite(market.get("analysis", {}).get("BTC", {}).get("funding_annualized_median")),
             "net-liquidity": finite(liquidity.get("net_liquidity_million_usd")),
+            "m2-money-stock-yoy": finite(liquidity.get("m2_money_stock_yoy_change")),
+            "bank-reserves-30d": finite(liquidity.get("reserve_balances_30d_change")),
             "fed-funds": finite(rates.get("fed_funds_pct")),
             "broad-dollar": finite(equities.get("broad_dollar", {}).get("change_30d")),
             "wti-oil": finite(oil.get("wti_spot_30d_change")) if finite(oil.get("wti_spot_30d_change")) is not None else finite(oil.get("wti_future_proxy_30d_change")),
@@ -180,6 +182,8 @@ def verify(
         funding = expected_values["btc-funding"]
         mvrv = expected_values["btc-mvrv"]
         net_change = finite(liquidity.get("net_liquidity_30d_change"))
+        m2_yoy = expected_values["m2-money-stock-yoy"]
+        reserve_change = expected_values["bank-reserves-30d"]
         fed_funds = expected_values["fed-funds"]
         oil_change = expected_values["wti-oil"]
         hy_change = finite(credit.get("high_yield_oas_30d_change_pp"))
@@ -212,6 +216,8 @@ def verify(
             "crypto-breadth": (market.get("generated_at"), 2, expected_direction((expected_values["crypto-breadth"] or 0) - 0.5, 0.2)),
             "btc-perp-funding": (market.get("generated_at"), funding_sources, expected_direction(funding, 0.12, inverse=True)),
             "net-liquidity": (liquidity.get("as_of"), 3, expected_direction(net_change, 0.01)),
+            "m2-money-stock-yoy": (liquidity.get("m2_money_stock_as_of"), 1, expected_direction(m2_yoy, 0.01)),
+            "bank-reserves-30d": (liquidity.get("reserve_balances_as_of"), 1, expected_direction(reserve_change, 0.01)),
             "fed-funds": (rates.get("fed_funds_as_of"), 1, expected_direction((4.0 - fed_funds) if fed_funds is not None else None, 0.25)),
             "broad-dollar": (equities.get("broad_dollar", {}).get("as_of"), 1, expected_direction(expected_values["broad-dollar"], 0.01, inverse=True)),
             "wti-oil": (oil.get("wti_spot_as_of") or oil.get("wti_future_proxy_as_of"), 2, expected_direction(oil_change, 0.08, inverse=True)),

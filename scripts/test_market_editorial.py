@@ -40,6 +40,9 @@ def main() -> int:
         expect(brief["falsifier"] and brief["what_changed"], f"{brief['id']} falsifier/change")
         expect(brief["knowledge_links"], f"{brief['id']} knowledge links")
         expect(brief["editorial_scope"] == "deterministic_research_hypothesis_not_source_claim", f"{brief['id']} scope")
+    liquidity_desk = next(item for item in editorial["desks"] if item["id"] == "liquidity-fed-oil")
+    liquidity_metrics = {item["metric_id"] for item in liquidity_desk["evidence"]}
+    expect({"net-liquidity", "m2-money-stock-yoy", "bank-reserves-30d"}.issubset(liquidity_metrics), "three-speed dollar liquidity evidence")
     print(f"market editorial tests: PASS ({checks}/{checks})")
     return 0
 

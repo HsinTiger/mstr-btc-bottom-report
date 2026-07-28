@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "verified_at": "2026-07-28T11:09:46+00:00",
-  "source_generated_at": "2026-07-28T11:09:33+00:00",
-  "source_hash": "98534820014581b518aede91adb25e574d346279cdf8c1784610abcbdaa272ae",
+  "verified_at": "2026-07-28T12:10:30+00:00",
+  "source_generated_at": "2026-07-28T12:09:43+00:00",
+  "source_hash": "a64f773e0fb5f9ec4e0518d753bbb93d672ab3d316372915358e4da3542d92bc",
   "status": "pass",
   "failures": [],
   "degradations": [],
@@ -25,7 +25,7 @@
     {
       "name": "freshness",
       "status": "pass",
-      "detail": "market context age_hours=0.00"
+      "detail": "market context age_hours=0.01"
     },
     {
       "name": "date_binding",
@@ -46,6 +46,16 @@
       "name": "independent_pair:fed_assets",
       "status": "pass",
       "detail": "fed_assets 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:m2_official",
+      "status": "pass",
+      "detail": "m2_official 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:reserve_balances_official",
+      "status": "pass",
+      "detail": "reserve_balances_official 缺少兩個獨立成功來源，不得標示完整通過"
     },
     {
       "name": "independent_pair:treasury_10y",
@@ -81,6 +91,26 @@
       "name": "net_liquidity_change_math",
       "status": "pass",
       "detail": "淨流動性 30 日變化重算不一致"
+    },
+    {
+      "name": "m2_yoy_math",
+      "status": "pass",
+      "detail": "M2 年增率重算不一致"
+    },
+    {
+      "name": "m2_3m_annualized_math",
+      "status": "pass",
+      "detail": "M2 三個月年化變化重算不一致"
+    },
+    {
+      "name": "reserve_balances_change_math",
+      "status": "pass",
+      "detail": "銀行準備金 30 日變化重算不一致"
+    },
+    {
+      "name": "dollar_liquidity_resonance",
+      "status": "pass",
+      "detail": "美元流動性共振票數或方向不可重算"
     },
     {
       "name": "fed_assets_cross_source",
@@ -121,6 +151,16 @@
       "name": "fresh:rrp_as_of",
       "status": "pass",
       "detail": "rrp_as_of 超過 10 日新鮮度契約"
+    },
+    {
+      "name": "fresh:m2_money_stock_as_of",
+      "status": "pass",
+      "detail": "m2_money_stock_as_of 超過 120 日新鮮度契約"
+    },
+    {
+      "name": "fresh:reserve_balances_as_of",
+      "status": "pass",
+      "detail": "reserve_balances_as_of 超過 14 日新鮮度契約"
     },
     {
       "name": "yield_curve_math",
@@ -254,9 +294,9 @@
     }
   ],
   "source_summary": {
-    "passed": 38,
+    "passed": 40,
     "failed": 1,
-    "total": 39
+    "total": 41
   },
   "execution_gate_eligible": false
 }
