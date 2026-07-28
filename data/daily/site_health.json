@@ -1,20 +1,16 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-28T06:42:01+00:00",
-  "status": "fail",
+  "generated_at": "2026-07-28T07:30:18+00:00",
+  "status": "degraded",
   "summary": {
     "active_pages": 8,
     "archive_pages": 0,
-    "pass": 2,
+    "pass": 3,
     "degraded": 5,
-    "fail": 1,
-    "critical_failures": [
-      "site-governance"
-    ],
+    "fail": 0,
+    "critical_failures": [],
     "critical_surface_failures": [],
-    "critical_data_failures": [
-      "site-governance"
-    ],
+    "critical_data_failures": [],
     "degraded_pages": [
       "market-overview",
       "market-radar",
@@ -42,10 +38,10 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 33615,
+          "bytes": 34480,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -53,10 +49,10 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
+          "bytes": 3665,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         }
       ],
@@ -125,9 +121,9 @@
           "path": "data/daily/market_universe.json",
           "required": true,
           "status": "degraded",
-          "bytes": 111293,
+          "bytes": 113948,
           "as_of": "2026-07-28T06:42:01+00:00",
-          "age_hours": 0.0,
+          "age_hours": 0.8,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -135,9 +131,9 @@
           "path": "data/daily/market_universe_verification.json",
           "required": true,
           "status": "degraded",
-          "bytes": 435,
+          "bytes": 451,
           "as_of": "2026-07-28T06:42:01+00:00",
-          "age_hours": 0.0,
+          "age_hours": 0.8,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -145,9 +141,9 @@
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 34590,
+          "bytes": 35603,
           "as_of": "2026-07-28T06:42:01+00:00",
-          "age_hours": 0.0
+          "age_hours": 0.8
         }
       ],
       "status": "degraded",
@@ -200,13 +196,13 @@
     {
       "id": "ai-intelligence",
       "path": "x-intelligence.html",
-      "title": "AI 情報",
-      "title_contains": "AI 情報",
+      "title": "AI 總編",
+      "title_contains": "AI 總編",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "以官方 feeds、GitHub Releases 與 arXiv 維護 AI 應用與變現、工程方法、模型進展三類情報，每天提出三個可執行精進動作。",
-      "user_question": "今天有哪些最新 AI 用法、工程方法與模型進展值得實際測試？",
-      "open_when": "每天想精進 AI 工作流時；先看三個行動，再讀完整消息與來源。",
+      "role": "以官方 feeds、GitHub Releases 與 arXiv 維護三類 AI 情報；原始主題訊號只提供背景，本站另行提出非共識編輯假說與反證條件。",
+      "user_question": "今天哪些 AI 主題在多個來源同時出現，本站據此提出什麼假說，又該如何推翻？",
+      "open_when": "每天想掌握 AI 產業變化時；先讀今日主文與三篇短評，再看行動與原始消息。",
       "cadence": "每日 08:37（台北時間）",
       "surface_type": "context_intelligence",
       "owner_action": "keep",
@@ -215,18 +211,18 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 34880,
-          "as_of": "2026-07-28T03:50:19+00:00",
-          "age_hours": 2.86,
+          "bytes": 52381,
+          "as_of": "2026-07-28T07:29:35+00:00",
+          "age_hours": 0.01,
           "quality": "pass"
         },
         {
           "path": "data/daily/ai_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 627,
-          "as_of": "2026-07-28T03:50:22+00:00",
-          "age_hours": 2.86,
+          "bytes": 926,
+          "as_of": "2026-07-28T07:29:41+00:00",
+          "age_hours": 0.01,
           "quality": "pass"
         }
       ],
@@ -295,10 +291,10 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 33615,
+          "bytes": 34480,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -306,29 +302,29 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
+          "bytes": 3665,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 8020,
+          "bytes": 8279,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:29+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 34901,
+          "bytes": 35877,
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74
+          "age_hours": 19.55
         }
       ],
       "status": "degraded",
@@ -396,10 +392,10 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 33615,
+          "bytes": 34480,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -407,19 +403,19 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
+          "bytes": 3665,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 34901,
+          "bytes": 35877,
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74
+          "age_hours": 19.55
         }
       ],
       "status": "degraded",
@@ -487,30 +483,30 @@
           "path": "data/daily/timescale_price_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 1362482,
+          "bytes": 1408114,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:29+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 8020,
+          "bytes": 8279,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:29+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 33615,
+          "bytes": 34480,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -518,19 +514,19 @@
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
+          "bytes": 3665,
           "lineage": "2026-07-27T11:57:26+00:00",
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74,
+          "age_hours": 19.55,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 34901,
+          "bytes": 35877,
           "as_of": "2026-07-27T11:57:30+00:00",
-          "age_hours": 18.74
+          "age_hours": 19.55
         }
       ],
       "status": "degraded",
@@ -598,7 +594,7 @@
           "path": "wiki/manifest.json",
           "required": true,
           "status": "pass",
-          "bytes": 5423
+          "bytes": 5601
         }
       ],
       "status": "pass",
@@ -666,22 +662,20 @@
           "path": "data/site_registry.json",
           "required": true,
           "status": "pass",
-          "bytes": 12962
+          "bytes": 13296
         },
         {
           "path": "data/daily/site_health.json",
           "required": true,
-          "status": "fail",
-          "bytes": 21093,
-          "as_of": "2026-07-28T03:50:22+00:00",
-          "age_hours": 2.86,
-          "quality": "fail",
-          "reason": "資料品質狀態為 fail"
+          "status": "pass",
+          "bytes": 21722,
+          "as_of": "2026-07-28T07:13:21+00:00",
+          "age_hours": 0.28
         }
       ],
-      "status": "fail",
+      "status": "pass",
       "surface_status": "pass",
-      "data_status": "fail",
+      "data_status": "pass",
       "checks": [
         {
           "name": "page_exists",
@@ -734,5 +728,5 @@
     "封存頁不得出現在主要導航，且必須指向目前替代專區。",
     "缺值、過期、schema 或日期不一致時 fail closed。"
   ],
-  "publication_mode": "fail_closed_diagnostics_only"
+  "publication_mode": "normal"
 }

@@ -34,6 +34,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test source-bounded editorial synthesis
+        run: python scripts/test_ai_editorial.py
+
       - name: Collect official AI feeds and releases
         id: collect_ai
         continue-on-error: true
@@ -43,6 +46,15 @@ jobs:
         id: verify_ai
         continue-on-error: true
         run: python scripts/verify_ai_intelligence.py
+
+      - name: Prove verifier rejects editorial and history mutations
+        run: python scripts/test_ai_verifier_mutations.py
+
+      - name: Install pinned browser smoke dependency
+        run: python -m pip install -r requirements-smoke.txt
+
+      - name: Render AI editor on desktop, mobile, and failed verification
+        run: python scripts/smoke_ai_intelligence.py
 
       - name: Audit product surfaces and publish diagnostics
         run: python scripts/audit_product_surfaces.py --allow-fail-closed-data

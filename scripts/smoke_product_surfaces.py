@@ -12,6 +12,7 @@ import threading
 from contextlib import contextmanager
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal, ROUND_HALF_UP
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Iterator
@@ -31,7 +32,7 @@ PAGES = {
     "analytics.html": "週期證據矩陣",
     "dashboard.html": "近一年標準化價格",
     "daily-extensions.html": "今天最值得追蹤的觀點",
-    "x-intelligence.html": "每天精進三件事",
+    "x-intelligence.html": "今天真正改變了什麼",
     "wiki.html": "最後驗證",
     "site-overview.html": "頁面程式",
 }
@@ -39,6 +40,12 @@ ANALYSIS_PAGES = {"index.html", "analytics.html", "dashboard.html", "daily-exten
 STATUS_PAGES = ANALYSIS_PAGES | {"market-monitor.html", "x-intelligence.html"}
 VIEWPORTS = {"desktop": (1440, 1000), "mobile": (390, 844)}
 CRASH_MARKERS = ("Cannot read properties", "治理資料失敗", "知識庫載入失敗", "ReferenceError", "SyntaxError")
+
+
+def browser_money(value: float, digits: int = 2) -> str:
+    quantum = Decimal(1).scaleb(-digits)
+    rounded = Decimal(str(value)).quantize(quantum, rounding=ROUND_HALF_UP)
+    return f"${rounded:,.{digits}f}"
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -193,6 +200,10 @@ def validate_base_page(
             raise RuntimeError("AI 情報狀態不可讀")
         if 'data-category-count="3"' not in dom or 'data-action-count="3"' not in dom:
             raise RuntimeError("AI 情報三分類或三個行動未完整載入")
+        if 'data-editorial-count="3"' not in dom or 'data-lead-visible="true"' not in dom:
+            raise RuntimeError("AI 情報主文或三篇機構觀點未完整載入")
+        if 'data-page-overflow="false"' not in dom:
+            raise RuntimeError("AI 情報版面發生水平溢位")
 
 
 def main() -> int:
@@ -202,14 +213,18 @@ def main() -> int:
     analysis = json.loads((ROOT / "data/daily/timescale_intelligence.json").read_text(encoding="utf-8-sig"))
     analysis_verification = json.loads((ROOT / "data/daily/timescale_intelligence_verification.json").read_text(encoding="utf-8-sig"))
     market = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
+    ai = json.loads((ROOT / "data/daily/ai_intelligence.json").read_text(encoding="utf-8-sig"))
+    ai_verification = json.loads((ROOT / "data/daily/ai_intelligence_verification.json").read_text(encoding="utf-8-sig"))
     daily_key = analysis["horizons"]["daily"]["key_number"]
     first_insight = analysis["exclusive_insights"][0]["title"]
+    lead_brief = next(item for item in ai["editorial_digest"]["briefs"] if item["id"] == ai["editorial_digest"]["lead_brief_id"])
     live_values = {
         "index.html": [analysis["date"], daily_key, first_insight],
-        "market-monitor.html": [f"${market['assets']['BTC']['price_usd']:,.2f}", f"${market['assets']['ETH']['price_usd']:,.2f}"],
+        "market-monitor.html": [browser_money(market["assets"]["BTC"]["price_usd"]), browser_money(market["assets"]["ETH"]["price_usd"])],
         "analytics.html": [analysis["date"], daily_key, first_insight],
         "dashboard.html": [analysis["date"], str(analysis["record_advantage"]["observations"])],
         "daily-extensions.html": [analysis["date"], first_insight],
+        "x-intelligence.html": [lead_brief["headline"], lead_brief["variant_view"], lead_brief["what_changed"], lead_brief["evidence"][0]["source_label"]],
     }
     with tempfile.TemporaryDirectory(prefix="product-smoke-") as profile, server() as base_url:
         for viewport, (width, height) in VIEWPORTS.items():
@@ -254,6 +269,20 @@ def main() -> int:
                         results.append({"viewport": viewport, "page": f"{page_name}:{fixture_name}", "status": "pass"})
                     except (RuntimeError, PlaywrightError) as error:
                         failures.append({"viewport": viewport, "page": f"{page_name}:{fixture_name}", "error": str(error)})
+
+    failed_ai_verification = {**deepcopy(ai_verification), "status": "fail", "failures": ["fixture failure"]}
+    with server({"/data/daily/ai_intelligence_verification.json": failed_ai_verification}) as base_url:
+        for viewport, (width, height) in VIEWPORTS.items():
+            try:
+                body, dom, layout = renderer.render(f"{base_url}/x-intelligence.html", width, height)
+                assert_no_horizontal_overflow(layout, f"{viewport} x-intelligence.html:verification-fail")
+                if render_status(dom) != "fail" or 'data-lead-visible="false"' not in dom:
+                    raise RuntimeError("AI verification-fail 未封鎖主文")
+                if lead_brief["headline"] in body or "AI 情報已封鎖" not in body:
+                    raise RuntimeError("AI verification-fail 沿用舊主文或缺少診斷")
+                results.append({"viewport": viewport, "page": "x-intelligence.html:verification-fail", "status": "pass"})
+            except (RuntimeError, PlaywrightError) as error:
+                failures.append({"viewport": viewport, "page": "x-intelligence.html:verification-fail", "error": str(error)})
     renderer.close()
     print(json.dumps({"browser": renderer.executable_path, "checks": len(results), "failures": failures}, ensure_ascii=False))
     return 1 if failures else 0

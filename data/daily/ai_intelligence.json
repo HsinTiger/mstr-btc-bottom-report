@@ -1,6 +1,6 @@
 {
-  "schema": 1,
-  "generated_at": "2026-07-28T03:50:19+00:00",
+  "schema": 3,
+  "generated_at": "2026-07-28T07:29:35+00:00",
   "window_hours": 336,
   "quality": {
     "status": "pass",
@@ -8,14 +8,16 @@
     "execution_gate_eligible": false,
     "failures": [],
     "degradations": [],
-    "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic ranking"
+    "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
     "posts": 21,
     "unique_sources": 10,
     "successful_sources": 10,
-    "failed_sources": 0
+    "failed_sources": 0,
+    "editorial_briefs": 3,
+    "editorial_pass": 3
   },
   "source_checks": [
     {
@@ -24,7 +26,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 1051,
       "eligible_items": 11
@@ -35,7 +37,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 1
@@ -46,7 +48,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 1
@@ -57,7 +59,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -68,7 +70,7 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 24
@@ -79,7 +81,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 2
@@ -90,7 +92,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 2
@@ -101,7 +103,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 3
@@ -112,7 +114,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 831,
       "eligible_items": 3
@@ -123,12 +125,236 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-07-28T03:50:19+00:00",
+      "checked_at": "2026-07-28T07:29:35+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
     }
   ],
+  "editorial_digest": {
+    "status": "pass",
+    "lead_brief_id": "brief-model-progress",
+    "briefs": [
+      {
+        "id": "brief-ai-application-monetization",
+        "category_id": "ai-application-monetization",
+        "category_title": "AI 應用與變現",
+        "status": "pass",
+        "theme_id": "workflow-distribution",
+        "kicker": "AI 應用與變現",
+        "headline": "AI 正從獨立目的地，變成既有工作流裡的隱形功能",
+        "standfirst": "產品價值不再只看模型多聰明，而要看它能否在不增加切換成本的情況下完成原本就存在的工作。",
+        "lede": "今日可回查的共同訊號來自 Google AI Blog 的「Connect more of your apps to Search」，以及 OpenAI News 的「Introducing OpenAI Presence」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "common_interpretation": "市場容易把更多入口、整合與代理功能解讀成採用加速。",
+        "variant_view": "真正稀缺的不是再多一個 AI 入口，而是能被量測、被治理、被持續使用的流程結果。",
+        "second_order_effect": "若 AI 被嵌進搜尋、通訊與開發環境，競爭優勢會從單次回答品質，轉向權限、上下文與工作紀錄的累積。",
+        "practical_readthrough": "只挑一條高頻工作流測試，固定記錄完成率、人工接手次數、時間與成本；沒有流程改善就不因新功能而遷移。",
+        "falsifier": "若四週內仍只有功能發布、沒有可重現的使用頻率、完成率或付費證據，這個整合趨勢仍只是分發敘事。",
+        "evidence_source_count": 3,
+        "matched_term_count": 4,
+        "evidence": [
+          {
+            "item_id": "google-ai-blog:cfc723fcba3f4c3f1ab1",
+            "title": "Connect more of your apps to Search",
+            "source_key": "google-ai-blog",
+            "source_label": "Google AI Blog",
+            "source_type": "official_feed",
+            "created_at": "2026-07-16T16:00:00+00:00",
+            "url": "https://blog.google/products-and-platforms/products/search/connected-apps/",
+            "ranking_score_0_100": 59.9,
+            "source_excerpt": "Connect more of your apps to Search — Connected apps rendering",
+            "matched_terms": [
+              "search",
+              "app"
+            ],
+            "item_integrity_hash": "26a20ddbc0eb9f8f8f8485d4a4072e27f659f2d412525d60fe1b188d970cf736",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "openai-news:839f7a51d7b587ae6fb6",
+            "title": "Introducing OpenAI Presence",
+            "source_key": "openai-news",
+            "source_label": "OpenAI News",
+            "source_type": "official_feed",
+            "created_at": "2026-07-22T05:30:00+00:00",
+            "url": "https://openai.com/index/introducing-openai-presence",
+            "ranking_score_0_100": 91.3,
+            "source_excerpt": "Introducing OpenAI Presence — Introducing OpenAI Presence, a proven enterprise AI agent platform that helps organizations deploy trusted voice and chat agents for customer and internal workflows.",
+            "matched_terms": [
+              "workflow"
+            ],
+            "item_integrity_hash": "45ba6a4eb8bfe6f4cac8396ed4714bbadd5c38becad013bb295139f5adcf854d",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "cursor-changelog:2da47eb357714739f1bc",
+            "title": "Improvements to Cursor in Slack",
+            "source_key": "cursor-changelog",
+            "source_label": "Cursor Changelog",
+            "source_type": "official_feed",
+            "created_at": "2026-07-17T00:00:00+00:00",
+            "url": "https://cursor.com/changelog/slack-improvements",
+            "ranking_score_0_100": 59.3,
+            "source_excerpt": "Improvements to Cursor in Slack — Cursor in Slack now shares a plan before it starts, runs in multi-repo environments, and can work across channels and threads.",
+            "matched_terms": [
+              "slack"
+            ],
+            "item_integrity_hash": "5dce95d41566a262acdedb7802751feed4a49616d1ceaa9c4278727e077302c7",
+            "relationship": "topic_context_not_endorsement"
+          }
+        ],
+        "editorial_scope": "editorial_hypothesis_not_source_claim",
+        "novelty_status": "baseline",
+        "what_changed": "首次建立可回查基準；明日起只在主軸或證據真的改變時更新敘事。"
+      },
+      {
+        "id": "brief-engineering-methods",
+        "category_id": "engineering-methods",
+        "category_title": "工程方法",
+        "status": "pass",
+        "theme_id": "release-velocity-debt",
+        "kicker": "工程方法",
+        "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
+        "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow-harness@1.0.45」，以及 vLLM Releases 的「v0.26.0」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
+        "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
+        "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
+        "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
+        "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
+        "evidence_source_count": 3,
+        "matched_term_count": 3,
+        "evidence": [
+          {
+            "item_id": "vercel-ai-releases:9af0501c9abb5e48f80b",
+            "title": "@ai-sdk/workflow-harness@1.0.45",
+            "source_key": "vercel-ai-releases",
+            "source_label": "Vercel AI SDK Releases",
+            "source_type": "github_release",
+            "created_at": "2026-07-28T03:11:30+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.45",
+            "ranking_score_0_100": 89.7,
+            "source_excerpt": "@ai-sdk/workflow-harness@1.0.45 — ### Patch Changes - 214ea9f: feat(workflow-harness): add utility functions for agent-step based workflow step definitions - @ai-sdk/harness@1.0.45",
+            "matched_terms": [
+              "sdk"
+            ],
+            "item_integrity_hash": "4924a35303f757ad350695462762fc76378ba472c2c70b9f474b513717cdc11a",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "vllm-releases:b811cc97eff4aae9d6ca",
+            "title": "v0.26.0",
+            "source_key": "vllm-releases",
+            "source_label": "vLLM Releases",
+            "source_type": "github_release",
+            "created_at": "2026-07-27T01:06:58+00:00",
+            "url": "https://github.com/vllm-project/vllm/releases/tag/v0.26.0",
+            "ranking_score_0_100": 80.7,
+            "source_excerpt": "v0.26.0 — # vLLM v0.26.0 Release Notes ## Highlights This release features 411 commits from 212 contributors (61 new)! * **New Inkling model family** with a full support stack: base modeling (#48799), piecewise CUDA graph support (#48822), Hopper FA4 relative attention (#48858), MTP=1 speculative decoding (#48869), LoRA (#48884), and standard ModelOpt NVFP4…",
+            "matched_terms": [
+              "release"
+            ],
+            "item_integrity_hash": "490c709b4e2c248678f7e4325e95973f61bac93daf7cd681b2d48a09b71acb92",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "transformers-releases:e711876fcc1e0f358e56",
+            "title": "Patch release: v5.14.1",
+            "source_key": "transformers-releases",
+            "source_label": "Transformers Releases",
+            "source_type": "github_release",
+            "created_at": "2026-07-16T09:41:36+00:00",
+            "url": "https://github.com/huggingface/transformers/releases/tag/v5.14.1",
+            "ranking_score_0_100": 65.5,
+            "source_excerpt": "Patch release: v5.14.1 — # Patch release v5.14.1 This patch solves a few issues which appeared when integrating Inkling model, most notably an issue affecting models using EncoderDecoderCache during assisted generation. It also fixes an issue that could appear during prefill with StaticCache and sdpa without padding for Inkling which uses a position_bias. I…",
+            "matched_terms": [
+              "release"
+            ],
+            "item_integrity_hash": "82dceac07c49fe873647a751aadeea88c4a5dd7e121c6cdf3ca3e9a600519cb3",
+            "relationship": "topic_context_not_endorsement"
+          }
+        ],
+        "editorial_scope": "editorial_hypothesis_not_source_claim",
+        "novelty_status": "baseline",
+        "what_changed": "首次建立可回查基準；明日起只在主軸或證據真的改變時更新敘事。"
+      },
+      {
+        "id": "brief-model-progress",
+        "category_id": "model-progress",
+        "category_title": "模型進展",
+        "status": "pass",
+        "theme_id": "specialization-efficiency",
+        "kicker": "模型進展",
+        "headline": "模型競爭不只追求更強，也開始追求更專用、更省、更快落地",
+        "standfirst": "輕量模型、低位元推論與專用能力同時出現，顯示產品端正在把平均能力拆成延遲、成本與特定任務可靠性。",
+        "lede": "今日可回查的共同訊號來自 Hugging Face Blog 的「Bringing Nunchaku 4-bit Diffusion Inference to Diffusers」，以及 Google DeepMind Blog 的「Introducing Gemini 3.5 Flash Cyber」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "common_interpretation": "新模型與新推論方法通常被分別解讀成能力升級或效率改善。",
+        "variant_view": "更值得追蹤的是兩者是否合流：模型若按任務專用化，再配合低成本推論，產品可能不必為每個請求支付最高能力溢價。",
+        "second_order_effect": "模型路由會從成本工具變成產品架構：快速模型處理大多數工作，專用或高能力模型只接手高風險例外。",
+        "practical_readthrough": "把任務分成低風險高頻、專業窄域與高風險例外三層，分別測成功率、延遲與成本，不再只選一個模型包辦全部。",
+        "falsifier": "若輕量或專用模型在真實任務需要大量重試與高階模型接管，總成本與延遲沒有下降，這個分層路由論點就不成立。",
+        "evidence_source_count": 3,
+        "matched_term_count": 5,
+        "evidence": [
+          {
+            "item_id": "huggingface-blog:96f5dc656a14a806246f",
+            "title": "Bringing Nunchaku 4-bit Diffusion Inference to Diffusers",
+            "source_key": "huggingface-blog",
+            "source_label": "Hugging Face Blog",
+            "source_type": "official_feed",
+            "created_at": "2026-07-23T00:00:00+00:00",
+            "url": "https://huggingface.co/blog/nunchaku-diffusers",
+            "ranking_score_0_100": 66.9,
+            "source_excerpt": "Bringing Nunchaku 4-bit Diffusion Inference to Diffusers",
+            "matched_terms": [
+              "inference",
+              "diffusion"
+            ],
+            "item_integrity_hash": "cf5d0acb92b801f68cb9576d867b482ecb79b9d3603b9c9a5fcaeac521f0c26a",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "deepmind-blog:b5de177ccc831b459c55",
+            "title": "Introducing Gemini 3.5 Flash Cyber",
+            "source_key": "deepmind-blog",
+            "source_label": "Google DeepMind Blog",
+            "source_type": "official_feed",
+            "created_at": "2026-07-17T15:00:11+00:00",
+            "url": "https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber/",
+            "ranking_score_0_100": 62.2,
+            "source_excerpt": "Introducing Gemini 3.5 Flash Cyber — Google introduces Gemini 3.5 Flash Cyber, a lightweight cybersecurity model to find and patch vulnerabilities.",
+            "matched_terms": [
+              "lightweight",
+              "flash"
+            ],
+            "item_integrity_hash": "2b4ed57b5752920b0c47ff891440acc5b364dae69777cbc12d3a23eaad59eadd",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "arxiv-ai:503a193f933c594bdf80",
+            "title": "Rethinking Classifier-Free Guidance in On-Policy Diffusion Distillation",
+            "source_key": "arxiv-ai",
+            "source_label": "arXiv cs.AI 最新研究",
+            "source_type": "preprint_feed",
+            "created_at": "2026-07-27T17:57:02+00:00",
+            "url": "https://arxiv.org/abs/2607.24731v1",
+            "ranking_score_0_100": 70.2,
+            "source_excerpt": "Rethinking Classifier-Free Guidance in On-Policy Diffusion Distillation — On-policy distillation (OPD) adapts diffusion models by querying a teacher along trajectories generated by the current student, but how it should behave under classifier-free guidance (CFG), a default component of modern diffusion systems, remains poorly understood. Existing OPD metho…",
+            "matched_terms": [
+              "diffusion"
+            ],
+            "item_integrity_hash": "430e573beeb83f15769bf8529fc02b961b2725289db452bf4e01920f07b7074c",
+            "relationship": "topic_context_not_endorsement"
+          }
+        ],
+        "editorial_scope": "editorial_hypothesis_not_source_claim",
+        "novelty_status": "baseline",
+        "what_changed": "首次建立可回查基準；明日起只在主軸或證據真的改變時更新敘事。"
+      }
+    ],
+    "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
+    "method": "deterministic topic-context synthesis; source excerpts do not endorse editorial hypotheses; every hypothesis includes a falsifier"
+  },
   "daily_actions": [
     {
       "item_id": "openai-news:839f7a51d7b587ae6fb6",
@@ -177,13 +403,14 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 91.5,
+          "ranking_score_0_100": 91.3,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 57.6
+            "recency": 56.5
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "45ba6a4eb8bfe6f4cac8396ed4714bbadd5c38becad013bb295139f5adcf854d"
         },
         {
           "id": "openai-news:389ebd02d2834f48054d",
@@ -198,13 +425,14 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 83.7,
+          "ranking_score_0_100": 83.5,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 56.0
+            "recency": 54.9
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "63c707c648ef31de317bfc0ee705ff9911cba2428b1ebde9783ae37dcd5350e7"
         },
         {
           "id": "openai-news:932591afba7f1cf55372",
@@ -219,13 +447,14 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 77.0,
+          "ranking_score_0_100": 76.8,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 50.0,
-            "recency": 59.9
+            "recency": 58.8
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "bfeefc047a3f5073b9bbefa6cc0066cbc2c5fa426425f0b24a96a55942f9b896"
         },
         {
           "id": "google-ai-blog:cfc723fcba3f4c3f1ab1",
@@ -240,13 +469,14 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 60.1,
+          "ranking_score_0_100": 59.9,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 17.9
+            "recency": 16.8
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "26a20ddbc0eb9f8f8f8485d4a4072e27f659f2d412525d60fe1b188d970cf736"
         },
         {
           "id": "cursor-changelog:2da47eb357714739f1bc",
@@ -261,13 +491,14 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 59.6,
+          "ranking_score_0_100": 59.3,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 20.3
+            "recency": 19.2
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "5dce95d41566a262acdedb7802751feed4a49616d1ceaa9c4278727e077302c7"
         }
       ]
     },
@@ -296,13 +527,14 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 92.3,
+          "ranking_score_0_100": 92.0,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 68.8
+            "recency": 67.7
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "800eecfafcd178a40dad87fda16cfcd7c4895d2043f7b2d2c891da8c382bb6d3"
         },
         {
           "id": "vercel-ai-releases:9af0501c9abb5e48f80b",
@@ -317,13 +549,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 90.0,
+          "ranking_score_0_100": 89.7,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 75.0,
-            "recency": 99.8
+            "recency": 98.7
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "4924a35303f757ad350695462762fc76378ba472c2c70b9f474b513717cdc11a"
         },
         {
           "id": "vercel-ai-releases:80996ab00a554aa0b465",
@@ -338,13 +571,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 90.0,
+          "ranking_score_0_100": 89.7,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 75.0,
-            "recency": 99.8
+            "recency": 98.7
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "b244aa5583af07fe0596ca783aed2f7b03115420bfd66f5c33392e0a2b58433e"
         },
         {
           "id": "nvidia-developer:25dd22dacf767554f031",
@@ -359,13 +593,14 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 84.8,
+          "ranking_score_0_100": 84.6,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 69.1
+            "recency": 68.0
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "83a1c673b7abaf8c0bb92b05294e98684261a6d90a2c5b2884a24b9628ede2cd"
         },
         {
           "id": "nvidia-developer:b18e2cdb0acbbd624a79",
@@ -380,13 +615,14 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 84.8,
+          "ranking_score_0_100": 84.5,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 68.8
+            "recency": 67.7
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "8cff5f7c517ad978f0f3e84a237887d6549cbb1147ec25d3be42a4c1fbb81b42"
         },
         {
           "id": "vercel-ai-releases:44a10107c37c26468723",
@@ -401,13 +637,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.5,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 99.9
+            "recency": 98.8
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "2a534bc436907cfb9493e636b378ee5117422f17f79780954eb3e09313053b03"
         },
         {
           "id": "vllm-releases:b811cc97eff4aae9d6ca",
@@ -422,13 +659,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.9,
+          "ranking_score_0_100": 80.7,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 92.0
+            "recency": 91.0
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "490c709b4e2c248678f7e4325e95973f61bac93daf7cd681b2d48a09b71acb92"
         },
         {
           "id": "transformers-releases:e711876fcc1e0f358e56",
@@ -443,13 +681,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 65.7,
+          "ranking_score_0_100": 65.5,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 16.0
+            "recency": 14.9
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "82dceac07c49fe873647a751aadeea88c4a5dd7e121c6cdf3ca3e9a600519cb3"
         }
       ]
     },
@@ -477,13 +716,14 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 77.9,
+          "ranking_score_0_100": 77.7,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 75.0,
-            "recency": 97.0
+            "recency": 96.0
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "9c206bbeb87ec23445ec58b6ebaf101080cb2097c7c631487c75b2364877e497"
         },
         {
           "id": "arxiv-ai:9c53f0e70bc1b9081c71",
@@ -498,13 +738,14 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 70.4,
+          "ranking_score_0_100": 70.2,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 50.0,
-            "recency": 97.1
+            "recency": 96.0
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "ed8a2d75523e91ffc25ddee2ad8baba6f1bfec52a3abf6853095c51acd810eb6"
         },
         {
           "id": "arxiv-ai:503a193f933c594bdf80",
@@ -519,13 +760,14 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 70.4,
+          "ranking_score_0_100": 70.2,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 50.0,
-            "recency": 97.1
+            "recency": 96.0
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "430e573beeb83f15769bf8529fc02b961b2725289db452bf4e01920f07b7074c"
         },
         {
           "id": "deepmind-blog:e38a2bc2474832f28ea9",
@@ -540,13 +782,14 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 68.2,
+          "ranking_score_0_100": 68.0,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 53.4
+            "recency": 52.3
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "31e214af7b369e10693b9e7b1585d87399c3fc0442ff04908e5263a346f59585"
         },
         {
           "id": "huggingface-blog:96f5dc656a14a806246f",
@@ -561,13 +804,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 67.1,
+          "ranking_score_0_100": 66.9,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 63.1
+            "recency": 62.1
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "cf5d0acb92b801f68cb9576d867b482ecb79b9d3603b9c9a5fcaeac521f0c26a"
         },
         {
           "id": "deepmind-blog:b5de177ccc831b459c55",
@@ -582,13 +826,14 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 62.5,
+          "ranking_score_0_100": 62.2,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 24.8
+            "recency": 23.7
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "2b4ed57b5752920b0c47ff891440acc5b364dae69777cbc12d3a23eaad59eadd"
         },
         {
           "id": "deepmind-blog:53ad893ddb18c2e18d2e",
@@ -603,13 +848,14 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 60.7,
+          "ranking_score_0_100": 60.5,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 16.0
+            "recency": 14.9
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "d1274f8dfed4264be323838aeb3dde72fef857f1dd301b589ec252293ef5f475"
         },
         {
           "id": "huggingface-blog:c5c3971a8972616617d3",
@@ -624,13 +870,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 57.8,
+          "ranking_score_0_100": 57.6,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 16.7
+            "recency": 15.6
           },
-          "decision_use": "learning_context_not_execution_gate"
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "d7b1cdd71321916982fdf6dbe465ba888e0a2887e20d8ed42325963c26749a72"
         }
       ]
     }

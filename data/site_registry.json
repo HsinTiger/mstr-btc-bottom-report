@@ -14,9 +14,9 @@
     "data/daily/timescale_intelligence.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality.status", "horizons", "alignment", "asset_matrix", "exclusive_insights"], "lineage_field": "snapshot_generated_at"},
     "data/daily/timescale_intelligence_history.json": {"schema_value": 1, "required_fields": ["updated_at", "items"]},
     "data/daily/timescale_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "analysis_generated_at", "snapshot_generated_at", "status", "checks"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/ai_intelligence.json": {"schema_value": 1, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.provider", "quality.execution_gate_eligible", "summary.posts", "summary.successful_sources", "source_checks", "daily_actions", "categories"]},
-    "data/daily/ai_intelligence_history.json": {"schema_value": 1, "required_fields": ["last_attempt_at", "quality.status", "items"]},
-    "data/daily/ai_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts", "successful_sources", "daily_actions"]},
+    "data/daily/ai_intelligence.json": {"schema_value": 3, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.provider", "quality.execution_gate_eligible", "summary.posts", "summary.successful_sources", "summary.editorial_briefs", "source_checks", "editorial_digest.lead_brief_id", "editorial_digest.policy_hash", "editorial_digest.briefs", "daily_actions", "categories"]},
+    "data/daily/ai_intelligence_history.json": {"schema_value": 2, "required_fields": ["integrity_contract", "last_attempt_at", "quality.status", "items", "editorial_runs"]},
+    "data/daily/ai_intelligence_verification.json": {"schema_value": 3, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts", "successful_sources", "daily_actions", "editorial_briefs", "editorial_status", "editorial_history_runs"]},
     "data/daily/site_health.json": {"schema_value": 1, "required_fields": ["generated_at", "status", "summary", "pages"]},
     "wiki/manifest.json": {"schema_value": 1, "required_fields": ["updated", "pages"]}
   },
@@ -61,13 +61,13 @@
     {
       "id": "ai-intelligence",
       "path": "x-intelligence.html",
-      "title": "AI 情報",
-      "title_contains": "AI 情報",
+      "title": "AI 總編",
+      "title_contains": "AI 總編",
       "lifecycle": "active",
       "criticality": "medium",
-      "role": "以官方 feeds、GitHub Releases 與 arXiv 維護 AI 應用與變現、工程方法、模型進展三類情報，每天提出三個可執行精進動作。",
-      "user_question": "今天有哪些最新 AI 用法、工程方法與模型進展值得實際測試？",
-      "open_when": "每天想精進 AI 工作流時；先看三個行動，再讀完整消息與來源。",
+      "role": "以官方 feeds、GitHub Releases 與 arXiv 維護三類 AI 情報；原始主題訊號只提供背景，本站另行提出非共識編輯假說與反證條件。",
+      "user_question": "今天哪些 AI 主題在多個來源同時出現，本站據此提出什麼假說，又該如何推翻？",
+      "open_when": "每天想掌握 AI 產業變化時；先讀今日主文與三篇短評，再看行動與原始消息。",
       "cadence": "每日 08:37（台北時間）",
       "surface_type": "context_intelligence",
       "owner_action": "keep",
@@ -168,7 +168,7 @@
       "owner_action": "keep",
       "dependencies": [
         {"path": "data/site_registry.json", "required": true},
-        {"path": "data/daily/site_health.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
+        {"path": "data/daily/site_health.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true}
       ]
     }
   ]
