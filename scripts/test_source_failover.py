@@ -717,6 +717,25 @@ def test_etf_official_gap_uses_absolute_floor_near_zero() -> None:
     assert relative_difference(0.0, -6_000_000.0, scale_floor=100_000_000.0) == 0.06
 
 
+def test_nasdaq_equity_uses_completed_regular_close() -> None:
+    prior_fetch = daily_pipeline.fetch_json
+    market_date = datetime.now(timezone.utc).date() - timedelta(days=1)
+    fixture = {
+        "status": {"rCode": 200},
+        "data": {"tradesTable": {"rows": [{"date": market_date.strftime("%m/%d/%Y"), "close": "$321.45"}]}},
+    }
+    daily_pipeline.fetch_json = lambda *args, **kwargs: fixture
+    try:
+        observation = daily_pipeline.collect_nasdaq_equity("MSTR")
+    finally:
+        daily_pipeline.fetch_json = prior_fetch
+    assert observation.ok
+    assert observation.value == 321.45
+    assert observation.source == "Nasdaq historical API"
+    assert observation.basis == "regular_market_close"
+    assert observation.as_of == market_date.isoformat()
+
+
 def main() -> int:
     tests = [
         test_daily_source_pool,
@@ -756,6 +775,7 @@ def main() -> int:
         test_verifier_recomputes_etf_evidence,
         test_verifier_recomputes_dat_claim,
         test_etf_official_gap_uses_absolute_floor_near_zero,
+        test_nasdaq_equity_uses_completed_regular_close,
     ]
     for test in tests:
         test()

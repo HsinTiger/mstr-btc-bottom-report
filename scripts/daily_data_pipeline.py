@@ -321,21 +321,44 @@ def nasdaq_quote_basis(primary: dict[str, Any]) -> str:
 
 
 def collect_nasdaq_equity(ticker: str) -> Observation:
-    url = f"https://api.nasdaq.com/api/quote/{urllib.parse.quote(ticker)}/info?assetclass=stocks"
-    data = fetch_json(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0",
-            "Accept": "application/json",
-            "Origin": "https://www.nasdaq.com",
-            "Referer": "https://www.nasdaq.com/",
-        },
-    )
-    primary = data.get("data", {}).get("primaryData", {})
-    value = clean_price(primary.get("lastSalePrice"))
-    quote_basis = nasdaq_quote_basis(primary)
-    detail = f"quote_basis={quote_basis} timestamp={primary.get('lastTradeTimestamp')} realTime={primary.get('isRealTime')}"
-    return obs(f"{ticker.lower()}_usd_nasdaq", value, "Nasdaq quote API", url, ok=value is not None, detail=detail)
+    today = datetime.now(timezone.utc).date()
+    query = urllib.parse.urlencode({
+        "assetclass": "stocks",
+        "fromdate": (today - timedelta(days=14)).isoformat(),
+        "todate": today.isoformat(),
+        "limit": 30,
+    })
+    historical_url = f"https://api.nasdaq.com/api/quote/{urllib.parse.quote(ticker)}/historical?{query}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept": "application/json, text/plain, */*",
+        "Origin": "https://www.nasdaq.com",
+        "Referer": f"https://www.nasdaq.com/market-activity/stocks/{ticker.lower()}/historical",
+    }
+    try:
+        payload = fetch_json(historical_url, headers=headers)
+        if (payload.get("status") or {}).get("rCode") != 200:
+            raise ValueError(f"Nasdaq historical status: {payload.get('status')}")
+        rows = (((payload.get("data") or {}).get("tradesTable") or {}).get("rows") or [])
+        completed = []
+        for row in rows:
+            row_date = datetime.strptime(row["date"], "%m/%d/%Y").date()
+            value = clean_price(row.get("close"))
+            if row_date < today and value is not None:
+                completed.append((row_date, value))
+        if not completed:
+            raise ValueError("Nasdaq historical close unavailable")
+        as_of_date, value = max(completed)
+        detail = f"quote_basis=regular_market_close source_field=historical_close date={as_of_date.isoformat()}"
+        return obs(f"{ticker.lower()}_usd_nasdaq", value, "Nasdaq historical API", historical_url, ok=True, detail=detail, as_of=as_of_date.isoformat(), basis="regular_market_close", source_tier="independent_market")
+    except Exception as historical_error:
+        quote_url = f"https://api.nasdaq.com/api/quote/{urllib.parse.quote(ticker)}/info?assetclass=stocks"
+        data = fetch_json(quote_url, headers=headers)
+        primary = data.get("data", {}).get("primaryData", {})
+        value = clean_price(primary.get("lastSalePrice"))
+        quote_basis = nasdaq_quote_basis(primary)
+        detail = f"quote_basis={quote_basis} timestamp={primary.get('lastTradeTimestamp')} realTime={primary.get('isRealTime')} historical_error={historical_error}"
+        return obs(f"{ticker.lower()}_usd_nasdaq", value, "Nasdaq quote API", quote_url, ok=value is not None, detail=detail)
 
 def collect_yahoo_equity(ticker: str) -> Observation:
     value, url, detail, as_of = yahoo_chart(ticker)

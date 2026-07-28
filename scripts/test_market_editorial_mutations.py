@@ -32,14 +32,14 @@ BASE = {
 }
 
 
-def run(source: dict, history: dict) -> dict:
+def run(source: dict, history: dict, *, market: dict | None = None, market_verify: dict | None = None) -> dict:
     return verifier.verify(
         source,
         history,
         BASE["context"],
         BASE["context_verify"],
-        BASE["market"],
-        BASE["market_verify"],
+        market if market is not None else BASE["market"],
+        market_verify if market_verify is not None else BASE["market_verify"],
         BASE["timescale"],
         BASE["timescale_verify"],
         BASE["snapshot"],
@@ -157,16 +157,25 @@ def main() -> int:
 
     mutations.append(("reversed-direction", mutate_direction))
 
-    def mutate_quality(source: dict, history: dict) -> None:
-        source["quality"]["status"] = "pass"
-        source["editorial_digest"]["status"] = "pass"
-        rehash_source(source)
-        sync_latest_history(source, history)
-
-    mutations.append(("upstream-degraded-fake-pass", mutate_quality))
-
     for name, mutate in mutations:
         expect_rejected(name, mutate)
+
+    degraded_source = copy.deepcopy(BASE["source"])
+    degraded_history = copy.deepcopy(BASE["history"])
+    degraded_market = copy.deepcopy(BASE["market"])
+    degraded_market_verify = copy.deepcopy(BASE["market_verify"])
+    degraded_market["quality"]["status"] = "degraded"
+    degraded_market_verify["status"] = "degraded"
+    degraded_source["quality"]["upstream_statuses"]["market_universe"] = "degraded"
+    degraded_source["quality"]["upstream_statuses"]["market_universe_verifier"] = "degraded"
+    degraded_source["quality"]["status"] = "pass"
+    degraded_source["editorial_digest"]["status"] = "pass"
+    degraded_source["lineage"]["market_universe_hash"] = verifier.canonical_hash(degraded_market)
+    rehash_source(degraded_source)
+    sync_latest_history(degraded_source, degraded_history)
+    degraded_report = run(degraded_source, degraded_history, market=degraded_market, market_verify=degraded_market_verify)
+    if degraded_report["status"] != "fail":
+        raise AssertionError("upstream-degraded-fake-pass mutation unexpectedly passed")
 
     manifest = {"commit": "abc123", "editorial_hash": BASE["source"]["editorial_hash"]}
     verification = {
@@ -183,7 +192,7 @@ def main() -> int:
     else:
         raise AssertionError("manifest/editorial hash mismatch unexpectedly passed")
 
-    total = len(mutations) + 1
+    total = len(mutations) + 2
     print(f"market editorial mutation tests: PASS ({total}/{total})")
     return 0
 

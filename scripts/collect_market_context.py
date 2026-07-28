@@ -15,6 +15,8 @@ import json
 import math
 import re
 import statistics
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -98,9 +100,21 @@ def fetch_json(url: str, *, data: Any = None, timeout: int = 35) -> Any:
     headers = {"User-Agent": USER_AGENT, "Accept": "application/json,*/*"}
     if body is not None:
         headers["Content-Type"] = "application/json"
-    request = urllib.request.Request(url, data=body, headers=headers)
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return json.loads(response.read().decode("utf-8"))
+    for attempt in range(3):
+        request = urllib.request.Request(url, data=body, headers=headers)
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            if error.code not in {429, 500, 502, 503, 504} or attempt == 2:
+                raise
+            retry_after = finite(error.headers.get("Retry-After")) if error.headers else None
+            time.sleep(min(retry_after or attempt + 1, 5))
+        except (TimeoutError, urllib.error.URLError):
+            if attempt == 2:
+                raise
+            time.sleep(attempt + 1)
+    raise RuntimeError(f"JSON request exhausted retries: {url}")
 
 
 def source_check(
@@ -482,6 +496,7 @@ def collect_eth_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         "1RPC": "https://1rpc.io/eth",
         "Flashbots": "https://rpc.flashbots.net",
         "LlamaRPC": "https://eth.llamarpc.com",
+        "MEVBlocker": "https://rpc.mevblocker.io",
     }
     heads: dict[str, int] = {}
     checks: list[dict[str, Any]] = []
@@ -492,14 +507,27 @@ def collect_eth_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         except Exception as error:
             checks.append(source_check("onchain_eth", name, url, "fail", error=str(error), role="primary_or_failover"))
     output: dict[str, Any] = {"provider_heads": heads, "source_count": len(heads)}
+    primary_name: str | None = None
+    current: dict[int, dict[str, Any]] = {}
+    prior: dict[int, dict[str, Any]] = {}
     if heads:
         head = min(heads.values())
         current_heights = [head - index * 600 for index in range(12)]
         prior_heights = [head - 50_400 - index * 600 for index in range(12)]
-        primary_name = next(iter(heads))
-        primary_url = providers[primary_name]
-        current = rpc_blocks(primary_url, current_heights)
-        prior = rpc_blocks(primary_url, prior_heights)
+        for candidate in heads:
+            try:
+                candidate_current = rpc_blocks(providers[candidate], current_heights)
+                candidate_prior = rpc_blocks(providers[candidate], prior_heights)
+                if len(candidate_current) < 10 or len(candidate_prior) < 10:
+                    raise ValueError("Ethereum RPC sample depth below 10 blocks")
+                primary_name = candidate
+                current = candidate_current
+                prior = candidate_prior
+                checks.append(source_check("onchain_eth", f"{candidate} block sample", providers[candidate], "pass", role="sample_primary"))
+                break
+            except Exception as error:
+                checks.append(source_check("onchain_eth", f"{candidate} block sample", providers[candidate], "fail", error=str(error), role="sample_failover"))
+    if primary_name:
         current_summary = summarize_eth_blocks(current)
         prior_summary = summarize_eth_blocks(prior)
         output.update({
@@ -511,17 +539,22 @@ def collect_eth_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             "gas_utilization_7d_change": current_summary["average_gas_utilization"] - prior_summary["average_gas_utilization"],
             "as_of": current_summary["as_of"],
         })
-        if len(heads) > 1:
-            backup: dict[int, dict[str, Any]] = {}
-            backup_name: str | None = None
-            for candidate in heads:
-                if candidate == primary_name:
-                    continue
+        backup: dict[int, dict[str, Any]] = {}
+        backup_name: str | None = None
+        for candidate in heads:
+            if candidate == primary_name:
+                continue
+            try:
                 candidate_blocks = rpc_blocks(providers[candidate], current_heights)
-                if len(candidate_blocks) >= 10:
-                    backup = candidate_blocks
-                    backup_name = candidate
-                    break
+                if len(candidate_blocks) < 10:
+                    raise ValueError("Ethereum RPC independent sample depth below 10 blocks")
+                backup = candidate_blocks
+                backup_name = candidate
+                checks.append(source_check("onchain_eth", f"{candidate} block sample", providers[candidate], "pass", role="sample_independent_check"))
+                break
+            except Exception as error:
+                checks.append(source_check("onchain_eth", f"{candidate} block sample", providers[candidate], "fail", error=str(error), role="sample_failover"))
+        if backup_name:
             common = sorted(set(current) & set(backup))
             output["sample_check_provider"] = backup_name
             output["sample_agreement"] = len(common) >= 10 and all(
@@ -531,7 +564,7 @@ def collect_eth_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             )
         else:
             output["sample_agreement"] = None
-    else:
+    if not primary_name:
         blockchair_url = "https://api.blockchair.com/ethereum/stats"
         try:
             stats = fetch_json(blockchair_url).get("data", {})
