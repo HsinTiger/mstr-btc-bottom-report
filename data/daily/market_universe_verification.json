@@ -1,12 +1,16 @@
 {
   "schema": 1,
   "agent": "market-universe-verifier",
-  "verified_at": "2026-07-28T16:52:34+00:00",
+  "verified_at": "2026-07-28T18:47:59+00:00",
   "market_date": "2026-07-28",
-  "market_generated_at": "2026-07-28T16:52:34+00:00",
-  "status": "pass",
+  "market_generated_at": "2026-07-28T18:47:59+00:00",
+  "status": "degraded",
   "failures": [],
-  "degradations": [],
+  "degradations": [
+    "collector quality: 賽道固定籃子資料不完整或跨源分歧：DeFi",
+    "sector DeFi: sector consensus does not have a strict majority",
+    "sector DeFi: status is not cross_source_verified"
+  ],
   "warnings": [],
   "evidence": [
     "artifact_age_hours=0.000"
