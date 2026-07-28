@@ -1,0 +1,119 @@
+name: Daily verified market editorial
+
+on:
+  schedule:
+    - cron: "42 0 * * *" # 08:42 Asia/Taipei, 00:42 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: governed-data-writer
+  cancel-in-progress: false
+
+jobs:
+  update-market-editorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned browser smoke dependency
+        run: python -m pip install -r requirements-smoke.txt
+
+      - name: Test source failover contracts
+        run: python scripts/test_source_failover.py
+
+      - name: Refresh current cross-asset market universe
+        run: python scripts/collect_market_universe.py
+
+      - name: Verify current market universe
+        run: python scripts/verify_market_universe.py
+
+      - name: Collect macro, policy, equity, and on-chain context
+        run: python scripts/collect_market_context.py
+
+      - name: Verify cross-market context
+        run: python scripts/verify_market_context.py
+
+      - name: Prove context verifier rejects date and independence mutations
+        run: python scripts/test_market_context_mutations.py
+
+      - name: Require current verified daily research inputs
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          def load(name):
+              return json.loads(Path(f"data/daily/{name}").read_text(encoding="utf-8-sig"))
+          def age_hours(value):
+              parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+              if parsed.tzinfo is None:
+                  parsed = parsed.replace(tzinfo=timezone.utc)
+              return (datetime.now(timezone.utc) - parsed).total_seconds() / 3600
+          snapshot = load("latest_snapshot.json")
+          timescale = load("timescale_intelligence.json")
+          timescale_verification = load("timescale_intelligence_verification.json")
+          if age_hours(snapshot["generated_at"]) > 36 or age_hours(timescale["generated_at"]) > 36:
+              raise SystemExit("Daily snapshot or timescale analysis is older than 36 hours")
+          if timescale_verification.get("analysis_generated_at") != timescale.get("generated_at") or timescale_verification.get("status") != "pass":
+              raise SystemExit("Timescale analysis is not bound to a passing verifier")
+          print(f"Daily research inputs current: snapshot={snapshot['generated_at']} timescale={timescale['generated_at']}")
+          PY
+
+      - name: Compile current LLM Wiki context
+        run: python scripts/build_knowledge_context.py
+
+      - name: Generate eight-desk market editorial
+        run: python scripts/generate_market_editorial.py
+
+      - name: Verify values, lineage, hashes, and history
+        run: python scripts/verify_market_editorial.py
+
+      - name: Prove verifier rejects mutations
+        run: |
+          python scripts/test_market_editorial.py
+          python scripts/test_market_editorial_mutations.py
+
+      - name: Audit all product surfaces
+        run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
+
+      - name: Render desktop and mobile fail-closed smoke
+        run: python scripts/smoke_product_surfaces.py
+
+      - name: Commit verified market editorial
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/daily/market_universe.json \
+            data/daily/market_universe_history.json \
+            data/daily/market_universe_verification.json \
+            data/daily/market_context.json \
+            data/daily/market_context_verification.json \
+            data/daily/market_editorial.json \
+            data/daily/market_editorial_history.json \
+            data/daily/market_editorial_verification.json \
+            data/daily/knowledge_context.json \
+            data/daily/site_health.json
+          if git diff --cached --quiet; then
+            echo "No market editorial changes to commit."
+          else
+            git commit -m "Update verified market editorial"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

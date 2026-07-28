@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-07-27",
+  "updated_at": "2026-07-28",
   "owner": "product-ceo-governance",
   "mission": "以日線、週線、月線、季線累積可追溯市場資料與洞察；每個專區只回答一個問題，不輸出交易策略。",
   "data_contracts": {
@@ -9,6 +9,11 @@
     "data/daily/market_universe.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "snapshot_generated_at", "source_batch_id", "quality", "quality.validation_summary", "quality.freshness_contract", "assets", "derivatives", "etf", "dat", "sources"]},
     "data/daily/market_universe_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "market_date", "market_generated_at", "status", "failures", "degradations"]},
     "data/daily/market_universe_history.json": {"schema_value": 2, "required_fields": ["updated_at"]},
+    "data/daily/market_context.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "payload_hash", "quality.status", "quality.execution_gate_eligible", "macro", "policy", "onchain", "source_checks"]},
+    "data/daily/market_context_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "source_hash", "status", "checks"]},
+    "data/daily/market_editorial.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "editorial_hash", "quality.status", "quality.execution_gate_eligible", "lineage", "editorial_digest", "desks"]},
+    "data/daily/market_editorial_history.json": {"schema_value": 1, "required_fields": ["updated_at", "head_hash", "runs"]},
+    "data/daily/market_editorial_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "source_hash", "history_head_hash", "status", "checks", "desk_count"]},
     "data/daily/timescale_price_history.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality.status", "assets"], "lineage_field": "snapshot_generated_at"},
     "data/daily/timescale_data_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "history_generated_at", "snapshot_generated_at", "status", "checks"], "lineage_field": "snapshot_generated_at"},
     "data/daily/timescale_intelligence.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality.status", "horizons", "alignment", "asset_matrix", "exclusive_insights"], "lineage_field": "snapshot_generated_at"},
@@ -56,6 +61,24 @@
         {"path": "data/daily/market_universe.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/market_universe_verification.json", "timestamp_field": "verified_at", "max_age_hours": 3, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/market_universe_history.json", "timestamp_field": "updated_at", "max_age_hours": 3, "required": true}
+      ]
+    },
+    {
+      "id": "market-editorial",
+      "path": "market-intelligence.html",
+      "title": "市場總編",
+      "title_contains": "市場總編",
+      "lifecycle": "active",
+      "criticality": "high",
+      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌。",
+      "user_question": "今天真正主導 BTC／ETH 的跨市場力量是什麼，哪些維度共振或分歧？",
+      "open_when": "每天看完四週期總覽後，用來理解市場原因、非共識假說、二階影響與反證條件。",
+      "cadence": "每日 08:42（台北時間）",
+      "surface_type": "verified_cross_market_editorial",
+      "owner_action": "keep",
+      "dependencies": [
+        {"path": "data/daily/market_editorial.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/market_editorial_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"}
       ]
     },
     {

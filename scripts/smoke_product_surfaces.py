@@ -28,6 +28,7 @@ except ImportError as error:
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
     "index.html": "日／週／月／季一眼看懂",
+    "market-intelligence.html": "八個研究桌",
     "market-monitor.html": "先看四個市場結論",
     "analytics.html": "週期證據矩陣",
     "dashboard.html": "近一年標準化價格",
@@ -37,7 +38,7 @@ PAGES = {
     "site-overview.html": "頁面程式",
 }
 ANALYSIS_PAGES = {"index.html", "analytics.html", "dashboard.html", "daily-extensions.html"}
-STATUS_PAGES = ANALYSIS_PAGES | {"market-monitor.html", "x-intelligence.html"}
+STATUS_PAGES = ANALYSIS_PAGES | {"market-intelligence.html", "market-monitor.html", "x-intelligence.html"}
 VIEWPORTS = {"desktop": (1440, 1000), "mobile": (390, 844)}
 CRASH_MARKERS = ("Cannot read properties", "治理資料失敗", "知識庫載入失敗", "ReferenceError", "SyntaxError")
 
@@ -95,7 +96,7 @@ class BrowserRenderer:
         self.browser.close()
         self.playwright.stop()
 
-    def render(self, url: str, width: int, height: int) -> tuple[str, str, dict[str, int]]:
+    def render(self, url: str, width: int, height: int) -> tuple[str, str, dict[str, Any]]:
         context = self.browser.new_context(viewport={"width": width, "height": height})
         page = context.new_page()
         page_errors: list[str] = []
@@ -119,6 +120,16 @@ class BrowserRenderer:
                 documentScrollWidth: document.documentElement.scrollWidth,
                 bodyClientWidth: document.body.clientWidth,
                 bodyScrollWidth: document.body.scrollWidth,
+                activeNavVisible: (() => {
+                    const activeLinks = [...document.querySelectorAll('nav a[aria-current="page"]')];
+                    return activeLinks.some(active => {
+                        const nav = active.closest('nav');
+                        if (!nav || active.offsetParent === null || nav.offsetParent === null) return false;
+                        const activeRect = active.getBoundingClientRect();
+                        const navRect = nav.getBoundingClientRect();
+                        return activeRect.left >= navRect.left - 1 && activeRect.right <= navRect.right + 1;
+                    });
+                })(),
             })""")
             return page.locator("body").inner_text(), page.content(), layout
         finally:
@@ -165,7 +176,7 @@ def validate_base_page(
     expected_text: str,
     body: str,
     dom: str,
-    layout: dict[str, int],
+    layout: dict[str, Any],
     live_values: list[str],
     viewport: str,
 ) -> None:
@@ -178,6 +189,8 @@ def validate_base_page(
     if missing_values:
         raise RuntimeError(f"資料未渲染：{', '.join(missing_values)}")
     assert_no_horizontal_overflow(layout, f"{viewport} {page_name}")
+    if viewport == "mobile" and not layout.get("activeNavVisible"):
+        raise RuntimeError(f"{page_name} 手機目前頁導覽不在初始可視區")
     links = set(re.findall(r'href="([^"#?]+)', dom, flags=re.IGNORECASE))
     missing_navigation = [target for target in PAGES if target not in links]
     if missing_navigation:
@@ -194,6 +207,14 @@ def validate_base_page(
             raise RuntimeError("即時市場品質契約未通過")
         if 'data-core-checks="14/14"' not in dom or 'data-page-overflow="false"' not in dom:
             raise RuntimeError("即時市場核心欄位或版面契約未通過")
+    if page_name == "market-intelligence.html":
+        status = render_status(dom)
+        if status not in {"pass", "degraded"} or 'data-conclusions-visible="true"' not in dom:
+            raise RuntimeError("市場總編 analysis-only 品質契約未通過")
+        if 'data-desk-count="8"' not in dom or 'data-lead-visible="true"' not in dom:
+            raise RuntimeError("市場總編主文或八個研究桌未完整載入")
+        if 'data-page-overflow="false"' not in dom:
+            raise RuntimeError("市場總編版面發生水平溢位")
     if page_name == "x-intelligence.html":
         status = render_status(dom)
         if status not in {"pass", "degraded"}:
@@ -215,11 +236,15 @@ def main() -> int:
     market = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
     ai = json.loads((ROOT / "data/daily/ai_intelligence.json").read_text(encoding="utf-8-sig"))
     ai_verification = json.loads((ROOT / "data/daily/ai_intelligence_verification.json").read_text(encoding="utf-8-sig"))
+    market_editorial = json.loads((ROOT / "data/daily/market_editorial.json").read_text(encoding="utf-8-sig"))
+    market_editorial_verification = json.loads((ROOT / "data/daily/market_editorial_verification.json").read_text(encoding="utf-8-sig"))
     daily_key = analysis["horizons"]["daily"]["key_number"]
     first_insight = analysis["exclusive_insights"][0]["title"]
     lead_brief = next(item for item in ai["editorial_digest"]["briefs"] if item["id"] == ai["editorial_digest"]["lead_brief_id"])
+    market_lead = next(item for item in market_editorial["desks"] if item["id"] == market_editorial["editorial_digest"]["lead_desk_id"])
     live_values = {
         "index.html": [analysis["date"], daily_key, first_insight],
+        "market-intelligence.html": [market_lead["headline"], market_lead["conclusion"], market_lead["evidence"][0]["display"]],
         "market-monitor.html": [browser_money(market["assets"]["BTC"]["price_usd"]), browser_money(market["assets"]["ETH"]["price_usd"])],
         "analytics.html": [analysis["date"], daily_key, first_insight],
         "dashboard.html": [analysis["date"], str(analysis["record_advantage"]["observations"])],
@@ -283,6 +308,20 @@ def main() -> int:
                 results.append({"viewport": viewport, "page": "x-intelligence.html:verification-fail", "status": "pass"})
             except (RuntimeError, PlaywrightError) as error:
                 failures.append({"viewport": viewport, "page": "x-intelligence.html:verification-fail", "error": str(error)})
+
+    failed_market_editorial_verification = {**deepcopy(market_editorial_verification), "status": "fail", "failures": ["fixture failure"]}
+    with server({"/data/daily/market_editorial_verification.json": failed_market_editorial_verification}) as base_url:
+        for viewport, (width, height) in VIEWPORTS.items():
+            try:
+                body, dom, layout = renderer.render(f"{base_url}/market-intelligence.html", width, height)
+                assert_no_horizontal_overflow(layout, f"{viewport} market-intelligence.html:verification-fail")
+                if render_status(dom) != "fail" or 'data-lead-visible="false"' not in dom or 'data-conclusions-visible="false"' not in dom:
+                    raise RuntimeError("市場總編 verification-fail 未封鎖主文")
+                if market_lead["headline"] in body or "市場總編已封鎖" not in body:
+                    raise RuntimeError("市場總編 verification-fail 沿用舊主文或缺少診斷")
+                results.append({"viewport": viewport, "page": "market-intelligence.html:verification-fail", "status": "pass"})
+            except (RuntimeError, PlaywrightError) as error:
+                failures.append({"viewport": viewport, "page": "market-intelligence.html:verification-fail", "error": str(error)})
     renderer.close()
     print(json.dumps({"browser": renderer.executable_path, "checks": len(results), "failures": failures}, ensure_ascii=False))
     return 1 if failures else 0

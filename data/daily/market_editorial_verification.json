@@ -1,0 +1,493 @@
+{
+  "schema": 1,
+  "verified_at": "2026-07-28T10:29:44+00:00",
+  "source_generated_at": "2026-07-28T10:29:43+00:00",
+  "source_hash": "97a997a27cce92b5cf1797822605f6f451f910c77e623a4a6cf1e0b7c65cc430",
+  "history_head_hash": "6bb01cf1e1f778fd7f2ca4482bc7ed4d6ca9e5859522f87c945f9cc81ae2f03f",
+  "status": "pass",
+  "failures": [],
+  "checks": [
+    {
+      "name": "schema",
+      "status": "pass",
+      "detail": "market editorial schema 必須為 1"
+    },
+    {
+      "name": "artifact_hash",
+      "status": "pass",
+      "detail": "market editorial artifact hash 不一致"
+    },
+    {
+      "name": "scope",
+      "status": "pass",
+      "detail": "市場總編不得接入交易執行"
+    },
+    {
+      "name": "freshness",
+      "status": "pass",
+      "detail": "market editorial age_hours=0.00"
+    },
+    {
+      "name": "lineage_hashes",
+      "status": "pass",
+      "detail": "市場總編輸入 lineage 或完整 artifact hash 不一致"
+    },
+    {
+      "name": "context_verifier_binding",
+      "status": "pass",
+      "detail": "market context verifier 未綁定目前 hash"
+    },
+    {
+      "name": "market_verifier_binding",
+      "status": "pass",
+      "detail": "market universe verifier 未綁定目前批次"
+    },
+    {
+      "name": "timescale_verifier_binding",
+      "status": "pass",
+      "detail": "timescale verifier 未綁定目前批次"
+    },
+    {
+      "name": "upstream_statuses",
+      "status": "pass",
+      "detail": "市場總編未完整傳播上游品質狀態"
+    },
+    {
+      "name": "desk_order",
+      "status": "pass",
+      "detail": "八個研究桌缺漏、重複或順序錯誤"
+    },
+    {
+      "name": "brief_fields:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:crypto-core",
+      "status": "pass",
+      "detail": "crypto-core 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:institutional-flows",
+      "status": "pass",
+      "detail": "institutional-flows 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:policy",
+      "status": "pass",
+      "detail": "policy 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:policy",
+      "status": "pass",
+      "detail": "policy 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:policy",
+      "status": "pass",
+      "detail": "policy brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:policy",
+      "status": "pass",
+      "detail": "policy 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:policy",
+      "status": "pass",
+      "detail": "policy 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:policy",
+      "status": "pass",
+      "detail": "policy 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:policy",
+      "status": "pass",
+      "detail": "policy as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:policy",
+      "status": "pass",
+      "detail": "policy 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:policy",
+      "status": "pass",
+      "detail": "policy 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:policy",
+      "status": "pass",
+      "detail": "policy 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:onchain",
+      "status": "pass",
+      "detail": "onchain 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:onchain",
+      "status": "pass",
+      "detail": "onchain 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:onchain",
+      "status": "pass",
+      "detail": "onchain brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:onchain",
+      "status": "pass",
+      "detail": "onchain 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:onchain",
+      "status": "pass",
+      "detail": "onchain 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:onchain",
+      "status": "pass",
+      "detail": "onchain 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:onchain",
+      "status": "pass",
+      "detail": "onchain as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:onchain",
+      "status": "pass",
+      "detail": "onchain 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:onchain",
+      "status": "pass",
+      "detail": "onchain 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:onchain",
+      "status": "pass",
+      "detail": "onchain 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:technical-positioning",
+      "status": "pass",
+      "detail": "technical-positioning 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:liquidity-fed-oil",
+      "status": "pass",
+      "detail": "liquidity-fed-oil 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:credit-bonds",
+      "status": "pass",
+      "detail": "credit-bonds 共振票數不可重算"
+    },
+    {
+      "name": "brief_fields:us-equities",
+      "status": "pass",
+      "detail": "us-equities 編輯欄位不完整"
+    },
+    {
+      "name": "brief_scope:us-equities",
+      "status": "pass",
+      "detail": "us-equities 未聲明來源不背書本站假說"
+    },
+    {
+      "name": "brief_hash:us-equities",
+      "status": "pass",
+      "detail": "us-equities brief hash 不一致"
+    },
+    {
+      "name": "evidence_depth:us-equities",
+      "status": "pass",
+      "detail": "us-equities 未達三個獨立視角"
+    },
+    {
+      "name": "evidence_contract:us-equities",
+      "status": "pass",
+      "detail": "us-equities 證據欄位缺漏"
+    },
+    {
+      "name": "evidence_values:us-equities",
+      "status": "pass",
+      "detail": "us-equities 證據值未由目前已驗證輸入重算"
+    },
+    {
+      "name": "evidence_metadata:us-equities",
+      "status": "pass",
+      "detail": "us-equities as_of、來源數或方向未由目前輸入重算"
+    },
+    {
+      "name": "source_links:us-equities",
+      "status": "pass",
+      "detail": "us-equities 證據來源連結無效"
+    },
+    {
+      "name": "knowledge_links:us-equities",
+      "status": "pass",
+      "detail": "us-equities 未連結 LLM Wiki 知識基礎"
+    },
+    {
+      "name": "resonance_counts:us-equities",
+      "status": "pass",
+      "detail": "us-equities 共振票數不可重算"
+    },
+    {
+      "name": "lead_selection",
+      "status": "pass",
+      "detail": "主文未綁定最高 materiality 研究桌"
+    },
+    {
+      "name": "digest_method",
+      "status": "pass",
+      "detail": "總編方法未聲明來源與本站假說邊界"
+    },
+    {
+      "name": "source_health",
+      "status": "pass",
+      "detail": "總編來源健康摘要與市場 context 不一致"
+    },
+    {
+      "name": "quality_status",
+      "status": "pass",
+      "detail": "市場總編品質應為 degraded，不得假 PASS"
+    },
+    {
+      "name": "history_chain",
+      "status": "pass",
+      "detail": "market editorial history chain 或 head hash 不一致"
+    },
+    {
+      "name": "current_history_run",
+      "status": "pass",
+      "detail": "目前總編輸出未綁定 history 最新 run"
+    }
+  ],
+  "desk_count": 8,
+  "execution_gate_eligible": false
+}

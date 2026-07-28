@@ -45,6 +45,15 @@ jobs:
       - name: Independently verify current market universe
         run: python scripts/verify_market_universe.py
 
+      - name: Collect macro, policy, equity, and on-chain context
+        run: python scripts/collect_market_context.py
+
+      - name: Independently verify cross-market context
+        run: python scripts/verify_market_context.py
+
+      - name: Prove context verifier rejects date and independence mutations
+        run: python scripts/test_market_context_mutations.py
+
       - name: Collect dual-source completed price history
         run: python scripts/collect_timescale_data.py
 
@@ -96,6 +105,17 @@ jobs:
       - name: Verify four-horizon math, lineage, and scope
         run: python scripts/verify_timescale_intelligence.py
 
+      - name: Generate eight-desk market editorial
+        run: python scripts/generate_market_editorial.py
+
+      - name: Verify editorial values, hashes, history, and scope
+        run: python scripts/verify_market_editorial.py
+
+      - name: Prove editorial verifier rejects mutations
+        run: |
+          python scripts/test_market_editorial.py
+          python scripts/test_market_editorial_mutations.py
+
       - name: Validate analysis-only publication contract
         run: |
           python - <<'PY'
@@ -106,6 +126,8 @@ jobs:
           history = json.loads(Path("data/daily/timescale_intelligence_history.json").read_text(encoding="utf-8-sig"))
           context = json.loads(Path("data/daily/knowledge_context.json").read_text(encoding="utf-8-sig"))
           snapshot = json.loads(Path("data/daily/latest_snapshot.json").read_text(encoding="utf-8-sig"))
+          market_editorial = json.loads(Path("data/daily/market_editorial.json").read_text(encoding="utf-8-sig"))
+          market_editorial_verification = json.loads(Path("data/daily/market_editorial_verification.json").read_text(encoding="utf-8-sig"))
           if analysis.get("snapshot_generated_at") != snapshot.get("generated_at"):
               raise SystemExit("Four-horizon analysis is not bound to the current snapshot")
           if analysis_verification.get("analysis_generated_at") != analysis.get("generated_at") or analysis_verification.get("status") != "pass":
@@ -124,6 +146,12 @@ jobs:
           required_page_keys = {"slug", "title", "confidence", "last_verified", "quality_flags", "analysis_use", "decision_inputs"}
           if any(not required_page_keys.issubset(page) for page in context.get("pages", [])):
               raise SystemExit("Knowledge context contract is incomplete")
+          if market_editorial_verification.get("source_generated_at") != market_editorial.get("generated_at") or market_editorial_verification.get("source_hash") != market_editorial.get("editorial_hash"):
+              raise SystemExit("Market editorial verifier is not bound to the complete current artifact")
+          if market_editorial_verification.get("status") != "pass" or market_editorial.get("quality", {}).get("execution_gate_eligible") is not False:
+              raise SystemExit("Market editorial verification or analysis-only scope failed")
+          if market_editorial.get("quality", {}).get("publication_mode") == "analysis_only" and len(market_editorial.get("desks", [])) != 8:
+              raise SystemExit("Market editorial does not contain all eight research desks")
           print(f"Analysis-only publication validated: mode={mode} horizons={len(analysis.get('horizons', {}))} knowledge_pages={len(context.get('pages', []))}")
           PY
 

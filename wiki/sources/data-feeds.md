@@ -2,9 +2,9 @@
 title: 數據流與權威來源
 type: source
 tags: [data, sources, monitor]
-updated: 2026-07-22
+updated: 2026-07-28
 confidence: high
-summary: 每日決策資料與每小時跨資產雷達分層更新；現貨要求交叉來源，ETF 與 DAT 必須通過可重算的多來源契約，但不得單獨當硬觸發。
+summary: 每日四週期與市場總編、每小時跨資產雷達分層更新；現貨、ETF、DAT、宏觀與鏈上資料各自保留 as_of 並通過可重算契約。
 ---
 
 # 數據流與權威來源
@@ -47,6 +47,21 @@ summary: 每日決策資料與每小時跨資產雷達分層更新；現貨要�
 | 美國債務／GDP 與 10 年實質利率 | FRED `GFDEGDQ188S`、`DFII10` | 結構信用壓力與週期機會成本分開判讀 |
 
 這一層對應 [[btc-neutral-anchor]]，只作長期結構背景，不進入 [[five-dimension-model]] 的底部標準分。
+
+## 每日市場總編研究層
+
+| 研究桌 | 主來源與備援 | 驗證限制 |
+|---|---|---|
+| BTC／ETH 核心市場與技術籌碼 | 四來源現貨、OKX／Hyperliquid 永續、雙來源完成日 K | 價格、跨資產廣度與槓桿分開投票；日線不得冒充月線結論 |
+| ETF／DAT | ETF 三來源＋iShares；DAT 多來源＋SEC 公司 overlay | ETF 是流量、DAT 是存量；流入而價格下跌仍需標示吸收失敗 |
+| 加密法案與政策 | Congress.gov、Federal Register、SEC、Federal Reserve、White House | 提案、新聞稿、正式規則與生效法律分層；事件數不等於政策利多 |
+| BTC 鏈上 | Blockchain.com、Blockchair、mempool.space、Coin Metrics | 交易數與算力做跨來源差異；MVRV 只作估值背景 |
+| ETH 鏈上 | PublicNode、1RPC、Flashbots；LlamaRPC 為額外備援 | 至少雙 RPC 高度差不超過 3，抽樣區塊 hash 與交易數須一致；抽樣不冒充全日總量 |
+| 美元流動性與聯準會 | Fed H.4.1／FRED、NY Fed RRP、Treasury FiscalData TGA | 淨流動性逐組件保留 `as_of`，以最慢組件日期呈現，不偽裝即時 |
+| 原油、信用與債券 | FRED WTI／Yahoo `CL=F`、ICE BofA OAS、Treasury XML／FRED | 現貨油與期貨只比方向；HYG／IEF 只作 OAS 失效時的備援代理 |
+| 美股與波動率 | FRED SP500／NASDAQCOM／VIXCLS、Yahoo 同標的核對 | 同標的才比較 level；VIX 只描述避險定價，不是方向預測器 |
+
+`market_editorial.json` 的每個數字由 verifier 從上述目前 artifact 重算；`market_editorial_verification.json` 同時綁定完整 editorial hash 與 history head。來源只支持原始數據，不背書本站的非共識假說。
 
 ## 內部產物（raw/ 層）
 - `../data/daily/timescale_price_history.json` — 多來源完整日 K 與日／週／月／季時序基礎

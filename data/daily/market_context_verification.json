@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "verified_at": "2026-07-28T10:29:42+00:00",
+  "source_generated_at": "2026-07-28T10:29:18+00:00",
+  "source_hash": "64f945b72e1395634d6861f68fa22115a75650c6c281aae67abfccda87058cfd",
+  "status": "pass",
+  "failures": [],
+  "degradations": [],
+  "checks": [
+    {
+      "name": "schema",
+      "status": "pass",
+      "detail": "market context schema 必須為 1"
+    },
+    {
+      "name": "payload_hash",
+      "status": "pass",
+      "detail": "market context payload hash 不一致"
+    },
+    {
+      "name": "analysis_only",
+      "status": "pass",
+      "detail": "market context 不得接入交易執行"
+    },
+    {
+      "name": "freshness",
+      "status": "pass",
+      "detail": "market context age_hours=0.01"
+    },
+    {
+      "name": "date_binding",
+      "status": "pass",
+      "detail": "market context date 與 generated_at 不一致"
+    },
+    {
+      "name": "source_count",
+      "status": "pass",
+      "detail": "來源健康計數與 artifact 不一致"
+    },
+    {
+      "name": "source_urls",
+      "status": "pass",
+      "detail": "成功來源必須保留 HTTPS URL"
+    },
+    {
+      "name": "independent_pair:fed_assets",
+      "status": "pass",
+      "detail": "fed_assets 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:treasury_10y",
+      "status": "pass",
+      "detail": "treasury_10y 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:sp500",
+      "status": "pass",
+      "detail": "sp500 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:nasdaq",
+      "status": "pass",
+      "detail": "nasdaq 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:btc_transactions",
+      "status": "pass",
+      "detail": "btc_transactions 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "independent_pair:btc_hashrate",
+      "status": "pass",
+      "detail": "btc_hashrate 缺少兩個獨立成功來源，不得標示完整通過"
+    },
+    {
+      "name": "net_liquidity_math",
+      "status": "pass",
+      "detail": "淨流動性公式重算不一致"
+    },
+    {
+      "name": "net_liquidity_change_math",
+      "status": "pass",
+      "detail": "淨流動性 30 日變化重算不一致"
+    },
+    {
+      "name": "fed_assets_cross_source",
+      "status": "pass",
+      "detail": "Fed 總資產跨來源差異超過 2%"
+    },
+    {
+      "name": "net_liquidity_as_of",
+      "status": "pass",
+      "detail": "淨流動性 as_of 必須等於最慢組件日期"
+    },
+    {
+      "name": "prior_net_liquidity_as_of",
+      "status": "pass",
+      "detail": "前期淨流動性 as_of 必須等於實際最慢前期組件日期"
+    },
+    {
+      "name": "h41_observation_date",
+      "status": "pass",
+      "detail": "H.4.1 觀測日與發布日語意錯誤"
+    },
+    {
+      "name": "fresh:fed_assets_as_of",
+      "status": "pass",
+      "detail": "fed_assets_as_of 超過 14 日新鮮度契約"
+    },
+    {
+      "name": "fresh:h41_assets_as_of",
+      "status": "pass",
+      "detail": "h41_assets_as_of 超過 14 日新鮮度契約"
+    },
+    {
+      "name": "fresh:tga_as_of",
+      "status": "pass",
+      "detail": "tga_as_of 超過 10 日新鮮度契約"
+    },
+    {
+      "name": "fresh:rrp_as_of",
+      "status": "pass",
+      "detail": "rrp_as_of 超過 10 日新鮮度契約"
+    },
+    {
+      "name": "yield_curve_math",
+      "status": "pass",
+      "detail": "2s10s 殖利率曲線重算不一致"
+    },
+    {
+      "name": "treasury_fred_gap",
+      "status": "pass",
+      "detail": "Treasury 與 FRED 10 年殖利率未以獨立原值對帳"
+    },
+    {
+      "name": "rates_as_of",
+      "status": "pass",
+      "detail": "公債殖利率超過 10 日新鮮度契約"
+    },
+    {
+      "name": "credit_ranges",
+      "status": "pass",
+      "detail": "信用利差超出合理範圍"
+    },
+    {
+      "name": "credit_as_of",
+      "status": "pass",
+      "detail": "信用利差超過 10 日新鮮度契約"
+    },
+    {
+      "name": "oil_range",
+      "status": "pass",
+      "detail": "WTI 現貨與期貨代理皆不可用"
+    },
+    {
+      "name": "sp500_cross_source",
+      "status": "pass",
+      "detail": "sp500 缺少獨立來源或差異超過 1%"
+    },
+    {
+      "name": "sp500_as_of",
+      "status": "pass",
+      "detail": "sp500 超過 7 日新鮮度契約"
+    },
+    {
+      "name": "nasdaq_cross_source",
+      "status": "pass",
+      "detail": "nasdaq 缺少獨立來源或差異超過 1%"
+    },
+    {
+      "name": "nasdaq_as_of",
+      "status": "pass",
+      "detail": "nasdaq 超過 7 日新鮮度契約"
+    },
+    {
+      "name": "vix_range",
+      "status": "pass",
+      "detail": "VIX 超出合理範圍"
+    },
+    {
+      "name": "vix_as_of",
+      "status": "pass",
+      "detail": "VIX 超過 7 日新鮮度契約"
+    },
+    {
+      "name": "oil_as_of",
+      "status": "pass",
+      "detail": "WTI 現貨與期貨代理皆超過新鮮度契約"
+    },
+    {
+      "name": "btc_transaction_cross_source",
+      "status": "pass",
+      "detail": "BTC 交易數跨來源驗證失敗"
+    },
+    {
+      "name": "btc_hashrate_cross_source",
+      "status": "pass",
+      "detail": "BTC 算力跨來源驗證失敗"
+    },
+    {
+      "name": "btc_transactions_as_of",
+      "status": "pass",
+      "detail": "BTC transactions 超過 3 日新鮮度契約"
+    },
+    {
+      "name": "btc_active_addresses_as_of",
+      "status": "pass",
+      "detail": "BTC active_addresses 超過 3 日新鮮度契約"
+    },
+    {
+      "name": "btc_hashrate_as_of",
+      "status": "pass",
+      "detail": "BTC hashrate 超過 3 日新鮮度契約"
+    },
+    {
+      "name": "eth_head_cross_source",
+      "status": "pass",
+      "detail": "ETH 至少需要兩個 RPC 且高度差不得超過 3"
+    },
+    {
+      "name": "eth_sample_agreement",
+      "status": "pass",
+      "detail": "ETH 抽樣區塊 hash 與交易數未通過雙 RPC 對帳"
+    },
+    {
+      "name": "eth_sample_depth",
+      "status": "pass",
+      "detail": "ETH 目前與前週抽樣深度不足"
+    },
+    {
+      "name": "eth_as_of",
+      "status": "pass",
+      "detail": "ETH RPC 抽樣超過 1 日新鮮度契約"
+    },
+    {
+      "name": "policy_sources",
+      "status": "pass",
+      "detail": "政策研究至少需要三個成功官方來源"
+    },
+    {
+      "name": "policy_event_contract",
+      "status": "pass",
+      "detail": "政策事件缺少官方連結或命中詞"
+    },
+    {
+      "name": "group_status",
+      "status": "pass",
+      "detail": "quality group_status 與實際研究桌不一致"
+    },
+    {
+      "name": "quality_status",
+      "status": "pass",
+      "detail": "market context quality 應為 pass，不得假 PASS"
+    }
+  ],
+  "source_summary": {
+    "passed": 35,
+    "failed": 1,
+    "total": 36
+  },
+  "execution_gate_eligible": false
+}

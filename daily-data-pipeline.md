@@ -10,6 +10,7 @@
 - 時間：每日 UTC 00:05（台北 08:05）與手動 `workflow_dispatch`
 - 權限：`contents: write`，只 commit `data/daily/*.json`
 - 跨資產 Workflow：`.github/workflows/market-universe.yml`，每小時第 17 分更新。
+- 市場總編 Workflow：`.github/workflows/market-editorial.yml`，每日 UTC 00:42（台北 08:42）獨立刷新；最近一次已驗證四週期資料不得超過 36 小時。
 
 ## 腳本分工
 
@@ -50,9 +51,20 @@
    - 獨立重算數學、資料血緣與 analysis-only 契約。
    - 同日 revision 與相異日期觀點寫入 append-only 歷史，不沿用已失效結論。
 
+6. `scripts/collect_market_context.py` 與 `scripts/verify_market_context.py`
+   - 收集 Fed H.4.1、紐約聯儲逆回購、財政部 TGA、Treasury 殖利率曲線、FRED 信用／利率／原油／美股，以及 Congress.gov、Federal Register、SEC 等政策來源。
+   - BTC 鏈上使用 Blockchain.com＋Blockchair／mempool.space；ETH 以 PublicNode、1RPC、Flashbots 區塊高度與抽樣區塊 hash 對帳。
+   - 每個欄位保留原始 `as_of`；不同更新頻率不以抓取時間偽裝為同一日資料。
+
+7. `scripts/generate_market_editorial.py` 與 `scripts/verify_market_editorial.py`
+   - 產生 BTC／ETH、ETF／DAT、政策、鏈上、技術籌碼、流動性／Fed／油、信用／債券、美股八個研究桌。
+   - 每桌至少三個獨立視角，分開呈現常見解讀、本站非共識假說、二階影響、反證與跨日變化。
+   - verifier 從目前已驗證輸入重新計算每個證據值，並綁定完整 artifact hash、LLM Wiki context 與 append-only revision head。
+
 ## 前端資料
 
 - `index.html`：四週期結論、大數字與獨家背離觀點。
+- `market-intelligence.html`：每日跨市場總編主文與八個可反證研究桌。
 - `analytics.html`：四週期完整證據與資料對帳。
 - `dashboard.html`：原始時序、標準化價格與歷史 revisions。
 - `daily-extensions.html`：每日觀點變化與反證 ledger。
