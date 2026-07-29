@@ -3,76 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="app-section" content="market-overview">
-  <meta name="app-purpose" content="首頁統整日線、週線、月線、季線趨勢、變化與獨家背離觀點。">
-  <meta name="app-update" content="每日完成 K 棒後更新">
-  <title>四週期市場情報台｜BTC、MSTR、BMNR</title>
-  <link rel="stylesheet" href="assets/intelligence.css">
+  <title>市場總編</title>
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="market-intelligence.html">
+  <meta http-equiv="refresh" content="0; url=market-intelligence.html">
+  <script>
+    const target = new URL('market-intelligence.html', location.href);
+    target.search = location.search;
+    target.hash = location.hash;
+    location.replace(target.href);
+  </script>
 </head>
 <body>
-<header class="hero">
-  <div class="shell">
-    <div class="hero-grid">
-      <div>
-        <div class="eyebrow">Market Intelligence · Daily / Weekly / Monthly / Quarterly</div>
-        <h1>四週期市場情報台</h1>
-        <p><b>本專區回答：</b>BTC、MSTR、BMNR 的日線、週線、月線、季線目前各是什麼趨勢？哪些變化互相共振，哪些地方正在背離？</p>
-      </div>
-      <div class="hero-stat"><span class="label">多週期同步</span><strong id="alignmentScore">—</strong><span class="mini" id="historyDepth">載入歷史深度</span></div>
-    </div>
-    <nav class="nav" aria-label="全站主要專區">
-      <a class="active" href="index.html" aria-current="page">四週期總覽</a><a href="market-intelligence.html">市場總編</a><a href="market-monitor.html">即時市場</a><a href="analytics.html">週期分析</a><a href="dashboard.html">時序研究</a><a href="daily-extensions.html">洞察日誌</a><a href="x-intelligence.html">AI 情報</a><a href="wiki.html">知識庫</a><a href="site-overview.html">系統治理</a>
-    </nav>
-    <div class="quality" id="quality">載入雙來源時序、分析與獨立驗證…</div>
-  </div>
-</header>
-
-<main class="shell">
-  <section class="section">
-    <div class="grid grid-2">
-      <article class="card"><div class="label">目前市場結構</div><div class="headline" id="dominantState">載入中</div><div class="read" id="dominantRead">等待四週期資料。</div></article>
-      <article class="card"><div class="label">這套系統現在能證明什麼</div><div class="headline" id="evidenceState">建立基線</div><div class="read" id="evidenceRead">不足 20 個相異日期前，不發布統計分位或歷史勝率。</div></article>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head"><div><h2>日／週／月／季一眼看懂</h2><p>每張卡只保留一個數字、一句趨勢解讀與相較前次的變化。</p></div><span class="pill">完成 K 棒 · 雙來源</span></div>
-    <div class="grid grid-4" id="horizonCards"></div>
-  </section>
-
-  <section class="section">
-    <div class="section-head"><div><h2>我們獨家的背離觀點</h2><p>把價格、ETF、槓桿、MSTR 資本結構與 BMNR gross treasury 拆開，不用單一指標講完整故事。</p></div><span class="pill">主張 → 證據 → 反證</span></div>
-    <div class="grid grid-2" id="exclusiveInsights"></div>
-  </section>
-
-  <section class="section">
-    <div class="section-head"><div><h2>跨資產四週期矩陣</h2><p>同時看 BTC、ETH、MSTR、BMNR、STRC 的報酬與相對 BTC 強弱。</p></div><span class="pill">不等於買賣建議</span></div>
-    <div class="table-wrap"><table id="assetMatrix"></table></div>
-  </section>
-
-  <section class="section">
-    <div class="card">
-      <div class="label">方法與邊界</div>
-      <div class="read">此首頁是市場狀態判讀，不是策略頁。它描述趨勢、加速、波動、背離與共振，不輸出買賣、槓桿、部位或目標價。</div>
-      <details><summary>查看資料與統計限制</summary><ul class="list"><li>BTC／ETH 使用 Yahoo Finance＋Kraken＋Coinbase；MSTR／BMNR／STRC 使用 Yahoo Finance＋Nasdaq。</li><li>只採完成日 K；即時價格與完成 K 棒分開。</li><li>同日重跑保留 revision 與 supersedes，歷史不覆蓋。</li><li>至少 20 個相異日期後才啟用經驗分位數。</li></ul></details>
-    </div>
-  </section>
-</main>
-<footer class="footer shell">研究與資料分析用途。所有輸出皆為 analysis-only，不連接交易執行。</footer>
-
-<script>
-const esc=value=>String(value??'—').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const pct=value=>value==null?'—':`${Number(value)>=0?'+':''}${(Number(value)*100).toFixed(1)}%`;
-const money=value=>value==null?'—':'$'+Number(value).toLocaleString('en-US',{maximumFractionDigits:2});
-const tone=value=>['positive','negative','mixed','unknown'].includes(value)?value:'unknown';
-async function json(path){const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw new Error(`${path} HTTP ${response.status}`);return response.json()}
-function fresh(value,maxHours){const stamp=new Date(value);if(!value||Number.isNaN(stamp.getTime())||(Date.now()-stamp.getTime())/36e5>maxHours)throw new Error('四週期分析已過期或時間戳無效')}
-function renderHorizon(item){const metrics=item.metrics||{};return `<article class="card" data-tone="${tone(item.tone)}"><div class="label">${esc(item.label)}｜${esc(item.status)}</div><div class="number ${tone(item.tone)}">${esc(item.key_number)}</div><div class="read">${esc(item.plain_read)}</div><div class="metric-row"><div class="metric"><b>${pct(metrics.return_acceleration)}</b><span>等長窗口加速度</span></div><div class="metric"><b>${pct(metrics.drawdown_from_range_high)}</b><span>距該週期高點</span></div></div><div class="change">${esc(item.what_changed)}</div><div class="mini" style="margin-top:9px">${esc(item.resonance)}｜資料截至 ${esc(item.data_depth?.as_of)}</div></article>`}
-function renderInsight(item){return `<article class="card"><div class="label">${esc(item.title)}｜信心 ${esc(item.confidence)}</div><div class="number">${esc(item.key_number)}</div><div class="read">${esc(item.claim)}</div><ul class="evidence">${(item.evidence||[]).map(value=>`<li>${esc(value)}</li>`).join('')}</ul><div class="change">${esc(item.what_changed)}</div><div class="falsifier">反證：${esc(item.falsifier)}</div></article>`}
-function renderMatrix(matrix){const order=['BTC','ETH','MSTR','BMNR','STRC'];const labels={daily:'日線',weekly:'週線',monthly:'月線',quarterly:'季線'};const head='<tr><th>標的</th>'+Object.values(labels).map(label=>`<th>${label}</th>`).join('')+'<th>相對 BTC（月）</th><th>資料來源</th></tr>';const rows=order.map(symbol=>{const item=matrix[symbol]||{};return `<tr><td><b>${symbol}</b></td>${Object.keys(labels).map(key=>`<td class="${tone(item[key]?.tone)}">${pct(item[key]?.return)}<br><span class="mini">${esc(item[key]?.status)}</span></td>`).join('')}<td>${symbol==='BTC'?'基準':pct(item.monthly?.relative_to_btc)}</td><td>${esc(item.monthly?.canonical_provider)} × ${esc(item.monthly?.source_count)}</td></tr>`}).join('');document.getElementById('assetMatrix').innerHTML=head+rows}
-function failClosed(message){document.body.dataset.renderStatus='fail';document.body.dataset.conclusionsVisible='false';document.body.dataset.executionGrade='false';document.getElementById('quality').className='quality fail';document.getElementById('quality').textContent=`資料封鎖：${message}`;document.getElementById('dominantState').textContent='必要資料未通過';document.getElementById('dominantRead').textContent='不沿用舊分析。';document.getElementById('horizonCards').innerHTML='<div class="empty">四週期結論已封鎖</div>';document.getElementById('exclusiveInsights').innerHTML='<div class="empty">獨家觀點已封鎖</div>'}
-async function load(){try{const[analysis,verification]=await Promise.all([json('data/daily/timescale_intelligence.json'),json('data/daily/timescale_intelligence_verification.json')]);if(analysis.schema!==1||verification.schema!==1)throw new Error('schema 不相容');if(verification.analysis_generated_at!==analysis.generated_at||verification.status!=='pass')throw new Error('獨立分析驗證未通過');fresh(analysis.generated_at,30);if(analysis.quality?.status==='fail'||analysis.quality?.publication_mode!=='analysis_only')throw new Error((analysis.quality?.failures||[])[0]||'分析品質失敗');const degraded=analysis.quality.status==='degraded';document.body.dataset.renderStatus=degraded?'degraded':'pass';document.body.dataset.conclusionsVisible='true';document.body.dataset.executionGrade='false';document.body.dataset.dataDate=analysis.date;document.getElementById('quality').className=`quality ${degraded?'degraded':'pass'}`;document.getElementById('quality').textContent=`資料日 ${analysis.date}｜雙來源日 K 驗證通過｜四週期數學重算 20/20｜${degraded?'部分非核心市場欄位降級，但趨勢資料可讀':'核心資料完整'}｜只供分析，不形成交易動作`;document.getElementById('alignmentScore').textContent=`${analysis.alignment.aligned_horizons}/${analysis.alignment.known_horizons}`;document.getElementById('historyDepth').textContent=`${analysis.record_advantage.distinct_dates} 個相異日期｜${analysis.record_advantage.observations} 次觀察`;document.getElementById('dominantState').textContent=analysis.alignment.dominant_state;document.getElementById('dominantRead').textContent=analysis.alignment.plain_read;const enough=analysis.record_advantage.distinct_dates>=analysis.record_advantage.statistical_claim_minimum;document.getElementById('evidenceState').textContent=enough?'可啟用歷史分位':'正在沉澱';document.getElementById('evidenceRead').textContent=analysis.record_advantage.plain_read;document.getElementById('horizonCards').innerHTML=['daily','weekly','monthly','quarterly'].map(key=>renderHorizon(analysis.horizons[key])).join('');document.getElementById('exclusiveInsights').innerHTML=(analysis.exclusive_insights||[]).map(renderInsight).join('');renderMatrix(analysis.asset_matrix||{})}catch(error){failClosed(error.message)}}
-load();
-</script>
+  <p>正在前往<a href="market-intelligence.html">市場總編</a>…</p>
 </body>
 </html>

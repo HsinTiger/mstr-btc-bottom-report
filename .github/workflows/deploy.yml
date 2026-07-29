@@ -1,4 +1,4 @@
-name: Deploy dashboard + Quartz wiki to Pages
+name: Deploy market editorial + Quartz wiki to Pages
 
 on:
   push:
@@ -78,7 +78,7 @@ jobs:
       - name: Build Quartz
         run: cd quartz-tmp && npx quartz build
 
-      - name: Assemble site (dashboard at root + Quartz at /kb)
+      - name: Assemble site (market editorial at root + Quartz at /kb)
         run: |
           mkdir -p _site
           rsync -a --exclude '.git' --exclude 'quartz-tmp' --exclude '_site' --exclude 'node_modules' ./ _site/
@@ -87,28 +87,9 @@ jobs:
           cp -R quartz-tmp/public/. _site/kb/
           touch _site/.nojekyll
 
-      - name: Bind Pages artifact to commit and editorial hash
+      - name: Bind Pages artifact to commit and critical data hashes
         id: site-meta
-        run: |
-          python - <<'PY'
-          import json
-          import os
-          import subprocess
-          from datetime import datetime, timezone
-          from pathlib import Path
-          commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-          editorial = json.loads(Path("data/daily/market_editorial.json").read_text(encoding="utf-8-sig"))
-          manifest = {
-              "schema": 1,
-              "commit": commit,
-              "editorial_hash": editorial.get("editorial_hash"),
-              "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-          }
-          Path("_site/deployment-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"commit={commit}\n")
-              output.write(f"editorial_hash={editorial.get('editorial_hash')}\n")
-          PY
+        run: python scripts/build_deployment_manifest.py --site-root _site --commit "$(git rev-parse HEAD)"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
@@ -148,7 +129,7 @@ jobs:
       - name: Install pinned browser smoke dependency
         run: python -m pip install -r requirements-smoke.txt
 
-      - name: Read back production JSON and desktop/mobile DOM
+      - name: Read back production artifacts and desktop/mobile DOM
         env:
           BASE_URL: ${{ needs.deploy.outputs.page_url }}
           EXPECTED_COMMIT: ${{ needs.build.outputs.site_commit }}

@@ -1,4 +1,4 @@
-# Four-Horizon Market Intelligence
+# Market Editorial Intelligence
 
 這個 repo 現在是一套 **資料分析與市場狀態判讀系統**，不是交易策略或自動下單系統。
 
@@ -14,15 +14,13 @@
 
 | Page | Responsibility |
 |---|---|
-| `index.html` | 四週期結論、大數字、變化與獨家背離觀點 |
-| `market-intelligence.html` | 每日市場總編：BTC／ETH、ETF／DAT、政策、鏈上、技術、宏觀、信用、債券與美股八個研究桌 |
-| `market-monitor.html` | 每小時現貨、衍生品、ETF、DAT 與熱門賽道 |
-| `analytics.html` | 四週期多視角證據、跨資產矩陣與資料對帳 |
-| `dashboard.html` | 原始價格路徑、標準化曲線與歷史 revisions |
-| `daily-extensions.html` | 每日洞察、前次變化與反證 ledger |
-| `x-intelligence.html` | AI 三類官方情報；原始主題訊號與本站編輯假說分開呈現，附反證、跨日差異、同日 revision 與三個行動 |
+| `market-intelligence.html` | **主要首頁**；每日市場總編統籌 BTC／ETH、ETF／DAT、政策、鏈上、技術、宏觀、信用、債券與美股八個研究桌 |
+| `market-monitor.html` | 每小時現貨、衍生品、ETF、DAT 與熱門賽道原始證據 |
+| `x-intelligence.html` | AI 總編；三類官方情報、本站編輯假說、反證、跨日差異與三個行動 |
 | `wiki.html` | 指標、公司與假說的治理知識庫 |
-| `site-overview.html` | 頁面責任、資料健康與生命週期治理 |
+| `site-overview.html` | 系統狀態、頁面責任、資料健康與生命週期治理 |
+
+根網址 `index.html` 只負責導向市場總編，不再維護第二套重複首頁。四週期資料、歷史 revisions 與 append-only 洞察仍完整保留為公開可稽核 JSON，繼續供市場總編、verifier 與部署 readback 使用；只有三個重複 HTML 呈現層退場。
 
 ## Data architecture
 
@@ -36,7 +34,8 @@ Daily source collection
   -> macro/policy/on-chain collection + independent value verification
   -> deterministic eight-desk market editorial + hash-bound revision ledger
   -> append-only insight history
-  -> product audit + desktop/mobile browser smoke + production readback
+  -> page audit + backend-product binding audit
+  -> desktop/mobile browser smoke + artifact hash production readback
 ```
 
 主要產物：
@@ -51,6 +50,8 @@ Daily source collection
 - `data/daily/market_editorial.json`
 - `data/daily/market_editorial_history.json`
 - `data/daily/market_editorial_verification.json`
+
+Pages 的 `deployment-manifest.json` 會綁定 commit、市場總編 semantic hash，以及五個四週期公開 artifact 的 SHA-256／bytes；正式站驗收同時確認三個退場頁為 404、五頁桌面／手機可讀與根網址轉址。
 
 方法與維護程序位於 `skills/market-timescale-intelligence/SKILL.md`；其 evidence ledger、diff-first、deterministic gate 與 append-only revision 方法取自 `HsinTiger/skills-radar` 的已審研究原則，未安裝仍標為待審的第三方金融 skill。
 

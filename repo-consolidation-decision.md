@@ -1,6 +1,6 @@
 ﻿# Repo 合併與去蕪存菁決策
 
-> 日期：2026-07-07｜結論：保留 `mstr-btc-bottom-report` 作為唯一主 repo；`btc-dashboard` 已完成轉址封存，不再維護。
+> 日期：2026-07-07｜2026-07-29 前端決策更新：保留 `mstr-btc-bottom-report` 作為唯一主 repo；`btc-dashboard` 已完成轉址封存，不再維護。主 repo 公開入口再收斂為市場總編。
 
 ## 一句話結論
 
@@ -22,8 +22,8 @@
 
 | 類型 | 路徑 |
 |---|---|
-| 每日大字卡 / 主站 | `index.html` |
-| 日週月/交易紀錄 dashboard | `dashboard.html` |
+| 每日跨市場主站 | `market-intelligence.html` |
+| 即時市場原始證據 | `market-monitor.html` |
 | LLM 投資知識庫前端 | `wiki.html` |
 | LLM 可讀知識庫 | `wiki/**`、`wiki/manifest.json` |
 | 機構級 IC memo | `institutional-ic-memo-v3.md` |
@@ -36,5 +36,5 @@
 1. `btc-dashboard` 保持 archived，不再 push。
 2. `btc-dashboard` README 與轉址頁已足夠；若要改，只能 unarchive 後更新。
 3. 所有新功能只加到 `mstr-btc-bottom-report`。
-4. 主站首頁以「每日大字卡」呈現，wiki 只作知識庫，不搶主入口。
-5. 策略分桶固定為：大倉 `MSTR+BMNR 4:1 現貨 1–4 年週期`；小倉 `MSTR 2.5x 合約，月線到年線波段`。
+4. 主站根網址導向市場總編；四週期、時序與洞察 revisions 保留後端，不再拆成重複前端。
+5. 舊策略文件只作歷史研究，不屬於 active runtime；目前公開站只做資料分析與市場狀態判讀。

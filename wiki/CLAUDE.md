@@ -47,5 +47,6 @@ wiki/
 - 數據流：[[data-feeds]]（五維權威平台 + 每日監控）
 
 ## 與前端的關係
-- 主決策儀表：`../index.html`（八分頁：總覽/歷史趨勢/五維/KOL）。
+- 主要市場入口：`../market-intelligence.html`（每日主文與八個可反證研究桌）；根網址 `../index.html` 只負責轉址。
+- 即時證據入口：`../market-monitor.html`（報價、衍生品、ETF、DAT 與輪動）。
 - 本 Wiki 的瀏覽前端：`../wiki.html`（側欄＋內容＋關係圖 graph view），讀 `manifest.json` 與各 .md。

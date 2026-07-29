@@ -92,15 +92,6 @@ def clickable_contract_issues(page_path: str, html: str) -> list[str]:
         if not re.search(r"<summary\b[^>]*>.*?</summary>", details, flags=re.IGNORECASE | re.DOTALL):
             issues.append("details 缺少 summary")
 
-    if page_path == "dashboard.html":
-        tabs = set(re.findall(r'<button\b[^>]*data-t=["\']([^"\']+)["\']', html, flags=re.IGNORECASE))
-        panels = set(re.findall(r'<section\b[^>]*class=["\'][^"\']*\btab\b[^"\']*["\'][^>]*id=["\']([^"\']+)["\']', html, flags=re.IGNORECASE))
-        panels.update(re.findall(r'<section\b[^>]*id=["\']([^"\']+)["\'][^>]*class=["\'][^"\']*\btab\b', html, flags=re.IGNORECASE))
-        if tabs != panels:
-            issues.append(f"Dashboard tab/panel 不一致：tabs={sorted(tabs)} panels={sorted(panels)}")
-        if "document.getElementById(b.dataset.t).classList.add('on')" not in html:
-            issues.append("Dashboard tab 缺少切換 handler")
-
     if page_path == "wiki.html":
         for token in ("id=\"burger\"", "id=\"search\"", "location.hash=a.dataset.slug", "location.hash=c.dataset.slug"):
             if token not in html:
@@ -270,6 +261,28 @@ def audit_page(
     }
 
 
+def audit_data_product(product: dict[str, Any], now: datetime, data_contracts: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    dependency_specs = [{**data_contracts.get(item["path"], {}), **item} for item in product.get("dependencies", [])]
+    dependency_results = [check_dependency(item, now) for item in dependency_specs]
+    checks: list[dict[str, Any]] = []
+    for binding in product.get("bindings", []):
+        left_path = ROOT / binding["left_path"]
+        right_path = ROOT / binding["right_path"]
+        try:
+            left_value = nested(load_json(left_path), binding["left_field"])
+            right_value = nested(load_json(right_path), binding["right_field"])
+            matches = left_value is not None and left_value == right_value
+            reason = None if matches else f"批次綁定不一致：{binding['left_path']}:{binding['left_field']} != {binding['right_path']}:{binding['right_field']}"
+        except (OSError, json.JSONDecodeError) as error:
+            matches = False
+            reason = f"批次綁定無法讀取：{error}"
+        checks.append({"name": "artifact_binding", "status": "pass" if matches else "fail", "reason": reason})
+
+    statuses = [item["status"] for item in dependency_results + checks]
+    status = "fail" if "fail" in statuses else "degraded" if "degraded" in statuses else "pass"
+    return {**product, "status": status, "checks": checks, "dependencies": dependency_results}
+
+
 def main(allow_fail_closed_data: bool = False) -> int:
     registry = load_json(REGISTRY_PATH)
     now = datetime.now(timezone.utc)
@@ -278,11 +291,14 @@ def main(allow_fail_closed_data: bool = False) -> int:
     paths_by_id = {page["id"]: page["path"] for page in registry_pages}
     data_contracts = registry.get("data_contracts", {})
     pages = [audit_page(page, now, active_paths, paths_by_id, data_contracts) for page in registry_pages]
+    data_products = [audit_data_product(product, now, data_contracts) for product in registry.get("data_products", [])]
     active = [page for page in pages if page.get("lifecycle") == "active"]
     critical_surface_failures = [page["id"] for page in active if page["surface_status"] == "fail" and page.get("criticality") in {"critical", "high"}]
     critical_data_failures = [page["id"] for page in active if page["data_status"] == "fail" and page.get("criticality") in {"critical", "high"}]
+    critical_data_failures.extend(product["id"] for product in data_products if product["status"] == "fail" and product.get("criticality") in {"critical", "high"})
     degraded = [page["id"] for page in active if page["status"] == "degraded"]
-    overall = "fail" if critical_surface_failures or critical_data_failures else "degraded" if any(page["status"] != "pass" for page in active) else "pass"
+    degraded.extend(product["id"] for product in data_products if product["status"] == "degraded")
+    overall = "fail" if critical_surface_failures or critical_data_failures else "degraded" if any(page["status"] != "pass" for page in active) or any(product["status"] != "pass" for product in data_products) else "pass"
     output = {
         "schema": 1,
         "generated_at": now_iso(),
@@ -297,14 +313,20 @@ def main(allow_fail_closed_data: bool = False) -> int:
             "critical_surface_failures": critical_surface_failures,
             "critical_data_failures": critical_data_failures,
             "degraded_pages": degraded,
+            "data_products": len(data_products),
+            "data_product_pass": sum(product["status"] == "pass" for product in data_products),
+            "data_product_degraded": sum(product["status"] == "degraded" for product in data_products),
+            "data_product_fail": sum(product["status"] == "fail" for product in data_products),
         },
         "pages": pages,
+        "data_products": data_products,
         "governance_rules": [
             "每個 active 專區必須有唯一問題、資料依賴與更新頻率。",
             "頁面不得用未驗證即時資料覆蓋已驗證每日資料。",
             "每日資料與歷史研究樣本混放時必須明示兩個日期。",
             "封存頁不得出現在主要導航，且必須指向目前替代專區。",
-            "缺值、過期、schema 或日期不一致時 fail closed。"
+            "缺值、過期、schema 或日期不一致時 fail closed。",
+            "後端資料產品即使沒有獨立前端，也必須逐一稽核 artifact、verifier 與批次綁定。"
         ],
         "publication_mode": "fail_closed_diagnostics_only" if critical_data_failures and not critical_surface_failures else "normal",
     }

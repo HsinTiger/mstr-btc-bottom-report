@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "updated_at": "2026-07-28",
+  "updated_at": "2026-07-29",
   "owner": "product-ceo-governance",
-  "mission": "以日線、週線、月線、季線累積可追溯市場資料與洞察；每個專區只回答一個問題，不輸出交易策略。",
+  "mission": "以市場總編統籌可追溯的跨市場結論；即時數據、AI 總編、知識庫與系統狀態各自只回答一個問題，不輸出交易策略。",
   "data_contracts": {
     "data/daily/latest_snapshot.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "batch_id", "metrics"], "lineage_source_field": "generated_at"},
     "data/daily/agent_verification_report.json": {"schema_value": 2, "required_fields": ["date", "verified_at", "batch_id", "snapshot_generated_at", "market_universe_generated_at", "status"], "lineage_field": "snapshot_generated_at"},
@@ -25,23 +25,59 @@
     "data/daily/site_health.json": {"schema_value": 1, "required_fields": ["generated_at", "status", "summary", "pages"]},
     "wiki/manifest.json": {"schema_value": 1, "required_fields": ["updated", "pages"]}
   },
-  "pages": [
+  "data_products": [
     {
-      "id": "market-overview",
-      "path": "index.html",
-      "title": "四週期總覽",
-      "title_contains": "四週期市場情報台",
-      "lifecycle": "active",
-      "criticality": "critical",
-      "role": "用大字卡顯示日線、週線、月線、季線趨勢、變化、同步程度與獨家背離觀點。",
-      "user_question": "四個週期各在走什麼趨勢，哪些證據共振或背離？",
-      "open_when": "每天第一個打開；先看四週期結論，再進入證據或時序專區。",
+      "id": "timescale-price-ledger",
+      "title": "四週期價格與來源對帳",
+      "criticality": "high",
+      "role": "保存 BTC、ETH、MSTR、BMNR 的多來源完成日 K，並以獨立 verifier 對帳來源、批次與目前快照。",
       "cadence": "每日",
-      "surface_type": "live_timescale_overview",
-      "owner_action": "redesign",
+      "owner_action": "keep_backend",
+      "bindings": [
+        {"left_path": "data/daily/timescale_price_history.json", "left_field": "generated_at", "right_path": "data/daily/timescale_data_verification.json", "right_field": "history_generated_at"},
+        {"left_path": "data/daily/timescale_price_history.json", "left_field": "snapshot_generated_at", "right_path": "data/daily/timescale_data_verification.json", "right_field": "snapshot_generated_at"}
+      ],
+      "dependencies": [
+        {"path": "data/daily/timescale_price_history.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/timescale_data_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
+      ]
+    },
+    {
+      "id": "timescale-intelligence-ledger",
+      "title": "四週期分析與修訂紀錄",
+      "criticality": "high",
+      "role": "保存日、週、月、季趨勢、跨資產背離與 append-only revisions，持續供市場總編與 verifier 使用。",
+      "cadence": "每日",
+      "owner_action": "keep_backend",
+      "bindings": [
+        {"left_path": "data/daily/timescale_intelligence.json", "left_field": "generated_at", "right_path": "data/daily/timescale_intelligence_verification.json", "right_field": "analysis_generated_at"},
+        {"left_path": "data/daily/timescale_intelligence.json", "left_field": "snapshot_generated_at", "right_path": "data/daily/timescale_intelligence_verification.json", "right_field": "snapshot_generated_at"},
+        {"left_path": "data/daily/timescale_intelligence.json", "left_field": "generated_at", "right_path": "data/daily/timescale_intelligence_history.json", "right_field": "updated_at"}
+      ],
       "dependencies": [
         {"path": "data/daily/timescale_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/timescale_intelligence_history.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true},
         {"path": "data/daily/timescale_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"}
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "id": "market-editorial",
+      "path": "market-intelligence.html",
+      "title": "市場總編",
+      "title_contains": "市場總編",
+      "lifecycle": "active",
+      "criticality": "critical",
+      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌。",
+      "user_question": "今天真正主導 BTC／ETH 的跨市場力量是什麼，哪些維度共振或分歧？",
+      "open_when": "每天第一個打開；先讀今日主文與跨市場結論，需要原始報價再進即時數據。",
+      "cadence": "每日 08:42（台北時間）",
+      "surface_type": "verified_cross_market_editorial",
+      "owner_action": "keep",
+      "dependencies": [
+        {"path": "data/daily/market_editorial.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
+        {"path": "data/daily/market_editorial_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"}
       ]
     },
     {
@@ -53,7 +89,7 @@
       "criticality": "high",
       "role": "追蹤 BTC、ETH、衍生品、ETF、DAT、熱門賽道與 BTC 長期論證。",
       "user_question": "市場槓桿、機構流向與長期貨幣化背景今天有何變化？",
-      "open_when": "首頁結論需要市場結構、輪動或長期論證的第二層證據時。",
+      "open_when": "市場總編結論需要即時報價、槓桿、流向、輪動或長期論證的原始證據時。",
       "cadence": "每小時",
       "surface_type": "live_market",
       "owner_action": "keep",
@@ -61,24 +97,6 @@
         {"path": "data/daily/market_universe.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/market_universe_verification.json", "timestamp_field": "verified_at", "max_age_hours": 3, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
         {"path": "data/daily/market_universe_history.json", "timestamp_field": "updated_at", "max_age_hours": 3, "required": true}
-      ]
-    },
-    {
-      "id": "market-editorial",
-      "path": "market-intelligence.html",
-      "title": "市場總編",
-      "title_contains": "市場總編",
-      "lifecycle": "active",
-      "criticality": "high",
-      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌。",
-      "user_question": "今天真正主導 BTC／ETH 的跨市場力量是什麼，哪些維度共振或分歧？",
-      "open_when": "每天看完四週期總覽後，用來理解市場原因、非共識假說、二階影響與反證條件。",
-      "cadence": "每日 08:42（台北時間）",
-      "surface_type": "verified_cross_market_editorial",
-      "owner_action": "keep",
-      "dependencies": [
-        {"path": "data/daily/market_editorial.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/market_editorial_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"}
       ]
     },
     {
@@ -100,66 +118,6 @@
       ]
     },
     {
-      "id": "timescale-analysis",
-      "path": "analytics.html",
-      "title": "週期分析",
-      "title_contains": "四週期趨勢分析",
-      "lifecycle": "active",
-      "criticality": "high",
-      "role": "拆解四週期的技術、廣度、槓桿、流向、情緒、資本結構與反證。",
-      "user_question": "四週期結論由哪些獨立視角構成，資料對帳是否通過？",
-      "open_when": "首頁出現共振或背離，需要查看完整證據與限制時。",
-      "cadence": "每日",
-      "surface_type": "live_timescale_analysis",
-      "owner_action": "redesign",
-      "dependencies": [
-        {"path": "data/daily/timescale_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_data_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_history.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true}
-      ]
-    },
-    {
-      "id": "insight-journal",
-      "path": "daily-extensions.html",
-      "title": "洞察日誌",
-      "title_contains": "洞察日誌",
-      "lifecycle": "active",
-      "criticality": "medium",
-      "role": "保存每日獨家觀點、前次變化、反證條件與同日 revisions。",
-      "user_question": "今天哪些觀點新增或改變，下一次要用什麼證據驗證？",
-      "open_when": "想追蹤觀點如何隨時間修正，而不是只看當日快照時。",
-      "cadence": "每日",
-      "surface_type": "append_only_insight_ledger",
-      "owner_action": "redesign",
-      "dependencies": [
-        {"path": "data/daily/timescale_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_history.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true}
-      ]
-    },
-    {
-      "id": "history-lab",
-      "path": "dashboard.html",
-      "title": "時序研究",
-      "title_contains": "時間序列研究室",
-      "lifecycle": "active",
-      "criticality": "medium",
-      "role": "檢視雙來源原始價格、標準化曲線、四週期數字矩陣與歷史 revisions。",
-      "user_question": "分析背後的原始時序、跨來源差異與歷史沉澱是否可信？",
-      "open_when": "需要稽核資料、比較價格路徑或追溯歷次觀察時。",
-      "cadence": "每日＋append-only revisions",
-      "surface_type": "time_series_research",
-      "owner_action": "redesign",
-      "dependencies": [
-        {"path": "data/daily/timescale_price_history.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_data_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_history.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true}
-      ]
-    },
-    {
       "id": "knowledge-base",
       "path": "wiki.html",
       "title": "投資知識庫",
@@ -168,7 +126,7 @@
       "criticality": "medium",
       "role": "保存可重用的概念、標的、來源、假說、反證與最後驗證日期。",
       "user_question": "某個指標、公司或假說的正式定義與限制是什麼？",
-      "open_when": "看不懂名詞、需要追溯定義，或要深化洞察日誌觀點時。",
+      "open_when": "看不懂名詞、需要追溯定義、來源、假說或反證條件時。",
       "cadence": "研究變更時",
       "surface_type": "governed_knowledge",
       "owner_action": "keep",
@@ -190,8 +148,7 @@
       "surface_type": "product_governance",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/site_registry.json", "required": true},
-        {"path": "data/daily/site_health.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true}
+        {"path": "data/site_registry.json", "required": true}
       ]
     }
   ]

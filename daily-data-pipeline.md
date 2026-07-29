@@ -64,12 +64,13 @@
 
 ## 前端資料
 
-- `index.html`：四週期結論、大數字與獨家背離觀點。
-- `market-intelligence.html`：每日跨市場總編主文與八個可反證研究桌。
-- `analytics.html`：四週期完整證據與資料對帳。
-- `dashboard.html`：原始時序、標準化價格與歷史 revisions。
-- `daily-extensions.html`：每日觀點變化與反證 ledger。
-- `market-monitor.html`：跨資產現貨、衍生品、ETF、DAT 與賽道輪動。
+- `market-intelligence.html`：主要首頁；每日跨市場總編主文與八個可反證研究桌。
+- `market-monitor.html`：跨資產現貨、衍生品、ETF、DAT 與賽道輪動的原始證據。
+- `x-intelligence.html`：AI 總編的官方情報、編輯假說與反證。
+- `wiki.html`：指標、公司、來源與假說的治理知識庫。
+- `site-overview.html`：五個公開專區的系統狀態與資料責任。
+
+`index.html` 只負責導向市場總編。四週期分析、原始時序與 append-only revisions 保留為公開可稽核的後端資料產品，不再各自占用公開導航。`data/site_registry.json` 的 `data_products` 會逐項稽核五個 timescale artifact 與批次綁定；部署 manifest 再以 SHA-256 綁定正式站實際檔案。
 
 ## 驗證政策
 

@@ -7,16 +7,15 @@ import json
 import os
 import re
 import shutil
-import tempfile
 import threading
 from contextlib import contextmanager
-from copy import deepcopy
-from datetime import datetime, timedelta, timezone
 from decimal import Decimal, ROUND_HALF_UP
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Iterator
+from urllib.error import HTTPError
 from urllib.parse import urlsplit
+from urllib.request import Request, urlopen
 
 try:
     from playwright.sync_api import Error as PlaywrightError
@@ -27,18 +26,21 @@ except ImportError as error:
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
-    "index.html": "日／週／月／季一眼看懂",
     "market-intelligence.html": "八個研究桌",
     "market-monitor.html": "先看四個市場結論",
-    "analytics.html": "週期證據矩陣",
-    "dashboard.html": "近一年標準化價格",
-    "daily-extensions.html": "今天最值得追蹤的觀點",
     "x-intelligence.html": "今天真正改變了什麼",
     "wiki.html": "最後驗證",
     "site-overview.html": "頁面程式",
 }
-ANALYSIS_PAGES = {"index.html", "analytics.html", "dashboard.html", "daily-extensions.html"}
-STATUS_PAGES = ANALYSIS_PAGES | {"market-intelligence.html", "market-monitor.html", "x-intelligence.html"}
+STATUS_PAGES = {"market-intelligence.html", "market-monitor.html", "x-intelligence.html"}
+RETIRED_PAGES = {"analytics.html", "dashboard.html", "daily-extensions.html"}
+TIMESCALE_ARTIFACTS = {
+    "price": "data/daily/timescale_price_history.json",
+    "data_verification": "data/daily/timescale_data_verification.json",
+    "analysis": "data/daily/timescale_intelligence.json",
+    "history": "data/daily/timescale_intelligence_history.json",
+    "analysis_verification": "data/daily/timescale_intelligence_verification.json",
+}
 VIEWPORTS = {"desktop": (1440, 1000), "mobile": (390, 844)}
 CRASH_MARKERS = ("Cannot read properties", "治理資料失敗", "知識庫載入失敗", "ReferenceError", "SyntaxError")
 
@@ -130,6 +132,7 @@ class BrowserRenderer:
                         return activeRect.left >= navRect.left - 1 && activeRect.right <= navRect.right + 1;
                     });
                 })(),
+                currentPath: location.pathname,
             })""")
             return page.locator("body").inner_text(), page.content(), layout
         finally:
@@ -166,9 +169,42 @@ def render_status(dom: str) -> str | None:
     return match.group(1) if match else None
 
 
-def shift_time(value: str, hours: float) -> str:
-    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    return (parsed + timedelta(hours=hours)).isoformat()
+def fetch_json(url: str) -> dict[str, Any]:
+    request = Request(url, headers={"User-Agent": "product-surface-smoke"})
+    with urlopen(request, timeout=10) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def validate_timescale_artifacts(base_url: str) -> None:
+    payloads = {name: fetch_json(f"{base_url}/{path}") for name, path in TIMESCALE_ARTIFACTS.items()}
+    if any(payload.get("schema") != 1 for payload in payloads.values()):
+        raise RuntimeError("四週期後端 artifact schema 不相容")
+    price = payloads["price"]
+    data_verification = payloads["data_verification"]
+    analysis = payloads["analysis"]
+    history = payloads["history"]
+    analysis_verification = payloads["analysis_verification"]
+    if data_verification.get("status") != "pass" or analysis_verification.get("status") != "pass":
+        raise RuntimeError("四週期後端 verifier 未通過")
+    if price.get("generated_at") != data_verification.get("history_generated_at") or price.get("snapshot_generated_at") != data_verification.get("snapshot_generated_at"):
+        raise RuntimeError("四週期價格 artifact 與 verifier 批次未綁定")
+    if analysis.get("generated_at") != analysis_verification.get("analysis_generated_at") or analysis.get("snapshot_generated_at") != analysis_verification.get("snapshot_generated_at"):
+        raise RuntimeError("四週期分析 artifact 與 verifier 批次未綁定")
+    history_items = history.get("items", [])
+    if history.get("updated_at") != analysis.get("generated_at") or not history_items or history_items[-1].get("generated_at") != analysis.get("generated_at"):
+        raise RuntimeError("四週期分析與 append-only history 最新 revision 未綁定")
+
+
+def validate_retired_pages(base_url: str) -> None:
+    for page_name in RETIRED_PAGES:
+        try:
+            with urlopen(f"{base_url}/{page_name}", timeout=10) as response:
+                status = response.status
+        except HTTPError as error:
+            if error.code == 404:
+                continue
+            raise RuntimeError(f"退場頁 {page_name} 回傳 HTTP {error.code}") from error
+        raise RuntimeError(f"退場頁 {page_name} 仍可公開存取：HTTP {status}")
 
 
 def validate_base_page(
@@ -195,12 +231,6 @@ def validate_base_page(
     missing_navigation = [target for target in PAGES if target not in links]
     if missing_navigation:
         raise RuntimeError(f"主要導航缺漏：{', '.join(missing_navigation)}")
-    if page_name in ANALYSIS_PAGES:
-        status = render_status(dom)
-        if status not in {"pass", "degraded"}:
-            raise RuntimeError(f"分析頁狀態不可讀：{status}")
-        if 'data-conclusions-visible="true"' not in dom or 'data-execution-grade="false"' not in dom:
-            raise RuntimeError("分析頁未維持 analysis-only 可讀契約")
     if page_name == "market-monitor.html":
         status = render_status(dom)
         if status not in {"pass", "degraded"} or 'data-conclusions-visible="true"' not in dom:
@@ -213,6 +243,8 @@ def validate_base_page(
             raise RuntimeError("市場總編 analysis-only 品質契約未通過")
         if 'data-desk-count="8"' not in dom or 'data-lead-visible="true"' not in dom:
             raise RuntimeError("市場總編主文或八個研究桌未完整載入")
+        if not re.search(r'data-timescale-status="(?:pass|degraded)"', dom):
+            raise RuntimeError("市場總編四週期與修訂證據未通過")
         if 'data-page-overflow="false"' not in dom:
             raise RuntimeError("市場總編版面發生水平溢位")
     if page_name == "x-intelligence.html":
@@ -231,27 +263,31 @@ def main() -> int:
     renderer = BrowserRenderer(browser_path())
     failures: list[dict[str, str]] = []
     results: list[dict[str, str]] = []
-    analysis = json.loads((ROOT / "data/daily/timescale_intelligence.json").read_text(encoding="utf-8-sig"))
-    analysis_verification = json.loads((ROOT / "data/daily/timescale_intelligence_verification.json").read_text(encoding="utf-8-sig"))
     market = json.loads((ROOT / "data/daily/market_universe.json").read_text(encoding="utf-8-sig"))
     ai = json.loads((ROOT / "data/daily/ai_intelligence.json").read_text(encoding="utf-8-sig"))
     ai_verification = json.loads((ROOT / "data/daily/ai_intelligence_verification.json").read_text(encoding="utf-8-sig"))
     market_editorial = json.loads((ROOT / "data/daily/market_editorial.json").read_text(encoding="utf-8-sig"))
     market_editorial_verification = json.loads((ROOT / "data/daily/market_editorial_verification.json").read_text(encoding="utf-8-sig"))
-    daily_key = analysis["horizons"]["daily"]["key_number"]
-    first_insight = analysis["exclusive_insights"][0]["title"]
+    timescale_verification = json.loads((ROOT / "data/daily/timescale_intelligence_verification.json").read_text(encoding="utf-8-sig"))
     lead_brief = next(item for item in ai["editorial_digest"]["briefs"] if item["id"] == ai["editorial_digest"]["lead_brief_id"])
     market_lead = next(item for item in market_editorial["desks"] if item["id"] == market_editorial["editorial_digest"]["lead_desk_id"])
     live_values = {
-        "index.html": [analysis["date"], daily_key, first_insight],
         "market-intelligence.html": [market_lead["headline"], market_lead["conclusion"], market_lead["evidence"][0]["display"]],
         "market-monitor.html": [browser_money(market["assets"]["BTC"]["price_usd"]), browser_money(market["assets"]["ETH"]["price_usd"])],
-        "analytics.html": [analysis["date"], daily_key, first_insight],
-        "dashboard.html": [analysis["date"], str(analysis["record_advantage"]["observations"])],
-        "daily-extensions.html": [analysis["date"], first_insight],
         "x-intelligence.html": [lead_brief["headline"], lead_brief["variant_view"], lead_brief["what_changed"], lead_brief["evidence"][0]["source_label"]],
+        "site-overview.html": ["四週期價格與來源對帳", "四週期分析與修訂紀錄"],
     }
-    with tempfile.TemporaryDirectory(prefix="product-smoke-") as profile, server() as base_url:
+    with server() as base_url:
+        try:
+            validate_timescale_artifacts(base_url)
+            results.append({"viewport": "server", "page": "timescale-backend-products", "status": "pass"})
+        except (RuntimeError, OSError, json.JSONDecodeError) as error:
+            failures.append({"viewport": "server", "page": "timescale-backend-products", "error": str(error)})
+        try:
+            validate_retired_pages(base_url)
+            results.append({"viewport": "server", "page": "retired-pages-404", "status": "pass"})
+        except (RuntimeError, OSError) as error:
+            failures.append({"viewport": "server", "page": "retired-pages-404", "error": str(error)})
         for viewport, (width, height) in VIEWPORTS.items():
             for page_name, expected_text in PAGES.items():
                 try:
@@ -267,35 +303,18 @@ def main() -> int:
                 except (RuntimeError, PlaywrightError) as error:
                     failures.append({"viewport": viewport, "page": page_name, "error": str(error)})
 
-    failed_verification = {**deepcopy(analysis_verification), "status": "fail", "failures": ["fixture failure"]}
-    stale_analysis = deepcopy(analysis)
-    stale_analysis["generated_at"] = shift_time(analysis["generated_at"], -31)
-    stale_verification = {**deepcopy(analysis_verification), "analysis_generated_at": stale_analysis["generated_at"]}
-    fixtures = [
-        ("verification-fail", {
-            "/data/daily/timescale_intelligence_verification.json": failed_verification,
-        }),
-        ("stale-analysis", {
-            "/data/daily/timescale_intelligence.json": stale_analysis,
-            "/data/daily/timescale_intelligence_verification.json": stale_verification,
-        }),
-    ]
-    for fixture_name, overrides in fixtures:
-        with server(overrides) as base_url:
-            for viewport, (width, height) in VIEWPORTS.items():
-                for page_name in ANALYSIS_PAGES:
-                    try:
-                        body, dom, layout = renderer.render(f"{base_url}/{page_name}", width, height)
-                        assert_no_horizontal_overflow(layout, f"{viewport} {page_name}:{fixture_name}")
-                        if render_status(dom) != "fail" or 'data-conclusions-visible="false"' not in dom:
-                            raise RuntimeError(f"{fixture_name} 未 fail closed")
-                        if "封鎖" not in body and "不可用" not in body:
-                            raise RuntimeError(f"{fixture_name} 未顯示清楚診斷")
-                        results.append({"viewport": viewport, "page": f"{page_name}:{fixture_name}", "status": "pass"})
-                    except (RuntimeError, PlaywrightError) as error:
-                        failures.append({"viewport": viewport, "page": f"{page_name}:{fixture_name}", "error": str(error)})
+            try:
+                body, _, layout = renderer.render(f"{base_url}/", width, height)
+                assert_no_horizontal_overflow(layout, f"{viewport} root-redirect")
+                if not str(layout.get("currentPath", "")).endswith("/market-intelligence.html"):
+                    raise RuntimeError(f"根網址未導向市場總編：{layout.get('currentPath')}")
+                if market_lead["headline"] not in body:
+                    raise RuntimeError("根網址轉址後未載入市場總編主文")
+                results.append({"viewport": viewport, "page": "root→market-intelligence.html", "status": "pass"})
+            except (RuntimeError, PlaywrightError) as error:
+                failures.append({"viewport": viewport, "page": "root→market-intelligence.html", "error": str(error)})
 
-    failed_ai_verification = {**deepcopy(ai_verification), "status": "fail", "failures": ["fixture failure"]}
+    failed_ai_verification = {**ai_verification, "status": "fail", "failures": ["fixture failure"]}
     with server({"/data/daily/ai_intelligence_verification.json": failed_ai_verification}) as base_url:
         for viewport, (width, height) in VIEWPORTS.items():
             try:
@@ -309,7 +328,7 @@ def main() -> int:
             except (RuntimeError, PlaywrightError) as error:
                 failures.append({"viewport": viewport, "page": "x-intelligence.html:verification-fail", "error": str(error)})
 
-    failed_market_editorial_verification = {**deepcopy(market_editorial_verification), "status": "fail", "failures": ["fixture failure"]}
+    failed_market_editorial_verification = {**market_editorial_verification, "status": "fail", "failures": ["fixture failure"]}
     with server({"/data/daily/market_editorial_verification.json": failed_market_editorial_verification}) as base_url:
         for viewport, (width, height) in VIEWPORTS.items():
             try:
@@ -322,6 +341,20 @@ def main() -> int:
                 results.append({"viewport": viewport, "page": "market-intelligence.html:verification-fail", "status": "pass"})
             except (RuntimeError, PlaywrightError) as error:
                 failures.append({"viewport": viewport, "page": "market-intelligence.html:verification-fail", "error": str(error)})
+
+    failed_timescale_verification = {**timescale_verification, "status": "fail", "failures": ["fixture failure"]}
+    with server({"/data/daily/timescale_intelligence_verification.json": failed_timescale_verification}) as base_url:
+        for viewport, (width, height) in VIEWPORTS.items():
+            try:
+                body, dom, layout = renderer.render(f"{base_url}/market-intelligence.html", width, height)
+                assert_no_horizontal_overflow(layout, f"{viewport} market-intelligence.html:timescale-verification-fail")
+                if 'data-timescale-status="fail"' not in dom or "四週期證據已封鎖" not in body:
+                    raise RuntimeError("四週期 verification-fail 未封鎖研究證據")
+                if not re.search(r'<div(?=[^>]*id="timescaleContent")(?=[^>]*class="hidden")[^>]*>', dom):
+                    raise RuntimeError("四週期 verification-fail 仍顯示舊結論")
+                results.append({"viewport": viewport, "page": "market-intelligence.html:timescale-verification-fail", "status": "pass"})
+            except (RuntimeError, PlaywrightError) as error:
+                failures.append({"viewport": viewport, "page": "market-intelligence.html:timescale-verification-fail", "error": str(error)})
     renderer.close()
     print(json.dumps({"browser": renderer.executable_path, "checks": len(results), "failures": failures}, ensure_ascii=False))
     return 1 if failures else 0

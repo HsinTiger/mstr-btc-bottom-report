@@ -8,6 +8,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "daily"
@@ -46,6 +47,21 @@ def finite(value: Any) -> float | None:
         return result if result == result and abs(result) != float("inf") else None
     except (TypeError, ValueError):
         return None
+
+
+def source_url_valid(value: Any) -> bool:
+    url = str(value or "").strip()
+    if url.startswith("https://"):
+        return True
+    parsed = urlsplit(url)
+    if parsed.scheme or parsed.netloc or not parsed.path or parsed.path.startswith(("/", "\\")):
+        return False
+    try:
+        target = (ROOT / parsed.path).resolve()
+        target.relative_to(ROOT.resolve())
+    except (OSError, ValueError):
+        return False
+    return target.is_file()
 
 
 def expected_direction(value: float | None, threshold: float, *, inverse: bool = False) -> str:
@@ -266,7 +282,7 @@ def verify(
                 for item in evidence
             ), f"{desk_id} as_of、來源數或方向未由目前輸入重算")
             check(f"source_links:{desk_id}", all(
-                entry.get("label") and (str(entry.get("url", "")).startswith("https://") or str(entry.get("url", "")).endswith(".html") or ".html#" in str(entry.get("url", "")))
+                entry.get("label") and source_url_valid(entry.get("url"))
                 for item in evidence for entry in item.get("sources", [])
             ), f"{desk_id} 證據來源連結無效")
             check(f"knowledge_links:{desk_id}", bool(brief.get("knowledge_links")) and all(item.get("slug") in knowledge_slugs for item in brief.get("knowledge_links", [])), f"{desk_id} 未連結 LLM Wiki 知識基礎")
