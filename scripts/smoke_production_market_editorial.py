@@ -8,15 +8,18 @@ import hashlib
 import os
 import shutil
 import time
+from datetime import datetime, timezone
 from urllib.error import HTTPError
 import urllib.request
 from pathlib import Path
 from typing import Any
 
 try:
-    from build_deployment_manifest import TIMESCALE_ARTIFACTS
+    from build_deployment_manifest import CRITICAL_ARTIFACTS, MARKET_EVIDENCE_ARTIFACTS, TIMESCALE_ARTIFACTS
+    from verify_market_universe import evidence_ledger_errors
 except ModuleNotFoundError:
-    from scripts.build_deployment_manifest import TIMESCALE_ARTIFACTS
+    from scripts.build_deployment_manifest import CRITICAL_ARTIFACTS, MARKET_EVIDENCE_ARTIFACTS, TIMESCALE_ARTIFACTS
+    from scripts.verify_market_universe import evidence_ledger_errors
 
 PAGES = {
     "market-intelligence.html": "八個研究桌",
@@ -104,6 +107,55 @@ def validate_timescale_artifacts(manifest: dict[str, Any], artifact_bytes: dict[
         raise RuntimeError("production timescale history binding mismatch")
 
 
+def validate_market_evidence_artifacts(manifest: dict[str, Any], artifact_bytes: dict[str, bytes]) -> None:
+    manifest_artifacts = manifest.get("artifacts", {})
+    for path in MARKET_EVIDENCE_ARTIFACTS:
+        record = manifest_artifacts.get(path, {})
+        payload = artifact_bytes.get(path, b"")
+        if record.get("sha256") != hashlib.sha256(payload).hexdigest() or record.get("bytes") != len(payload):
+            raise RuntimeError(f"production market evidence artifact hash mismatch: {path}")
+    market = json.loads(artifact_bytes["data/daily/market_universe.json"].decode("utf-8"))
+    snapshot = json.loads(artifact_bytes["data/daily/latest_snapshot.json"].decode("utf-8"))
+    daily_verification = json.loads(artifact_bytes["data/daily/agent_verification_report.json"].decode("utf-8"))
+    verification = json.loads(artifact_bytes["data/daily/market_universe_verification.json"].decode("utf-8"))
+    try:
+        daily_verified_at = datetime.fromisoformat(str(daily_verification.get("verified_at")).replace("Z", "+00:00"))
+        market_generated_at = datetime.fromisoformat(str(market.get("generated_at")).replace("Z", "+00:00"))
+        if daily_verified_at.tzinfo is None:
+            daily_verified_at = daily_verified_at.replace(tzinfo=timezone.utc)
+        if market_generated_at.tzinfo is None:
+            market_generated_at = market_generated_at.replace(tzinfo=timezone.utc)
+        verifier_lag_hours = (daily_verified_at - market_generated_at).total_seconds() / 3600
+        verifier_age_hours = (datetime.now(timezone.utc) - daily_verified_at).total_seconds() / 3600
+    except (TypeError, ValueError):
+        verifier_lag_hours = None
+        verifier_age_hours = None
+    if verification.get("status") not in {"pass", "degraded"} or verification.get("failures"):
+        raise RuntimeError("production market evidence verifier failed")
+    if verification.get("market_generated_at") != market.get("generated_at") or verification.get("market_date") != market.get("date"):
+        raise RuntimeError("production market evidence/verifier batch mismatch")
+    if (
+        daily_verification.get("schema") != 2
+        or daily_verification.get("status") not in {"pass", "degraded"}
+        or daily_verification.get("failures")
+        or daily_verification.get("status_scope") != "verified_market_inputs_only"
+        or daily_verification.get("date") != snapshot.get("date")
+        or daily_verification.get("snapshot_generated_at") != snapshot.get("generated_at")
+        or daily_verification.get("batch_id") != snapshot.get("batch_id")
+        or daily_verification.get("market_universe_generated_at") != market.get("generated_at")
+        or verifier_lag_hours is None
+        or verifier_age_hours is None
+        or verifier_lag_hours < 0
+        or verifier_lag_hours > 1
+        or verifier_age_hours < -0.25
+        or verifier_age_hours > 30
+    ):
+        raise RuntimeError("production daily independent verifier binding failed")
+    errors = evidence_ledger_errors(market)
+    if errors:
+        raise RuntimeError(f"production evidence ledger failed: {errors[0]}")
+
+
 def validate_retired_pages(base_url: str) -> None:
     for page_name in ("analytics.html", "dashboard.html", "daily-extensions.html"):
         try:
@@ -131,9 +183,10 @@ def main() -> int:
             manifest = fetch_json(f"{base_url}/deployment-manifest.json?v={time.time_ns()}")
             editorial = fetch_json(f"{base_url}/data/daily/market_editorial.json?v={time.time_ns()}")
             verification = fetch_json(f"{base_url}/data/daily/market_editorial_verification.json?v={time.time_ns()}")
-            artifact_bytes = {path: fetch_bytes(f"{base_url}/{path}?v={time.time_ns()}") for path in TIMESCALE_ARTIFACTS}
+            artifact_bytes = {path: fetch_bytes(f"{base_url}/{path}?v={time.time_ns()}") for path in CRITICAL_ARTIFACTS}
             validate_json_binding(manifest, editorial, verification, expected_commit, expected_editorial_hash)
             validate_timescale_artifacts(manifest, artifact_bytes)
+            validate_market_evidence_artifacts(manifest, artifact_bytes)
             validate_retired_pages(base_url)
             break
         except Exception as error:
@@ -189,6 +242,12 @@ def main() -> int:
                     timescale_status = page.locator("body").get_attribute("data-timescale-status")
                     if desk_count != "8" or lead_visible != "true" or timescale_status not in {"pass", "degraded"} or lead["headline"] not in body or lead["evidence"][0]["display"] not in body:
                         raise RuntimeError(f"{name} market editorial live values missing")
+                if page_name == "market-monitor.html":
+                    evidence_complete = page.locator("body").get_attribute("data-evidence-complete")
+                    evidence_cards = page.locator("body").get_attribute("data-evidence-cards")
+                    evidence_links = page.locator('.evidence-source a[href]').count()
+                    if evidence_complete != "true" or evidence_cards != "30" or evidence_links < 30 or "ETF 不是盤中即時資料" not in body:
+                        raise RuntimeError(f"{name} market evidence surface incomplete")
                 results.append({"viewport": name, "page": page_name, "status": status, "overflow": 0, "page_errors": 0})
                 context.close()
 

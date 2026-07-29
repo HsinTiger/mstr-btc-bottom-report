@@ -43,6 +43,12 @@ jobs:
           rm -f data/daily/market_universe_verification.json
           python scripts/verify_market_universe.py
 
+      - name: Prove evidence ledger fails closed
+        run: python scripts/test_market_evidence_mutations.py
+
+      - name: Recompute daily independent verification against current market batch
+        run: python scripts/verify_daily_data.py
+
       - name: Bind verifier to current market artifact
         run: |
           python - <<'PY'
@@ -118,7 +124,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily/market_universe.json data/daily/market_universe_history.json data/daily/market_universe_verification.json data/daily/site_health.json
+          git add data/daily/agent_verification_report.json data/daily/market_universe.json data/daily/market_universe_history.json data/daily/market_universe_verification.json data/daily/site_health.json
           if git diff --cached --quiet; then
             echo "No market-universe changes to commit."
           else

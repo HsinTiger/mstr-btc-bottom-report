@@ -47,13 +47,21 @@ Daily source collection
 - `data/daily/timescale_intelligence.json`
 - `data/daily/timescale_intelligence_history.json`
 - `data/daily/timescale_intelligence_verification.json`
+- `data/daily/market_universe.json`
+- `data/daily/market_universe_verification.json`
 - `data/daily/market_context.json`
 - `data/daily/market_context_verification.json`
 - `data/daily/market_editorial.json`
 - `data/daily/market_editorial_history.json`
 - `data/daily/market_editorial_verification.json`
 
-Pages 的 `deployment-manifest.json` 會綁定 commit、市場總編 semantic hash，以及五個四週期公開 artifact 的 SHA-256／bytes；正式站驗收同時確認三個退場頁為 404、五頁桌面／手機可讀與根網址轉址。
+Pages 的 `deployment-manifest.json` 會綁定 commit、市場總編 semantic hash，以及十個關鍵公開 artifact（五個四週期、原始觀測、每日快照、每日獨立驗證、市場總表與市場 verifier）的 SHA-256／bytes；正式站驗收同時確認三個退場頁為 404、五頁桌面／手機可讀與根網址轉址。
+
+## 逐卡來源契約
+
+`market-monitor.html` 的 30 張分析卡各自綁定 evidence ledger，直接顯示可點原始來源、資料觀測日、系統抓取時間、來源原生更新頻率、驗證方法、新鮮度規則與已知限制。每張卡都必須通過獨立 verifier；卡片、來源、日期或驗證來源任一缺漏時，頁面 fail closed，不沿用舊值。
+
+「每小時更新」指市場總表每小時重建，不代表每個來源都是盤中即時。現貨、衍生品與 DAT 聚合來源按小時重抓；美國現貨 ETF 上游按交易日每日重抓，屬交易日完成後的 T+1 資料，只發布同日完成資料商、官方發行商與獨立備援三方驗證的版本；DAT 官方申報依事件更新。所有欄位保留原始觀測日與實際抓取時間，不把組裝或抓取時間冒充持倉日。
 
 方法與維護程序位於 `skills/market-timescale-intelligence/SKILL.md`；其 evidence ledger、diff-first、deterministic gate 與 append-only revision 方法取自 `HsinTiger/skills-radar` 的已審研究原則。資料 reconciliation 方法採用已審、固定 commit 且 Apache-2.0 的 Anthropic skill，只移植對帳與治理流程，不採用通用範例門檻。
 

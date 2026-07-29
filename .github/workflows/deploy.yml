@@ -91,6 +91,9 @@ jobs:
         id: site-meta
         run: python scripts/build_deployment_manifest.py --site-root _site --commit "$(git rev-parse HEAD)"
 
+      - name: Verify assembled Pages artifact before upload
+        run: python scripts/verify_deployment_artifact.py --site-root _site --commit "$(git rev-parse HEAD)"
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:

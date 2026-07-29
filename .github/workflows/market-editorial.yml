@@ -43,6 +43,12 @@ jobs:
       - name: Verify current market universe
         run: python scripts/verify_market_universe.py
 
+      - name: Prove market evidence ledger fails closed
+        run: python scripts/test_market_evidence_mutations.py
+
+      - name: Recompute daily independent verification against current market batch
+        run: python scripts/verify_daily_data.py
+
       - name: Collect macro, policy, equity, and on-chain context
         run: python scripts/collect_market_context.py
 
@@ -103,6 +109,7 @@ jobs:
             data/daily/market_universe.json \
             data/daily/market_universe_history.json \
             data/daily/market_universe_verification.json \
+            data/daily/agent_verification_report.json \
             data/daily/market_context.json \
             data/daily/market_context_verification.json \
             data/daily/market_editorial.json \

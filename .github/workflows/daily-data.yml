@@ -45,6 +45,9 @@ jobs:
       - name: Independently verify current market universe
         run: python scripts/verify_market_universe.py
 
+      - name: Prove market evidence ledger fails closed
+        run: python scripts/test_market_evidence_mutations.py
+
       - name: Collect macro, policy, equity, and on-chain context
         run: python scripts/collect_market_context.py
 

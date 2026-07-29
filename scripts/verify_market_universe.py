@@ -10,11 +10,15 @@ from pathlib import Path
 from typing import Any
 
 from verify_daily_data import (
+    ETF_BACKUP_COMPONENT_MIN_COVERAGE,
+    ETF_MAX_ABS_DAILY_FUND_FLOW_USD,
+    ETF_OFFICIAL_COMPONENT_MIN_COVERAGE,
     as_float,
     assert_close,
     classify_verification_status,
     lag_hours,
     now_iso,
+    recompute_etf_validation,
     recompute_sector_validation,
     write_json,
 )
@@ -24,6 +28,113 @@ ROOT = Path(__file__).resolve().parents[1]
 MARKET_PATH = ROOT / "data" / "daily" / "market_universe.json"
 REPORT_PATH = ROOT / "data" / "daily" / "market_universe_verification.json"
 COMPOSITION_DIVERGENT_SECTORS = {"defi", "meme"}
+
+
+def expected_evidence_metric_ids(market: dict[str, Any]) -> set[str]:
+    return {
+        "summary.BTC.leverage",
+        "summary.ETH.leverage",
+        "summary.asset_breadth",
+        "summary.sector_lead",
+        *(f"assets.{symbol}" for symbol in market.get("assets", {})),
+        "derivatives.BTC",
+        "derivatives.ETH",
+        "etf.BTC",
+        "etf.ETH",
+        "dat.BTC",
+        "dat.ETH",
+        *(f"sectors.{name}" for name in market.get("sectors", {})),
+        "thesis.btcfi",
+        "thesis.gold",
+        "thesis.stablecoin",
+        "thesis.rwa",
+        "thesis.company_share",
+        "thesis.company_concentration",
+        "thesis.hashrate",
+        "thesis.debt",
+        "thesis.real_yield",
+    }
+
+
+def evidence_ledger_errors(market: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    sources = market.get("sources", [])
+    if not isinstance(sources, list) or not sources:
+        return ["source registry is missing"]
+    source_ids = [str(item.get("source_id") or "") for item in sources]
+    if any(not source_id for source_id in source_ids) or len(source_ids) != len(set(source_ids)):
+        errors.append("source registry IDs are missing or duplicated")
+    source_index = {str(item.get("source_id")): item for item in sources if item.get("source_id")}
+    generated_at = market.get("generated_at")
+    fetched_max_lag = as_float(market.get("quality", {}).get("freshness_contract", {}).get("daily_snapshot_max_age_hours")) or 30
+    for source_id, item in source_index.items():
+        if not str(item.get("url") or "").startswith("https://"):
+            errors.append(f"source {source_id} URL is missing or not HTTPS")
+        for field in ("provider", "source_tier", "as_of", "as_of_basis", "fetched_at", "detail"):
+            if item.get(field) in (None, ""):
+                errors.append(f"source {source_id} is missing {field}")
+        fetched_lag = lag_hours(item.get("fetched_at"), generated_at)
+        if fetched_lag is None or fetched_lag < -0.25 or fetched_lag > fetched_max_lag:
+            errors.append(f"source {source_id} fetched_at is future, stale, or invalid")
+
+    ledger = market.get("evidence_ledger", {})
+    if ledger.get("schema") != 1 or ledger.get("generated_at") != market.get("generated_at"):
+        errors.append("evidence ledger schema or batch binding is invalid")
+    metrics = ledger.get("metrics")
+    if not isinstance(metrics, dict):
+        return errors + ["evidence ledger metrics are missing"]
+    expected = expected_evidence_metric_ids(market)
+    missing = expected - set(metrics)
+    extra = set(metrics) - expected
+    if missing:
+        errors.append(f"evidence ledger missing metrics: {','.join(sorted(missing))}")
+    if extra:
+        errors.append(f"evidence ledger has unbound metrics: {','.join(sorted(extra))}")
+
+    for metric_id, item in metrics.items():
+        ids = item.get("source_ids")
+        validation_ids = item.get("validation_source_ids")
+        if not isinstance(ids, list) or not ids or len(ids) != len(set(ids)):
+            errors.append(f"evidence {metric_id} source IDs are missing or duplicated")
+            continue
+        if any(source_id not in source_index for source_id in ids):
+            errors.append(f"evidence {metric_id} references unknown source")
+        if item.get("source_count") != len(ids):
+            errors.append(f"evidence {metric_id} source count mismatch")
+        if not isinstance(validation_ids, list) or not validation_ids or any(source_id not in ids for source_id in validation_ids):
+            errors.append(f"evidence {metric_id} validation sources are invalid")
+        elif item.get("validation_source_count") != len(validation_ids):
+            errors.append(f"evidence {metric_id} validation source count mismatch")
+        if item.get("status") not in {"pass", "degraded", "context_only", "fail"}:
+            errors.append(f"evidence {metric_id} status is invalid")
+        for field in ("title", "as_of", "update_frequency", "verification_method", "freshness_policy", "limitation"):
+            if item.get(field) in (None, ""):
+                errors.append(f"evidence {metric_id} is missing {field}")
+        if item.get("verification_artifact") != "data/daily/market_universe_verification.json":
+            errors.append(f"evidence {metric_id} verifier binding is invalid")
+        if metric_id.startswith("assets.") and len(validation_ids or []) < 2:
+            errors.append(f"evidence {metric_id} lacks two-source spot quorum")
+        if metric_id.startswith("derivatives.") and len(validation_ids or []) < 4:
+            errors.append(f"evidence {metric_id} lacks derivatives source coverage")
+        if metric_id.startswith("etf."):
+            if item.get("formula_verification_artifact") != "data/daily/agent_verification_report.json":
+                errors.append(f"evidence {metric_id} formula verifier binding is invalid")
+            tiers = {source_index[source_id].get("source_tier") for source_id in validation_ids or [] if source_id in source_index}
+            if len(validation_ids or []) < 3 or "official_issuer_crosscheck" not in tiers:
+                errors.append(f"evidence {metric_id} lacks canonical, official, and backup validation")
+        if metric_id.startswith("dat.") and len(validation_ids or []) < 3:
+            errors.append(f"evidence {metric_id} lacks representative cross-source coverage")
+        if metric_id.startswith("sectors.") and len(validation_ids or []) < 3:
+            errors.append(f"evidence {metric_id} lacks sector source quorum")
+
+    for asset in ("BTC", "ETH"):
+        entry = metrics.get(f"etf.{asset}", {})
+        if entry.get("as_of") != market.get("etf", {}).get(asset, {}).get("as_of"):
+            errors.append(f"evidence etf.{asset} date does not match published metric")
+    for symbol, item in market.get("assets", {}).items():
+        if metrics.get(f"assets.{symbol}", {}).get("as_of") != item.get("as_of"):
+            errors.append(f"evidence assets.{symbol} date does not match published metric")
+    return list(dict.fromkeys(errors))
 
 
 def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
@@ -50,6 +161,19 @@ def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
     else:
         evidence.append(f"artifact_age_hours={artifact_age:.3f}")
 
+    snapshot_max_age = as_float(freshness.get("daily_snapshot_max_age_hours")) or 30
+    snapshot_lag = lag_hours(market.get("snapshot_generated_at"), generated_at)
+    raw_lag = lag_hours(market.get("raw_generated_at"), generated_at)
+    if (
+        snapshot_lag is None
+        or raw_lag is None
+        or snapshot_lag < -0.25
+        or raw_lag < -0.25
+        or snapshot_lag > snapshot_max_age
+        or raw_lag > snapshot_max_age
+    ):
+        failures.append("daily snapshot or raw observations are future, stale, or invalid")
+
     checks = quality.get("checks")
     summary = quality.get("validation_summary", {})
     if not isinstance(checks, list) or not checks:
@@ -75,6 +199,8 @@ def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
         degradations.extend(f"collector quality: {item}" for item in quality.get("degradations", []))
     elif quality.get("status") != "pass":
         failures.append("market universe quality status is invalid")
+
+    failures.extend(evidence_ledger_errors(market))
 
     spot_max_lag = as_float(freshness.get("spot_source_max_lag_hours")) or 2
     perpetual_max_lag = as_float(freshness.get("perpetual_source_max_lag_hours")) or 2
@@ -151,8 +277,51 @@ def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
             target.append(f"sector {sector}: status is not cross_source_verified")
 
     for asset in ("BTC", "ETH"):
-        if market.get("etf", {}).get(asset, {}).get("status") != "sample_cross_source_verified":
+        etf = market.get("etf", {}).get(asset, {})
+        if etf.get("status") != "sample_cross_source_verified":
             degradations.append(f"{asset} ETF flow is not cross-source verified")
+        else:
+            try:
+                validation_inputs = json.loads(str(etf.get("validation_inputs_json") or ""))
+            except json.JSONDecodeError:
+                validation_inputs = {}
+            recomputed = recompute_etf_validation(validation_inputs, asset)
+            failures.extend(f"{asset} ETF reconstruction: {error}" for error in recomputed["errors"])
+            if validation_inputs.get("canonical_provider") not in {"The Block", "Blockworks / Trackinsights", "Bitbo"}:
+                failures.append(f"{asset} ETF canonical provider is not approved")
+            if validation_inputs.get("canonical_as_of") != etf.get("as_of"):
+                failures.append(f"{asset} ETF canonical date does not match published metric")
+            assert_close(f"{asset} ETF published 1d flow", recomputed["canonical_component_sum_usd"], etf.get("flow_1d_usd"), failures)
+            assert_close(f"{asset} ETF component completeness", recomputed["component_completeness"], etf.get("component_completeness"), failures)
+            assert_close(f"{asset} ETF official gap", recomputed["official_gap"], etf.get("official_major_fund_gap"), failures)
+            assert_close(f"{asset} ETF official coverage", recomputed["official_coverage"], etf.get("official_major_fund_coverage"), failures)
+            assert_close(f"{asset} ETF backup gap", recomputed["backup_max_gap"], etf.get("backup_component_gap"), failures)
+            assert_close(f"{asset} ETF backup coverage", recomputed["backup_coverage"], etf.get("backup_component_coverage"), failures)
+            assert_close(f"{asset} ETF source count", recomputed["validation_source_count"], etf.get("source_count"), failures)
+            for field, days in {"flow_1d_usd": 1, "flow_7d_usd": 7, "flow_30d_usd": 30}.items():
+                value = as_float(etf.get(field))
+                if value is None or abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD * days:
+                    failures.append(f"{asset} ETF {field} is missing or outside sanity bounds")
+            independently_verified = bool(
+                recomputed["component_completeness"] is not None
+                and recomputed["component_completeness"] >= 0.95
+                and recomputed["official_gap"] is not None
+                and recomputed["official_gap"] <= 0.05
+                and recomputed["official_direction_match"]
+                and recomputed["official_coverage"] is not None
+                and recomputed["official_coverage"] >= ETF_OFFICIAL_COMPONENT_MIN_COVERAGE
+                and recomputed["backup_max_gap"] is not None
+                and recomputed["backup_max_gap"] <= 0.05
+                and recomputed["backup_direction_match"]
+                and recomputed["backup_coverage"] is not None
+                and recomputed["backup_coverage"] >= ETF_BACKUP_COMPONENT_MIN_COVERAGE
+                and recomputed["validation_source_count"] >= 3
+                and recomputed["canonical_total_reconciled"]
+                and recomputed["amount_sanity_pass"]
+                and not recomputed["errors"]
+            )
+            if not independently_verified:
+                failures.append(f"{asset} ETF verified claim failed independent reconstruction")
         if market.get("dat", {}).get(asset, {}).get("status") != "representative_cross_source_verified":
             degradations.append(f"{asset} DAT holdings are not representative cross-source verified")
 

@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "date": "2026-07-29",
-  "generated_at": "2026-07-29T09:32:44+00:00",
-  "snapshot_generated_at": "2026-07-29T02:41:22+00:00",
-  "market_universe_generated_at": "2026-07-29T06:46:26+00:00",
-  "price_history_generated_at": "2026-07-29T02:41:37+00:00",
+  "generated_at": "2026-07-29T10:51:43+00:00",
+  "snapshot_generated_at": "2026-07-29T10:40:19+00:00",
+  "market_universe_generated_at": "2026-07-29T10:51:28+00:00",
+  "price_history_generated_at": "2026-07-29T10:40:49+00:00",
   "quality": {
     "status": "pass",
     "publication_mode": "analysis_only",
@@ -66,13 +66,13 @@
       "label": "日線",
       "status": "方向切換",
       "tone": "mixed",
-      "key_number": "-2.5%",
-      "plain_read": "BTC 日線報酬 -2.5%，目前屬「方向切換」，相較前一等長窗口為減速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
+      "key_number": "+0.2%",
+      "plain_read": "BTC 日線報酬 +0.2%，目前屬「方向切換」，相較前一等長窗口為加速。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +2.7 個百分點。",
       "resonance": "多維訊號分歧",
       "resonance_votes": {
-        "positive_clusters": 0,
-        "negative_clusters": 2,
+        "positive_clusters": 1,
+        "negative_clusters": 1,
         "directional_clusters": 2,
         "eligible_clusters": 4
       },
@@ -81,16 +81,16 @@
           "name": "價格趨勢",
           "cluster_id": "underlying_price_trend",
           "direction": "mixed",
-          "key_number": "-2.5%",
-          "plain_read": "BTC 為「方向切換」；趨勢擬合度 +31%。",
+          "key_number": "+0.2%",
+          "plain_read": "BTC 為「方向切換」；趨勢擬合度 +15%。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
         },
         {
           "name": "加密底層廣度",
           "cluster_id": "underlying_crypto_breadth",
-          "direction": "negative",
-          "key_number": "0/2",
+          "direction": "positive",
+          "key_number": "2/2",
           "plain_read": "BTC、ETH 同週期報酬的正負分布；MSTR、BMNR 上市載具不參與底層體制投票。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
@@ -99,7 +99,7 @@
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
           "direction": "mixed",
-          "key_number": "+8.5%",
+          "key_number": "+4.7%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -115,15 +115,15 @@
         }
       ],
       "metrics": {
-        "btc_return": -0.024722909512739144,
-        "previous_equal_window_return": 0.0159922142024842,
-        "return_acceleration": -0.040715123715223345,
-        "distance_from_fast_average": -0.012079326106414712,
-        "distance_from_slow_average": -0.009389377624245188,
-        "trend_r_squared": 0.31361052938068557,
-        "realized_volatility_annualized": 0.32233148609017365,
-        "range_position": 0.3482831653232268,
-        "drawdown_from_range_high": -0.041804696442567346
+        "btc_return": 0.0022983927372384194,
+        "previous_equal_window_return": -0.024722909512739144,
+        "return_acceleration": 0.027021302249977563,
+        "distance_from_fast_average": -0.006192855342660009,
+        "distance_from_slow_average": -0.008356410206283194,
+        "trend_r_squared": 0.147782597335811,
+        "realized_volatility_annualized": 0.31327722155088394,
+        "range_position": 0.3826161961803759,
+        "drawdown_from_range_high": -0.039602387316015064
       },
       "historical_percentile": {
         "status": "insufficient_history",
@@ -131,8 +131,8 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 729,
-        "as_of": "2026-07-27",
+        "bars": 730,
+        "as_of": "2026-07-28",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
       },
@@ -142,14 +142,14 @@
       "label": "週線",
       "status": "方向切換",
       "tone": "mixed",
-      "key_number": "-3.6%",
-      "plain_read": "BTC 週線報酬 -3.6%，目前屬「方向切換」，相較前一等長窗口為減速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
+      "key_number": "-1.8%",
+      "plain_read": "BTC 週線報酬 -1.8%，目前屬「方向切換」，相較前一等長窗口為減速。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +1.8 個百分點。",
       "resonance": "多維訊號分歧",
       "resonance_votes": {
         "positive_clusters": 0,
-        "negative_clusters": 2,
-        "directional_clusters": 2,
+        "negative_clusters": 1,
+        "directional_clusters": 1,
         "eligible_clusters": 3
       },
       "perspectives": [
@@ -157,16 +157,16 @@
           "name": "價格趨勢",
           "cluster_id": "underlying_price_trend",
           "direction": "mixed",
-          "key_number": "-3.6%",
-          "plain_read": "BTC 為「方向切換」；趨勢擬合度 +63%。",
+          "key_number": "-1.8%",
+          "plain_read": "BTC 為「方向切換」；趨勢擬合度 +55%。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
         },
         {
           "name": "加密底層廣度",
           "cluster_id": "underlying_crypto_breadth",
-          "direction": "negative",
-          "key_number": "0/2",
+          "direction": "mixed",
+          "key_number": "1/2",
           "plain_read": "BTC、ETH 同週期報酬的正負分布；MSTR、BMNR 上市載具不參與底層體制投票。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
@@ -191,15 +191,15 @@
         }
       ],
       "metrics": {
-        "btc_return": -0.035943567246139896,
-        "previous_equal_window_return": 0.034449992303583254,
-        "return_acceleration": -0.07039355954972315,
-        "distance_from_fast_average": -0.019381109450836043,
-        "distance_from_slow_average": 0.004718060953132541,
-        "trend_r_squared": 0.6312306009460733,
-        "realized_volatility_annualized": 0.3157433346389773,
-        "range_position": 0.33996097856906,
-        "drawdown_from_range_high": -0.13599023538604826
+        "btc_return": -0.018040627279077737,
+        "previous_equal_window_return": 0.003830616598936798,
+        "return_acceleration": -0.021871243878014535,
+        "distance_from_fast_average": -0.015725866453748294,
+        "distance_from_slow_average": 0.004736124999436653,
+        "trend_r_squared": 0.5495361202142885,
+        "realized_volatility_annualized": 0.3141181154438516,
+        "range_position": 0.3495993748345188,
+        "drawdown_from_range_high": -0.13400440161815663
       },
       "historical_percentile": {
         "status": "insufficient_history",
@@ -207,8 +207,8 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 729,
-        "as_of": "2026-07-27",
+        "bars": 730,
+        "as_of": "2026-07-28",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
       },
@@ -216,15 +216,15 @@
     },
     "monthly": {
       "label": "月線",
-      "status": "下降趨勢",
-      "tone": "negative",
-      "key_number": "-0.4%",
-      "plain_read": "BTC 月線報酬 -0.4%，目前屬「下降趨勢」，相較前一等長窗口為加速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
+      "status": "方向切換",
+      "tone": "mixed",
+      "key_number": "+0.9%",
+      "plain_read": "BTC 月線報酬 +0.9%，目前屬「方向切換」，相較前一等長窗口為加速。",
+      "what_changed": "較前一觀察日由「下降趨勢」轉為「方向切換」。",
       "resonance": "多維訊號分歧",
       "resonance_votes": {
-        "positive_clusters": 0,
-        "negative_clusters": 1,
+        "positive_clusters": 1,
+        "negative_clusters": 0,
         "directional_clusters": 1,
         "eligible_clusters": 3
       },
@@ -232,17 +232,17 @@
         {
           "name": "價格趨勢",
           "cluster_id": "underlying_price_trend",
-          "direction": "negative",
-          "key_number": "-0.4%",
-          "plain_read": "BTC 為「下降趨勢」；趨勢擬合度 +14%。",
+          "direction": "mixed",
+          "key_number": "+0.9%",
+          "plain_read": "BTC 為「方向切換」；趨勢擬合度 +10%。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
         },
         {
           "name": "加密底層廣度",
           "cluster_id": "underlying_crypto_breadth",
-          "direction": "mixed",
-          "key_number": "1/2",
+          "direction": "positive",
+          "key_number": "2/2",
           "plain_read": "BTC、ETH 同週期報酬的正負分布；MSTR、BMNR 上市載具不參與底層體制投票。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
@@ -260,22 +260,22 @@
           "name": "MSTR 普通股估值",
           "cluster_id": "vehicle_mstr_relative_value",
           "direction": "negative",
-          "key_number": "1.06x",
+          "key_number": "1.05x",
           "plain_read": "普通股市值／自算普通股淨值用來辨識估值與 BTC 趨勢是否背離。",
           "source": "SEC＋市場價格衍生",
           "counts_toward_underlying_resonance": false
         }
       ],
       "metrics": {
-        "btc_return": -0.004220909782768678,
-        "previous_equal_window_return": -0.034613089177018996,
-        "return_acceleration": 0.030392179394250318,
-        "distance_from_fast_average": -0.008632398908445693,
-        "distance_from_slow_average": -0.010919021905018922,
-        "trend_r_squared": 0.1384441119911285,
-        "realized_volatility_annualized": 0.38123989940250075,
-        "range_position": 0.21908497277726258,
-        "drawdown_from_range_high": -0.2241815338969807
+        "btc_return": 0.00906781004574575,
+        "previous_equal_window_return": -0.03511011587396373,
+        "return_acceleration": 0.04417792591970948,
+        "distance_from_fast_average": -0.006776166819825513,
+        "distance_from_slow_average": -0.0057174041187456615,
+        "trend_r_squared": 0.1000349766891171,
+        "realized_volatility_annualized": 0.3794410502087801,
+        "range_position": 0.22529635560220512,
+        "drawdown_from_range_high": -0.22239839836907416
       },
       "historical_percentile": {
         "status": "insufficient_history",
@@ -283,8 +283,8 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 729,
-        "as_of": "2026-07-27",
+        "bars": 730,
+        "as_of": "2026-07-28",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
       },
@@ -294,9 +294,9 @@
       "label": "季線",
       "status": "下降趨勢",
       "tone": "negative",
-      "key_number": "-17.5%",
-      "plain_read": "BTC 季線報酬 -17.5%，目前屬「下降趨勢」，相較前一等長窗口為減速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
+      "key_number": "-15.8%",
+      "plain_read": "BTC 季線報酬 -15.8%，目前屬「下降趨勢」，相較前一等長窗口為減速。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +1.8 個百分點。",
       "resonance": "偏負向共振",
       "resonance_votes": {
         "positive_clusters": 1,
@@ -309,8 +309,8 @@
           "name": "價格趨勢",
           "cluster_id": "underlying_price_trend",
           "direction": "negative",
-          "key_number": "-17.5%",
-          "plain_read": "BTC 為「下降趨勢」；趨勢擬合度 +37%。",
+          "key_number": "-15.8%",
+          "plain_read": "BTC 為「下降趨勢」；趨勢擬合度 +38%。",
           "source": "雙來源完成日 K 衍生",
           "counts_toward_underlying_resonance": true
         },
@@ -343,15 +343,15 @@
         }
       ],
       "metrics": {
-        "btc_return": -0.1754017026776944,
-        "previous_equal_window_return": 0.08975651039285437,
-        "return_acceleration": -0.26515821307054876,
-        "distance_from_fast_average": -0.010919021905018922,
-        "distance_from_slow_average": -0.08634917717100188,
-        "trend_r_squared": 0.3656081736078802,
-        "realized_volatility_annualized": 0.35979325782545457,
-        "range_position": 0.1346358079740686,
-        "drawdown_from_range_high": -0.3425632915218353
+        "btc_return": -0.1576558564488021,
+        "previous_equal_window_return": 0.07526993937484372,
+        "return_acceleration": -0.2329257958236458,
+        "distance_from_fast_average": -0.0057174041187456615,
+        "distance_from_slow_average": -0.08355614353391283,
+        "trend_r_squared": 0.3750989575617929,
+        "realized_volatility_annualized": 0.3597391990457069,
+        "range_position": 0.1384529321458967,
+        "drawdown_from_range_high": -0.3410522437658752
       },
       "historical_percentile": {
         "status": "insufficient_history",
@@ -359,8 +359,8 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 729,
-        "as_of": "2026-07-27",
+        "bars": 730,
+        "as_of": "2026-07-28",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
       },
@@ -369,38 +369,38 @@
   },
   "alignment": {
     "dominant_state": "週期分歧／盤整",
-    "aligned_horizons": 2,
+    "aligned_horizons": 1,
     "known_horizons": 4,
     "positive_horizons": 0,
-    "negative_horizons": 2,
+    "negative_horizons": 1,
     "states": {
       "daily": "mixed",
       "weekly": "mixed",
-      "monthly": "negative",
+      "monthly": "mixed",
       "quarterly": "negative"
     },
-    "plain_read": "四個週期中 0 個上升、2 個下降；目前判讀為「週期分歧／盤整」。"
+    "plain_read": "四個週期中 0 個上升、1 個下降；目前判讀為「週期分歧／盤整」。"
   },
   "asset_matrix": {
     "BTC": {
       "daily": {
         "status": "方向切換",
         "tone": "mixed",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 63724.8984375,
-        "return": -0.024722909512739144,
-        "previous_equal_window_return": 0.0159922142024842,
-        "return_acceleration": -0.040715123715223345,
-        "fast_average": 64504.0640625,
-        "slow_average": 64328.9068359375,
-        "distance_from_fast_average": -0.012079326106414712,
-        "distance_from_slow_average": -0.009389377624245188,
-        "trend_return": 0.03099079515685066,
-        "trend_r_squared": 0.31361052938068557,
-        "realized_volatility_annualized": 0.32233148609017365,
-        "range_position": 0.3482831653232268,
-        "drawdown_from_range_high": -0.041804696442567346,
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 63871.36328125,
+        "return": 0.0022983927372384194,
+        "previous_equal_window_return": -0.024722909512739144,
+        "return_acceleration": 0.027021302249977563,
+        "fast_average": 64269.37421875,
+        "slow_average": 64409.5962890625,
+        "distance_from_fast_average": -0.006192855342660009,
+        "distance_from_slow_average": -0.008356410206283194,
+        "trend_return": 0.0190209038471969,
+        "trend_r_squared": 0.147782597335811,
+        "realized_volatility_annualized": 0.31327722155088394,
+        "range_position": 0.3826161961803759,
+        "drawdown_from_range_high": -0.039602387316015064,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
         "relative_to_btc": 0.0
@@ -408,43 +408,43 @@
       "weekly": {
         "status": "方向切換",
         "tone": "mixed",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 63724.8984375,
-        "return": -0.035943567246139896,
-        "previous_equal_window_return": 0.034449992303583254,
-        "return_acceleration": -0.07039355954972315,
-        "fast_average": 64984.367578125,
-        "slow_average": 63425.65234375,
-        "distance_from_fast_average": -0.019381109450836043,
-        "distance_from_slow_average": 0.004718060953132541,
-        "trend_return": 0.08307066472573332,
-        "trend_r_squared": 0.6312306009460733,
-        "realized_volatility_annualized": 0.3157433346389773,
-        "range_position": 0.33996097856906,
-        "drawdown_from_range_high": -0.13599023538604826,
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 63871.36328125,
+        "return": -0.018040627279077737,
+        "previous_equal_window_return": 0.003830616598936798,
+        "return_acceleration": -0.021871243878014535,
+        "fast_average": 64891.84375,
+        "slow_average": 63570.286458333336,
+        "distance_from_fast_average": -0.015725866453748294,
+        "distance_from_slow_average": 0.004736124999436653,
+        "trend_return": 0.07102150436982835,
+        "trend_r_squared": 0.5495361202142885,
+        "realized_volatility_annualized": 0.3141181154438516,
+        "range_position": 0.3495993748345188,
+        "drawdown_from_range_high": -0.13400440161815663,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
         "relative_to_btc": 0.0
       },
       "monthly": {
-        "status": "下降趨勢",
-        "tone": "negative",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 63724.8984375,
-        "return": -0.004220909782768678,
-        "previous_equal_window_return": -0.034613089177018996,
-        "return_acceleration": 0.030392179394250318,
-        "fast_average": 64279.787202380954,
-        "slow_average": 64428.39347718254,
-        "distance_from_fast_average": -0.008632398908445693,
-        "distance_from_slow_average": -0.010919021905018922,
-        "trend_return": -0.06861526426277265,
-        "trend_r_squared": 0.1384441119911285,
-        "realized_volatility_annualized": 0.38123989940250075,
-        "range_position": 0.21908497277726258,
-        "drawdown_from_range_high": -0.2241815338969807,
+        "status": "方向切換",
+        "tone": "mixed",
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 63871.36328125,
+        "return": 0.00906781004574575,
+        "previous_equal_window_return": -0.03511011587396373,
+        "return_acceleration": 0.04417792591970948,
+        "fast_average": 64307.119047619046,
+        "slow_average": 64238.64155505953,
+        "distance_from_fast_average": -0.006776166819825513,
+        "distance_from_slow_average": -0.0057174041187456615,
+        "trend_return": -0.05452672024476468,
+        "trend_r_squared": 0.1000349766891171,
+        "realized_volatility_annualized": 0.3794410502087801,
+        "range_position": 0.22529635560220512,
+        "drawdown_from_range_high": -0.22239839836907416,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
         "relative_to_btc": 0.0
@@ -452,21 +452,21 @@
       "quarterly": {
         "status": "下降趨勢",
         "tone": "negative",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 63724.8984375,
-        "return": -0.1754017026776944,
-        "previous_equal_window_return": 0.08975651039285437,
-        "return_acceleration": -0.26515821307054876,
-        "fast_average": 64428.39347718254,
-        "slow_average": 69747.54123263889,
-        "distance_from_fast_average": -0.010919021905018922,
-        "distance_from_slow_average": -0.08634917717100188,
-        "trend_return": -0.1818277021087945,
-        "trend_r_squared": 0.3656081736078802,
-        "realized_volatility_annualized": 0.35979325782545457,
-        "range_position": 0.1346358079740686,
-        "drawdown_from_range_high": -0.3425632915218353,
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 63871.36328125,
+        "return": -0.1576558564488021,
+        "previous_equal_window_return": 0.07526993937484372,
+        "return_acceleration": -0.2329257958236458,
+        "fast_average": 64238.64155505953,
+        "slow_average": 69694.79126364087,
+        "distance_from_fast_average": -0.0057174041187456615,
+        "distance_from_slow_average": -0.08355614353391283,
+        "trend_return": -0.18440897805893064,
+        "trend_r_squared": 0.3750989575617929,
+        "realized_volatility_annualized": 0.3597391990457069,
+        "range_position": 0.1384529321458967,
+        "drawdown_from_range_high": -0.3410522437658752,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
         "relative_to_btc": 0.0
@@ -474,92 +474,92 @@
     },
     "ETH": {
       "daily": {
-        "status": "方向切換",
-        "tone": "mixed",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 1890.613525390625,
-        "return": -0.03214772584893022,
-        "previous_equal_window_return": 0.04280796677162302,
-        "return_acceleration": -0.07495569262055324,
-        "fast_average": 1890.904833984375,
-        "slow_average": 1855.695330810547,
-        "distance_from_fast_average": -0.0001540577762109141,
-        "distance_from_slow_average": 0.018816771266448207,
-        "trend_return": 0.08879158129593323,
-        "trend_r_squared": 0.6177530946985557,
-        "realized_volatility_annualized": 0.4574366211158717,
-        "range_position": 0.7020042517942687,
-        "drawdown_from_range_high": -0.03214772584893022,
+        "status": "上升趨勢",
+        "tone": "positive",
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 1919.948486328125,
+        "return": 0.015516106567279087,
+        "previous_equal_window_return": -0.03214772584893022,
+        "return_acceleration": 0.047663832416209306,
+        "fast_average": 1899.4744873046875,
+        "slow_average": 1864.5588745117188,
+        "distance_from_fast_average": 0.010778770212644284,
+        "distance_from_slow_average": 0.029706550205292448,
+        "trend_return": 0.07870719456187736,
+        "trend_r_squared": 0.5739092274029485,
+        "realized_volatility_annualized": 0.4526692684156407,
+        "range_position": 0.8398348375456537,
+        "drawdown_from_range_high": -0.017130426821818978,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
-        "relative_to_btc": -0.007424816336191076
+        "relative_to_btc": 0.013217713830040667
       },
       "weekly": {
-        "status": "方向切換",
-        "tone": "mixed",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 1890.613525390625,
-        "return": -0.02217574666722988,
-        "previous_equal_window_return": 0.050245816445781744,
-        "return_acceleration": -0.07242156311301162,
-        "fast_average": 1895.30576171875,
-        "slow_average": 1801.861014811198,
-        "distance_from_fast_average": -0.002475714696223985,
-        "distance_from_slow_average": 0.04925602465999668,
-        "trend_return": 0.1914696908655258,
-        "trend_r_squared": 0.7707691883197136,
-        "realized_volatility_annualized": 0.4546636618873839,
-        "range_position": 0.7166015469774655,
-        "drawdown_from_range_high": -0.06380162919331833,
+        "status": "上升趨勢",
+        "tone": "positive",
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 1919.948486328125,
+        "return": 0.022826840118213898,
+        "previous_equal_window_return": 0.008438915136966596,
+        "return_acceleration": 0.014387924981247302,
+        "fast_average": 1901.1614013671874,
+        "slow_average": 1813.5139241536458,
+        "distance_from_fast_average": 0.009881899005222294,
+        "distance_from_slow_average": 0.05868968567426447,
+        "trend_return": 0.1737872329629293,
+        "trend_r_squared": 0.754979545447522,
+        "realized_volatility_annualized": 0.45505662219917953,
+        "range_position": 0.781124812856968,
+        "drawdown_from_range_high": -0.04927547550376876,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
-        "relative_to_btc": 0.013767820578910017
+        "relative_to_btc": 0.040867467397291635
       },
       "monthly": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 1890.613525390625,
-        "return": 0.05175854171923899,
-        "previous_equal_window_return": 0.0014554904333570207,
-        "return_acceleration": 0.05030305128588197,
-        "fast_average": 1851.5437186104912,
-        "slow_average": 1779.099341982887,
-        "distance_from_fast_average": 0.02110120673221494,
-        "distance_from_slow_average": 0.06268013301800801,
-        "trend_return": 0.020900785918810394,
-        "trend_r_squared": 0.0065315423768750325,
-        "realized_volatility_annualized": 0.5588682361830054,
-        "range_position": 0.3804904224740899,
-        "drawdown_from_range_high": -0.21910058880414973,
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 1919.948486328125,
+        "return": 0.0856296461136612,
+        "previous_equal_window_return": -0.012224497785564337,
+        "return_acceleration": 0.09785414389922553,
+        "fast_average": 1858.7550048828125,
+        "slow_average": 1776.7039504278273,
+        "distance_from_fast_average": 0.03292175745838577,
+        "distance_from_slow_average": 0.08062375043732217,
+        "trend_return": 0.04363165750406428,
+        "trend_r_squared": 0.029307875602976763,
+        "realized_volatility_annualized": 0.5586808230605974,
+        "range_position": 0.4147500257326242,
+        "drawdown_from_range_high": -0.2069840703217095,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
-        "relative_to_btc": 0.05597945150200767
+        "relative_to_btc": 0.07656183606791545
       },
       "quarterly": {
         "status": "震盪分歧",
         "tone": "mixed",
-        "bars": 729,
-        "as_of": "2026-07-27",
-        "close": 1890.613525390625,
-        "return": -0.10455618776358888,
-        "previous_equal_window_return": -0.018946500302319036,
-        "return_acceleration": -0.08560968746126985,
-        "fast_average": 1779.099341982887,
-        "slow_average": 2001.4925624302455,
-        "distance_from_fast_average": 0.06268013301800801,
-        "distance_from_slow_average": -0.05539817590178264,
-        "trend_return": -0.2717653748233717,
-        "trend_r_squared": 0.5056991775368048,
-        "realized_volatility_annualized": 0.5050498883191723,
-        "range_position": 0.18201898531737562,
-        "drawdown_from_range_high": -0.4364322422098511,
+        "bars": 730,
+        "as_of": "2026-07-28",
+        "close": 1919.948486328125,
+        "return": -0.0728730104742441,
+        "previous_equal_window_return": -0.03935891838571015,
+        "return_acceleration": -0.03351409208853395,
+        "fast_average": 1776.7039504278273,
+        "slow_average": 1999.6214841812375,
+        "distance_from_fast_average": 0.08062375043732217,
+        "distance_from_slow_average": -0.039844039726216196,
+        "trend_return": -0.2700363504072737,
+        "trend_r_squared": 0.49953320931554557,
+        "realized_volatility_annualized": 0.5058041292996318,
+        "range_position": 0.19840809225453884,
+        "drawdown_from_range_high": -0.42768786482209664,
         "canonical_provider": "Yahoo Finance",
         "source_count": 3,
-        "relative_to_btc": 0.07084551491410551
+        "relative_to_btc": 0.08478284597455799
       }
     },
     "MSTR": {
@@ -583,7 +583,7 @@
         "drawdown_from_range_high": -0.05679248121088487,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": -0.000517818568915529
+        "relative_to_btc": -0.027539120818893092
       },
       "weekly": {
         "status": "下降趨勢",
@@ -605,7 +605,7 @@
         "drawdown_from_range_high": -0.5092375091152457,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": -0.020848913964744975
+        "relative_to_btc": -0.038751853931807134
       },
       "monthly": {
         "status": "方向切換",
@@ -627,7 +627,7 @@
         "drawdown_from_range_high": -0.5092375091152457,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.17248729921688655
+        "relative_to_btc": 0.15919857938837212
       },
       "quarterly": {
         "status": "下降趨勢",
@@ -649,7 +649,7 @@
         "drawdown_from_range_high": -0.7618622918051912,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": -0.25627675242579795
+        "relative_to_btc": -0.27402259865469025
       }
     },
     "BMNR": {
@@ -673,7 +673,7 @@
         "drawdown_from_range_high": -0.01953127120421927,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.005191638308519875
+        "relative_to_btc": -0.02182966394145769
       },
       "weekly": {
         "status": "上升趨勢",
@@ -695,7 +695,7 @@
         "drawdown_from_range_high": -0.23939396516553924,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.05567660042205147
+        "relative_to_btc": 0.03777366045498931
       },
       "monthly": {
         "status": "方向切換",
@@ -717,7 +717,7 @@
         "drawdown_from_range_high": -0.40701990575521707,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.29994356104511055
+        "relative_to_btc": 0.2866548412165961
       },
       "quarterly": {
         "status": "下降趨勢",
@@ -739,7 +739,7 @@
         "drawdown_from_range_high": -0.7220816299340652,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": -0.009285057560873722
+        "relative_to_btc": -0.027030903789766025
       }
     },
     "STRC": {
@@ -763,7 +763,7 @@
         "drawdown_from_range_high": -0.00406412963321201,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.02359068040872392
+        "relative_to_btc": -0.003430621841253645
       },
       "weekly": {
         "status": "上升趨勢",
@@ -785,7 +785,7 @@
         "drawdown_from_range_high": -0.11779998779296874,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.0366241202872184
+        "relative_to_btc": 0.01872118032015624
       },
       "monthly": {
         "status": "方向切換",
@@ -807,7 +807,7 @@
         "drawdown_from_range_high": -0.11832896888646516,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.18727041470084804
+        "relative_to_btc": 0.17398169487233361
       },
       "quarterly": {
         "status": "下降趨勢",
@@ -829,7 +829,7 @@
         "drawdown_from_range_high": null,
         "canonical_provider": "Yahoo Finance",
         "source_count": 2,
-        "relative_to_btc": 0.0624806763112119
+        "relative_to_btc": 0.0447348300823196
       }
     }
   },
@@ -837,12 +837,12 @@
     {
       "id": "multi_horizon_alignment",
       "title": "四週期同步程度",
-      "key_number": "2/4",
-      "claim": "四個週期中 0 個上升、2 個下降；目前判讀為「週期分歧／盤整」。",
+      "key_number": "1/4",
+      "claim": "四個週期中 0 個上升、1 個下降；目前判讀為「週期分歧／盤整」。",
       "evidence": [
         "日線 方向切換",
         "週線 方向切換",
-        "月線 下降趨勢",
+        "月線 方向切換",
         "季線 下降趨勢"
       ],
       "falsifier": "任兩個完成週期的狀態方向翻轉，需重新分類同步程度。",
@@ -852,14 +852,14 @@
         "monthly",
         "quarterly"
       ],
-      "what_changed": "核心數字未變。",
+      "what_changed": "前值 2/4，本期 1/4。",
       "confidence": "中"
     },
     {
       "id": "mstr_price_structure_divergence",
       "title": "MSTR 價格強弱與資本結構背離",
-      "key_number": "+17.2%",
-      "claim": "MSTR 月線相對 BTC +17.2%；普通股市值／自算普通股淨值 1.06x，STRC 折價 +11.8%。",
+      "key_number": "+15.9%",
+      "claim": "MSTR 月線相對 BTC +15.9%；普通股市值／自算普通股淨值 1.05x，STRC 折價 +11.8%。",
       "evidence": [
         "MSTR 與 BTC 雙來源完成日 K",
         "SEC 資本結構",
@@ -869,14 +869,14 @@
       "horizons": [
         "monthly"
       ],
-      "what_changed": "前值 +16.0%，本期 +17.2%。",
+      "what_changed": "前值 +16.0%，本期 +15.9%。",
       "confidence": "中"
     },
     {
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $-60M",
-      "claim": "BTC 週線 -3.6%、ETF 七日淨流 $-60M、永續資金費率年化 +8.5%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 -1.8%、ETF 七日淨流 $-60M、永續資金費率年化 +4.7%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -892,8 +892,8 @@
     {
       "id": "bmnr_eth_treasury_divergence",
       "title": "BMNR 相對 ETH 與 gross treasury 差",
-      "key_number": "+24.4%",
-      "claim": "BMNR 月線相對 ETH +24.4%；市值／gross treasury 0.91x，質押比例 +85.0%。",
+      "key_number": "+21.0%",
+      "claim": "BMNR 月線相對 ETH +21.0%；市值／gross treasury 0.91x，質押比例 +85.0%。",
       "evidence": [
         "BMNR 與 ETH 雙來源完成日 K",
         "BMNR SEC 8-K 持倉",
@@ -904,12 +904,12 @@
         "monthly",
         "quarterly"
       ],
-      "what_changed": "前值 +29.4%，本期 +24.4%。",
+      "what_changed": "前值 +29.4%，本期 +21.0%。",
       "confidence": "中"
     }
   ],
   "record_advantage": {
-    "observations": 19,
+    "observations": 23,
     "distinct_dates": 3,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,

@@ -122,6 +122,12 @@ class BrowserRenderer:
                 documentScrollWidth: document.documentElement.scrollWidth,
                 bodyClientWidth: document.body.clientWidth,
                 bodyScrollWidth: document.body.scrollWidth,
+                analysisCardCount: document.querySelectorAll('[data-analysis-card="true"]').length,
+                evidenceMetricCount: document.querySelectorAll('details[data-evidence-metric]').length,
+                evidenceMetricUniqueCount: new Set(
+                    [...document.querySelectorAll('details[data-evidence-metric]')].map(item => item.dataset.evidenceMetric)
+                ).size,
+                evidenceSourceLinkCount: document.querySelectorAll('.evidence-source a[href]').length,
                 activeNavVisible: (() => {
                     const activeLinks = [...document.querySelectorAll('nav a[aria-current="page"]')];
                     return activeLinks.some(active => {
@@ -237,6 +243,17 @@ def validate_base_page(
             raise RuntimeError("即時市場品質契約未通過")
         if 'data-core-checks="14/14"' not in dom or 'data-page-overflow="false"' not in dom:
             raise RuntimeError("即時市場核心欄位或版面契約未通過")
+        if 'data-evidence-complete="true"' not in dom or 'data-evidence-cards="30"' not in dom:
+            raise RuntimeError("即時市場逐卡來源證據未完整載入")
+        if (
+            layout.get("analysisCardCount") != 30
+            or layout.get("evidenceMetricCount") != 30
+            or layout.get("evidenceMetricUniqueCount") != 30
+            or layout.get("evidenceSourceLinkCount", 0) < 30
+        ):
+            raise RuntimeError("即時市場來源證據數與分析卡數不一致")
+        if "來源與驗證" not in body or "ETF 不是盤中即時資料" not in body:
+            raise RuntimeError("即時市場未清楚揭露來源或 ETF 更新頻率")
     if page_name == "market-intelligence.html":
         status = render_status(dom)
         if status not in {"pass", "degraded"} or 'data-conclusions-visible="true"' not in dom:

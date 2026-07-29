@@ -10,8 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import audit_product_surfaces as audit
-from build_deployment_manifest import TIMESCALE_ARTIFACTS, build_manifest
-from smoke_production_market_editorial import validate_timescale_artifacts
+from build_deployment_manifest import CRITICAL_ARTIFACTS, MARKET_EVIDENCE_ARTIFACTS, TIMESCALE_ARTIFACTS, build_manifest
+from smoke_production_market_editorial import validate_market_evidence_artifacts, validate_timescale_artifacts
 
 
 def write_json(root: Path, name: str, payload: dict[str, object]) -> None:
@@ -61,13 +61,14 @@ def main() -> int:
     repository = Path(__file__).resolve().parents[1]
     with tempfile.TemporaryDirectory(prefix="deployment-binding-") as temp:
         site = Path(temp)
-        for name in list(TIMESCALE_ARTIFACTS) + ["data/daily/market_editorial.json"]:
+        for name in list(CRITICAL_ARTIFACTS) + ["data/daily/market_editorial.json"]:
             target = site / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(repository / name, target)
         manifest = build_manifest(site, "test-commit")
-        artifacts = {name: (site / name).read_bytes() for name in TIMESCALE_ARTIFACTS}
+        artifacts = {name: (site / name).read_bytes() for name in CRITICAL_ARTIFACTS}
         validate_timescale_artifacts(manifest, artifacts)
+        validate_market_evidence_artifacts(manifest, artifacts)
         first_path = TIMESCALE_ARTIFACTS[0]
         tampered = {**artifacts, first_path: artifacts[first_path] + b"\n"}
         try:
@@ -76,7 +77,15 @@ def main() -> int:
             pass
         else:
             raise AssertionError("tampered production artifact produced false PASS")
-    print("product governance tests: PASS (5/5)")
+        market_path = MARKET_EVIDENCE_ARTIFACTS[0]
+        tampered_market = {**artifacts, market_path: artifacts[market_path] + b"\n"}
+        try:
+            validate_market_evidence_artifacts(manifest, tampered_market)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("tampered market evidence artifact produced false PASS")
+    print("product governance tests: PASS (6/6)")
     return 0
 
 

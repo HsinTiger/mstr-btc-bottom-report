@@ -19,6 +19,16 @@ TIMESCALE_ARTIFACTS = (
     "data/daily/timescale_intelligence_verification.json",
 )
 
+MARKET_EVIDENCE_ARTIFACTS = (
+    "data/daily/raw_observations.json",
+    "data/daily/latest_snapshot.json",
+    "data/daily/agent_verification_report.json",
+    "data/daily/market_universe.json",
+    "data/daily/market_universe_verification.json",
+)
+
+CRITICAL_ARTIFACTS = TIMESCALE_ARTIFACTS + MARKET_EVIDENCE_ARTIFACTS
+
 
 def artifact_record(path: Path) -> dict[str, Any]:
     payload = path.read_bytes()
@@ -31,7 +41,7 @@ def build_manifest(site_root: Path, commit: str) -> dict[str, Any]:
         "schema": 2,
         "commit": commit,
         "editorial_hash": editorial.get("editorial_hash"),
-        "artifacts": {path: artifact_record(site_root / path) for path in TIMESCALE_ARTIFACTS},
+        "artifacts": {path: artifact_record(site_root / path) for path in CRITICAL_ARTIFACTS},
         "retired_pages": ["analytics.html", "dashboard.html", "daily-extensions.html"],
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     }

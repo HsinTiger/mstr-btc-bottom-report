@@ -28,10 +28,11 @@ OUTPUT_PATH = DATA_DIR / "market_universe.json"
 HISTORY_PATH = DATA_DIR / "market_universe_history.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 RAW_PATH = DATA_DIR / "raw_observations.json"
-USER_AGENT = "mstr-btc-bottom-report/market-universe hsin73@realtek.com"
+USER_AGENT = "HsinTiger/mstr-btc-bottom-report market-universe collector"
 TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
 FRESHNESS_CONTRACT = {
     "artifact_max_age_hours": 3,
+    "daily_snapshot_max_age_hours": 30,
     "spot_source_max_lag_hours": 2,
     "perpetual_source_max_lag_hours": 2,
     "dated_future_source_max_lag_hours": 2,
@@ -332,6 +333,7 @@ def source(
     as_of: str | None,
     detail: str,
     as_of_basis: str = "provider_timestamp",
+    fetched_at: str | None = None,
 ) -> dict[str, Any]:
     return {
         "source_id": source_id,
@@ -340,7 +342,7 @@ def source(
         "source_tier": tier,
         "as_of": as_of,
         "as_of_basis": as_of_basis,
-        "fetched_at": now_iso(),
+        "fetched_at": fetched_at or now_iso(),
         "detail": detail,
     }
 
@@ -1548,6 +1550,7 @@ def official_dat_observations(asset: str) -> tuple[dict[str, dict[str, Any]], li
             observation.get("as_of"),
             str(observation.get("detail") or "官方公司持倉揭露"),
             str(observation.get("basis") or "official_filing"),
+            str(observation.get("fetched_at") or "") or None,
         ))
     return companies, sources, incidents
 
@@ -2273,13 +2276,19 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
         and raw_generated_at
         and snapshot_generated_at == raw_generated_at
     )
+    snapshot_lag = lag_hours_at(generated_at, snapshot_generated_at)
+    lineage_ok = bool(
+        lineage_ok
+        and snapshot_lag is not None
+        and -0.25 <= snapshot_lag <= FRESHNESS_CONTRACT["daily_snapshot_max_age_hours"]
+    )
     if not lineage_ok:
         failures.append("每日快照、原始觀測與市場層批次血緣不一致")
     add_check(
         "daily_snapshot_lineage",
         "每日快照批次血緣",
         "pass" if lineage_ok else "fail",
-        "snapshot、raw 與 market universe 共用同一批次" if lineage_ok else "批次 ID 或生成時間缺漏／不一致",
+        f"snapshot、raw 與 market universe 共用同一批次；日批次落後 {snapshot_lag:.1f} 小時" if lineage_ok else "批次 ID、生成時間或 30 小時新鮮度不合格",
         core=True,
         observed=1 if lineage_ok else 0,
         required=1,
@@ -2524,6 +2533,197 @@ def quality_checks(output: dict[str, Any], errors: list[str]) -> dict[str, Any]:
     }
 
 
+def build_evidence_ledger(output: dict[str, Any]) -> dict[str, Any]:
+    source_index = {item["source_id"]: item for item in output.get("sources", []) if item.get("source_id")}
+    metrics: dict[str, Any] = {}
+
+    def select_ids(*, prefixes: tuple[str, ...] = (), exact: tuple[str, ...] = (), contains: tuple[str, ...] = ()) -> list[str]:
+        return sorted({
+            source_id for source_id in source_index
+            if source_id in exact
+            or any(source_id.startswith(prefix) for prefix in prefixes)
+            or any(token in source_id for token in contains)
+        })
+
+    def add(
+        metric_id: str,
+        *,
+        title: str,
+        source_ids: list[str],
+        as_of: Any,
+        update_frequency: str,
+        status: str,
+        method: str,
+        freshness_policy: str,
+        limitation: str,
+        validation_source_ids: list[str] | None = None,
+        formula_verification_artifact: str | None = None,
+    ) -> None:
+        available = [source_id for source_id in dict.fromkeys(source_ids) if source_id in source_index]
+        validation = [source_id for source_id in dict.fromkeys(validation_source_ids or available) if source_id in available]
+        metrics[metric_id] = {
+            "title": title,
+            "status": status,
+            "as_of": as_of,
+            "update_frequency": update_frequency,
+            "source_ids": validation + [source_id for source_id in available if source_id not in validation],
+            "source_count": len(available),
+            "validation_source_ids": validation,
+            "validation_source_count": len(validation),
+            "verification_method": method,
+            "freshness_policy": freshness_policy,
+            "verification_artifact": "data/daily/market_universe_verification.json",
+            "formula_verification_artifact": formula_verification_artifact,
+            "limitation": limitation,
+        }
+
+    asset_source_ids: dict[str, list[str]] = {}
+    for symbol, item in output.get("assets", {}).items():
+        token = symbol.lower()
+        ids = select_ids(exact=(
+            f"coingecko_{token}", f"coinbase_{token}", f"binance_{token}_spot",
+            f"okx_{token}_spot", f"kraken_{token}_spot",
+        ))
+        asset_source_ids[symbol] = ids
+        add(
+            f"assets.{symbol}",
+            title=f"{symbol} 現貨",
+            source_ids=ids,
+            as_of=item.get("as_of"),
+            update_frequency="每小時批次；來源本身為近即時報價",
+            status="pass" if item.get("source_count", 0) >= 2 and finite(item.get("cross_source_gap")) is not None else "fail",
+            method=f"至少雙來源中位數；跨來源價差不得超過 2%，目前 {float(item.get('cross_source_gap') or 0) * 100:.2f}%",
+            freshness_policy=f"相對批次時間不得落後超過 {FRESHNESS_CONTRACT['spot_source_max_lag_hours']} 小時",
+            limitation="聚合報價只代表已接入來源，不是單一交易所可成交價格。",
+        )
+
+    derivative_ids: dict[str, list[str]] = {}
+    for symbol in ("BTC", "ETH"):
+        token = symbol.lower()
+        item = output.get("derivatives", {}).get(symbol, {})
+        ids = select_ids(
+            contains=(f"_{token}_perp", f"_{token}_dated_future", f"_{token}_options", f"_{token}_dvol"),
+            exact=(f"yahoo_cme_{token}",),
+        )
+        derivative_ids[symbol] = ids
+        add(
+            f"derivatives.{symbol}",
+            title=f"{symbol} 機構衍生品",
+            source_ids=ids,
+            as_of=max(filter(None, [item.get("perpetual", {}).get("as_of"), item.get("dated_future", {}).get("as_of"), item.get("options", {}).get("as_of")]), default=None),
+            update_frequency="每小時批次；期權波動率使用最近完成觀測",
+            status="pass" if item.get("perpetual", {}).get("funding_source_count", 0) >= 2 else "fail",
+            method="永續至少兩場域；到期期貨與期權優先主交易場所，代理值與主序列分開",
+            freshness_policy=f"永續／期貨／期權不得分別落後批次超過 {FRESHNESS_CONTRACT['perpetual_source_max_lag_hours']}／{FRESHNESS_CONTRACT['dated_future_source_max_lag_hours']}／{FRESHNESS_CONTRACT['options_source_max_lag_hours']} 小時",
+            limitation="未平倉量與資金費率只涵蓋已接入場域，不是全球總量。",
+        )
+
+    etf_ids: dict[str, list[str]] = {}
+    for asset, item in output.get("etf", {}).items():
+        token = asset.lower()
+        ids = select_ids(prefixes=(f"{token}_etf_",))
+        try:
+            inputs = json.loads(str(item.get("validation_inputs_json") or "{}"))
+        except json.JSONDecodeError:
+            inputs = {}
+        validation_providers = {
+            str(inputs.get("canonical_provider") or ""),
+            str((inputs.get("backup_sample") or {}).get("provider") or ""),
+        }
+        validation_ids = [
+            source_id for source_id in ids
+            if source_index[source_id].get("provider") in validation_providers
+            or source_index[source_id].get("source_tier") == "official_issuer_crosscheck"
+        ]
+        etf_ids[asset] = ids
+        add(
+            f"etf.{asset}",
+            title=f"{asset} 美國現貨 ETF 資金流",
+            source_ids=ids,
+            validation_source_ids=validation_ids,
+            as_of=item.get("as_of"),
+            update_frequency="市場總表每小時重建；ETF 上游每日重抓，官方基金資料為美股交易日 T+1",
+            status="pass" if item.get("status") == "sample_cross_source_verified" else "degraded",
+            method="基金明細加總＋主要發行商官方持倉變化＋同日獨立備援；三者方向與差異門檻同時通過才發布",
+            freshness_policy=f"只發布最近完成驗證且距批次不超過 {FRESHNESS_CONTRACT['etf_source_max_lag_days']} 個日曆日的市場日；較新但未通過者不覆蓋",
+            limitation=str(item.get("limitation") or "ETF 流量為 T+1 資料，不是盤中即時申贖。"),
+            formula_verification_artifact="data/daily/agent_verification_report.json",
+        )
+
+    dat_ids: dict[str, list[str]] = {}
+    for asset, item in output.get("dat", {}).items():
+        token = asset.lower()
+        ids = select_ids(contains=(f"_{token}_dat", f"_{token}_holdings"))
+        dat_ids[asset] = ids
+        add(
+            f"dat.{asset}",
+            title=f"{asset} 數位資產財庫公司持倉",
+            source_ids=ids,
+            as_of=item.get("as_of"),
+            update_frequency="每小時檢查聚合站；公司申報事件到達後更新",
+            status="pass" if item.get("status") == "representative_cross_source_verified" else "degraded",
+            method="雙聚合站公司交集＋前列公司 SEC 申報 overlay；不同 universe 不平均",
+            freshness_policy="聚合站未提供全域持倉日期時，明示抓取時間並以官方申報日覆核代表公司",
+            limitation=str(item.get("limitation") or "聚合站總量不是會計級普通股淨值。"),
+        )
+
+    sector_ids = select_ids(prefixes=("sector_basket_",))
+    for name, item in output.get("sectors", {}).items():
+        add(
+            f"sectors.{name}",
+            title=f"{name} 固定籃子",
+            source_ids=sector_ids,
+            as_of=item.get("as_of"),
+            update_frequency="每小時批次",
+            status="pass" if item.get("status") == "cross_source_verified" else "degraded",
+            method=f"同成分固定籃子至少三來源嚴格多數；目前採用 {item.get('source_count', 0)} 源，偏離來源公開排除",
+            freshness_policy=f"各來源相對批次不得落後超過 {SECTOR_SOURCE_MAX_LAG_HOURS * 60:.0f} 分鐘",
+            limitation="只比較固定代表籃子的相對輪動，不代表整個賽道可投資報酬。",
+        )
+
+    thesis = output.get("btc_thesis", {})
+    thesis_specs = {
+        "thesis.btcfi": ("可觀測 BTCFi 代理", select_ids(prefixes=("defillama_",)), thesis.get("digital_dollar_competition", {}).get("as_of"), "DefiLlama 可觀測協議分類；只作結構背景"),
+        "thesis.gold": ("BTC／黃金規模", select_ids(exact=("wgc_above_ground_gold", "yahoo_gold_front_month")), thesis.get("gold_monetization", {}).get("gold_price_as_of"), "WGC 存量與黃金期貨代理；不同頻率分開標示"),
+        "thesis.stablecoin": ("美元穩定幣供給", select_ids(exact=("defillama_usd_stablecoins",)), thesis.get("digital_dollar_competition", {}).get("as_of"), "穩定幣供給同群比較；單一資料集只作結構背景"),
+        "thesis.rwa": ("RWA 可見規模", select_ids(exact=("defillama_rwa_protocols",)), thesis.get("digital_dollar_competition", {}).get("as_of"), "DefiLlama 協議分類；可能存在分類重疊"),
+        "thesis.company_share": ("公開公司 BTC 供給占比", dat_ids.get("BTC", []), thesis.get("public_company_adoption", {}).get("as_of"), "DAT 多源公司交集與 SEC 代表公司覆核"),
+        "thesis.company_concentration": ("公開公司持幣集中度", dat_ids.get("BTC", []), thesis.get("public_company_adoption", {}).get("as_of"), "DAT 多源公司交集與 SEC 代表公司覆核"),
+        "thesis.hashrate": ("BTC 算力", select_ids(exact=("blockchain_hashrate_180d",)), thesis.get("security_consensus", {}).get("as_of"), "Blockchain.com 時序；只作安全背景"),
+        "thesis.debt": ("美國債務占 GDP", select_ids(exact=("fred_us_debt_gdp",)), thesis.get("sovereign_credit_competition", {}).get("us_federal_debt_to_gdp_as_of"), "FRED／OMB 官方序列；低頻宏觀背景"),
+        "thesis.real_yield": ("美國十年期實質利率", select_ids(exact=("fred_us_10y_real_yield",)), thesis.get("sovereign_credit_competition", {}).get("us_10y_real_yield_as_of"), "FRED／Fed 官方序列；每日完成值"),
+    }
+    for metric_id, (title, ids, as_of, method) in thesis_specs.items():
+        add(
+            metric_id,
+            title=title,
+            source_ids=ids,
+            as_of=as_of,
+            update_frequency="依來源原生頻率；每小時檢查新版本",
+            status="context_only",
+            method=method,
+            freshness_policy="使用各結構指標自己的 freshness window，不以抓取時間冒充觀測日",
+            limitation="結構背景不得單獨放行交易或宣稱短線因果。",
+        )
+
+    breadth_ids = sorted({source_id for ids in asset_source_ids.values() for source_id in ids})
+    summary_specs = {
+        "summary.BTC.leverage": ("BTC 槓桿溫度摘要", derivative_ids.get("BTC", []), metrics.get("derivatives.BTC", {}).get("as_of"), metrics.get("derivatives.BTC", {}).get("status", "fail"), "引用 BTC 衍生品卡的已驗證輸入，不另建黑箱分數", metrics.get("derivatives.BTC", {}).get("freshness_policy", ""), "摘要只描述槓桿溫度。"),
+        "summary.ETH.leverage": ("ETH 槓桿溫度摘要", derivative_ids.get("ETH", []), metrics.get("derivatives.ETH", {}).get("as_of"), metrics.get("derivatives.ETH", {}).get("status", "fail"), "引用 ETH 衍生品卡的已驗證輸入，不另建黑箱分數", metrics.get("derivatives.ETH", {}).get("freshness_policy", ""), "摘要只描述槓桿溫度。"),
+        "summary.asset_breadth": ("七項觀測清單廣度", breadth_ids, max((item.get("as_of") for item in output.get("assets", {}).values() if item.get("as_of")), default=None), "pass" if all(item.get("source_count", 0) >= 2 for item in output.get("assets", {}).values()) else "fail", "每個資產先通過雙來源價格驗證，再計算正報酬個數", f"每項來源不得落後批次超過 {FRESHNESS_CONTRACT['spot_source_max_lag_hours']} 小時", "清單廣度不是整體加密市場廣度。"),
+        "summary.sector_lead": ("四類賽道領先摘要", sector_ids, max((item.get("as_of") for item in output.get("sectors", {}).values() if item.get("as_of")), default=None), "pass" if all(item.get("status") == "cross_source_verified" for item in output.get("sectors", {}).values()) else "degraded", "只在通過同成分多來源嚴格多數的固定籃子間排序", f"各來源相對批次不得落後超過 {SECTOR_SOURCE_MAX_LAG_HOURS * 60:.0f} 分鐘", "領先只表示 24 小時相對輪動。"),
+    }
+    for metric_id, (title, ids, as_of, status, method, freshness_policy, limitation) in summary_specs.items():
+        add(metric_id, title=title, source_ids=ids, as_of=as_of, update_frequency="每小時批次", status=status, method=method, freshness_policy=freshness_policy, limitation=limitation)
+
+    return {
+        "schema": 1,
+        "generated_at": output.get("generated_at"),
+        "policy": "每張數據分析卡必須綁定可點來源、來源觀測日、更新頻率、驗證方法、新鮮度與限制；來源缺漏時前端 fail closed。",
+        "metrics": metrics,
+    }
+
+
 def compact_history(output: dict[str, Any]) -> dict[str, Any]:
     return {
         "date": output["date"],
@@ -2738,6 +2938,7 @@ def main() -> int:
             item.get("as_of"),
             str(item.get("detail") or "ETF provider observation"),
             str(item.get("basis") or "provider_reported"),
+            str(item.get("fetched_at") or "") or None,
         ))
     history = load_json(HISTORY_PATH, {"schema": 1, "updated_at": None, "items": []})
     previous_items = sorted([item for item in history.get("items", []) if item.get("date") != today_utc()], key=lambda item: item.get("date", ""))
@@ -2838,6 +3039,7 @@ def main() -> int:
     }
     output["btc_thesis"] = build_btc_thesis(output, snapshot, thesis_inputs)
     output["analysis"] = analyze(output)
+    output["evidence_ledger"] = build_evidence_ledger(output)
     output["quality"] = quality_checks(output, execution_errors)
     write_json(OUTPUT_PATH, output)
 
