@@ -1,16 +1,20 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-28T22:18:06+00:00",
-  "status": "pass",
+  "generated_at": "2026-07-29T02:41:39+00:00",
+  "status": "fail",
   "summary": {
     "active_pages": 9,
     "archive_pages": 0,
-    "pass": 9,
+    "pass": 8,
     "degraded": 0,
-    "fail": 0,
-    "critical_failures": [],
+    "fail": 1,
+    "critical_failures": [
+      "site-governance"
+    ],
     "critical_surface_failures": [],
-    "critical_data_failures": [],
+    "critical_data_failures": [
+      "site-governance"
+    ],
     "degraded_pages": []
   },
   "pages": [
@@ -32,20 +36,20 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 33218,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 33260,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 3538,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],
@@ -114,8 +118,8 @@
           "path": "data/daily/market_universe.json",
           "required": true,
           "status": "pass",
-          "bytes": 111186,
-          "as_of": "2026-07-28T22:18:05+00:00",
+          "bytes": 110973,
+          "as_of": "2026-07-29T02:41:25+00:00",
           "age_hours": 0.0,
           "quality": "pass"
         },
@@ -124,7 +128,7 @@
           "required": true,
           "status": "pass",
           "bytes": 318,
-          "as_of": "2026-07-28T22:18:05+00:00",
+          "as_of": "2026-07-29T02:41:25+00:00",
           "age_hours": 0.0,
           "quality": "pass"
         },
@@ -132,8 +136,8 @@
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 34583,
-          "as_of": "2026-07-28T22:18:05+00:00",
+          "bytes": 39734,
+          "as_of": "2026-07-29T02:41:25+00:00",
           "age_hours": 0.0
         }
       ],
@@ -202,9 +206,9 @@
           "path": "data/daily/market_editorial.json",
           "required": true,
           "status": "pass",
-          "bytes": 41180,
-          "as_of": "2026-07-28T12:15:35+00:00",
-          "age_hours": 10.04,
+          "bytes": 41474,
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
@@ -212,8 +216,8 @@
           "required": true,
           "status": "pass",
           "bytes": 14124,
-          "as_of": "2026-07-28T12:15:35+00:00",
-          "age_hours": 10.04,
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],
@@ -284,7 +288,7 @@
           "status": "pass",
           "bytes": 51496,
           "as_of": "2026-07-28T07:38:04+00:00",
-          "age_hours": 14.67,
+          "age_hours": 19.06,
           "quality": "pass"
         },
         {
@@ -293,7 +297,7 @@
           "status": "pass",
           "bytes": 900,
           "as_of": "2026-07-28T07:38:08+00:00",
-          "age_hours": 14.67,
+          "age_hours": 19.06,
           "quality": "pass"
         }
       ],
@@ -362,39 +366,39 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 33218,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 33260,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 3538,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 8017,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 7969,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 42871,
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16
+          "bytes": 45491,
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "pass",
@@ -462,29 +466,29 @@
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 33218,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 33260,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 3538,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 42871,
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16
+          "bytes": 45491,
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "pass",
@@ -552,49 +556,49 @@
           "path": "data/daily/timescale_price_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 1363168,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:40+00:00",
-          "age_hours": 11.16,
+          "bytes": 1363854,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:37+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_data_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 8017,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 7969,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 33218,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 33260,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
           "required": true,
           "status": "pass",
-          "bytes": 3524,
-          "lineage": "2026-07-28T11:08:01+00:00",
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16,
+          "bytes": 3538,
+          "lineage": "2026-07-29T02:41:22+00:00",
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 42871,
-          "as_of": "2026-07-28T11:08:42+00:00",
-          "age_hours": 11.16
+          "bytes": 45491,
+          "as_of": "2026-07-29T02:41:38+00:00",
+          "age_hours": 0.0
         }
       ],
       "status": "pass",
@@ -735,15 +739,16 @@
         {
           "path": "data/daily/site_health.json",
           "required": true,
-          "status": "pass",
-          "bytes": 22775,
-          "as_of": "2026-07-28T20:35:18+00:00",
-          "age_hours": 1.71
+          "status": "fail",
+          "bytes": 22791,
+          "as_of": "2026-07-28T22:18:06+00:00",
+          "age_hours": 4.39,
+          "reason": "超過新鮮度契約"
         }
       ],
-      "status": "pass",
+      "status": "fail",
       "surface_status": "pass",
-      "data_status": "pass",
+      "data_status": "fail",
       "checks": [
         {
           "name": "page_exists",
@@ -796,5 +801,5 @@
     "封存頁不得出現在主要導航，且必須指向目前替代專區。",
     "缺值、過期、schema 或日期不一致時 fail closed。"
   ],
-  "publication_mode": "normal"
+  "publication_mode": "fail_closed_diagnostics_only"
 }
