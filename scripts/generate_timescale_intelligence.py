@@ -190,8 +190,48 @@ def direction_from_ratio(positive: int, total: int) -> str:
     return "mixed"
 
 
-def perspective(name: str, direction: str, key_number: str, plain_read: str, source: str) -> dict[str, str]:
-    return {"name": name, "direction": direction, "key_number": key_number, "plain_read": plain_read, "source": source}
+def perspective(
+    name: str,
+    cluster_id: str,
+    direction: str,
+    key_number: str,
+    plain_read: str,
+    source: str,
+    counts_toward_underlying_resonance: bool = True,
+) -> dict[str, Any]:
+    return {
+        "name": name,
+        "cluster_id": cluster_id,
+        "direction": direction,
+        "key_number": key_number,
+        "plain_read": plain_read,
+        "source": source,
+        "counts_toward_underlying_resonance": counts_toward_underlying_resonance,
+    }
+
+
+def resonance_from_perspectives(perspectives: list[dict[str, Any]]) -> tuple[str, dict[str, int]]:
+    cluster_directions: dict[str, set[str]] = {}
+    for item in perspectives:
+        if not item.get("counts_toward_underlying_resonance"):
+            continue
+        cluster_id = str(item.get("cluster_id") or "")
+        direction = str(item.get("direction") or "")
+        if not cluster_id:
+            continue
+        cluster_directions.setdefault(cluster_id, set())
+        if direction in {"positive", "negative"}:
+            cluster_directions[cluster_id].add(direction)
+    positive = sum(directions == {"positive"} for directions in cluster_directions.values())
+    negative = sum(directions == {"negative"} for directions in cluster_directions.values())
+    directional = sum(directions in ({"positive"}, {"negative"}) for directions in cluster_directions.values())
+    resonance = "偏正向共振" if positive >= 3 and positive > negative else "偏負向共振" if negative >= 3 and negative > positive else "多維訊號分歧"
+    return resonance, {
+        "positive_clusters": positive,
+        "negative_clusters": negative,
+        "directional_clusters": directional,
+        "eligible_clusters": len(cluster_directions),
+    }
 
 
 def history_percentile(history: dict[str, Any], horizon: str, value: float | None) -> dict[str, Any]:
@@ -223,8 +263,8 @@ def horizon_perspectives(
     asset_matrix: dict[str, Any],
     snapshot: dict[str, Any],
     market: dict[str, Any],
-) -> list[dict[str, str]]:
-    tracked = [asset_matrix[symbol][horizon_key] for symbol in ("BTC", "ETH", "MSTR", "BMNR") if asset_matrix.get(symbol, {}).get(horizon_key)]
+) -> list[dict[str, Any]]:
+    tracked = [asset_matrix[symbol][horizon_key] for symbol in ("BTC", "ETH") if asset_matrix.get(symbol, {}).get(horizon_key)]
     known_returns = [number(item.get("return")) for item in tracked]
     known_returns = [value for value in known_returns if value is not None]
     positive_count = sum(value > 0 for value in known_returns)
@@ -233,16 +273,18 @@ def horizon_perspectives(
     perspectives = [
         perspective(
             "價格趨勢",
+            "underlying_price_trend",
             technical_direction,
             format_percent(number(btc.get("return"))),
             f"BTC 為「{btc.get('status')}」；趨勢擬合度 {format_percent(number(btc.get('trend_r_squared')), 0)}。",
             "雙來源完成日 K 衍生",
         ),
         perspective(
-            "跨資產廣度",
+            "加密底層廣度",
+            "underlying_crypto_breadth",
             breadth_direction,
             f"{positive_count}/{len(known_returns)}",
-            "BTC、ETH、MSTR、BMNR 同週期報酬的正負分布；只描述廣度，不形成交易動作。",
+            "BTC、ETH 同週期報酬的正負分布；MSTR、BMNR 上市載具不參與底層體制投票。",
             "雙來源完成日 K 衍生",
         ),
     ]
@@ -253,8 +295,8 @@ def horizon_perspectives(
         funding = number(nested(market, "analysis.BTC.funding_annualized_median"))
         fear_greed = number(radar.get("fear_greed"))
         perspectives.extend([
-            perspective("衍生品擁擠", "positive" if funding is not None and funding > 0.10 else "negative" if funding is not None and funding < 0 else "mixed", format_percent(funding), "永續資金費率只衡量槓桿偏向與持有成本。", "OKX＋Hyperliquid"),
-            perspective("市場情緒", "positive" if fear_greed is not None and fear_greed >= 60 else "negative" if fear_greed is not None and fear_greed <= 40 else "mixed", f"{fear_greed:.0f}" if fear_greed is not None else "資料不足", "情緒數值描述風險偏好，不採反向或順勢策略假設。", "Alternative.me"),
+            perspective("衍生品擁擠", "underlying_derivatives_positioning", "positive" if funding is not None and funding > 0.10 else "negative" if funding is not None and funding < 0 else "mixed", format_percent(funding), "永續資金費率只衡量槓桿偏向與持有成本。", "OKX＋Hyperliquid"),
+            perspective("市場情緒", "underlying_market_sentiment", "positive" if fear_greed is not None and fear_greed >= 60 else "negative" if fear_greed is not None and fear_greed <= 40 else "mixed", f"{fear_greed:.0f}" if fear_greed is not None else "資料不足", "情緒數值描述風險偏好，不採反向或順勢策略假設。", "Alternative.me"),
         ])
     elif horizon_key == "weekly":
         etf_item = nested(market, "etf.BTC") or {}
@@ -263,23 +305,23 @@ def horizon_perspectives(
         etf_key = f"${etf_flow / 1e6:+,.0f}M" if etf_verified else f"{int(number(etf_item.get('source_count')) or 0)} 源未過"
         sale_ratio = number(mstr.get("sale_ratio"))
         perspectives.extend([
-            perspective("現貨 ETF 邊際流", "positive" if etf_verified and etf_flow > 0 else "negative" if etf_verified else "unknown", etf_key, "已驗證 7 日淨流才描述方向；目前未過 quorum 時只顯示來源診斷。", "ETF 多來源＋發行商持倉核對"),
-            perspective("MSTR 資本結構", "negative" if sale_ratio is None or sale_ratio > 2 else "mixed", format_multiple(sale_ratio, 1), "已報告賣幣壓力與普通股價格趨勢分開觀察。", "Strategy SEC／公司揭露"),
+            perspective("現貨 ETF 邊際流", "underlying_institutional_flows", "positive" if etf_verified and etf_flow > 0 else "negative" if etf_verified else "unknown", etf_key, "已驗證 7 日淨流才描述方向；目前未過 quorum 時只顯示來源診斷。", "ETF 多來源＋發行商持倉核對"),
+            perspective("MSTR 資本結構", "vehicle_mstr_capital_structure", "negative" if sale_ratio is None or sale_ratio > 2 else "mixed", format_multiple(sale_ratio, 1), "已報告賣幣壓力與普通股價格趨勢分開觀察。", "Strategy SEC／公司揭露", False),
         ])
     elif horizon_key == "monthly":
         mvrv = number(radar.get("btc_mvrv_current"))
         common_ratio = number(mstr.get("common_equity_price_to_nav"))
         perspectives.extend([
-            perspective("鏈上估值位置", "negative" if mvrv is not None and mvrv < 1 else "positive" if mvrv is not None and mvrv > 2 else "mixed", format_multiple(mvrv), "MVRV 描述市場價相對實現價位置，不等同方向訊號。", "Coin Metrics Community API"),
-            perspective("MSTR 普通股估值", "negative" if common_ratio is not None and common_ratio > 1 else "positive" if common_ratio is not None else "unknown", format_multiple(common_ratio), "普通股市值／自算普通股淨值用來辨識估值與 BTC 趨勢是否背離。", "SEC＋市場價格衍生"),
+            perspective("鏈上估值位置", "underlying_onchain_valuation", "negative" if mvrv is not None and mvrv < 1 else "positive" if mvrv is not None and mvrv > 2 else "mixed", format_multiple(mvrv), "MVRV 描述市場價相對實現價位置，不等同方向訊號。", "Coin Metrics Community API"),
+            perspective("MSTR 普通股估值", "vehicle_mstr_relative_value", "negative" if common_ratio is not None and common_ratio > 1 else "positive" if common_ratio is not None else "unknown", format_multiple(common_ratio), "普通股市值／自算普通股淨值用來辨識估值與 BTC 趨勢是否背離。", "SEC＋市場價格衍生", False),
         ])
     else:
         hashrate_change = number(nested(thesis, "security_consensus.hashrate_30d_change"))
         company_share = number(nested(thesis, "public_company_adoption.share_of_btc_supply"))
         stablecoin_change = number(nested(thesis, "digital_dollar_competition.stablecoin_supply_30d_change"))
         perspectives.extend([
-            perspective("網路安全活動", "positive" if hashrate_change is not None and hashrate_change > 0 else "negative" if hashrate_change is not None else "unknown", format_percent(hashrate_change), "算力 30 日變化作為網路活動背景，不把單月變動外推為價格目標。", "Blockchain.com 多點序列"),
-            perspective("結構性採用", "positive" if company_share is not None and company_share > 0.03 else "mixed", format_percent(company_share), f"公開公司持幣占供給；穩定幣供給 30 日 {format_percent(stablecoin_change)}。", "DAT 多來源＋SEC overlay"),
+            perspective("網路安全活動", "underlying_network_security", "positive" if hashrate_change is not None and hashrate_change > 0 else "negative" if hashrate_change is not None else "unknown", format_percent(hashrate_change), "算力 30 日變化作為網路活動背景，不把單月變動外推為價格目標。", "Blockchain.com 多點序列"),
+            perspective("結構性採用", "underlying_structural_adoption", "positive" if company_share is not None and company_share > 0.03 else "mixed", format_percent(company_share), f"公開公司持幣占供給；穩定幣供給 30 日 {format_percent(stablecoin_change)}。", "DAT 多來源＋SEC overlay"),
         ])
     return perspectives
 
@@ -295,10 +337,7 @@ def horizon_summary(
 ) -> dict[str, Any]:
     btc = asset_matrix["BTC"][horizon_key]
     perspectives = horizon_perspectives(horizon_key, btc, asset_matrix, snapshot, market)
-    known_directions = [item["direction"] for item in perspectives if item["direction"] in {"positive", "negative"}]
-    positive = known_directions.count("positive")
-    negative = known_directions.count("negative")
-    resonance = "偏正向共振" if positive >= 2 and positive > negative else "偏負向共振" if negative >= 2 and negative > positive else "多維訊號分歧"
+    resonance, resonance_votes = resonance_from_perspectives(perspectives)
     prior_state = nested(previous, f"horizons.{horizon_key}.status") if previous else None
     prior_return = number(nested(previous, f"horizons.{horizon_key}.btc_return")) if previous else None
     current_return = number(btc.get("return"))
@@ -318,6 +357,7 @@ def horizon_summary(
         "plain_read": f"BTC {horizon['label']}報酬 {format_percent(current_return)}，目前屬「{btc.get('status')}」，相較前一等長窗口為{acceleration_text}。",
         "what_changed": what_changed,
         "resonance": resonance,
+        "resonance_votes": resonance_votes,
         "perspectives": perspectives,
         "metrics": {
             "btc_return": current_return,

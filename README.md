@@ -22,6 +22,8 @@
 
 根網址 `index.html` 只負責導向市場總編，不再維護第二套重複首頁。四週期資料、歷史 revisions 與 append-only 洞察仍完整保留為公開可稽核 JSON，繼續供市場總編、verifier 與部署 readback 使用；只有三個重複 HTML 呈現層退場。
 
+BTC／ETH 底層體制、MSTR／BMNR 上市載具、獨家指標與校準順序見 `institutional-analysis-plan-v2.md`。
+
 ## Data architecture
 
 ```text
@@ -53,7 +55,7 @@ Daily source collection
 
 Pages 的 `deployment-manifest.json` 會綁定 commit、市場總編 semantic hash，以及五個四週期公開 artifact 的 SHA-256／bytes；正式站驗收同時確認三個退場頁為 404、五頁桌面／手機可讀與根網址轉址。
 
-方法與維護程序位於 `skills/market-timescale-intelligence/SKILL.md`；其 evidence ledger、diff-first、deterministic gate 與 append-only revision 方法取自 `HsinTiger/skills-radar` 的已審研究原則，未安裝仍標為待審的第三方金融 skill。
+方法與維護程序位於 `skills/market-timescale-intelligence/SKILL.md`；其 evidence ledger、diff-first、deterministic gate 與 append-only revision 方法取自 `HsinTiger/skills-radar` 的已審研究原則。資料 reconciliation 方法採用已審、固定 commit 且 Apache-2.0 的 Anthropic skill，只移植對帳與治理流程，不採用通用範例門檻。
 
 ## Research boundary
 

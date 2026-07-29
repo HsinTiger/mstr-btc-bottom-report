@@ -2,7 +2,7 @@
 
 ## Method provenance
 
-This workflow adapts the evidence-ledger, diff-first, deterministic-gate, two-signal resonance, and append-only revision practices documented by `HsinTiger/skills-radar` on 2026-07-27. No third-party finance skill is installed: that radar marked the candidate list `PREVIEW_STALE_CORPUS` and required pin, license, source/security review, offline canary, and owner approval before adoption.
+This workflow adapts the evidence-ledger, diff-first, deterministic-gate, multi-signal resonance, and append-only revision practices documented by `HsinTiger/skills-radar`. The reconciliation checklist is adapted from Anthropic's Apache-2.0 `reconciliation` skill pinned at commit `2d6f7e22dd25593f0f748010430ef86f19659735`; its illustrative dollar and aging thresholds are not imported as defaults. The project remains research-only and retains independent verification and human review.
 
 ## Lineage
 

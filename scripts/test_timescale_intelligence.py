@@ -11,7 +11,9 @@ from generate_timescale_intelligence import (
     history_percentile,
     log_trend,
     period_return,
+    perspective,
     range_position,
+    resonance_from_perspectives,
 )
 from verify_timescale_data import compare_sources, verify_rows
 
@@ -67,6 +69,14 @@ def main() -> int:
     expect(percentile["status"] == "insufficient_history", "percentile must remain disabled below 20 dates")
     aligned = alignment({key: {"tone": "positive"} for key in HORIZONS})
     expect(aligned["dominant_state"] == "多週期同步上行", "alignment classification mismatch")
+    two_votes = [perspective(str(index), f"cluster_{index}", "positive", "1", "test", "fixture") for index in range(2)]
+    expect(resonance_from_perspectives(two_votes)[0] == "多維訊號分歧", "two clusters must not claim resonance")
+    three_votes = [perspective(str(index), f"cluster_{index}", "positive", "1", "test", "fixture") for index in range(3)]
+    expect(resonance_from_perspectives(three_votes)[0] == "偏正向共振", "three independent clusters should claim resonance")
+    duplicate_cluster = three_votes[:2] + [perspective("duplicate", "cluster_1", "positive", "1", "test", "fixture")]
+    expect(resonance_from_perspectives(duplicate_cluster)[0] == "多維訊號分歧", "duplicate cluster must count once")
+    vehicle_vote = three_votes[:2] + [perspective("MSTR", "vehicle_mstr", "positive", "1", "test", "fixture", False)]
+    expect(resonance_from_perspectives(vehicle_vote)[0] == "多維訊號分歧", "vehicle evidence must not vote in underlying resonance")
     print(f"timescale intelligence tests: PASS ({checks}/{checks})")
     return 0
 

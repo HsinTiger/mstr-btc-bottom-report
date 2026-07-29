@@ -127,6 +127,31 @@ def verify() -> dict[str, Any]:
             failures.append("alignment does not cover all four horizons")
         if len(analysis.get("exclusive_insights", [])) < 3:
             failures.append("exclusive insight set is incomplete")
+        for horizon, item in analysis.get("horizons", {}).items():
+            clusters: dict[str, set[str]] = {}
+            for perspective in item.get("perspectives", []):
+                cluster_id = str(perspective.get("cluster_id") or "")
+                if not cluster_id:
+                    failures.append(f"{horizon} perspective is missing cluster_id")
+                    continue
+                if not perspective.get("counts_toward_underlying_resonance"):
+                    continue
+                direction = perspective.get("direction")
+                clusters.setdefault(cluster_id, set())
+                if direction in {"positive", "negative"}:
+                    clusters[cluster_id].add(direction)
+            positive = sum(directions == {"positive"} for directions in clusters.values())
+            negative = sum(directions == {"negative"} for directions in clusters.values())
+            directional = sum(directions in ({"positive"}, {"negative"}) for directions in clusters.values())
+            expected = "偏正向共振" if positive >= 3 and positive > negative else "偏負向共振" if negative >= 3 and negative > positive else "多維訊號分歧"
+            if item.get("resonance") != expected:
+                failures.append(f"{horizon} resonance is inconsistent with independent cluster votes")
+            reported_votes = item.get("resonance_votes") or {}
+            if reported_votes != {"positive_clusters": positive, "negative_clusters": negative, "directional_clusters": directional, "eligible_clusters": len(clusters)}:
+                failures.append(f"{horizon} resonance vote audit is inconsistent")
+            for perspective in item.get("perspectives", []):
+                if perspective.get("cluster_id") in {"vehicle_mstr_capital_structure", "vehicle_mstr_relative_value"} and perspective.get("counts_toward_underlying_resonance"):
+                    failures.append(f"{horizon} vehicle evidence participates in underlying resonance")
     text = "\n".join(collect_analysis_text(analysis))
     for phrase in PROHIBITED_ACTION_PHRASES:
         if phrase in text:
