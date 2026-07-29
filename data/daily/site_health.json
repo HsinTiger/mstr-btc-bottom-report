@@ -1,21 +1,19 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-29T02:41:39+00:00",
-  "status": "fail",
+  "generated_at": "2026-07-29T03:43:02+00:00",
+  "status": "degraded",
   "summary": {
     "active_pages": 9,
     "archive_pages": 0,
     "pass": 8,
-    "degraded": 0,
-    "fail": 1,
-    "critical_failures": [
-      "site-governance"
-    ],
+    "degraded": 1,
+    "fail": 0,
+    "critical_failures": [],
     "critical_surface_failures": [],
-    "critical_data_failures": [
-      "site-governance"
-    ],
-    "degraded_pages": []
+    "critical_data_failures": [],
+    "degraded_pages": [
+      "market-radar"
+    ]
   },
   "pages": [
     {
@@ -39,7 +37,7 @@
           "bytes": 33260,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -49,7 +47,7 @@
           "bytes": 3538,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         }
       ],
@@ -117,33 +115,35 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "pass",
-          "bytes": 110973,
-          "as_of": "2026-07-29T02:41:25+00:00",
+          "status": "degraded",
+          "bytes": 110928,
+          "as_of": "2026-07-29T03:43:02+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "pass",
-          "bytes": 318,
-          "as_of": "2026-07-29T02:41:25+00:00",
+          "status": "degraded",
+          "bytes": 531,
+          "as_of": "2026-07-29T03:43:02+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 39734,
-          "as_of": "2026-07-29T02:41:25+00:00",
+          "bytes": 39715,
+          "as_of": "2026-07-29T03:43:02+00:00",
           "age_hours": 0.0
         }
       ],
-      "status": "pass",
+      "status": "degraded",
       "surface_status": "pass",
-      "data_status": "pass",
+      "data_status": "degraded",
       "checks": [
         {
           "name": "page_exists",
@@ -208,7 +208,7 @@
           "status": "pass",
           "bytes": 41474,
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -217,7 +217,7 @@
           "status": "pass",
           "bytes": 14124,
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         }
       ],
@@ -288,7 +288,7 @@
           "status": "pass",
           "bytes": 51496,
           "as_of": "2026-07-28T07:38:04+00:00",
-          "age_hours": 19.06,
+          "age_hours": 20.08,
           "quality": "pass"
         },
         {
@@ -297,7 +297,7 @@
           "status": "pass",
           "bytes": 900,
           "as_of": "2026-07-28T07:38:08+00:00",
-          "age_hours": 19.06,
+          "age_hours": 20.08,
           "quality": "pass"
         }
       ],
@@ -369,7 +369,7 @@
           "bytes": 33260,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -379,7 +379,7 @@
           "bytes": 3538,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -389,7 +389,7 @@
           "bytes": 7969,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -398,7 +398,7 @@
           "status": "pass",
           "bytes": 45491,
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.02
         }
       ],
       "status": "pass",
@@ -469,7 +469,7 @@
           "bytes": 33260,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -479,7 +479,7 @@
           "bytes": 3538,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -488,7 +488,7 @@
           "status": "pass",
           "bytes": 45491,
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.02
         }
       ],
       "status": "pass",
@@ -559,7 +559,7 @@
           "bytes": 1363854,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:37+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -569,7 +569,7 @@
           "bytes": 7969,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -579,7 +579,7 @@
           "bytes": 33260,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -589,7 +589,7 @@
           "bytes": 3538,
           "lineage": "2026-07-29T02:41:22+00:00",
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0,
+          "age_hours": 1.02,
           "quality": "pass"
         },
         {
@@ -598,7 +598,7 @@
           "status": "pass",
           "bytes": 45491,
           "as_of": "2026-07-29T02:41:38+00:00",
-          "age_hours": 0.0
+          "age_hours": 1.02
         }
       ],
       "status": "pass",
@@ -739,16 +739,15 @@
         {
           "path": "data/daily/site_health.json",
           "required": true,
-          "status": "fail",
-          "bytes": 22791,
-          "as_of": "2026-07-28T22:18:06+00:00",
-          "age_hours": 4.39,
-          "reason": "超過新鮮度契約"
+          "status": "pass",
+          "bytes": 22884,
+          "as_of": "2026-07-29T02:41:39+00:00",
+          "age_hours": 1.02
         }
       ],
-      "status": "fail",
+      "status": "pass",
       "surface_status": "pass",
-      "data_status": "fail",
+      "data_status": "pass",
       "checks": [
         {
           "name": "page_exists",
@@ -801,5 +800,5 @@
     "封存頁不得出現在主要導航，且必須指向目前替代專區。",
     "缺值、過期、schema 或日期不一致時 fail closed。"
   ],
-  "publication_mode": "fail_closed_diagnostics_only"
+  "publication_mode": "normal"
 }
