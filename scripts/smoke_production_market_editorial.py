@@ -13,13 +13,16 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-from build_deployment_manifest import TIMESCALE_ARTIFACTS
+try:
+    from build_deployment_manifest import TIMESCALE_ARTIFACTS
+except ModuleNotFoundError:
+    from scripts.build_deployment_manifest import TIMESCALE_ARTIFACTS
 
 PAGES = {
     "market-intelligence.html": "八個研究桌",
     "market-monitor.html": "先看四個市場結論",
     "x-intelligence.html": "今天真正改變了什麼",
-    "wiki.html": "投資 LLM Wiki",
+    "wiki.html": "幣圈投資 Wiki",
     "site-overview.html": "四週期價格與來源對帳",
 }
 STATUS_PAGES = {"market-intelligence.html", "market-monitor.html", "x-intelligence.html"}
@@ -154,7 +157,10 @@ def main() -> int:
                 if not response or not response.ok:
                     raise RuntimeError(f"{name} {page_name} HTTP render failed")
                 if page_name in STATUS_PAGES:
-                    page.wait_for_function("() => ['pass','degraded','fail'].includes(document.body.dataset.renderStatus)", timeout=20_000)
+                    page.wait_for_function(
+                        "() => ['pass','degraded','fail'].includes(document.body.dataset.renderStatus || document.documentElement.dataset.renderStatus)",
+                        timeout=20_000,
+                    )
                 else:
                     page.wait_for_timeout(500)
                 body = page.locator("body").inner_text()
@@ -174,7 +180,7 @@ def main() -> int:
                     raise RuntimeError(f"{name} {page_name} render failed errors={errors} markers={markers}")
                 if layout["scroll"] - layout["client"] > 1 or not layout["activeNavVisible"]:
                     raise RuntimeError(f"{name} {page_name} layout/navigation failed")
-                status = page.locator("body").get_attribute("data-render-status") if page_name in STATUS_PAGES else "pass"
+                status = page.evaluate("() => document.body.dataset.renderStatus || document.documentElement.dataset.renderStatus") if page_name in STATUS_PAGES else "pass"
                 if page_name in STATUS_PAGES and status not in {"pass", "degraded"}:
                     raise RuntimeError(f"{name} {page_name} status={status}")
                 if page_name == "market-intelligence.html":
