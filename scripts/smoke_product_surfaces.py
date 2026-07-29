@@ -128,6 +128,16 @@ class BrowserRenderer:
                     [...document.querySelectorAll('details[data-evidence-metric]')].map(item => item.dataset.evidenceMetric)
                 ).size,
                 evidenceSourceLinkCount: document.querySelectorAll('.evidence-source a[href]').length,
+                evidenceTextComplete: [...document.querySelectorAll('details[data-evidence-metric]')].every(item => {
+                    const text = item.textContent || '';
+                    return ['資料截至','更新節奏','怎麼驗','新鮮度','驗證報告','限制'].every(label => text.includes(label));
+                }),
+                sourceTimingComplete: [...document.querySelectorAll('.evidence-source small')].every(item => {
+                    const text = item.textContent || '';
+                    return text.includes('觀測 ') && text.includes('抓取 ');
+                }),
+                minEvidenceLinkHeight: Math.min(...[...document.querySelectorAll('.evidence-source a[href]')].map(item => item.getBoundingClientRect().height)),
+                minEvidenceLinkFontPx: Math.min(...[...document.querySelectorAll('.evidence-source a[href]')].map(item => parseFloat(getComputedStyle(item).fontSize))),
                 activeNavVisible: (() => {
                     const activeLinks = [...document.querySelectorAll('nav a[aria-current="page"]')];
                     return activeLinks.some(active => {
@@ -250,6 +260,10 @@ def validate_base_page(
             or layout.get("evidenceMetricCount") != 30
             or layout.get("evidenceMetricUniqueCount") != 30
             or layout.get("evidenceSourceLinkCount", 0) < 30
+            or not layout.get("evidenceTextComplete")
+            or not layout.get("sourceTimingComplete")
+            or layout.get("minEvidenceLinkHeight", 0) < 44
+            or layout.get("minEvidenceLinkFontPx", 0) < 12
         ):
             raise RuntimeError("即時市場來源證據數與分析卡數不一致")
         if "來源與驗證" not in body or "ETF 不是盤中即時資料" not in body:

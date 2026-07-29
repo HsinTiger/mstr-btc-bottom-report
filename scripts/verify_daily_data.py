@@ -41,6 +41,7 @@ ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD = 500_000
 ETF_COMPONENT_SUM_RELATIVE_TOLERANCE = 0.001
 ETF_OFFICIAL_COMPONENT_MIN_COVERAGE = 0.20
 ETF_BACKUP_COMPONENT_MIN_COVERAGE = 0.30
+SECTOR_SOURCE_MAX_LAG_HOURS = 0.25
 
 
 def load_json(path: Path) -> Any:
@@ -721,7 +722,7 @@ def main() -> int:
             # 未經跨源驗證，不再 hard fail 擋住整條發布線。
             # 核心資產（BTC/ETH 現貨、ETF、期貨）的嚴格跨源驗證完全不受影響。
             sector_bucket = COMPOSITION_DIVERGENT_SECTORS.get(sector.lower())
-            sector_check = recompute_sector_validation(item, market_generated_at, spot_max_lag)
+            sector_check = recompute_sector_validation(item, market_generated_at, SECTOR_SOURCE_MAX_LAG_HOURS)
             if sector_check["errors"]:
                 target = degradations if sector_bucket else failures
                 target.extend(f"market universe sector {sector}: {error}" for error in sector_check["errors"])

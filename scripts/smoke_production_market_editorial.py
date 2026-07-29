@@ -227,6 +227,16 @@ def main() -> int:
                         const navRect = nav.getBoundingClientRect();
                         return activeRect.left >= navRect.left - 1 && activeRect.right <= navRect.right + 1;
                     }),
+                    evidenceTextComplete: [...document.querySelectorAll('details[data-evidence-metric]')].every(item => {
+                        const text = item.textContent || '';
+                        return ['資料截至','更新節奏','怎麼驗','新鮮度','驗證報告','限制'].every(label => text.includes(label));
+                    }),
+                    sourceTimingComplete: [...document.querySelectorAll('.evidence-source small')].every(item => {
+                        const text = item.textContent || '';
+                        return text.includes('觀測 ') && text.includes('抓取 ');
+                    }),
+                    minEvidenceLinkHeight: Math.min(...[...document.querySelectorAll('.evidence-source a[href]')].map(item => item.getBoundingClientRect().height)),
+                    minEvidenceLinkFontPx: Math.min(...[...document.querySelectorAll('.evidence-source a[href]')].map(item => parseFloat(getComputedStyle(item).fontSize))),
                 })""")
                 markers = [marker for marker in CRASH_MARKERS if marker in body]
                 if errors or expected_text not in body or markers:
@@ -246,7 +256,16 @@ def main() -> int:
                     evidence_complete = page.locator("body").get_attribute("data-evidence-complete")
                     evidence_cards = page.locator("body").get_attribute("data-evidence-cards")
                     evidence_links = page.locator('.evidence-source a[href]').count()
-                    if evidence_complete != "true" or evidence_cards != "30" or evidence_links < 30 or "ETF 不是盤中即時資料" not in body:
+                    if (
+                        evidence_complete != "true"
+                        or evidence_cards != "30"
+                        or evidence_links < 30
+                        or not layout["evidenceTextComplete"]
+                        or not layout["sourceTimingComplete"]
+                        or layout["minEvidenceLinkHeight"] < 44
+                        or layout["minEvidenceLinkFontPx"] < 12
+                        or "ETF 不是盤中即時資料" not in body
+                    ):
                         raise RuntimeError(f"{name} market evidence surface incomplete")
                 results.append({"viewport": name, "page": page_name, "status": status, "overflow": 0, "page_errors": 0})
                 context.close()

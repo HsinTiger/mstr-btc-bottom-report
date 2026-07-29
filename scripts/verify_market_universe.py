@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MARKET_PATH = ROOT / "data" / "daily" / "market_universe.json"
 REPORT_PATH = ROOT / "data" / "daily" / "market_universe_verification.json"
 COMPOSITION_DIVERGENT_SECTORS = {"defi", "meme"}
+SECTOR_SOURCE_MAX_LAG_HOURS = 0.25
 
 
 def expected_evidence_metric_ids(market: dict[str, Any]) -> set[str]:
@@ -270,7 +271,7 @@ def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
             failures.append(f"{symbol} volatility timestamp outside batch freshness window")
 
     for sector, item in market.get("sectors", {}).items():
-        result = recompute_sector_validation(item, generated_at, spot_max_lag)
+        result = recompute_sector_validation(item, generated_at, SECTOR_SOURCE_MAX_LAG_HOURS)
         target = degradations if sector.lower() in COMPOSITION_DIVERGENT_SECTORS else failures
         target.extend(f"sector {sector}: {error}" for error in result["errors"])
         if item.get("status") != "cross_source_verified":

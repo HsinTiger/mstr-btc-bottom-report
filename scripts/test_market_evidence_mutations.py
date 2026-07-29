@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import json
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import verify_market_universe as verifier
@@ -83,7 +84,13 @@ def main() -> int:
     absurd_etf_window["etf"]["BTC"]["flow_7d_usd"] = 9.99e99
     expect_verifier_failure("absurd-etf-window", absurd_etf_window, "ETF flow_7d_usd is missing or outside sanity bounds")
 
-    print("market evidence mutation tests: PASS (10/10)")
+    stale_sector_source = copy.deepcopy(SOURCE)
+    generated_at = datetime.fromisoformat(stale_sector_source["generated_at"].replace("Z", "+00:00"))
+    stale_time = (generated_at - timedelta(hours=1)).isoformat()
+    stale_sector_source["sectors"]["RWA"]["source_observations"]["CoinGecko"]["as_of"] = stale_time
+    expect_verifier_failure("stale-sector-source", stale_sector_source, "sector RWA")
+
+    print("market evidence mutation tests: PASS (11/11)")
     return 0
 
 
