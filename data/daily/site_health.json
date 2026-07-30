@@ -1,16 +1,20 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-29T12:22:14+00:00",
-  "status": "pass",
+  "generated_at": "2026-07-30T03:44:39+00:00",
+  "status": "fail",
   "summary": {
     "active_pages": 5,
     "archive_pages": 0,
-    "pass": 5,
+    "pass": 4,
     "degraded": 0,
-    "fail": 0,
-    "critical_failures": [],
+    "fail": 1,
+    "critical_failures": [
+      "market-radar"
+    ],
     "critical_surface_failures": [],
-    "critical_data_failures": [],
+    "critical_data_failures": [
+      "market-radar"
+    ],
     "degraded_pages": [],
     "data_products": 2,
     "data_product_pass": 2,
@@ -38,7 +42,7 @@
           "status": "pass",
           "bytes": 41527,
           "as_of": "2026-07-29T10:58:14+00:00",
-          "age_hours": 1.4,
+          "age_hours": 16.77,
           "quality": "pass"
         },
         {
@@ -47,7 +51,7 @@
           "status": "pass",
           "bytes": 14124,
           "as_of": "2026-07-29T10:58:15+00:00",
-          "age_hours": 1.4,
+          "age_hours": 16.77,
           "quality": "pass"
         }
       ],
@@ -115,33 +119,34 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "pass",
+          "status": "fail",
           "bytes": 143902,
           "as_of": "2026-07-29T12:22:13+00:00",
-          "age_hours": 0.0,
-          "quality": "pass"
+          "age_hours": 15.37,
+          "reason": "超過新鮮度契約"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "pass",
+          "status": "fail",
           "bytes": 318,
           "as_of": "2026-07-29T12:22:13+00:00",
-          "age_hours": 0.0,
-          "quality": "pass"
+          "age_hours": 15.37,
+          "reason": "超過新鮮度契約"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
-          "status": "pass",
+          "status": "fail",
           "bytes": 39732,
           "as_of": "2026-07-29T12:22:13+00:00",
-          "age_hours": 0.0
+          "age_hours": 15.37,
+          "reason": "超過新鮮度契約"
         }
       ],
-      "status": "pass",
+      "status": "fail",
       "surface_status": "pass",
-      "data_status": "pass",
+      "data_status": "fail",
       "checks": [
         {
           "name": "page_exists",
@@ -204,9 +209,9 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "pass",
-          "bytes": 53550,
-          "as_of": "2026-07-29T03:54:07+00:00",
-          "age_hours": 8.47,
+          "bytes": 52320,
+          "as_of": "2026-07-30T03:44:26+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         },
         {
@@ -214,8 +219,8 @@
           "required": true,
           "status": "pass",
           "bytes": 900,
-          "as_of": "2026-07-29T03:54:11+00:00",
-          "age_hours": 8.47,
+          "as_of": "2026-07-30T03:44:30+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],
@@ -433,7 +438,7 @@
           "bytes": 1364374,
           "lineage": "2026-07-29T10:40:19+00:00",
           "as_of": "2026-07-29T10:40:49+00:00",
-          "age_hours": 1.69,
+          "age_hours": 17.06,
           "quality": "pass"
         },
         {
@@ -443,7 +448,7 @@
           "bytes": 8013,
           "lineage": "2026-07-29T10:40:19+00:00",
           "as_of": "2026-07-29T10:40:53+00:00",
-          "age_hours": 1.69,
+          "age_hours": 17.06,
           "quality": "pass"
         }
       ],
@@ -496,7 +501,7 @@
           "bytes": 35675,
           "lineage": "2026-07-29T10:40:19+00:00",
           "as_of": "2026-07-29T10:58:13+00:00",
-          "age_hours": 1.4,
+          "age_hours": 16.77,
           "quality": "pass"
         },
         {
@@ -505,7 +510,7 @@
           "status": "pass",
           "bytes": 61489,
           "as_of": "2026-07-29T10:58:13+00:00",
-          "age_hours": 1.4
+          "age_hours": 16.77
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
@@ -514,7 +519,7 @@
           "bytes": 3530,
           "lineage": "2026-07-29T10:40:19+00:00",
           "as_of": "2026-07-29T10:58:13+00:00",
-          "age_hours": 1.4,
+          "age_hours": 16.77,
           "quality": "pass"
         }
       ],
@@ -546,5 +551,5 @@
     "缺值、過期、schema 或日期不一致時 fail closed。",
     "後端資料產品即使沒有獨立前端，也必須逐一稽核 artifact、verifier 與批次綁定。"
   ],
-  "publication_mode": "normal"
+  "publication_mode": "fail_closed_diagnostics_only"
 }
