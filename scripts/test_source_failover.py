@@ -22,6 +22,7 @@ from collect_market_universe import (
 )
 from daily_data_pipeline import (
     Observation,
+    complete_etf_roster_from_peers,
     etf_backup_sample_validation,
     etf_quorum_passes,
     now_iso,
@@ -507,6 +508,18 @@ def test_etf_quorum_accepts_verified_fallback_canonical() -> None:
     assert etf_quorum(canonical_provider="Bitbo")
 
 
+def test_etf_roster_completion_requires_same_date_peer_near_zero() -> None:
+    latest = {"date": "2026-07-20", "flow_usd": 10.0, "components_usd": {"IBIT": 10.0}}
+    providers = {
+        "The Block": {"series": [latest]},
+        "Bitbo": {"series": [{"date": "2026-07-20", "components_usd": {"DEFI": 0.0}}]},
+    }
+    completed, confirmations = complete_etf_roster_from_peers("The Block", latest, ["IBIT", "DEFI"], providers)
+    assert completed["component_completeness"] == 1.0
+    assert completed["components_usd"]["DEFI"] == 0.0
+    assert confirmations["DEFI"]["providers"] == {"Bitbo": 0.0}
+
+
 def test_etf_quorum_rejects_missing_backup_or_official_divergence() -> None:
     assert not etf_quorum(validation_source_count=2)
     assert not etf_quorum(official_gap=0.06)
@@ -607,6 +620,7 @@ def test_etf_selects_latest_fully_verified_market_date() -> None:
     today = datetime.now(timezone.utc).date()
     d_t1 = (today - timedelta(days=1)).isoformat()     # T+1：官方持倉尚未發布
     d_target = (today - timedelta(days=2)).isoformat()  # T  ：預期被選中（age=2，穩在 5 天內）
+    d_official_prior = (today - timedelta(days=3)).isoformat()
     d_prior = (today - timedelta(days=5)).isoformat()   # 前一次官方持倉基準
     providers = {
         "The Block": {
@@ -632,7 +646,7 @@ def test_etf_selects_latest_fully_verified_market_date() -> None:
             raise ValueError("official T+1 holding not published")
         return {"units": 2_000_000.0, "market_value_usd": 2_000_000_000.0, "as_of": as_of, "url": "https://fixture.invalid/ishares"}
     def fake_prior(asset: str, as_of: str) -> dict:
-        return {"units": 1_950_000.0, "market_value_usd": 1_950_000_000.0, "as_of": d_prior, "url": "https://fixture.invalid/ishares"}
+        return {"units": 1_950_000.0, "market_value_usd": 1_950_000_000.0, "as_of": d_official_prior, "url": "https://fixture.invalid/ishares"}
     daily_pipeline.ishares_holding = fake_current
     daily_pipeline.prior_ishares_holding = fake_prior
     try:
@@ -764,6 +778,7 @@ def main() -> int:
         test_dat_partial_canonical_falls_back,
         test_dat_divergent_canonical_switches_to_passing_base,
         test_etf_quorum_accepts_verified_fallback_canonical,
+        test_etf_roster_completion_requires_same_date_peer_near_zero,
         test_etf_quorum_rejects_missing_backup_or_official_divergence,
         test_etf_quorum_rejects_incomplete_fund_roster,
         test_etf_quorum_rejects_implausible_amounts,

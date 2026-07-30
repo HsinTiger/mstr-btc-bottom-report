@@ -19,14 +19,18 @@ TIMESCALE_ARTIFACTS = (
     "data/daily/timescale_intelligence_verification.json",
 )
 
-MARKET_EVIDENCE_ARTIFACTS = (
+DAILY_EVIDENCE_ARTIFACTS = (
     "data/daily/raw_observations.json",
     "data/daily/latest_snapshot.json",
     "data/daily/agent_verification_report.json",
+)
+
+HOURLY_EVIDENCE_ARTIFACTS = (
     "data/daily/market_universe.json",
     "data/daily/market_universe_verification.json",
 )
 
+MARKET_EVIDENCE_ARTIFACTS = DAILY_EVIDENCE_ARTIFACTS + HOURLY_EVIDENCE_ARTIFACTS
 CRITICAL_ARTIFACTS = TIMESCALE_ARTIFACTS + MARKET_EVIDENCE_ARTIFACTS
 
 

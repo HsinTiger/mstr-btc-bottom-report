@@ -2560,7 +2560,8 @@ def build_evidence_ledger(output: dict[str, Any]) -> dict[str, Any]:
         formula_verification_artifact: str | None = None,
     ) -> None:
         available = [source_id for source_id in dict.fromkeys(source_ids) if source_id in source_index]
-        validation = [source_id for source_id in dict.fromkeys(validation_source_ids or available) if source_id in available]
+        requested_validation = available if validation_source_ids is None else validation_source_ids
+        validation = [source_id for source_id in dict.fromkeys(requested_validation) if source_id in available]
         metrics[metric_id] = {
             "title": title,
             "status": status,
@@ -2629,6 +2630,11 @@ def build_evidence_ledger(output: dict[str, Any]) -> dict[str, Any]:
         validation_providers = {
             str(inputs.get("canonical_provider") or ""),
             str((inputs.get("backup_sample") or {}).get("provider") or ""),
+            *(
+                str(provider)
+                for confirmation in (inputs.get("roster_completion") or {}).values()
+                for provider in (confirmation.get("providers") or {})
+            ),
         }
         validation_ids = [
             source_id for source_id in ids
@@ -2644,10 +2650,10 @@ def build_evidence_ledger(output: dict[str, Any]) -> dict[str, Any]:
             as_of=item.get("as_of"),
             update_frequency="市場總表每小時重建；ETF 上游每日重抓，官方基金資料為美股交易日 T+1",
             status="pass" if item.get("status") == "sample_cross_source_verified" else "degraded",
-            method="基金明細加總＋主要發行商官方持倉變化＋同日獨立備援；三者方向與差異門檻同時通過才發布",
+            method="基金明細完整 roster（缺欄僅接受同日獨立來源確認近零）＋主要發行商官方持倉變化＋同日獨立總量或基金備援；全部差異與方向門檻通過才發布",
             freshness_policy=f"只發布最近完成驗證且距批次不超過 {FRESHNESS_CONTRACT['etf_source_max_lag_days']} 個日曆日的市場日；較新但未通過者不覆蓋",
             limitation=str(item.get("limitation") or "ETF 流量為 T+1 資料，不是盤中即時申贖。"),
-            formula_verification_artifact="data/daily/agent_verification_report.json",
+            formula_verification_artifact="data/daily/market_universe_verification.json",
         )
 
     dat_ids: dict[str, list[str]] = {}

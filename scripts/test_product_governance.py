@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import shutil
 import tempfile
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import audit_product_surfaces as audit
@@ -67,8 +67,11 @@ def main() -> int:
             shutil.copy2(repository / name, target)
         manifest = build_manifest(site, "test-commit")
         artifacts = {name: (site / name).read_bytes() for name in CRITICAL_ARTIFACTS}
+        market_payload = json.loads(artifacts["data/daily/market_universe.json"].decode("utf-8"))
+        market_generated_at = datetime.fromisoformat(market_payload["generated_at"].replace("Z", "+00:00"))
+        validation_now = market_generated_at + timedelta(minutes=30)
         validate_timescale_artifacts(manifest, artifacts)
-        validate_market_evidence_artifacts(manifest, artifacts)
+        validate_market_evidence_artifacts(manifest, artifacts, now=validation_now)
         first_path = TIMESCALE_ARTIFACTS[0]
         tampered = {**artifacts, first_path: artifacts[first_path] + b"\n"}
         try:
@@ -80,12 +83,45 @@ def main() -> int:
         market_path = MARKET_EVIDENCE_ARTIFACTS[0]
         tampered_market = {**artifacts, market_path: artifacts[market_path] + b"\n"}
         try:
-            validate_market_evidence_artifacts(manifest, tampered_market)
+            validate_market_evidence_artifacts(manifest, tampered_market, now=validation_now)
         except RuntimeError:
             pass
         else:
             raise AssertionError("tampered market evidence artifact produced false PASS")
-    print("product governance tests: PASS (6/6)")
+
+        daily_path = site / "data/daily/agent_verification_report.json"
+        daily_report = json.loads(daily_path.read_text(encoding="utf-8"))
+        daily_report["market_universe_generated_at"] = "2000-01-01T00:00:00+00:00"
+        write_json(site, "data/daily/agent_verification_report.json", daily_report)
+        decoupled_manifest = build_manifest(site, "test-commit")
+        decoupled_artifacts = {name: (site / name).read_bytes() for name in CRITICAL_ARTIFACTS}
+        validate_market_evidence_artifacts(decoupled_manifest, decoupled_artifacts, now=validation_now)
+
+        daily_report["snapshot_generated_at"] = "2000-01-01T00:00:00+00:00"
+        write_json(site, "data/daily/agent_verification_report.json", daily_report)
+        bad_daily_manifest = build_manifest(site, "test-commit")
+        bad_daily_artifacts = {name: (site / name).read_bytes() for name in CRITICAL_ARTIFACTS}
+        try:
+            validate_market_evidence_artifacts(bad_daily_manifest, bad_daily_artifacts, now=validation_now)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("daily verifier/snapshot mismatch produced false PASS")
+
+        write_json(site, "data/daily/agent_verification_report.json", json.loads(artifacts["data/daily/agent_verification_report.json"].decode("utf-8")))
+        market_verification_path = site / "data/daily/market_universe_verification.json"
+        market_verification = json.loads(market_verification_path.read_text(encoding="utf-8"))
+        market_verification["market_generated_at"] = "2000-01-01T00:00:00+00:00"
+        write_json(site, "data/daily/market_universe_verification.json", market_verification)
+        bad_market_manifest = build_manifest(site, "test-commit")
+        bad_market_artifacts = {name: (site / name).read_bytes() for name in CRITICAL_ARTIFACTS}
+        try:
+            validate_market_evidence_artifacts(bad_market_manifest, bad_market_artifacts, now=validation_now)
+        except RuntimeError:
+            pass
+        else:
+            raise AssertionError("hourly market/verifier mismatch produced false PASS")
+    print("product governance tests: PASS (9/9)")
     return 0
 
 

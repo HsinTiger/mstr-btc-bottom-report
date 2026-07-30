@@ -38,6 +38,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test workflow cadence contracts
+        run: python scripts/test_workflow_cadence.py
+
+      - name: Test production governance contracts
+        run: python scripts/test_product_governance.py
+
       - name: Audit product surfaces before fail-closed deploy
         run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
 

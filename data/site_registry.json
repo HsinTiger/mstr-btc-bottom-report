@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "updated_at": "2026-07-29",
+  "updated_at": "2026-07-30",
   "owner": "product-ceo-governance",
   "mission": "以市場總編統籌可追溯的跨市場結論；即時數據、AI 總編、知識庫與系統狀態各自只回答一個問題，不輸出交易策略。",
   "data_contracts": {
     "data/daily/latest_snapshot.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "batch_id", "metrics"], "lineage_source_field": "generated_at"},
-    "data/daily/agent_verification_report.json": {"schema_value": 2, "required_fields": ["date", "verified_at", "batch_id", "snapshot_generated_at", "market_universe_generated_at", "status"], "lineage_field": "snapshot_generated_at"},
+    "data/daily/agent_verification_report.json": {"schema_value": 2, "required_fields": ["date", "verified_at", "batch_id", "snapshot_generated_at", "status"], "lineage_field": "snapshot_generated_at"},
     "data/daily/market_universe.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "snapshot_generated_at", "source_batch_id", "quality", "quality.validation_summary", "quality.freshness_contract", "assets", "derivatives", "etf", "dat", "sources"]},
     "data/daily/market_universe_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "market_date", "market_generated_at", "status", "failures", "degradations"]},
     "data/daily/market_universe_history.json": {"schema_value": 2, "required_fields": ["updated_at"]},

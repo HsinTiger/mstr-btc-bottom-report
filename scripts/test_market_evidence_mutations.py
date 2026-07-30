@@ -31,6 +31,12 @@ def main() -> int:
     baseline = verifier.evidence_ledger_errors(copy.deepcopy(SOURCE))
     if baseline:
         raise AssertionError(f"baseline evidence ledger failed: {baseline}")
+    verified_etf_asset = next(
+        (asset for asset in ("BTC", "ETH") if SOURCE.get("etf", {}).get(asset, {}).get("status") == "sample_cross_source_verified"),
+        None,
+    )
+    if verified_etf_asset is None:
+        raise AssertionError("fixture requires at least one independently verified ETF asset")
 
     missing_card = copy.deepcopy(SOURCE)
     missing_card["evidence_ledger"]["metrics"].pop("etf.BTC")
@@ -38,7 +44,7 @@ def main() -> int:
 
     missing_official_etf = copy.deepcopy(SOURCE)
     source_index = {item["source_id"]: item for item in missing_official_etf["sources"]}
-    etf_entry = missing_official_etf["evidence_ledger"]["metrics"]["etf.BTC"]
+    etf_entry = missing_official_etf["evidence_ledger"]["metrics"][f"etf.{verified_etf_asset}"]
     etf_entry["validation_source_ids"] = [
         source_id
         for source_id in etf_entry["validation_source_ids"]
@@ -50,6 +56,18 @@ def main() -> int:
     missing_formula_verifier = copy.deepcopy(SOURCE)
     missing_formula_verifier["evidence_ledger"]["metrics"]["etf.BTC"]["formula_verification_artifact"] = None
     expect_error("missing-formula-verifier", missing_formula_verifier, "formula verifier binding is invalid")
+
+    degraded_optional_etf = copy.deepcopy(SOURCE)
+    degraded_optional_etf["etf"]["BTC"]["status"] = "unavailable"
+    degraded_optional_etf["etf"]["BTC"]["as_of"] = None
+    degraded_entry = degraded_optional_etf["evidence_ledger"]["metrics"]["etf.BTC"]
+    degraded_entry["status"] = "degraded"
+    degraded_entry["as_of"] = None
+    degraded_entry["validation_source_ids"] = []
+    degraded_entry["validation_source_count"] = 0
+    degraded_errors = verifier.evidence_ledger_errors(degraded_optional_etf)
+    if degraded_errors:
+        raise AssertionError(f"degraded optional ETF blocked unrelated market cards: {degraded_errors}")
 
     missing_observation_date = copy.deepcopy(SOURCE)
     missing_observation_date["sources"][0]["as_of"] = None
@@ -77,12 +95,12 @@ def main() -> int:
     expect_verifier_failure("stale-daily-inputs", stale_daily_inputs, "daily snapshot or raw observations")
 
     tampered_etf_formula = copy.deepcopy(SOURCE)
-    tampered_etf_formula["etf"]["BTC"]["flow_1d_usd"] = 9.99e9
-    expect_verifier_failure("tampered-etf-formula", tampered_etf_formula, "ETF published 1d flow")
+    tampered_etf_formula["etf"][verified_etf_asset]["flow_1d_usd"] = 9.99e9
+    expect_verifier_failure("tampered-etf-formula", tampered_etf_formula, f"{verified_etf_asset} ETF published 1d flow")
 
     absurd_etf_window = copy.deepcopy(SOURCE)
-    absurd_etf_window["etf"]["BTC"]["flow_7d_usd"] = 9.99e99
-    expect_verifier_failure("absurd-etf-window", absurd_etf_window, "ETF flow_7d_usd is missing or outside sanity bounds")
+    absurd_etf_window["etf"][verified_etf_asset]["flow_7d_usd"] = 9.99e99
+    expect_verifier_failure("absurd-etf-window", absurd_etf_window, f"{verified_etf_asset} ETF flow_7d_usd is missing or outside sanity bounds")
 
     stale_sector_source = copy.deepcopy(SOURCE)
     generated_at = datetime.fromisoformat(stale_sector_source["generated_at"].replace("Z", "+00:00"))
@@ -90,7 +108,7 @@ def main() -> int:
     stale_sector_source["sectors"]["RWA"]["source_observations"]["CoinGecko"]["as_of"] = stale_time
     expect_verifier_failure("stale-sector-source", stale_sector_source, "sector RWA")
 
-    print("market evidence mutation tests: PASS (11/11)")
+    print("market evidence mutation tests: PASS (12/12)")
     return 0
 
 

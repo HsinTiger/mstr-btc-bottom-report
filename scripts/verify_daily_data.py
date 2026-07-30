@@ -359,6 +359,23 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
         errors.append("expected fund roster count mismatch")
     component_count = sum(ticker in numeric_components for ticker in expected_tickers)
     completeness = component_count / expected_count if expected_count else None
+    roster_completion = inputs.get("roster_completion") if isinstance(inputs.get("roster_completion"), dict) else {}
+    roster_providers: set[str] = set()
+    for ticker, confirmation in roster_completion.items():
+        if ticker not in expected_tickers or not isinstance(confirmation, dict):
+            errors.append(f"roster completion {ticker} is not governed")
+            continue
+        completed_value = as_float(confirmation.get("value_usd"))
+        peer_values = confirmation.get("providers") if isinstance(confirmation.get("providers"), dict) else {}
+        if completed_value is None or numeric_components.get(ticker) != completed_value or not peer_values:
+            errors.append(f"roster completion {ticker} is not reconstructable")
+            continue
+        for provider, raw_value in peer_values.items():
+            peer_value = as_float(raw_value)
+            if peer_value is None or abs(peer_value - completed_value) > ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD:
+                errors.append(f"roster completion {ticker} peer confirmation diverges")
+            else:
+                roster_providers.add(str(provider))
 
     official_ticker = str(inputs.get("official_ticker") or "")
     official_component = numeric_components.get(official_ticker)
@@ -412,7 +429,9 @@ def recompute_etf_validation(inputs: dict[str, Any], asset: str | None = None) -
         amount_sanity_errors.append("official major-fund proxy missing or exceeds sanity bound")
     if any((value := as_float(raw_value)) is None or abs(value) > ETF_MAX_ABS_DAILY_FUND_FLOW_USD for raw_value in backup_values.values()):
         amount_sanity_errors.append("backup sample amount missing or exceeds sanity bound")
-    source_count = 1 + int(official_proxy is not None) + int(bool(backup.get("provider") and component_gaps and same_date))
+    base_providers = {str(inputs.get("canonical_provider") or ""), str(backup.get("provider") or "")}
+    extra_roster_providers = {provider for provider in roster_providers if provider not in base_providers}
+    source_count = 1 + int(official_proxy is not None) + int(bool(backup.get("provider") and component_gaps and same_date)) + len(extra_roster_providers)
     return {
         "errors": errors,
         "canonical_component_sum_usd": component_total,

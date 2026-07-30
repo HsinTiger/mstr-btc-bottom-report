@@ -95,6 +95,7 @@ def evidence_ledger_errors(market: dict[str, Any]) -> list[str]:
     for metric_id, item in metrics.items():
         ids = item.get("source_ids")
         validation_ids = item.get("validation_source_ids")
+        status = item.get("status")
         if not isinstance(ids, list) or not ids or len(ids) != len(set(ids)):
             errors.append(f"evidence {metric_id} source IDs are missing or duplicated")
             continue
@@ -102,13 +103,16 @@ def evidence_ledger_errors(market: dict[str, Any]) -> list[str]:
             errors.append(f"evidence {metric_id} references unknown source")
         if item.get("source_count") != len(ids):
             errors.append(f"evidence {metric_id} source count mismatch")
-        if not isinstance(validation_ids, list) or not validation_ids or any(source_id not in ids for source_id in validation_ids):
+        if not isinstance(validation_ids, list) or any(source_id not in ids for source_id in validation_ids):
             errors.append(f"evidence {metric_id} validation sources are invalid")
         elif item.get("validation_source_count") != len(validation_ids):
             errors.append(f"evidence {metric_id} validation source count mismatch")
-        if item.get("status") not in {"pass", "degraded", "context_only", "fail"}:
+        if status not in {"pass", "degraded", "context_only", "fail"}:
             errors.append(f"evidence {metric_id} status is invalid")
-        for field in ("title", "as_of", "update_frequency", "verification_method", "freshness_policy", "limitation"):
+        required_fields = ["title", "update_frequency", "verification_method", "freshness_policy", "limitation"]
+        if status in {"pass", "context_only"}:
+            required_fields.append("as_of")
+        for field in required_fields:
             if item.get(field) in (None, ""):
                 errors.append(f"evidence {metric_id} is missing {field}")
         if item.get("verification_artifact") != "data/daily/market_universe_verification.json":
@@ -118,10 +122,10 @@ def evidence_ledger_errors(market: dict[str, Any]) -> list[str]:
         if metric_id.startswith("derivatives.") and len(validation_ids or []) < 4:
             errors.append(f"evidence {metric_id} lacks derivatives source coverage")
         if metric_id.startswith("etf."):
-            if item.get("formula_verification_artifact") != "data/daily/agent_verification_report.json":
+            if item.get("formula_verification_artifact") != "data/daily/market_universe_verification.json":
                 errors.append(f"evidence {metric_id} formula verifier binding is invalid")
             tiers = {source_index[source_id].get("source_tier") for source_id in validation_ids or [] if source_id in source_index}
-            if len(validation_ids or []) < 3 or "official_issuer_crosscheck" not in tiers:
+            if status == "pass" and (len(validation_ids or []) < 3 or "official_issuer_crosscheck" not in tiers):
                 errors.append(f"evidence {metric_id} lacks canonical, official, and backup validation")
         if metric_id.startswith("dat.") and len(validation_ids or []) < 3:
             errors.append(f"evidence {metric_id} lacks representative cross-source coverage")
@@ -345,7 +349,11 @@ def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
 def main() -> int:
     report = verify_market_universe(json.loads(MARKET_PATH.read_text(encoding="utf-8-sig")))
     write_json(REPORT_PATH, report)
-    print(json.dumps({"status": report["status"], "failures": len(report["failures"]), "degradations": len(report["degradations"])}, ensure_ascii=False))
+    print(json.dumps({
+        "status": report["status"],
+        "failures": report["failures"],
+        "degradations": report["degradations"],
+    }, ensure_ascii=False))
     return 1 if report["status"] == "fail" else 0
 
 

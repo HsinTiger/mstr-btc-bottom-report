@@ -15,10 +15,22 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from build_deployment_manifest import CRITICAL_ARTIFACTS, MARKET_EVIDENCE_ARTIFACTS, TIMESCALE_ARTIFACTS
+    from build_deployment_manifest import (
+        CRITICAL_ARTIFACTS,
+        DAILY_EVIDENCE_ARTIFACTS,
+        HOURLY_EVIDENCE_ARTIFACTS,
+        MARKET_EVIDENCE_ARTIFACTS,
+        TIMESCALE_ARTIFACTS,
+    )
     from verify_market_universe import evidence_ledger_errors
 except ModuleNotFoundError:
-    from scripts.build_deployment_manifest import CRITICAL_ARTIFACTS, MARKET_EVIDENCE_ARTIFACTS, TIMESCALE_ARTIFACTS
+    from scripts.build_deployment_manifest import (
+        CRITICAL_ARTIFACTS,
+        DAILY_EVIDENCE_ARTIFACTS,
+        HOURLY_EVIDENCE_ARTIFACTS,
+        MARKET_EVIDENCE_ARTIFACTS,
+        TIMESCALE_ARTIFACTS,
+    )
     from scripts.verify_market_universe import evidence_ledger_errors
 
 PAGES = {
@@ -107,7 +119,13 @@ def validate_timescale_artifacts(manifest: dict[str, Any], artifact_bytes: dict[
         raise RuntimeError("production timescale history binding mismatch")
 
 
-def validate_market_evidence_artifacts(manifest: dict[str, Any], artifact_bytes: dict[str, bytes]) -> None:
+def validate_market_evidence_artifacts(
+    manifest: dict[str, Any],
+    artifact_bytes: dict[str, bytes],
+    *,
+    now: datetime | None = None,
+) -> None:
+    reference_now = now or datetime.now(timezone.utc)
     manifest_artifacts = manifest.get("artifacts", {})
     for path in MARKET_EVIDENCE_ARTIFACTS:
         record = manifest_artifacts.get(path, {})
@@ -120,16 +138,26 @@ def validate_market_evidence_artifacts(manifest: dict[str, Any], artifact_bytes:
     verification = json.loads(artifact_bytes["data/daily/market_universe_verification.json"].decode("utf-8"))
     try:
         daily_verified_at = datetime.fromisoformat(str(daily_verification.get("verified_at")).replace("Z", "+00:00"))
+        snapshot_generated_at = datetime.fromisoformat(str(snapshot.get("generated_at")).replace("Z", "+00:00"))
         market_generated_at = datetime.fromisoformat(str(market.get("generated_at")).replace("Z", "+00:00"))
+        market_verified_at = datetime.fromisoformat(str(verification.get("verified_at")).replace("Z", "+00:00"))
         if daily_verified_at.tzinfo is None:
             daily_verified_at = daily_verified_at.replace(tzinfo=timezone.utc)
+        if snapshot_generated_at.tzinfo is None:
+            snapshot_generated_at = snapshot_generated_at.replace(tzinfo=timezone.utc)
         if market_generated_at.tzinfo is None:
             market_generated_at = market_generated_at.replace(tzinfo=timezone.utc)
-        verifier_lag_hours = (daily_verified_at - market_generated_at).total_seconds() / 3600
-        verifier_age_hours = (datetime.now(timezone.utc) - daily_verified_at).total_seconds() / 3600
+        if market_verified_at.tzinfo is None:
+            market_verified_at = market_verified_at.replace(tzinfo=timezone.utc)
+        daily_verifier_lag_hours = (daily_verified_at - snapshot_generated_at).total_seconds() / 3600
+        daily_verifier_age_hours = (reference_now - daily_verified_at).total_seconds() / 3600
+        market_verifier_lag_hours = (market_verified_at - market_generated_at).total_seconds() / 3600
+        market_age_hours = (reference_now - market_generated_at).total_seconds() / 3600
     except (TypeError, ValueError):
-        verifier_lag_hours = None
-        verifier_age_hours = None
+        daily_verifier_lag_hours = None
+        daily_verifier_age_hours = None
+        market_verifier_lag_hours = None
+        market_age_hours = None
     if verification.get("status") not in {"pass", "degraded"} or verification.get("failures"):
         raise RuntimeError("production market evidence verifier failed")
     if verification.get("market_generated_at") != market.get("generated_at") or verification.get("market_date") != market.get("date"):
@@ -142,15 +170,23 @@ def validate_market_evidence_artifacts(manifest: dict[str, Any], artifact_bytes:
         or daily_verification.get("date") != snapshot.get("date")
         or daily_verification.get("snapshot_generated_at") != snapshot.get("generated_at")
         or daily_verification.get("batch_id") != snapshot.get("batch_id")
-        or daily_verification.get("market_universe_generated_at") != market.get("generated_at")
-        or verifier_lag_hours is None
-        or verifier_age_hours is None
-        or verifier_lag_hours < 0
-        or verifier_lag_hours > 1
-        or verifier_age_hours < -0.25
-        or verifier_age_hours > 30
+        or daily_verifier_lag_hours is None
+        or daily_verifier_age_hours is None
+        or daily_verifier_lag_hours < 0
+        or daily_verifier_lag_hours > 1
+        or daily_verifier_age_hours < -0.25
+        or daily_verifier_age_hours > 30
     ):
         raise RuntimeError("production daily independent verifier binding failed")
+    if (
+        market_verifier_lag_hours is None
+        or market_age_hours is None
+        or market_verifier_lag_hours < 0
+        or market_verifier_lag_hours > 1
+        or market_age_hours < -0.25
+        or market_age_hours > 3
+    ):
+        raise RuntimeError("production hourly market verifier freshness failed")
     errors = evidence_ledger_errors(market)
     if errors:
         raise RuntimeError(f"production evidence ledger failed: {errors[0]}")

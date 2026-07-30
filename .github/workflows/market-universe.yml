@@ -2,7 +2,7 @@ name: Hourly cross-asset market universe
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17,47 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -31,6 +31,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test workflow cadence contracts
+        run: python scripts/test_workflow_cadence.py
+
       - name: Test source failover contracts
         run: python scripts/test_source_failover.py
 
@@ -38,16 +41,23 @@ jobs:
         run: python scripts/collect_market_universe.py
 
       - name: Verify current market artifact
-        continue-on-error: true
         run: |
           rm -f data/daily/market_universe_verification.json
           python scripts/verify_market_universe.py
 
+      - name: Upload failed market verification diagnostics
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hourly-market-verification-${{ github.run_id }}
+          path: |
+            data/daily/market_universe.json
+            data/daily/market_universe_verification.json
+          if-no-files-found: ignore
+          retention-days: 7
+
       - name: Prove evidence ledger fails closed
         run: python scripts/test_market_evidence_mutations.py
-
-      - name: Recompute daily independent verification against current market batch
-        run: python scripts/verify_daily_data.py
 
       - name: Bind verifier to current market artifact
         run: |
@@ -124,7 +134,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily/agent_verification_report.json data/daily/market_universe.json data/daily/market_universe_history.json data/daily/market_universe_verification.json data/daily/site_health.json
+          git add data/daily/market_universe.json data/daily/market_universe_history.json data/daily/market_universe_verification.json data/daily/site_health.json
           if git diff --cached --quiet; then
             echo "No market-universe changes to commit."
           else

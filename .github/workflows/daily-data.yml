@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test workflow cadence contracts
+        run: python scripts/test_workflow_cadence.py
+
       - name: Test source failover contracts
         run: python scripts/test_source_failover.py
 
@@ -44,6 +47,17 @@ jobs:
 
       - name: Independently verify current market universe
         run: python scripts/verify_market_universe.py
+
+      - name: Upload failed market verification diagnostics
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: daily-market-verification-${{ github.run_id }}
+          path: |
+            data/daily/market_universe.json
+            data/daily/market_universe_verification.json
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Prove market evidence ledger fails closed
         run: python scripts/test_market_evidence_mutations.py

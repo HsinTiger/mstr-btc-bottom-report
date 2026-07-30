@@ -31,6 +31,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test workflow cadence contracts
+        run: python scripts/test_workflow_cadence.py
+
       - name: Install pinned browser smoke dependency
         run: python -m pip install -r requirements-smoke.txt
 
@@ -45,9 +48,6 @@ jobs:
 
       - name: Prove market evidence ledger fails closed
         run: python scripts/test_market_evidence_mutations.py
-
-      - name: Recompute daily independent verification against current market batch
-        run: python scripts/verify_daily_data.py
 
       - name: Collect macro, policy, equity, and on-chain context
         run: python scripts/collect_market_context.py
@@ -72,10 +72,18 @@ jobs:
                   parsed = parsed.replace(tzinfo=timezone.utc)
               return (datetime.now(timezone.utc) - parsed).total_seconds() / 3600
           snapshot = load("latest_snapshot.json")
+          daily_verification = load("agent_verification_report.json")
           timescale = load("timescale_intelligence.json")
           timescale_verification = load("timescale_intelligence_verification.json")
-          if age_hours(snapshot["generated_at"]) > 36 or age_hours(timescale["generated_at"]) > 36:
-              raise SystemExit("Daily snapshot or timescale analysis is older than 36 hours")
+          if age_hours(snapshot["generated_at"]) > 36 or age_hours(daily_verification["verified_at"]) > 36 or age_hours(timescale["generated_at"]) > 36:
+              raise SystemExit("Daily snapshot, verifier, or timescale analysis is older than 36 hours")
+          if (
+              daily_verification.get("status") not in {"pass", "degraded"}
+              or daily_verification.get("failures")
+              or daily_verification.get("snapshot_generated_at") != snapshot.get("generated_at")
+              or daily_verification.get("batch_id") != snapshot.get("batch_id")
+          ):
+              raise SystemExit("Daily verifier is not bound to the current daily snapshot")
           if timescale_verification.get("analysis_generated_at") != timescale.get("generated_at") or timescale_verification.get("status") != "pass":
               raise SystemExit("Timescale analysis is not bound to a passing verifier")
           print(f"Daily research inputs current: snapshot={snapshot['generated_at']} timescale={timescale['generated_at']}")
@@ -109,7 +117,6 @@ jobs:
             data/daily/market_universe.json \
             data/daily/market_universe_history.json \
             data/daily/market_universe_verification.json \
-            data/daily/agent_verification_report.json \
             data/daily/market_context.json \
             data/daily/market_context_verification.json \
             data/daily/market_editorial.json \

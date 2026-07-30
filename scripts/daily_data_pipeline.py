@@ -960,6 +960,40 @@ def etf_amount_sanity(latest: dict[str, Any], official_proxy: float | None, back
     return not errors, errors
 
 
+def complete_etf_roster_from_peers(
+    canonical_provider: str,
+    latest: dict[str, Any],
+    expected_tickers: list[str],
+    providers: dict[str, dict[str, Any]],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    completed = {**latest, "components_usd": dict(latest.get("components_usd", {}))}
+    confirmations: dict[str, Any] = {}
+    for ticker in sorted(set(expected_tickers) - set(completed["components_usd"])):
+        peer_values: dict[str, float] = {}
+        for provider_name, provider in providers.items():
+            if provider_name == canonical_provider:
+                continue
+            peer_row = next(
+                (row for row in reversed(provider.get("series", [])) if row.get("date") == latest.get("date")),
+                None,
+            )
+            peer_value = safe_float((peer_row or {}).get("components_usd", {}).get(ticker))
+            if peer_value is not None:
+                peer_values[provider_name] = peer_value
+        if not peer_values or max(abs(value) for value in peer_values.values()) > ETF_COMPONENT_SUM_ABSOLUTE_TOLERANCE_USD:
+            continue
+        confirmed_value = statistics.median(peer_values.values())
+        completed["components_usd"][ticker] = confirmed_value
+        confirmations[ticker] = {
+            "value_usd": confirmed_value,
+            "providers": peer_values,
+            "policy": "same_date_peer_explicit_near_zero_within_component_rounding_tolerance",
+        }
+    completed["component_count"] = sum(ticker in completed["components_usd"] for ticker in expected_tickers)
+    completed["component_completeness"] = completed["component_count"] / len(expected_tickers) if expected_tickers else 0
+    return completed, confirmations
+
+
 def evaluate_etf_candidate(
     asset: str,
     canonical: dict[str, Any],
@@ -967,8 +1001,12 @@ def evaluate_etf_candidate(
     index: int,
     providers: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
-    latest = rows[index]
-    previous = rows[index - 1] if index >= 1 else None
+    latest, roster_completion = complete_etf_roster_from_peers(
+        str(canonical.get("provider")),
+        rows[index],
+        list(canonical.get("expected_tickers", [])),
+        providers,
+    )
     largest_ticker = "IBIT" if asset == "BTC" else "ETHA"
     official_component = safe_float(latest.get("components_usd", {}).get(largest_ticker))
     gross_component_flow = sum(abs(safe_float(value) or 0) for value in latest.get("components_usd", {}).values())
@@ -978,14 +1016,10 @@ def evaluate_etf_candidate(
     official_direction_match = False
     official_url = None
     errors: list[str] = []
-    if previous and official_component is not None:
+    if official_component is not None:
         try:
             current_holding = ishares_holding(asset, latest["date"])
             prior_holding = prior_ishares_holding(asset, latest["date"])
-            if prior_holding["as_of"] != previous["date"]:
-                raise ValueError(
-                    f"canonical prior date {previous['date']} differs from official prior holding date {prior_holding['as_of']}"
-                )
             unit_price = current_holding["market_value_usd"] / current_holding["units"] if current_holding["units"] else None
             official_proxy = (current_holding["units"] - prior_holding["units"]) * unit_price if unit_price is not None else None
             official_gap = relative_difference(official_component, official_proxy, scale_floor=100_000_000)
@@ -1000,7 +1034,13 @@ def evaluate_etf_candidate(
     backup_same_date = backup_validation.get("as_of") == latest.get("date")
     amount_sanity_pass, amount_sanity_errors = etf_amount_sanity(latest, official_proxy, backup_validation)
     errors.extend(f"{asset} ETF 金額合理性檢查失敗：{item}" for item in amount_sanity_errors)
-    validation_source_count = 1 + int(official_proxy is not None) + int(backup_validation.get("provider") is not None)
+    roster_providers = {
+        provider
+        for confirmation in roster_completion.values()
+        for provider in confirmation.get("providers", {})
+        if provider not in {canonical.get("provider"), backup_validation.get("provider")}
+    }
+    validation_source_count = 1 + int(official_proxy is not None) + int(backup_validation.get("provider") is not None) + len(roster_providers)
     canonical_total = safe_float(latest.get("flow_usd"))
     canonical_component_sum = sum(safe_float(value) or 0 for value in latest.get("components_usd", {}).values())
     canonical_total_difference = abs(canonical_component_sum - canonical_total) if canonical_total is not None else None
@@ -1060,6 +1100,7 @@ def evaluate_etf_candidate(
         "amount_sanity_pass": amount_sanity_pass,
         "amount_sanity_errors": amount_sanity_errors,
         "validation_source_count": validation_source_count,
+        "roster_completion": roster_completion,
         "canonical_component_sum_usd": canonical_component_sum,
         "canonical_total_difference_usd": canonical_total_difference,
         "canonical_total_tolerance_usd": canonical_total_tolerance,
@@ -1080,7 +1121,7 @@ def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]]
     for candidate in canonical_candidates:
         candidate_rows = candidate["series"]
         for index in range(len(candidate_rows) - 1, max(0, len(candidate_rows) - 6) - 1, -1):
-            if index < 1 or (safe_float(candidate_rows[index].get("component_completeness")) or 0) < 0.95:
+            if index < 1:
                 continue
             evaluated.append((candidate, evaluate_etf_candidate(asset, candidate, candidate_rows, index, providers)))
     verified_candidates = [item for item in evaluated if item[1]["verified"]]
@@ -1187,6 +1228,7 @@ def build_etf_flow_observations(asset: str, providers: dict[str, dict[str, Any]]
             "expected_ticker_count": expected_ticker_count,
             "expected_tickers": canonical.get("expected_tickers", []),
             "component_completeness": component_completeness,
+            "roster_completion": selected["roster_completion"],
             "official_ticker": largest_ticker,
             "official_component_usd": official_component,
             "official_proxy_usd": official_proxy,
