@@ -1,19 +1,18 @@
 {
   "schema": 1,
-  "generated_at": "2026-07-30T17:10:35+00:00",
+  "generated_at": "2026-07-30T18:50:21+00:00",
   "status": "degraded",
   "summary": {
     "active_pages": 5,
     "archive_pages": 0,
-    "pass": 3,
-    "degraded": 2,
+    "pass": 4,
+    "degraded": 1,
     "fail": 0,
     "critical_failures": [],
     "critical_surface_failures": [],
     "critical_data_failures": [],
     "degraded_pages": [
       "market-editorial",
-      "market-radar",
       "timescale-intelligence-ledger"
     ],
     "data_products": 2,
@@ -42,7 +41,7 @@
           "status": "degraded",
           "bytes": 41724,
           "as_of": "2026-07-30T04:07:27+00:00",
-          "age_hours": 13.05,
+          "age_hours": 14.72,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -52,7 +51,7 @@
           "status": "pass",
           "bytes": 14128,
           "as_of": "2026-07-30T04:07:29+00:00",
-          "age_hours": 13.05,
+          "age_hours": 14.71,
           "quality": "pass"
         }
       ],
@@ -120,35 +119,33 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 144175,
-          "as_of": "2026-07-30T17:10:35+00:00",
+          "status": "pass",
+          "bytes": 144404,
+          "as_of": "2026-07-30T18:50:21+00:00",
           "age_hours": 0.0,
-          "quality": "degraded",
-          "reason": "資料品質狀態為 degraded"
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 531,
-          "as_of": "2026-07-30T17:10:35+00:00",
+          "status": "pass",
+          "bytes": 318,
+          "as_of": "2026-07-30T18:50:21+00:00",
           "age_hours": 0.0,
-          "quality": "degraded",
-          "reason": "資料品質狀態為 degraded"
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 44833,
-          "as_of": "2026-07-30T17:10:35+00:00",
+          "bytes": 44862,
+          "as_of": "2026-07-30T18:50:21+00:00",
           "age_hours": 0.0
         }
       ],
-      "status": "degraded",
+      "status": "pass",
       "surface_status": "pass",
-      "data_status": "degraded",
+      "data_status": "pass",
       "checks": [
         {
           "name": "page_exists",
@@ -213,7 +210,7 @@
           "status": "pass",
           "bytes": 52320,
           "as_of": "2026-07-30T03:44:26+00:00",
-          "age_hours": 13.44,
+          "age_hours": 15.1,
           "quality": "pass"
         },
         {
@@ -222,7 +219,7 @@
           "status": "pass",
           "bytes": 900,
           "as_of": "2026-07-30T03:44:30+00:00",
-          "age_hours": 13.43,
+          "age_hours": 15.1,
           "quality": "pass"
         }
       ],
@@ -440,7 +437,7 @@
           "bytes": 1364795,
           "lineage": "2026-07-30T04:03:55+00:00",
           "as_of": "2026-07-30T04:04:49+00:00",
-          "age_hours": 13.1,
+          "age_hours": 14.76,
           "quality": "pass"
         },
         {
@@ -450,7 +447,7 @@
           "bytes": 7973,
           "lineage": "2026-07-30T04:03:55+00:00",
           "as_of": "2026-07-30T04:04:54+00:00",
-          "age_hours": 13.09,
+          "age_hours": 14.76,
           "quality": "pass"
         }
       ],
@@ -503,7 +500,7 @@
           "bytes": 35952,
           "lineage": "2026-07-30T04:03:55+00:00",
           "as_of": "2026-07-30T04:07:25+00:00",
-          "age_hours": 13.05,
+          "age_hours": 14.72,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -513,7 +510,7 @@
           "status": "pass",
           "bytes": 72157,
           "as_of": "2026-07-30T04:07:25+00:00",
-          "age_hours": 13.05
+          "age_hours": 14.72
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
@@ -522,7 +519,7 @@
           "bytes": 3526,
           "lineage": "2026-07-30T04:03:55+00:00",
           "as_of": "2026-07-30T04:07:26+00:00",
-          "age_hours": 13.05,
+          "age_hours": 14.72,
           "quality": "pass"
         }
       ],
