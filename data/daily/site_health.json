@@ -1,17 +1,19 @@
 {
   "schema": 1,
-  "generated_at": "2026-08-02T16:39:30+00:00",
-  "status": "pass",
+  "generated_at": "2026-08-02T17:46:23+00:00",
+  "status": "degraded",
   "summary": {
     "active_pages": 5,
     "archive_pages": 0,
-    "pass": 5,
-    "degraded": 0,
+    "pass": 4,
+    "degraded": 1,
     "fail": 0,
     "critical_failures": [],
     "critical_surface_failures": [],
     "critical_data_failures": [],
-    "degraded_pages": [],
+    "degraded_pages": [
+      "market-radar"
+    ],
     "data_products": 2,
     "data_product_pass": 2,
     "data_product_degraded": 0,
@@ -38,7 +40,7 @@
           "status": "pass",
           "bytes": 41588,
           "as_of": "2026-08-02T04:16:59+00:00",
-          "age_hours": 12.38,
+          "age_hours": 13.49,
           "quality": "pass"
         },
         {
@@ -47,7 +49,7 @@
           "status": "pass",
           "bytes": 14124,
           "as_of": "2026-08-02T04:16:59+00:00",
-          "age_hours": 12.38,
+          "age_hours": 13.49,
           "quality": "pass"
         }
       ],
@@ -115,33 +117,35 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "pass",
-          "bytes": 144436,
-          "as_of": "2026-08-02T16:39:30+00:00",
+          "status": "degraded",
+          "bytes": 144411,
+          "as_of": "2026-08-02T17:46:23+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "pass",
-          "bytes": 318,
-          "as_of": "2026-08-02T16:39:30+00:00",
+          "status": "degraded",
+          "bytes": 595,
+          "as_of": "2026-08-02T17:46:23+00:00",
           "age_hours": 0.0,
-          "quality": "pass"
+          "quality": "degraded",
+          "reason": "資料品質狀態為 degraded"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 55120,
-          "as_of": "2026-08-02T16:39:30+00:00",
+          "bytes": 55101,
+          "as_of": "2026-08-02T17:46:23+00:00",
           "age_hours": 0.0
         }
       ],
-      "status": "pass",
+      "status": "degraded",
       "surface_status": "pass",
-      "data_status": "pass",
+      "data_status": "degraded",
       "checks": [
         {
           "name": "page_exists",
@@ -206,7 +210,7 @@
           "status": "pass",
           "bytes": 45582,
           "as_of": "2026-08-02T04:07:35+00:00",
-          "age_hours": 12.53,
+          "age_hours": 13.65,
           "quality": "pass"
         },
         {
@@ -215,7 +219,7 @@
           "status": "pass",
           "bytes": 900,
           "as_of": "2026-08-02T04:07:38+00:00",
-          "age_hours": 12.53,
+          "age_hours": 13.65,
           "quality": "pass"
         }
       ],
@@ -433,7 +437,7 @@
           "bytes": 1366717,
           "lineage": "2026-08-02T02:50:26+00:00",
           "as_of": "2026-08-02T02:50:44+00:00",
-          "age_hours": 13.81,
+          "age_hours": 14.93,
           "quality": "pass"
         },
         {
@@ -443,7 +447,7 @@
           "bytes": 7974,
           "lineage": "2026-08-02T02:50:26+00:00",
           "as_of": "2026-08-02T02:50:46+00:00",
-          "age_hours": 13.81,
+          "age_hours": 14.93,
           "quality": "pass"
         }
       ],
@@ -496,7 +500,7 @@
           "bytes": 35719,
           "lineage": "2026-08-02T02:50:26+00:00",
           "as_of": "2026-08-02T02:50:46+00:00",
-          "age_hours": 13.81,
+          "age_hours": 14.93,
           "quality": "pass"
         },
         {
@@ -505,7 +509,7 @@
           "status": "pass",
           "bytes": 74783,
           "as_of": "2026-08-02T02:50:46+00:00",
-          "age_hours": 13.81
+          "age_hours": 14.93
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
@@ -514,7 +518,7 @@
           "bytes": 3540,
           "lineage": "2026-08-02T02:50:26+00:00",
           "as_of": "2026-08-02T02:50:46+00:00",
-          "age_hours": 13.81,
+          "age_hours": 14.93,
           "quality": "pass"
         }
       ],
