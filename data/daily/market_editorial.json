@@ -1,50 +1,46 @@
 {
   "schema": 1,
-  "date": "2026-07-30",
-  "generated_at": "2026-07-30T04:07:27+00:00",
+  "date": "2026-08-02",
+  "generated_at": "2026-08-02T02:50:46+00:00",
   "quality": {
-    "status": "degraded",
+    "status": "pass",
     "publication_mode": "analysis_only",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [
-      "market_universe=degraded",
-      "market_universe_verifier=degraded",
-      "timescale=degraded"
-    ],
+    "degradations": [],
     "upstream_statuses": {
       "market_context": "pass",
       "market_context_verifier": "pass",
-      "market_universe": "degraded",
-      "market_universe_verifier": "degraded",
-      "timescale": "degraded",
+      "market_universe": "pass",
+      "market_universe_verifier": "pass",
+      "timescale": "pass",
       "timescale_verifier": "pass"
     }
   },
   "lineage": {
-    "market_context_generated_at": "2026-07-30T04:04:27+00:00",
-    "market_context_hash": "e5856eeea9a61652f1a2a612d1b33b5ee019b02c64e81c86dbbd8dc83a898e71",
-    "market_universe_generated_at": "2026-07-30T04:07:18+00:00",
-    "market_universe_hash": "6c1851942cac050a462934589db17acb5d29d2764a02cc55c10734ff2c002f6f",
-    "timescale_generated_at": "2026-07-30T04:07:25+00:00",
-    "timescale_hash": "8d8279362eb7063c9e422daac462e41c68501ee091b0fc769c7da8e0ddd028a5",
-    "snapshot_generated_at": "2026-07-30T04:03:55+00:00",
-    "snapshot_hash": "7c461db513bf0354267d98bffba40b0a8484dd7fd64a50731349962168a118cb",
-    "knowledge_context_generated_at": "2026-07-30T04:04:56+00:00",
-    "knowledge_context_hash": "8026e988d1b8e6846cbefc0117b74ef6d908d775a507e51a14c280c10e3f2c75"
+    "market_context_generated_at": "2026-08-02T02:50:32+00:00",
+    "market_context_hash": "5a1d001687040e62b62c3c6f806a9c2cbba318da292a9860d735683376afe1b3",
+    "market_universe_generated_at": "2026-08-02T02:50:31+00:00",
+    "market_universe_hash": "988a522262c956dbe06f6fda860110e0e58f31e17bc13e2b4442533ab4eb2818",
+    "timescale_generated_at": "2026-08-02T02:50:46+00:00",
+    "timescale_hash": "a6ae1d9e6f92050e334f38dcc40ae067e3537302fdd6528379dc8d14583d9563",
+    "snapshot_generated_at": "2026-08-02T02:50:26+00:00",
+    "snapshot_hash": "2add6079f218a08947df6e0c003c31bea7f9782a25c3f519ca6983b88a342db0",
+    "knowledge_context_generated_at": "2026-08-02T02:50:46+00:00",
+    "knowledge_context_hash": "8db97262a1707d5af4288ed27195b3c82c138a6f02ecb11fbb8469bb51252cb1"
   },
   "editorial_digest": {
-    "status": "degraded",
-    "lead_desk_id": "liquidity-fed-oil",
-    "lead_headline": "M2、銀行準備金與 Fed 淨流動性仍在分歧",
-    "lead_conclusion": "Fed 淨流動性 30 日 -1.0%、銀行準備金 30 日 +0.9%、M2 年增 +5.5%；三票判定為「不同頻率分歧」。",
-    "dominant_tension": "本站把 M2 當慢速背景、銀行準備金當金融體系脈衝、Fed 淨流動性當政策資產負債表脈衝；三者先投票，再看美元與油價是否抵銷。",
-    "falsifier": "若 M2、銀行準備金與 Fed 淨流動性轉為兩票以上反向，且美元同步確認，當前流動性假說失效。",
+    "status": "pass",
+    "lead_desk_id": "credit-bonds",
+    "lead_headline": "信用利差尚穩，但長端利率仍是估值壓力",
+    "lead_conclusion": "高收益債利差 2.84%、30 日 +0.09 個百分點；10 年殖利率 4.75%、2s10s +0.47 個百分點。",
+    "dominant_tension": "本站把信用風險與無風險利率拆開：利差平穩只能說違約風險未惡化，不能抵銷高長端利率對估值的壓力。",
+    "falsifier": "若 10 年殖利率回落、利差保持穩定且曲線由政策端帶動轉陡，『長端估值壓力』假說失效。",
     "desk_count": 8,
     "resonance_summary": {
-      "positive": 0,
+      "positive": 2,
       "negative": 0,
-      "mixed": 1,
+      "mixed": 0,
       "known": 8
     },
     "source_health": {
@@ -60,8 +56,8 @@
       "title": "BTC／ETH 核心市場",
       "status": "pass",
       "confidence": "高",
-      "headline": "現貨動能與月線方向同步改善",
-      "conclusion": "BTC 24 小時 +0.7%、ETH +1.0%；月線 BTC +0.9%。先把短線去風險與中期結構分開。",
+      "headline": "BTC 與 ETH 的短中期訊號仍在分化",
+      "conclusion": "BTC 24 小時 +0.6%、ETH +0.4%；月線 BTC -2.0%。先把短線去風險與中期結構分開。",
       "common_interpretation": "市場常把單日大跌直接解讀為趨勢反轉，或把單日反彈直接解讀為底部確認。",
       "variant_view": "本站更在意價格方向是否與槓桿成本、ETH 相對強弱及月線窗口同向；若資金費率沒有同步過熱，跌幅可能主要是去槓桿，而非長期論點瞬間消失。",
       "second_order_effect": "若 ETH 持續弱於 BTC，資金通常先收縮至流動性最深的資產；反之 ETH 轉強才較像風險偏好擴散。",
@@ -79,12 +75,12 @@
         {
           "metric_id": "btc-24h-return",
           "full_name": "比特幣 24 小時報酬",
-          "value": 0.007178168589001954,
-          "display": "+0.7%",
+          "value": 0.005590844081094115,
+          "display": "+0.6%",
           "change": "相較昨日報價",
-          "as_of": "2026-07-30T04:07:10.006000+00:00",
+          "as_of": "2026-08-02T02:50:26.174556881Z",
           "direction": "neutral",
-          "source_count": 5,
+          "source_count": 4,
           "sources": [
             {
               "label": "CoinGecko／OKX／Coinbase／Kraken",
@@ -97,12 +93,12 @@
         {
           "metric_id": "eth-24h-return",
           "full_name": "以太幣 24 小時報酬",
-          "value": 0.009990883379764944,
-          "display": "+1.0%",
+          "value": 0.0036972236044452433,
+          "display": "+0.4%",
           "change": "相較昨日報價",
-          "as_of": "2026-07-30T04:07:11+00:00",
+          "as_of": "2026-08-02T02:50:26.671000+00:00",
           "direction": "neutral",
-          "source_count": 5,
+          "source_count": 4,
           "sources": [
             {
               "label": "CoinGecko／OKX／Coinbase／Kraken",
@@ -115,10 +111,10 @@
         {
           "metric_id": "btc-monthly-return",
           "full_name": "比特幣月線等長窗口報酬",
-          "value": 0.00906781004574575,
-          "display": "+0.9%",
-          "change": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
-          "as_of": "2026-07-28",
+          "value": -0.020481102360861758,
+          "display": "-2.0%",
+          "change": "同週期 BTC 報酬較前一觀察日變化 -3.0 個百分點。",
+          "as_of": "2026-07-31",
           "direction": "neutral",
           "source_count": 3,
           "sources": [
@@ -133,12 +129,12 @@
         {
           "metric_id": "btc-funding",
           "full_name": "比特幣永續合約年化資金費率中位數",
-          "value": 0.10950000000000001,
-          "display": "+11.0%",
+          "value": 0.05690303132996251,
+          "display": "+5.7%",
           "change": "跨可觀測交易所",
-          "as_of": "2026-07-30T04:06:10.733000+00:00",
+          "as_of": "2026-08-02T02:50:24.521000+00:00",
           "direction": "neutral",
-          "source_count": 4,
+          "source_count": 2,
           "sources": [
             {
               "label": "OKX／Hyperliquid",
@@ -167,10 +163,10 @@
           "url": "wiki.html#five-dimension-model"
         }
       ],
-      "materiality_score": 0.463,
+      "materiality_score": 1.156,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "2cb8bdfb018b038ee1650aadcc34db82b594a94a35bbc3d208c0f8a6b7d0f197"
+      "what_changed": "狀態仍為「尚未形成共振」，但核心矛盾改為：BTC 與 ETH 的短中期訊號仍在分化。",
+      "brief_hash": "6e47d964fbef21dce86f68fef55c5ae28d2dbb897f822b2667a7a230fa2ecd51"
     },
     {
       "id": "institutional-flows",
@@ -178,7 +174,7 @@
       "status": "pass",
       "confidence": "高",
       "headline": "ETF 與財庫需求暫未形成一致增量",
-      "conclusion": "BTC 與 ETH ETF 七日合計 −$419M；MSTR、BMNR 的官方持幣變化分別為 0 BTC 與 0 ETH。",
+      "conclusion": "BTC 與 ETH ETF 七日合計 −$112M；MSTR、BMNR 的官方持幣變化分別為 0 BTC 與 0 ETH。",
       "common_interpretation": "常見解讀是 ETF 流入與公司增持等於價格下檔有保證。",
       "variant_view": "本站把 ETF 流量、DAT 存量與價格反應拆開：若資金流入但價格仍弱，代表未被觀測的賣壓更大，反而是重要警訊。",
       "second_order_effect": "ETF 是贖回速度快的流量，DAT 是資本結構驅動的存量；兩者同向才是制度化需求共振，不能混成一個數字。",
@@ -196,11 +192,11 @@
         {
           "metric_id": "btc-etf-7d",
           "full_name": "美國比特幣現貨 ETF 七日淨流",
-          "value": -457400000.0,
-          "display": "−$457M",
-          "change": "資料日 2026-07-28",
-          "as_of": "2026-07-28",
-          "direction": "negative",
+          "value": -36200000.0,
+          "display": "−$36M",
+          "change": "資料日 2026-07-30",
+          "as_of": "2026-07-30",
+          "direction": "neutral",
           "source_count": 4,
           "sources": [
             {
@@ -214,11 +210,11 @@
         {
           "metric_id": "eth-etf-7d",
           "full_name": "美國以太幣現貨 ETF 七日淨流",
-          "value": 38100000.0,
-          "display": "+$38M",
-          "change": "資料日 2026-07-28",
-          "as_of": "2026-07-28",
-          "direction": "neutral",
+          "value": -75700000.0,
+          "display": "−$76M",
+          "change": "資料日 2026-07-30",
+          "as_of": "2026-07-30",
+          "direction": "negative",
           "source_count": 3,
           "sources": [
             {
@@ -268,12 +264,12 @@
         {
           "metric_id": "institutional-price-absorption",
           "full_name": "ETF 流入期間的比特幣短線價格反應",
-          "value": 0.007178168589001954,
-          "display": "+0.7%",
-          "change": "七日 ETF 淨流 −$457M",
-          "as_of": "2026-07-30T04:07:10.006000+00:00",
+          "value": 0.005590844081094115,
+          "display": "+0.6%",
+          "change": "七日 ETF 淨流 −$36M",
+          "as_of": "2026-08-02T02:50:26.174556881Z",
           "direction": "neutral",
-          "source_count": 5,
+          "source_count": 4,
           "sources": [
             {
               "label": "ETF 驗證流量＋四來源現貨",
@@ -311,10 +307,10 @@
           "url": "wiki.html#bmnr"
         }
       ],
-      "materiality_score": 0.419,
+      "materiality_score": 0.112,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "狀態仍為「尚未形成共振」，但核心矛盾改為：ETF 與財庫需求暫未形成一致增量。",
-      "brief_hash": "f7f928237ae6075af7f4259b97ccf99e68a514cb47e8e58556729e33471ea678"
+      "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
+      "brief_hash": "a46a9002ac34ea5ed4dda249e3a288d22872543ff82d60a4549811dc0ca653f6"
     },
     {
       "id": "policy",
@@ -322,7 +318,7 @@
       "status": "pass",
       "confidence": "中",
       "headline": "政策催化正在增加，但文件效力比消息數量重要",
-      "conclusion": "近七日命中 2 件、三十日 3 件官方事件；最新事件為「Agency Information Collection Activities: Proposed Information Collection; Comment Request; Applications for Licensing or Registration To Issue Payment Stablecoins Under the GENIUS Act」。",
+      "conclusion": "近七日命中 1 件、三十日 3 件官方事件；最新事件為「Agency Information Collection Activities: Proposed Information Collection; Comment Request; Applications for Licensing or Registration To Issue Payment Stablecoins Under the GENIUS Act」。",
       "common_interpretation": "市場常把法案提出、監管機構發言與正式生效規則放在同一層解讀。",
       "variant_view": "本站只把正式法律、已生效規則視為制度改變；提案與新聞稿是領先訊號，必須等待 action、effective date 或執法落地驗證。",
       "second_order_effect": "政策利多可能先反映在交易所、穩定幣與代幣化資產，再傳導至 BTC／ETH；政策利空也常先透過流動性與市場准入發生。",
@@ -340,10 +336,10 @@
         {
           "metric_id": "policy-events-7d",
           "full_name": "七日加密政策官方事件數",
-          "value": 2.0,
-          "display": "2",
+          "value": 1.0,
+          "display": "1",
           "change": "30 日共 3 件",
-          "as_of": "2026-07-30T04:04:27+00:00",
+          "as_of": "2026-08-02T02:50:32+00:00",
           "direction": "positive",
           "source_count": 5,
           "sources": [
@@ -404,10 +400,10 @@
           "url": "wiki.html#data-feeds"
         }
       ],
-      "materiality_score": 0.6,
+      "materiality_score": 0.45,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "7074ea14b0047dcefed1f9b11cf9eb071eec3540b4019c3e77cf72263232708c"
+      "brief_hash": "c44a0202bc9ef2ead960f374a1823fd34df82ad64f56d4b4a69935fa5663b3ac"
     },
     {
       "id": "onchain",
@@ -415,28 +411,28 @@
       "status": "pass",
       "confidence": "中",
       "headline": "估值降溫，但鏈上活動尚未全面共振",
-      "conclusion": "BTC MVRV 1.21x；交易數 30 日 +24.8%、活躍地址 -2.5%、算力 +7.9%；ETH 每區塊交易數七日 -13.7%。",
+      "conclusion": "BTC MVRV 1.19x；交易數 30 日 +35.1%、活躍地址 +0.1%、算力 +18.0%；ETH 每區塊交易數七日 +21.2%。",
       "common_interpretation": "常見解讀是 MVRV 偏低就等於價格已到底，或鏈上活動增加就等於需求即將推升價格。",
       "variant_view": "本站要求估值便宜、使用活動與安全投入至少兩類同向；便宜但使用收縮，可能只是價格先反映更弱的需求。",
       "second_order_effect": "BTC 與 ETH 的活動若同時轉弱，會先降低手續費與結算需求，再影響礦工、驗證者與應用層收入。",
       "practical_readthrough": "今天把『便宜』和『正在被使用』分開看；只有兩者共振，鏈上訊號才比價格單獨更有說服力。",
       "falsifier": "若 MVRV 回升但交易、地址與 ETH 活動持續下降，『鏈上修復』假說失效。",
       "resonance": {
-        "state": "尚未形成共振",
-        "tone": "neutral",
-        "positive": 2,
-        "negative": 1,
-        "neutral": 2,
+        "state": "偏正向共振",
+        "tone": "positive",
+        "positive": 4,
+        "negative": 0,
+        "neutral": 1,
         "known": 5
       },
       "evidence": [
         {
           "metric_id": "btc-mvrv",
           "full_name": "比特幣市值對實現價值比率",
-          "value": 1.2088544364298526,
-          "display": "1.21x",
+          "value": 1.1887286460199475,
+          "display": "1.19x",
           "change": "低於 1.5x 為偏冷估值背景",
-          "as_of": "2026-07-30",
+          "as_of": "2026-08-02",
           "direction": "positive",
           "source_count": 1,
           "sources": [
@@ -451,10 +447,10 @@
         {
           "metric_id": "btc-transactions",
           "full_name": "比特幣每日確認交易數 30 日變化",
-          "value": 0.24753764324942673,
-          "display": "+24.8%",
-          "change": "663K",
-          "as_of": "2026-07-29",
+          "value": 0.3509444932007897,
+          "display": "+35.1%",
+          "change": "734K",
+          "as_of": "2026-08-01",
           "direction": "positive",
           "source_count": 2,
           "sources": [
@@ -469,10 +465,10 @@
         {
           "metric_id": "btc-active-addresses",
           "full_name": "比特幣活躍地址 30 日變化",
-          "value": -0.025245487511714182,
-          "display": "-2.5%",
-          "change": "478K",
-          "as_of": "2026-07-29",
+          "value": 0.0006486437276909118,
+          "display": "+0.1%",
+          "change": "528K",
+          "as_of": "2026-08-01",
           "direction": "neutral",
           "source_count": 1,
           "sources": [
@@ -487,11 +483,11 @@
         {
           "metric_id": "btc-hashrate",
           "full_name": "比特幣算力 30 日變化",
-          "value": 0.07872564530698489,
-          "display": "+7.9%",
-          "change": "897.3M TH/s",
-          "as_of": "2026-07-29",
-          "direction": "neutral",
+          "value": 0.1804770046865518,
+          "display": "+18.0%",
+          "change": "1.0B TH/s",
+          "as_of": "2026-08-01",
+          "direction": "positive",
           "source_count": 2,
           "sources": [
             {
@@ -505,11 +501,11 @@
         {
           "metric_id": "eth-tx-block",
           "full_name": "以太坊每區塊交易數七日變化",
-          "value": -0.1372845479286362,
-          "display": "-13.7%",
-          "change": "237.8 筆/區塊",
-          "as_of": "2026-07-30T04:04:11+00:00",
-          "direction": "negative",
+          "value": 0.2120974076983504,
+          "display": "+21.2%",
+          "change": "257.2 筆/區塊",
+          "as_of": "2026-08-02T02:50:23+00:00",
+          "direction": "positive",
           "source_count": 4,
           "sources": [
             {
@@ -540,18 +536,18 @@
           "url": "wiki.html#btc-neutral-anchor"
         }
       ],
-      "materiality_score": 0.464,
+      "materiality_score": 0.744,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "多維狀態由「多維訊號分歧」轉為「尚未形成共振」。",
-      "brief_hash": "adfdd1937c1eb1d37fa67bf40114a6d18ddb43e0d78613ce87e82b1cd8d771f5"
+      "what_changed": "多維狀態由「尚未形成共振」轉為「偏正向共振」。",
+      "brief_hash": "7596895351e51b6eb9eca54fc046eecf60be8bbd8e4bf4d58aaa8031309a2672"
     },
     {
       "id": "technical-positioning",
       "title": "動能、技術與籌碼",
       "status": "pass",
       "confidence": "高",
-      "headline": "日線反彈、週線承壓，廣度仍未確認",
-      "conclusion": "BTC 日線 +0.2%、週線 -1.8%、月線 +0.9%、季線 -15.8%；24 小時廣度 6/7。",
+      "headline": "趨勢、廣度與槓桿正在重新定價",
+      "conclusion": "BTC 日線 -3.0%、週線 -3.9%、月線 -2.0%、季線 -14.4%；24 小時廣度 5/7。",
       "common_interpretation": "常見技術分析會挑選單一週期或單一均線給出方向。",
       "variant_view": "本站要求價格趨勢、跨資產廣度與槓桿溫度三維共振；日線翻多但週線、廣度未確認，只能稱為候選修復。",
       "second_order_effect": "若價格上漲卻廣度收窄，資金容易集中於 BTC；若 funding 同時升高，回撤對槓桿部位的破壞力會放大。",
@@ -561,19 +557,19 @@
         "state": "尚未形成共振",
         "tone": "neutral",
         "positive": 1,
-        "negative": 0,
-        "neutral": 3,
+        "negative": 1,
+        "neutral": 2,
         "known": 4
       },
       "evidence": [
         {
           "metric_id": "btc-daily-window",
           "full_name": "比特幣日線等長窗口報酬",
-          "value": 0.0022983927372384194,
-          "display": "+0.2%",
-          "change": "方向切換",
-          "as_of": "2026-07-28",
-          "direction": "neutral",
+          "value": -0.02953346289931147,
+          "display": "-3.0%",
+          "change": "下降趨勢",
+          "as_of": "2026-07-31",
+          "direction": "negative",
           "source_count": 3,
           "sources": [
             {
@@ -587,10 +583,10 @@
         {
           "metric_id": "btc-weekly-window",
           "full_name": "比特幣週線等長窗口報酬",
-          "value": -0.018040627279077737,
-          "display": "-1.8%",
-          "change": "方向切換",
-          "as_of": "2026-07-28",
+          "value": -0.03866763172637577,
+          "display": "-3.9%",
+          "change": "震盪分歧",
+          "as_of": "2026-07-31",
           "direction": "neutral",
           "source_count": 3,
           "sources": [
@@ -605,10 +601,10 @@
         {
           "metric_id": "crypto-breadth",
           "full_name": "追蹤加密資產上漲廣度",
-          "value": 0.8571428571428571,
-          "display": "6/7",
+          "value": 0.7142857142857143,
+          "display": "5/7",
           "change": "24 小時正報酬資產",
-          "as_of": "2026-07-30T04:07:18+00:00",
+          "as_of": "2026-08-02T02:50:31+00:00",
           "direction": "positive",
           "source_count": 2,
           "sources": [
@@ -623,12 +619,12 @@
         {
           "metric_id": "btc-perp-funding",
           "full_name": "比特幣永續合約年化資金費率中位數",
-          "value": 0.10950000000000001,
-          "display": "+11.0%",
+          "value": 0.05690303132996251,
+          "display": "+5.7%",
           "change": "中性偏多",
-          "as_of": "2026-07-30T04:07:18+00:00",
+          "as_of": "2026-08-02T02:50:31+00:00",
           "direction": "neutral",
-          "source_count": 4,
+          "source_count": 2,
           "sources": [
             {
               "label": "OKX／Hyperliquid",
@@ -657,10 +653,10 @@
           "url": "wiki.html#cycle-diminishing-returns"
         }
       ],
-      "materiality_score": 0.306,
+      "materiality_score": 0.359,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "4badd0621fd2e4b9b14161076baa04bc5476a7db101fd2b2867f8663c63f4fd0"
+      "what_changed": "狀態仍為「尚未形成共振」，但核心矛盾改為：趨勢、廣度與槓桿正在重新定價。",
+      "brief_hash": "e3afba3e86d441a215ce398c6bc70666b7511c0ad44e7e2778e061cacd033a0e"
     },
     {
       "id": "liquidity-fed-oil",
@@ -668,28 +664,28 @@
       "status": "pass",
       "confidence": "中",
       "headline": "M2、銀行準備金與 Fed 淨流動性仍在分歧",
-      "conclusion": "Fed 淨流動性 30 日 -1.0%、銀行準備金 30 日 +0.9%、M2 年增 +5.5%；三票判定為「不同頻率分歧」。",
+      "conclusion": "Fed 淨流動性 30 日 -1.3%、銀行準備金 30 日 +1.1%、M2 年增 +5.5%；三票判定為「不同頻率分歧」。",
       "common_interpretation": "常見解讀是聯準會資產增加就必然利多 BTC，或油價上升就必然利空風險資產。",
       "variant_view": "本站把 M2 當慢速背景、銀行準備金當金融體系脈衝、Fed 淨流動性當政策資產負債表脈衝；三者先投票，再看美元與油價是否抵銷。",
       "second_order_effect": "油價上升若推高通膨預期，可能透過債券殖利率與美元再次收緊流動性，而不是直接作用在 BTC。",
       "practical_readthrough": "今天先看 M2、銀行準備金與 Fed 淨流動性是否共振，再用美元、利率與油價判斷傳導是否被抵銷。",
       "falsifier": "若 M2、銀行準備金與 Fed 淨流動性轉為兩票以上反向，且美元同步確認，當前流動性假說失效。",
       "resonance": {
-        "state": "多維訊號分歧",
-        "tone": "mixed",
-        "positive": 2,
+        "state": "偏正向共振",
+        "tone": "positive",
+        "positive": 3,
         "negative": 2,
-        "neutral": 2,
+        "neutral": 1,
         "known": 6
       },
       "evidence": [
         {
           "metric_id": "net-liquidity",
           "full_name": "聯準會資產減財政部現金與隔夜逆回購",
-          "value": 5778666.0,
-          "display": "+$5.78T",
-          "change": "-1.0%／30 日",
-          "as_of": "2026-07-22",
+          "value": 5738093.0,
+          "display": "+$5.74T",
+          "change": "-1.3%／30 日",
+          "as_of": "2026-07-29",
           "direction": "negative",
           "source_count": 3,
           "sources": [
@@ -722,11 +718,11 @@
         {
           "metric_id": "bank-reserves-30d",
           "full_name": "美國銀行準備金 30 日變化",
-          "value": 0.009462841575450298,
-          "display": "+0.9%",
-          "change": "餘額 +$3.06T",
-          "as_of": "2026-07-22",
-          "direction": "neutral",
+          "value": 0.011233252106785274,
+          "display": "+1.1%",
+          "change": "餘額 +$2.98T",
+          "as_of": "2026-07-29",
+          "direction": "positive",
           "source_count": 1,
           "sources": [
             {
@@ -743,7 +739,7 @@
           "value": 3.63,
           "display": "3.63%",
           "change": "政策資金成本",
-          "as_of": "2026-07-28",
+          "as_of": "2026-07-30",
           "direction": "positive",
           "source_count": 1,
           "sources": [
@@ -807,10 +803,10 @@
           "url": "wiki.html#btc-neutral-anchor"
         }
       ],
-      "materiality_score": 1.124,
+      "materiality_score": 1.175,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "多維狀態由「尚未形成共振」轉為「多維訊號分歧」。",
-      "brief_hash": "72b33da9cf6ffc5071518d0ff8960c832c71f36a25c2d2cab128250db91d9623"
+      "what_changed": "多維狀態由「多維訊號分歧」轉為「偏正向共振」。",
+      "brief_hash": "8fda16bf1126421e05c7f82b83c0496cb5755c7b8867e196ecc2e245b8b3a268"
     },
     {
       "id": "credit-bonds",
@@ -818,7 +814,7 @@
       "status": "pass",
       "confidence": "中",
       "headline": "信用利差尚穩，但長端利率仍是估值壓力",
-      "conclusion": "高收益債利差 2.84%、30 日 +0.01 個百分點；10 年殖利率 4.67%、2s10s +0.45 個百分點。",
+      "conclusion": "高收益債利差 2.84%、30 日 +0.09 個百分點；10 年殖利率 4.75%、2s10s +0.47 個百分點。",
       "common_interpretation": "常見解讀是利差沒擴大就代表風險資產安全，或曲線轉正就代表降息利多。",
       "variant_view": "本站把信用風險與無風險利率拆開：利差平穩只能說違約風險未惡化，不能抵銷高長端利率對估值的壓力。",
       "second_order_effect": "若長端殖利率上升而信用利差不動，壓力先打在估值；若兩者同時上升，才是融資與風險偏好雙重收緊。",
@@ -828,8 +824,8 @@
         "state": "尚未形成共振",
         "tone": "neutral",
         "positive": 1,
-        "negative": 0,
-        "neutral": 3,
+        "negative": 1,
+        "neutral": 2,
         "known": 4
       },
       "evidence": [
@@ -838,8 +834,8 @@
           "full_name": "美國高收益債選擇權調整利差",
           "value": 2.84,
           "display": "2.84%",
-          "change": "+0.01 個百分點",
-          "as_of": "2026-07-28",
+          "change": "+0.09 個百分點",
+          "as_of": "2026-07-30",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -854,10 +850,10 @@
         {
           "metric_id": "ig-oas",
           "full_name": "美國投資級債選擇權調整利差",
-          "value": 0.81,
-          "display": "0.81%",
+          "value": 0.8,
+          "display": "0.80%",
           "change": "+0.04 個百分點",
-          "as_of": "2026-07-28",
+          "as_of": "2026-07-30",
           "direction": "neutral",
           "source_count": 1,
           "sources": [
@@ -872,11 +868,11 @@
         {
           "metric_id": "treasury-10y",
           "full_name": "美國十年期公債殖利率",
-          "value": 4.67,
-          "display": "4.67%",
+          "value": 4.75,
+          "display": "4.75%",
           "change": "無現金流資產機會成本",
-          "as_of": "2026-07-29",
-          "direction": "neutral",
+          "as_of": "2026-07-31",
+          "direction": "negative",
           "source_count": 2,
           "sources": [
             {
@@ -890,10 +886,10 @@
         {
           "metric_id": "curve-2s10s",
           "full_name": "美債二年與十年期利差",
-          "value": 0.4500000000000002,
-          "display": "+0.45 個百分點",
+          "value": 0.46999999999999975,
+          "display": "+0.47 個百分點",
           "change": "正值代表曲線正斜率",
-          "as_of": "2026-07-29",
+          "as_of": "2026-07-31",
           "direction": "positive",
           "source_count": 2,
           "sources": [
@@ -919,10 +915,10 @@
           "url": "wiki.html#btc-neutral-anchor"
         }
       ],
-      "materiality_score": 0.86,
+      "materiality_score": 1.18,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "0f0244dabbb20a747f776bfc4f048692cb5553f3bd3e353db35ef18067392ac7"
+      "brief_hash": "3385dcc00f266ee40a96fad22bb4aa960bc43c06ed362262ff27ff7231cdf6e3"
     },
     {
       "id": "us-equities",
@@ -930,7 +926,7 @@
       "status": "pass",
       "confidence": "高",
       "headline": "大型股指數表面平穩，但科技與加密風險偏好分化",
-      "conclusion": "標普 500 近 30 日 -1.7%、那斯達克 -5.3%、VIX 18.2；BTC 同期 +7.3%。",
+      "conclusion": "標普 500 近 30 日 +0.1%、那斯達克 -2.6%、VIX 17.1；BTC 同期 +4.7%。",
       "common_interpretation": "常見解讀是美股上漲就會帶動 BTC，或 VIX 下降就等於所有風險資產安全。",
       "variant_view": "本站觀察標普、科技股、VIX 與 BTC 的相對路徑；只有方向、波動與跨市場相對強弱同向，才叫風險偏好共振。",
       "second_order_effect": "若 BTC 強於科技股，可能是資金在交易加密特有催化；若兩者同跌，宏觀流動性通常比幣圈敘事更重要。",
@@ -940,18 +936,18 @@
         "state": "尚未形成共振",
         "tone": "neutral",
         "positive": 0,
-        "negative": 1,
-        "neutral": 3,
+        "negative": 0,
+        "neutral": 4,
         "known": 4
       },
       "evidence": [
         {
           "metric_id": "sp500-30d",
           "full_name": "標普 500 指數 30 日報酬",
-          "value": -0.01670333569430804,
-          "display": "-1.7%",
-          "change": "7.3K",
-          "as_of": "2026-07-29",
+          "value": 0.0008672725547658189,
+          "display": "+0.1%",
+          "change": "7.5K",
+          "as_of": "2026-07-31",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -966,11 +962,11 @@
         {
           "metric_id": "nasdaq-30d",
           "full_name": "那斯達克綜合指數 30 日報酬",
-          "value": -0.053338208080978666,
-          "display": "-5.3%",
-          "change": "24.4K",
-          "as_of": "2026-07-29",
-          "direction": "negative",
+          "value": -0.025582919835345774,
+          "display": "-2.6%",
+          "change": "25.4K",
+          "as_of": "2026-07-31",
+          "direction": "neutral",
           "source_count": 2,
           "sources": [
             {
@@ -984,10 +980,10 @@
         {
           "metric_id": "vix-level",
           "full_name": "芝加哥選擇權交易所波動率指數",
-          "value": 18.21,
-          "display": "18.2",
-          "change": "-1.1%／30 日",
-          "as_of": "2026-07-28",
+          "value": 17.09,
+          "display": "17.1",
+          "change": "+3.9%／30 日",
+          "as_of": "2026-07-30",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -1002,10 +998,10 @@
         {
           "metric_id": "btc-30d-relative",
           "full_name": "比特幣 30 日報酬",
-          "value": 0.0728851486249038,
-          "display": "+7.3%",
-          "change": "相對標普差 +9.0%",
-          "as_of": "2026-07-30",
+          "value": 0.04683020503533575,
+          "display": "+4.7%",
+          "change": "相對標普差 +4.6%",
+          "as_of": "2026-08-02",
           "direction": "neutral",
           "source_count": 3,
           "sources": [
@@ -1031,11 +1027,11 @@
           "url": "wiki.html#delayed-pro-cyclical"
         }
       ],
-      "materiality_score": 0.725,
+      "materiality_score": 0.448,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "6e846b5ee2ce8af735ced1ff51e6608344f22c91aa6d53f7738bbb29b4349695"
+      "brief_hash": "fcabd6b6705fb8fdc3d4b9cc1fd3850c687b4857cef707d34cf45d60061e179d"
     }
   ],
-  "editorial_hash": "d9424eaa4c9c5cbb754665f1e87f8e741cf8630a07319b73b55d0cf215008b6b"
+  "editorial_hash": "ac23084e496f5595f592904b71fe8772498d10fbbc240a0dd9be0659ba3b74e7"
 }

@@ -1,39 +1,37 @@
 {
   "schema": 2,
   "agent": "daily-data-verifier",
-  "verified_at": "2026-07-30T04:07:23+00:00",
-  "date": "2026-07-30",
-  "batch_id": "2026-07-30T04:03:55+00:00",
-  "raw_generated_at": "2026-07-30T04:03:55+00:00",
-  "snapshot_generated_at": "2026-07-30T04:03:55+00:00",
-  "market_universe_generated_at": "2026-07-30T04:07:18+00:00",
-  "status": "degraded",
+  "verified_at": "2026-08-02T02:50:46+00:00",
+  "date": "2026-08-02",
+  "batch_id": "2026-08-02T02:50:26+00:00",
+  "raw_generated_at": "2026-08-02T02:50:26+00:00",
+  "snapshot_generated_at": "2026-08-02T02:50:26+00:00",
+  "market_universe_generated_at": "2026-08-02T02:50:31+00:00",
+  "status": "pass",
   "status_scope": "verified_market_inputs_only",
   "failures": [],
-  "degradations": [
-    "market universe: 賽道固定籃子資料不完整或跨源分歧：Meme",
-    "market universe sector Meme: sector consensus does not have a strict majority",
-    "market universe sector Meme: status is not cross_source_verified"
+  "degradations": [],
+  "warnings": [
+    "SEC 最新表單型別非核心清單: 8-K/A"
   ],
-  "warnings": [],
   "evidence": [
-    "BTC DAT reconstructed status=representative_cross_source_verified providers=4 coverage=0.7514071434467372 gap=0.0010356340980455514",
+    "BTC DAT reconstructed status=representative_cross_source_verified providers=4 coverage=0.7509490385102181 gap=0.0010356340980455514",
     "ETH DAT reconstructed status=representative_cross_source_verified providers=3 coverage=0.8535672413666798 gap=0.0029699711078837285",
-    "market universe quality=degraded score=97 sources=74 age_hours=0.00",
-    "BTC spot median=64074.97 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.04%",
-    "ETH spot median=1907.0 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.07%",
-    "BTC MVRV as_of=2026-07-29 age_days=1",
-    "Strategy BTC holdings as_of=2026-07-26 age_days=4",
-    "Strategy latest complete disclosed week sales as_of=2026-07-26 age_days=4",
-    "BMNR treasury holdings as_of=2026-07-26 age_days=4",
-    "MSTR Yahoo/Nasdaq=93.33/93.33; basis=regular_market_close/regular_market_close; gap=0.00%",
-    "BMNR Yahoo/Nasdaq=16.59/16.59; basis=regular_market_close/regular_market_close; gap=0.00%",
-    "STRC Yahoo/Nasdaq=87.51/87.51; basis=regular_market_close/regular_market_close; gap=0.00%",
-    "SEC latest form=4",
-    "BTC ETF sample verified validation_sources=4.0 completeness=1.0 official_gap=0.0017897971376420558 official_coverage=0.9148580968280468 backup_gap=0.0 backup_coverage=1.0",
-    "ETH ETF sample verified validation_sources=3.0 completeness=1.0 official_gap=0.00026243845881108194 official_coverage=1.0 backup_gap=0.0 backup_coverage=1.0",
-    "BTC standard=偏冷等待區 score=-8.1",
-    "BMNR gross treasury=11558.926091759999m market_cap_to_gross=0.8657833605834764 as_of=2026-07-26"
+    "market universe quality=pass score=100 sources=68 age_hours=0.00",
+    "BTC spot median=63360.0 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.11%",
+    "ETH spot median=1874.52 sources=3 [CoinGecko simple price, Coinbase Exchange ticker, Kraken Spot ticker] gap=0.16%",
+    "BTC MVRV as_of=2026-08-01 age_days=1",
+    "Strategy BTC holdings as_of=2026-07-26 age_days=7",
+    "Strategy latest complete disclosed week sales as_of=2026-07-26 age_days=7",
+    "BMNR treasury holdings as_of=2026-07-26 age_days=7",
+    "MSTR Yahoo/Nasdaq=93.28/93.28; basis=regular_market_close/regular_market_close; gap=0.00%",
+    "BMNR Yahoo/Nasdaq=17.28/17.28; basis=regular_market_close/regular_market_close; gap=0.00%",
+    "STRC Yahoo/Nasdaq=89.46/89.46; basis=regular_market_close/regular_market_close; gap=0.00%",
+    "SEC latest form=8-K/A",
+    "BTC ETF sample verified validation_sources=4.0 completeness=1.0 official_gap=0.001454077229459813 official_coverage=0.7867867867867868 backup_gap=0.03225806451612903 backup_coverage=1.0",
+    "ETH ETF sample verified validation_sources=3.0 completeness=1.0 official_gap=1.696380787970498e-05 official_coverage=0.7105263157894737 backup_gap=0.0 backup_coverage=1.0",
+    "BTC standard=偏冷等待區 score=-7.4",
+    "BMNR gross treasury=11370.80217128m market_cap_to_gross=0.9167121132973338 as_of=2026-07-26"
   ],
   "structural_context_quality": {
     "status": "pass",
@@ -42,7 +40,7 @@
     "failures": [],
     "degradations": [],
     "evidence": [
-      "BTC thesis gold_ratio=0.04416075054799391 stablecoin_supply=304558291167.65 company_supply_share=0.06405073722825047"
+      "BTC thesis gold_ratio=0.043779411528989454 stablecoin_supply=302349767927.36 company_supply_share=0.06408507898213225"
     ],
     "verification_scope": "independent formula, lineage, ETF evidence and DAT consensus reconstruction; upstream HTTP responses are not all re-fetched"
   },
