@@ -61,7 +61,8 @@ def completed_date(timestamp: int) -> str:
 
 def yahoo_rows(ticker: str) -> tuple[list[dict[str, Any]], str]:
     encoded = urllib.parse.quote(ticker)
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{encoded}?range=2y&interval=1d"
+    history_range = "8y" if ticker in {"BTC-USD", "ETH-USD"} else "2y"
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{encoded}?range={history_range}&interval=1d"
     payload = fetch_json(url)
     result = payload["chart"]["result"][0]
     timestamps = result.get("timestamp") or []
@@ -225,7 +226,8 @@ def main() -> int:
             "sources": sources,
         }
     missing_canonical = [symbol for symbol, item in assets.items() if not item.get("canonical_provider")]
-    status = "fail" if missing_canonical else "degraded" if incidents or any(item["source_count"] < 2 for item in assets.values()) else "pass"
+    insufficient_sources = [symbol for symbol, item in assets.items() if item["source_count"] < 2]
+    status = "fail" if missing_canonical else "degraded" if insufficient_sources else "pass"
     artifact = {
         "schema": 1,
         "date": snapshot.get("date"),
@@ -235,11 +237,12 @@ def main() -> int:
         "quality": {
             "status": status,
             "failures": [f"missing canonical series: {', '.join(missing_canonical)}"] if missing_canonical else [],
-            "degradations": incidents,
+            "degradations": [f"{symbol}: fewer than two independent sources" for symbol in insufficient_sources],
+            "source_incidents": incidents,
             "policy": {
                 "completed_bars_only": True,
                 "canonical_preference": "Yahoo Finance, then verified secondary provider",
-                "history_window": "approximately two years",
+                "history_window": "BTC/ETH eight years; listed vehicles approximately two years",
                 "minimum_independent_sources": 2,
                 "research_only": True,
             },

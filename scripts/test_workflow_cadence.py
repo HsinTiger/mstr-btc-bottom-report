@@ -43,8 +43,49 @@ def main() -> int:
         raise AssertionError("daily workflow must remain the sole daily verifier writer")
     if "verify_market_universe.py" not in hourly or "market_universe_verification.json" not in hourly:
         raise AssertionError("hourly workflow must verify and publish its own market artifact")
+    required_hourly_order = [
+        "collect_market_universe.py",
+        "verify_market_universe.py",
+        "generate_timescale_intelligence.py",
+        "verify_timescale_intelligence.py",
+        "generate_market_editorial.py",
+        "verify_market_editorial.py",
+    ]
+    positions = [hourly.find(item) for item in required_hourly_order]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        raise AssertionError("hourly market refresh must rebuild and verify every dependent artifact in order")
+    hourly_staged = staged_paths(hourly)
+    for artifact in (
+        "timescale_intelligence.json",
+        "timescale_intelligence_verification.json",
+        "market_editorial.json",
+        "market_editorial_verification.json",
+    ):
+        if artifact not in hourly_staged:
+            raise AssertionError(f"hourly workflow must atomically publish rebuilt {artifact}")
+    required_editorial_order = [
+        "collect_market_universe.py",
+        "verify_market_universe.py",
+        "collect_market_context.py",
+        "verify_market_context.py",
+        "generate_timescale_intelligence.py",
+        "verify_timescale_intelligence.py",
+        "generate_market_editorial.py",
+        "verify_market_editorial.py",
+    ]
+    positions = [editorial.find(item) for item in required_editorial_order]
+    if any(position < 0 for position in positions) or positions != sorted(positions):
+        raise AssertionError("editorial refresh must rebuild and verify timescale analysis before editorial output")
+    editorial_staged = staged_paths(editorial)
+    for artifact in (
+        "timescale_intelligence.json",
+        "timescale_intelligence_history.json",
+        "timescale_intelligence_verification.json",
+    ):
+        if artifact not in editorial_staged:
+            raise AssertionError(f"editorial workflow must publish rebuilt {artifact}")
 
-    print("workflow cadence tests: PASS (7/7)")
+    print("workflow cadence tests: PASS (17/17)")
     return 0
 
 

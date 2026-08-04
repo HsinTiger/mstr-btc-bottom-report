@@ -6,7 +6,8 @@ from __future__ import annotations
 import json
 import math
 import statistics
-from datetime import datetime, timezone
+from calendar import monthrange
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,9 @@ DATA_VERIFICATION_PATH = DATA_DIR / "timescale_data_verification.json"
 SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 DAILY_VERIFICATION_PATH = DATA_DIR / "agent_verification_report.json"
 MARKET_PATH = DATA_DIR / "market_universe.json"
+MARKET_VERIFICATION_PATH = DATA_DIR / "market_universe_verification.json"
+CONTEXT_PATH = DATA_DIR / "market_context.json"
+CONTEXT_VERIFICATION_PATH = DATA_DIR / "market_context_verification.json"
 OUTPUT_PATH = DATA_DIR / "timescale_intelligence.json"
 HISTORY_PATH = DATA_DIR / "timescale_intelligence_history.json"
 
@@ -115,6 +119,411 @@ def range_position(values: list[float], bars: int) -> float | None:
     lower = min(sample)
     upper = max(sample)
     return (sample[-1] - lower) / (upper - lower) if upper > lower else 0.5
+
+
+def aggregate_completed_bars(rows: list[dict[str, Any]], timeframe: str) -> list[dict[str, Any]]:
+    if timeframe not in {"weekly", "monthly"}:
+        raise ValueError(f"unsupported completed-bar timeframe: {timeframe}")
+    normalized: list[tuple[date, dict[str, Any]]] = []
+    for row in rows:
+        try:
+            row_date = date.fromisoformat(str(row.get("date")))
+        except (TypeError, ValueError):
+            continue
+        close = number(row.get("close"))
+        if close is None or close <= 0:
+            continue
+        normalized.append((row_date, row))
+    normalized.sort(key=lambda item: item[0])
+    if not normalized:
+        return []
+    latest_date = normalized[-1][0]
+    groups: dict[tuple[int, int], dict[str, Any]] = {}
+    for row_date, row in normalized:
+        if timeframe == "weekly":
+            period_start = row_date - timedelta(days=row_date.weekday())
+            period_end = period_start + timedelta(days=6)
+            key = (period_start.isocalendar().year, period_start.isocalendar().week)
+        else:
+            period_start = row_date.replace(day=1)
+            period_end = row_date.replace(day=monthrange(row_date.year, row_date.month)[1])
+            key = (row_date.year, row_date.month)
+        if period_end > latest_date:
+            continue
+        bucket = groups.setdefault(key, {
+            "period_start": period_start.isoformat(),
+            "period_end": period_end.isoformat(),
+            "rows": [],
+        })
+        bucket["rows"].append(row)
+    completed: list[dict[str, Any]] = []
+    for bucket in sorted(groups.values(), key=lambda item: item["period_end"]):
+        bucket_rows = bucket["rows"]
+        opens = [number(row.get("open")) for row in bucket_rows]
+        highs = [number(row.get("high")) for row in bucket_rows]
+        lows = [number(row.get("low")) for row in bucket_rows]
+        volumes = [number(row.get("volume")) for row in bucket_rows]
+        valid_opens = [value for value in opens if value is not None]
+        valid_highs = [value for value in highs if value is not None]
+        valid_lows = [value for value in lows if value is not None]
+        valid_volumes = [value for value in volumes if value is not None]
+        completed.append({
+            "date": bucket["period_end"],
+            "period_start": bucket["period_start"],
+            "period_end": bucket["period_end"],
+            "source_last_date": bucket_rows[-1].get("date"),
+            "observed_days": len(bucket_rows),
+            "open": valid_opens[0] if valid_opens else number(bucket_rows[0].get("close")),
+            "high": max(valid_highs) if valid_highs else max(number(row.get("close")) for row in bucket_rows),
+            "low": min(valid_lows) if valid_lows else min(number(row.get("close")) for row in bucket_rows),
+            "close": number(bucket_rows[-1].get("close")),
+            "volume": sum(valid_volumes) if valid_volumes else None,
+        })
+    return completed
+
+
+def exponential_moving_average_series(values: list[float], period: int) -> list[float | None]:
+    result: list[float | None] = [None] * len(values)
+    if period <= 0 or len(values) < period:
+        return result
+    seed = statistics.fmean(values[:period])
+    result[period - 1] = seed
+    multiplier = 2 / (period + 1)
+    current = seed
+    for index in range(period, len(values)):
+        current = (values[index] - current) * multiplier + current
+        result[index] = current
+    return result
+
+
+def rsi_series(values: list[float], period: int = 14) -> list[float | None]:
+    result: list[float | None] = [None] * len(values)
+    if period <= 0 or len(values) <= period:
+        return result
+    changes = [values[index] - values[index - 1] for index in range(1, len(values))]
+    average_gain = statistics.fmean(max(change, 0.0) for change in changes[:period])
+    average_loss = statistics.fmean(max(-change, 0.0) for change in changes[:period])
+
+    def value() -> float:
+        if average_loss == 0:
+            return 100.0 if average_gain > 0 else 50.0
+        relative_strength = average_gain / average_loss
+        return 100 - 100 / (1 + relative_strength)
+
+    result[period] = value()
+    for index in range(period + 1, len(values)):
+        change = changes[index - 1]
+        average_gain = (average_gain * (period - 1) + max(change, 0.0)) / period
+        average_loss = (average_loss * (period - 1) + max(-change, 0.0)) / period
+        result[index] = value()
+    return result
+
+
+def macd_series(values: list[float]) -> tuple[list[float | None], list[float | None], list[float | None]]:
+    fast = exponential_moving_average_series(values, 12)
+    slow = exponential_moving_average_series(values, 26)
+    macd: list[float | None] = [
+        fast_value - slow_value if fast_value is not None and slow_value is not None else None
+        for fast_value, slow_value in zip(fast, slow)
+    ]
+    valid_indices = [index for index, value in enumerate(macd) if value is not None]
+    valid_values = [macd[index] for index in valid_indices]
+    compact_signal = exponential_moving_average_series([float(value) for value in valid_values], 9)
+    signal: list[float | None] = [None] * len(values)
+    for compact_index, original_index in enumerate(valid_indices):
+        signal[original_index] = compact_signal[compact_index]
+    histogram = [
+        macd_value - signal_value if macd_value is not None and signal_value is not None else None
+        for macd_value, signal_value in zip(macd, signal)
+    ]
+    return macd, signal, histogram
+
+
+def atr_series(bars: list[dict[str, Any]], period: int = 14) -> list[float | None]:
+    result: list[float | None] = [None] * len(bars)
+    if not bars:
+        return result
+    true_ranges: list[float] = []
+    for index, bar in enumerate(bars):
+        high = number(bar.get("high"))
+        low = number(bar.get("low"))
+        close = number(bar.get("close"))
+        if high is None or low is None or close is None:
+            true_ranges.append(float("nan"))
+            continue
+        previous_close = number(bars[index - 1].get("close")) if index else close
+        true_ranges.append(max(high - low, abs(high - previous_close), abs(low - previous_close)))
+    if len(true_ranges) < period or any(not math.isfinite(value) for value in true_ranges[:period]):
+        return result
+    current = statistics.fmean(true_ranges[:period])
+    result[period - 1] = current
+    for index in range(period, len(true_ranges)):
+        if not math.isfinite(true_ranges[index]):
+            continue
+        current = (current * (period - 1) + true_ranges[index]) / period
+        result[index] = current
+    return result
+
+
+def obv_series(bars: list[dict[str, Any]]) -> list[float | None]:
+    if not bars:
+        return []
+    result: list[float | None] = [0.0]
+    current = 0.0
+    for index in range(1, len(bars)):
+        volume = number(bars[index].get("volume"))
+        close = number(bars[index].get("close"))
+        previous_close = number(bars[index - 1].get("close"))
+        if volume is None or close is None or previous_close is None:
+            result.append(None)
+            continue
+        current += volume if close > previous_close else -volume if close < previous_close else 0.0
+        result.append(current)
+    return result
+
+
+def detect_divergence(
+    bars: list[dict[str, Any]],
+    oscillator: list[float | None],
+    direction: str,
+    *,
+    radius: int = 2,
+    lookback: int | None = None,
+) -> dict[str, Any]:
+    if direction not in {"bottom", "top"}:
+        raise ValueError(f"unsupported divergence direction: {direction}")
+    start = max(radius, len(bars) - lookback) if lookback else radius
+    pivots: list[int] = []
+    for index in range(start, len(bars) - radius):
+        price = number(bars[index].get("close"))
+        oscillator_value = oscillator[index] if index < len(oscillator) else None
+        if price is None or oscillator_value is None:
+            continue
+        neighbours = [number(bars[candidate].get("close")) for candidate in range(index - radius, index + radius + 1)]
+        if any(value is None for value in neighbours):
+            continue
+        is_pivot = price == min(neighbours) and any(price < value for value in neighbours) if direction == "bottom" else price == max(neighbours) and any(price > value for value in neighbours)
+        if is_pivot:
+            pivots.append(index)
+    if len(pivots) < 2:
+        return {"detected": False, "direction": direction, "reason": "可比較轉折點不足"}
+    first_index, second_index = pivots[-2], pivots[-1]
+    first_price = number(bars[first_index].get("close"))
+    second_price = number(bars[second_index].get("close"))
+    first_oscillator = number(oscillator[first_index])
+    second_oscillator = number(oscillator[second_index])
+    lower_low = second_price < first_price and second_oscillator > first_oscillator
+    higher_high = second_price > first_price and second_oscillator < first_oscillator
+    detected = lower_low if direction == "bottom" else higher_high
+    return {
+        "detected": detected,
+        "direction": direction,
+        "price_direction": "lower_low" if second_price < first_price else "higher_high" if second_price > first_price else "equal",
+        "oscillator_direction": "higher_low" if second_oscillator > first_oscillator else "lower_high" if second_oscillator < first_oscillator else "equal",
+        "first": {"date": bars[first_index].get("period_end") or bars[first_index].get("date"), "price": first_price, "oscillator": first_oscillator},
+        "second": {"date": bars[second_index].get("period_end") or bars[second_index].get("date"), "price": second_price, "oscillator": second_oscillator},
+    }
+
+
+def regression_log_slope(values: list[float], bars: int, offset: int = 0) -> float | None:
+    end = len(values) - offset
+    start = end - bars
+    if start < 0 or bars < 2:
+        return None
+    sample = values[start:end]
+    if any(value <= 0 for value in sample):
+        return None
+    mean_index = (len(sample) - 1) / 2
+    mean_value = statistics.fmean(math.log(value) for value in sample)
+    denominator = sum((index - mean_index) ** 2 for index in range(len(sample)))
+    return sum((index - mean_index) * (math.log(value) - mean_value) for index, value in enumerate(sample)) / denominator if denominator else None
+
+
+def technical_horizon(rows: list[dict[str, Any]], timeframe: str) -> dict[str, Any]:
+    bars = aggregate_completed_bars(rows, timeframe)
+    basis = f"completed_{timeframe}_candles"
+    if not bars:
+        return {"status": "資料不足", "bar_basis": basis, "bars": 0}
+    closes = [float(number(bar.get("close"))) for bar in bars]
+    rsi = rsi_series(closes)
+    macd_line, signal_line, histogram = macd_series(closes)
+    atr = atr_series(bars)
+    obv = obv_series(bars)
+    fast_period, slow_period = (20, 30) if timeframe == "weekly" else (10, 20)
+    fast_average = moving_average(closes, fast_period)
+    slow_average = moving_average(closes, slow_period)
+    slope_bars = 12 if timeframe == "weekly" else 6
+    current_slope = regression_log_slope(closes, slope_bars)
+    previous_slope = regression_log_slope(closes, slope_bars, slope_bars)
+    slope_change = current_slope - previous_slope if current_slope is not None and previous_slope is not None else None
+    volume_values = [number(bar.get("volume")) for bar in bars]
+    volume_average_values = [value for value in volume_values[-20:] if value is not None]
+    volume_average = statistics.fmean(volume_average_values) if len(volume_average_values) >= 10 else None
+    current_volume = volume_values[-1]
+    relative_volume = current_volume / volume_average if current_volume is not None and volume_average else None
+    bar_return = closes[-1] / closes[-2] - 1 if len(closes) >= 2 else None
+    latest = bars[-1]
+    high = number(latest.get("high"))
+    low = number(latest.get("low"))
+    recovery = (closes[-1] - low) / (high - low) if high is not None and low is not None and high > low else None
+    if relative_volume is not None and relative_volume >= 1.5 and bar_return is not None and bar_return <= 0.02 and recovery is not None and recovery >= 0.6:
+        volume_state = "放量承接"
+    elif relative_volume is not None and relative_volume >= 1.5 and bar_return is not None and abs(bar_return) <= 0.02:
+        volume_state = "量增價滯"
+    elif relative_volume is not None and relative_volume >= 1.5 and bar_return is not None and bar_return < -0.02:
+        volume_state = "放量下跌"
+    elif relative_volume is not None and relative_volume <= 0.7:
+        volume_state = "量能收縮"
+    else:
+        volume_state = "量價中性"
+    rsi_bottom = detect_divergence(bars, rsi, "bottom", lookback=30 if timeframe == "weekly" else 24)
+    rsi_top = detect_divergence(bars, rsi, "top", lookback=30 if timeframe == "weekly" else 24)
+    macd_bottom = detect_divergence(bars, histogram, "bottom", lookback=30 if timeframe == "weekly" else 24)
+    macd_top = detect_divergence(bars, histogram, "top", lookback=30 if timeframe == "weekly" else 24)
+    for item, oscillator_name in ((rsi_bottom, "RSI 14"), (rsi_top, "RSI 14"), (macd_bottom, "MACD 柱狀體"), (macd_top, "MACD 柱狀體")):
+        item["oscillator"] = oscillator_name
+    slope_decelerating_down = current_slope is not None and current_slope < 0 and slope_change is not None and slope_change > 0
+    slope_decelerating_up = current_slope is not None and current_slope > 0 and slope_change is not None and slope_change < 0
+    leading_signals = [
+        {"name": "動能底背離", "state": "supportive" if rsi_bottom.get("detected") or macd_bottom.get("detected") else "neutral", "evidence": "RSI 或 MACD 柱狀體在價格創低時未同步創低。"},
+        {"name": "下跌斜率放緩", "state": "supportive" if slope_decelerating_down else "neutral", "evidence": f"每根 K 的對數斜率 {current_slope:+.4f}，較前窗變化 {slope_change:+.4f}。" if current_slope is not None and slope_change is not None else "斜率歷史不足。"},
+        {"name": "恐慌量承接", "state": "supportive" if volume_state == "放量承接" else "warning" if volume_state in {"量增價滯", "放量下跌"} else "neutral", "evidence": f"量比 {relative_volume:.2f}x、收盤回復幅度 {recovery:.0%}，判為{volume_state}。" if relative_volume is not None and recovery is not None else f"量價判為{volume_state}。"},
+    ]
+    recent_pivots = []
+    for index in range(2, len(bars) - 2):
+        neighbours = closes[index - 2:index + 3]
+        if closes[index] == min(neighbours) and any(closes[index] < value for value in neighbours):
+            recent_pivots.append(index)
+    higher_low = len(recent_pivots) >= 2 and closes[recent_pivots[-1]] > closes[recent_pivots[-2]]
+    macd_cross_positive = macd_line[-1] is not None and signal_line[-1] is not None and macd_line[-1] > signal_line[-1]
+    lagging_confirmations = [
+        {"name": f"站回 {fast_period} {('週' if timeframe == 'weekly' else '月')}均線", "state": "confirmed" if fast_average is not None and closes[-1] > fast_average else "not_confirmed", "value": fast_average},
+        {"name": f"站回 {slow_period} {('週' if timeframe == 'weekly' else '月')}均線", "state": "confirmed" if slow_average is not None and closes[-1] > slow_average else "not_confirmed", "value": slow_average},
+        {"name": "MACD 位於訊號線之上", "state": "confirmed" if macd_cross_positive else "not_confirmed", "value": histogram[-1]},
+        {"name": "低點墊高", "state": "confirmed" if higher_low else "not_confirmed", "value": None},
+    ]
+    leading_count = sum(item["state"] == "supportive" for item in leading_signals)
+    confirmation_count = sum(item["state"] == "confirmed" for item in lagging_confirmations)
+    bottom_state = "底部形成證據增加" if leading_count >= 2 and confirmation_count >= 2 else "底部候選，尚待落後指標確認" if leading_count >= 2 else "底部證據尚未成形"
+    top_warnings = [
+        {"name": "動能頂背離", "active": bool(rsi_top.get("detected") or macd_top.get("detected"))},
+        {"name": "上漲斜率放緩", "active": slope_decelerating_up},
+        {"name": "量增價滯", "active": volume_state == "量增價滯"},
+    ]
+    top_count = sum(item["active"] for item in top_warnings)
+    return {
+        "status": "可用" if len(bars) >= 35 else "歷史深度有限",
+        "bar_basis": basis,
+        "bars": len(bars),
+        "as_of": bars[-1].get("period_end"),
+        "close": closes[-1],
+        "period_return": bar_return,
+        "price_slope": {"lookback_bars": slope_bars, "current_log_slope_per_bar": current_slope, "previous_log_slope_per_bar": previous_slope, "change": slope_change},
+        "rsi_14": rsi[-1],
+        "macd": {"line": macd_line[-1], "signal": signal_line[-1], "histogram": histogram[-1]},
+        "volume": {"current": current_volume, "average_20": volume_average, "relative_to_average": relative_volume, "close_recovery": recovery, "state": volume_state},
+        "obv": {"value": obv[-1], "change_4_bars": obv[-1] - obv[-5] if len(obv) >= 5 and obv[-1] is not None and obv[-5] is not None else None},
+        "atr_14": {"value": atr[-1], "percent_of_close": atr[-1] / closes[-1] if atr[-1] is not None else None},
+        "moving_averages": {
+            f"{fast_period}_{timeframe}": fast_average,
+            f"{slow_period}_{timeframe}": slow_average,
+            "distance_from_fast": closes[-1] / fast_average - 1 if fast_average else None,
+            "distance_from_slow": closes[-1] / slow_average - 1 if slow_average else None,
+        },
+        "divergence": {"rsi_bottom": rsi_bottom, "macd_bottom": macd_bottom, "rsi_top": rsi_top, "macd_top": macd_top},
+        "leading_signals": leading_signals,
+        "lagging_confirmations": lagging_confirmations,
+        "bottom_assessment": {"state": bottom_state, "leading_supportive": leading_count, "lagging_confirmed": confirmation_count},
+        "top_risk": {"state": "頂部風險升高" if top_count >= 2 else "未見多項頂部共振", "active_warnings": top_count, "warnings": top_warnings},
+        "invalidation": "若下一根完成 K 同時打破最近結構低點、動能再創低且量價轉為放量下跌，底部候選失效；頂部警訊則以價格與動能同步再創高失效。",
+    }
+
+
+def sentiment_evidence(
+    name: str,
+    cluster_id: str,
+    value: Any,
+    state: str,
+    as_of: Any,
+    interpretation: str,
+    source_label: str,
+    source_url: str,
+    source_status: str,
+) -> dict[str, Any]:
+    return {
+        "name": name,
+        "cluster_id": cluster_id,
+        "value": value,
+        "state": state,
+        "as_of": as_of,
+        "interpretation": interpretation,
+        "source": {"label": source_label, "url": source_url, "status": source_status},
+    }
+
+
+def sentiment_summary(label: str, evidence: list[dict[str, Any]]) -> dict[str, Any]:
+    supportive = sum(item.get("state") == "supportive" for item in evidence)
+    risk_off = sum(item.get("state") == "risk_off" for item in evidence)
+    if supportive >= 2 and supportive > risk_off:
+        conclusion = f"{label}消息與情緒偏支持，但仍需價格結構確認"
+    elif risk_off >= 2 and risk_off > supportive:
+        conclusion = f"{label}消息與情緒偏風險收縮"
+    else:
+        conclusion = f"{label}消息與情緒分歧"
+    return {
+        "conclusion": conclusion,
+        "supportive_clusters": supportive,
+        "risk_off_clusters": risk_off,
+        "evidence": evidence,
+        "method": "每個獨立證據群只計一票；政策事件量只描述監管活動，不臆測利多或利空。",
+        "invalidation": "若 ETF、流動性、鏈上活動或情緒代理的方向在下一次已驗證更新中反轉，本結論即失效。",
+    }
+
+
+def build_news_sentiment(snapshot: dict[str, Any], market: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+    radar = nested(snapshot, "metrics.market_radar") or {}
+    fear_greed = number(radar.get("fear_greed"))
+    fear_state = "risk_off" if fear_greed is not None and fear_greed <= 25 else "supportive" if fear_greed is not None and fear_greed >= 60 else "neutral"
+    btc_etf = nested(market, "etf.BTC") or {}
+    etf_verified = btc_etf.get("status") == "sample_cross_source_verified"
+    etf_7d = number(btc_etf.get("flow_7d_usd")) if etf_verified else None
+    etf_30d = number(btc_etf.get("flow_30d_usd")) if etf_verified else None
+    source_observations = btc_etf.get("source_observations") or {}
+    canonical_etf = source_observations.get("The Block") or {}
+    policy = context.get("policy") or {}
+    policy_events = policy.get("events") or []
+    latest_policy = policy_events[0] if policy_events else {}
+    funding = number(nested(market, "analysis.BTC.funding_annualized_median"))
+    liquidity = nested(context, "macro.liquidity") or {}
+    liquidity_resonance = liquidity.get("dollar_liquidity_resonance") or {}
+    liquidity_positive = int(number(liquidity_resonance.get("positive_votes")) or 0)
+    liquidity_negative = int(number(liquidity_resonance.get("negative_votes")) or 0)
+    liquidity_state = "supportive" if liquidity_positive > liquidity_negative else "risk_off" if liquidity_negative > liquidity_positive else "neutral"
+    active_addresses = nested(context, "onchain.BTC.active_addresses") or {}
+    active_change = number(active_addresses.get("change_30d"))
+    active_state = "supportive" if active_change is not None and active_change > 0 else "risk_off" if active_change is not None and active_change < 0 else "neutral"
+    hashrate = nested(context, "onchain.BTC.hashrate") or {}
+    hashrate_change = number(hashrate.get("change_30d"))
+    hashrate_state = "supportive" if hashrate_change is not None and hashrate_change > 0 else "risk_off" if hashrate_change is not None and hashrate_change < 0 else "neutral"
+    weekly_evidence = [
+        sentiment_evidence("恐懼貪婪情緒", "market_sentiment", fear_greed, fear_state, radar.get("fear_greed_timestamp"), "只描述市場風險偏好；極端恐懼不是自動反向買進訊號。", "Alternative.me Fear & Greed", "https://api.alternative.me/fng/", "verified_snapshot"),
+        sentiment_evidence("BTC 現貨 ETF 七日淨流", "institutional_flows", etf_7d, "supportive" if etf_7d is not None and etf_7d > 0 else "risk_off" if etf_7d is not None and etf_7d < 0 else "unknown", btc_etf.get("as_of") or market.get("generated_at"), "僅在基金明細、官方主要基金與同日備援通過後計票。", "The Block＋發行商官方＋同日備援", canonical_etf.get("url") or "data/daily/market_universe.json", "verified" if etf_verified else "unverified"),
+        sentiment_evidence("永續資金費率", "derivatives_positioning", funding, "risk_off" if funding is not None and funding > 0.15 else "neutral", market.get("generated_at"), "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。", "OKX＋Hyperliquid", "data/daily/market_universe.json", "verified_market_universe"),
+        sentiment_evidence("官方政策事件", "policy_activity", policy.get("event_count_7d"), "context", latest_policy.get("published_at") or context.get("date"), "零事件不代表監管風險消失；事件量不自行判定利多或利空。", latest_policy.get("provider") or "官方來源集合", latest_policy.get("url") or "https://www.federalregister.gov/", policy.get("status") or "unknown"),
+    ]
+    monthly_evidence = [
+        sentiment_evidence("BTC 現貨 ETF 三十日淨流", "institutional_flows", etf_30d, "supportive" if etf_30d is not None and etf_30d > 0 else "risk_off" if etf_30d is not None and etf_30d < 0 else "unknown", btc_etf.get("as_of") or market.get("generated_at"), "觀察機構資金的月級別持續性，不以單日流量替代。", "The Block＋發行商官方＋同日備援", canonical_etf.get("url") or "data/daily/market_universe.json", "verified" if etf_verified else "unverified"),
+        sentiment_evidence("美元流動性三速共振", "macro_liquidity", liquidity_resonance.get("state"), liquidity_state, liquidity.get("as_of"), f"M2、銀行準備金與 Fed 淨流動性分開計票：正向 {liquidity_positive}、負向 {liquidity_negative}。", "Federal Reserve＋U.S. Treasury＋FRED", "https://fred.stlouisfed.org/series/WALCL", context.get("quality", {}).get("status") or "unknown"),
+        sentiment_evidence("BTC 活躍地址三十日變化", "network_activity", active_change, active_state, active_addresses.get("as_of") or context.get("date"), "鏈上活動是使用背景與落後驗證，不等同價格領先訊號。", "Blockchain.com＋Blockchair", active_addresses.get("url") or "https://api.blockchain.info/charts/n-unique-addresses", nested(context, "onchain.BTC.status") or "unknown"),
+        sentiment_evidence("BTC 算力三十日變化", "network_security", hashrate_change, hashrate_state, hashrate.get("as_of") or context.get("date"), "算力描述安全活動；短期下降需與難度、礦工經濟及價格分開解讀。", "Blockchain.com＋mempool.space", hashrate.get("url") or "https://api.blockchain.info/charts/hash-rate", nested(context, "onchain.BTC.status") or "unknown"),
+        sentiment_evidence("官方政策事件", "policy_activity", policy.get("event_count_30d"), "context", latest_policy.get("published_at") or context.get("date"), "政策活動只提供可追溯事件背景，不以標題情緒替代法案狀態。", latest_policy.get("provider") or "官方來源集合", latest_policy.get("url") or "https://www.federalregister.gov/", policy.get("status") or "unknown"),
+    ]
+    return {
+        "weekly": sentiment_summary("週線", weekly_evidence),
+        "monthly": sentiment_summary("月線", monthly_evidence),
+        "scope": "verified_context_only",
+        "execution_gate_eligible": False,
+    }
 
 
 def classify_state(
@@ -498,6 +907,21 @@ def compact_observation(analysis: dict[str, Any], revision: int, supersedes: str
             for key, value in analysis.get("horizons", {}).items()
         },
         "alignment": analysis.get("alignment"),
+        "technical_horizons": {
+            key: {
+                "as_of": value.get("as_of"),
+                "rsi_14": value.get("rsi_14"),
+                "macd_histogram": nested(value, "macd.histogram"),
+                "bottom_state": nested(value, "bottom_assessment.state"),
+                "top_state": nested(value, "top_risk.state"),
+            }
+            for key, value in analysis.get("technical_horizons", {}).items()
+        },
+        "news_sentiment": {
+            key: value.get("conclusion")
+            for key, value in analysis.get("news_sentiment", {}).items()
+            if isinstance(value, dict) and value.get("conclusion")
+        },
         "exclusive_insights": [
             {"id": item.get("id"), "key_number": item.get("key_number"), "claim": item.get("claim")}
             for item in analysis.get("exclusive_insights", [])
@@ -511,6 +935,9 @@ def main() -> int:
     snapshot = load_json(SNAPSHOT_PATH)
     daily_verification = load_json(DAILY_VERIFICATION_PATH)
     market = load_json(MARKET_PATH)
+    market_verification = load_json(MARKET_VERIFICATION_PATH)
+    context = load_json(CONTEXT_PATH)
+    context_verification = load_json(CONTEXT_VERIFICATION_PATH)
     history = load_json(HISTORY_PATH, {"schema": 1, "items": []})
     previous = prior_distinct_observation(history, snapshot.get("date", ""))
     asset_matrix: dict[str, dict[str, Any]] = {}
@@ -526,26 +953,43 @@ def main() -> int:
     }
     source_status = data_verification.get("status")
     daily_status = daily_verification.get("status")
+    market_status = market_verification.get("status")
+    context_status = context_verification.get("status")
     lineage_ok = (
         price_history.get("snapshot_generated_at") == snapshot.get("generated_at")
         and data_verification.get("snapshot_generated_at") == snapshot.get("generated_at")
         and daily_verification.get("snapshot_generated_at") == snapshot.get("generated_at")
         and market.get("snapshot_generated_at") == snapshot.get("generated_at")
     )
+    verifier_bindings_ok = (
+        market_verification.get("market_generated_at") == market.get("generated_at")
+        and market_status != "fail"
+        and context_verification.get("source_generated_at") == context.get("generated_at")
+        and context_status != "fail"
+    )
     failures = list(data_verification.get("failures") or [])
     if daily_status == "fail":
         failures.extend(daily_verification.get("failures") or ["daily verification failed"])
     if not lineage_ok:
         failures.append("timescale inputs are not bound to the same daily snapshot")
-    degradations = list(data_verification.get("degradations") or []) + list(daily_verification.get("degradations") or [])
-    quality_status = "fail" if failures else "degraded" if source_status == "degraded" or daily_status == "degraded" else "pass"
+    if not verifier_bindings_ok:
+        failures.append("market or context verifier is not bound to the current analysis inputs")
+    degradations = list(data_verification.get("degradations") or []) + list(daily_verification.get("degradations") or []) + list(context_verification.get("degradations") or [])
+    quality_status = "fail" if failures else "degraded" if "degraded" in {source_status, daily_status, market_status, context_status} else "pass"
     generated_at = now_iso()
+    btc_rows, btc_asset = source_rows(price_history, "BTC")
+    technical_horizons = {timeframe: technical_horizon(btc_rows, timeframe) for timeframe in ("weekly", "monthly")}
+    for item in technical_horizons.values():
+        item["canonical_provider"] = btc_asset.get("canonical_provider")
+        item["source_count"] = btc_asset.get("source_count")
+    news_sentiment = build_news_sentiment(snapshot, market, context)
     analysis = {
         "schema": 1,
         "date": snapshot.get("date"),
         "generated_at": generated_at,
         "snapshot_generated_at": snapshot.get("generated_at"),
         "market_universe_generated_at": market.get("generated_at"),
+        "market_context_generated_at": context.get("generated_at"),
         "price_history_generated_at": price_history.get("generated_at"),
         "quality": {
             "status": quality_status,
@@ -553,8 +997,8 @@ def main() -> int:
             "execution_gate_eligible": False,
             "failures": failures,
             "degradations": list(dict.fromkeys(degradations)),
-            "lineage_bound": lineage_ok,
-            "method": "deterministic dual-source completed-bar analysis",
+            "lineage_bound": lineage_ok and verifier_bindings_ok,
+            "method": "deterministic dual-source daily history plus completed weekly/monthly candle analysis and verified context synthesis",
         },
         "system": {
             "name": "四週期市場狀態判讀系統",
@@ -565,6 +1009,8 @@ def main() -> int:
         "horizons": horizons if quality_status != "fail" else {},
         "alignment": alignment(horizons) if quality_status != "fail" else {"dominant_state": "資料封鎖", "plain_read": "必要資料或血緣驗證失敗。"},
         "asset_matrix": asset_matrix if quality_status != "fail" else {},
+        "technical_horizons": technical_horizons if quality_status != "fail" else {},
+        "news_sentiment": news_sentiment if quality_status != "fail" else {},
         "exclusive_insights": exclusive_insights(asset_matrix, horizons, snapshot, market, previous) if quality_status != "fail" else [],
         "record_advantage": {
             "observations": len(history.get("items", [])) + 1,

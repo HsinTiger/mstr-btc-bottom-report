@@ -114,6 +114,22 @@ def validate_timescale_artifacts(manifest: dict[str, Any], artifact_bytes: dict[
         raise RuntimeError("production timescale price/verifier binding mismatch")
     if analysis.get("generated_at") != analysis_verification.get("analysis_generated_at") or analysis.get("snapshot_generated_at") != analysis_verification.get("snapshot_generated_at"):
         raise RuntimeError("production timescale analysis/verifier binding mismatch")
+    if not analysis_verification.get("lineage") or not all(analysis_verification["lineage"].values()):
+        raise RuntimeError("production timescale lineage or freshness failed")
+    if set(analysis.get("technical_horizons", {})) != {"weekly", "monthly"}:
+        raise RuntimeError("production completed weekly/monthly technical layer missing")
+    required_checks = set()
+    for timeframe in ("weekly", "monthly"):
+        technical = analysis["technical_horizons"][timeframe]
+        sentiment = analysis.get("news_sentiment", {}).get(timeframe, {})
+        if technical.get("bar_basis") != f"completed_{timeframe}_candles" or int(technical.get("bars", 0)) < 35 or int(technical.get("source_count", 0)) < 2:
+            raise RuntimeError(f"production {timeframe} completed-candle contract failed")
+        if len(sentiment.get("evidence", [])) < 4:
+            raise RuntimeError(f"production {timeframe} sentiment evidence incomplete")
+        required_checks.update({f"BTC_{timeframe}_rsi_14", f"BTC_{timeframe}_macd_histogram", f"BTC_{timeframe}_atr_14", f"BTC_{timeframe}_obv"})
+    passed_checks = {item.get("name") for item in analysis_verification.get("checks", []) if item.get("status") == "pass"}
+    if not required_checks.issubset(passed_checks):
+        raise RuntimeError("production completed weekly/monthly indicators lack independent recomputation")
     items = history.get("items", [])
     if history.get("updated_at") != analysis.get("generated_at") or not items or items[-1].get("generated_at") != analysis.get("generated_at"):
         raise RuntimeError("production timescale history binding mismatch")

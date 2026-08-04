@@ -37,6 +37,9 @@ jobs:
       - name: Test source failover contracts
         run: python scripts/test_source_failover.py
 
+      - name: Test completed weekly and monthly analysis contracts
+        run: python scripts/test_timescale_intelligence.py
+
       - name: Collect market universe
         run: python scripts/collect_market_universe.py
 
@@ -127,6 +130,27 @@ jobs:
           )
           PY
 
+      - name: Rebuild dependent timescale analysis
+        run: python scripts/generate_timescale_intelligence.py
+
+      - name: Verify rebuilt timescale analysis
+        run: |
+          rm -f data/daily/timescale_intelligence_verification.json
+          python scripts/verify_timescale_intelligence.py
+
+      - name: Rebuild dependent market editorial
+        run: python scripts/generate_market_editorial.py
+
+      - name: Verify rebuilt market editorial
+        run: |
+          rm -f data/daily/market_editorial_verification.json
+          python scripts/verify_market_editorial.py
+
+      - name: Prove rebuilt editorial contracts
+        run: |
+          python scripts/test_market_editorial.py
+          python scripts/test_market_editorial_mutations.py
+
       - name: Audit product surfaces and publish fail-closed diagnostics
         run: python scripts/audit_product_surfaces.py --allow-fail-closed-data
 
@@ -134,7 +158,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/daily/market_universe.json data/daily/market_universe_history.json data/daily/market_universe_verification.json data/daily/site_health.json
+          git add \
+            data/daily/market_universe.json \
+            data/daily/market_universe_history.json \
+            data/daily/market_universe_verification.json \
+            data/daily/timescale_intelligence.json \
+            data/daily/timescale_intelligence_history.json \
+            data/daily/timescale_intelligence_verification.json \
+            data/daily/market_editorial.json \
+            data/daily/market_editorial_history.json \
+            data/daily/market_editorial_verification.json \
+            data/daily/site_health.json
           if git diff --cached --quiet; then
             echo "No market-universe changes to commit."
           else

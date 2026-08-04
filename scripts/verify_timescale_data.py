@@ -97,9 +97,11 @@ def compare_sources(primary: dict[str, Any], secondary: dict[str, Any]) -> dict[
         if first is not None and second not in (None, 0):
             gaps.append(abs(first - second) / ((abs(first) + abs(second)) / 2))
     return_gaps: dict[str, float | None] = {}
+    aligned_primary = [{"date": observation_date, "close": primary_by_date[observation_date]} for observation_date in overlap_dates]
+    aligned_secondary = [{"date": observation_date, "close": secondary_by_date[observation_date]} for observation_date in overlap_dates]
     for bars in (1, 5, 21, 63):
-        first_return = period_return(primary_rows, bars)
-        second_return = period_return(secondary_rows, bars)
+        first_return = period_return(aligned_primary, bars)
+        second_return = period_return(aligned_secondary, bars)
         return_gaps[str(bars)] = abs(first_return - second_return) if first_return is not None and second_return is not None else None
     latest_primary = datetime.fromisoformat(primary_rows[-1]["date"]).date() if primary_rows else None
     latest_secondary = datetime.fromisoformat(secondary_rows[-1]["date"]).date() if secondary_rows else None
@@ -109,6 +111,7 @@ def compare_sources(primary: dict[str, Any], secondary: dict[str, Any]) -> dict[
         "p95_close_gap": percentile(gaps, 0.95),
         "maximum_close_gap": max(gaps) if gaps else None,
         "period_return_gaps": return_gaps,
+        "return_comparison_as_of": overlap_dates[-1] if overlap_dates else None,
         "latest_date_gap_days": abs((latest_primary - latest_secondary).days) if latest_primary and latest_secondary else None,
     }
 

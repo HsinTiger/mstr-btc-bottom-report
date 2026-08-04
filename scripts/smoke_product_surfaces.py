@@ -206,6 +206,22 @@ def validate_timescale_artifacts(base_url: str) -> None:
         raise RuntimeError("四週期價格 artifact 與 verifier 批次未綁定")
     if analysis.get("generated_at") != analysis_verification.get("analysis_generated_at") or analysis.get("snapshot_generated_at") != analysis_verification.get("snapshot_generated_at"):
         raise RuntimeError("四週期分析 artifact 與 verifier 批次未綁定")
+    if not analysis_verification.get("lineage") or not all(analysis_verification["lineage"].values()):
+        raise RuntimeError("四週期分析 lineage 或新鮮度未全部通過")
+    if set(analysis.get("technical_horizons", {})) != {"weekly", "monthly"}:
+        raise RuntimeError("完成週 K／月 K 技術層缺漏")
+    required_checks = set()
+    for timeframe in ("weekly", "monthly"):
+        technical = analysis["technical_horizons"][timeframe]
+        sentiment = analysis.get("news_sentiment", {}).get(timeframe, {})
+        if technical.get("bar_basis") != f"completed_{timeframe}_candles" or int(technical.get("bars", 0)) < 35 or int(technical.get("source_count", 0)) < 2:
+            raise RuntimeError(f"{timeframe} 完成 K 技術契約不完整")
+        if len(sentiment.get("evidence", [])) < 4:
+            raise RuntimeError(f"{timeframe} 消息情緒證據不足")
+        required_checks.update({f"BTC_{timeframe}_rsi_14", f"BTC_{timeframe}_macd_histogram", f"BTC_{timeframe}_atr_14", f"BTC_{timeframe}_obv"})
+    passed_checks = {item.get("name") for item in analysis_verification.get("checks", []) if item.get("status") == "pass"}
+    if not required_checks.issubset(passed_checks):
+        raise RuntimeError("完成週 K／月 K 核心指標缺少獨立重算")
     history_items = history.get("items", [])
     if history.get("updated_at") != analysis.get("generated_at") or not history_items or history_items[-1].get("generated_at") != analysis.get("generated_at"):
         raise RuntimeError("四週期分析與 append-only history 最新 revision 未綁定")
@@ -276,6 +292,8 @@ def validate_base_page(
             raise RuntimeError("市場總編主文或八個研究桌未完整載入")
         if not re.search(r'data-timescale-status="(?:pass|degraded)"', dom):
             raise RuntimeError("市場總編四週期與修訂證據未通過")
+        if "週線／月線頂底判讀" not in body or "RSI 14" not in body or not re.search(r'<section(?=[^>]*id="technicalPulse")(?![^>]*class="[^"]*hidden)[^>]*>', dom):
+            raise RuntimeError("市場總編週線／月線技術雙卡未完整顯示")
         if 'data-page-overflow="false"' not in dom:
             raise RuntimeError("市場總編版面發生水平溢位")
     if page_name == "x-intelligence.html":

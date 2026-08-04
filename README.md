@@ -55,6 +55,10 @@ Daily source collection
 - `data/daily/market_editorial_history.json`
 - `data/daily/market_editorial_verification.json`
 
+`timescale_intelligence.json` 另外保留兩層不可混稱的時間尺度：原有日 K 等長窗口用於跨資產一致比較；`technical_horizons.weekly/monthly` 則由完整日 K 聚合成「已完成週 K／月 K」，重算 RSI 14、MACD、量價、OBV、ATR、20／30 週均線、10／20 月均線、頂底背離、領先訊號與落後確認。消息情緒只納入已驗證 ETF、政策、流動性、鏈上及情緒證據，且不具交易執行資格。
+
+每次 `market_universe` 更新後，工作流必須依序重算並驗證 timescale → market editorial，再將上游與全部下游 artifact 原子提交；舊 verifier 即使曾通過，也不能替新上游批次背書。
+
 Pages 的 `deployment-manifest.json` 會綁定 commit、市場總編 semantic hash，以及十個關鍵公開 artifact（五個四週期、原始觀測、每日快照、每日獨立驗證、市場總表與市場 verifier）的 SHA-256／bytes；正式站驗收同時確認三個退場頁為 404、五頁桌面／手機可讀與根網址轉址。
 
 ## 逐卡來源契約

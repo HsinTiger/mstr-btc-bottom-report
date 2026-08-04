@@ -52,7 +52,7 @@ summary: 每日四週期與市場總編、每小時跨資產雷達分層更新�
 
 | 研究桌 | 主來源與備援 | 驗證限制 |
 |---|---|---|
-| BTC／ETH 核心市場與技術籌碼 | 四來源現貨、OKX／Hyperliquid 永續、雙來源完成日 K | 價格、跨資產廣度與槓桿分開投票；日線不得冒充月線結論 |
+| BTC／ETH 核心市場與技術籌碼 | 四來源現貨、OKX／Hyperliquid 永續、雙來源完成日 K | 日 K 等長窗口只作跨資產比較；真正週線／月線技術面由已完成週 K／月 K 重算 RSI、MACD、量價、OBV、ATR、均線與背離，未完成 K 不進分析 |
 | ETF／DAT | ETF 三來源＋iShares；DAT 多來源＋SEC 公司 overlay | ETF 是流量、DAT 是存量；流入而價格下跌仍需標示吸收失敗 |
 | 加密法案與政策 | Congress.gov、Federal Register、SEC、Federal Reserve、White House | 提案、新聞稿、正式規則與生效法律分層；事件數不等於政策利多 |
 | BTC 鏈上 | Blockchain.com、Blockchair、mempool.space、Coin Metrics | 交易數與算力做跨來源差異；MVRV 只作估值背景 |
@@ -64,7 +64,7 @@ summary: 每日四週期與市場總編、每小時跨資產雷達分層更新�
 `market_editorial.json` 的每個數字由 verifier 從上述目前 artifact 重算；`market_editorial_verification.json` 同時綁定完整 editorial hash 與 history head。來源只支持原始數據，不背書本站的非共識假說。
 
 ## 內部產物（raw/ 層）
-- `../data/daily/timescale_price_history.json` — 多來源完整日 K 與日／週／月／季時序基礎
+- `../data/daily/timescale_price_history.json` — BTC／ETH 八年、上市載具約兩年的多來源完成日 K；週 K／月 K 由系統按 UTC 日曆聚合並排除未完成期間
 - `../data/daily/timescale_intelligence_history.json` — append-only 洞察與同日 revision
 - `../monitor-log.md` — 每日完整報告追加
 - `../raw/kol-subtitles/` — KOL 影片字幕（[[kol-roster]]）

@@ -43,6 +43,14 @@ def main() -> int:
     liquidity_desk = next(item for item in editorial["desks"] if item["id"] == "liquidity-fed-oil")
     liquidity_metrics = {item["metric_id"] for item in liquidity_desk["evidence"]}
     expect({"net-liquidity", "m2-money-stock-yoy", "bank-reserves-30d"}.issubset(liquidity_metrics), "three-speed dollar liquidity evidence")
+    technical_desk = next(item for item in editorial["desks"] if item["id"] == "technical-positioning")
+    technical_metrics = {item["metric_id"] for item in technical_desk["evidence"]}
+    expect({
+        "btc-weekly-rsi", "btc-weekly-macd-histogram", "btc-weekly-volume-ratio", "btc-weekly-fast-ma-distance",
+        "btc-monthly-rsi", "btc-monthly-macd-histogram", "btc-monthly-fast-ma-distance",
+        "btc-weekly-news-sentiment", "btc-monthly-news-sentiment",
+    }.issubset(technical_metrics), "completed weekly/monthly technical and sentiment evidence")
+    expect("等長窗口" not in json.dumps(technical_desk, ensure_ascii=False), "technical desk must not relabel daily windows as weekly/monthly candles")
     print(f"market editorial tests: PASS ({checks}/{checks})")
     return 0
 

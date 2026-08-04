@@ -154,12 +154,19 @@ def verify(
         btc_chain = context.get("onchain", {}).get("BTC", {})
         eth_chain = context.get("onchain", {}).get("ETH", {})
         horizons = timescale.get("horizons", {})
+        technical_horizons = timescale.get("technical_horizons", {})
+        weekly_technical = technical_horizons.get("weekly", {})
+        monthly_technical = technical_horizons.get("monthly", {})
+        weekly_sentiment = timescale.get("news_sentiment", {}).get("weekly", {})
+        monthly_sentiment = timescale.get("news_sentiment", {}).get("monthly", {})
+        weekly_sentiment_score = finite(weekly_sentiment.get("supportive_clusters")) - finite(weekly_sentiment.get("risk_off_clusters")) if finite(weekly_sentiment.get("supportive_clusters")) is not None and finite(weekly_sentiment.get("risk_off_clusters")) is not None else None
+        monthly_sentiment_score = finite(monthly_sentiment.get("supportive_clusters")) - finite(monthly_sentiment.get("risk_off_clusters")) if finite(monthly_sentiment.get("supportive_clusters")) is not None and finite(monthly_sentiment.get("risk_off_clusters")) is not None else None
         tracked = market.get("analysis", {}).get("breadth", {}).get("tracked_assets", 0)
         positive_assets = market.get("analysis", {}).get("breadth", {}).get("positive_assets", 0)
         expected_values = {
             "btc-24h-return": finite(market.get("assets", {}).get("BTC", {}).get("change_24h")),
             "eth-24h-return": finite(market.get("assets", {}).get("ETH", {}).get("change_24h")),
-            "btc-monthly-return": finite(horizons.get("monthly", {}).get("metrics", {}).get("btc_return")),
+            "btc-monthly-return": finite(monthly_technical.get("period_return")),
             "btc-funding": finite(market.get("analysis", {}).get("BTC", {}).get("funding_annualized_median")),
             "btc-etf-7d": finite(market_radar.get("etf_flow_7d_usd")),
             "eth-etf-7d": finite(market_radar.get("eth_etf_flow_7d_usd")),
@@ -178,6 +185,15 @@ def verify(
             "btc-weekly-window": finite(horizons.get("weekly", {}).get("metrics", {}).get("btc_return")),
             "crypto-breadth": positive_assets / tracked if tracked else None,
             "btc-perp-funding": finite(market.get("analysis", {}).get("BTC", {}).get("funding_annualized_median")),
+            "btc-weekly-rsi": finite(weekly_technical.get("rsi_14")),
+            "btc-weekly-macd-histogram": finite(weekly_technical.get("macd", {}).get("histogram")),
+            "btc-weekly-volume-ratio": finite(weekly_technical.get("volume", {}).get("relative_to_average")),
+            "btc-weekly-fast-ma-distance": finite(weekly_technical.get("moving_averages", {}).get("distance_from_fast")),
+            "btc-monthly-rsi": finite(monthly_technical.get("rsi_14")),
+            "btc-monthly-macd-histogram": finite(monthly_technical.get("macd", {}).get("histogram")),
+            "btc-monthly-fast-ma-distance": finite(monthly_technical.get("moving_averages", {}).get("distance_from_fast")),
+            "btc-weekly-news-sentiment": weekly_sentiment_score,
+            "btc-monthly-news-sentiment": monthly_sentiment_score,
             "net-liquidity": finite(liquidity.get("net_liquidity_million_usd")),
             "m2-money-stock-yoy": finite(liquidity.get("m2_money_stock_yoy_change")),
             "bank-reserves-30d": finite(liquidity.get("reserve_balances_30d_change")),
@@ -212,7 +228,7 @@ def verify(
         expected_contracts = {
             "btc-24h-return": (market.get("assets", {}).get("BTC", {}).get("as_of"), btc_sources, expected_direction(btc_change, 0.02)),
             "eth-24h-return": (market.get("assets", {}).get("ETH", {}).get("as_of"), int(market.get("assets", {}).get("ETH", {}).get("source_count", 0)), expected_direction(expected_values["eth-24h-return"], 0.02)),
-            "btc-monthly-return": (horizons.get("monthly", {}).get("data_depth", {}).get("as_of"), int(horizons.get("monthly", {}).get("data_depth", {}).get("source_count", 0)), expected_direction(expected_values["btc-monthly-return"], 0.04)),
+            "btc-monthly-return": (monthly_technical.get("as_of"), int(monthly_technical.get("source_count", 0)), expected_direction(expected_values["btc-monthly-return"], 0.04)),
             "btc-funding": (market.get("derivatives", {}).get("BTC", {}).get("perpetual", {}).get("okx", {}).get("as_of"), funding_sources, expected_direction(funding, 0.12, inverse=True)),
             "btc-etf-7d": (market_radar.get("etf_flow_as_of"), int(market_radar.get("etf_flow_source_count") or 0), expected_direction(btc_etf_7d, 100_000_000)),
             "eth-etf-7d": (market_radar.get("eth_etf_flow_as_of"), int(market_radar.get("eth_etf_flow_source_count") or 0), expected_direction(expected_values["eth-etf-7d"], 50_000_000)),
@@ -231,6 +247,15 @@ def verify(
             "btc-weekly-window": (horizons.get("weekly", {}).get("data_depth", {}).get("as_of"), int(horizons.get("weekly", {}).get("data_depth", {}).get("source_count", 0)), expected_direction(expected_values["btc-weekly-window"], 0.04)),
             "crypto-breadth": (market.get("generated_at"), 2, expected_direction((expected_values["crypto-breadth"] or 0) - 0.5, 0.2)),
             "btc-perp-funding": (market.get("generated_at"), funding_sources, expected_direction(funding, 0.12, inverse=True)),
+            "btc-weekly-rsi": (weekly_technical.get("as_of"), int(weekly_technical.get("source_count", 0)), expected_direction((expected_values["btc-weekly-rsi"] - 50) if expected_values["btc-weekly-rsi"] is not None else None, 10)),
+            "btc-weekly-macd-histogram": (weekly_technical.get("as_of"), int(weekly_technical.get("source_count", 0)), expected_direction(expected_values["btc-weekly-macd-histogram"], 1)),
+            "btc-weekly-volume-ratio": (weekly_technical.get("as_of"), int(weekly_technical.get("source_count", 0)), expected_direction((expected_values["btc-weekly-volume-ratio"] - 1) if expected_values["btc-weekly-volume-ratio"] is not None else None, 0.5)),
+            "btc-weekly-fast-ma-distance": (weekly_technical.get("as_of"), int(weekly_technical.get("source_count", 0)), expected_direction(expected_values["btc-weekly-fast-ma-distance"], 0.03)),
+            "btc-monthly-rsi": (monthly_technical.get("as_of"), int(monthly_technical.get("source_count", 0)), expected_direction((expected_values["btc-monthly-rsi"] - 50) if expected_values["btc-monthly-rsi"] is not None else None, 10)),
+            "btc-monthly-macd-histogram": (monthly_technical.get("as_of"), int(monthly_technical.get("source_count", 0)), expected_direction(expected_values["btc-monthly-macd-histogram"], 1)),
+            "btc-monthly-fast-ma-distance": (monthly_technical.get("as_of"), int(monthly_technical.get("source_count", 0)), expected_direction(expected_values["btc-monthly-fast-ma-distance"], 0.05)),
+            "btc-weekly-news-sentiment": (timescale.get("generated_at"), len(weekly_sentiment.get("evidence", [])), expected_direction(expected_values["btc-weekly-news-sentiment"], 1)),
+            "btc-monthly-news-sentiment": (timescale.get("generated_at"), len(monthly_sentiment.get("evidence", [])), expected_direction(expected_values["btc-monthly-news-sentiment"], 1)),
             "net-liquidity": (liquidity.get("as_of"), 3, expected_direction(net_change, 0.01)),
             "m2-money-stock-yoy": (liquidity.get("m2_money_stock_as_of"), 1, expected_direction(m2_yoy, 0.01)),
             "bank-reserves-30d": (liquidity.get("reserve_balances_as_of"), 1, expected_direction(reserve_change, 0.01)),

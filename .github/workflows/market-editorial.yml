@@ -58,6 +58,14 @@ jobs:
       - name: Prove context verifier rejects date and independence mutations
         run: python scripts/test_market_context_mutations.py
 
+      - name: Rebuild timescale analysis against current market and context
+        run: python scripts/generate_timescale_intelligence.py
+
+      - name: Verify current timescale analysis
+        run: |
+          rm -f data/daily/timescale_intelligence_verification.json
+          python scripts/verify_timescale_intelligence.py
+
       - name: Require current verified daily research inputs
         run: |
           python - <<'PY'
@@ -119,6 +127,9 @@ jobs:
             data/daily/market_universe_verification.json \
             data/daily/market_context.json \
             data/daily/market_context_verification.json \
+            data/daily/timescale_intelligence.json \
+            data/daily/timescale_intelligence_history.json \
+            data/daily/timescale_intelligence_verification.json \
             data/daily/market_editorial.json \
             data/daily/market_editorial_history.json \
             data/daily/market_editorial_verification.json \

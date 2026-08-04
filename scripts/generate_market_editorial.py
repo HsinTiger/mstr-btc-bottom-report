@@ -224,9 +224,15 @@ def build_briefs(
     btc = market.get("assets", {}).get("BTC", {})
     eth = market.get("assets", {}).get("ETH", {})
     horizons = timescale.get("horizons", {})
+    technical_horizons = timescale.get("technical_horizons", {})
+    weekly_technical = technical_horizons.get("weekly", {})
+    monthly_technical = technical_horizons.get("monthly", {})
+    news_sentiment = timescale.get("news_sentiment", {})
+    weekly_sentiment = news_sentiment.get("weekly", {})
+    monthly_sentiment = news_sentiment.get("monthly", {})
     daily_return = finite(horizons.get("daily", {}).get("metrics", {}).get("btc_return"))
-    weekly_return = finite(horizons.get("weekly", {}).get("metrics", {}).get("btc_return"))
-    monthly_return = finite(horizons.get("monthly", {}).get("metrics", {}).get("btc_return"))
+    weekly_return = finite(weekly_technical.get("period_return"))
+    monthly_return = finite(monthly_technical.get("period_return"))
     quarterly_return = finite(horizons.get("quarterly", {}).get("metrics", {}).get("btc_return"))
     btc_change = finite(btc.get("change_24h"))
     eth_change = finite(eth.get("change_24h"))
@@ -245,7 +251,7 @@ def build_briefs(
     crypto_items = [
         evidence("btc-24h-return", "比特幣 24 小時報酬", btc_change, signed_pct(btc_change), "相較昨日報價", btc.get("as_of"), direction(btc_change, 0.02), int(btc.get("source_count", 0)), [source("CoinGecko／OKX／Coinbase／Kraken", "market-monitor.html")], "短線風險偏好，不等於月線趨勢。", "價格"),
         evidence("eth-24h-return", "以太幣 24 小時報酬", eth_change, signed_pct(eth_change), "相較昨日報價", eth.get("as_of"), direction(eth_change, 0.02), int(eth.get("source_count", 0)), [source("CoinGecko／OKX／Coinbase／Kraken", "market-monitor.html")], "ETH 相對 BTC 的弱強可辨識風險偏好是否外溢。", "跨資產"),
-        evidence("btc-monthly-return", "比特幣月線等長窗口報酬", monthly_return, signed_pct(monthly_return), horizons.get("monthly", {}).get("what_changed", ""), horizons.get("monthly", {}).get("data_depth", {}).get("as_of"), direction(monthly_return, 0.04), int(horizons.get("monthly", {}).get("data_depth", {}).get("source_count", 0)), [source("雙來源完成日 K", "data/daily/timescale_intelligence.json")], "月線用來區分反彈與中期趨勢，不以單日價格取代。", "趨勢"),
+        evidence("btc-monthly-return", "比特幣最新完成月 K 報酬", monthly_return, signed_pct(monthly_return), monthly_technical.get("bottom_assessment", {}).get("state", ""), monthly_technical.get("as_of"), direction(monthly_return, 0.04), int(monthly_technical.get("source_count", 0)), [source("雙來源完成日 K 聚合月 K", "data/daily/timescale_intelligence.json")], "只使用已完成月 K，用來區分短線反彈與月級別結構。", "趨勢"),
         evidence("btc-funding", "比特幣永續合約年化資金費率中位數", funding, signed_pct(funding), "跨可觀測交易所", market.get("derivatives", {}).get("BTC", {}).get("perpetual", {}).get("okx", {}).get("as_of"), direction(funding, 0.12, inverse=True), int(market.get("derivatives", {}).get("BTC", {}).get("perpetual", {}).get("funding_source_count", 0)), [source("OKX／Hyperliquid", "market-monitor.html")], "正費率代表多方付費，但低於擁擠門檻時不等於過熱。", "槓桿"),
     ]
     crypto = finish_brief(
@@ -336,22 +342,38 @@ def build_briefs(
     )
 
     breadth_ratio = positive_assets / tracked if tracked else None
-    technical_headline = "日線反彈、週線承壓，廣度仍未確認" if (daily_return or 0) > 0 > (weekly_return or 0) else "趨勢、廣度與槓桿正在重新定價"
+    weekly_rsi = finite(weekly_technical.get("rsi_14"))
+    monthly_rsi = finite(monthly_technical.get("rsi_14"))
+    weekly_macd_histogram = finite(weekly_technical.get("macd", {}).get("histogram"))
+    monthly_macd_histogram = finite(monthly_technical.get("macd", {}).get("histogram"))
+    weekly_volume_ratio = finite(weekly_technical.get("volume", {}).get("relative_to_average"))
+    weekly_fast_distance = finite(weekly_technical.get("moving_averages", {}).get("distance_from_fast"))
+    monthly_fast_distance = finite(monthly_technical.get("moving_averages", {}).get("distance_from_fast"))
+    weekly_sentiment_score = finite(weekly_sentiment.get("supportive_clusters")) - finite(weekly_sentiment.get("risk_off_clusters")) if finite(weekly_sentiment.get("supportive_clusters")) is not None and finite(weekly_sentiment.get("risk_off_clusters")) is not None else None
+    monthly_sentiment_score = finite(monthly_sentiment.get("supportive_clusters")) - finite(monthly_sentiment.get("risk_off_clusters")) if finite(monthly_sentiment.get("supportive_clusters")) is not None and finite(monthly_sentiment.get("risk_off_clusters")) is not None else None
+    weekly_bottom_state = weekly_technical.get("bottom_assessment", {}).get("state", "資料不足")
+    monthly_bottom_state = monthly_technical.get("bottom_assessment", {}).get("state", "資料不足")
+    technical_headline = f"週線：{weekly_bottom_state}；月線：{monthly_bottom_state}"
     technical_items = [
-        evidence("btc-daily-window", "比特幣日線等長窗口報酬", daily_return, signed_pct(daily_return), horizons.get("daily", {}).get("status", ""), horizons.get("daily", {}).get("data_depth", {}).get("as_of"), direction(daily_return, 0.02), int(horizons.get("daily", {}).get("data_depth", {}).get("source_count", 0)), [source("雙來源完成日 K", "data/daily/timescale_intelligence.json")], "領先觀察短期動能。", "動能"),
-        evidence("btc-weekly-window", "比特幣週線等長窗口報酬", weekly_return, signed_pct(weekly_return), horizons.get("weekly", {}).get("status", ""), horizons.get("weekly", {}).get("data_depth", {}).get("as_of"), direction(weekly_return, 0.04), int(horizons.get("weekly", {}).get("data_depth", {}).get("source_count", 0)), [source("雙來源完成日 K", "data/daily/timescale_intelligence.json")], "用來驗證日線反彈是否升級。", "趨勢"),
-        evidence("crypto-breadth", "追蹤加密資產上漲廣度", breadth_ratio, f"{positive_assets}/{tracked}", "24 小時正報酬資產", market.get("generated_at"), direction((breadth_ratio or 0) - 0.5, 0.2), 2, [source("固定資產清單多來源", "market-monitor.html")], "廣度確認行情是否只集中在少數資產。", "籌碼廣度"),
-        evidence("btc-perp-funding", "比特幣永續合約年化資金費率中位數", funding, signed_pct(funding), market.get("analysis", {}).get("BTC", {}).get("leverage_temperature", ""), market.get("generated_at"), direction(funding, 0.12, inverse=True), int(market.get("derivatives", {}).get("BTC", {}).get("perpetual", {}).get("funding_source_count", 0)), [source("OKX／Hyperliquid", "market-monitor.html")], "用來辨識趨勢背後是否伴隨擁擠槓桿。", "槓桿籌碼"),
+        evidence("btc-weekly-rsi", "比特幣週線相對強弱指標 RSI 14", weekly_rsi, f"{weekly_rsi:.1f}" if weekly_rsi is not None else "—", weekly_bottom_state, weekly_technical.get("as_of"), direction((weekly_rsi - 50) if weekly_rsi is not None else None, 10), int(weekly_technical.get("source_count", 0)), [source("雙來源完成週 K／獨立重算", "data/daily/timescale_intelligence.json")], "RSI 低於 50 代表動能仍弱；底背離只能列為領先候選，不能替代價格確認。", "週線動能"),
+        evidence("btc-weekly-macd-histogram", "比特幣週線 MACD 柱狀體", weekly_macd_histogram, compact_number(weekly_macd_histogram, 0), "正值代表短期 MACD 動能高於訊號線", weekly_technical.get("as_of"), direction(weekly_macd_histogram, 1), int(weekly_technical.get("source_count", 0)), [source("雙來源完成週 K／獨立重算", "data/daily/timescale_intelligence.json")], "柱狀體轉正表示跌勢動能改善，但價格仍需站回週均線確認。", "週線動能變化"),
+        evidence("btc-weekly-volume-ratio", "比特幣週線成交量相對二十週均量", weekly_volume_ratio, f"{weekly_volume_ratio:.2f}x" if weekly_volume_ratio is not None else "—", weekly_technical.get("volume", {}).get("state", ""), weekly_technical.get("as_of"), direction((weekly_volume_ratio - 1) if weekly_volume_ratio is not None else None, 0.5), int(weekly_technical.get("source_count", 0)), [source("雙來源完成週 K／獨立重算", "data/daily/timescale_intelligence.json")], "量比與收盤回復幅度共同辨識放量承接、量增價滯或放量下跌。", "週線量價"),
+        evidence("btc-weekly-fast-ma-distance", "比特幣距二十週均線", weekly_fast_distance, signed_pct(weekly_fast_distance), weekly_bottom_state, weekly_technical.get("as_of"), direction(weekly_fast_distance, 0.03), int(weekly_technical.get("source_count", 0)), [source("雙來源完成週 K／獨立重算", "data/daily/timescale_intelligence.json")], "尚未站回二十週均線時，週線底背離仍屬領先訊號，未獲落後確認。", "週線趨勢確認"),
+        evidence("btc-monthly-rsi", "比特幣月線相對強弱指標 RSI 14", monthly_rsi, f"{monthly_rsi:.1f}" if monthly_rsi is not None else "—", monthly_bottom_state, monthly_technical.get("as_of"), direction((monthly_rsi - 50) if monthly_rsi is not None else None, 10), int(monthly_technical.get("source_count", 0)), [source("八年日 K 聚合完成月 K／獨立重算", "data/daily/timescale_intelligence.json")], "月線 RSI 用來判斷長週期動能是否真正止跌，更新速度慢於週線。", "月線動能"),
+        evidence("btc-monthly-macd-histogram", "比特幣月線 MACD 柱狀體", monthly_macd_histogram, compact_number(monthly_macd_histogram, 0), "負值代表月級別動能仍低於訊號線", monthly_technical.get("as_of"), direction(monthly_macd_histogram, 1), int(monthly_technical.get("source_count", 0)), [source("八年日 K 聚合完成月 K／獨立重算", "data/daily/timescale_intelligence.json")], "月線 MACD 尚未改善時，週線反彈不能直接升級為長週期底部。", "月線動能確認"),
+        evidence("btc-monthly-fast-ma-distance", "比特幣距十月均線", monthly_fast_distance, signed_pct(monthly_fast_distance), monthly_bottom_state, monthly_technical.get("as_of"), direction(monthly_fast_distance, 0.05), int(monthly_technical.get("source_count", 0)), [source("八年日 K 聚合完成月 K／獨立重算", "data/daily/timescale_intelligence.json")], "價格低於十月均線表示月線趨勢尚未恢復，屬落後確認缺口。", "月線趨勢確認"),
+        evidence("btc-weekly-news-sentiment", "比特幣週線消息與情緒淨票數", weekly_sentiment_score, f"{weekly_sentiment_score:+.0f}" if weekly_sentiment_score is not None else "—", weekly_sentiment.get("conclusion", ""), timescale.get("generated_at"), direction(weekly_sentiment_score, 1), len(weekly_sentiment.get("evidence", [])), [source("已驗證 ETF／政策／情緒／衍生品", "data/daily/timescale_intelligence.json")], "消息情緒只作獨立證據群，不覆蓋價格與動能結論。", "週線消息情緒"),
+        evidence("btc-monthly-news-sentiment", "比特幣月線消息與情緒淨票數", monthly_sentiment_score, f"{monthly_sentiment_score:+.0f}" if monthly_sentiment_score is not None else "—", monthly_sentiment.get("conclusion", ""), timescale.get("generated_at"), direction(monthly_sentiment_score, 1), len(monthly_sentiment.get("evidence", [])), [source("已驗證 ETF／流動性／鏈上／政策", "data/daily/timescale_intelligence.json")], "月線消息面以機構流、美元流動性與鏈上活動交叉，不使用標題情緒猜方向。", "月線消息情緒"),
     ]
     technical = finish_brief(
         "technical-positioning", "動能、技術與籌碼", technical_headline,
-        f"BTC 日線 {signed_pct(daily_return)}、週線 {signed_pct(weekly_return)}、月線 {signed_pct(monthly_return)}、季線 {signed_pct(quarterly_return)}；24 小時廣度 {positive_assets}/{tracked}。",
-        "常見技術分析會挑選單一週期或單一均線給出方向。",
-        "本站要求價格趨勢、跨資產廣度與槓桿溫度三維共振；日線翻多但週線、廣度未確認，只能稱為候選修復。",
-        "若價格上漲卻廣度收窄，資金容易集中於 BTC；若 funding 同時升高，回撤對槓桿部位的破壞力會放大。",
-        "今天先看短線訊號能否升級到週線，再用廣度與 funding 驗證，不反過來拿情緒替價格作答。",
-        "若週線轉正、廣度超過一半且 funding 維持非擁擠，『只是候選修復』將被推翻並升級。",
-        technical_items, pages, abs((daily_return or 0) - (weekly_return or 0)) * 8 + (1 - (breadth_ratio or 0)),
+        f"週線 RSI {weekly_rsi:.1f}、MACD 柱 {compact_number(weekly_macd_histogram, 0)}、距二十週均線 {signed_pct(weekly_fast_distance)}；月線 RSI {monthly_rsi:.1f}、MACD 柱 {compact_number(monthly_macd_histogram, 0)}、距十月均線 {signed_pct(monthly_fast_distance)}。" if weekly_rsi is not None and monthly_rsi is not None else "週線或月線完成 K 指標不足，停止技術結論。",
+        "常見技術分析會把一個 RSI 背離或一根反彈 K 線直接稱為大底。",
+        "本站把底部形成拆成領先訊號與落後確認：週線底背離可先出現，但月線 MACD、均線與高低點結構未確認前，不宣稱長週期底部完成。",
+        "週線領先、月線落後時，短線修復可能延續但長週期波動仍高；消息情緒只提供環境，不替價格結構表決。",
+        f"目前先讀作：週線「{weekly_bottom_state}」，月線「{monthly_bottom_state}」；分別對照 {weekly_sentiment.get('conclusion', '消息資料不足')}、{monthly_sentiment.get('conclusion', '消息資料不足')}。",
+        f"週線失效：{weekly_technical.get('invalidation', '資料不足')} 月線失效：{monthly_technical.get('invalidation', '資料不足')}",
+        technical_items, pages, abs(weekly_fast_distance or 0) * 8 + abs(monthly_fast_distance or 0) * 4 + abs(weekly_sentiment_score or 0),
     )
 
     macro = context.get("macro", {})
