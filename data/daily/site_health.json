@@ -1,19 +1,18 @@
 {
   "schema": 1,
-  "generated_at": "2026-08-06T03:53:31+00:00",
+  "generated_at": "2026-08-06T03:54:01+00:00",
   "status": "degraded",
   "summary": {
     "active_pages": 5,
     "archive_pages": 0,
-    "pass": 3,
-    "degraded": 2,
+    "pass": 4,
+    "degraded": 1,
     "fail": 0,
     "critical_failures": [],
     "critical_surface_failures": [],
     "critical_data_failures": [],
     "degraded_pages": [
       "market-editorial",
-      "market-radar",
       "timescale-intelligence-ledger"
     ],
     "data_products": 2,
@@ -40,9 +39,9 @@
           "path": "data/daily/market_editorial.json",
           "required": true,
           "status": "degraded",
-          "bytes": 45960,
-          "as_of": "2026-08-06T02:36:52+00:00",
-          "age_hours": 1.28,
+          "bytes": 46230,
+          "as_of": "2026-08-06T03:54:01+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -51,8 +50,8 @@
           "required": true,
           "status": "pass",
           "bytes": 14128,
-          "as_of": "2026-08-06T02:36:52+00:00",
-          "age_hours": 1.28,
+          "as_of": "2026-08-06T03:54:01+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],
@@ -120,35 +119,33 @@
         {
           "path": "data/daily/market_universe.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 144306,
-          "as_of": "2026-08-06T02:36:37+00:00",
-          "age_hours": 1.28,
-          "quality": "degraded",
-          "reason": "資料品質狀態為 degraded"
+          "status": "pass",
+          "bytes": 144472,
+          "as_of": "2026-08-06T03:53:49+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_verification.json",
           "required": true,
-          "status": "degraded",
-          "bytes": 595,
-          "as_of": "2026-08-06T02:36:37+00:00",
-          "age_hours": 1.28,
-          "quality": "degraded",
-          "reason": "資料品質狀態為 degraded"
+          "status": "pass",
+          "bytes": 318,
+          "as_of": "2026-08-06T03:53:49+00:00",
+          "age_hours": 0.0,
+          "quality": "pass"
         },
         {
           "path": "data/daily/market_universe_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 70536,
-          "as_of": "2026-08-06T02:36:37+00:00",
-          "age_hours": 1.28
+          "bytes": 70572,
+          "as_of": "2026-08-06T03:53:49+00:00",
+          "age_hours": 0.0
         }
       ],
-      "status": "degraded",
+      "status": "pass",
       "surface_status": "pass",
-      "data_status": "degraded",
+      "data_status": "pass",
       "checks": [
         {
           "name": "page_exists",
@@ -213,7 +210,7 @@
           "status": "pass",
           "bytes": 42325,
           "as_of": "2026-08-06T03:53:19+00:00",
-          "age_hours": 0.0,
+          "age_hours": 0.01,
           "quality": "pass"
         },
         {
@@ -222,7 +219,7 @@
           "status": "pass",
           "bytes": 902,
           "as_of": "2026-08-06T03:53:22+00:00",
-          "age_hours": 0.0,
+          "age_hours": 0.01,
           "quality": "pass"
         }
       ],
@@ -440,7 +437,7 @@
           "bytes": 2510179,
           "lineage": "2026-08-06T02:36:33+00:00",
           "as_of": "2026-08-06T02:36:50+00:00",
-          "age_hours": 1.28,
+          "age_hours": 1.29,
           "quality": "pass"
         },
         {
@@ -450,7 +447,7 @@
           "bytes": 8629,
           "lineage": "2026-08-06T02:36:33+00:00",
           "as_of": "2026-08-06T02:36:52+00:00",
-          "age_hours": 1.28,
+          "age_hours": 1.29,
           "quality": "pass"
         }
       ],
@@ -502,8 +499,8 @@
           "status": "degraded",
           "bytes": 52719,
           "lineage": "2026-08-06T02:36:33+00:00",
-          "as_of": "2026-08-06T02:36:52+00:00",
-          "age_hours": 1.28,
+          "as_of": "2026-08-06T03:54:00+00:00",
+          "age_hours": 0.0,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         },
@@ -511,9 +508,9 @@
           "path": "data/daily/timescale_intelligence_history.json",
           "required": true,
           "status": "pass",
-          "bytes": 90887,
-          "as_of": "2026-08-06T02:36:52+00:00",
-          "age_hours": 1.28
+          "bytes": 94272,
+          "as_of": "2026-08-06T03:54:00+00:00",
+          "age_hours": 0.0
         },
         {
           "path": "data/daily/timescale_intelligence_verification.json",
@@ -521,8 +518,8 @@
           "status": "pass",
           "bytes": 8657,
           "lineage": "2026-08-06T02:36:33+00:00",
-          "as_of": "2026-08-06T02:36:52+00:00",
-          "age_hours": 1.28,
+          "as_of": "2026-08-06T03:54:01+00:00",
+          "age_hours": 0.0,
           "quality": "pass"
         }
       ],

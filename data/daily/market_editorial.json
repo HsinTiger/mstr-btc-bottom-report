@@ -1,45 +1,43 @@
 {
   "schema": 1,
   "date": "2026-08-06",
-  "generated_at": "2026-08-06T02:36:52+00:00",
+  "generated_at": "2026-08-06T03:54:01+00:00",
   "quality": {
     "status": "degraded",
     "publication_mode": "analysis_only",
     "execution_gate_eligible": false,
     "failures": [],
     "degradations": [
-      "market_universe=degraded",
-      "market_universe_verifier=degraded",
       "timescale=degraded"
     ],
     "upstream_statuses": {
       "market_context": "pass",
       "market_context_verifier": "pass",
-      "market_universe": "degraded",
-      "market_universe_verifier": "degraded",
+      "market_universe": "pass",
+      "market_universe_verifier": "pass",
       "timescale": "degraded",
       "timescale_verifier": "pass"
     }
   },
   "lineage": {
-    "market_context_generated_at": "2026-08-06T02:36:37+00:00",
-    "market_context_hash": "b2074f7addf285019597a4ee888190024c39870d0f79373cbd7f1fb56ee2982b",
-    "market_universe_generated_at": "2026-08-06T02:36:37+00:00",
-    "market_universe_hash": "140c6a2d783e3e266a91d2c546ca832d707283c616324dafeaef0bc0bb23358d",
-    "timescale_generated_at": "2026-08-06T02:36:52+00:00",
-    "timescale_hash": "5372e57e086811c813792a1f7faf7f9c7db6913a28026a351e35b762d95c6ee2",
+    "market_context_generated_at": "2026-08-06T03:53:49+00:00",
+    "market_context_hash": "59f1307fa3bc01c5fa21cc9fb6b5edf68f62b8e68dd0e0ea025bdd7f4a847d80",
+    "market_universe_generated_at": "2026-08-06T03:53:49+00:00",
+    "market_universe_hash": "21a259c9df7d4729ee582e7be5ca69c4d66ba00a1733d12868bee8364a5937f2",
+    "timescale_generated_at": "2026-08-06T03:54:00+00:00",
+    "timescale_hash": "448e005e27ccf6f0ba665076cd5aae227a5f6f33b947c485e3ed0bca4d823b54",
     "snapshot_generated_at": "2026-08-06T02:36:33+00:00",
     "snapshot_hash": "bc5633432d6ca39bc34e99b9092ce6f3d987ec94226681beaf1d23f2a2b6894d",
-    "knowledge_context_generated_at": "2026-08-06T02:36:52+00:00",
-    "knowledge_context_hash": "cd23d1466a25bcc78d5f3996010cb901166221b14df0524a1e3a7ae1cd3ffbc0"
+    "knowledge_context_generated_at": "2026-08-06T03:54:01+00:00",
+    "knowledge_context_hash": "380c33be15c3962b19c65675faaf82184e93db20eea253af4085010f17a632d0"
   },
   "editorial_digest": {
     "status": "degraded",
-    "lead_desk_id": "onchain",
-    "lead_headline": "估值降溫，但鏈上活動尚未全面共振",
-    "lead_conclusion": "BTC MVRV 1.22x；交易數 30 日 +17.0%、活躍地址 +14.6%、算力 +15.4%；ETH 每區塊交易數七日 +116.0%。",
-    "dominant_tension": "本站要求估值便宜、使用活動與安全投入至少兩類同向；便宜但使用收縮，可能只是價格先反映更弱的需求。",
-    "falsifier": "若 MVRV 回升但交易、地址與 ETH 活動持續下降，『鏈上修復』假說失效。",
+    "lead_desk_id": "technical-positioning",
+    "lead_headline": "週線：底部證據尚未成形；月線：底部證據尚未成形",
+    "lead_conclusion": "週線 RSI 38.8、MACD 柱 250、距二十週均線 -8.5%；月線 RSI 43.1、MACD 柱 -6K、距十月均線 -18.7%。",
+    "dominant_tension": "本站把底部形成拆成領先訊號與落後確認：週線底背離可先出現，但月線 MACD、均線與高低點結構未確認前，不宣稱長週期底部完成。",
+    "falsifier": "週線失效：若下一根完成 K 同時打破最近結構低點、動能再創低且量價轉為放量下跌，底部候選失效；頂部警訊則以價格與動能同步再創高失效。 月線失效：若下一根完成 K 同時打破最近結構低點、動能再創低且量價轉為放量下跌，底部候選失效；頂部警訊則以價格與動能同步再創高失效。",
     "desk_count": 8,
     "resonance_summary": {
       "positive": 4,
@@ -61,7 +59,7 @@
       "status": "pass",
       "confidence": "高",
       "headline": "現貨動能與月線方向同步改善",
-      "conclusion": "BTC 24 小時 +0.1%、ETH +1.2%；月線 BTC +7.3%。先把短線去風險與中期結構分開。",
+      "conclusion": "BTC 24 小時 +0.5%、ETH +1.6%；月線 BTC +7.3%。先把短線去風險與中期結構分開。",
       "common_interpretation": "市場常把單日大跌直接解讀為趨勢反轉，或把單日反彈直接解讀為底部確認。",
       "variant_view": "本站更在意價格方向是否與槓桿成本、ETH 相對強弱及月線窗口同向；若資金費率沒有同步過熱，跌幅可能主要是去槓桿，而非長期論點瞬間消失。",
       "second_order_effect": "若 ETH 持續弱於 BTC，資金通常先收縮至流動性最深的資產；反之 ETH 轉強才較像風險偏好擴散。",
@@ -79,10 +77,10 @@
         {
           "metric_id": "btc-24h-return",
           "full_name": "比特幣 24 小時報酬",
-          "value": 0.0008510568132849009,
-          "display": "+0.1%",
+          "value": 0.0053287296433179865,
+          "display": "+0.5%",
           "change": "相較昨日報價",
-          "as_of": "2026-08-06T02:36:33+00:00",
+          "as_of": "2026-08-06T03:53:44+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -97,10 +95,10 @@
         {
           "metric_id": "eth-24h-return",
           "full_name": "以太幣 24 小時報酬",
-          "value": 0.01209426856376691,
-          "display": "+1.2%",
+          "value": 0.016031817403220128,
+          "display": "+1.6%",
           "change": "相較昨日報價",
-          "as_of": "2026-08-06T02:36:33.968000+00:00",
+          "as_of": "2026-08-06T03:53:44.362000+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -133,10 +131,10 @@
         {
           "metric_id": "btc-funding",
           "full_name": "比特幣永續合約年化資金費率中位數",
-          "value": 0.07783041024336376,
-          "display": "+7.8%",
+          "value": 0.08750583024336375,
+          "display": "+8.8%",
           "change": "跨可觀測交易所",
-          "as_of": "2026-08-06T02:36:18.621000+00:00",
+          "as_of": "2026-08-06T03:53:13.661000+00:00",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -167,10 +165,10 @@
           "url": "wiki.html#five-dimension-model"
         }
       ],
-      "materiality_score": 0.362,
+      "materiality_score": 0.499,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "b305db425c2abf6643bb076a4abdabb7f5a5c277dc546fb38ed93f6645354523"
+      "brief_hash": "a97a3360f532c1453fe558238203bb77d044aa7092b04bf1d803b28374b26faa"
     },
     {
       "id": "institutional-flows",
@@ -268,10 +266,10 @@
         {
           "metric_id": "institutional-price-absorption",
           "full_name": "ETF 流入期間的比特幣短線價格反應",
-          "value": 0.0008510568132849009,
-          "display": "+0.1%",
+          "value": 0.0053287296433179865,
+          "display": "+0.5%",
           "change": "七日 ETF 淨流 +$381M",
-          "as_of": "2026-08-06T02:36:33+00:00",
+          "as_of": "2026-08-06T03:53:44+00:00",
           "direction": "positive",
           "source_count": 4,
           "sources": [
@@ -314,7 +312,7 @@
       "materiality_score": 0.393,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "多維狀態由「尚未形成共振」轉為「偏正向共振」。",
-      "brief_hash": "5efcb57cb8b9dbbba50b17e3da618f6e37512fb254e84c3fadbbf4ddef677542"
+      "brief_hash": "525e027c5cfdab8066ed91edb26d2f2b2907c82e05f6f27908e60159b0c50706"
     },
     {
       "id": "policy",
@@ -343,7 +341,7 @@
           "value": 1.0,
           "display": "1",
           "change": "30 日共 4 件",
-          "as_of": "2026-08-06T02:36:37+00:00",
+          "as_of": "2026-08-06T03:53:49+00:00",
           "direction": "positive",
           "source_count": 5,
           "sources": [
@@ -407,7 +405,7 @@
       "materiality_score": 0.45,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "多維狀態由「尚未形成共振」轉為「偏正向共振」。",
-      "brief_hash": "850c6163688009fa9f3b6cd3c960a7bf7bedd63bccd7a642bfcb5cf65c6a9162"
+      "brief_hash": "2176cbc591229133246dc2def2b897896e78749efafc2d45c8b1a7962f3ce042"
     },
     {
       "id": "onchain",
@@ -415,7 +413,7 @@
       "status": "pass",
       "confidence": "中",
       "headline": "估值降溫，但鏈上活動尚未全面共振",
-      "conclusion": "BTC MVRV 1.22x；交易數 30 日 +17.0%、活躍地址 +14.6%、算力 +15.4%；ETH 每區塊交易數七日 +116.0%。",
+      "conclusion": "BTC MVRV 1.22x；交易數 30 日 +17.0%、活躍地址 +14.6%、算力 +15.4%；ETH 每區塊交易數七日 +83.1%。",
       "common_interpretation": "常見解讀是 MVRV 偏低就等於價格已到底，或鏈上活動增加就等於需求即將推升價格。",
       "variant_view": "本站要求估值便宜、使用活動與安全投入至少兩類同向；便宜但使用收縮，可能只是價格先反映更弱的需求。",
       "second_order_effect": "BTC 與 ETH 的活動若同時轉弱，會先降低手續費與結算需求，再影響礦工、驗證者與應用層收入。",
@@ -505,10 +503,10 @@
         {
           "metric_id": "eth-tx-block",
           "full_name": "以太坊每區塊交易數七日變化",
-          "value": 1.160440424695242,
-          "display": "+116.0%",
-          "change": "457.8 筆/區塊",
-          "as_of": "2026-08-06T02:36:11+00:00",
+          "value": 0.8309764309764311,
+          "display": "+83.1%",
+          "change": "453.2 筆/區塊",
+          "as_of": "2026-08-06T03:53:47+00:00",
           "direction": "positive",
           "source_count": 4,
           "sources": [
@@ -540,10 +538,10 @@
           "url": "wiki.html#btc-neutral-anchor"
         }
       ],
-      "materiality_score": 1.485,
+      "materiality_score": 1.155,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「偏正向共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "824c42476bf809555707425f3d3fe118d2a07bb126cabe4d6795f639c21c8de9"
+      "brief_hash": "026baaea72215deee47ed08552c25404d72c82713192463393dab522cf4b4140"
     },
     {
       "id": "technical-positioning",
@@ -698,7 +696,7 @@
           "value": 0.0,
           "display": "+0",
           "change": "週線消息與情緒分歧",
-          "as_of": "2026-08-06T02:36:52+00:00",
+          "as_of": "2026-08-06T03:54:00+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -716,7 +714,7 @@
           "value": 4.0,
           "display": "+4",
           "change": "月線消息與情緒偏支持，但仍需價格結構確認",
-          "as_of": "2026-08-06T02:36:52+00:00",
+          "as_of": "2026-08-06T03:54:00+00:00",
           "direction": "positive",
           "source_count": 5,
           "sources": [
@@ -755,7 +753,7 @@
       "materiality_score": 1.426,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「偏負向共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "65810b76b9f00371db149938e405439fb8605f3c39fdbcd9ea8962eb09139855"
+      "brief_hash": "7cd6696b8e98b663a3140b3b25ea17cf9a17fbc481235893a017690fdd355b8a"
     },
     {
       "id": "liquidity-fed-oil",
@@ -1024,8 +1022,8 @@
       "title": "美股市場與風險偏好",
       "status": "pass",
       "confidence": "高",
-      "headline": "美股與加密風險偏好正在重新同步",
-      "conclusion": "標普 500 近 30 日 +2.5%、那斯達克 +2.9%、VIX 16.5；BTC 同期 +0.8%。",
+      "headline": "大型股指數表面平穩，但科技與加密風險偏好分化",
+      "conclusion": "標普 500 近 30 日 +2.5%、那斯達克 +0.9%、VIX 16.5；BTC 同期 +0.8%。",
       "common_interpretation": "常見解讀是美股上漲就會帶動 BTC，或 VIX 下降就等於所有風險資產安全。",
       "variant_view": "本站觀察標普、科技股、VIX 與 BTC 的相對路徑；只有方向、波動與跨市場相對強弱同向，才叫風險偏好共振。",
       "second_order_effect": "若 BTC 強於科技股，可能是資金在交易加密特有催化；若兩者同跌，宏觀流動性通常比幣圈敘事更重要。",
@@ -1061,10 +1059,10 @@
         {
           "metric_id": "nasdaq-30d",
           "full_name": "那斯達克綜合指數 30 日報酬",
-          "value": 0.029122812314793745,
-          "display": "+2.9%",
-          "change": "26.6K",
-          "as_of": "2026-08-04",
+          "value": 0.009275238925070761,
+          "display": "+0.9%",
+          "change": "26.4K",
+          "as_of": "2026-08-05",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -1126,11 +1124,11 @@
           "url": "wiki.html#delayed-pro-cyclical"
         }
       ],
-      "materiality_score": 0.111,
+      "materiality_score": 0.221,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "狀態仍為「尚未形成共振」，但核心矛盾改為：美股與加密風險偏好正在重新同步。",
-      "brief_hash": "d77cff69ba770158ff7f2e043293958121711165bc0729e863a7c2063ea23896"
+      "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
+      "brief_hash": "a1d8e15d4a5763412fd7999f5279550d93061f440c9fc28bade067e8a1fa1c7f"
     }
   ],
-  "editorial_hash": "31a1d617fea293d81ac8c66e6125b371993a68d0fed4b2fd033c9e81a4136c5e"
+  "editorial_hash": "425fc322f8bb28fd56f6acf03d10922de0a39d76d7d6ffc90032555ff788993d"
 }
