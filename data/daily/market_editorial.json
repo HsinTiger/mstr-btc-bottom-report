@@ -1,22 +1,20 @@
 {
   "schema": 1,
   "date": "2026-08-07",
-  "generated_at": "2026-08-07T18:05:41+00:00",
+  "generated_at": "2026-08-07T19:18:53+00:00",
   "quality": {
     "status": "degraded",
     "publication_mode": "analysis_only",
     "execution_gate_eligible": false,
     "failures": [],
     "degradations": [
-      "market_universe=degraded",
-      "market_universe_verifier=degraded",
       "timescale=degraded"
     ],
     "upstream_statuses": {
       "market_context": "pass",
       "market_context_verifier": "pass",
-      "market_universe": "degraded",
-      "market_universe_verifier": "degraded",
+      "market_universe": "pass",
+      "market_universe_verifier": "pass",
       "timescale": "degraded",
       "timescale_verifier": "pass"
     }
@@ -24,10 +22,10 @@
   "lineage": {
     "market_context_generated_at": "2026-08-07T03:37:52+00:00",
     "market_context_hash": "fbe6d038562c515f6ac1cde81b7436c8c443c894f1a609b5e15bec182db3d0af",
-    "market_universe_generated_at": "2026-08-07T18:05:40+00:00",
-    "market_universe_hash": "c4707d9300d207ce2f09b5e8f9367f72fbef5673b61e87243a09ee203c02b833",
-    "timescale_generated_at": "2026-08-07T18:05:40+00:00",
-    "timescale_hash": "4528beb787a56f6232b25cbbf6178815d0e5731e3cef3fbb266cc28b388fae3e",
+    "market_universe_generated_at": "2026-08-07T19:18:52+00:00",
+    "market_universe_hash": "a2fbffcfc9f29902e7f0e83ec2fd0b0e26985bb60b9a9d0ca4d45d07c72b1486",
+    "timescale_generated_at": "2026-08-07T19:18:53+00:00",
+    "timescale_hash": "92c673f1815433f851cbff4c16a3a1effcff6f96bdb73c6ca07cca08fa8823a6",
     "snapshot_generated_at": "2026-08-07T02:41:47+00:00",
     "snapshot_hash": "dc7396a3e5f92ab9a19b208c96380126e8bfe47ab4ce5f3c45f7bda69a35746c",
     "knowledge_context_generated_at": "2026-08-07T03:38:04+00:00",
@@ -61,7 +59,7 @@
       "status": "pass",
       "confidence": "高",
       "headline": "現貨動能與月線方向同步改善",
-      "conclusion": "BTC 24 小時 +0.5%、ETH +0.1%；月線 BTC +7.3%。先把短線去風險與中期結構分開。",
+      "conclusion": "BTC 24 小時 +0.7%、ETH +0.4%；月線 BTC +7.3%。先把短線去風險與中期結構分開。",
       "common_interpretation": "市場常把單日大跌直接解讀為趨勢反轉，或把單日反彈直接解讀為底部確認。",
       "variant_view": "本站更在意價格方向是否與槓桿成本、ETH 相對強弱及月線窗口同向；若資金費率沒有同步過熱，跌幅可能主要是去槓桿，而非長期論點瞬間消失。",
       "second_order_effect": "若 ETH 持續弱於 BTC，資金通常先收縮至流動性最深的資產；反之 ETH 轉強才較像風險偏好擴散。",
@@ -79,10 +77,10 @@
         {
           "metric_id": "btc-24h-return",
           "full_name": "比特幣 24 小時報酬",
-          "value": 0.0054323054741640675,
-          "display": "+0.5%",
+          "value": 0.0070702915816187595,
+          "display": "+0.7%",
           "change": "相較昨日報價",
-          "as_of": "2026-08-07T18:05:35+00:00",
+          "as_of": "2026-08-07T19:18:43.168000+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -97,10 +95,10 @@
         {
           "metric_id": "eth-24h-return",
           "full_name": "以太幣 24 小時報酬",
-          "value": 0.0013238795426597783,
-          "display": "+0.1%",
+          "value": 0.0038422426536111054,
+          "display": "+0.4%",
           "change": "相較昨日報價",
-          "as_of": "2026-08-07T18:05:35+00:00",
+          "as_of": "2026-08-07T19:18:43+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -133,10 +131,10 @@
         {
           "metric_id": "btc-funding",
           "full_name": "比特幣永續合約年化資金費率中位數",
-          "value": 0.061250634304197006,
-          "display": "+6.1%",
+          "value": 0.013651860304197,
+          "display": "+1.4%",
           "change": "跨可觀測交易所",
-          "as_of": "2026-08-07T18:05:11.180000+00:00",
+          "as_of": "2026-08-07T19:18:12.939000+00:00",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -167,10 +165,10 @@
           "url": "wiki.html#five-dimension-model"
         }
       ],
-      "materiality_score": 0.325,
+      "materiality_score": 0.388,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "狀態仍為「尚未形成共振」，但核心矛盾改為：現貨動能與月線方向同步改善。",
-      "brief_hash": "f23cb5ac0bf51ac8dcbf49ffec3fcec19145e6904da02ec4d31018e641faa061"
+      "brief_hash": "9d3e97a4083e814f86153c9567433fb2d3ede1f3740866c92fac663ce974b0aa"
     },
     {
       "id": "institutional-flows",
@@ -268,10 +266,10 @@
         {
           "metric_id": "institutional-price-absorption",
           "full_name": "ETF 流入期間的比特幣短線價格反應",
-          "value": 0.0054323054741640675,
-          "display": "+0.5%",
+          "value": 0.0070702915816187595,
+          "display": "+0.7%",
           "change": "七日 ETF 淨流 +$594M",
-          "as_of": "2026-08-07T18:05:35+00:00",
+          "as_of": "2026-08-07T19:18:43.168000+00:00",
           "direction": "positive",
           "source_count": 4,
           "sources": [
@@ -314,7 +312,7 @@
       "materiality_score": 0.69,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "多維狀態由「尚未形成共振」轉為「偏正向共振」。",
-      "brief_hash": "4a9443421064bb69807083d4491347fd8b3b595fc928ae769941ee13697ff79a"
+      "brief_hash": "e1f463938e43b70f84a97a7ce1798462a2a3d0bea433a343c7a29ba65e222a9d"
     },
     {
       "id": "policy",
@@ -698,7 +696,7 @@
           "value": 1.0,
           "display": "+1",
           "change": "週線消息與情緒分歧",
-          "as_of": "2026-08-07T18:05:40+00:00",
+          "as_of": "2026-08-07T19:18:53+00:00",
           "direction": "positive",
           "source_count": 4,
           "sources": [
@@ -716,7 +714,7 @@
           "value": 1.0,
           "display": "+1",
           "change": "月線消息與情緒偏支持，但仍需價格結構確認",
-          "as_of": "2026-08-07T18:05:40+00:00",
+          "as_of": "2026-08-07T19:18:53+00:00",
           "direction": "positive",
           "source_count": 5,
           "sources": [
@@ -755,7 +753,7 @@
       "materiality_score": 2.426,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「偏負向共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "650749221851047851c1ecfef15126226822a597b5d6062a2744c6874d9a9d59"
+      "brief_hash": "e924ba7666308fbf1b31ea902a259858ffbb3dd20fa5df0839020ec870d7ac40"
     },
     {
       "id": "liquidity-fed-oil",
@@ -1132,5 +1130,5 @@
       "brief_hash": "6f457f286d43ba288862d5795ee02f02ea9c3735e74944b593b0e10b8027c8b5"
     }
   ],
-  "editorial_hash": "1a2ca6ba32966d93b977b21228c8435f5080e81f060dfedc9b7e2633aa77e515"
+  "editorial_hash": "f3d685ac2f74681db89b90e8b419f8bb1f69dc55464c8d0c9befc1482c18ab6b"
 }
