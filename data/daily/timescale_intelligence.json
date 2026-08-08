@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "date": "2026-08-07",
-  "generated_at": "2026-08-08T00:33:42+00:00",
+  "generated_at": "2026-08-08T02:45:25+00:00",
   "snapshot_generated_at": "2026-08-07T02:41:47+00:00",
-  "market_universe_generated_at": "2026-08-08T00:33:42+00:00",
+  "market_universe_generated_at": "2026-08-08T02:45:25+00:00",
   "market_context_generated_at": "2026-08-07T03:37:52+00:00",
   "price_history_generated_at": "2026-08-07T02:42:07+00:00",
   "quality": {
@@ -103,7 +103,7 @@
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
           "direction": "mixed",
-          "key_number": "+0.1%",
+          "key_number": "+1.9%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -301,10 +301,10 @@
       "key_number": "+0.9%",
       "plain_read": "BTC 季線報酬 +0.9%，目前屬「方向切換」，相較前一等長窗口為加速。",
       "what_changed": "較前一觀察日由「震盪分歧」轉為「方向切換」。",
-      "resonance": "多維訊號分歧",
+      "resonance": "偏正向共振",
       "resonance_votes": {
-        "positive_clusters": 2,
-        "negative_clusters": 1,
+        "positive_clusters": 3,
+        "negative_clusters": 0,
         "directional_clusters": 3,
         "eligible_clusters": 4
       },
@@ -330,8 +330,8 @@
         {
           "name": "網路安全活動",
           "cluster_id": "underlying_network_security",
-          "direction": "negative",
-          "key_number": "-13.2%",
+          "direction": "positive",
+          "key_number": "+11.2%",
           "plain_read": "算力 30 日變化作為網路活動背景，不把單月變動外推為價格目標。",
           "source": "Blockchain.com 多點序列",
           "counts_toward_underlying_resonance": true
@@ -341,7 +341,7 @@
           "cluster_id": "underlying_structural_adoption",
           "direction": "positive",
           "key_number": "+6.4%",
-          "plain_read": "公開公司持幣占供給；穩定幣供給 30 日 -0.8%。",
+          "plain_read": "公開公司持幣占供給；穩定幣供給 30 日 -0.7%。",
           "source": "DAT 多來源＋SEC overlay",
           "counts_toward_underlying_resonance": true
         }
@@ -1226,9 +1226,9 @@
         {
           "name": "永續資金費率",
           "cluster_id": "derivatives_positioning",
-          "value": 0.001446408300363751,
+          "value": 0.019132848300363752,
           "state": "neutral",
-          "as_of": "2026-08-08T00:33:42+00:00",
+          "as_of": "2026-08-08T02:45:25+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1373,7 +1373,7 @@
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $+594M",
-      "claim": "BTC 週線 +2.8%、ETF 七日淨流 $+594M、永續資金費率年化 +0.1%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 +2.8%、ETF 七日淨流 $+594M、永續資金費率年化 +1.9%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -1406,7 +1406,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 62,
+    "observations": 63,
     "distinct_dates": 8,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
