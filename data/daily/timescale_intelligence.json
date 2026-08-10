@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "date": "2026-08-10",
-  "generated_at": "2026-08-10T15:18:45+00:00",
+  "generated_at": "2026-08-10T16:36:45+00:00",
   "snapshot_generated_at": "2026-08-10T01:50:43+00:00",
-  "market_universe_generated_at": "2026-08-10T15:18:44+00:00",
+  "market_universe_generated_at": "2026-08-10T16:36:44+00:00",
   "market_context_generated_at": "2026-08-10T02:57:49+00:00",
   "price_history_generated_at": "2026-08-10T01:50:59+00:00",
   "quality": {
@@ -73,11 +73,11 @@
       "key_number": "+0.0%",
       "plain_read": "BTC 日線報酬 +0.0%，目前屬「上升趨勢」，相較前一等長窗口為減速。",
       "what_changed": "較前一觀察日由「方向切換」轉為「上升趨勢」。",
-      "resonance": "多維訊號分歧",
+      "resonance": "偏正向共振",
       "resonance_votes": {
-        "positive_clusters": 2,
+        "positive_clusters": 3,
         "negative_clusters": 1,
-        "directional_clusters": 3,
+        "directional_clusters": 4,
         "eligible_clusters": 4
       },
       "perspectives": [
@@ -102,8 +102,8 @@
         {
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
-          "direction": "mixed",
-          "key_number": "+8.6%",
+          "direction": "positive",
+          "key_number": "+10.8%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -1226,9 +1226,9 @@
         {
           "name": "永續資金費率",
           "cluster_id": "derivatives_positioning",
-          "value": 0.086198449935504,
+          "value": 0.10770621975542251,
           "state": "neutral",
-          "as_of": "2026-08-10T15:18:44+00:00",
+          "as_of": "2026-08-10T16:36:44+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1373,7 +1373,7 @@
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $+594M",
-      "claim": "BTC 週線 +2.3%、ETF 七日淨流 $+594M、永續資金費率年化 +8.6%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 +2.3%、ETF 七日淨流 $+594M、永續資金費率年化 +10.8%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -1406,7 +1406,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 103,
+    "observations": 104,
     "distinct_dates": 10,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
