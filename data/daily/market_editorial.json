@@ -1,20 +1,22 @@
 {
   "schema": 1,
   "date": "2026-08-11",
-  "generated_at": "2026-08-11T23:06:22+00:00",
+  "generated_at": "2026-08-12T00:02:20+00:00",
   "quality": {
     "status": "degraded",
     "publication_mode": "analysis_only",
     "execution_gate_eligible": false,
     "failures": [],
     "degradations": [
+      "market_universe=degraded",
+      "market_universe_verifier=degraded",
       "timescale=degraded"
     ],
     "upstream_statuses": {
       "market_context": "pass",
       "market_context_verifier": "pass",
-      "market_universe": "pass",
-      "market_universe_verifier": "pass",
+      "market_universe": "degraded",
+      "market_universe_verifier": "degraded",
       "timescale": "degraded",
       "timescale_verifier": "pass"
     }
@@ -22,10 +24,10 @@
   "lineage": {
     "market_context_generated_at": "2026-08-11T02:50:41+00:00",
     "market_context_hash": "282176e8cc51e44935d046d9e5eff2667f64f56aa80c3dcec17c6428e4d03290",
-    "market_universe_generated_at": "2026-08-11T23:06:22+00:00",
-    "market_universe_hash": "c890ca7f87f22a758fe060acef2c8357dcd4797f1744b26fd3896bb678214b6c",
-    "timescale_generated_at": "2026-08-11T23:06:22+00:00",
-    "timescale_hash": "4939fe0e7926a4033ca554dee13596f1a6be7f5cf6ce8c117965799c64b157a7",
+    "market_universe_generated_at": "2026-08-12T00:02:19+00:00",
+    "market_universe_hash": "04e033b6529d6d7c7d51320c176174389966ba441f9919a3b3b27e49814dabed",
+    "timescale_generated_at": "2026-08-12T00:02:19+00:00",
+    "timescale_hash": "a08a38d650d4852c23bc264b1a6fbefb157941b8128064b511bd7bd7891cae93",
     "snapshot_generated_at": "2026-08-11T01:47:03+00:00",
     "snapshot_hash": "5c8be7e8c8655c76634deb6698ec2415d51ccd9107bda56ebac1e0ed3ed28596",
     "knowledge_context_generated_at": "2026-08-11T02:50:54+00:00",
@@ -40,7 +42,7 @@
     "falsifier": "週線失效：若下一根完成 K 同時打破最近結構低點、動能再創低且量價轉為放量下跌，底部候選失效；頂部警訊則以價格與動能同步再創高失效。 月線失效：若下一根完成 K 同時打破最近結構低點、動能再創低且量價轉為放量下跌，底部候選失效；頂部警訊則以價格與動能同步再創高失效。",
     "desk_count": 8,
     "resonance_summary": {
-      "positive": 3,
+      "positive": 2,
       "negative": 0,
       "mixed": 1,
       "known": 8
@@ -59,7 +61,7 @@
       "status": "pass",
       "confidence": "高",
       "headline": "BTC 與 ETH 的短中期訊號仍在分化",
-      "conclusion": "BTC 24 小時 -0.6%、ETH +0.3%；月線 BTC +7.3%。先把短線去風險與中期結構分開。",
+      "conclusion": "BTC 24 小時 -0.5%、ETH +0.5%；月線 BTC +7.3%。先把短線去風險與中期結構分開。",
       "common_interpretation": "市場常把單日大跌直接解讀為趨勢反轉，或把單日反彈直接解讀為底部確認。",
       "variant_view": "本站更在意價格方向是否與槓桿成本、ETH 相對強弱及月線窗口同向；若資金費率沒有同步過熱，跌幅可能主要是去槓桿，而非長期論點瞬間消失。",
       "second_order_effect": "若 ETH 持續弱於 BTC，資金通常先收縮至流動性最深的資產；反之 ETH 轉強才較像風險偏好擴散。",
@@ -77,10 +79,10 @@
         {
           "metric_id": "btc-24h-return",
           "full_name": "比特幣 24 小時報酬",
-          "value": -0.0062841415618492494,
-          "display": "-0.6%",
+          "value": -0.005338284241347413,
+          "display": "-0.5%",
           "change": "相較昨日報價",
-          "as_of": "2026-08-11T23:06:18+00:00",
+          "as_of": "2026-08-12T00:02:17.074000+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -95,10 +97,10 @@
         {
           "metric_id": "eth-24h-return",
           "full_name": "以太幣 24 小時報酬",
-          "value": 0.0028596511951825706,
-          "display": "+0.3%",
+          "value": 0.005020777472732885,
+          "display": "+0.5%",
           "change": "相較昨日報價",
-          "as_of": "2026-08-11T23:06:19.074000+00:00",
+          "as_of": "2026-08-12T00:02:17.073000+00:00",
           "direction": "neutral",
           "source_count": 4,
           "sources": [
@@ -131,10 +133,10 @@
         {
           "metric_id": "btc-funding",
           "full_name": "比特幣永續合約年化資金費率中位數",
-          "value": 0.04098322200000001,
-          "display": "+4.1%",
+          "value": 0.025095540575955748,
+          "display": "+2.5%",
           "change": "跨可觀測交易所",
-          "as_of": "2026-08-11T23:06:00.177000+00:00",
+          "as_of": "2026-08-12T00:01:28.173000+00:00",
           "direction": "neutral",
           "source_count": 2,
           "sources": [
@@ -165,10 +167,10 @@
           "url": "wiki.html#five-dimension-model"
         }
       ],
-      "materiality_score": 1.16,
+      "materiality_score": 1.167,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
-      "brief_hash": "b891ce0a2f2424e7a9f6c17dc108798a9fd7e51e7d5b96f848eb76cc80bfc7d5"
+      "brief_hash": "47c83ff9b6bc6882ef03551383ec029822c3c48bc53c534738ab8531943b886b"
     },
     {
       "id": "institutional-flows",
@@ -176,18 +178,18 @@
       "status": "pass",
       "confidence": "高",
       "headline": "機構買盤仍在，但吸收能力要由價格確認",
-      "conclusion": "BTC 與 ETH ETF 七日合計 +$1.09B；MSTR、BMNR 的官方持幣變化分別為 -2K BTC 與 7K ETH。",
+      "conclusion": "BTC 與 ETH ETF 七日合計 +$1.09B；MSTR、BMNR 的官方持幣變化分別為 0 BTC 與 0 ETH。",
       "common_interpretation": "常見解讀是 ETF 流入與公司增持等於價格下檔有保證。",
       "variant_view": "本站把 ETF 流量、DAT 存量與價格反應拆開：若資金流入但價格仍弱，代表未被觀測的賣壓更大，反而是重要警訊。",
       "second_order_effect": "ETF 是贖回速度快的流量，DAT 是資本結構驅動的存量；兩者同向才是制度化需求共振，不能混成一個數字。",
       "practical_readthrough": "今天先看新增需求是否真的被價格吸收，再看公司持幣是否伴隨稀釋、負債或優先股成本。",
       "falsifier": "若七日 ETF 流轉負、DAT 未增持且價格跌破中期結構，『機構吸收』假說失效。",
       "resonance": {
-        "state": "偏正向共振",
-        "tone": "positive",
-        "positive": 3,
-        "negative": 2,
-        "neutral": 0,
+        "state": "尚未形成共振",
+        "tone": "neutral",
+        "positive": 2,
+        "negative": 1,
+        "neutral": 2,
         "known": 5
       },
       "evidence": [
@@ -232,9 +234,9 @@
           "full_name": "上市公司比特幣財庫占供給比",
           "value": 0.0611,
           "display": "+6.1%",
-          "change": "MSTR 本週持幣變化 -2K BTC",
+          "change": "MSTR 本週持幣變化 0 BTC",
           "as_of": "2026-08-09",
-          "direction": "negative",
+          "direction": "neutral",
           "source_count": 4,
           "sources": [
             {
@@ -248,11 +250,11 @@
         {
           "metric_id": "eth-dat-share",
           "full_name": "上市公司以太幣財庫占供給比",
-          "value": 0.06494939835275226,
+          "value": 0.06480000000000001,
           "display": "+6.5%",
-          "change": "BMNR 本週持幣變化 7K ETH",
+          "change": "BMNR 本週持幣變化 0 ETH",
           "as_of": "2026-08-09",
-          "direction": "positive",
+          "direction": "neutral",
           "source_count": 3,
           "sources": [
             {
@@ -266,10 +268,10 @@
         {
           "metric_id": "institutional-price-absorption",
           "full_name": "ETF 流入期間的比特幣短線價格反應",
-          "value": -0.0062841415618492494,
-          "display": "-0.6%",
+          "value": -0.005338284241347413,
+          "display": "-0.5%",
           "change": "七日 ETF 淨流 +$856M",
-          "as_of": "2026-08-11T23:06:18+00:00",
+          "as_of": "2026-08-12T00:02:17.074000+00:00",
           "direction": "negative",
           "source_count": 4,
           "sources": [
@@ -311,8 +313,8 @@
       ],
       "materiality_score": 2.086,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
-      "what_changed": "多維狀態由「尚未形成共振」轉為「偏正向共振」。",
-      "brief_hash": "6238b8557f26daf82ebfa2434bbb23f43d18042b89e1698d5c782266f19596de"
+      "what_changed": "核心判斷未變，仍為「尚未形成共振」；今日只更新證據值與 as_of。",
+      "brief_hash": "54cc3c5338f38e9fa2ddc361e809b796320f85ddf956399fd3539045836ee9ec"
     },
     {
       "id": "policy",
@@ -696,7 +698,7 @@
           "value": 1.0,
           "display": "+1",
           "change": "週線消息與情緒分歧",
-          "as_of": "2026-08-11T23:06:22+00:00",
+          "as_of": "2026-08-12T00:02:19+00:00",
           "direction": "positive",
           "source_count": 4,
           "sources": [
@@ -714,7 +716,7 @@
           "value": 1.0,
           "display": "+1",
           "change": "月線消息與情緒偏支持，但仍需價格結構確認",
-          "as_of": "2026-08-11T23:06:22+00:00",
+          "as_of": "2026-08-12T00:02:19+00:00",
           "direction": "positive",
           "source_count": 5,
           "sources": [
@@ -753,7 +755,7 @@
       "materiality_score": 2.253,
       "editorial_scope": "deterministic_research_hypothesis_not_source_claim",
       "what_changed": "多維狀態由「偏負向共振」轉為「多維訊號分歧」。",
-      "brief_hash": "8a100a7a3beb333d7636f4992b61921ed4946b2213f350ef7af9c5bd3ac4f9d3"
+      "brief_hash": "2468b48b6e70d9fe92d7ee505a89b47579c54836ff48d3e41f1aa8c4de54a426"
     },
     {
       "id": "liquidity-fed-oil",
@@ -1130,5 +1132,5 @@
       "brief_hash": "9a6733ea6eea9740ef24421947a53c09f4f5c300e3e075f1b317a94c4e3bf1bb"
     }
   ],
-  "editorial_hash": "d133af0b3a611ccc80dca6d16d54b307c37810026e781b19143411bff2d9b831"
+  "editorial_hash": "c4f0673a3570860595d6c10e495af2d37dad5b8ea68e5130dade3d6bc76df556"
 }
