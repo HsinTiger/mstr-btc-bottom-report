@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "date": "2026-08-11",
-  "generated_at": "2026-08-12T00:02:19+00:00",
+  "generated_at": "2026-08-12T02:47:54+00:00",
   "snapshot_generated_at": "2026-08-11T01:47:03+00:00",
-  "market_universe_generated_at": "2026-08-12T00:02:19+00:00",
+  "market_universe_generated_at": "2026-08-12T02:47:54+00:00",
   "market_context_generated_at": "2026-08-11T02:50:41+00:00",
   "price_history_generated_at": "2026-08-11T01:47:29+00:00",
   "quality": {
@@ -103,7 +103,7 @@
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
           "direction": "mixed",
-          "key_number": "+2.5%",
+          "key_number": "+4.4%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -331,7 +331,7 @@
           "name": "網路安全活動",
           "cluster_id": "underlying_network_security",
           "direction": "negative",
-          "key_number": "-3.7%",
+          "key_number": "-10.2%",
           "plain_read": "算力 30 日變化作為網路活動背景，不把單月變動外推為價格目標。",
           "source": "Blockchain.com 多點序列",
           "counts_toward_underlying_resonance": true
@@ -341,7 +341,7 @@
           "cluster_id": "underlying_structural_adoption",
           "direction": "positive",
           "key_number": "+6.4%",
-          "plain_read": "公開公司持幣占供給；穩定幣供給 30 日 -1.4%。",
+          "plain_read": "公開公司持幣占供給；穩定幣供給 30 日 -1.0%。",
           "source": "DAT 多來源＋SEC overlay",
           "counts_toward_underlying_resonance": true
         }
@@ -1226,9 +1226,9 @@
         {
           "name": "永續資金費率",
           "cluster_id": "derivatives_positioning",
-          "value": 0.025095540575955748,
+          "value": 0.04432417857595575,
           "state": "neutral",
-          "as_of": "2026-08-12T00:02:19+00:00",
+          "as_of": "2026-08-12T02:47:54+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1373,7 +1373,7 @@
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $+856M",
-      "claim": "BTC 週線 +1.2%、ETF 七日淨流 $+856M、永續資金費率年化 +2.5%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 +1.2%、ETF 七日淨流 $+856M、永續資金費率年化 +4.4%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -1406,7 +1406,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 132,
+    "observations": 133,
     "distinct_dates": 11,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
