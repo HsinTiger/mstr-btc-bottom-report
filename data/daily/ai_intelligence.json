@@ -1,26 +1,23 @@
 {
   "schema": 3,
-  "generated_at": "2026-08-15T02:02:34+00:00",
+  "generated_at": "2026-08-16T02:09:08+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "degraded",
+    "status": "pass",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [
-      "arXiv cs.AI 最新研究：HTTP 429: Rate exceeded.",
-      "機構觀點跨來源證據不足：模型進展。"
-    ],
+    "degradations": [],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 18,
-    "unique_sources": 8,
-    "successful_sources": 9,
-    "failed_sources": 1,
+    "posts": 21,
+    "unique_sources": 9,
+    "successful_sources": 10,
+    "failed_sources": 0,
     "editorial_briefs": 3,
-    "editorial_pass": 2
+    "editorial_pass": 3
   },
   "source_checks": [
     {
@@ -29,7 +26,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 1129,
       "eligible_items": 15
@@ -40,7 +37,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 1
@@ -51,7 +48,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 1
@@ -62,7 +59,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -73,7 +70,7 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 51
@@ -84,7 +81,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 2
@@ -95,7 +92,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -106,7 +103,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 2
@@ -117,7 +114,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-08-15T02:02:34+00:00",
+      "checked_at": "2026-08-16T02:09:08+00:00",
       "status": "pass",
       "raw_items": 842,
       "eligible_items": 4
@@ -128,15 +125,14 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-08-15T02:02:34+00:00",
-      "status": "fail",
-      "raw_items": 0,
-      "eligible_items": 0,
-      "error": "HTTP 429: Rate exceeded."
+      "checked_at": "2026-08-16T02:09:08+00:00",
+      "status": "pass",
+      "raw_items": 20,
+      "eligible_items": 20
     }
   ],
   "editorial_digest": {
-    "status": "degraded",
+    "status": "pass",
     "lead_brief_id": "brief-engineering-methods",
     "briefs": [
       {
@@ -165,7 +161,7 @@
             "source_type": "official_feed",
             "created_at": "2026-08-12T06:00:00+00:00",
             "url": "https://openai.com/index/how-enterprises-put-ai-to-work",
-            "ranking_score_0_100": 88.4,
+            "ranking_score_0_100": 87.0,
             "source_excerpt": "From assistance to execution: How enterprises put AI to work — OpenAI research reveals how enterprises are adopting agentic AI, using ChatGPT and Codex, and how frontier firms are pulling ahead in AI adoption.",
             "matched_terms": [
               "codex"
@@ -181,7 +177,7 @@
             "source_type": "official_feed",
             "created_at": "2026-08-13T00:00:00+00:00",
             "url": "https://cursor.com/changelog/08-13-26",
-            "ranking_score_0_100": 72.5,
+            "ranking_score_0_100": 71.1,
             "source_excerpt": "Cloud Agents Start 3x Faster with Builds — Agents do their best work when they start in a ready environment: repos cloned, dependencies installed, and your install script already run.",
             "matched_terms": [
               "agent"
@@ -203,7 +199,7 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 NVIDIA Developer Blog 的「Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA」，以及 Vercel AI SDK Releases 的「@ai-sdk/xai@3.0.122」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 NVIDIA Developer Blog 的「Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA」，以及 Vercel AI SDK Releases 的「@ai-sdk/xai@4.0.40」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
@@ -220,7 +216,7 @@
             "source_type": "official_feed",
             "created_at": "2026-08-10T19:48:05+00:00",
             "url": "https://developer.nvidia.com/blog/run-local-agentic-ai-workflows-with-metas-muse-glimmer-on-nvidia/",
-            "ranking_score_0_100": 84.9,
+            "ranking_score_0_100": 83.5,
             "source_excerpt": "Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA — Meta returns to the open source ecosystem with the release of Muse Glimmer, a 30B open-weight dense model with a 120K+ context window built for local AI...",
             "matched_terms": [
               "release"
@@ -229,19 +225,19 @@
             "relationship": "topic_context_not_endorsement"
           },
           {
-            "item_id": "vercel-ai-releases:097cbad861f382f267a9",
-            "title": "@ai-sdk/xai@3.0.122",
+            "item_id": "vercel-ai-releases:ed64d8f45c3245f8197a",
+            "title": "@ai-sdk/xai@4.0.40",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-08-14T19:56:53+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%403.0.122",
+            "created_at": "2026-08-15T18:54:57+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%404.0.40",
             "ranking_score_0_100": 82.1,
-            "source_excerpt": "@ai-sdk/xai@3.0.122 — ### Patch Changes - Updated dependencies [31205a4] - @ai-sdk/provider-utils@4.0.46 - @ai-sdk/openai-compatible@2.0.68",
+            "source_excerpt": "@ai-sdk/xai@4.0.40 — ### Patch Changes - 1ffa1d2: feat(xai): speech timestamps, pronunciation replacements, provider metadata, and error parsing - Add `withTimestamps` and `replace` provider options for text to speech. With `withTimestamps`, the JSON envelope is decoded and the audio returned as usual, while duration, content type, and character-level align…",
             "matched_terms": [
               "sdk"
             ],
-            "item_integrity_hash": "c8f0579116701576c01d0938048004a2d4e8ae9de5045d9f2ea9b003684a996a",
+            "item_integrity_hash": "0c2a15538811edaa6d53f1a228926e30595f077c4def47c572e0e3df5e2ebb37",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -252,7 +248,7 @@
             "source_type": "github_release",
             "created_at": "2026-08-11T10:47:49+00:00",
             "url": "https://github.com/vllm-project/vllm/releases/tag/v0.27.1",
-            "ranking_score_0_100": 77.3,
+            "ranking_score_0_100": 75.9,
             "source_excerpt": "v0.27.1 — This is a patch release on top of v0.27.0. - Support quantized DSpark Markov heads (#50424)",
             "matched_terms": [
               "release"
@@ -269,20 +265,39 @@
         "id": "brief-model-progress",
         "category_id": "model-progress",
         "category_title": "模型進展",
-        "status": "degraded",
-        "theme_id": "open-deployment",
+        "status": "pass",
+        "theme_id": "efficient-learning",
         "kicker": "模型進展",
-        "headline": "開放模型的競爭焦點，正從能否下載轉向能否治理與部署",
-        "standfirst": "權重可得只是起點；授權、硬體需求、微調可重現性與安全邊界才決定它是否形成實際替代。",
-        "lede": "今日只有 Hugging Face Blog 的「Meta is back with Muse Glimmer: local, agentic, multimodal, and open source」命中此主題；不宣稱形成跨來源訊號。",
-        "common_interpretation": "釋出權重容易被直接解讀為能力民主化與成本下降。",
-        "variant_view": "若部署與維運成本高於 API 差價，開放權重帶來的是選擇權，而不是立即可用的成本優勢。",
-        "second_order_effect": "模型路由與混合部署會比單一模型押注更重要，因為組織能按資料敏感度與任務難度分配模型。",
-        "practical_readthrough": "比較時把授權、硬體、延遲、品質、監控與升級工時一起列入總持有成本。",
-        "falsifier": "若相同品質下的完整持有成本長期低於託管 API，且治理負擔可控，開放模型就從選擇權變成結構性優勢。",
-        "evidence_source_count": 1,
-        "matched_term_count": 2,
+        "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
+        "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
+        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「DFM Mimir v1: An Open HRM Delivering Frontier Performance at 1B Parameters Using Only Permissible Post-Training Data」，以及 Hugging Face Blog 的「Meta is back with Muse Glimmer: local, agentic, multimodal, and open source」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
+        "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
+        "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
+        "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
+        "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
+        "evidence_source_count": 2,
+        "matched_term_count": 5,
         "evidence": [
+          {
+            "item_id": "arxiv-ai:d09037d0a09d8e64de7a",
+            "title": "DFM Mimir v1: An Open HRM Delivering Frontier Performance at 1B Parameters Using Only Permissible Post-Training Data",
+            "source_key": "arxiv-ai",
+            "source_label": "arXiv cs.AI 最新研究",
+            "source_type": "preprint_feed",
+            "created_at": "2026-08-13T17:37:53+00:00",
+            "url": "https://arxiv.org/abs/2608.13517v1",
+            "ranking_score_0_100": 82.6,
+            "source_excerpt": "DFM Mimir v1: An Open HRM Delivering Frontier Performance at 1B Parameters Using Only Permissible Post-Training Data — Current large language model development relies on massive, often non-permissible datasets, creating a high barrier for researchers committed to open-source and ethically sourced data. We introduce Mimir v1, a 1-billion-parameter language m…",
+            "matched_terms": [
+              "training",
+              "architecture",
+              "post-training",
+              "data"
+            ],
+            "item_integrity_hash": "e2d158bcd082e2a9a5c2ef6018024bed7bd6b4868f5711824d464c70ff7e1d2e",
+            "relationship": "topic_context_not_endorsement"
+          },
           {
             "item_id": "huggingface-blog:dfb586131bf3d3cb04b4",
             "title": "Meta is back with Muse Glimmer: local, agentic, multimodal, and open source",
@@ -291,11 +306,10 @@
             "source_type": "official_feed",
             "created_at": "2026-08-10T00:00:00+00:00",
             "url": "https://huggingface.co/blog/muse-glimmer",
-            "ranking_score_0_100": 67.2,
+            "ranking_score_0_100": 65.8,
             "source_excerpt": "Meta is back with Muse Glimmer: local, agentic, multimodal, and open source",
             "matched_terms": [
-              "open source",
-              "open-source"
+              "multimodal"
             ],
             "item_integrity_hash": "ddb389029d8ef68cc34151c713c6e258c1ecd05401ee68df154fa94a4c2f3127",
             "relationship": "topic_context_not_endorsement"
@@ -303,7 +317,7 @@
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
         "novelty_status": "changed",
-        "what_changed": "主軸由「模型研究正把問題從『更大』改寫成『怎樣學得更有效』」轉為「開放模型的競爭焦點，正從能否下載轉向能否治理與部署」。"
+        "what_changed": "主軸由「開放模型的競爭焦點，正從能否下載轉向能否治理與部署」轉為「模型研究正把問題從『更大』改寫成『怎樣學得更有效』」。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -325,11 +339,11 @@
       "url": "https://developer.nvidia.com/blog/boost-inference-performance-up-to-15x-on-nvidia-blackwell-using-dflash-speculative-decoding/"
     },
     {
-      "item_id": "deepmind-blog:1357a9ae7911e1d557ac",
-      "title": "Putting sign language AI into users’ hands",
-      "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "source_label": "Google DeepMind Blog",
-      "url": "https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/"
+      "item_id": "arxiv-ai:d09037d0a09d8e64de7a",
+      "title": "DFM Mimir v1: An Open HRM Delivering Frontier Performance at 1B Parameters Using Only Permissible Post-Training Data",
+      "action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "source_label": "arXiv cs.AI 最新研究",
+      "url": "https://arxiv.org/abs/2608.13517v1"
     }
   ],
   "categories": [
@@ -357,11 +371,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 88.4,
+          "ranking_score_0_100": 87.0,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 79.7
+            "recency": 72.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4df4ef2488ac7d7c834866410d32ba1b2045cb247371b83c91677ecd383cd722"
@@ -379,11 +393,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 88.1,
+          "ranking_score_0_100": 86.7,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 78.0
+            "recency": 70.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "59d89418414815de7435661ef046fc806f62086d8accde561bdb2eff2ba3fd35"
@@ -401,11 +415,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 85.2,
+          "ranking_score_0_100": 83.8,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 63.7
+            "recency": 56.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "2fa32d4487e8f4d06dc7ece3f37cf586af4c28baea829e98112f47ced098a2c0"
@@ -423,11 +437,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 72.5,
+          "ranking_score_0_100": 71.1,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 85.1
+            "recency": 77.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b967c1e29dcaf5eee8fa9c2286d1e015abe439ce4ff7271470eee588bc83d2c8"
@@ -445,11 +459,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 70.1,
+          "ranking_score_0_100": 68.7,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 68.0
+            "recency": 60.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "8b9710a982a34759d748235bf9160a2a0027c00f1231f6431f3a46cf83afabae"
@@ -481,11 +495,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 86.7,
+          "ranking_score_0_100": 85.2,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 40.8
+            "recency": 33.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "172c902a6dbf10b81958752c5022cd57e5c04dfef51a96ddd4097d5b91995719"
@@ -503,11 +517,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 86.7,
+          "ranking_score_0_100": 85.2,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 40.8
+            "recency": 33.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3f2401600c51deafbac24bdc1ed89a6fc164c42a2d63a7d7a088b3ec4903a69f"
@@ -525,21 +539,21 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 84.9,
+          "ranking_score_0_100": 83.5,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 69.6
+            "recency": 62.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "0566a1de8174c36f1697b01e9c3e12c90682ffc386a32ad76d0bf06c5a5ae0c7"
         },
         {
-          "id": "vercel-ai-releases:097cbad861f382f267a9",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%403.0.122",
-          "created_at": "2026-08-14T19:56:53+00:00",
-          "title": "@ai-sdk/xai@3.0.122",
-          "text": "@ai-sdk/xai@3.0.122 — ### Patch Changes - Updated dependencies [31205a4] - @ai-sdk/provider-utils@4.0.46 - @ai-sdk/openai-compatible@2.0.68",
+          "id": "vercel-ai-releases:ed64d8f45c3245f8197a",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%404.0.40",
+          "created_at": "2026-08-15T18:54:57+00:00",
+          "title": "@ai-sdk/xai@4.0.40",
+          "text": "@ai-sdk/xai@4.0.40 — ### Patch Changes - 1ffa1d2: feat(xai): speech timestamps, pronunciation replacements, provider metadata, and error parsing - Add `withTimestamps` and `replace` provider options for text to speech. With `withTimestamps`, the JSON envelope is decoded and the audio returned as usual, while duration, content type, and character-level alignment are exposed via `providerMetadata.xai`. - Return `providerMetadata.xai.traceId` (from the `x-trace-id` response header) on every speech response. - Parse the text to speech err…",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -551,17 +565,17 @@
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 98.2
+            "recency": 97.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "c8f0579116701576c01d0938048004a2d4e8ae9de5045d9f2ea9b003684a996a"
+          "integrity_hash": "0c2a15538811edaa6d53f1a228926e30595f077c4def47c572e0e3df5e2ebb37"
         },
         {
-          "id": "vercel-ai-releases:de6a92c25cbdd5e0a3c3",
-          "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.256",
-          "created_at": "2026-08-14T19:54:11+00:00",
-          "title": "ai@6.0.256",
-          "text": "ai@6.0.256 — ### Patch Changes - Updated dependencies [31205a4] - @ai-sdk/provider-utils@4.0.46 - @ai-sdk/gateway@3.0.174",
+          "id": "vercel-ai-releases:4bbfffbc7bae35ecfc82",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/moonshotai%403.0.35",
+          "created_at": "2026-08-15T18:54:54+00:00",
+          "title": "@ai-sdk/moonshotai@3.0.35",
+          "text": "@ai-sdk/moonshotai@3.0.35 — ### Patch Changes - 9435df8: feat(provider/moonshotai): normalize tool schemas for Moonshot's MFJS validator. Tuple `items` arrays become `prefixItems`, `type` next to `anyOf` moves into the branches, and non-`object` root schemas fail with a clear client-side error instead of Moonshot's opaque 400. Everything else passes through unchanged; the original schema is still used for AI SDK result validation.",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -573,17 +587,17 @@
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 98.2
+            "recency": 97.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "33b417d77620b2123ba75172c576ceb3e4610dc143d08805c7131c1990b3ea5d"
+          "integrity_hash": "0802c7e214921facda7dca853ac2cf8ac59a8b62a8f934b1839054ea7b4cdb2a"
         },
         {
-          "id": "vercel-ai-releases:dee744e33827ad5ae251",
-          "url": "https://github.com/vercel/ai/releases/tag/ai%405.0.237",
-          "created_at": "2026-08-14T19:53:16+00:00",
-          "title": "ai@5.0.237",
-          "text": "ai@5.0.237 — ### Patch Changes - bf11412: Avoid repeatedly cloning accumulated text in `readUIMessageStream` while preserving independent snapshots for mutable nested values. - 7ec6b69: Fix declaration emit for exported values that infer an `Output` type.",
+          "id": "vercel-ai-releases:9b4216bab6e146388d39",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/harness-grok-build%401.0.9",
+          "created_at": "2026-08-15T18:54:51+00:00",
+          "title": "@ai-sdk/harness-grok-build@1.0.9",
+          "text": "@ai-sdk/harness-grok-build@1.0.9 — ### Patch Changes - Updated dependencies [8d05a55] - @ai-sdk/harness-acp@1.0.10",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -595,10 +609,10 @@
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 98.2
+            "recency": 97.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "020e7c047d36c276fa77305cd0347228ae583ee3ba0012dc79da3238ddbe68fc"
+          "integrity_hash": "6c975ac4a6499523633d82e1e66eb90664591409df44ff8d9e9feac0728a24a6"
         },
         {
           "id": "vllm-releases:79fa413a464f8b759667",
@@ -613,11 +627,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 77.3,
+          "ranking_score_0_100": 75.9,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 74.0
+            "recency": 66.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "bbdc8ea4fa30d642e98714a6334a93124ccb9d0c5ef2b769d219e7540c828d17"
@@ -635,11 +649,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 76.5,
+          "ranking_score_0_100": 75.1,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 70.0
+            "recency": 62.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "5c72fbdaeb35d8e964b8be42246e99dea37ad633aa4a4e5a1bcf1a0a472a2cb1"
@@ -658,6 +672,72 @@
       ],
       "items": [
         {
+          "id": "arxiv-ai:d09037d0a09d8e64de7a",
+          "url": "https://arxiv.org/abs/2608.13517v1",
+          "created_at": "2026-08-13T17:37:53+00:00",
+          "title": "DFM Mimir v1: An Open HRM Delivering Frontier Performance at 1B Parameters Using Only Permissible Post-Training Data",
+          "text": "DFM Mimir v1: An Open HRM Delivering Frontier Performance at 1B Parameters Using Only Permissible Post-Training Data — Current large language model development relies on massive, often non-permissible datasets, creating a high barrier for researchers committed to open-source and ethically sourced data. We introduce Mimir v1, a 1-billion-parameter language model based on the Hierarchical Reasoning Model (HRM) architecture, that is trained from scratch and delivers highly competitive performance for English and sets a new state of the art for Danish using only permissible post-training data. Trained on a mixture of 161 datasets, Mim…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 82.6,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 100.0,
+            "recency": 83.2
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "e2d158bcd082e2a9a5c2ef6018024bed7bd6b4868f5711824d464c70ff7e1d2e"
+        },
+        {
+          "id": "arxiv-ai:4c28be0ac8c1bb284f4c",
+          "url": "https://arxiv.org/abs/2608.13545v1",
+          "created_at": "2026-08-13T17:56:12+00:00",
+          "title": "LittleLearner: Language Models Under Pedagogically Controlled Knowledge Exposure",
+          "text": "LittleLearner: Language Models Under Pedagogically Controlled Knowledge Exposure — Modern language models are trained on heterogeneous web-scale text corpora. Consequently, studying knowledge and skill acquisition is difficult, as prior exposure to related content is hard to characterize. To address this challenge, we introduce LITTLECURRICULUM, a curated 88B-token pretraining corpus tailored to U.S. elementary school material, explicitly excluding concepts, facts, and vocabulary taught above Grade 5. Training a 5B-parameter LLM from scratch on LITTLECURRICULUM yields LITTLELEARNER, a model with…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 75.2,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 75.0,
+            "recency": 83.3
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "e4f0b4a8c2e91b8cb05872c1d9ed3f7c9e2d5aed595c8e64663a2933da6d15fb"
+        },
+        {
+          "id": "arxiv-ai:d3d9c74cdfbb57ef875e",
+          "url": "https://arxiv.org/abs/2608.13492v1",
+          "created_at": "2026-08-13T17:21:03+00:00",
+          "title": "AlayaWorld: Interactive Long-Horizon World Modeling - Full Technical Report (v1.1)",
+          "text": "AlayaWorld: Interactive Long-Horizon World Modeling - Full Technical Report (v1.1) — This report presents an improved version of AlayaWorld. While the backbone architecture, chunk-wise autoregressive generation scheme, and training data remain unchanged from the previous release, we substantially revise how conditioning signals are represented and integrated into the model. The new design is guided by a simple principle: conditioning signals should match the generated content as closely as possible in both latent representation and temporal structure. To this end, we make two major changes. First,…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 75.1,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 75.0,
+            "recency": 83.1
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "73b6d19472ca22a054e767f0f00b367047df137779c04f2c99022948313bf489"
+        },
+        {
           "id": "deepmind-blog:1357a9ae7911e1d557ac",
           "url": "https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/",
           "created_at": "2026-08-12T14:01:59+00:00",
@@ -670,11 +750,11 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 73.9,
+          "ranking_score_0_100": 72.5,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 82.1
+            "recency": 75.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d0df2c6f9a3323b45171645c7a534a5ed95ae6f2fd144b25b8806bb009ff58b7"
@@ -692,11 +772,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 72.9,
+          "ranking_score_0_100": 71.5,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 92.2
+            "recency": 85.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3d296a3667e84aae0d7b120ac20a53f33782450e5570b9ad1df2dfed5c99a0cc"
@@ -714,11 +794,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 68.2,
+          "ranking_score_0_100": 66.8,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 68.6
+            "recency": 61.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4f2bc5cdf5de937aa675f9fe0979939215af014e8fc3f97b618ae5eb1f493624"
@@ -736,11 +816,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 67.2,
+          "ranking_score_0_100": 65.8,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 63.7
+            "recency": 56.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "ddb389029d8ef68cc34151c713c6e258c1ecd05401ee68df154fa94a4c2f3127"
@@ -758,11 +838,11 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 65.4,
+          "ranking_score_0_100": 64.0,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 39.6
+            "recency": 32.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "697d03ab7b226d0617d2be404e5724aadbc7288d4a5965cecae48ccf838bad3e"
