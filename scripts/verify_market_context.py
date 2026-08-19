@@ -261,7 +261,7 @@ def main() -> int:
     source = json.loads(SOURCE_PATH.read_text(encoding="utf-8-sig"))
     report = verify(source)
     OUTPUT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"path": str(OUTPUT_PATH), "status": report["status"], "failures": len(report["failures"]), "degradations": len(report["degradations"])}, ensure_ascii=False))
+    print(json.dumps({"path": str(OUTPUT_PATH), "status": report["status"], "failures": len(report["failures"]), "degradations": len(report["degradations"]), "failure_details": report["failures"], "degradation_details": report["degradations"]}, ensure_ascii=False))
     return 1 if report["failures"] else 0
 
 
