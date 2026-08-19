@@ -1,23 +1,26 @@
 {
   "schema": 3,
-  "generated_at": "2026-08-18T02:03:49+00:00",
+  "generated_at": "2026-08-19T02:06:03+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "pass",
+    "status": "degraded",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [],
+    "degradations": [
+      "arXiv cs.AI 最新研究：HTTP 429: Rate exceeded.",
+      "機構觀點跨來源證據不足：模型進展。"
+    ],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 21,
-    "unique_sources": 9,
-    "successful_sources": 10,
-    "failed_sources": 0,
+    "posts": 18,
+    "unique_sources": 8,
+    "successful_sources": 9,
+    "failed_sources": 1,
     "editorial_briefs": 3,
-    "editorial_pass": 3
+    "editorial_pass": 2
   },
   "source_checks": [
     {
@@ -26,10 +29,10 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
-      "raw_items": 1132,
-      "eligible_items": 13
+      "raw_items": 1138,
+      "eligible_items": 17
     },
     {
       "source_key": "google-ai-blog",
@@ -37,7 +40,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 1
@@ -48,7 +51,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 1
@@ -59,7 +62,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -70,10 +73,10 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 100,
-      "eligible_items": 52
+      "eligible_items": 54
     },
     {
       "source_key": "vllm-releases",
@@ -81,7 +84,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 2
@@ -92,7 +95,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -103,7 +106,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 2
@@ -114,10 +117,10 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-08-18T02:03:49+00:00",
+      "checked_at": "2026-08-19T02:06:03+00:00",
       "status": "pass",
-      "raw_items": 843,
-      "eligible_items": 4
+      "raw_items": 844,
+      "eligible_items": 5
     },
     {
       "source_key": "arxiv-ai",
@@ -125,14 +128,15 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-08-18T02:03:49+00:00",
-      "status": "pass",
-      "raw_items": 20,
-      "eligible_items": 20
+      "checked_at": "2026-08-19T02:06:03+00:00",
+      "status": "fail",
+      "raw_items": 0,
+      "eligible_items": 0,
+      "error": "HTTP 429: Rate exceeded."
     }
   ],
   "editorial_digest": {
-    "status": "pass",
+    "status": "degraded",
     "lead_brief_id": "brief-engineering-methods",
     "briefs": [
       {
@@ -161,7 +165,7 @@
             "source_type": "official_feed",
             "created_at": "2026-08-12T06:00:00+00:00",
             "url": "https://openai.com/index/how-enterprises-put-ai-to-work",
-            "ranking_score_0_100": 84.2,
+            "ranking_score_0_100": 82.7,
             "source_excerpt": "From assistance to execution: How enterprises put AI to work — OpenAI research reveals how enterprises are adopting agentic AI, using ChatGPT and Codex, and how frontier firms are pulling ahead in AI adoption.",
             "matched_terms": [
               "codex"
@@ -177,7 +181,7 @@
             "source_type": "official_feed",
             "created_at": "2026-08-13T00:00:00+00:00",
             "url": "https://cursor.com/changelog/08-13-26",
-            "ranking_score_0_100": 68.2,
+            "ranking_score_0_100": 66.8,
             "source_excerpt": "Cloud Agents Start 3x Faster with Builds — Agents do their best work when they start in a ready environment: repos cloned, dependencies installed, and your install script already run.",
             "matched_terms": [
               "agent"
@@ -199,7 +203,7 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow-harness@1.0.73」，以及 NVIDIA Developer Blog 的「Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow@1.0.69」，以及 NVIDIA Developer Blog 的「Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
@@ -209,19 +213,19 @@
         "matched_term_count": 3,
         "evidence": [
           {
-            "item_id": "vercel-ai-releases:c835ac79902579eb5672",
-            "title": "@ai-sdk/workflow-harness@1.0.73",
+            "item_id": "vercel-ai-releases:e92f5a08ebfa4208eca4",
+            "title": "@ai-sdk/workflow@1.0.69",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-08-17T18:22:28+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.73",
-            "ranking_score_0_100": 82.0,
-            "source_excerpt": "@ai-sdk/workflow-harness@1.0.73 — ### Patch Changes - Updated dependencies [62a9c2a] - Updated dependencies [d25cae2] - @ai-sdk/harness@1.0.73",
+            "created_at": "2026-08-18T22:49:27+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%401.0.69",
+            "ranking_score_0_100": 82.3,
+            "source_excerpt": "@ai-sdk/workflow@1.0.69 — ### Patch Changes - ai@7.0.68",
             "matched_terms": [
               "sdk"
             ],
-            "item_integrity_hash": "8ef01b60a0be0d81b6ca8bc41e4911893a73b4cef62623a7dcdf85fbe5dedba9",
+            "item_integrity_hash": "d720425865cfbc793681baea86880636bb7b41b1534b58585e8e313e1dee02e5",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -232,7 +236,7 @@
             "source_type": "official_feed",
             "created_at": "2026-08-10T19:48:05+00:00",
             "url": "https://developer.nvidia.com/blog/run-local-agentic-ai-workflows-with-metas-muse-glimmer-on-nvidia/",
-            "ranking_score_0_100": 80.6,
+            "ranking_score_0_100": 79.2,
             "source_excerpt": "Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA — Meta returns to the open source ecosystem with the release of Muse Glimmer, a 30B open-weight dense model with a 120K+ context window built for local AI...",
             "matched_terms": [
               "release"
@@ -248,7 +252,7 @@
             "source_type": "github_release",
             "created_at": "2026-08-11T10:47:49+00:00",
             "url": "https://github.com/vllm-project/vllm/releases/tag/v0.27.1",
-            "ranking_score_0_100": 73.0,
+            "ranking_score_0_100": 71.6,
             "source_excerpt": "v0.27.1 — This is a patch release on top of v0.27.0. - Support quantized DSpark Markov heads (#50424)",
             "matched_terms": [
               "release"
@@ -265,56 +269,40 @@
         "id": "brief-model-progress",
         "category_id": "model-progress",
         "category_title": "模型進展",
-        "status": "pass",
-        "theme_id": "efficient-learning",
+        "status": "degraded",
+        "theme_id": "specialization-efficiency",
         "kicker": "模型進展",
-        "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
-        "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
-        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「Toward AI-Friendly Cartography: Understanding How Color Design Influences Foundation Model Spatial Reasoning on Sequential Choropleth Maps」，以及 Hugging Face Blog 的「Meta is back with Muse Glimmer: local, agentic, multimodal, and open source」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
-        "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
-        "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
-        "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
-        "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
-        "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
-        "evidence_source_count": 2,
-        "matched_term_count": 2,
+        "headline": "模型競爭不只追求更強，也開始追求更專用、更省、更快落地",
+        "standfirst": "輕量模型、低位元推論與專用能力同時出現，顯示產品端正在把平均能力拆成延遲、成本與特定任務可靠性。",
+        "lede": "今日只有 Hugging Face Blog 的「Build Low-Latency Multilingual Voice Agents: Open Weights & Full Deployment Control with NVIDIA Magpie TTS」命中此主題；不宣稱形成跨來源訊號。",
+        "common_interpretation": "新模型與新推論方法通常被分別解讀成能力升級或效率改善。",
+        "variant_view": "更值得追蹤的是兩者是否合流：模型若按任務專用化，再配合低成本推論，產品可能不必為每個請求支付最高能力溢價。",
+        "second_order_effect": "模型路由會從成本工具變成產品架構：快速模型處理大多數工作，專用或高能力模型只接手高風險例外。",
+        "practical_readthrough": "把任務分成低風險高頻、專業窄域與高風險例外三層，分別測成功率、延遲與成本，不再只選一個模型包辦全部。",
+        "falsifier": "若輕量或專用模型在真實任務需要大量重試與高階模型接管，總成本與延遲沒有下降，這個分層路由論點就不成立。",
+        "evidence_source_count": 1,
+        "matched_term_count": 1,
         "evidence": [
           {
-            "item_id": "arxiv-ai:defd4a9af8cdcaa642bf",
-            "title": "Toward AI-Friendly Cartography: Understanding How Color Design Influences Foundation Model Spatial Reasoning on Sequential Choropleth Maps",
-            "source_key": "arxiv-ai",
-            "source_label": "arXiv cs.AI 最新研究",
-            "source_type": "preprint_feed",
-            "created_at": "2026-08-16T13:24:31+00:00",
-            "url": "https://arxiv.org/abs/2608.15736v1",
-            "ranking_score_0_100": 83.8,
-            "source_excerpt": "Toward AI-Friendly Cartography: Understanding How Color Design Influences Foundation Model Spatial Reasoning on Sequential Choropleth Maps — Foundation models (FMs) increasingly support multimodal and geospatial reasoning, yet it remains unclear whether cartographic principles designed for human perception are equally effective for machines. Focusing on seq…",
-            "matched_terms": [
-              "multimodal"
-            ],
-            "item_integrity_hash": "ad99d095b63a8fdba32d4e6663ff785a4453e13ca744e4380dd7ee8620733644",
-            "relationship": "topic_context_not_endorsement"
-          },
-          {
-            "item_id": "huggingface-blog:dfb586131bf3d3cb04b4",
-            "title": "Meta is back with Muse Glimmer: local, agentic, multimodal, and open source",
+            "item_id": "huggingface-blog:5890b1cfd4cc38aa3885",
+            "title": "Build Low-Latency Multilingual Voice Agents: Open Weights & Full Deployment Control with NVIDIA Magpie TTS",
             "source_key": "huggingface-blog",
             "source_label": "Hugging Face Blog",
             "source_type": "official_feed",
-            "created_at": "2026-08-10T00:00:00+00:00",
-            "url": "https://huggingface.co/blog/muse-glimmer",
-            "ranking_score_0_100": 62.9,
-            "source_excerpt": "Meta is back with Muse Glimmer: local, agentic, multimodal, and open source",
+            "created_at": "2026-08-10T16:25:36+00:00",
+            "url": "https://huggingface.co/blog/nvidia/magpie-tts-multilingual-voice-agents",
+            "ranking_score_0_100": 62.5,
+            "source_excerpt": "Build Low-Latency Multilingual Voice Agents: Open Weights & Full Deployment Control with NVIDIA Magpie TTS",
             "matched_terms": [
-              "multimodal"
+              "latency"
             ],
-            "item_integrity_hash": "ddb389029d8ef68cc34151c713c6e258c1ecd05401ee68df154fa94a4c2f3127",
+            "item_integrity_hash": "4f2bc5cdf5de937aa675f9fe0979939215af014e8fc3f97b618ae5eb1f493624",
             "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
         "novelty_status": "changed",
-        "what_changed": "主軸由「開放模型的競爭焦點，正從能否下載轉向能否治理與部署」轉為「模型研究正把問題從『更大』改寫成『怎樣學得更有效』」。"
+        "what_changed": "主軸由「模型研究正把問題從『更大』改寫成『怎樣學得更有效』」轉為「模型競爭不只追求更強，也開始追求更專用、更省、更快落地」。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -322,11 +310,11 @@
   },
   "daily_actions": [
     {
-      "item_id": "openai-news:e063daae6225e1569539",
-      "title": "From assistance to execution: How enterprises put AI to work",
+      "item_id": "openai-news:baf07daff59f271b9079",
+      "title": "How NVIDIA scales expertise with ChatGPT Work",
       "action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
       "source_label": "OpenAI News",
-      "url": "https://openai.com/index/how-enterprises-put-ai-to-work"
+      "url": "https://openai.com/index/nvidia/chatgpt-work"
     },
     {
       "item_id": "nvidia-developer:fee4d4ed686cbacf98e7",
@@ -336,11 +324,11 @@
       "url": "https://developer.nvidia.com/blog/boost-inference-performance-up-to-15x-on-nvidia-blackwell-using-dflash-speculative-decoding/"
     },
     {
-      "item_id": "deepmind-blog:1357a9ae7911e1d557ac",
-      "title": "Putting sign language AI into users’ hands",
+      "item_id": "huggingface-blog:d9524ab76177d5beaf99",
+      "title": "Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers",
       "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "source_label": "Google DeepMind Blog",
-      "url": "https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/"
+      "source_label": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/multi-vector-encoder"
     }
   ],
   "categories": [
@@ -356,6 +344,28 @@
       ],
       "items": [
         {
+          "id": "openai-news:baf07daff59f271b9079",
+          "url": "https://openai.com/index/nvidia/chatgpt-work",
+          "created_at": "2026-08-18T00:00:00+00:00",
+          "title": "How NVIDIA scales expertise with ChatGPT Work",
+          "text": "How NVIDIA scales expertise with ChatGPT Work — NVIDIA teams use ChatGPT Work to reduce manual tasks, connect fast-moving signals, and scale successful workflows globally.",
+          "source_key": "openai-news",
+          "category_id": "ai-application-monetization",
+          "source_label": "OpenAI News",
+          "source_type": "official_feed",
+          "source_tier": "官方公司",
+          "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+          "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+          "ranking_score_0_100": 83.4,
+          "ranking_components_0_100": {
+            "source_quality": 100.0,
+            "keyword_relevance": 50.0,
+            "recency": 92.2
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "b1ee27fcdbeab4f9dadfa9bf6e7d78574721c880233ac9fc941b78345429300f"
+        },
+        {
           "id": "openai-news:e063daae6225e1569539",
           "url": "https://openai.com/index/how-enterprises-put-ai-to-work",
           "created_at": "2026-08-12T06:00:00+00:00",
@@ -368,11 +378,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 84.2,
+          "ranking_score_0_100": 82.7,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 58.3
+            "recency": 51.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4df4ef2488ac7d7c834866410d32ba1b2045cb247371b83c91677ecd383cd722"
@@ -390,36 +400,14 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 83.8,
+          "ranking_score_0_100": 82.4,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 56.5
+            "recency": 49.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "59d89418414815de7435661ef046fc806f62086d8accde561bdb2eff2ba3fd35"
-        },
-        {
-          "id": "openai-news:0e82d8998833621ad9c9",
-          "url": "https://openai.com/index/virgin-atlantic/chatgpt-work",
-          "created_at": "2026-08-10T00:00:00+00:00",
-          "title": "Virgin Atlantic sharpens customer journeys with ChatGPT Work",
-          "text": "Virgin Atlantic sharpens customer journeys with ChatGPT Work — Virgin Atlantic is accelerating research, product planning, and decision-making with ChatGPT Work, helping teams connect signals across the customer journey.",
-          "source_key": "openai-news",
-          "category_id": "ai-application-monetization",
-          "source_label": "OpenAI News",
-          "source_type": "official_feed",
-          "source_tier": "官方公司",
-          "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
-          "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 80.9,
-          "ranking_components_0_100": {
-            "source_quality": 100.0,
-            "keyword_relevance": 75.0,
-            "recency": 42.2
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "2fa32d4487e8f4d06dc7ece3f37cf586af4c28baea829e98112f47ced098a2c0"
         },
         {
           "id": "cursor-changelog:6513f392a2d6804b090d",
@@ -434,11 +422,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 68.2,
+          "ranking_score_0_100": 66.8,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 63.7
+            "recency": 56.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b967c1e29dcaf5eee8fa9c2286d1e015abe439ce4ff7271470eee588bc83d2c8"
@@ -456,11 +444,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 65.8,
+          "ranking_score_0_100": 64.4,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 46.6
+            "recency": 39.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "8b9710a982a34759d748235bf9160a2a0027c00f1231f6431f3a46cf83afabae"
@@ -480,6 +468,72 @@
       ],
       "items": [
         {
+          "id": "vercel-ai-releases:e92f5a08ebfa4208eca4",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%401.0.69",
+          "created_at": "2026-08-18T22:49:27+00:00",
+          "title": "@ai-sdk/workflow@1.0.69",
+          "text": "@ai-sdk/workflow@1.0.69 — ### Patch Changes - ai@7.0.68",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.3,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 99.0
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "d720425865cfbc793681baea86880636bb7b41b1534b58585e8e313e1dee02e5"
+        },
+        {
+          "id": "vercel-ai-releases:c3085b71c8d8083ca2d5",
+          "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.68",
+          "created_at": "2026-08-18T22:48:00+00:00",
+          "title": "ai@7.0.68",
+          "text": "ai@7.0.68 — ### Patch Changes - Updated dependencies [257632b] - @ai-sdk/gateway@4.0.54",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.3,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 99.0
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "163f137bf82827c8a4dc482cf327a848af6ce83d4818faa8d7969fe88255bb3f"
+        },
+        {
+          "id": "vercel-ai-releases:b9c98743644d1532a28d",
+          "url": "https://github.com/vercel/ai/releases/tag/ai%405.0.239",
+          "created_at": "2026-08-18T18:04:15+00:00",
+          "title": "ai@5.0.239",
+          "text": "ai@5.0.239 — ### Patch Changes - Updated dependencies [05d5b6c] - @ai-sdk/gateway@2.0.136",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "20175651fbad12f58e52f7f30bd2c52dc44f813dd59cdface95f05326f728436"
+        },
+        {
           "id": "nvidia-developer:fee4d4ed686cbacf98e7",
           "url": "https://developer.nvidia.com/blog/boost-inference-performance-up-to-15x-on-nvidia-blackwell-using-dflash-speculative-decoding/",
           "created_at": "2026-08-06T19:09:46+00:00",
@@ -492,11 +546,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 82.4,
+          "ranking_score_0_100": 80.9,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 19.4
+            "recency": 12.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "172c902a6dbf10b81958752c5022cd57e5c04dfef51a96ddd4097d5b91995719"
@@ -514,80 +568,14 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 82.4,
+          "ranking_score_0_100": 80.9,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 19.4
+            "recency": 12.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3f2401600c51deafbac24bdc1ed89a6fc164c42a2d63a7d7a088b3ec4903a69f"
-        },
-        {
-          "id": "vercel-ai-releases:c835ac79902579eb5672",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.73",
-          "created_at": "2026-08-17T18:22:28+00:00",
-          "title": "@ai-sdk/workflow-harness@1.0.73",
-          "text": "@ai-sdk/workflow-harness@1.0.73 — ### Patch Changes - Updated dependencies [62a9c2a] - Updated dependencies [d25cae2] - @ai-sdk/harness@1.0.73",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.0,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 97.7
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "8ef01b60a0be0d81b6ca8bc41e4911893a73b4cef62623a7dcdf85fbe5dedba9"
-        },
-        {
-          "id": "vercel-ai-releases:7386f5a0ea01c48d5c29",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/togetherai%403.0.32",
-          "created_at": "2026-08-17T18:22:25+00:00",
-          "title": "@ai-sdk/togetherai@3.0.32",
-          "text": "@ai-sdk/togetherai@3.0.32 — ### Patch Changes - Updated dependencies [86892f3] - @ai-sdk/openai-compatible@3.0.31",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.0,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 97.7
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "070be0a9d0086d3ea1fb8b3761c1801d45c08805da15a3a46b7cdbd6708f2319"
-        },
-        {
-          "id": "vercel-ai-releases:de289cd8907e2ee03274",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/sandbox-vercel%401.0.73",
-          "created_at": "2026-08-17T18:22:22+00:00",
-          "title": "@ai-sdk/sandbox-vercel@1.0.73",
-          "text": "@ai-sdk/sandbox-vercel@1.0.73 — ### Patch Changes - Updated dependencies [62a9c2a] - Updated dependencies [d25cae2] - @ai-sdk/harness@1.0.73",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.0,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 97.7
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "0ff74b1f77a182c041bc7226f5a0d83ae471c4a106d7917f787862fb5d073c3d"
         },
         {
           "id": "nvidia-developer:a55484127056e2582739",
@@ -602,11 +590,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 80.6,
+          "ranking_score_0_100": 79.2,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 48.1
+            "recency": 41.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "0566a1de8174c36f1697b01e9c3e12c90682ffc386a32ad76d0bf06c5a5ae0c7"
@@ -624,11 +612,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 73.0,
+          "ranking_score_0_100": 71.6,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 52.6
+            "recency": 45.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "bbdc8ea4fa30d642e98714a6334a93124ccb9d0c5ef2b769d219e7540c828d17"
@@ -646,11 +634,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 72.2,
+          "ranking_score_0_100": 70.8,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 48.6
+            "recency": 41.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "5c72fbdaeb35d8e964b8be42246e99dea37ad633aa4a4e5a1bcf1a0a472a2cb1"
@@ -669,26 +657,26 @@
       ],
       "items": [
         {
-          "id": "arxiv-ai:defd4a9af8cdcaa642bf",
-          "url": "https://arxiv.org/abs/2608.15736v1",
-          "created_at": "2026-08-16T13:24:31+00:00",
-          "title": "Toward AI-Friendly Cartography: Understanding How Color Design Influences Foundation Model Spatial Reasoning on Sequential Choropleth Maps",
-          "text": "Toward AI-Friendly Cartography: Understanding How Color Design Influences Foundation Model Spatial Reasoning on Sequential Choropleth Maps — Foundation models (FMs) increasingly support multimodal and geospatial reasoning, yet it remains unclear whether cartographic principles designed for human perception are equally effective for machines. Focusing on sequential choropleth maps, we examine how hue palette, color ordering, and lightness contrast influence FM spatial reasoning. We construct a controlled benchmark of 5,760 maps and 28,800 questions spanning Attribute Identify, Spatial Recognition, Compare, Rank, and Pattern Delineate, and evaluate 21 op…",
-          "source_key": "arxiv-ai",
+          "id": "huggingface-blog:d9524ab76177d5beaf99",
+          "url": "https://huggingface.co/blog/multi-vector-encoder",
+          "created_at": "2026-08-18T00:00:00+00:00",
+          "title": "Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers",
+          "text": "Multi-Vector (Late Interaction) Embedding Models with Sentence Transformers",
+          "source_key": "huggingface-blog",
           "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 83.8,
+          "source_label": "Hugging Face Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方平台",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 72.9,
           "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 100.0,
-            "recency": 89.1
+            "source_quality": 94.0,
+            "keyword_relevance": 25.0,
+            "recency": 92.2
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "ad99d095b63a8fdba32d4e6663ff785a4453e13ca744e4380dd7ee8620733644"
+          "integrity_hash": "aa211485ba150f352cad24aa1e85439a0ee55df4e7bc194976fd1a36c1da200f"
         },
         {
           "id": "deepmind-blog:1357a9ae7911e1d557ac",
@@ -703,58 +691,14 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 69.6,
+          "ranking_score_0_100": 68.2,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 60.7
+            "recency": 53.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d0df2c6f9a3323b45171645c7a534a5ed95ae6f2fd144b25b8806bb009ff58b7"
-        },
-        {
-          "id": "arxiv-ai:7e75ba2fc11fda508853",
-          "url": "https://arxiv.org/abs/2608.15832v1",
-          "created_at": "2026-08-16T16:05:50+00:00",
-          "title": "The Authority Resolution Framework: A Five-Domain Ontology for Governing Who and What Decides, at Scale",
-          "text": "The Authority Resolution Framework: A Five-Domain Ontology for Governing Who and What Decides, at Scale — As AI systems become increasingly capable of autonomous action, determining whether an agent is technically capable of performing an action is insufficient: the system must also determine whether the action is authorised in its context. This paper introduces the Authority Resolution Framework (ARF), a five-domain ontology for representing and resolving authority across organisational roles and informal influence, business concepts, codified processes, machine-readable permissions and executable systems, and extern…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 69.0,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 89.9
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "9eb691e9211da72bd228139c559915ad31801ed8d78db4e5858d2f4e18007810"
-        },
-        {
-          "id": "arxiv-ai:c70b1817e705baf49e4e",
-          "url": "https://arxiv.org/abs/2608.15831v1",
-          "created_at": "2026-08-16T16:05:24+00:00",
-          "title": "CardiacMamba: Fair and Robust RGB-RF Fusion for Remote Heart Rate Estimation via State Space Modeling",
-          "text": "CardiacMamba: Fair and Robust RGB-RF Fusion for Remote Heart Rate Estimation via State Space Modeling — Remote photoplethysmography (rPPG) enables non-contact heart rate (HR) monitoring from facial videos, but RGB-only methods are vulnerable to illumination changes, motion artifacts, and skin-tone-dependent optical reflectance. We propose CardiacMamba, a fair and robust RGB-RF fusion framework that integrates optical facial cues and radio-frequency cardiac motion cues through state space modeling. CardiacMamba introduces a Temporal Difference Mamba Module (TDMM) to enhance subtle RF temporal variations, a bidirectio…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 69.0,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 89.9
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "acd741ba7c4e3b0686fd6b2a7a705b850d0650916cd5f96dc104a9a7b4dcd705"
         },
         {
           "id": "huggingface-blog:bc290ba394fd0d9149bf",
@@ -769,11 +713,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 68.7,
+          "ranking_score_0_100": 67.2,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 70.8
+            "recency": 63.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3d296a3667e84aae0d7b120ac20a53f33782450e5570b9ad1df2dfed5c99a0cc"
@@ -791,36 +735,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 63.9,
+          "ranking_score_0_100": 62.5,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 47.1
+            "recency": 40.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4f2bc5cdf5de937aa675f9fe0979939215af014e8fc3f97b618ae5eb1f493624"
-        },
-        {
-          "id": "huggingface-blog:dfb586131bf3d3cb04b4",
-          "url": "https://huggingface.co/blog/muse-glimmer",
-          "created_at": "2026-08-10T00:00:00+00:00",
-          "title": "Meta is back with Muse Glimmer: local, agentic, multimodal, and open source",
-          "text": "Meta is back with Muse Glimmer: local, agentic, multimodal, and open source",
-          "source_key": "huggingface-blog",
-          "category_id": "model-progress",
-          "source_label": "Hugging Face Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方平台",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 62.9,
-          "ranking_components_0_100": {
-            "source_quality": 94.0,
-            "keyword_relevance": 25.0,
-            "recency": 42.2
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "ddb389029d8ef68cc34151c713c6e258c1ecd05401ee68df154fa94a4c2f3127"
         },
         {
           "id": "deepmind-blog:1986eab2e2ed84ba8b77",
@@ -835,11 +757,11 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 61.1,
+          "ranking_score_0_100": 59.7,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 18.2
+            "recency": 11.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "697d03ab7b226d0617d2be404e5724aadbc7288d4a5965cecae48ccf838bad3e"
