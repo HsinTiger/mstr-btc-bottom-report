@@ -16,11 +16,11 @@ SNAPSHOT_PATH = DATA_DIR / "latest_snapshot.json"
 OUTPUT_PATH = DATA_DIR / "timescale_price_history.json"
 
 ASSETS = {
-    "BTC": {"yahoo": "BTC-USD", "secondary": ("Kraken", "XBTUSD"), "market": "crypto"},
-    "ETH": {"yahoo": "ETH-USD", "secondary": ("Kraken", "ETHUSD"), "market": "crypto"},
-    "MSTR": {"yahoo": "MSTR", "secondary": ("Nasdaq", "MSTR"), "market": "equity"},
-    "BMNR": {"yahoo": "BMNR", "secondary": ("Nasdaq", "BMNR"), "market": "equity"},
-    "STRC": {"yahoo": "STRC", "secondary": ("Nasdaq", "STRC"), "market": "equity"},
+    "BTC": {"yahoo": "BTC-USD", "secondary": (("Kraken", "XBTUSD"),), "market": "crypto"},
+    "ETH": {"yahoo": "ETH-USD", "secondary": (("Kraken", "ETHUSD"),), "market": "crypto"},
+    "MSTR": {"yahoo": "MSTR", "secondary": (("Nasdaq", "MSTR"), ("StockAnalysis", "MSTR")), "market": "equity"},
+    "BMNR": {"yahoo": "BMNR", "secondary": (("Nasdaq", "BMNR"), ("StockAnalysis", "BMNR")), "market": "equity"},
+    "STRC": {"yahoo": "STRC", "secondary": (("Nasdaq", "STRC"), ("StockAnalysis", "STRC")), "market": "equity"},
 }
 
 
@@ -185,11 +185,50 @@ def nasdaq_rows(ticker: str) -> tuple[list[dict[str, Any]], str]:
     return rows, url
 
 
+def stockanalysis_rows(ticker: str) -> tuple[list[dict[str, Any]], str]:
+    """Daily OHLC failover for listed vehicles when Nasdaq blocks the caller.
+
+    Nasdaq's quote API rejects data-centre IPs, so CI needs a second free
+    provider that is still independent of Yahoo.
+    """
+    today = datetime.now(timezone.utc).date().isoformat()
+    url = f"https://stockanalysis.com/api/symbol/s/{urllib.parse.quote(ticker.lower())}/history?range=2Y&period=Daily"
+    payload = fetch_json(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "Accept": "application/json, text/plain, */*",
+            "Referer": f"https://stockanalysis.com/stocks/{ticker.lower()}/history/",
+        },
+    )
+    if payload.get("status") != 200:
+        raise ValueError(f"StockAnalysis {ticker}: status {payload.get('status')}")
+    rows: list[dict[str, Any]] = []
+    for raw in payload.get("data") or []:
+        date = str(raw.get("t") or "")[:10]
+        close = number(raw.get("c"))
+        if not date or date >= today or close is None or close <= 0:
+            continue
+        rows.append({
+            "date": date,
+            "open": number(raw.get("o")),
+            "high": number(raw.get("h")),
+            "low": number(raw.get("l")),
+            "close": close,
+            "volume": number(raw.get("v")),
+        })
+    rows.sort(key=lambda item: item["date"])
+    if not rows:
+        raise ValueError(f"StockAnalysis {ticker}: no completed bars")
+    return rows, url
+
+
 def collect_source(provider: str, symbol: str) -> tuple[list[dict[str, Any]], str]:
     collectors: dict[str, Callable[[str], tuple[list[dict[str, Any]], str]]] = {
         "Kraken": kraken_rows,
         "Coinbase": coinbase_rows,
         "Nasdaq": nasdaq_rows,
+        "StockAnalysis": stockanalysis_rows,
     }
     return collectors[provider](symbol)
 
@@ -201,10 +240,14 @@ def main() -> int:
     assets: dict[str, Any] = {}
     for symbol, config in ASSETS.items():
         sources: dict[str, Any] = {}
-        source_specs = [("Yahoo Finance", config["yahoo"]), config["secondary"]]
+        source_specs: list[tuple[str, str]] = [("Yahoo Finance", config["yahoo"])]
+        source_specs.extend(config["secondary"])
         if symbol in {"BTC", "ETH"}:
             source_specs.append(("Coinbase", f"{symbol}-USD"))
+        secondary_providers = {provider for provider, _ in config["secondary"]}
         for provider, provider_symbol in source_specs:
+            if provider in secondary_providers and secondary_providers & sources.keys():
+                continue  # one verified secondary is enough; later candidates are failovers
             try:
                 rows, url = yahoo_rows(provider_symbol) if provider == "Yahoo Finance" else collect_source(provider, provider_symbol)
                 if not rows:
@@ -241,7 +284,7 @@ def main() -> int:
             "source_incidents": incidents,
             "policy": {
                 "completed_bars_only": True,
-                "canonical_preference": "Yahoo Finance, then verified secondary provider",
+                "canonical_preference": "Yahoo Finance, then the first secondary provider that returns completed bars",
                 "history_window": "BTC/ETH eight years; listed vehicles approximately two years",
                 "minimum_independent_sources": 2,
                 "research_only": True,
@@ -255,6 +298,7 @@ def main() -> int:
         "status": status,
         "assets": len(assets),
         "source_incidents": len(incidents),
+        "incident_details": incidents,
     }, ensure_ascii=False))
     return 1 if status == "fail" else 0
 
