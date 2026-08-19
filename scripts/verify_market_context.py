@@ -215,6 +215,68 @@ def verify(source: dict[str, Any]) -> dict[str, Any]:
         onchain_age = age_days(btc.get(name, {}).get("as_of"))
         check(f"btc_{name}_as_of", onchain_age is not None and -1 <= onchain_age <= 3, f"BTC {name} 超過 3 日新鮮度契約")
 
+    provider = btc.get("canonical_onchain_provider")
+    check("btc_canonical_provider", provider in {"CoinMetrics", "Blockchain.com"}, "BTC 鏈上 canonical 來源必須具名")
+    promoted = btc.get("canonical_promoted_series") or []
+    check(
+        "btc_canonical_promotion_consistency",
+        (provider == "CoinMetrics") == bool(promoted)
+        and all(
+            btc.get(name, {}).get("as_of") == (btc.get("coinmetrics", {}).get(name) or {}).get("as_of")
+            for name in promoted
+        ),
+        "BTC canonical 來源標記與實際採用的觀測日不一致",
+    )
+    for name in promoted:
+        superseded = (btc.get("blockchain_com", {}).get(name) or {}).get("as_of")
+        check(
+            f"btc_promotion_is_fresher:{name}",
+            superseded is None or str(btc.get(name, {}).get("as_of")) > str(superseded),
+            f"BTC {name} 換用的來源並未比原來源新",
+        )
+
+    def check_valuation(asset: str, block: dict[str, Any]) -> None:
+        mvrv = finite((block.get("mvrv") or {}).get("value"))
+        market_cap = finite((block.get("market_cap_usd") or {}).get("value"))
+        supply = finite((block.get("supply") or {}).get("value"))
+        realized_cap = finite(block.get("realized_cap_usd"))
+        realized_price = finite(block.get("realized_price_usd"))
+        check(f"{asset}_mvrv_range", mvrv is not None and 0.05 <= mvrv <= 20, f"{asset} MVRV 超出合理範圍")
+        expected_cap = market_cap / mvrv if None not in {market_cap, mvrv} and mvrv else None
+        check(
+            f"{asset}_realized_cap_math",
+            expected_cap is not None and realized_cap is not None and (relative_gap(expected_cap, realized_cap) or 0.0) <= 1e-9,
+            f"{asset} 已實現市值重算不一致",
+        )
+        expected_price = realized_cap / supply if None not in {realized_cap, supply} and supply else None
+        check(
+            f"{asset}_realized_price_math",
+            expected_price is not None and realized_price is not None and (relative_gap(expected_price, realized_price) or 0.0) <= 1e-9,
+            f"{asset} 已實現價格重算不一致",
+        )
+        inflow = finite((block.get("exchange_inflow_usd") or {}).get("value"))
+        outflow = finite((block.get("exchange_outflow_usd") or {}).get("value"))
+        net_flow = finite(block.get("exchange_net_flow_usd"))
+        expected_net = inflow - outflow if None not in {inflow, outflow} else None
+        check(
+            f"{asset}_exchange_net_flow_math",
+            expected_net is not None and net_flow is not None and abs(expected_net - net_flow) < 0.01,
+            f"{asset} 交易所淨流量重算不一致",
+        )
+        check(
+            f"{asset}_exchange_flow_preliminary_flag",
+            isinstance(block.get("exchange_flow_is_preliminary"), bool),
+            f"{asset} 交易所流量必須標示初步或最終",
+        )
+        valuation_age = age_days(block.get("as_of"))
+        check(
+            f"{asset}_valuation_as_of",
+            valuation_age is not None and -1 <= valuation_age <= 3,
+            f"{asset} 鏈上估值指標超過 3 日新鮮度契約",
+        )
+
+    check_valuation("btc", btc.get("valuation", {}))
+
     eth = source.get("onchain", {}).get("ETH", {})
     heads = [int(value) for value in eth.get("provider_heads", {}).values()]
     head_gap = max(heads) - min(heads) if heads else None
@@ -225,6 +287,7 @@ def verify(source: dict[str, Any]) -> dict[str, Any]:
     check("eth_sample_depth", current_sample.get("sample_blocks", 0) >= 10 and prior_sample.get("sample_blocks", 0) >= 10, "ETH 目前與前週抽樣深度不足", hard=False)
     eth_age = age_days(eth.get("as_of"))
     check("eth_as_of", eth_age is not None and -1 <= eth_age <= 1, "ETH RPC 抽樣超過 1 日新鮮度契約")
+    check_valuation("eth", eth.get("valuation", {}))
 
     policy = source.get("policy", {})
     check("policy_sources", policy.get("successful_sources", 0) >= 3, "政策研究至少需要三個成功官方來源", hard=False)

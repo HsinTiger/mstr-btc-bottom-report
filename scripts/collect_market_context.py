@@ -413,6 +413,127 @@ def timed_series(rows: list[tuple[datetime, float]]) -> dict[str, Any]:
     return {"value": latest, "change_30d": change, "as_of": latest_time.date().isoformat()}
 
 
+COINMETRICS_BASE = "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics"
+COINMETRICS_METRICS = (
+    "CapMVRVCur",
+    "CapMrktCurUSD",
+    "SplyCur",
+    "TxCnt",
+    "AdrActCnt",
+    "IssTotUSD",
+    "FlowInExUSD",
+    "FlowOutExUSD",
+    "HashRate",
+)
+
+
+def coinmetrics_series(asset: str, metrics: tuple[str, ...], days: int = 45) -> tuple[dict[str, list[tuple[str, float]]], str]:
+    """Return {metric: [(date, value)]} sorted ascending from the free community API.
+
+    The community tier needs no key. Preliminary values carry a ``<metric>-status``
+    of ``flash``; that flag is preserved so downstream consumers never present a
+    provisional exchange-flow reading as final.
+    """
+    start = (datetime.now(timezone.utc).date() - timedelta(days=days)).isoformat()
+    url = (
+        f"{COINMETRICS_BASE}?assets={asset}&metrics={','.join(metrics)}"
+        f"&frequency=1d&page_size=10000&start_time={start}"
+    )
+    payload = fetch_json(url)
+    rows = payload.get("data", [])
+    if not rows:
+        raise ValueError(f"CoinMetrics {asset} returned no rows")
+    series: dict[str, list[tuple[str, float]]] = {metric: [] for metric in metrics}
+    flash: dict[str, str] = {}
+    for row in sorted(rows, key=lambda item: str(item.get("time"))):
+        as_of = str(row.get("time") or "")[:10]
+        if not as_of:
+            continue
+        for metric in metrics:
+            value = finite(row.get(metric))
+            if value is not None:
+                series[metric].append((as_of, value))
+                if row.get(f"{metric}-status") == "flash":
+                    flash[metric] = as_of
+    series = {metric: values for metric, values in series.items() if values}
+    if not series:
+        raise ValueError(f"CoinMetrics {asset} returned no usable metric values")
+    series["__flash__"] = flash  # type: ignore[assignment]
+    return series, url
+
+
+def coinmetrics_point(series: dict[str, Any], metric: str) -> dict[str, Any] | None:
+    """Latest value plus its own 30-day change, keeping the observation date."""
+    rows = series.get(metric)
+    if not rows:
+        return None
+    as_of, value = rows[-1]
+    latest_day = date.fromisoformat(as_of)
+    target = latest_day - timedelta(days=30)
+    prior = min(rows, key=lambda item: abs((date.fromisoformat(item[0]) - target).days))
+    change = value / prior[1] - 1 if prior[1] else None
+    point = {"value": value, "change_30d": change, "as_of": as_of}
+    if metric in series.get("__flash__", {}):
+        point["preliminary_as_of"] = series["__flash__"][metric]
+    return point
+
+
+def coinmetrics_valuation(series: dict[str, Any]) -> dict[str, Any]:
+    """Valuation and flow block used by the author-thesis tracker.
+
+    ``realized_price_usd`` is derived, not fetched: market cap / MVRV / supply.
+    Keeping the derivation explicit means the verifier can recompute it.
+    """
+    mvrv = coinmetrics_point(series, "CapMVRVCur")
+    market_cap = coinmetrics_point(series, "CapMrktCurUSD")
+    supply = coinmetrics_point(series, "SplyCur")
+    inflow = coinmetrics_point(series, "FlowInExUSD")
+    outflow = coinmetrics_point(series, "FlowOutExUSD")
+    issuance = coinmetrics_point(series, "IssTotUSD")
+    realized_cap = (
+        market_cap["value"] / mvrv["value"]
+        if mvrv and market_cap and mvrv["value"] else None
+    )
+    realized_price = (
+        realized_cap / supply["value"]
+        if realized_cap is not None and supply and supply["value"] else None
+    )
+    net_flow = (
+        inflow["value"] - outflow["value"]
+        if inflow and outflow else None
+    )
+    block: dict[str, Any] = {
+        "mvrv": mvrv,
+        "market_cap_usd": market_cap,
+        "supply": supply,
+        "realized_cap_usd": realized_cap,
+        "realized_price_usd": realized_price,
+        "realized_price_basis": "market_cap_divided_by_mvrv_divided_by_supply",
+        "exchange_inflow_usd": inflow,
+        "exchange_outflow_usd": outflow,
+        "exchange_net_flow_usd": net_flow,
+        "exchange_net_flow_basis": "inflow_usd_minus_outflow_usd",
+        "issuance_usd": issuance,
+    }
+    dates = [point["as_of"] for point in (mvrv, market_cap, supply) if point]
+    block["as_of"] = min(dates) if dates else None
+    flow_dates = [point["as_of"] for point in (inflow, outflow) if point]
+    block["exchange_flow_as_of"] = min(flow_dates) if flow_dates else None
+    block["exchange_flow_is_preliminary"] = any(
+        point and point.get("preliminary_as_of") for point in (inflow, outflow)
+    )
+    return block
+
+
+def fresher(candidate: dict[str, Any] | None, incumbent: dict[str, Any] | None) -> bool:
+    """True when ``candidate`` carries a strictly newer observation date."""
+    if not candidate or not candidate.get("as_of"):
+        return False
+    if not incumbent or not incumbent.get("as_of"):
+        return True
+    return str(candidate["as_of"]) > str(incumbent["as_of"])
+
+
 def collect_btc_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     names = {"transactions": "n-transactions", "active_addresses": "n-unique-addresses", "hashrate": "hash-rate"}
     output: dict[str, Any] = {}
@@ -427,6 +548,38 @@ def collect_btc_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
                 checks.append(source_check("onchain_btc", f"Blockchain.com {chart}", url, "pass", as_of=output[name]["as_of"]))
             except Exception as error:
                 checks.append(source_check("onchain_btc", f"Blockchain.com {chart}", "https://www.blockchain.com/explorer/charts", "fail", error=str(error)))
+
+    try:
+        series, coinmetrics_url = coinmetrics_series("btc", COINMETRICS_METRICS)
+        candidates = {
+            "transactions": coinmetrics_point(series, "TxCnt"),
+            "active_addresses": coinmetrics_point(series, "AdrActCnt"),
+            "hashrate": coinmetrics_point(series, "HashRate"),
+        }
+        output["coinmetrics"] = {name: point for name, point in candidates.items() if point}
+        output["valuation"] = coinmetrics_valuation(series)
+        # Blockchain.com's chart API now lags 3+ days; whichever provider carries the
+        # newer observation date becomes canonical and the other stays as the check.
+        promoted = []
+        for name, point in candidates.items():
+            if fresher(point, output.get(name)):
+                output.setdefault("blockchain_com", {})[name] = output.get(name)
+                output[name] = {**point, "url": coinmetrics_url}
+                promoted.append(name)
+        output["canonical_onchain_provider"] = "CoinMetrics" if promoted else "Blockchain.com"
+        output["canonical_promoted_series"] = promoted
+        checks.append(source_check(
+            "onchain_btc", "CoinMetrics community", coinmetrics_url, "pass",
+            as_of=output["valuation"].get("as_of"),
+            role="primary" if promoted else "independent_check",
+        ))
+    except Exception as error:
+        output["canonical_onchain_provider"] = "Blockchain.com"
+        output["canonical_promoted_series"] = []
+        checks.append(source_check(
+            "onchain_btc", "CoinMetrics community", COINMETRICS_BASE, "fail",
+            error=str(error), role="primary_or_independent_check",
+        ))
 
     blockchair_url = "https://api.blockchair.com/bitcoin/stats"
     try:
@@ -589,6 +742,26 @@ def collect_eth_onchain() -> tuple[dict[str, Any], list[dict[str, Any]]]:
             checks.append(source_check("onchain_eth", "Blockchair Ethereum", blockchair_url, "pass", as_of=str(stats.get("best_block_time") or "")[:10], role="fallback"))
         except Exception as error:
             checks.append(source_check("onchain_eth", "Blockchair Ethereum", blockchair_url, "fail", error=str(error), role="fallback"))
+    try:
+        series, coinmetrics_url = coinmetrics_series("eth", COINMETRICS_METRICS)
+        output["valuation"] = coinmetrics_valuation(series)
+        output["coinmetrics"] = {
+            name: point
+            for name, point in (
+                ("transactions", coinmetrics_point(series, "TxCnt")),
+                ("active_addresses", coinmetrics_point(series, "AdrActCnt")),
+            )
+            if point
+        }
+        checks.append(source_check(
+            "onchain_eth", "CoinMetrics community", coinmetrics_url, "pass",
+            as_of=output["valuation"].get("as_of"), role="independent_check",
+        ))
+    except Exception as error:
+        checks.append(source_check(
+            "onchain_eth", "CoinMetrics community", COINMETRICS_BASE, "fail",
+            error=str(error), role="independent_check",
+        ))
     output["status"] = "pass" if output.get("sample_agreement") is True and output.get("head_gap_blocks", 99) <= 3 else "degraded" if output.get("head_block") else "fail"
     return output, checks
 
