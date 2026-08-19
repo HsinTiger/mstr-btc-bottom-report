@@ -133,6 +133,17 @@ jobs:
           python scripts/test_market_editorial.py
           python scripts/test_market_editorial_mutations.py
 
+      - name: Rebuild author thesis tracker
+        run: python scripts/generate_author_thesis_tracker.py
+
+      - name: Independently re-derive author thesis tracker
+        run: |
+          rm -f data/daily/author_thesis_tracker_verification.json
+          python scripts/verify_author_thesis_tracker.py
+
+      - name: Prove author thesis verifier rejects mutations
+        run: python scripts/test_author_thesis_mutations.py
+
       - name: Validate analysis-only publication contract
         run: |
           python - <<'PY'

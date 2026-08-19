@@ -1,29 +1,257 @@
 {
   "schema": 1,
-  "updated_at": "2026-07-30",
+  "updated_at": "2026-08-19",
   "owner": "product-ceo-governance",
   "mission": "以市場總編統籌可追溯的跨市場結論；即時數據、AI 總編、知識庫與系統狀態各自只回答一個問題，不輸出交易策略。",
   "data_contracts": {
-    "data/daily/latest_snapshot.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "batch_id", "metrics"], "lineage_source_field": "generated_at"},
-    "data/daily/agent_verification_report.json": {"schema_value": 2, "required_fields": ["date", "verified_at", "batch_id", "snapshot_generated_at", "status"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/market_universe.json": {"schema_value": 2, "required_fields": ["date", "generated_at", "snapshot_generated_at", "source_batch_id", "quality", "quality.validation_summary", "quality.freshness_contract", "assets", "derivatives", "etf", "dat", "sources"]},
-    "data/daily/market_universe_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "market_date", "market_generated_at", "status", "failures", "degradations"]},
-    "data/daily/market_universe_history.json": {"schema_value": 2, "required_fields": ["updated_at"]},
-    "data/daily/market_context.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "payload_hash", "quality.status", "quality.execution_gate_eligible", "macro", "policy", "onchain", "source_checks"]},
-    "data/daily/market_context_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "source_hash", "status", "checks"]},
-    "data/daily/market_editorial.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "editorial_hash", "quality.status", "quality.execution_gate_eligible", "lineage", "editorial_digest", "desks"]},
-    "data/daily/market_editorial_history.json": {"schema_value": 1, "required_fields": ["updated_at", "head_hash", "runs"]},
-    "data/daily/market_editorial_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "source_generated_at", "source_hash", "history_head_hash", "status", "checks", "desk_count"]},
-    "data/daily/timescale_price_history.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality.status", "assets"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/timescale_data_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "history_generated_at", "snapshot_generated_at", "status", "checks"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/timescale_intelligence.json": {"schema_value": 1, "required_fields": ["date", "generated_at", "snapshot_generated_at", "quality.status", "horizons", "alignment", "asset_matrix", "exclusive_insights"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/timescale_intelligence_history.json": {"schema_value": 1, "required_fields": ["updated_at", "items"]},
-    "data/daily/timescale_intelligence_verification.json": {"schema_value": 1, "required_fields": ["verified_at", "analysis_generated_at", "snapshot_generated_at", "status", "checks"], "lineage_field": "snapshot_generated_at"},
-    "data/daily/ai_intelligence.json": {"schema_value": 3, "required_fields": ["generated_at", "window_hours", "quality.status", "quality.provider", "quality.execution_gate_eligible", "summary.posts", "summary.successful_sources", "summary.editorial_briefs", "source_checks", "editorial_digest.lead_brief_id", "editorial_digest.policy_hash", "editorial_digest.briefs", "daily_actions", "categories"]},
-    "data/daily/ai_intelligence_history.json": {"schema_value": 2, "required_fields": ["integrity_contract", "last_attempt_at", "quality.status", "items", "editorial_runs"]},
-    "data/daily/ai_intelligence_verification.json": {"schema_value": 3, "required_fields": ["verified_at", "source_generated_at", "status", "category_counts", "successful_sources", "daily_actions", "editorial_briefs", "editorial_status", "editorial_history_runs"]},
-    "data/daily/site_health.json": {"schema_value": 1, "required_fields": ["generated_at", "status", "summary", "pages"]},
-    "wiki/manifest.json": {"schema_value": 1, "required_fields": ["updated", "pages"]}
+    "data/daily/latest_snapshot.json": {
+      "schema_value": 2,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "batch_id",
+        "metrics"
+      ],
+      "lineage_source_field": "generated_at"
+    },
+    "data/daily/agent_verification_report.json": {
+      "schema_value": 2,
+      "required_fields": [
+        "date",
+        "verified_at",
+        "batch_id",
+        "snapshot_generated_at",
+        "status"
+      ],
+      "lineage_field": "snapshot_generated_at"
+    },
+    "data/daily/market_universe.json": {
+      "schema_value": 2,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "snapshot_generated_at",
+        "source_batch_id",
+        "quality",
+        "quality.validation_summary",
+        "quality.freshness_contract",
+        "assets",
+        "derivatives",
+        "etf",
+        "dat",
+        "sources"
+      ]
+    },
+    "data/daily/market_universe_verification.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "verified_at",
+        "market_date",
+        "market_generated_at",
+        "status",
+        "failures",
+        "degradations"
+      ]
+    },
+    "data/daily/market_universe_history.json": {
+      "schema_value": 2,
+      "required_fields": [
+        "updated_at"
+      ]
+    },
+    "data/daily/market_context.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "payload_hash",
+        "quality.status",
+        "quality.execution_gate_eligible",
+        "macro",
+        "policy",
+        "onchain",
+        "source_checks"
+      ]
+    },
+    "data/daily/market_context_verification.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "verified_at",
+        "source_generated_at",
+        "source_hash",
+        "status",
+        "checks"
+      ]
+    },
+    "data/daily/market_editorial.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "editorial_hash",
+        "quality.status",
+        "quality.execution_gate_eligible",
+        "lineage",
+        "editorial_digest",
+        "desks"
+      ]
+    },
+    "data/daily/market_editorial_history.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "updated_at",
+        "head_hash",
+        "runs"
+      ]
+    },
+    "data/daily/market_editorial_verification.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "verified_at",
+        "source_generated_at",
+        "source_hash",
+        "history_head_hash",
+        "status",
+        "checks",
+        "desk_count"
+      ]
+    },
+    "data/daily/timescale_price_history.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "snapshot_generated_at",
+        "quality.status",
+        "assets"
+      ],
+      "lineage_field": "snapshot_generated_at"
+    },
+    "data/daily/timescale_data_verification.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "verified_at",
+        "history_generated_at",
+        "snapshot_generated_at",
+        "status",
+        "checks"
+      ],
+      "lineage_field": "snapshot_generated_at"
+    },
+    "data/daily/timescale_intelligence.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "snapshot_generated_at",
+        "quality.status",
+        "horizons",
+        "alignment",
+        "asset_matrix",
+        "exclusive_insights"
+      ],
+      "lineage_field": "snapshot_generated_at"
+    },
+    "data/daily/timescale_intelligence_history.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "updated_at",
+        "items"
+      ]
+    },
+    "data/daily/timescale_intelligence_verification.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "verified_at",
+        "analysis_generated_at",
+        "snapshot_generated_at",
+        "status",
+        "checks"
+      ],
+      "lineage_field": "snapshot_generated_at"
+    },
+    "data/daily/ai_intelligence.json": {
+      "schema_value": 3,
+      "required_fields": [
+        "generated_at",
+        "window_hours",
+        "quality.status",
+        "quality.provider",
+        "quality.execution_gate_eligible",
+        "summary.posts",
+        "summary.successful_sources",
+        "summary.editorial_briefs",
+        "source_checks",
+        "editorial_digest.lead_brief_id",
+        "editorial_digest.policy_hash",
+        "editorial_digest.briefs",
+        "daily_actions",
+        "categories"
+      ]
+    },
+    "data/daily/ai_intelligence_history.json": {
+      "schema_value": 2,
+      "required_fields": [
+        "integrity_contract",
+        "last_attempt_at",
+        "quality.status",
+        "items",
+        "editorial_runs"
+      ]
+    },
+    "data/daily/ai_intelligence_verification.json": {
+      "schema_value": 3,
+      "required_fields": [
+        "verified_at",
+        "source_generated_at",
+        "status",
+        "category_counts",
+        "successful_sources",
+        "daily_actions",
+        "editorial_briefs",
+        "editorial_status",
+        "editorial_history_runs"
+      ]
+    },
+    "data/daily/site_health.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "generated_at",
+        "status",
+        "summary",
+        "pages"
+      ]
+    },
+    "wiki/manifest.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "updated",
+        "pages"
+      ]
+    },
+    "data/daily/author_thesis_tracker.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "date",
+        "generated_at",
+        "context_generated_at",
+        "market_generated_at",
+        "tracker_hash",
+        "quality",
+        "theses"
+      ],
+      "lineage_field": "context_generated_at"
+    },
+    "data/daily/author_thesis_tracker_verification.json": {
+      "schema_value": 1,
+      "required_fields": [
+        "verified_at",
+        "source_generated_at",
+        "source_hash",
+        "status",
+        "failures"
+      ]
+    }
   },
   "data_products": [
     {
@@ -34,12 +262,48 @@
       "cadence": "每日",
       "owner_action": "keep_backend",
       "bindings": [
-        {"left_path": "data/daily/timescale_price_history.json", "left_field": "generated_at", "right_path": "data/daily/timescale_data_verification.json", "right_field": "history_generated_at"},
-        {"left_path": "data/daily/timescale_price_history.json", "left_field": "snapshot_generated_at", "right_path": "data/daily/timescale_data_verification.json", "right_field": "snapshot_generated_at"}
+        {
+          "left_path": "data/daily/timescale_price_history.json",
+          "left_field": "generated_at",
+          "right_path": "data/daily/timescale_data_verification.json",
+          "right_field": "history_generated_at"
+        },
+        {
+          "left_path": "data/daily/timescale_price_history.json",
+          "left_field": "snapshot_generated_at",
+          "right_path": "data/daily/timescale_data_verification.json",
+          "right_field": "snapshot_generated_at"
+        }
       ],
       "dependencies": [
-        {"path": "data/daily/timescale_price_history.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_data_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
+        {
+          "path": "data/daily/timescale_price_history.json",
+          "timestamp_field": "generated_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "quality.status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/timescale_data_verification.json",
+          "timestamp_field": "verified_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        }
       ]
     },
     {
@@ -50,14 +314,57 @@
       "cadence": "每日",
       "owner_action": "keep_backend",
       "bindings": [
-        {"left_path": "data/daily/timescale_intelligence.json", "left_field": "generated_at", "right_path": "data/daily/timescale_intelligence_verification.json", "right_field": "analysis_generated_at"},
-        {"left_path": "data/daily/timescale_intelligence.json", "left_field": "snapshot_generated_at", "right_path": "data/daily/timescale_intelligence_verification.json", "right_field": "snapshot_generated_at"},
-        {"left_path": "data/daily/timescale_intelligence.json", "left_field": "generated_at", "right_path": "data/daily/timescale_intelligence_history.json", "right_field": "updated_at"}
+        {
+          "left_path": "data/daily/timescale_intelligence.json",
+          "left_field": "generated_at",
+          "right_path": "data/daily/timescale_intelligence_verification.json",
+          "right_field": "analysis_generated_at"
+        },
+        {
+          "left_path": "data/daily/timescale_intelligence.json",
+          "left_field": "snapshot_generated_at",
+          "right_path": "data/daily/timescale_intelligence_verification.json",
+          "right_field": "snapshot_generated_at"
+        },
+        {
+          "left_path": "data/daily/timescale_intelligence.json",
+          "left_field": "generated_at",
+          "right_path": "data/daily/timescale_intelligence_history.json",
+          "right_field": "updated_at"
+        }
       ],
       "dependencies": [
-        {"path": "data/daily/timescale_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/timescale_intelligence_history.json", "timestamp_field": "updated_at", "max_age_hours": 30, "required": true},
-        {"path": "data/daily/timescale_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"}
+        {
+          "path": "data/daily/timescale_intelligence.json",
+          "timestamp_field": "generated_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "quality.status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/timescale_intelligence_history.json",
+          "timestamp_field": "updated_at",
+          "max_age_hours": 30,
+          "required": true
+        },
+        {
+          "path": "data/daily/timescale_intelligence_verification.json",
+          "timestamp_field": "verified_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "status",
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        }
       ]
     }
   ],
@@ -69,15 +376,66 @@
       "title_contains": "市場總編",
       "lifecycle": "active",
       "criticality": "critical",
-      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌。",
+      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌；並把作者在 Substack 發表的 BTC／ETH 論點逐條對本站已驗證資料重算。",
       "user_question": "今天真正主導 BTC／ETH 的跨市場力量是什麼，哪些維度共振或分歧？",
       "open_when": "每天第一個打開；先讀今日主文與跨市場結論，需要原始報價再進即時數據。",
       "cadence": "每日 08:42（台北時間）",
       "surface_type": "verified_cross_market_editorial",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/daily/market_editorial.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/market_editorial_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "fail_values": ["fail"], "fail_result": "fail"}
+        {
+          "path": "data/daily/market_editorial.json",
+          "timestamp_field": "generated_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "quality.status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/market_editorial_verification.json",
+          "timestamp_field": "verified_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "status",
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/author_thesis_tracker.json",
+          "timestamp_field": "generated_at",
+          "max_age_hours": 30,
+          "required": false,
+          "quality_field": "quality.status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "degraded"
+        },
+        {
+          "path": "data/daily/author_thesis_tracker_verification.json",
+          "timestamp_field": "verified_at",
+          "max_age_hours": 30,
+          "required": false,
+          "quality_field": "status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "degraded"
+        }
       ]
     },
     {
@@ -94,9 +452,40 @@
       "surface_type": "live_market",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/daily/market_universe.json", "timestamp_field": "generated_at", "max_age_hours": 3, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/market_universe_verification.json", "timestamp_field": "verified_at", "max_age_hours": 3, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/market_universe_history.json", "timestamp_field": "updated_at", "max_age_hours": 3, "required": true}
+        {
+          "path": "data/daily/market_universe.json",
+          "timestamp_field": "generated_at",
+          "max_age_hours": 3,
+          "required": true,
+          "quality_field": "quality.status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/market_universe_verification.json",
+          "timestamp_field": "verified_at",
+          "max_age_hours": 3,
+          "required": true,
+          "quality_field": "status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/market_universe_history.json",
+          "timestamp_field": "updated_at",
+          "max_age_hours": 3,
+          "required": true
+        }
       ]
     },
     {
@@ -113,8 +502,34 @@
       "surface_type": "context_intelligence",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/daily/ai_intelligence.json", "timestamp_field": "generated_at", "max_age_hours": 30, "required": true, "quality_field": "quality.status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"},
-        {"path": "data/daily/ai_intelligence_verification.json", "timestamp_field": "verified_at", "max_age_hours": 30, "required": true, "quality_field": "status", "degraded_values": ["degraded"], "fail_values": ["fail"], "fail_result": "fail"}
+        {
+          "path": "data/daily/ai_intelligence.json",
+          "timestamp_field": "generated_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "quality.status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        },
+        {
+          "path": "data/daily/ai_intelligence_verification.json",
+          "timestamp_field": "verified_at",
+          "max_age_hours": 30,
+          "required": true,
+          "quality_field": "status",
+          "degraded_values": [
+            "degraded"
+          ],
+          "fail_values": [
+            "fail"
+          ],
+          "fail_result": "fail"
+        }
       ]
     },
     {
@@ -131,7 +546,10 @@
       "surface_type": "governed_knowledge",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "wiki/manifest.json", "required": true}
+        {
+          "path": "wiki/manifest.json",
+          "required": true
+        }
       ]
     },
     {
@@ -148,7 +566,10 @@
       "surface_type": "product_governance",
       "owner_action": "keep",
       "dependencies": [
-        {"path": "data/site_registry.json", "required": true}
+        {
+          "path": "data/site_registry.json",
+          "required": true
+        }
       ]
     }
   ]

@@ -50,6 +50,8 @@ def main() -> int:
         "verify_timescale_intelligence.py",
         "generate_market_editorial.py",
         "verify_market_editorial.py",
+        "generate_author_thesis_tracker.py",
+        "verify_author_thesis_tracker.py",
     ]
     positions = [hourly.find(item) for item in required_hourly_order]
     if any(position < 0 for position in positions) or positions != sorted(positions):
@@ -60,6 +62,8 @@ def main() -> int:
         "timescale_intelligence_verification.json",
         "market_editorial.json",
         "market_editorial_verification.json",
+        "author_thesis_tracker.json",
+        "author_thesis_tracker_verification.json",
     ):
         if artifact not in hourly_staged:
             raise AssertionError(f"hourly workflow must atomically publish rebuilt {artifact}")
@@ -85,7 +89,13 @@ def main() -> int:
         if artifact not in editorial_staged:
             raise AssertionError(f"editorial workflow must publish rebuilt {artifact}")
 
-    print("workflow cadence tests: PASS (17/17)")
+    for name, text in (("daily", daily), ("hourly", hourly)):
+        if "generate_author_thesis_tracker.py" not in text or "verify_author_thesis_tracker.py" not in text:
+            raise AssertionError(f"{name} workflow must rebuild and independently re-derive the author thesis tracker")
+        if text.find("generate_author_thesis_tracker.py") > text.find("verify_author_thesis_tracker.py"):
+            raise AssertionError(f"{name} workflow must verify the tracker after rebuilding it")
+
+    print("workflow cadence tests: PASS (21/21)")
     return 0
 
 

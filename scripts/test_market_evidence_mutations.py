@@ -27,6 +27,14 @@ def expect_verifier_failure(name: str, source: dict, expected: str) -> None:
         raise AssertionError(f"{name}: expected failure {expected!r}, got {report}")
 
 
+def expect_verifier_degradation(name: str, source: dict, expected: str) -> None:
+    report = verifier.verify_market_universe(source)
+    if any(expected in error for error in report["failures"]):
+        raise AssertionError(f"{name}: {expected!r} must degrade, not hard-fail: {report['failures']}")
+    if not any(expected in note for note in report["degradations"]):
+        raise AssertionError(f"{name}: expected degradation {expected!r}, got {report}")
+
+
 def main() -> int:
     baseline = verifier.evidence_ledger_errors(copy.deepcopy(SOURCE))
     if baseline:
@@ -106,7 +114,15 @@ def main() -> int:
     generated_at = datetime.fromisoformat(stale_sector_source["generated_at"].replace("Z", "+00:00"))
     stale_time = (generated_at - timedelta(hours=1)).isoformat()
     stale_sector_source["sectors"]["RWA"]["source_observations"]["CoinGecko"]["as_of"] = stale_time
-    expect_verifier_failure("stale-sector-source", stale_sector_source, "sector RWA")
+    # Breadth baskets are context, not a core check: a source falling out of the
+    # freshness window degrades the sector, it does not freeze the whole batch.
+    expect_verifier_degradation("stale-sector-source", stale_sector_source, "sector RWA")
+
+    # What must still fail closed is publishing a number the sources never agreed on.
+    unverified_sector_value = copy.deepcopy(SOURCE)
+    unverified_sector_value["sectors"]["RWA"]["status"] = "unavailable"
+    unverified_sector_value["sectors"]["RWA"]["change_24h"] = 0.042
+    expect_verifier_failure("unverified-sector-value", unverified_sector_value, "must not publish a value")
 
     print("market evidence mutation tests: PASS (12/12)")
     return 0

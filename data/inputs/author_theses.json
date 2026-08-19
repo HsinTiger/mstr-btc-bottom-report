@@ -1,0 +1,380 @@
+{
+  "schema": 1,
+  "updated_at": "2026-08-19",
+  "owner": "author-editorial",
+  "scope": "author_thesis_tracking_only",
+  "execution_gate_eligible": false,
+  "note": "作者本人在 Substack『賺錢有道』寫的 BTC／ETH 分析草稿，逐條拆成可對帳的 claim 與可判定的 falsifier。stated_value 是文章寫下的數字，永遠不覆寫；current 由本站已驗證 artifact 重算。本檔案只描述論點是否仍與資料一致，不輸出任何買賣建議。",
+  "metric_roots": [
+    "context",
+    "universe"
+  ],
+  "theses": [
+    {
+      "id": "btc-bottom-not-yet-2026-08-19",
+      "asset": "BTC",
+      "authored_on": "2026-08-19",
+      "title": "比特幣的底部還沒到位",
+      "subtitle": "價格腰斬但算力維持高檔，表面上的籌碼沉澱，掩蓋了礦工將電力轉向 AI 的結構性拋壓。",
+      "stance": "估值修正期，而非確認的週期底部",
+      "core_argument": "鏈上 MVRV 尚未進入歷史極端折價區間、美國現貨買盤持續偏弱，礦商同時把電力資源轉向 AI 資料中心並變現庫存，供給曲線實質右移，市場仍需更長換手時間消化新增發行與結構性拋壓。",
+      "source": {
+        "publication": "Substack 賺錢有道",
+        "mode": "company",
+        "draft_path": "news_radar/data/substack_drafts/2026-08-19/company_比特幣的底部還沒到位賺錢有道",
+        "generated_by": "antigravity_cli · Gemini 3.7 Flash (High)，Claude Opus 4.6 稽核"
+      },
+      "self_reported_audit_warnings": [
+        "具名來源『CoinMetrics 的初步數據』不在原取材清單，需補來源連結",
+        "一句比較級沒有給基準數字"
+      ],
+      "claims": [
+        {
+          "id": "btc_mvrv",
+          "label": "BTC MVRV",
+          "stated_value": 1.23,
+          "stated_as_of": "2026-08-18",
+          "unit": "ratio",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "tolerance": 0.02
+        },
+        {
+          "id": "btc_exchange_net_flow",
+          "label": "交易所單日淨流出",
+          "stated_value": -410000000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.exchange_net_flow_usd",
+          "tolerance": 0.1
+        },
+        {
+          "id": "btc_daily_issuance",
+          "label": "每日新增發行金額",
+          "stated_value": 30120000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.issuance_usd.value",
+          "tolerance": 0.1
+        },
+        {
+          "id": "btc_supply",
+          "label": "流通量",
+          "stated_value": 20071518,
+          "stated_as_of": "2026-08-19",
+          "unit": "btc",
+          "metric": "context.onchain.BTC.valuation.supply.value",
+          "tolerance": 0.001
+        },
+        {
+          "id": "btc_hashrate",
+          "label": "全網算力",
+          "stated_value": 941100000,
+          "stated_as_of": "2026-08-19",
+          "unit": "th_per_s",
+          "metric": "context.onchain.BTC.hashrate.value",
+          "tolerance": 0.05
+        },
+        {
+          "id": "btc_price",
+          "label": "BTC 價格",
+          "stated_value": 64187,
+          "stated_as_of": "2026-08-19",
+          "unit": "usd",
+          "metric": "universe.assets.BTC.price_usd",
+          "tolerance": 0.03
+        },
+        {
+          "id": "btc_market_cap",
+          "label": "BTC 市值",
+          "stated_value": 1290000000000,
+          "stated_as_of": "2026-08-19",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.market_cap_usd.value",
+          "tolerance": 0.03
+        }
+      ],
+      "untracked_claims": [
+        {
+          "label": "Coinbase 溢價指數 -0.0868%，連續 80 天負值",
+          "reason": "本站尚未收錄 Coinbase 溢價指數，無法對帳"
+        },
+        {
+          "label": "礦工 OTC 地址餘額 139,700 枚，自 2021-11 約 50 萬枚下降 72%",
+          "reason": "本站尚未收錄 CryptoQuant 礦工 OTC 餘額"
+        },
+        {
+          "label": "2026 年初單枚生產成本約 87,000 美元",
+          "reason": "本站尚未收錄礦工生產成本序列"
+        },
+        {
+          "label": "上市礦商將 1MW 電力轉為 AI 託管可得 10 倍以上估值溢價",
+          "reason": "產業敘事，非本站可重算的時間序列"
+        }
+      ],
+      "falsifiers": [
+        {
+          "id": "btc_mvrv_capitulation",
+          "label": "MVRV 跌破 1.0（籌碼投降）",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "operator": "lt",
+          "threshold": 1.0,
+          "meaning": "觸發代表作者所說的『尚未進入極端折價』這個前提失效"
+        },
+        {
+          "id": "btc_etf_demand_return",
+          "label": "美國現貨 ETF 30 日淨流入轉正且具規模（>= 10 億美元）",
+          "metric": "universe.etf.BTC.flow_30d_usd",
+          "operator": "gte",
+          "threshold": 1000000000,
+          "meaning": "觸發代表需求端已回補，作者的『邊際買盤偏弱』論點需要重寫"
+        },
+        {
+          "id": "btc_coinbase_premium_positive",
+          "label": "Coinbase 溢價指數翻正並維持常態",
+          "metric": null,
+          "meaning": "作者列為第一道門檻，但本站目前無此指標，狀態必須誠實標成未追蹤"
+        },
+        {
+          "id": "btc_miner_otc_stabilises",
+          "label": "礦工 OTC 餘額止跌 + 算力絲帶黃金交叉",
+          "metric": null,
+          "meaning": "作者列為第三個訊號，本站目前無此兩個序列"
+        }
+      ]
+    },
+    {
+      "id": "btc-halved-bottom-question-2026-08-19",
+      "asset": "BTC",
+      "authored_on": "2026-08-19",
+      "title": "跌掉一半的比特幣見底了嗎",
+      "subtitle": "價格從十二萬美元跌到六萬四，鏈上出現四億美元淨流出。但翻開成本線與持幣盈虧，這場修正可能還沒完成最後的清洗。",
+      "stance": "橫盤是缺乏新增流動性背書的脆弱暫態平衡，未完成極端底部出清",
+      "core_argument": "單日交易所淨流出常被當成大戶吸籌，但實務上多是託管商冷熱錢包換倉；MVRV 停在 1.23 的過渡區間、礦工生產成本高於幣價、Coinbase 溢價持續為負，三者合起來說明出清尚未完成。",
+      "source": {
+        "publication": "Substack 賺錢有道",
+        "mode": "company",
+        "draft_path": "news_radar/data/substack_drafts/2026-08-19/company_跌掉一半的比特幣見底了嗎賺錢有道",
+        "generated_by": "antigravity_cli · Gemini 3.7 Flash (High)，Claude Opus 4.6 稽核"
+      },
+      "self_reported_audit_warnings": [
+        "標題 17 字超過 15 字上限",
+        "一句比較級沒有給基準數字",
+        "有單段超過 260 字"
+      ],
+      "claims": [
+        {
+          "id": "btc_price_variant",
+          "label": "BTC 價格",
+          "stated_value": 64232,
+          "stated_as_of": "2026-08-19",
+          "unit": "usd",
+          "metric": "universe.assets.BTC.price_usd",
+          "tolerance": 0.03
+        },
+        {
+          "id": "btc_mvrv_variant",
+          "label": "BTC MVRV",
+          "stated_value": 1.23,
+          "stated_as_of": "2026-08-18",
+          "unit": "ratio",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "tolerance": 0.02
+        },
+        {
+          "id": "btc_exchange_inflow",
+          "label": "交易所單日流入",
+          "stated_value": 1300000000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.exchange_inflow_usd.value",
+          "tolerance": 0.05
+        },
+        {
+          "id": "btc_exchange_outflow",
+          "label": "交易所單日流出",
+          "stated_value": 1710000000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.exchange_outflow_usd.value",
+          "tolerance": 0.05
+        }
+      ],
+      "untracked_claims": [
+        {
+          "label": "52 週高點 126,198 美元、回檔 49.1%",
+          "reason": "本站 timescale 另有自己的回撤計算，口徑不同不直接對帳"
+        },
+        {
+          "label": "市場主導率 56.4%",
+          "reason": "本站尚未收錄 BTC dominance 序列"
+        },
+        {
+          "label": "現貨黃金一度突破每盎司 4,400 美元",
+          "reason": "本站宏觀桌未收錄黃金現貨"
+        },
+        {
+          "label": "灰度研究團隊主張的三大長線需求支柱",
+          "reason": "第三方觀點引用，非可重算數值"
+        }
+      ],
+      "falsifiers": [
+        {
+          "id": "btc_mvrv_capitulation_variant",
+          "label": "MVRV 跌破 1.0",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "operator": "lt",
+          "threshold": 1.0,
+          "meaning": "觸發代表『尚未完成出清』的核心前提要改寫"
+        },
+        {
+          "id": "btc_price_breaks_range",
+          "label": "價格跌破作者所述 6.2 萬美元區間下緣",
+          "metric": "universe.assets.BTC.price_usd",
+          "operator": "lt",
+          "threshold": 62000,
+          "meaning": "觸發代表 30 天窄幅震盪的描述已失效"
+        },
+        {
+          "id": "btc_net_flow_turns_inflow",
+          "label": "交易所單日轉為淨流入",
+          "metric": "context.onchain.BTC.valuation.exchange_net_flow_usd",
+          "operator": "gt",
+          "threshold": 0,
+          "meaning": "觸發代表『籌碼離開交易所』這個觀察當日不成立"
+        }
+      ]
+    },
+    {
+      "id": "eth-below-cost-basis-2026-08-19",
+      "asset": "ETH",
+      "authored_on": "2026-08-19",
+      "title": "當以太幣跌破持有成本",
+      "subtitle": "MVRV 降至 0.94 進入歷史低估區，單日交易所淨流出看似吸籌。但在缺乏質押與銷毀數據的背書下，新增供應仍考驗著市場的真實承接力。",
+      "stance": "低估但未確認反轉；是缺乏新增流動性下的估值重置，不只是情緒超跌",
+      "core_argument": "MVRV 跌破 1 只說明風險報酬比改善，不等於觸底訊號；在現貨 ETF 增量資金流向不明、且無法確認 EIP-1559 燃燒能覆蓋每日新增發行的情況下，供需修復尚未取得數據背書。",
+      "source": {
+        "publication": "Substack 賺錢有道",
+        "mode": "company",
+        "draft_path": "news_radar/data/substack_drafts/2026-08-19/company_當以太幣跌破持有成本賺錢有道",
+        "generated_by": "antigravity_cli · Gemini 3.7 Flash (High)，Claude Opus 4.6 稽核"
+      },
+      "self_reported_audit_warnings": [],
+      "claims": [
+        {
+          "id": "eth_mvrv",
+          "label": "ETH MVRV",
+          "stated_value": 0.94,
+          "stated_as_of": "2026-08-18",
+          "unit": "ratio",
+          "metric": "context.onchain.ETH.valuation.mvrv.value",
+          "tolerance": 0.02
+        },
+        {
+          "id": "eth_price",
+          "label": "ETH 價格",
+          "stated_value": 1920,
+          "stated_as_of": "2026-08-19",
+          "unit": "usd",
+          "metric": "universe.assets.ETH.price_usd",
+          "tolerance": 0.03
+        },
+        {
+          "id": "eth_market_cap",
+          "label": "ETH 市值",
+          "stated_value": 231550000000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.ETH.valuation.market_cap_usd.value",
+          "tolerance": 0.03
+        },
+        {
+          "id": "eth_exchange_net_flow",
+          "label": "交易所單日淨流出",
+          "stated_value": -30710000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.ETH.valuation.exchange_net_flow_usd",
+          "tolerance": 0.1
+        },
+        {
+          "id": "eth_daily_issuance",
+          "label": "每日新增發行金額",
+          "stated_value": 5610000,
+          "stated_as_of": "2026-08-18",
+          "unit": "usd",
+          "metric": "context.onchain.ETH.valuation.issuance_usd.value",
+          "tolerance": 0.05
+        },
+        {
+          "id": "eth_supply",
+          "label": "流通總量",
+          "stated_value": 120700000,
+          "stated_as_of": "2026-08-18",
+          "unit": "eth",
+          "metric": "context.onchain.ETH.valuation.supply.value",
+          "tolerance": 0.02
+        },
+        {
+          "id": "eth_active_addresses",
+          "label": "單日活躍地址",
+          "stated_value": 814843,
+          "stated_as_of": "2026-08-18",
+          "unit": "count",
+          "metric": "context.onchain.ETH.coinmetrics.active_addresses.value",
+          "tolerance": 0.01
+        },
+        {
+          "id": "eth_transactions",
+          "label": "單日交易筆數",
+          "stated_value": 2856958,
+          "stated_as_of": "2026-08-18",
+          "unit": "count",
+          "metric": "context.onchain.ETH.coinmetrics.transactions.value",
+          "tolerance": 0.01
+        }
+      ],
+      "untracked_claims": [
+        {
+          "label": "52 週高點 4,954 美元、回撤 61.2%",
+          "reason": "本站 timescale 另有自己的回撤計算，口徑不同不直接對帳"
+        },
+        {
+          "label": "ETH 市值佔比 10.1%",
+          "reason": "本站尚未收錄 ETH dominance 序列"
+        },
+        {
+          "label": "每月需約 1.68 億美元新增買盤才能消化增發",
+          "reason": "由每日增發推導的敘事值，非獨立來源觀測"
+        },
+        {
+          "label": "EIP-1559 每日實際銷毀量是否覆蓋增發",
+          "reason": "本站尚未收錄 base fee 銷毀序列，這也是作者自承的資料缺口"
+        }
+      ],
+      "falsifiers": [
+        {
+          "id": "eth_mvrv_recovers",
+          "label": "MVRV 重新站回 1.0 之上",
+          "metric": "context.onchain.ETH.valuation.mvrv.value",
+          "operator": "gte",
+          "threshold": 1.0,
+          "meaning": "觸發代表『跌破全網平均成本』的前提解除，論點要改寫"
+        },
+        {
+          "id": "eth_etf_sustained_inflow",
+          "label": "現貨 ETF 30 日淨流量轉為明顯淨流入（>= 5 億美元）",
+          "metric": "universe.etf.ETH.flow_30d_usd",
+          "operator": "gte",
+          "threshold": 500000000,
+          "meaning": "作者列為第一個驗證訊號：增量資本是否真的在接盤"
+        },
+        {
+          "id": "eth_burn_exceeds_issuance",
+          "label": "EIP-1559 每日銷毀量超過每日新增發行",
+          "metric": null,
+          "meaning": "作者列為第三個訊號，本站目前無銷毀量序列"
+        }
+      ]
+    }
+  ]
+}

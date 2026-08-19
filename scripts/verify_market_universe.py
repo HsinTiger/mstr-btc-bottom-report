@@ -27,7 +27,6 @@ from verify_daily_data import (
 ROOT = Path(__file__).resolve().parents[1]
 MARKET_PATH = ROOT / "data" / "daily" / "market_universe.json"
 REPORT_PATH = ROOT / "data" / "daily" / "market_universe_verification.json"
-COMPOSITION_DIVERGENT_SECTORS = {"defi", "meme"}
 SECTOR_SOURCE_MAX_LAG_HOURS = 0.25
 
 
@@ -274,12 +273,19 @@ def verify_market_universe(market: dict[str, Any]) -> dict[str, Any]:
         if volatility_lag is None or volatility_lag < -0.25 or volatility_lag > volatility_max_lag:
             failures.append(f"{symbol} volatility timestamp outside batch freshness window")
 
+    # Sector baskets are breadth context, never a core market check. The four
+    # aggregators legitimately disagree on 24h return (USD aggregate vs USDT
+    # spot), so a missing strict majority is routine. The data layer already
+    # fails closed — an unverified basket publishes status "unavailable" with a
+    # null value — so a breadth disagreement is recorded as a degradation and no
+    # longer freezes BTC/ETH/ETF/macro data for the rest of the day.
     for sector, item in market.get("sectors", {}).items():
         result = recompute_sector_validation(item, generated_at, SECTOR_SOURCE_MAX_LAG_HOURS)
-        target = degradations if sector.lower() in COMPOSITION_DIVERGENT_SECTORS else failures
-        target.extend(f"sector {sector}: {error}" for error in result["errors"])
+        degradations.extend(f"sector {sector}: {error}" for error in result["errors"])
         if item.get("status") != "cross_source_verified":
-            target.append(f"sector {sector}: status is not cross_source_verified")
+            degradations.append(f"sector {sector}: status is not cross_source_verified")
+            if item.get("change_24h") is not None or item.get("market_cap_usd") is not None:
+                failures.append(f"sector {sector}: unverified basket must not publish a value")
 
     for asset in ("BTC", "ETH"):
         etf = market.get("etf", {}).get(asset, {})

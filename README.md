@@ -14,7 +14,7 @@
 
 | Page | Responsibility |
 |---|---|
-| `market-intelligence.html` | **主要首頁**；每日市場總編統籌 BTC／ETH、ETF／DAT、政策、鏈上、技術、宏觀、信用、債券與美股八個研究桌 |
+| `market-intelligence.html` | **主要首頁**；每日市場總編統籌 BTC／ETH、ETF／DAT、政策、鏈上、技術、宏觀、信用、債券與美股八個研究桌，並追蹤作者已發表論點是否仍與資料一致 |
 | `market-monitor.html` | 每小時現貨、衍生品、ETF、DAT 與熱門賽道原始證據 |
 | `x-intelligence.html` | AI 總編；三類官方情報、本站編輯假說、反證、跨日差異與三個行動 |
 | `wiki.html` | 指標、公司與假說的治理知識庫 |
@@ -54,6 +54,8 @@ Daily source collection
 - `data/daily/market_editorial.json`
 - `data/daily/market_editorial_history.json`
 - `data/daily/market_editorial_verification.json`
+- `data/daily/author_thesis_tracker.json`
+- `data/daily/author_thesis_tracker_verification.json`
 
 `timescale_intelligence.json` 另外保留兩層不可混稱的時間尺度：原有日 K 等長窗口用於跨資產一致比較；`technical_horizons.weekly/monthly` 則由完整日 K 聚合成「已完成週 K／月 K」，重算 RSI 14、MACD、量價、OBV、ATR、20／30 週均線、10／20 月均線、頂底背離、領先訊號與落後確認。消息情緒只納入已驗證 ETF、政策、流動性、鏈上及情緒證據，且不具交易執行資格。
 
@@ -68,6 +70,18 @@ Pages 的 `deployment-manifest.json` 會綁定 commit、市場總編 semantic ha
 「每小時更新」指市場總表每小時重建，不代表每個來源都是盤中即時。現貨、衍生品與 DAT 聚合來源按小時重抓；美國現貨 ETF 上游按交易日每日重抓，屬交易日完成後的 T+1 資料，只發布同日完成資料商、官方發行商與獨立備援三方驗證的版本；DAT 官方申報依事件更新。所有欄位保留原始觀測日與實際抓取時間，不把組裝或抓取時間冒充持倉日。
 
 方法與維護程序位於 `skills/market-timescale-intelligence/SKILL.md`；其 evidence ledger、diff-first、deterministic gate 與 append-only revision 方法取自 `HsinTiger/skills-radar` 的已審研究原則。資料 reconciliation 方法採用已審、固定 commit 且 Apache-2.0 的 Anthropic skill，只移植對帳與治理流程，不採用通用範例門檻。
+
+## 作者論點追蹤
+
+`data/inputs/author_theses.json` 記錄作者在 Substack 發表的 BTC／ETH 論點：文章
+寫下的數字、它自己的觀測日、對應到本站哪一個指標，以及文章自己列出的反證訊號。
+`generate_author_thesis_tracker.py` 只做一件事——用本站已獨立驗證的
+`market_context` 與 `market_universe` 重算同一個指標，然後回答三個問題：文中數字
+現在還成立嗎、偏離多少、作者自己說會推翻論點的訊號觸發了沒有。
+
+文章的原始數字永遠保留原值，不會被今天的資料覆寫；本站沒有的指標標成
+`unavailable`／`untracked` 並附上原因，不補值、不換算、不用相近指標頂替。
+`verify_author_thesis_tracker.py` 自己重讀輸入與上游再算一次，對不上就 fail closed。
 
 ## Research boundary
 
