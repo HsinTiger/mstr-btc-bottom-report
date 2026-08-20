@@ -1,27 +1,32 @@
 {
   "schema": 1,
   "date": "2026-08-20",
-  "generated_at": "2026-08-20T13:48:40+00:00",
-  "snapshot_generated_at": "2026-08-20T13:48:19+00:00",
-  "market_universe_generated_at": "2026-08-20T13:48:23+00:00",
-  "market_context_generated_at": "2026-08-20T13:48:23+00:00",
-  "price_history_generated_at": "2026-08-20T13:48:35+00:00",
+  "generated_at": "2026-08-20T13:54:42+00:00",
+  "snapshot_generated_at": "2026-08-20T13:54:24+00:00",
+  "market_universe_generated_at": "2026-08-20T13:54:28+00:00",
+  "market_context_generated_at": "2026-08-20T13:54:28+00:00",
+  "price_history_generated_at": "2026-08-20T13:54:40+00:00",
   "quality": {
     "status": "degraded",
     "publication_mode": "analysis_only",
     "execution_gate_eligible": false,
     "failures": [],
     "degradations": [
-      "market universe: 賽道固定籃子資料不完整或跨源分歧：RWA",
+      "market universe: 賽道固定籃子資料不完整或跨源分歧：RWA, Layer 1, Meme",
       "market universe: ETH DAT 來源 quorum、代表性覆蓋或差異門檻未通過",
       "market universe sector RWA: fewer than two market-cap or volume sources",
       "market universe sector RWA: sector consensus does not have a strict majority",
       "market universe sector RWA: status is not cross_source_verified",
+      "market universe sector Layer 1: fewer than two market-cap or volume sources",
+      "market universe sector Layer 1: sector consensus does not have a strict majority",
+      "market universe sector Layer 1: status is not cross_source_verified",
+      "market universe sector Meme: sector consensus does not have a strict majority",
+      "market universe sector Meme: status is not cross_source_verified",
       "ETH DAT BMNR: 最新官方申報未揭露持倉，已排除於官方覆蓋層",
       "ETH DAT SBET: 官方申報日期未知或超過 45 天，與 collector 一致排除於官方覆蓋層",
       "BMNR treasury holdings: observation unavailable",
-      "MSTR equity: Yahoo 觀測 2026-08-20、Nasdaq 觀測 2026-08-19 非同一交易時段，差距 6.82% 是隔日漲跌不是來源分歧；同時段對帳由已完成 K 線那一層負責",
-      "BMNR equity: Yahoo 觀測 2026-08-20、Nasdaq 觀測 2026-08-19 非同一交易時段，差距 5.34% 是隔日漲跌不是來源分歧；同時段對帳由已完成 K 線那一層負責",
+      "MSTR equity: Yahoo 觀測 2026-08-20、Nasdaq 觀測 2026-08-19 非同一交易時段，差距 7.17% 是隔日漲跌不是來源分歧；同時段對帳由已完成 K 線那一層負責",
+      "BMNR equity: Yahoo 觀測 2026-08-20、Nasdaq 觀測 2026-08-19 非同一交易時段，差距 6.11% 是隔日漲跌不是來源分歧；同時段對帳由已完成 K 線那一層負責",
       "BMNR treasury analytics missing: eth_holdings, bottom_up_gross_treasury_musd, market_cap_to_gross_treasury, gross_treasury_value_per_share",
       "manual capital-structure inputs: debt_face_musd, annual_interest_musd, other_debt_annual_service_musd, preferred, preferred_aggregate_musd",
       "capital-structure provenance status=mixed_automated_manual"
@@ -142,7 +147,7 @@
       },
       "historical_percentile": {
         "status": "insufficient_history",
-        "observations": 11,
+        "observations": 12,
         "percentile": null
       },
       "data_depth": {
@@ -218,7 +223,7 @@
       },
       "historical_percentile": {
         "status": "insufficient_history",
-        "observations": 11,
+        "observations": 12,
         "percentile": null
       },
       "data_depth": {
@@ -294,7 +299,7 @@
       },
       "historical_percentile": {
         "status": "insufficient_history",
-        "observations": 11,
+        "observations": 12,
         "percentile": null
       },
       "data_depth": {
@@ -312,10 +317,10 @@
       "key_number": "+7.5%",
       "plain_read": "BTC 季線報酬 +7.5%，目前屬「方向切換」，相較前一等長窗口為加速。",
       "what_changed": "同週期 BTC 報酬較前一觀察日變化 +5.0 個百分點。",
-      "resonance": "偏正向共振",
+      "resonance": "多維訊號分歧",
       "resonance_votes": {
-        "positive_clusters": 3,
-        "negative_clusters": 0,
+        "positive_clusters": 2,
+        "negative_clusters": 1,
         "directional_clusters": 3,
         "eligible_clusters": 4
       },
@@ -341,8 +346,8 @@
         {
           "name": "網路安全活動",
           "cluster_id": "underlying_network_security",
-          "direction": "positive",
-          "key_number": "+27.1%",
+          "direction": "negative",
+          "key_number": "-15.5%",
           "plain_read": "算力 30 日變化作為網路活動背景，不把單月變動外推為價格目標。",
           "source": "Blockchain.com 多點序列",
           "counts_toward_underlying_resonance": true
@@ -370,7 +375,7 @@
       },
       "historical_percentile": {
         "status": "insufficient_history",
-        "observations": 11,
+        "observations": 12,
         "percentile": null
       },
       "data_depth": {
@@ -1239,7 +1244,7 @@
           "cluster_id": "derivatives_positioning",
           "value": 0.10950000000000001,
           "state": "neutral",
-          "as_of": "2026-08-20T13:48:23+00:00",
+          "as_of": "2026-08-20T13:54:28+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1255,8 +1260,8 @@
           "as_of": "2026-08-19",
           "interpretation": "零事件不代表監管風險消失；事件量不自行判定利多或利空。",
           "source": {
-            "label": "Federal Register",
-            "url": "https://www.federalregister.gov/documents/2026/08/19/2026-16854/self-regulatory-organizations-cboe-bzx-exchange-inc-notice-of-filing-of-a-proposed-rule-change-to",
+            "label": "Congress.gov",
+            "url": "https://www.congress.gov/bill/119th-congress/hr/7840",
             "status": "pass"
           }
         }
@@ -1329,8 +1334,8 @@
           "as_of": "2026-08-19",
           "interpretation": "政策活動只提供可追溯事件背景，不以標題情緒替代法案狀態。",
           "source": {
-            "label": "Federal Register",
-            "url": "https://www.federalregister.gov/documents/2026/08/19/2026-16854/self-regulatory-organizations-cboe-bzx-exchange-inc-notice-of-filing-of-a-proposed-rule-change-to",
+            "label": "Congress.gov",
+            "url": "https://www.congress.gov/bill/119th-congress/hr/7840",
             "status": "pass"
           }
         }
@@ -1367,7 +1372,7 @@
       "id": "mstr_price_structure_divergence",
       "title": "MSTR 價格強弱與資本結構背離",
       "key_number": "-6.1%",
-      "claim": "MSTR 月線相對 BTC -6.1%；普通股市值／自算普通股淨值 1.14x，STRC 折價 +4.3%。",
+      "claim": "MSTR 月線相對 BTC -6.1%；普通股市值／自算普通股淨值 1.14x，STRC 折價 +4.4%。",
       "evidence": [
         "MSTR 與 BTC 雙來源完成日 K",
         "SEC 資本結構",
@@ -1417,7 +1422,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 137,
+    "observations": 138,
     "distinct_dates": 12,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
