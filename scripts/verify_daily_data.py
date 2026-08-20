@@ -29,7 +29,6 @@ TROY_OZ_PER_METRIC_TONNE = 32_150.746568627
 # 核心資產（BTC/ETH 現貨、ETF、期貨、選擇權）的嚴格跨源驗證完全不受影響。
 #
 # 新增條目前請先確認：差異是「成分定義不同」造成的，而不是真的資料錯誤。
-COMPOSITION_DIVERGENT_SECTORS = {"defi": True, "meme": True}
 
 ETF_REQUIRED_ROSTER = {
     "BTC": {"ARKB", "BITB", "BRRR", "BTC", "BTCO", "BTCW", "DEFI", "EZBC", "FBTC", "GBTC", "HODL", "IBIT", "MSBT"},
@@ -740,14 +739,16 @@ def main() -> int:
             # 不可能通過的條件，不是資料異常。這類板塊降級為 degraded 並標記為
             # 未經跨源驗證，不再 hard fail 擋住整條發布線。
             # 核心資產（BTC/ETH 現貨、ETF、期貨）的嚴格跨源驗證完全不受影響。
-            sector_bucket = COMPOSITION_DIVERGENT_SECTORS.get(sector.lower())
+            # 2026-08-19 owner 拍板：這件事對所有賽道都成立，不只 DeFi/Meme。
+            # Binance 用 USDT 計價、CoinGecko/CoinLore 用 USD 聚合，口徑不同，
+            # 4 家湊不出嚴格多數是常態。廣度一律降級，不再擋整條發布線；
+            # 但沒通過驗證卻還發數字，仍然 hard fail。
             sector_check = recompute_sector_validation(item, market_generated_at, SECTOR_SOURCE_MAX_LAG_HOURS)
-            if sector_check["errors"]:
-                target = degradations if sector_bucket else failures
-                target.extend(f"market universe sector {sector}: {error}" for error in sector_check["errors"])
+            degradations.extend(f"market universe sector {sector}: {error}" for error in sector_check["errors"])
             if item.get("status") != "cross_source_verified":
-                message = f"market universe sector {sector}: status is not cross_source_verified"
-                (degradations if sector_bucket else failures).append(message)
+                degradations.append(f"market universe sector {sector}: status is not cross_source_verified")
+                if item.get("change_24h") is not None or item.get("market_cap_usd") is not None:
+                    failures.append(f"market universe sector {sector}: unverified basket must not publish a value")
         for symbol in ["BTC", "ETH"]:
             derivative = market_universe.get("derivatives", {}).get(symbol, {})
             required_derivatives = {
@@ -1393,7 +1394,7 @@ def main() -> int:
         },
     }
     write_json(REPORT_PATH, report)
-    print(json.dumps({"status": status, "failures": len(failures), "degradations": len(degradations), "warnings": len(warnings)}, ensure_ascii=False))
+    print(json.dumps({"status": status, "failures": len(failures), "degradations": len(degradations), "warnings": len(warnings), "failure_details": failures, "degradation_details": degradations}, ensure_ascii=False))
     return 0 if status != "fail" else 1
 
 
