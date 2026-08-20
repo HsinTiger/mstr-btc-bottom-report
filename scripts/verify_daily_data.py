@@ -242,11 +242,29 @@ def check_equity_cross_source(
         f"basis={yahoo_basis}/{nasdaq_basis}; gap={gap:.2%}"
     )
 
-    if quote_bases_comparable(yahoo_basis, nasdaq_basis):
+    # 同一個 quote_basis 標籤不代表同一場交易時段：Yahoo 的 regularMarketPrice 是
+    # 今天的即時價，Nasdaq historical 給的是上一個已完成交易日的收盤。兩者相減
+    # 得到的是隔日漲跌幅，不是來源分歧——MSTR 這種一天可以動 5～12% 的標的，
+    # 拿它去撞 2% 門檻等於每天誤報。跨時段只記錄差距，不當硬失敗。
+    # 真正的同時段跨源對帳由 verify_timescale_data.py 負責（已完成 K 線的
+    # median gap ≤ 1%、p95 ≤ 3%），那一層沒有被放寬。
+    yahoo_session = str((yahoo_item or {}).get("as_of") or "")[:10] or None
+    nasdaq_session = str((nasdaq_item or {}).get("as_of") or "")[:10] or None
+    same_session = bool(yahoo_session and nasdaq_session and yahoo_session == nasdaq_session)
+
+    if quote_bases_comparable(yahoo_basis, nasdaq_basis) and same_session:
         if gap > 0.02:
-            failures.append(f"{label}: 同報價基準來源差距 {gap:.2%} > 2.00%")
+            failures.append(f"{label}: 同交易時段同報價基準來源差距 {gap:.2%} > 2.00%")
         elif gap > 0.01:
-            warnings.append(f"{label}: 同報價基準來源差距 {gap:.2%} 接近門檻")
+            warnings.append(f"{label}: 同交易時段同報價基準來源差距 {gap:.2%} 接近門檻")
+        return
+
+    if quote_bases_comparable(yahoo_basis, nasdaq_basis) and not same_session:
+        if gap > 0.02:
+            degradations.append(
+                f"{label}: Yahoo 觀測 {yahoo_session or 'unknown'}、Nasdaq 觀測 {nasdaq_session or 'unknown'} 非同一交易時段，"
+                f"差距 {gap:.2%} 是隔日漲跌不是來源分歧；同時段對帳由已完成 K 線那一層負責"
+            )
         return
 
     if gap > 0.02:
@@ -888,7 +906,20 @@ def main() -> int:
                 )
                 official_value = as_float(official_observation.get("value")) if official_observation else None
                 if official_value is None:
-                    failures.append(f"{asset} DAT {symbol}: required raw official observation missing")
+                    # 發行人改了新聞稿措辭或這一期根本沒揭露總持倉時，官方值就是不存在。
+                    # 資料層本來就 fail closed（值為 None、不進 quorum），沒有理由再把
+                    # 整條發布線停掉；真正該硬擋的是「官方值存在卻和發出去的數字對不上」。
+                    degradations.append(
+                        f"{asset} DAT {symbol}: 最新官方申報未揭露持倉，已排除於官方覆蓋層"
+                    )
+                    continue
+                # collector 只採用 45 天內的官方申報（official_dat_observations），
+                # verifier 必須套用同一個窗口，否則發行人停止申報就會每天誤報硬失敗。
+                official_age_hours = age_hours(official_observation.get("as_of"))
+                if official_age_hours is None or official_age_hours < -24 or official_age_hours > 24 * 45:
+                    degradations.append(
+                        f"{asset} DAT {symbol}: 官方申報日期未知或超過 45 天，與 collector 一致排除於官方覆蓋層"
+                    )
                     continue
                 official_values[symbol] = official_value
                 comparison_value = as_float(

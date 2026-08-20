@@ -1960,6 +1960,48 @@ def integer_cells(cells: list[str]) -> list[float]:
     return values
 
 
+def align_strategy_holdings_columns(table: list[str]) -> dict[str, float | None] | None:
+    """Map Strategy's 8-K BTC table to its header columns instead of cell position.
+
+    The table renders as a flat cell list: title cells, then one header per
+    column, then one value per column. Currency symbols sometimes arrive as
+    their own cells and unchanged weeks render "-", so counting from either end
+    is unreliable; only the header-to-value alignment is stable.
+    """
+    headers: list[str] = []
+    values: list[str] = []
+    for cell in table:
+        text = cell.strip()
+        if not text or text == "$":
+            continue
+        if re.search(r"[A-Za-z]", text):
+            if text.startswith("During Period ") or text.startswith("As of "):
+                continue
+            headers.append(text)
+        else:
+            values.append(text.lstrip("$").strip())
+    if not headers or len(headers) != len(values):
+        return None
+
+    def numeric(text: str) -> float | None:
+        cleaned = text.replace(",", "").replace("(", "-").replace(")", "")
+        if cleaned in {"-", "—", "–", ""}:
+            return 0.0
+        return safe_float(cleaned)
+
+    column = dict(zip(headers, values))
+    holdings_header = next((name for name in headers if "Aggregate BTC Holdings" in name), None)
+    holdings = numeric(column[holdings_header]) if holdings_header else None
+    acquired = 0.0
+    movement_header = next(
+        (name for name in headers if re.search(r"BTC (Acquired|Purchased)", name)),
+        None,
+    )
+    if movement_header:
+        acquired = numeric(column[movement_header]) or 0.0
+    return {"holdings": holdings, "acquired": acquired}
+
+
 def parse_strategy_sec_btc_filing(html_text: str, filing: dict[str, str]) -> dict[str, Any] | None:
     parser = SecTableParser()
     parser.feed(html_text)
@@ -1967,13 +2009,18 @@ def parse_strategy_sec_btc_filing(html_text: str, filing: dict[str, str]) -> dic
     if not holdings_tables:
         return None
     holdings_table = holdings_tables[-1]
-    holdings_values = integer_cells(holdings_table)
-    if not holdings_values:
+    aligned = align_strategy_holdings_columns(holdings_table)
+    if aligned is None:
+        # Column alignment is the only trustworthy read of this table. Taking the
+        # last integer cell used to work, but a zero-purchase week renders "-"
+        # placeholders and splits "$" into its own cell, which silently promoted
+        # Average Purchase Price (a five-digit dollar figure) into the holdings
+        # slot. Refuse to guess.
         return None
-    holdings = holdings_values[-1]
-    acquired = 0.0
-    if any("BTC Acquired" in cell for cell in holdings_table) and len(holdings_values) >= 2:
-        acquired = holdings_values[0]
+    holdings = aligned["holdings"]
+    acquired = aligned["acquired"]
+    if holdings is None:
+        return None
     period_cell = next((cell for cell in holdings_table if cell.startswith("During Period ")), "")
     period_dates = [parse_sec_date(value) for value in re.findall(r"[A-Z][a-z]+ \d{1,2}, \d{4}", period_cell)]
     period_dates = [value for value in period_dates if value]
@@ -2025,7 +2072,16 @@ def parse_strategy_sec_btc_filing(html_text: str, filing: dict[str, str]) -> dic
         "direct_sales_musd": sum(direct_sales) if direct_sales else None,
         "usd_reserve_musd": reserve_musd,
         "atm_net_proceeds_musd": atm_net_proceeds_musd,
-        "explicit_no_purchases": "No bitcoin purchases were made this week" in plain_text,
+        # Strategy moved from "No bitcoin purchases were made this week" to
+        # "No bitcoin purchases or sales were made this week"; the second form is
+        # the stronger statement, so an exact-string match silently lost the
+        # evidence that a zero-sales week really was zero.
+        "explicit_no_purchases": bool(
+            re.search(r"No bitcoin purchases(?:\s+or\s+sales)?\s+were made this week", plain_text, flags=re.IGNORECASE)
+        ),
+        "explicit_no_sales": bool(
+            re.search(r"No bitcoin purchases\s+or\s+sales\s+were made this week", plain_text, flags=re.IGNORECASE)
+        ),
     }
 
 
