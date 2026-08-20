@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-08-19T02:06:37+00:00",
+  "generated_at": "2026-08-20T02:05:31+00:00",
   "status": "fail",
   "summary": {
     "active_pages": 5,
@@ -37,7 +37,7 @@
       "title_contains": "市場總編",
       "lifecycle": "active",
       "criticality": "critical",
-      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌。",
+      "role": "把 BTC、ETH、ETF、DAT、政策、鏈上、技術、宏觀、信用、債券與美股資料編成八個可反證的每日研究桌；並把作者在 Substack 發表的 BTC／ETH 論點逐條對本站已驗證資料重算。",
       "user_question": "今天真正主導 BTC／ETH 的跨市場力量是什麼，哪些維度共振或分歧？",
       "open_when": "每天第一個打開；先讀今日主文與跨市場結論，需要原始報價再進即時數據。",
       "cadence": "每日 08:42（台北時間）",
@@ -50,7 +50,7 @@
           "status": "fail",
           "bytes": 46498,
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         },
         {
@@ -59,8 +59,20 @@
           "status": "fail",
           "bytes": 14128,
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
+        },
+        {
+          "path": "data/daily/author_thesis_tracker.json",
+          "required": false,
+          "status": "degraded",
+          "reason": "檔案不存在"
+        },
+        {
+          "path": "data/daily/author_thesis_tracker_verification.json",
+          "required": false,
+          "status": "degraded",
+          "reason": "檔案不存在"
         }
       ],
       "status": "fail",
@@ -130,7 +142,7 @@
           "status": "fail",
           "bytes": 143776,
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         },
         {
@@ -139,7 +151,7 @@
           "status": "fail",
           "bytes": 483,
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         },
         {
@@ -148,7 +160,7 @@
           "status": "fail",
           "bytes": 101477,
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         }
       ],
@@ -217,8 +229,8 @@
           "path": "data/daily/ai_intelligence.json",
           "required": true,
           "status": "degraded",
-          "bytes": 42325,
-          "as_of": "2026-08-19T02:06:03+00:00",
+          "bytes": 44273,
+          "as_of": "2026-08-20T02:04:54+00:00",
           "age_hours": 0.01,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
@@ -228,8 +240,8 @@
           "required": true,
           "status": "degraded",
           "bytes": 1029,
-          "as_of": "2026-08-19T02:06:21+00:00",
-          "age_hours": 0.0,
+          "as_of": "2026-08-20T02:04:58+00:00",
+          "age_hours": 0.01,
           "quality": "degraded",
           "reason": "資料品質狀態為 degraded"
         }
@@ -367,7 +379,7 @@
           "path": "data/site_registry.json",
           "required": true,
           "status": "pass",
-          "bytes": 12418
+          "bytes": 17091
         }
       ],
       "status": "pass",
@@ -448,7 +460,7 @@
           "bytes": 2512701,
           "lineage": "2026-08-11T01:47:03+00:00",
           "as_of": "2026-08-11T01:47:29+00:00",
-          "age_hours": 192.32,
+          "age_hours": 216.3,
           "reason": "超過新鮮度契約"
         },
         {
@@ -458,7 +470,7 @@
           "bytes": 8618,
           "lineage": "2026-08-11T01:47:03+00:00",
           "as_of": "2026-08-11T01:47:31+00:00",
-          "age_hours": 192.32,
+          "age_hours": 216.3,
           "reason": "超過新鮮度契約"
         }
       ],
@@ -511,7 +523,7 @@
           "bytes": 52651,
           "lineage": "2026-08-11T01:47:03+00:00",
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         },
         {
@@ -520,7 +532,7 @@
           "status": "fail",
           "bytes": 435848,
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         },
         {
@@ -530,7 +542,7 @@
           "bytes": 8665,
           "lineage": "2026-08-11T01:47:03+00:00",
           "as_of": "2026-08-12T06:45:13+00:00",
-          "age_hours": 163.36,
+          "age_hours": 187.34,
           "reason": "超過新鮮度契約"
         }
       ],
