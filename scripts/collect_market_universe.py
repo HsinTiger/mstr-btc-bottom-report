@@ -841,6 +841,25 @@ def collect_gold_reference() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     ]
 
 
+def coinmetrics_hashrate_series() -> tuple[list[tuple[datetime, float]], str]:
+    """Daily BTC hashrate from the free CoinMetrics community tier (T-1)."""
+    start = (datetime.now(timezone.utc).date() - timedelta(days=200)).isoformat()
+    url = (
+        "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics"
+        f"?assets=btc&metrics=HashRate&frequency=1d&page_size=10000&start_time={start}"
+    )
+    payload = fetch_json(url)
+    values = []
+    for row in payload.get("data", []):
+        value = finite(row.get("HashRate"))
+        stamp = str(row.get("time") or "")[:10]
+        if value is None or not stamp:
+            continue
+        values.append((datetime.fromisoformat(stamp).replace(tzinfo=timezone.utc), value))
+    values.sort(key=lambda item: item[0])
+    return values, url
+
+
 def collect_hashrate_consensus() -> tuple[dict[str, Any], list[dict[str, Any]]]:
     url = "https://api.blockchain.info/charts/hash-rate?timespan=180days&format=json&cors=true"
     payload = fetch_json(url)
@@ -848,6 +867,20 @@ def collect_hashrate_consensus() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         [(datetime.fromtimestamp(item["x"], timezone.utc), finite(item.get("y"))) for item in payload.get("values", []) if finite(item.get("y")) is not None],
         key=lambda item: item[0],
     )
+    # blockchain.info's chart now trails 3-4 days, which trips the 72-hour thesis
+    # freshness rule and fail-closes the whole long-argument block. CoinMetrics
+    # publishes the same series at T-1, so whichever carries the newer date wins
+    # and the other stays registered as the independent cross-check.
+    coinmetrics_values: list[tuple[datetime, float]] = []
+    coinmetrics_url = ""
+    try:
+        coinmetrics_values, coinmetrics_url = coinmetrics_hashrate_series()
+    except Exception:
+        coinmetrics_values = []
+    canonical_provider = "Blockchain.com"
+    if len(coinmetrics_values) >= 31 and (not values or coinmetrics_values[-1][0] > values[-1][0]):
+        values = coinmetrics_values
+        canonical_provider = "CoinMetrics"
     if len(values) < 31:
         raise ValueError("Insufficient hashrate history")
     latest_time, latest_value = values[-1]
@@ -866,9 +899,20 @@ def collect_hashrate_consensus() -> tuple[dict[str, Any], list[dict[str, Any]]]:
         "hashrate_90d_high_ths": high_90d,
         "hashrate_vs_90d_high": latest_value / high_90d if latest_value is not None and high_90d not in (None, 0) else None,
         "as_of": latest_time.isoformat(),
+        "canonical_provider": canonical_provider,
         "limitation": "Hashrate is a network-security and miner-commitment proxy, not a direct price or adoption signal",
     }
-    return result, [source("blockchain_hashrate_180d", "Blockchain.com", url, "independent_onchain", result["as_of"], "180 日算力序列，用於 30 日變化與相對 90 日高點")]
+    sources = [source("blockchain_hashrate_180d", "Blockchain.com", url, "independent_onchain", result["as_of"], "180 日算力序列，用於 30 日變化與相對 90 日高點")]
+    if coinmetrics_url:
+        sources.insert(0, source(
+            "coinmetrics_hashrate_daily",
+            "CoinMetrics community",
+            coinmetrics_url,
+            "independent_onchain",
+            result["as_of"],
+            f"每日算力序列（T-1）；目前 canonical={canonical_provider}",
+        ))
+    return result, sources
 
 
 def latest_fred_observations(series_id: str) -> list[tuple[date, float]]:
@@ -2695,7 +2739,7 @@ def build_evidence_ledger(output: dict[str, Any]) -> dict[str, Any]:
         "thesis.rwa": ("RWA 可見規模", select_ids(exact=("defillama_rwa_protocols",)), thesis.get("digital_dollar_competition", {}).get("as_of"), "DefiLlama 協議分類；可能存在分類重疊"),
         "thesis.company_share": ("公開公司 BTC 供給占比", dat_ids.get("BTC", []), thesis.get("public_company_adoption", {}).get("as_of"), "DAT 多源公司交集與 SEC 代表公司覆核"),
         "thesis.company_concentration": ("公開公司持幣集中度", dat_ids.get("BTC", []), thesis.get("public_company_adoption", {}).get("as_of"), "DAT 多源公司交集與 SEC 代表公司覆核"),
-        "thesis.hashrate": ("BTC 算力", select_ids(exact=("blockchain_hashrate_180d",)), thesis.get("security_consensus", {}).get("as_of"), "Blockchain.com 時序；只作安全背景"),
+        "thesis.hashrate": ("BTC 算力", select_ids(exact=("coinmetrics_hashrate_daily", "blockchain_hashrate_180d")), thesis.get("security_consensus", {}).get("as_of"), "CoinMetrics 與 Blockchain.com 時序；只作安全背景"),
         "thesis.debt": ("美國債務占 GDP", select_ids(exact=("fred_us_debt_gdp",)), thesis.get("sovereign_credit_competition", {}).get("us_federal_debt_to_gdp_as_of"), "FRED／OMB 官方序列；低頻宏觀背景"),
         "thesis.real_yield": ("美國十年期實質利率", select_ids(exact=("fred_us_10y_real_yield",)), thesis.get("sovereign_credit_competition", {}).get("us_10y_real_yield_as_of"), "FRED／Fed 官方序列；每日完成值"),
     }
