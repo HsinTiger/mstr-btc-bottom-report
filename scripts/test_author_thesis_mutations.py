@@ -58,9 +58,17 @@ def main() -> int:
                 raise AssertionError(f"mutation {name} was not rejected")
             print(json.dumps({"mutation": name, "rejected": True, "first_failure": report.get("failures", [])[:1]}, ensure_ascii=False))
     finally:
+        # Every mutation run overwrites the verification artifact, so the last
+        # rejection would otherwise be left on disk as if it were the real
+        # verdict — and the page reads that file to decide whether to publish.
+        # Restore the tracker and re-verify so the artifact matches reality.
         TRACKER.write_text(original, encoding="utf-8")
+        restored_code, restored = run_verifier()
 
-    print(json.dumps({"status": "pass", "mutations": len(mutations)}, ensure_ascii=False))
+    if restored_code != 0:
+        raise AssertionError(f"restored tracker no longer verifies: {restored.get('failures')}")
+
+    print(json.dumps({"status": "pass", "mutations": len(mutations), "restored_verification": restored.get("status")}, ensure_ascii=False))
     return 0
 
 
