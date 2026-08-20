@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "verified_at": "2026-08-12T03:09:29+00:00",
-  "source_generated_at": "2026-08-12T03:09:16+00:00",
-  "source_hash": "0f0c874f4499fa7af12244fa1c745ac6d9dcf487aba149210199f34d61f364c2",
+  "verified_at": "2026-08-20T13:48:35+00:00",
+  "source_generated_at": "2026-08-20T13:48:23+00:00",
+  "source_hash": "98d71292e8c5c0700d291eeda97fb3a563ac6c49b6af05e81ecb28c1b07fa5b4",
   "status": "pass",
   "failures": [],
   "degradations": [],
@@ -253,6 +253,61 @@
       "detail": "BTC hashrate 超過 3 日新鮮度契約"
     },
     {
+      "name": "btc_canonical_provider",
+      "status": "pass",
+      "detail": "BTC 鏈上 canonical 來源必須具名"
+    },
+    {
+      "name": "btc_canonical_promotion_consistency",
+      "status": "pass",
+      "detail": "BTC canonical 來源標記與實際採用的觀測日不一致"
+    },
+    {
+      "name": "btc_promotion_is_fresher:transactions",
+      "status": "pass",
+      "detail": "BTC transactions 換用的來源並未比原來源新"
+    },
+    {
+      "name": "btc_promotion_is_fresher:active_addresses",
+      "status": "pass",
+      "detail": "BTC active_addresses 換用的來源並未比原來源新"
+    },
+    {
+      "name": "btc_promotion_is_fresher:hashrate",
+      "status": "pass",
+      "detail": "BTC hashrate 換用的來源並未比原來源新"
+    },
+    {
+      "name": "btc_mvrv_range",
+      "status": "pass",
+      "detail": "btc MVRV 超出合理範圍"
+    },
+    {
+      "name": "btc_realized_cap_math",
+      "status": "pass",
+      "detail": "btc 已實現市值重算不一致"
+    },
+    {
+      "name": "btc_realized_price_math",
+      "status": "pass",
+      "detail": "btc 已實現價格重算不一致"
+    },
+    {
+      "name": "btc_exchange_net_flow_math",
+      "status": "pass",
+      "detail": "btc 交易所淨流量重算不一致"
+    },
+    {
+      "name": "btc_exchange_flow_preliminary_flag",
+      "status": "pass",
+      "detail": "btc 交易所流量必須標示初步或最終"
+    },
+    {
+      "name": "btc_valuation_as_of",
+      "status": "pass",
+      "detail": "btc 鏈上估值指標超過 3 日新鮮度契約"
+    },
+    {
       "name": "eth_head_cross_source",
       "status": "pass",
       "detail": "ETH 至少需要兩個 RPC 且高度差不得超過 3"
@@ -271,6 +326,36 @@
       "name": "eth_as_of",
       "status": "pass",
       "detail": "ETH RPC 抽樣超過 1 日新鮮度契約"
+    },
+    {
+      "name": "eth_mvrv_range",
+      "status": "pass",
+      "detail": "eth MVRV 超出合理範圍"
+    },
+    {
+      "name": "eth_realized_cap_math",
+      "status": "pass",
+      "detail": "eth 已實現市值重算不一致"
+    },
+    {
+      "name": "eth_realized_price_math",
+      "status": "pass",
+      "detail": "eth 已實現價格重算不一致"
+    },
+    {
+      "name": "eth_exchange_net_flow_math",
+      "status": "pass",
+      "detail": "eth 交易所淨流量重算不一致"
+    },
+    {
+      "name": "eth_exchange_flow_preliminary_flag",
+      "status": "pass",
+      "detail": "eth 交易所流量必須標示初步或最終"
+    },
+    {
+      "name": "eth_valuation_as_of",
+      "status": "pass",
+      "detail": "eth 鏈上估值指標超過 3 日新鮮度契約"
     },
     {
       "name": "policy_sources",
@@ -294,9 +379,9 @@
     }
   ],
   "source_summary": {
-    "passed": 39,
-    "failed": 2,
-    "total": 41
+    "passed": 42,
+    "failed": 1,
+    "total": 43
   },
   "execution_gate_eligible": false
 }

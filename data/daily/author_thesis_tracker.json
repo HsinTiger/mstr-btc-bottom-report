@@ -1,0 +1,533 @@
+{
+  "schema": 1,
+  "date": "2026-08-20",
+  "generated_at": "2026-08-20T13:48:40+00:00",
+  "input_updated_at": "2026-08-19",
+  "context_generated_at": "2026-08-20T13:48:23+00:00",
+  "context_payload_hash": "98d71292e8c5c0700d291eeda97fb3a563ac6c49b6af05e81ecb28c1b07fa5b4",
+  "market_generated_at": "2026-08-20T13:48:23+00:00",
+  "market_source_batch_id": "2026-08-20T13:48:19+00:00",
+  "quality": {
+    "status": "pass",
+    "scope": "author_thesis_tracking_only",
+    "execution_gate_eligible": false,
+    "method": "文章寫下的數字永遠保留原值；current 一律由本站已獨立驗證的 market_context / market_universe 重算，缺指標就標 unavailable 或 untracked，不補值、不換算、不猜。"
+  },
+  "theses": [
+    {
+      "id": "btc-bottom-not-yet-2026-08-19",
+      "asset": "BTC",
+      "authored_on": "2026-08-19",
+      "title": "比特幣的底部還沒到位",
+      "subtitle": "價格腰斬但算力維持高檔，表面上的籌碼沉澱，掩蓋了礦工將電力轉向 AI 的結構性拋壓。",
+      "stance": "估值修正期，而非確認的週期底部",
+      "core_argument": "鏈上 MVRV 尚未進入歷史極端折價區間、美國現貨買盤持續偏弱，礦商同時把電力資源轉向 AI 資料中心並變現庫存，供給曲線實質右移，市場仍需更長換手時間消化新增發行與結構性拋壓。",
+      "source": {
+        "publication": "Substack 賺錢有道",
+        "mode": "company",
+        "draft_path": "news_radar/data/substack_drafts/2026-08-19/company_比特幣的底部還沒到位賺錢有道",
+        "generated_by": "antigravity_cli · Gemini 3.7 Flash (High)，Claude Opus 4.6 稽核"
+      },
+      "self_reported_audit_warnings": [
+        "具名來源『CoinMetrics 的初步數據』不在原取材清單，需補來源連結",
+        "一句比較級沒有給基準數字"
+      ],
+      "untracked_claims": [
+        {
+          "label": "Coinbase 溢價指數 -0.0868%，連續 80 天負值",
+          "reason": "本站尚未收錄 Coinbase 溢價指數，無法對帳"
+        },
+        {
+          "label": "礦工 OTC 地址餘額 139,700 枚，自 2021-11 約 50 萬枚下降 72%",
+          "reason": "本站尚未收錄 CryptoQuant 礦工 OTC 餘額"
+        },
+        {
+          "label": "2026 年初單枚生產成本約 87,000 美元",
+          "reason": "本站尚未收錄礦工生產成本序列"
+        },
+        {
+          "label": "上市礦商將 1MW 電力轉為 AI 託管可得 10 倍以上估值溢價",
+          "reason": "產業敘事，非本站可重算的時間序列"
+        }
+      ],
+      "claims": [
+        {
+          "id": "btc_mvrv",
+          "label": "BTC MVRV",
+          "unit": "ratio",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "stated_value": 1.23,
+          "stated_as_of": "2026-08-18",
+          "current_value": 1.3153366802811952,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.02,
+          "drift": 0.06937941486276045,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_exchange_net_flow",
+          "label": "交易所單日淨流出",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.exchange_net_flow_usd",
+          "stated_value": -410000000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": -488756984.7204211,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.1,
+          "drift": 0.1920902066351733,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_daily_issuance",
+          "label": "每日新增發行金額",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.issuance_usd.value",
+          "stated_value": 30120000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 26624820.959655378,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.1,
+          "drift": -0.11604180080825444,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_supply",
+          "label": "流通量",
+          "unit": "btc",
+          "metric": "context.onchain.BTC.valuation.supply.value",
+          "stated_value": 20071518.0,
+          "stated_as_of": "2026-08-19",
+          "current_value": 20072494.88479491,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.001,
+          "drift": 4.86701999773409e-05,
+          "status": "consistent"
+        },
+        {
+          "id": "btc_hashrate",
+          "label": "全網算力",
+          "unit": "th_per_s",
+          "metric": "context.onchain.BTC.hashrate.value",
+          "stated_value": 941100000.0,
+          "stated_as_of": "2026-08-19",
+          "current_value": 779458136.9039879,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.05,
+          "drift": -0.17175843491234954,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_price",
+          "label": "BTC 價格",
+          "unit": "usd",
+          "metric": "universe.assets.BTC.price_usd",
+          "stated_value": 64187.0,
+          "stated_as_of": "2026-08-19",
+          "current_value": 71474.12,
+          "current_as_of": "2026-08-20T13:48:19+00:00",
+          "tolerance": 0.03,
+          "drift": 0.11352953090189599,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_market_cap",
+          "label": "BTC 市值",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.market_cap_usd.value",
+          "stated_value": 1290000000000.0,
+          "stated_as_of": "2026-08-19",
+          "current_value": 1390378100868.3262,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.03,
+          "drift": 0.07781248129327611,
+          "status": "drifted"
+        }
+      ],
+      "falsifiers": [
+        {
+          "id": "btc_mvrv_capitulation",
+          "label": "MVRV 跌破 1.0（籌碼投降）",
+          "meaning": "觸發代表作者所說的『尚未進入極端折價』這個前提失效",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "operator": "lt",
+          "threshold": 1.0,
+          "current_value": 1.3153366802811952,
+          "current_as_of": "2026-08-19",
+          "status": "not_triggered"
+        },
+        {
+          "id": "btc_etf_demand_return",
+          "label": "美國現貨 ETF 30 日淨流入轉正且具規模（>= 10 億美元）",
+          "meaning": "觸發代表需求端已回補，作者的『邊際買盤偏弱』論點需要重寫",
+          "metric": "universe.etf.BTC.flow_30d_usd",
+          "operator": "gte",
+          "threshold": 1000000000.0,
+          "current_value": 930200000.0,
+          "current_as_of": "2026-08-18",
+          "status": "not_triggered"
+        },
+        {
+          "id": "btc_coinbase_premium_positive",
+          "label": "Coinbase 溢價指數翻正並維持常態",
+          "meaning": "作者列為第一道門檻，但本站目前無此指標，狀態必須誠實標成未追蹤",
+          "metric": null,
+          "operator": null,
+          "threshold": null,
+          "current_value": null,
+          "current_as_of": null,
+          "status": "untracked"
+        },
+        {
+          "id": "btc_miner_otc_stabilises",
+          "label": "礦工 OTC 餘額止跌 + 算力絲帶黃金交叉",
+          "meaning": "作者列為第三個訊號，本站目前無此兩個序列",
+          "metric": null,
+          "operator": null,
+          "threshold": null,
+          "current_value": null,
+          "current_as_of": null,
+          "status": "untracked"
+        }
+      ],
+      "summary": {
+        "standing": "numbers_drifted",
+        "claims_total": 7,
+        "claims_tracked": 7,
+        "claims_consistent": 1,
+        "claims_drifted": 6,
+        "falsifiers_total": 4,
+        "falsifiers_evaluable": 2,
+        "falsifiers_triggered": 0,
+        "triggered_ids": []
+      }
+    },
+    {
+      "id": "btc-halved-bottom-question-2026-08-19",
+      "asset": "BTC",
+      "authored_on": "2026-08-19",
+      "title": "跌掉一半的比特幣見底了嗎",
+      "subtitle": "價格從十二萬美元跌到六萬四，鏈上出現四億美元淨流出。但翻開成本線與持幣盈虧，這場修正可能還沒完成最後的清洗。",
+      "stance": "橫盤是缺乏新增流動性背書的脆弱暫態平衡，未完成極端底部出清",
+      "core_argument": "單日交易所淨流出常被當成大戶吸籌，但實務上多是託管商冷熱錢包換倉；MVRV 停在 1.23 的過渡區間、礦工生產成本高於幣價、Coinbase 溢價持續為負，三者合起來說明出清尚未完成。",
+      "source": {
+        "publication": "Substack 賺錢有道",
+        "mode": "company",
+        "draft_path": "news_radar/data/substack_drafts/2026-08-19/company_跌掉一半的比特幣見底了嗎賺錢有道",
+        "generated_by": "antigravity_cli · Gemini 3.7 Flash (High)，Claude Opus 4.6 稽核"
+      },
+      "self_reported_audit_warnings": [
+        "標題 17 字超過 15 字上限",
+        "一句比較級沒有給基準數字",
+        "有單段超過 260 字"
+      ],
+      "untracked_claims": [
+        {
+          "label": "52 週高點 126,198 美元、回檔 49.1%",
+          "reason": "本站 timescale 另有自己的回撤計算，口徑不同不直接對帳"
+        },
+        {
+          "label": "市場主導率 56.4%",
+          "reason": "本站尚未收錄 BTC dominance 序列"
+        },
+        {
+          "label": "現貨黃金一度突破每盎司 4,400 美元",
+          "reason": "本站宏觀桌未收錄黃金現貨"
+        },
+        {
+          "label": "灰度研究團隊主張的三大長線需求支柱",
+          "reason": "第三方觀點引用，非可重算數值"
+        }
+      ],
+      "claims": [
+        {
+          "id": "btc_price_variant",
+          "label": "BTC 價格",
+          "unit": "usd",
+          "metric": "universe.assets.BTC.price_usd",
+          "stated_value": 64232.0,
+          "stated_as_of": "2026-08-19",
+          "current_value": 71474.12,
+          "current_as_of": "2026-08-20T13:48:19+00:00",
+          "tolerance": 0.03,
+          "drift": 0.1127494083945697,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_mvrv_variant",
+          "label": "BTC MVRV",
+          "unit": "ratio",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "stated_value": 1.23,
+          "stated_as_of": "2026-08-18",
+          "current_value": 1.3153366802811952,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.02,
+          "drift": 0.06937941486276045,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_exchange_inflow",
+          "label": "交易所單日流入",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.exchange_inflow_usd.value",
+          "stated_value": 1300000000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 1958900730.913358,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.05,
+          "drift": 0.5068467160871983,
+          "status": "drifted"
+        },
+        {
+          "id": "btc_exchange_outflow",
+          "label": "交易所單日流出",
+          "unit": "usd",
+          "metric": "context.onchain.BTC.valuation.exchange_outflow_usd.value",
+          "stated_value": 1710000000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 2447657715.633779,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.05,
+          "drift": 0.4313787810723855,
+          "status": "drifted"
+        }
+      ],
+      "falsifiers": [
+        {
+          "id": "btc_mvrv_capitulation_variant",
+          "label": "MVRV 跌破 1.0",
+          "meaning": "觸發代表『尚未完成出清』的核心前提要改寫",
+          "metric": "context.onchain.BTC.valuation.mvrv.value",
+          "operator": "lt",
+          "threshold": 1.0,
+          "current_value": 1.3153366802811952,
+          "current_as_of": "2026-08-19",
+          "status": "not_triggered"
+        },
+        {
+          "id": "btc_price_breaks_range",
+          "label": "價格跌破作者所述 6.2 萬美元區間下緣",
+          "meaning": "觸發代表 30 天窄幅震盪的描述已失效",
+          "metric": "universe.assets.BTC.price_usd",
+          "operator": "lt",
+          "threshold": 62000.0,
+          "current_value": 71474.12,
+          "current_as_of": "2026-08-20T13:48:19+00:00",
+          "status": "not_triggered"
+        },
+        {
+          "id": "btc_net_flow_turns_inflow",
+          "label": "交易所單日轉為淨流入",
+          "meaning": "觸發代表『籌碼離開交易所』這個觀察當日不成立",
+          "metric": "context.onchain.BTC.valuation.exchange_net_flow_usd",
+          "operator": "gt",
+          "threshold": 0.0,
+          "current_value": -488756984.7204211,
+          "current_as_of": "2026-08-19",
+          "status": "not_triggered"
+        }
+      ],
+      "summary": {
+        "standing": "numbers_drifted",
+        "claims_total": 4,
+        "claims_tracked": 4,
+        "claims_consistent": 0,
+        "claims_drifted": 4,
+        "falsifiers_total": 3,
+        "falsifiers_evaluable": 3,
+        "falsifiers_triggered": 0,
+        "triggered_ids": []
+      }
+    },
+    {
+      "id": "eth-below-cost-basis-2026-08-19",
+      "asset": "ETH",
+      "authored_on": "2026-08-19",
+      "title": "當以太幣跌破持有成本",
+      "subtitle": "MVRV 降至 0.94 進入歷史低估區，單日交易所淨流出看似吸籌。但在缺乏質押與銷毀數據的背書下，新增供應仍考驗著市場的真實承接力。",
+      "stance": "低估但未確認反轉；是缺乏新增流動性下的估值重置，不只是情緒超跌",
+      "core_argument": "MVRV 跌破 1 只說明風險報酬比改善，不等於觸底訊號；在現貨 ETF 增量資金流向不明、且無法確認 EIP-1559 燃燒能覆蓋每日新增發行的情況下，供需修復尚未取得數據背書。",
+      "source": {
+        "publication": "Substack 賺錢有道",
+        "mode": "company",
+        "draft_path": "news_radar/data/substack_drafts/2026-08-19/company_當以太幣跌破持有成本賺錢有道",
+        "generated_by": "antigravity_cli · Gemini 3.7 Flash (High)，Claude Opus 4.6 稽核"
+      },
+      "self_reported_audit_warnings": [],
+      "untracked_claims": [
+        {
+          "label": "52 週高點 4,954 美元、回撤 61.2%",
+          "reason": "本站 timescale 另有自己的回撤計算，口徑不同不直接對帳"
+        },
+        {
+          "label": "ETH 市值佔比 10.1%",
+          "reason": "本站尚未收錄 ETH dominance 序列"
+        },
+        {
+          "label": "每月需約 1.68 億美元新增買盤才能消化增發",
+          "reason": "由每日增發推導的敘事值，非獨立來源觀測"
+        },
+        {
+          "label": "EIP-1559 每日實際銷毀量是否覆蓋增發",
+          "reason": "本站尚未收錄 base fee 銷毀序列，這也是作者自承的資料缺口"
+        }
+      ],
+      "claims": [
+        {
+          "id": "eth_mvrv",
+          "label": "ETH MVRV",
+          "unit": "ratio",
+          "metric": "context.onchain.ETH.valuation.mvrv.value",
+          "stated_value": 0.94,
+          "stated_as_of": "2026-08-18",
+          "current_value": 1.0800448241874112,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.02,
+          "drift": 0.14898385551852256,
+          "status": "drifted"
+        },
+        {
+          "id": "eth_price",
+          "label": "ETH 價格",
+          "unit": "usd",
+          "metric": "universe.assets.ETH.price_usd",
+          "stated_value": 1920.0,
+          "stated_as_of": "2026-08-19",
+          "current_value": 2269.33,
+          "current_as_of": "2026-08-20T13:48:19.169000+00:00",
+          "tolerance": 0.03,
+          "drift": 0.18194270833333337,
+          "status": "drifted"
+        },
+        {
+          "id": "eth_market_cap",
+          "label": "ETH 市值",
+          "unit": "usd",
+          "metric": "context.onchain.ETH.valuation.market_cap_usd.value",
+          "stated_value": 231550000000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 274494057579.22128,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.03,
+          "drift": 0.18546343156649225,
+          "status": "drifted"
+        },
+        {
+          "id": "eth_exchange_net_flow",
+          "label": "交易所單日淨流出",
+          "unit": "usd",
+          "metric": "context.onchain.ETH.valuation.exchange_net_flow_usd",
+          "stated_value": -30710000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 126031591.11103189,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.1,
+          "drift": -5.103926770141058,
+          "status": "drifted"
+        },
+        {
+          "id": "eth_daily_issuance",
+          "label": "每日新增發行金額",
+          "unit": "usd",
+          "metric": "context.onchain.ETH.valuation.issuance_usd.value",
+          "stated_value": 5610000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 6604474.859332292,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.05,
+          "drift": 0.1772682458702839,
+          "status": "drifted"
+        },
+        {
+          "id": "eth_supply",
+          "label": "流通總量",
+          "unit": "eth",
+          "metric": "context.onchain.ETH.valuation.supply.value",
+          "stated_value": 120700000.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 121969160.17005564,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.02,
+          "drift": 0.010514997266409587,
+          "status": "consistent"
+        },
+        {
+          "id": "eth_active_addresses",
+          "label": "單日活躍地址",
+          "unit": "count",
+          "metric": "context.onchain.ETH.coinmetrics.active_addresses.value",
+          "stated_value": 814843.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 775498.0,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.01,
+          "drift": -0.04828537521952081,
+          "status": "drifted"
+        },
+        {
+          "id": "eth_transactions",
+          "label": "單日交易筆數",
+          "unit": "count",
+          "metric": "context.onchain.ETH.coinmetrics.transactions.value",
+          "stated_value": 2856958.0,
+          "stated_as_of": "2026-08-18",
+          "current_value": 2467880.0,
+          "current_as_of": "2026-08-19",
+          "tolerance": 0.01,
+          "drift": -0.13618611124139735,
+          "status": "drifted"
+        }
+      ],
+      "falsifiers": [
+        {
+          "id": "eth_mvrv_recovers",
+          "label": "MVRV 重新站回 1.0 之上",
+          "meaning": "觸發代表『跌破全網平均成本』的前提解除，論點要改寫",
+          "metric": "context.onchain.ETH.valuation.mvrv.value",
+          "operator": "gte",
+          "threshold": 1.0,
+          "current_value": 1.0800448241874112,
+          "current_as_of": "2026-08-19",
+          "status": "triggered"
+        },
+        {
+          "id": "eth_etf_sustained_inflow",
+          "label": "現貨 ETF 30 日淨流量轉為明顯淨流入（>= 5 億美元）",
+          "meaning": "作者列為第一個驗證訊號：增量資本是否真的在接盤",
+          "metric": "universe.etf.ETH.flow_30d_usd",
+          "operator": "gte",
+          "threshold": 500000000.0,
+          "current_value": 553700000.0,
+          "current_as_of": "2026-08-19",
+          "status": "triggered"
+        },
+        {
+          "id": "eth_burn_exceeds_issuance",
+          "label": "EIP-1559 每日銷毀量超過每日新增發行",
+          "meaning": "作者列為第三個訊號，本站目前無銷毀量序列",
+          "metric": null,
+          "operator": null,
+          "threshold": null,
+          "current_value": null,
+          "current_as_of": null,
+          "status": "untracked"
+        }
+      ],
+      "summary": {
+        "standing": "falsifier_triggered",
+        "claims_total": 8,
+        "claims_tracked": 8,
+        "claims_consistent": 1,
+        "claims_drifted": 7,
+        "falsifiers_total": 3,
+        "falsifiers_evaluable": 2,
+        "falsifiers_triggered": 2,
+        "triggered_ids": [
+          "eth_mvrv_recovers",
+          "eth_etf_sustained_inflow"
+        ]
+      }
+    }
+  ],
+  "tracker_hash": "dceaa205cb6e8ca9001ce0876728b0d45ca72859c6e8ba55a5e1a9440d9986b3"
+}
