@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-08-21T14:02:49+00:00",
+  "updated_at": "2026-08-21T14:56:01+00:00",
   "policy": "append-only observations; same-day refreshes carry revision, revision_note, and supersedes_generated_at; retain 3650 observations",
   "items": [
     {
@@ -14851,6 +14851,100 @@
       "generated_at": "2026-08-21T14:02:49+00:00",
       "revision": 30,
       "supersedes_generated_at": "2026-08-21T13:16:16+00:00",
+      "revision_note": "same-day source refresh; prior observation preserved",
+      "quality_status": "degraded",
+      "horizons": {
+        "daily": {
+          "status": "上升趨勢",
+          "tone": "positive",
+          "btc_return": 0.07089403465170441,
+          "return_acceleration": 0.06818953670483019,
+          "resonance": "偏正向共振"
+        },
+        "weekly": {
+          "status": "方向切換",
+          "tone": "mixed",
+          "btc_return": 0.0998893916740562,
+          "return_acceleration": 0.12871653693313634,
+          "resonance": "多維訊號分歧"
+        },
+        "monthly": {
+          "status": "上升趨勢",
+          "tone": "positive",
+          "btc_return": 0.08383935421009059,
+          "return_acceleration": 0.05732701782832872,
+          "resonance": "多維訊號分歧"
+        },
+        "quarterly": {
+          "status": "方向切換",
+          "tone": "mixed",
+          "btc_return": 0.07525394572910193,
+          "return_acceleration": 0.2141032467771382,
+          "resonance": "多維訊號分歧"
+        }
+      },
+      "alignment": {
+        "dominant_state": "週期分歧／盤整",
+        "aligned_horizons": 2,
+        "known_horizons": 4,
+        "positive_horizons": 2,
+        "negative_horizons": 0,
+        "states": {
+          "daily": "positive",
+          "weekly": "mixed",
+          "monthly": "positive",
+          "quarterly": "mixed"
+        },
+        "plain_read": "四個週期中 2 個上升、0 個下降；目前判讀為「週期分歧／盤整」。"
+      },
+      "technical_horizons": {
+        "weekly": {
+          "as_of": "2026-08-16",
+          "rsi_14": 38.80390621798449,
+          "macd_histogram": 411.10477716938203,
+          "bottom_state": "底部證據尚未成形",
+          "top_state": "未見多項頂部共振"
+        },
+        "monthly": {
+          "as_of": "2026-07-31",
+          "rsi_14": 43.13969811782198,
+          "macd_histogram": -6120.852774607671,
+          "bottom_state": "底部證據尚未成形",
+          "top_state": "未見多項頂部共振"
+        }
+      },
+      "news_sentiment": {
+        "weekly": "週線消息與情緒偏支持，但仍需價格結構確認",
+        "monthly": "月線消息與情緒分歧"
+      },
+      "exclusive_insights": [
+        {
+          "id": "multi_horizon_alignment",
+          "key_number": "2/4",
+          "claim": "四個週期中 2 個上升、0 個下降；目前判讀為「週期分歧／盤整」。"
+        },
+        {
+          "id": "mstr_price_structure_divergence",
+          "key_number": "-6.1%",
+          "claim": "MSTR 月線相對 BTC -6.1%；普通股市值／自算普通股淨值 1.14x，STRC 折價 +4.4%。"
+        },
+        {
+          "id": "spot_leverage_divergence",
+          "key_number": "ETF $+238M",
+          "claim": "BTC 週線 +10.0%、ETF 七日淨流 $+238M、永續資金費率年化 +9.9%；未驗證 ETF 不參與方向判讀。"
+        },
+        {
+          "id": "bmnr_eth_treasury_divergence",
+          "key_number": "-0.5%",
+          "claim": "BMNR 月線相對 ETH -0.5%；市值／gross treasury 資料不足，質押比例 資料不足。"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-20",
+      "generated_at": "2026-08-21T14:56:01+00:00",
+      "revision": 31,
+      "supersedes_generated_at": "2026-08-21T14:02:49+00:00",
       "revision_note": "same-day source refresh; prior observation preserved",
       "quality_status": "degraded",
       "horizons": {
