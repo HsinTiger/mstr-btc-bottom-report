@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-20T13:54:42+00:00",
-  "as_of_date": "2026-08-20",
+  "generated_at": "2026-08-22T01:15:43+00:00",
+  "as_of_date": "2026-08-22",
   "source_manifest": "/home/runner/work/mstr-btc-bottom-report/mstr-btc-bottom-report/wiki/manifest.json",
   "stale_after_days": 30,
-  "status": "ok",
+  "status": "degraded",
   "usage_policy": {
     "treat_as_facts": false,
     "allowed_use": "hypothesis_and_background_context_only",
@@ -12,10 +12,12 @@
   },
   "quality": {
     "active_pages": 16,
-    "context_only_pages": 16,
-    "excluded_pages": 0,
+    "context_only_pages": 13,
+    "excluded_pages": 3,
     "global_flags": [],
-    "flag_counts": {}
+    "flag_counts": {
+      "stale": 15
+    }
   },
   "pages": [
     {
@@ -24,10 +26,10 @@
       "summary": "大倉以 MSTR 與 BMNR 現貨做 1–4 年週期配置，小倉只在 BTC 體制與 MSTR 資本結構同時通過時研究 2.5 倍合約。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "mstr",
         "bmnr",
@@ -44,7 +46,9 @@
       "source_path": "wiki/overview.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -55,10 +59,10 @@
       "summary": "以鏈上估值、趨勢、情緒、ETF 邊際資金與週期回撤描述比特幣市場體制；不含 MSTR 或 BMNR 載具風險，也不直接產生交易指令。",
       "summary_source": "frontmatter",
       "declared_confidence": "medium",
-      "confidence": "medium",
+      "confidence": "low",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "data-feeds",
         "two-tranche-plan"
@@ -66,7 +70,9 @@
       "source_path": "wiki/concepts/five-dimension-model.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -77,10 +83,10 @@
       "summary": "BTC 歷史牛熊振幅有收斂跡象，但樣本極少且 ETF／機構化可能改變體制，只能產生情境區間，不能單獨定義底部。",
       "summary_source": "frontmatter",
       "declared_confidence": "low",
-      "confidence": "low",
+      "confidence": "unverified",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "target-price",
         "five-dimension-model"
@@ -88,8 +94,10 @@
       "source_path": "wiki/concepts/cycle-diminishing-returns.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
-      "analysis_use": "context_only",
+      "quality_flags": [
+        "stale"
+      ],
+      "analysis_use": "exclude",
       "decision_inputs": [],
       "requires_independent_verification": true
     },
@@ -99,10 +107,10 @@
       "summary": "將公司自訂 mNAV、企業價值對幣資產與歸屬普通股的調整後淨值分開，避免用單一溢折價掩蓋債務、優先股與稅負。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "mstr",
         "bmnr",
@@ -113,7 +121,9 @@
       "source_path": "wiki/concepts/mnav-reflexivity.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -124,10 +134,10 @@
       "summary": "每股含幣量必須用可追溯股數重算；公司自訂 BTC Yield 與本站基本股每股含幣量不可混為同一口徑。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "strc-preferred",
         "mstr",
@@ -137,7 +147,9 @@
       "source_path": "wiki/concepts/coin-per-share-accretion.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -148,10 +160,10 @@
       "summary": "40,000–52,000 美元是未回測、可證偽的比特幣底部研究假說；觸價不等於見底，仍需獨立領先訊號與右側確認。",
       "summary_source": "frontmatter",
       "declared_confidence": "low",
-      "confidence": "low",
+      "confidence": "unverified",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "cycle-diminishing-returns",
         "kol-roster",
@@ -161,8 +173,10 @@
       "source_path": "wiki/concepts/target-price.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
-      "analysis_use": "context_only",
+      "quality_flags": [
+        "stale"
+      ],
+      "analysis_use": "exclude",
       "decision_inputs": [
         "btc_bottom_hypothesis_40000_52000",
         "requires_price_structure_confirmation",
@@ -176,10 +190,10 @@
       "summary": "兩等份只用於分批現貨決策；比特幣市場體制、執行條件與 MSTR／BMNR 載具閘門必須分開判斷。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "mstr",
         "bmnr",
@@ -190,7 +204,9 @@
       "source_path": "wiki/concepts/two-tranche-plan.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -201,10 +217,10 @@
       "summary": "MSTR 是主要 BTC 財庫載具；本站以 SEC 資本結構與官方持幣重算歸屬普通股淨值、現金覆蓋與每股含幣量。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "coin-per-share-accretion",
         "mnav-reflexivity",
@@ -215,7 +231,9 @@
       "source_path": "wiki/entities/mstr.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -226,17 +244,19 @@
       "summary": "BMNR 是 ETH 衛星財庫；目前只發布毛資產、市值對毛資產與每千股 ETH，不把未扣完整負債的數字冒充普通股淨 NAV。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "mstr"
       ],
       "source_path": "wiki/entities/bmnr.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -247,10 +267,10 @@
       "summary": "STRC 折價是 MSTR 資本結構的市場信任票；超過 5% 時封鎖 2.5 倍 MSTR 合約，不因 BTC 本身偏冷而放行。",
       "summary_source": "frontmatter",
       "declared_confidence": "high",
-      "confidence": "high",
+      "confidence": "medium",
       "updated": "2026-07-22",
       "last_verified": "2026-07-22",
-      "stale_days": 29,
+      "stale_days": 31,
       "wikilinks": [
         "mstr",
         "mnav-reflexivity"
@@ -258,7 +278,9 @@
       "source_path": "wiki/entities/strc-preferred.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -272,7 +294,7 @@
       "confidence": "high",
       "updated": "2026-07-28",
       "last_verified": "2026-07-28",
-      "stale_days": 23,
+      "stale_days": 25,
       "wikilinks": [
         "five-dimension-model",
         "btc-neutral-anchor",
@@ -292,10 +314,10 @@
       "summary": "BTC 總值、GAAP 股東權益與公司自訂 mNAV 是三本不同的帳；普通股估值還要扣債務、優先股與稅務楔子。",
       "summary_source": "frontmatter",
       "declared_confidence": "medium",
-      "confidence": "medium",
+      "confidence": "low",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "mnav-definition-risk",
         "mnav-reflexivity",
@@ -304,7 +326,9 @@
       "source_path": "wiki/concepts/gaap-vs-mnav.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -315,10 +339,10 @@
       "summary": "公司官方 mNAV 是融資行為變數，定義可受優先股清算面額與發行結構影響；必須與普通股淨值及資本結構壓力分開自算。",
       "summary_source": "frontmatter",
       "declared_confidence": "medium",
-      "confidence": "medium",
+      "confidence": "low",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "gaap-vs-mnav",
         "mnav-reflexivity",
@@ -327,7 +351,9 @@
       "source_path": "wiki/concepts/mnav-definition-risk.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -338,10 +364,10 @@
       "summary": "現金儲備與融資工具只能延後無息 BTC 資產對有息義務的壓力，不能消除折價期的順週期賣壓。",
       "summary_source": "frontmatter",
       "declared_confidence": "medium",
-      "confidence": "medium",
+      "confidence": "low",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "mnav-reflexivity",
         "coin-per-share-accretion",
@@ -350,7 +376,9 @@
       "source_path": "wiki/concepts/delayed-pro-cyclical.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [],
       "requires_independent_verification": true
@@ -361,10 +389,10 @@
       "summary": "ETF 與機構託管可能改變已實現市值及四年週期指標的分布；舊門檻必須降權並用價格結構與獨立證據驗證。",
       "summary_source": "frontmatter",
       "declared_confidence": "low",
-      "confidence": "low",
+      "confidence": "unverified",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "five-dimension-model",
         "data-feeds",
@@ -373,8 +401,10 @@
       "source_path": "wiki/concepts/indicator-regime-change.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
-      "analysis_use": "context_only",
+      "quality_flags": [
+        "stale"
+      ],
+      "analysis_use": "exclude",
       "decision_inputs": [],
       "requires_independent_verification": true
     },
@@ -384,10 +414,10 @@
       "summary": "以黃金貨幣化比例、美元穩定幣與 RWA 規模、公開公司持幣、算力安全及主權信用壓力，檢驗 BTC 是否仍在走向非主權價值錨；結構證據不直接等於底部或買點。",
       "summary_source": "frontmatter",
       "declared_confidence": "medium",
-      "confidence": "medium",
+      "confidence": "low",
       "updated": "2026-07-21",
       "last_verified": "2026-07-21",
-      "stale_days": 30,
+      "stale_days": 32,
       "wikilinks": [
         "five-dimension-model",
         "indicator-regime-change",
@@ -397,7 +427,9 @@
       "source_path": "wiki/concepts/btc-neutral-anchor.md",
       "legacy_metric_names": [],
       "legacy_metric_replacements": {},
-      "quality_flags": [],
+      "quality_flags": [
+        "stale"
+      ],
       "analysis_use": "context_only",
       "decision_inputs": [
         "btc_to_gold_market_value_ratio",
