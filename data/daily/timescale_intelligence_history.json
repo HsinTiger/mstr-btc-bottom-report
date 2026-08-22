@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-08-22T07:48:16+00:00",
+  "updated_at": "2026-08-22T08:50:39+00:00",
   "policy": "append-only observations; same-day refreshes carry revision, revision_note, and supersedes_generated_at; retain 3650 observations",
   "items": [
     {
@@ -16436,6 +16436,100 @@
           "id": "spot_leverage_divergence",
           "key_number": "ETF $+238M",
           "claim": "BTC 週線 +15.9%、ETF 七日淨流 $+238M、永續資金費率年化 +11.3%；未驗證 ETF 不參與方向判讀。"
+        },
+        {
+          "id": "bmnr_eth_treasury_divergence",
+          "key_number": "+16.3%",
+          "claim": "BMNR 月線相對 ETH +16.3%；市值／gross treasury 資料不足，質押比例 資料不足。"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-22",
+      "generated_at": "2026-08-22T08:50:39+00:00",
+      "revision": 11,
+      "supersedes_generated_at": "2026-08-22T07:48:16+00:00",
+      "revision_note": "same-day source refresh; prior observation preserved",
+      "quality_status": "degraded",
+      "horizons": {
+        "daily": {
+          "status": "上升趨勢",
+          "tone": "positive",
+          "btc_return": 0.054378195891032766,
+          "return_acceleration": -0.01651583876067164,
+          "resonance": "偏正向共振"
+        },
+        "weekly": {
+          "status": "上升趨勢",
+          "tone": "positive",
+          "btc_return": 0.15880278359804811,
+          "return_acceleration": 0.17267005788445045,
+          "resonance": "偏正向共振"
+        },
+        "monthly": {
+          "status": "上升趨勢",
+          "tone": "positive",
+          "btc_return": 0.12834931805257055,
+          "return_acceleration": 0.10410364911323366,
+          "resonance": "多維訊號分歧"
+        },
+        "quarterly": {
+          "status": "方向切換",
+          "tone": "mixed",
+          "btc_return": 0.16115824509981902,
+          "return_acceleration": 0.3242362536352138,
+          "resonance": "偏正向共振"
+        }
+      },
+      "alignment": {
+        "dominant_state": "多週期同步上行",
+        "aligned_horizons": 3,
+        "known_horizons": 4,
+        "positive_horizons": 3,
+        "negative_horizons": 0,
+        "states": {
+          "daily": "positive",
+          "weekly": "positive",
+          "monthly": "positive",
+          "quarterly": "mixed"
+        },
+        "plain_read": "四個週期中 3 個上升、0 個下降；目前判讀為「多週期同步上行」。"
+      },
+      "technical_horizons": {
+        "weekly": {
+          "as_of": "2026-08-16",
+          "rsi_14": 38.80390621798449,
+          "macd_histogram": 411.10477716938203,
+          "bottom_state": "底部證據尚未成形",
+          "top_state": "未見多項頂部共振"
+        },
+        "monthly": {
+          "as_of": "2026-07-31",
+          "rsi_14": 43.13969811782198,
+          "macd_histogram": -6120.852774607671,
+          "bottom_state": "底部證據尚未成形",
+          "top_state": "未見多項頂部共振"
+        }
+      },
+      "news_sentiment": {
+        "weekly": "週線消息與情緒偏支持，但仍需價格結構確認",
+        "monthly": "月線消息與情緒偏支持，但仍需價格結構確認"
+      },
+      "exclusive_insights": [
+        {
+          "id": "multi_horizon_alignment",
+          "key_number": "3/4",
+          "claim": "四個週期中 3 個上升、0 個下降；目前判讀為「多週期同步上行」。"
+        },
+        {
+          "id": "mstr_price_structure_divergence",
+          "key_number": "+14.5%",
+          "claim": "MSTR 月線相對 BTC +14.5%；普通股市值／自算普通股淨值 1.07x，STRC 折價 +3.8%。"
+        },
+        {
+          "id": "spot_leverage_divergence",
+          "key_number": "ETF $+238M",
+          "claim": "BTC 週線 +15.9%、ETF 七日淨流 $+238M、永續資金費率年化 +11.0%；未驗證 ETF 不參與方向判讀。"
         },
         {
           "id": "bmnr_eth_treasury_divergence",
