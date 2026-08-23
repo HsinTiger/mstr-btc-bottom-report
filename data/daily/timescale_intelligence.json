@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "date": "2026-08-23",
-  "generated_at": "2026-08-23T21:02:07+00:00",
+  "generated_at": "2026-08-23T21:39:28+00:00",
   "snapshot_generated_at": "2026-08-23T01:21:31+00:00",
-  "market_universe_generated_at": "2026-08-23T21:02:07+00:00",
+  "market_universe_generated_at": "2026-08-23T21:39:28+00:00",
   "market_context_generated_at": "2026-08-23T02:12:51+00:00",
   "price_history_generated_at": "2026-08-23T01:22:05+00:00",
   "quality": {
@@ -112,7 +112,7 @@
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
           "direction": "positive",
-          "key_number": "+11.0%",
+          "key_number": "+17.9%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -1204,7 +1204,7 @@
     "weekly": {
       "conclusion": "週線消息與情緒偏支持，但仍需價格結構確認",
       "supportive_clusters": 2,
-      "risk_off_clusters": 0,
+      "risk_off_clusters": 1,
       "evidence": [
         {
           "name": "恐懼貪婪情緒",
@@ -1235,9 +1235,9 @@
         {
           "name": "永續資金費率",
           "cluster_id": "derivatives_positioning",
-          "value": 0.10950000000000001,
-          "state": "neutral",
-          "as_of": "2026-08-23T21:02:07+00:00",
+          "value": 0.17883627600000002,
+          "state": "risk_off",
+          "as_of": "2026-08-23T21:39:28+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1382,7 +1382,7 @@
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $+238M",
-      "claim": "BTC 週線 +24.7%、ETF 七日淨流 $+238M、永續資金費率年化 +11.0%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 +24.7%、ETF 七日淨流 $+238M、永續資金費率年化 +17.9%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -1415,7 +1415,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 241,
+    "observations": 242,
     "distinct_dates": 14,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
