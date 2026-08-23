@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-08-23",
-  "generated_at": "2026-08-23T01:21:53+00:00",
+  "generated_at": "2026-08-23T02:12:51+00:00",
   "quality": {
     "status": "pass",
     "publication_mode": "analysis_only",
@@ -13,7 +13,7 @@
       "onchain_eth": "pass"
     },
     "successful_sources": 42,
-    "failed_sources": 2,
+    "failed_sources": 1,
     "policy": "單一來源失效先切換同欄位備援或同研究桌替代代理；保留原始 as_of，不以抓取時間冒充觀測時間。"
   },
   "macro": {
@@ -148,7 +148,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "^GSPC",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "nasdaq": {
         "value": 26180.45,
@@ -189,7 +189,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "^IXIC",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "vix": {
         "value": 16.01,
@@ -230,7 +230,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "^VIX",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "broad_dollar": {
         "value": 118.9028,
@@ -254,45 +254,25 @@
       }
     },
     "fred": {
-      "treasury_2y": {
-        "value": 4.19,
-        "unit": "percent",
-        "as_of": "2026-08-20",
-        "prior_7d_value": 4.15,
-        "prior_7d_as_of": "2026-08-13",
-        "prior_30d_value": 4.26,
-        "prior_30d_as_of": "2026-07-21",
-        "prior_90d_value": 4.13,
-        "prior_90d_as_of": "2026-05-22",
-        "prior_365d_value": 3.74,
-        "prior_365d_as_of": "2025-08-20",
-        "change_7d": 0.040000000000000036,
-        "change_30d": -0.0699999999999994,
-        "change_90d": 0.0600000000000005,
-        "change_365d": 0.4500000000000002,
-        "change_mode": "absolute",
-        "series_id": "DGS2",
-        "url": "https://fred.stlouisfed.org/series/DGS2"
-      },
-      "fed_funds": {
-        "value": 3.63,
-        "unit": "percent",
-        "as_of": "2026-08-20",
-        "prior_7d_value": 3.63,
-        "prior_7d_as_of": "2026-08-13",
-        "prior_30d_value": 3.63,
-        "prior_30d_as_of": "2026-07-21",
-        "prior_90d_value": 3.62,
-        "prior_90d_as_of": "2026-05-22",
-        "prior_365d_value": 4.33,
-        "prior_365d_as_of": "2025-08-20",
-        "change_7d": 0.0,
-        "change_30d": 0.0,
-        "change_90d": 0.009999999999999787,
-        "change_365d": -0.7000000000000002,
-        "change_mode": "absolute",
-        "series_id": "DFF",
-        "url": "https://fred.stlouisfed.org/series/DFF"
+      "m2_money_stock": {
+        "value": 23155.2,
+        "unit": "billion_usd_seasonally_adjusted",
+        "as_of": "2026-06-01",
+        "prior_7d_value": 23055.6,
+        "prior_7d_as_of": "2026-05-01",
+        "prior_30d_value": 23055.6,
+        "prior_30d_as_of": "2026-05-01",
+        "prior_90d_value": 22676.1,
+        "prior_90d_as_of": "2026-03-01",
+        "prior_365d_value": 21942.7,
+        "prior_365d_as_of": "2025-06-01",
+        "change_7d": 0.0043199916723053455,
+        "change_30d": 0.0043199916723053455,
+        "change_90d": 0.021127971741172535,
+        "change_365d": 0.05525755718302672,
+        "change_mode": "percent",
+        "series_id": "M2SL",
+        "url": "https://fred.stlouisfed.org/series/M2SL"
       },
       "fed_assets": {
         "value": 6745699.0,
@@ -313,66 +293,6 @@
         "change_mode": "percent",
         "series_id": "WALCL",
         "url": "https://fred.stlouisfed.org/series/WALCL"
-      },
-      "high_yield_oas": {
-        "value": 2.75,
-        "unit": "percentage_points",
-        "as_of": "2026-08-20",
-        "prior_7d_value": 2.71,
-        "prior_7d_as_of": "2026-08-13",
-        "prior_30d_value": 2.69,
-        "prior_30d_as_of": "2026-07-21",
-        "prior_90d_value": 2.74,
-        "prior_90d_as_of": "2026-05-22",
-        "prior_365d_value": 2.94,
-        "prior_365d_as_of": "2025-08-20",
-        "change_7d": 0.040000000000000036,
-        "change_30d": 0.06000000000000005,
-        "change_90d": 0.009999999999999787,
-        "change_365d": -0.18999999999999995,
-        "change_mode": "absolute",
-        "series_id": "BAMLH0A0HYM2",
-        "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
-      },
-      "reserve_balances": {
-        "value": 2935287.0,
-        "unit": "million_usd",
-        "as_of": "2026-08-19",
-        "prior_7d_value": 2944059.0,
-        "prior_7d_as_of": "2026-08-12",
-        "prior_30d_value": 3142721.0,
-        "prior_30d_as_of": "2026-07-15",
-        "prior_90d_value": 3129562.0,
-        "prior_90d_as_of": "2026-05-20",
-        "prior_365d_value": 3320050.0,
-        "prior_365d_as_of": "2025-08-13",
-        "change_7d": -0.0029795598525709233,
-        "change_30d": -0.06600458647140484,
-        "change_90d": -0.06207737696201576,
-        "change_365d": -0.11589072453728111,
-        "change_mode": "percent",
-        "series_id": "WRESBAL",
-        "url": "https://fred.stlouisfed.org/series/WRESBAL"
-      },
-      "m2_money_stock": {
-        "value": 23155.2,
-        "unit": "billion_usd_seasonally_adjusted",
-        "as_of": "2026-06-01",
-        "prior_7d_value": 23055.6,
-        "prior_7d_as_of": "2026-05-01",
-        "prior_30d_value": 23055.6,
-        "prior_30d_as_of": "2026-05-01",
-        "prior_90d_value": 22676.1,
-        "prior_90d_as_of": "2026-03-01",
-        "prior_365d_value": 21942.7,
-        "prior_365d_as_of": "2025-06-01",
-        "change_7d": 0.0043199916723053455,
-        "change_30d": 0.0043199916723053455,
-        "change_90d": 0.021127971741172535,
-        "change_365d": 0.05525755718302672,
-        "change_mode": "percent",
-        "series_id": "M2SL",
-        "url": "https://fred.stlouisfed.org/series/M2SL"
       },
       "treasury_10y": {
         "value": 4.69,
@@ -414,25 +334,85 @@
         "series_id": "DGS30",
         "url": "https://fred.stlouisfed.org/series/DGS30"
       },
-      "wti_spot": {
-        "value": 86.48,
-        "unit": "usd_per_barrel",
-        "as_of": "2026-08-18",
-        "prior_7d_value": 84.77,
-        "prior_7d_as_of": "2026-08-11",
-        "prior_30d_value": 83.43,
-        "prior_30d_as_of": "2026-07-17",
-        "prior_90d_value": 101.69,
+      "high_yield_oas": {
+        "value": 2.75,
+        "unit": "percentage_points",
+        "as_of": "2026-08-20",
+        "prior_7d_value": 2.71,
+        "prior_7d_as_of": "2026-08-13",
+        "prior_30d_value": 2.69,
+        "prior_30d_as_of": "2026-07-21",
+        "prior_90d_value": 2.74,
+        "prior_90d_as_of": "2026-05-22",
+        "prior_365d_value": 2.94,
+        "prior_365d_as_of": "2025-08-20",
+        "change_7d": 0.040000000000000036,
+        "change_30d": 0.06000000000000005,
+        "change_90d": 0.009999999999999787,
+        "change_365d": -0.18999999999999995,
+        "change_mode": "absolute",
+        "series_id": "BAMLH0A0HYM2",
+        "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+      },
+      "treasury_2y": {
+        "value": 4.19,
+        "unit": "percent",
+        "as_of": "2026-08-20",
+        "prior_7d_value": 4.15,
+        "prior_7d_as_of": "2026-08-13",
+        "prior_30d_value": 4.26,
+        "prior_30d_as_of": "2026-07-21",
+        "prior_90d_value": 4.13,
+        "prior_90d_as_of": "2026-05-22",
+        "prior_365d_value": 3.74,
+        "prior_365d_as_of": "2025-08-20",
+        "change_7d": 0.040000000000000036,
+        "change_30d": -0.0699999999999994,
+        "change_90d": 0.0600000000000005,
+        "change_365d": 0.4500000000000002,
+        "change_mode": "absolute",
+        "series_id": "DGS2",
+        "url": "https://fred.stlouisfed.org/series/DGS2"
+      },
+      "reserve_balances": {
+        "value": 2935287.0,
+        "unit": "million_usd",
+        "as_of": "2026-08-19",
+        "prior_7d_value": 2944059.0,
+        "prior_7d_as_of": "2026-08-12",
+        "prior_30d_value": 3142721.0,
+        "prior_30d_as_of": "2026-07-15",
+        "prior_90d_value": 3129562.0,
         "prior_90d_as_of": "2026-05-20",
-        "prior_365d_value": 64.51,
-        "prior_365d_as_of": "2025-08-18",
-        "change_7d": 0.020172230742007802,
-        "change_30d": 0.03655759319189733,
-        "change_90d": -0.14957222932441727,
-        "change_365d": 0.34056735389862025,
+        "prior_365d_value": 3320050.0,
+        "prior_365d_as_of": "2025-08-13",
+        "change_7d": -0.0029795598525709233,
+        "change_30d": -0.06600458647140484,
+        "change_90d": -0.06207737696201576,
+        "change_365d": -0.11589072453728111,
         "change_mode": "percent",
-        "series_id": "DCOILWTICO",
-        "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+        "series_id": "WRESBAL",
+        "url": "https://fred.stlouisfed.org/series/WRESBAL"
+      },
+      "fed_funds": {
+        "value": 3.63,
+        "unit": "percent",
+        "as_of": "2026-08-20",
+        "prior_7d_value": 3.63,
+        "prior_7d_as_of": "2026-08-13",
+        "prior_30d_value": 3.63,
+        "prior_30d_as_of": "2026-07-21",
+        "prior_90d_value": 3.62,
+        "prior_90d_as_of": "2026-05-22",
+        "prior_365d_value": 4.33,
+        "prior_365d_as_of": "2025-08-20",
+        "change_7d": 0.0,
+        "change_30d": 0.0,
+        "change_90d": 0.009999999999999787,
+        "change_365d": -0.7000000000000002,
+        "change_mode": "absolute",
+        "series_id": "DFF",
+        "url": "https://fred.stlouisfed.org/series/DFF"
       },
       "investment_grade_oas": {
         "value": 0.82,
@@ -454,25 +434,25 @@
         "series_id": "BAMLC0A0CM",
         "url": "https://fred.stlouisfed.org/series/BAMLC0A0CM"
       },
-      "broad_dollar": {
-        "value": 118.9028,
-        "unit": "index",
-        "as_of": "2026-08-14",
-        "prior_7d_value": 119.0649,
-        "prior_7d_as_of": "2026-08-07",
-        "prior_30d_value": 120.3088,
-        "prior_30d_as_of": "2026-07-15",
-        "prior_90d_value": 119.2825,
-        "prior_90d_as_of": "2026-05-15",
-        "prior_365d_value": 120.6446,
-        "prior_365d_as_of": "2025-08-14",
-        "change_7d": -0.0013614423730250458,
-        "change_30d": -0.011686593166917225,
-        "change_90d": -0.0031831995472931807,
-        "change_365d": -0.014437446848014734,
+      "wti_spot": {
+        "value": 86.48,
+        "unit": "usd_per_barrel",
+        "as_of": "2026-08-18",
+        "prior_7d_value": 84.77,
+        "prior_7d_as_of": "2026-08-11",
+        "prior_30d_value": 83.43,
+        "prior_30d_as_of": "2026-07-17",
+        "prior_90d_value": 101.69,
+        "prior_90d_as_of": "2026-05-20",
+        "prior_365d_value": 64.51,
+        "prior_365d_as_of": "2025-08-18",
+        "change_7d": 0.020172230742007802,
+        "change_30d": 0.03655759319189733,
+        "change_90d": -0.14957222932441727,
+        "change_365d": 0.34056735389862025,
         "change_mode": "percent",
-        "series_id": "DTWEXBGS",
-        "url": "https://fred.stlouisfed.org/series/DTWEXBGS"
+        "series_id": "DCOILWTICO",
+        "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
       },
       "nasdaq": {
         "value": 26180.45,
@@ -494,6 +474,26 @@
         "series_id": "NASDAQCOM",
         "url": "https://fred.stlouisfed.org/series/NASDAQCOM"
       },
+      "sp500": {
+        "value": 7674.37,
+        "unit": "index",
+        "as_of": "2026-08-21",
+        "prior_7d_value": 7785.76,
+        "prior_7d_as_of": "2026-08-14",
+        "prior_30d_value": 7498.96,
+        "prior_30d_as_of": "2026-07-22",
+        "prior_90d_value": 7473.47,
+        "prior_90d_as_of": "2026-05-22",
+        "prior_365d_value": 6370.17,
+        "prior_365d_as_of": "2025-08-21",
+        "change_7d": -0.014306888473315404,
+        "change_30d": 0.023391243585777266,
+        "change_90d": 0.026881756399637524,
+        "change_365d": 0.20473550941340646,
+        "change_mode": "percent",
+        "series_id": "SP500",
+        "url": "https://fred.stlouisfed.org/series/SP500"
+      },
       "vix": {
         "value": 16.01,
         "unit": "index",
@@ -514,25 +514,25 @@
         "series_id": "VIXCLS",
         "url": "https://fred.stlouisfed.org/series/VIXCLS"
       },
-      "sp500": {
-        "value": 7674.37,
+      "broad_dollar": {
+        "value": 118.9028,
         "unit": "index",
-        "as_of": "2026-08-21",
-        "prior_7d_value": 7785.76,
-        "prior_7d_as_of": "2026-08-14",
-        "prior_30d_value": 7498.96,
-        "prior_30d_as_of": "2026-07-22",
-        "prior_90d_value": 7473.47,
-        "prior_90d_as_of": "2026-05-22",
-        "prior_365d_value": 6370.17,
-        "prior_365d_as_of": "2025-08-21",
-        "change_7d": -0.014306888473315404,
-        "change_30d": 0.023391243585777266,
-        "change_90d": 0.026881756399637524,
-        "change_365d": 0.20473550941340646,
+        "as_of": "2026-08-14",
+        "prior_7d_value": 119.0649,
+        "prior_7d_as_of": "2026-08-07",
+        "prior_30d_value": 120.3088,
+        "prior_30d_as_of": "2026-07-15",
+        "prior_90d_value": 119.2825,
+        "prior_90d_as_of": "2026-05-15",
+        "prior_365d_value": 120.6446,
+        "prior_365d_as_of": "2025-08-14",
+        "change_7d": -0.0013614423730250458,
+        "change_30d": -0.011686593166917225,
+        "change_90d": -0.0031831995472931807,
+        "change_365d": -0.014437446848014734,
         "change_mode": "percent",
-        "series_id": "SP500",
-        "url": "https://fred.stlouisfed.org/series/SP500"
+        "series_id": "DTWEXBGS",
+        "url": "https://fred.stlouisfed.org/series/DTWEXBGS"
       }
     },
     "market_proxies": {
@@ -554,7 +554,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "^VIX",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "oil_future": {
         "value": 87.05999755859375,
@@ -574,7 +574,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "CL=F",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/CL%3DF?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/CL%3DF?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "sp500": {
         "value": 7674.3701171875,
@@ -594,7 +594,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "^GSPC",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "nasdaq": {
         "value": 26180.4609375,
@@ -614,7 +614,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "^IXIC",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "hyg": {
         "value": 79.61000061035156,
@@ -634,7 +634,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "HYG",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/HYG?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/HYG?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "ief": {
         "value": 92.81999969482422,
@@ -654,7 +654,7 @@
         "change_365d": null,
         "change_mode": "percent",
         "symbol": "IEF",
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?period1=1778808125&period2=1787534525&interval=1d&events=history"
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?period1=1778811182&period2=1787537582&interval=1d&events=history"
       },
       "credit_risk_ratio": {
         "value": 0.857681543547675,
@@ -820,16 +820,10 @@
   },
   "onchain": {
     "BTC": {
-      "hashrate": {
-        "value": 868176946.8604448,
-        "change_30d": 0.19420232069889476,
-        "as_of": "2026-08-21",
-        "url": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur,CapMrktCurUSD,SplyCur,TxCnt,AdrActCnt,IssTotUSD,FlowInExUSD,FlowOutExUSD,HashRate&frequency=1d&page_size=10000&start_time=2026-07-09"
-      },
       "transactions": {
-        "value": 534986.0,
-        "change_30d": 0.07592833928628884,
-        "as_of": "2026-08-21",
+        "value": 709046.0,
+        "change_30d": 0.15895253179557334,
+        "as_of": "2026-08-22",
         "url": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur,CapMrktCurUSD,SplyCur,TxCnt,AdrActCnt,IssTotUSD,FlowInExUSD,FlowOutExUSD,HashRate&frequency=1d&page_size=10000&start_time=2026-07-09"
       },
       "active_addresses": {
@@ -838,11 +832,17 @@
         "as_of": "2026-08-22",
         "url": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur,CapMrktCurUSD,SplyCur,TxCnt,AdrActCnt,IssTotUSD,FlowInExUSD,FlowOutExUSD,HashRate&frequency=1d&page_size=10000&start_time=2026-07-09"
       },
+      "hashrate": {
+        "value": 937551968.6517191,
+        "change_30d": 0.1235409819439095,
+        "as_of": "2026-08-22",
+        "url": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur,CapMrktCurUSD,SplyCur,TxCnt,AdrActCnt,IssTotUSD,FlowInExUSD,FlowOutExUSD,HashRate&frequency=1d&page_size=10000&start_time=2026-07-09"
+      },
       "coinmetrics": {
         "transactions": {
-          "value": 534986.0,
-          "change_30d": 0.07592833928628884,
-          "as_of": "2026-08-21"
+          "value": 709046.0,
+          "change_30d": 0.15895253179557334,
+          "as_of": "2026-08-22"
         },
         "active_addresses": {
           "value": 634723.0,
@@ -850,9 +850,9 @@
           "as_of": "2026-08-22"
         },
         "hashrate": {
-          "value": 868176946.8604448,
-          "change_30d": 0.19420232069889476,
-          "as_of": "2026-08-21"
+          "value": 937551968.6517191,
+          "change_30d": 0.1235409819439095,
+          "as_of": "2026-08-22"
         }
       },
       "valuation": {
@@ -889,9 +889,9 @@
         "exchange_net_flow_usd": 4594279.306459904,
         "exchange_net_flow_basis": "inflow_usd_minus_outflow_usd",
         "issuance_usd": {
-          "value": 33547519.9611846,
-          "change_30d": 0.41474861024334686,
-          "as_of": "2026-08-21"
+          "value": 35621810.49879518,
+          "change_30d": 0.3266254924315881,
+          "as_of": "2026-08-22"
         },
         "as_of": "2026-08-21",
         "exchange_flow_as_of": "2026-08-21",
@@ -923,60 +923,60 @@
         "active_addresses",
         "hashrate"
       ],
-      "blockchair_transactions_24h": 702759.0,
+      "blockchair_transactions_24h": 727861.0,
       "blockchair_as_of": "2026-08-23",
       "mempool_hashrate_ths": 945923920.8922371,
       "mempool_hashrate_as_of": "2026-08-23",
-      "transactions_cross_source_gap": 0.2387347582884033,
-      "hashrate_cross_source_gap": 0.0821915719801841,
+      "transactions_cross_source_gap": 0.02584971581112328,
+      "hashrate_cross_source_gap": 0.008850555584450364,
       "source_count": 6,
       "status": "pass"
     },
     "ETH": {
       "provider_heads": {
-        "PublicNode": 25814535,
-        "1RPC": 25814535,
-        "Flashbots": 25814535,
-        "MEVBlocker": 25814535
+        "PublicNode": 25814789,
+        "1RPC": 25814788,
+        "Flashbots": 25814789,
+        "MEVBlocker": 25814789
       },
       "source_count": 4,
-      "head_block": 25814535,
-      "head_gap_blocks": 0,
+      "head_block": 25814788,
+      "head_gap_blocks": 1,
       "current_sample": {
         "sample_blocks": 12,
-        "average_transactions_per_block": 232.75,
-        "average_gas_utilization": 0.5914338664628459,
-        "as_of": "2026-08-23T01:21:47+00:00"
+        "average_transactions_per_block": 257.3333333333333,
+        "average_gas_utilization": 0.5560927328407248,
+        "as_of": "2026-08-23T02:12:35+00:00"
       },
       "prior_week_sample": {
         "sample_blocks": 12,
-        "average_transactions_per_block": 363.25,
-        "average_gas_utilization": 0.4715490125,
-        "as_of": "2026-08-16T00:49:35+00:00"
+        "average_transactions_per_block": 374.1666666666667,
+        "average_gas_utilization": 0.5564271537248134,
+        "as_of": "2026-08-16T01:40:11+00:00"
       },
-      "transactions_per_block_7d_change": -0.35925671025464556,
-      "gas_utilization_7d_change": 0.11988485396284593,
-      "as_of": "2026-08-23T01:21:47+00:00",
-      "sample_check_provider": "Flashbots",
+      "transactions_per_block_7d_change": -0.312249443207127,
+      "gas_utilization_7d_change": -0.00033442088408863757,
+      "as_of": "2026-08-23T02:12:35+00:00",
+      "sample_check_provider": "1RPC",
       "sample_agreement": true,
       "valuation": {
         "mvrv": {
-          "value": 1.1734020079805603,
-          "change_30d": 0.2501501804174122,
-          "as_of": "2026-08-21"
+          "value": 1.121930199694291,
+          "change_30d": 0.22468232118258635,
+          "as_of": "2026-08-22"
         },
         "market_cap_usd": {
-          "value": 307472193839.6408,
-          "change_30d": 0.30688066202054864,
-          "as_of": "2026-08-21"
+          "value": 295280316439.0254,
+          "change_30d": 0.2888699402351149,
+          "as_of": "2026-08-22"
         },
         "supply": {
           "value": 121977735.74819672,
           "change_30d": 0.0007055428865345714,
           "as_of": "2026-08-22"
         },
-        "realized_cap_usd": 262034828429.17947,
-        "realized_price_usd": 2148.2184992358602,
+        "realized_cap_usd": 263189560740.4853,
+        "realized_price_usd": 2157.6852458041812,
         "realized_price_basis": "market_cap_divided_by_mvrv_divided_by_supply",
         "exchange_inflow_usd": {
           "value": 1053722379.5116788,
@@ -997,15 +997,15 @@
           "change_30d": 0.32687224249425273,
           "as_of": "2026-08-21"
         },
-        "as_of": "2026-08-21",
+        "as_of": "2026-08-22",
         "exchange_flow_as_of": "2026-08-21",
         "exchange_flow_is_preliminary": true
       },
       "coinmetrics": {
         "transactions": {
-          "value": 2002081.0,
-          "change_30d": -0.21854456887029228,
-          "as_of": "2026-08-21"
+          "value": 1757714.0,
+          "change_30d": -0.2550910394654091,
+          "as_of": "2026-08-22"
         },
         "active_addresses": {
           "value": 907996.0,
@@ -1029,7 +1029,7 @@
     {
       "desk": "cross_asset",
       "provider": "Yahoo CL=F",
-      "url": "https://query1.finance.yahoo.com/v8/finance/chart/CL%3DF?period1=1778808125&period2=1787534525&interval=1d&events=history",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/CL%3DF?period1=1778811182&period2=1787537582&interval=1d&events=history",
       "status": "pass",
       "as_of": "2026-08-21",
       "error": null,
@@ -1038,7 +1038,7 @@
     {
       "desk": "cross_asset",
       "provider": "Yahoo HYG",
-      "url": "https://query1.finance.yahoo.com/v8/finance/chart/HYG?period1=1778808125&period2=1787534525&interval=1d&events=history",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/HYG?period1=1778811182&period2=1787537582&interval=1d&events=history",
       "status": "pass",
       "as_of": "2026-08-21",
       "error": null,
@@ -1047,7 +1047,7 @@
     {
       "desk": "cross_asset",
       "provider": "Yahoo IEF",
-      "url": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?period1=1778808125&period2=1787534525&interval=1d&events=history",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?period1=1778811182&period2=1787537582&interval=1d&events=history",
       "status": "pass",
       "as_of": "2026-08-21",
       "error": null,
@@ -1056,7 +1056,7 @@
     {
       "desk": "cross_asset",
       "provider": "Yahoo ^GSPC",
-      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=1778808125&period2=1787534525&interval=1d&events=history",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?period1=1778811182&period2=1787537582&interval=1d&events=history",
       "status": "pass",
       "as_of": "2026-08-21",
       "error": null,
@@ -1065,7 +1065,7 @@
     {
       "desk": "cross_asset",
       "provider": "Yahoo ^IXIC",
-      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?period1=1778808125&period2=1787534525&interval=1d&events=history",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?period1=1778811182&period2=1787537582&interval=1d&events=history",
       "status": "pass",
       "as_of": "2026-08-21",
       "error": null,
@@ -1074,7 +1074,7 @@
     {
       "desk": "cross_asset",
       "provider": "Yahoo ^VIX",
-      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?period1=1778808125&period2=1787534525&interval=1d&events=history",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5EVIX?period1=1778811182&period2=1787537582&interval=1d&events=history",
       "status": "pass",
       "as_of": "2026-08-21",
       "error": null,
@@ -1300,17 +1300,17 @@
       "desk": "onchain_eth",
       "provider": "1RPC block sample",
       "url": "https://1rpc.io/eth",
-      "status": "fail",
+      "status": "pass",
       "as_of": null,
-      "error": "HTTP Error 301: Moved Permanently",
-      "role": "sample_failover"
+      "error": null,
+      "role": "sample_independent_check"
     },
     {
       "desk": "onchain_eth",
       "provider": "CoinMetrics community",
       "url": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=eth&metrics=CapMVRVCur,CapMrktCurUSD,SplyCur,TxCnt,AdrActCnt,IssTotUSD,FlowInExUSD,FlowOutExUSD,HashRate&frequency=1d&page_size=10000&start_time=2026-07-09",
       "status": "pass",
-      "as_of": "2026-08-21",
+      "as_of": "2026-08-22",
       "error": null,
       "role": "independent_check"
     },
@@ -1322,15 +1322,6 @@
       "as_of": null,
       "error": null,
       "role": "independent_check"
-    },
-    {
-      "desk": "onchain_eth",
-      "provider": "Flashbots block sample",
-      "url": "https://rpc.flashbots.net",
-      "status": "pass",
-      "as_of": null,
-      "error": null,
-      "role": "sample_independent_check"
     },
     {
       "desk": "onchain_eth",
@@ -1373,7 +1364,7 @@
       "provider": "Congress.gov",
       "url": "https://api.congress.gov/v3/bill/119?format=json&limit=250&sort=updateDate%20desc&api_key=DEMO_KEY",
       "status": "pass",
-      "as_of": "2026-08-23T01:21:57+00:00",
+      "as_of": "2026-08-23T02:12:52+00:00",
       "error": null,
       "role": "primary"
     },
@@ -1382,7 +1373,7 @@
       "provider": "Federal Register",
       "url": "https://www.federalregister.gov/api/v1/documents.json?per_page=20&order=newest&conditions%5Bterm%5D=digital+asset",
       "status": "pass",
-      "as_of": "2026-08-23T01:21:55+00:00",
+      "as_of": "2026-08-23T02:12:52+00:00",
       "error": null,
       "role": "primary"
     },
@@ -1391,7 +1382,7 @@
       "provider": "Federal Reserve",
       "url": "https://www.federalreserve.gov/feeds/press_all.xml",
       "status": "pass",
-      "as_of": "2026-08-23T01:21:54+00:00",
+      "as_of": "2026-08-23T02:12:51+00:00",
       "error": null,
       "role": "primary"
     },
@@ -1400,7 +1391,7 @@
       "provider": "SEC",
       "url": "https://www.sec.gov/news/pressreleases.rss",
       "status": "pass",
-      "as_of": "2026-08-23T01:21:54+00:00",
+      "as_of": "2026-08-23T02:12:51+00:00",
       "error": null,
       "role": "primary"
     },
@@ -1409,10 +1400,10 @@
       "provider": "White House",
       "url": "https://www.whitehouse.gov/presidential-actions/feed/",
       "status": "pass",
-      "as_of": "2026-08-23T01:21:54+00:00",
+      "as_of": "2026-08-23T02:12:51+00:00",
       "error": null,
       "role": "primary"
     }
   ],
-  "payload_hash": "0de46214d614c7514fbac737fcbdde7f188ebae01719072ed848ad2a500b779e"
+  "payload_hash": "bc08eaba664b25fdb6f5aafd9eb50210f516096fcc1d7f7758ceb96235394280"
 }
