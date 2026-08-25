@@ -1,13 +1,211 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-08-24T02:10:27+00:00",
-  "last_attempt_at": "2026-08-24T02:10:27+00:00",
-  "last_successful_fetch_at": "2026-08-24T02:10:27+00:00",
+  "updated_at": "2026-08-25T02:06:36+00:00",
+  "last_attempt_at": "2026-08-25T02:06:36+00:00",
+  "last_successful_fetch_at": "2026-08-25T02:06:36+00:00",
   "quality": {
     "status": "pass"
   },
   "items": [
+    {
+      "id": "vercel-ai-releases:c017d0c1e88e552df0d4",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%402.0.87",
+      "created_at": "2026-08-24T18:35:47+00:00",
+      "title": "@ai-sdk/xai@2.0.87",
+      "text": "@ai-sdk/xai@2.0.87 — ### Patch Changes - Updated dependencies [9e8e087] - @ai-sdk/provider-utils@3.0.33 - @ai-sdk/openai-compatible@1.0.49",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 82.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "78748d30f6b7e37aed405d4a07a4e75bd823bf6eec85f22db41b45ea89ba1fe9"
+    },
+    {
+      "id": "vercel-ai-releases:f0aa4f4fc0f647b1874a",
+      "url": "https://github.com/vercel/ai/releases/tag/ai%405.0.245",
+      "created_at": "2026-08-24T18:33:26+00:00",
+      "title": "ai@5.0.245",
+      "text": "ai@5.0.245 — ### Patch Changes - 9e8e087: Stop re-exporting `createTestServer` and `TestResponseController` from `@ai-sdk/provider-utils/test` so `ai/test` can load without `msw` or `vitest`. Import these APIs from `@ai-sdk/test-server/with-vitest` instead. - Updated dependencies [9e8e087] - Updated dependencies [3505af4] - @ai-sdk/provider-utils@3.0.33 - @ai-sdk/gateway@2.0.140",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 82.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "665a796c623e660c5fc30fd263d84f29e40a3cc5f82b08ffc92bb63f44f670d2"
+    },
+    {
+      "id": "vercel-ai-releases:a167f09099dce8f674ca",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.8",
+      "created_at": "2026-08-24T18:30:43+00:00",
+      "title": "@ai-sdk/workflow@2.0.8",
+      "text": "@ai-sdk/workflow@2.0.8 — ### Patch Changes - 96970bb: Continue approved `generateText`, `streamText`, and `WorkflowAgent` turns with a model-visible tool error when revalidated tool input is invalid. - Updated dependencies [96970bb] - ai@7.0.78",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 89.5,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 75.0,
+        "recency": 97.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "0ee3551de1f04ed4d8530c6e982866c510e702e21358f4411ae01a3cf62152a3"
+    },
+    {
+      "id": "arxiv-ai:0f43f9497ffc0f4f9139",
+      "url": "https://arxiv.org/abs/2608.23566v1",
+      "created_at": "2026-08-24T17:59:39+00:00",
+      "title": "How to Train a Critic Stably and Efficiently",
+      "text": "How to Train a Critic Stably and Efficiently — Group-based reinforcement learning methods such as GRPO for large language models avoid training a critic by sampling multiple responses for each prompt. A reliable critic could instead estimate token-level advantages from one response, but standard critic-based training recipes are often unstable. We study this instability and develop \\textbf{Best-Practice Critic Optimization (BPCO)}, a recipe that combines DPPO, value predictions bounded to the reward range, Monte Carlo value targets, unnormalized policy advanta…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 70.5,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.6
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "9e099f15aa02dafec85abef88028f6009dd1592136dcef36fe3af8239db1dcb9"
+    },
+    {
+      "id": "arxiv-ai:797dd20043c2000cb6ce",
+      "url": "https://arxiv.org/abs/2608.23565v1",
+      "created_at": "2026-08-24T17:59:05+00:00",
+      "title": "ReWorld: An Interactive World Model with Long-Horizon Memory",
+      "text": "ReWorld: An Interactive World Model with Long-Horizon Memory — An interactive world model must follow the user's actions, remember the places it has shown, and stream in real time. The tension is structural: control wants a short horizon, memory wants an unbounded one. ReWorld separates the two during training and bounds them at inference. Mixed per-head attention windows confine most heads to the recent past while a small set of global heads attends over the entire history, and random head routing keeps either capability from binding to particular heads; random chunk droppin…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 78.0,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 97.6
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "5530877214f5e3c1870d762d88a52c1435634f0bae3f7265f85ec130d58a8805"
+    },
+    {
+      "id": "arxiv-ai:880df4f5e9cc92e9a79c",
+      "url": "https://arxiv.org/abs/2608.23493v1",
+      "created_at": "2026-08-24T16:55:09+00:00",
+      "title": "SRPO: Self-Reflective Policy Optimization for Long-Horizon Reasoning",
+      "text": "SRPO: Self-Reflective Policy Optimization for Long-Horizon Reasoning — Self-reflection is a powerful mechanism for credit assignment in human learning, converting sparse outcome feedback into actionable guidance. However, its potential for post-training Large Language Models (LLMs) remains underexplored. We propose Self-Reflective Policy Optimization (SRPO), a framework that internalizes this capability. SRPO enables LLMs to analyze their own completed trajectories, synthesize errors into concise \"reflection patches,\" and use reflection-conditioned teacher scores on student on-policy…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 85.5,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 100.0,
+        "recency": 97.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "834fd324a67d4d2e2b69cc7c53ed5e5cd1f9256b0e7e073956da8c7c65210503"
+    },
+    {
+      "id": "nvidia-developer:7606d2313168061b0199",
+      "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-and-blackwell-set-a-new-standard-for-agentic-ai-performance-per-watt/",
+      "created_at": "2026-08-24T15:23:55+00:00",
+      "title": "NVIDIA Vera Rubin and Blackwell Set a New Standard for Agentic AI Performance per Watt",
+      "text": "NVIDIA Vera Rubin and Blackwell Set a New Standard for Agentic AI Performance per Watt — AI agents have expanded inference from single-turn interactions into multi-step workflows that reason, invoke tools, coordinate subagents, and carry growing...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 97.9,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 100.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "411605a09d811f8b6e85d262170c751634ec273eba3d58ad9425849ea924ec89"
+    },
+    {
+      "id": "nvidia-developer:4914182f6bf7de24b10a",
+      "url": "https://developer.nvidia.com/blog/maximizing-ai-factory-performance-per-watt-with-nvidia-dsx-maxlps/",
+      "created_at": "2026-08-24T15:00:46+00:00",
+      "title": "Maximizing AI Factory Performance per Watt with NVIDIA DSX MaxLPS",
+      "text": "Maximizing AI Factory Performance per Watt with NVIDIA DSX MaxLPS — AI factories are power-constrained industrial systems. The question is no longer how many GPUs fit in a data center, but how much AI output each available...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 82.8,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "d930cfcb4f2d3cd7c3772052156d1c51c13c5ce85736f8fb8c189b76c87ca0c4"
+    },
+    {
+      "id": "openai-news:abd52c9f1dde403ea312",
+      "url": "https://openai.com/index/gpt-5-6-in-kiro",
+      "created_at": "2026-08-24T12:00:00+00:00",
+      "title": "Advancing price-performance for developers with GPT‑5.6 in Kiro",
+      "text": "Advancing price-performance for developers with GPT‑5.6 in Kiro — GPT‑5.6 is now available in Kiro, helping developers plan, build, review, and test software with better price-performance.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 76.7,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 25.0,
+        "recency": 95.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "6ef82222db485909668ca0357fe44dbb73332165a741852814671a8f06412ae6"
+    },
     {
       "id": "vercel-ai-releases:d8690b7f572062b3f6a0",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/deepgram%403.1.0",
@@ -219,11 +417,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 73.8,
+      "ranking_score_0_100": 72.4,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 81.5
+        "recency": 74.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ce4e6e74b727ccde2864195eef16443afcfb9ad2c5822db3d9cc1a82bc32c48f"
@@ -241,11 +439,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
       "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-      "ranking_score_0_100": 70.1,
+      "ranking_score_0_100": 68.7,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 77.9
+        "recency": 70.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "03e5f14f5950b58bbcd68dab9b252531e9ef666448b01c3008361c0bdceb85a7"
@@ -395,11 +593,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 86.2,
+      "ranking_score_0_100": 84.8,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 75.0,
-        "recency": 76.2
+        "recency": 69.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "0139addbe95c84bd0a20acf81e81f17cbba53aaba73eec381d3f6d4cc7c083b8"
@@ -461,11 +659,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 69.7,
+      "ranking_score_0_100": 68.2,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 75.8
+        "recency": 68.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "a402332ea21f1ea2f0939f92ad95ea058d0553d301823dd81bbb805fcfa88fa7"
@@ -505,11 +703,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 86.7,
+      "ranking_score_0_100": 85.2,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 70.8
+        "recency": 63.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "da2a31ecd65e72ac25375fff06be59234286f18c0b5b834b5e865b809b284e1b"
@@ -593,11 +791,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 78.9,
+      "ranking_score_0_100": 77.4,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 50.0,
-        "recency": 69.3
+        "recency": 62.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "0408a586b6c220730f322a051d6ad36c5fbe7ebccc6149e9b0146d5b737f715d"
@@ -681,11 +879,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 75.9,
+      "ranking_score_0_100": 74.4,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 66.9
+        "recency": 59.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "be8112c922c19bf2044dfecc6f7db6b47ae4002f3777708bd093af388578bd84"
@@ -703,11 +901,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 68.2,
+      "ranking_score_0_100": 66.8,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 63.6
+        "recency": 56.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "5bdddebf495e09cffce69cefebc95070115cc219a2e47ef117257ab47817e0d5"
@@ -835,11 +1033,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 65.8,
+      "ranking_score_0_100": 64.4,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 56.5
+        "recency": 49.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "aa211485ba150f352cad24aa1e85439a0ee55df4e7bc194976fd1a36c1da200f"
@@ -1341,11 +1539,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 59.7,
+      "ranking_score_0_100": 58.2,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 20.8
+        "recency": 13.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "b967c1e29dcaf5eee8fa9c2286d1e015abe439ce4ff7271470eee588bc83d2c8"
@@ -1363,11 +1561,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 61.1,
+      "ranking_score_0_100": 59.6,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 17.8
+        "recency": 10.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "d0df2c6f9a3323b45171645c7a534a5ed95ae6f2fd144b25b8806bb009ff58b7"
@@ -1561,11 +1759,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 64.4,
+      "ranking_score_0_100": 63.0,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 9.7
+        "recency": 2.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "bbdc8ea4fa30d642e98714a6334a93124ccb9d0c5ef2b769d219e7540c828d17"
@@ -7686,6 +7884,88 @@
         }
       ],
       "run_hash": "03a6b01146f9d203cf23e87a9ed35a0a86067d474699b0cfded67ef77910918e"
+    },
+    {
+      "schema": 1,
+      "date": "2026-08-25",
+      "generated_at": "2026-08-25T02:06:36+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "03a6b01146f9d203cf23e87a9ed35a0a86067d474699b0cfded67ef77910918e",
+      "lead_brief_id": "brief-engineering-methods",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "agent-reliability",
+          "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
+          "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
+          "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
+          "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
+          "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
+          "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
+          "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
+          "evidence_refs": [
+            {
+              "item_id": "openai-news:ad89fb510e3c78c26282",
+              "item_integrity_hash": "da2a31ecd65e72ac25375fff06be59234286f18c0b5b834b5e865b809b284e1b"
+            },
+            {
+              "item_id": "cursor-changelog:ce4a7eb28f92bcf67397",
+              "item_integrity_hash": "5bdddebf495e09cffce69cefebc95070115cc219a2e47ef117257ab47817e0d5"
+            }
+          ],
+          "brief_hash": "a996e2782baf7f3009188518eac27503d7adcce2a0eb5bbc7a19850c1a0e5e8e"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "release-velocity-debt",
+          "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
+          "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
+          "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
+          "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
+          "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
+          "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
+          "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
+          "evidence_refs": [
+            {
+              "item_id": "vercel-ai-releases:f0aa4f4fc0f647b1874a",
+              "item_integrity_hash": "665a796c623e660c5fc30fd263d84f29e40a3cc5f82b08ffc92bb63f44f670d2"
+            },
+            {
+              "item_id": "nvidia-developer:a55484127056e2582739",
+              "item_integrity_hash": "0139addbe95c84bd0a20acf81e81f17cbba53aaba73eec381d3f6d4cc7c083b8"
+            },
+            {
+              "item_id": "transformers-releases:7df98f84a450158b7253",
+              "item_integrity_hash": "be8112c922c19bf2044dfecc6f7db6b47ae4002f3777708bd093af388578bd84"
+            }
+          ],
+          "brief_hash": "41f849a25e600ee6c188a565cdb859930b5fec96dcf033b127d018120574b5e2"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "benchmark-to-reliability",
+          "headline": "榜單上的進步，仍要經過真實任務可靠性這一關",
+          "standfirst": "評測分數能指出能力方向，卻不能自動涵蓋資料污染、工具失敗、長任務漂移與你的工作分布。",
+          "common_interpretation": "新基準或更高分數常被視為模型能力已全面提升。",
+          "variant_view": "真正可用的進步是失敗分布改變，而不只是平均分上升；尤其要看最差案例與重試成本。",
+          "second_order_effect": "企業會更依賴自有評測集，公開榜單對採購與模型路由的決定力可能下降。",
+          "practical_readthrough": "從研究中只取一個可驗證假說，放進自己的固定任務集；同時保存失敗案例，不用單一平均分做結論。",
+          "falsifier": "若公開基準提升能在多個獨立真實任務集穩定重現，且尾端失敗同步下降，榜單才可作為較強代理指標。",
+          "evidence_refs": [
+            {
+              "item_id": "arxiv-ai:880df4f5e9cc92e9a79c",
+              "item_integrity_hash": "834fd324a67d4d2e2b69cc7c53ed5e5cd1f9256b0e7e073956da8c7c65210503"
+            },
+            {
+              "item_id": "huggingface-blog:e3ddd7a65cd3a566e91c",
+              "item_integrity_hash": "03e5f14f5950b58bbcd68dab9b252531e9ef666448b01c3008361c0bdceb85a7"
+            }
+          ],
+          "brief_hash": "7547d33f39b291eea1c518de287102dda76f992d19333f7ad3735bbdfa3fed13"
+        }
+      ],
+      "run_hash": "7a3341b73a5dbf05bce84d78f4a4bb62da0be878fa2c0b95cc4bb7e95563642a"
     }
   ]
 }
