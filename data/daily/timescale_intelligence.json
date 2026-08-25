@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "date": "2026-08-24",
-  "generated_at": "2026-08-24T23:39:57+00:00",
+  "generated_at": "2026-08-25T00:01:37+00:00",
   "snapshot_generated_at": "2026-08-24T01:19:06+00:00",
-  "market_universe_generated_at": "2026-08-24T23:39:57+00:00",
+  "market_universe_generated_at": "2026-08-25T00:01:37+00:00",
   "market_context_generated_at": "2026-08-24T02:11:07+00:00",
   "price_history_generated_at": "2026-08-24T01:19:21+00:00",
   "quality": {
@@ -83,9 +83,9 @@
       "what_changed": "較前一觀察日由「上升趨勢」轉為「方向切換」。",
       "resonance": "多維訊號分歧",
       "resonance_votes": {
-        "positive_clusters": 2,
+        "positive_clusters": 1,
         "negative_clusters": 1,
-        "directional_clusters": 3,
+        "directional_clusters": 2,
         "eligible_clusters": 4
       },
       "perspectives": [
@@ -110,8 +110,8 @@
         {
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
-          "direction": "positive",
-          "key_number": "+11.0%",
+          "direction": "mixed",
+          "key_number": "+9.4%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -1234,9 +1234,9 @@
         {
           "name": "永續資金費率",
           "cluster_id": "derivatives_positioning",
-          "value": 0.10950000000000001,
+          "value": 0.09425828361572701,
           "state": "neutral",
-          "as_of": "2026-08-24T23:39:57+00:00",
+          "as_of": "2026-08-25T00:01:37+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1381,7 +1381,7 @@
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $+1,554M",
-      "claim": "BTC 週線 +19.5%、ETF 七日淨流 $+1,554M、永續資金費率年化 +11.0%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 +19.5%、ETF 七日淨流 $+1,554M、永續資金費率年化 +9.4%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -1414,7 +1414,7 @@
     }
   ],
   "record_advantage": {
-    "observations": 274,
+    "observations": 275,
     "distinct_dates": 15,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
