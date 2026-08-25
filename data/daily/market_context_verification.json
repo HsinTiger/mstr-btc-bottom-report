@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "verified_at": "2026-08-24T02:11:20+00:00",
-  "source_generated_at": "2026-08-24T02:11:07+00:00",
-  "source_hash": "fe92ce319e330181f447ae8d0f1fad096ea322036274d62504f379cd0144dd29",
+  "verified_at": "2026-08-25T01:17:38+00:00",
+  "source_generated_at": "2026-08-25T01:17:16+00:00",
+  "source_hash": "e71bc80af8134fc0566194d1890ca6f6baaaa439d32b001ba27e04bd6b8202c8",
   "status": "pass",
   "failures": [],
   "degradations": [],
@@ -25,7 +25,7 @@
     {
       "name": "freshness",
       "status": "pass",
-      "detail": "market context age_hours=0.00"
+      "detail": "market context age_hours=0.01"
     },
     {
       "name": "date_binding",
@@ -263,21 +263,6 @@
       "detail": "BTC canonical 來源標記與實際採用的觀測日不一致"
     },
     {
-      "name": "btc_promotion_is_fresher:transactions",
-      "status": "pass",
-      "detail": "BTC transactions 換用的來源並未比原來源新"
-    },
-    {
-      "name": "btc_promotion_is_fresher:active_addresses",
-      "status": "pass",
-      "detail": "BTC active_addresses 換用的來源並未比原來源新"
-    },
-    {
-      "name": "btc_promotion_is_fresher:hashrate",
-      "status": "pass",
-      "detail": "BTC hashrate 換用的來源並未比原來源新"
-    },
-    {
       "name": "btc_mvrv_range",
       "status": "pass",
       "detail": "btc MVRV 超出合理範圍"
@@ -379,8 +364,8 @@
     }
   ],
   "source_summary": {
-    "passed": 41,
-    "failed": 2,
+    "passed": 42,
+    "failed": 1,
     "total": 43
   },
   "execution_gate_eligible": false
