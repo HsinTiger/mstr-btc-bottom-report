@@ -1,13 +1,167 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-08-25T02:06:36+00:00",
-  "last_attempt_at": "2026-08-25T02:06:36+00:00",
-  "last_successful_fetch_at": "2026-08-25T02:06:36+00:00",
+  "updated_at": "2026-08-26T02:11:59+00:00",
+  "last_attempt_at": "2026-08-26T02:11:59+00:00",
+  "last_successful_fetch_at": "2026-08-26T02:11:59+00:00",
   "quality": {
-    "status": "pass"
+    "status": "degraded"
   },
   "items": [
+    {
+      "id": "nvidia-developer:25dd22dacf767554f031",
+      "url": "https://developer.nvidia.com/blog/inside-nvidia-vera-cpu-olympus-cores-built-for-maximum-single-threaded-performance-in-agentic-ai/",
+      "created_at": "2026-08-25T21:57:07+00:00",
+      "title": "NVIDIA Vera CPU: Olympus Cores Built for Maximum Single-Thread Performance in Agentic AI",
+      "text": "NVIDIA Vera CPU: Olympus Cores Built for Maximum Single-Thread Performance in Agentic AI — Agentic AI shifts more of the critical execution path onto the CPU. Agents operate in sandboxes to execute code, invoke tools, retrieve context, interact with...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 90.7,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 75.0,
+        "recency": 98.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "897f425757ec5db33d879684e00825cd8eb3e1365529d5365cb3528746809a0c"
+    },
+    {
+      "id": "huggingface-blog:f1c76f23a788b6884a28",
+      "url": "https://huggingface.co/blog/MultiverseComputingCAI/quantization-aware-healing",
+      "created_at": "2026-08-25T11:39:24+00:00",
+      "title": "Quantization-Aware Healing: a compressed, 4-bit model that outperforms its full-precision original",
+      "text": "Quantization-Aware Healing: a compressed, 4-bit model that outperforms its full-precision original",
+      "source_key": "huggingface-blog",
+      "category_id": "model-progress",
+      "source_label": "Hugging Face Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方平台",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 73.6,
+      "ranking_components_0_100": {
+        "source_quality": 94.0,
+        "keyword_relevance": 25.0,
+        "recency": 95.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "e6571db539232bc5116f1b878af449eca102fb86cf65129b5b134d924c6d1030"
+    },
+    {
+      "id": "openai-news:51cfe3db04ed0bd3efb5",
+      "url": "https://openai.com/index/the-full-stack-behind-abundant-intelligence",
+      "created_at": "2026-08-25T07:05:00+00:00",
+      "title": "The full stack behind abundant intelligence",
+      "text": "The full stack behind abundant intelligence — OpenAI CFO Sarah Friar explains how advances across chips, compute, models, and products compound to deliver more useful intelligence at greater scale and lower cost.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 76.4,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 25.0,
+        "recency": 94.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "9e9842baa89d7931dfd7e273ecc23fa57464ba6e37a5333cbfed940875bb26f4"
+    },
+    {
+      "id": "vercel-ai-releases:3b704a4090f2e0f34744",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%404.0.44",
+      "created_at": "2026-08-25T03:21:52+00:00",
+      "title": "@ai-sdk/xai@4.0.44",
+      "text": "@ai-sdk/xai@4.0.44 — ### Patch Changes - Updated dependencies [591d25b] - @ai-sdk/provider@4.0.8 - @ai-sdk/provider-utils@5.0.30",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 93.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "4b42872c4d42e5ea1c4a617d62d761fc7cccffb7cd45c79f989a024c94895dd9"
+    },
+    {
+      "id": "vercel-ai-releases:9ab6ba3985f0a4f13123",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.87",
+      "created_at": "2026-08-25T03:21:49+00:00",
+      "title": "@ai-sdk/workflow-harness@1.0.87",
+      "text": "@ai-sdk/workflow-harness@1.0.87 — ### Patch Changes - Updated dependencies [8a15038] - @ai-sdk/harness@1.0.87",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 93.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "bead004d6e8c0e9c94e40d0421a9a37307ab7bb0793a9e96218a46f3873b95c2"
+    },
+    {
+      "id": "vercel-ai-releases:8d64c481d14319a83de1",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.9",
+      "created_at": "2026-08-25T03:21:46+00:00",
+      "title": "@ai-sdk/workflow@2.0.9",
+      "text": "@ai-sdk/workflow@2.0.9 — ### Patch Changes - b251584: Preserve active text and reasoning parts when another merged UI message stream finishes a step, and align workflow stream normalization with the explicit part end chunks. - Updated dependencies [b251584] - Updated dependencies [591d25b] - Updated dependencies [9de0baf] - ai@7.0.79 - @ai-sdk/provider@4.0.8 - @ai-sdk/provider-utils@5.0.30",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 93.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "a6b69ec58712b59379ed26aa494780d0f96d6b8b931740d6932bf73589a4a6f1"
+    },
+    {
+      "id": "openai-news:33eae878317d27dcc038",
+      "url": "https://openai.com/index/introducing-admin-plugin",
+      "created_at": "2026-08-25T00:00:00+00:00",
+      "title": "Introducing the Admin plugin for ChatGPT Work and Codex",
+      "text": "Introducing the Admin plugin for ChatGPT Work and Codex — Use the Admin plugin for ChatGPT Work and Codex to analyze workspace usage, manage members and permissions, adjust limits, and act on admin requests.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 83.4,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 50.0,
+        "recency": 92.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "ae4bc719c0a6101b9602f37cbddf55c814c322e2f6ade47493bfaceb6d364ca1"
+    },
     {
       "id": "vercel-ai-releases:c017d0c1e88e552df0d4",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%402.0.87",
@@ -153,11 +307,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 97.9,
+      "ranking_score_0_100": 96.4,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 100.0,
-        "recency": 96.8
+        "recency": 89.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "411605a09d811f8b6e85d262170c751634ec273eba3d58ad9425849ea924ec89"
@@ -417,11 +571,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 72.4,
+      "ranking_score_0_100": 70.9,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 74.4
+        "recency": 67.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ce4e6e74b727ccde2864195eef16443afcfb9ad2c5822db3d9cc1a82bc32c48f"
@@ -439,14 +593,36 @@
       "source_tier": "官方平台",
       "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
       "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-      "ranking_score_0_100": 68.7,
+      "ranking_score_0_100": 67.2,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 70.8
+        "recency": 63.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "03e5f14f5950b58bbcd68dab9b252531e9ef666448b01c3008361c0bdceb85a7"
+    },
+    {
+      "id": "huggingface-blog:966123ef613d7e9a038f",
+      "url": "https://huggingface.co/blog/pwc-search",
+      "created_at": "2026-08-21T00:00:00+00:00",
+      "title": "How Hugging Face Inference Endpoints, Jobs, and Buckets Power Search on Papers with Code",
+      "text": "How Hugging Face Inference Endpoints, Jobs, and Buckets Power Search on Papers with Code",
+      "source_key": "huggingface-blog",
+      "category_id": "model-progress",
+      "source_label": "Hugging Face Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方平台",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 67.2,
+      "ranking_components_0_100": {
+        "source_quality": 94.0,
+        "keyword_relevance": 25.0,
+        "recency": 63.6
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "515dce54d283b2428b1845ae443b6697ad426cb0e21e3eb538c68ffa53a2606c"
     },
     {
       "id": "nvidia-developer:89483a008eb7ed3a1b35",
@@ -593,11 +769,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 84.8,
+      "ranking_score_0_100": 83.4,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 75.0,
-        "recency": 69.1
+        "recency": 61.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "0139addbe95c84bd0a20acf81e81f17cbba53aaba73eec381d3f6d4cc7c083b8"
@@ -703,11 +879,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 85.2,
+      "ranking_score_0_100": 83.8,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 63.7
+        "recency": 56.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "da2a31ecd65e72ac25375fff06be59234286f18c0b5b834b5e865b809b284e1b"
@@ -879,11 +1055,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 74.4,
+      "ranking_score_0_100": 73.0,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 59.7
+        "recency": 52.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "be8112c922c19bf2044dfecc6f7db6b47ae4002f3777708bd093af388578bd84"
@@ -901,11 +1077,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 66.8,
+      "ranking_score_0_100": 65.4,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 56.5
+        "recency": 49.3
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "5bdddebf495e09cffce69cefebc95070115cc219a2e47ef117257ab47817e0d5"
@@ -1539,11 +1715,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 58.2,
+      "ranking_score_0_100": 56.8,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 13.7
+        "recency": 6.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "b967c1e29dcaf5eee8fa9c2286d1e015abe439ce4ff7271470eee588bc83d2c8"
@@ -1561,11 +1737,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 59.6,
+      "ranking_score_0_100": 58.2,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 10.7
+        "recency": 3.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "d0df2c6f9a3323b45171645c7a534a5ed95ae6f2fd144b25b8806bb009ff58b7"
@@ -7966,6 +8142,84 @@
         }
       ],
       "run_hash": "7a3341b73a5dbf05bce84d78f4a4bb62da0be878fa2c0b95cc4bb7e95563642a"
+    },
+    {
+      "schema": 1,
+      "date": "2026-08-26",
+      "generated_at": "2026-08-26T02:11:59+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "7a3341b73a5dbf05bce84d78f4a4bb62da0be878fa2c0b95cc4bb7e95563642a",
+      "lead_brief_id": "brief-engineering-methods",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "agent-reliability",
+          "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
+          "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
+          "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
+          "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
+          "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
+          "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
+          "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
+          "evidence_refs": [
+            {
+              "item_id": "openai-news:ad89fb510e3c78c26282",
+              "item_integrity_hash": "da2a31ecd65e72ac25375fff06be59234286f18c0b5b834b5e865b809b284e1b"
+            },
+            {
+              "item_id": "cursor-changelog:ce4a7eb28f92bcf67397",
+              "item_integrity_hash": "5bdddebf495e09cffce69cefebc95070115cc219a2e47ef117257ab47817e0d5"
+            }
+          ],
+          "brief_hash": "a996e2782baf7f3009188518eac27503d7adcce2a0eb5bbc7a19850c1a0e5e8e"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "release-velocity-debt",
+          "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
+          "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
+          "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
+          "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
+          "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
+          "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
+          "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
+          "evidence_refs": [
+            {
+              "item_id": "nvidia-developer:a55484127056e2582739",
+              "item_integrity_hash": "0139addbe95c84bd0a20acf81e81f17cbba53aaba73eec381d3f6d4cc7c083b8"
+            },
+            {
+              "item_id": "vercel-ai-releases:3b704a4090f2e0f34744",
+              "item_integrity_hash": "4b42872c4d42e5ea1c4a617d62d761fc7cccffb7cd45c79f989a024c94895dd9"
+            },
+            {
+              "item_id": "transformers-releases:7df98f84a450158b7253",
+              "item_integrity_hash": "be8112c922c19bf2044dfecc6f7db6b47ae4002f3777708bd093af388578bd84"
+            }
+          ],
+          "brief_hash": "b81563be33c1ea33da15c898d84991ca7b2c2ec7e71c294d8aed16c265485f64"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "specialization-efficiency",
+          "headline": "模型競爭不只追求更強，也開始追求更專用、更省、更快落地",
+          "standfirst": "輕量模型、低位元推論與專用能力同時出現，顯示產品端正在把平均能力拆成延遲、成本與特定任務可靠性。",
+          "common_interpretation": "新模型與新推論方法通常被分別解讀成能力升級或效率改善。",
+          "variant_view": "更值得追蹤的是兩者是否合流：模型若按任務專用化，再配合低成本推論，產品可能不必為每個請求支付最高能力溢價。",
+          "second_order_effect": "模型路由會從成本工具變成產品架構：快速模型處理大多數工作，專用或高能力模型只接手高風險例外。",
+          "practical_readthrough": "把任務分成低風險高頻、專業窄域與高風險例外三層，分別測成功率、延遲與成本，不再只選一個模型包辦全部。",
+          "falsifier": "若輕量或專用模型在真實任務需要大量重試與高階模型接管，總成本與延遲沒有下降，這個分層路由論點就不成立。",
+          "evidence_refs": [
+            {
+              "item_id": "huggingface-blog:f1c76f23a788b6884a28",
+              "item_integrity_hash": "e6571db539232bc5116f1b878af449eca102fb86cf65129b5b134d924c6d1030"
+            }
+          ],
+          "brief_hash": "c2f610659f880c7f946f7ab253d6a448cb2866f398e22fc5995783af108c1d07"
+        }
+      ],
+      "run_hash": "f7348687a12702c55793fb30b00e9721417aa24cfae181bab4cc46cb64d4402b"
     }
   ]
 }
