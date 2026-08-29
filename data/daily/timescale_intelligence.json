@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "date": "2026-08-28",
-  "generated_at": "2026-08-29T04:10:59+00:00",
-  "snapshot_generated_at": "2026-08-28T09:59:33+00:00",
-  "market_universe_generated_at": "2026-08-29T04:10:59+00:00",
-  "market_context_generated_at": "2026-08-28T12:12:59+00:00",
-  "price_history_generated_at": "2026-08-28T09:59:57+00:00",
+  "date": "2026-08-29",
+  "generated_at": "2026-08-29T05:59:25+00:00",
+  "snapshot_generated_at": "2026-08-29T05:58:41+00:00",
+  "market_universe_generated_at": "2026-08-29T05:58:58+00:00",
+  "market_context_generated_at": "2026-08-29T05:58:59+00:00",
+  "price_history_generated_at": "2026-08-29T05:59:22+00:00",
   "quality": {
     "status": "degraded",
     "publication_mode": "analysis_only",
@@ -13,13 +13,10 @@
     "failures": [],
     "degradations": [
       "market universe: ETH DAT 來源 quorum、代表性覆蓋或差異門檻未通過",
-      "ETH DAT BMNR: 最新官方申報未揭露持倉，已排除於官方覆蓋層",
       "ETH DAT SBET: 官方申報日期未知或超過 45 天，與 collector 一致排除於官方覆蓋層",
-      "BMNR treasury holdings: observation unavailable",
-      "BMNR treasury analytics missing: eth_holdings, btc_holdings, cash_marketable_musd, beast_stake_musd, eightco_stake_musd, bottom_up_gross_treasury_musd, market_cap_to_gross_treasury, gross_treasury_value_per_share",
       "manual capital-structure inputs: debt_face_musd, annual_interest_musd, other_debt_annual_service_musd, preferred, preferred_aggregate_musd",
       "capital-structure provenance status=mixed_automated_manual",
-      "usd_reserve_musd: official input stale 59 days > 30"
+      "usd_reserve_musd: official input stale 60 days > 30"
     ],
     "lineage_bound": true,
     "method": "deterministic dual-source daily history plus completed weekly/monthly candle analysis and verified context synthesis"
@@ -78,12 +75,12 @@
       "tone": "positive",
       "key_number": "+1.6%",
       "plain_read": "BTC 日線報酬 +1.6%，目前屬「上升趨勢」，相較前一等長窗口為加速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +1.0 個百分點。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
       "resonance": "偏正向共振",
       "resonance_votes": {
-        "positive_clusters": 3,
+        "positive_clusters": 4,
         "negative_clusters": 0,
-        "directional_clusters": 3,
+        "directional_clusters": 4,
         "eligible_clusters": 4
       },
       "perspectives": [
@@ -108,8 +105,8 @@
         {
           "name": "衍生品擁擠",
           "cluster_id": "underlying_derivatives_positioning",
-          "direction": "mixed",
-          "key_number": "+9.1%",
+          "direction": "positive",
+          "key_number": "+11.0%",
           "plain_read": "永續資金費率只衡量槓桿偏向與持有成本。",
           "source": "OKX＋Hyperliquid",
           "counts_toward_underlying_resonance": true
@@ -118,7 +115,7 @@
           "name": "市場情緒",
           "cluster_id": "underlying_market_sentiment",
           "direction": "positive",
-          "key_number": "73",
+          "key_number": "68",
           "plain_read": "情緒數值描述風險偏好，不採反向或順勢策略假設。",
           "source": "Alternative.me",
           "counts_toward_underlying_resonance": true
@@ -141,7 +138,7 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
@@ -154,7 +151,7 @@
       "tone": "positive",
       "key_number": "+4.1%",
       "plain_read": "BTC 週線報酬 +4.1%，目前屬「上升趨勢」，相較前一等長窗口為減速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +3.2 個百分點。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
       "resonance": "偏正向共振",
       "resonance_votes": {
         "positive_clusters": 3,
@@ -217,7 +214,7 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
@@ -230,7 +227,7 @@
       "tone": "positive",
       "key_number": "+24.9%",
       "plain_read": "BTC 月線報酬 +24.9%，目前屬「上升趨勢」，相較前一等長窗口為加速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +2.6 個百分點。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
       "resonance": "多維訊號分歧",
       "resonance_votes": {
         "positive_clusters": 2,
@@ -261,7 +258,7 @@
           "name": "鏈上估值位置",
           "cluster_id": "underlying_onchain_valuation",
           "direction": "mixed",
-          "key_number": "1.51x",
+          "key_number": "1.47x",
           "plain_read": "MVRV 描述市場價相對實現價位置，不等同方向訊號。",
           "source": "Coin Metrics Community API",
           "counts_toward_underlying_resonance": true
@@ -270,7 +267,7 @@
           "name": "MSTR 普通股估值",
           "cluster_id": "vehicle_mstr_relative_value",
           "direction": "negative",
-          "key_number": "1.25x",
+          "key_number": "1.19x",
           "plain_read": "普通股市值／自算普通股淨值用來辨識估值與 BTC 趨勢是否背離。",
           "source": "SEC＋市場價格衍生",
           "counts_toward_underlying_resonance": false
@@ -293,7 +290,7 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
@@ -306,7 +303,7 @@
       "tone": "mixed",
       "key_number": "+34.4%",
       "plain_read": "BTC 季線報酬 +34.4%，目前屬「方向切換」，相較前一等長窗口為加速。",
-      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +4.8 個百分點。",
+      "what_changed": "同週期 BTC 報酬較前一觀察日變化 +0.0 個百分點。",
       "resonance": "多維訊號分歧",
       "resonance_votes": {
         "positive_clusters": 2,
@@ -369,7 +366,7 @@
         "percentile": null
       },
       "data_depth": {
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "source_count": 3,
         "canonical_provider": "Yahoo Finance"
@@ -396,7 +393,7 @@
       "daily": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 80257.5390625,
         "return": 0.015565700592456544,
@@ -418,7 +415,7 @@
       "weekly": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 80257.5390625,
         "return": 0.04117779471244476,
@@ -440,7 +437,7 @@
       "monthly": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 80257.5390625,
         "return": 0.24890911556618622,
@@ -462,7 +459,7 @@
       "quarterly": {
         "status": "方向切換",
         "tone": "mixed",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 80257.5390625,
         "return": 0.3438594616210915,
@@ -486,7 +483,7 @@
       "daily": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 2510.41015625,
         "return": 0.0016555218887852607,
@@ -508,7 +505,7 @@
       "weekly": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 2510.41015625,
         "return": 0.035540431953205553,
@@ -530,7 +527,7 @@
       "monthly": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 2510.41015625,
         "return": 0.31983925969353066,
@@ -552,7 +549,7 @@
       "quarterly": {
         "status": "方向切換",
         "tone": "mixed",
-        "bars": 2922,
+        "bars": 2921,
         "as_of": "2026-08-27",
         "close": 2510.41015625,
         "return": 0.6042838984511869,
@@ -576,7 +573,7 @@
       "daily": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 501,
+        "bars": 500,
         "as_of": "2026-08-27",
         "close": 137.39999389648438,
         "return": 0.1153502002878597,
@@ -598,7 +595,7 @@
       "weekly": {
         "status": "上升趨勢",
         "tone": "positive",
-        "bars": 501,
+        "bars": 500,
         "as_of": "2026-08-27",
         "close": 137.39999389648438,
         "return": 0.22252864705629194,
@@ -620,7 +617,7 @@
       "monthly": {
         "status": "震盪分歧",
         "tone": "mixed",
-        "bars": 501,
+        "bars": 500,
         "as_of": "2026-08-27",
         "close": 137.39999389648438,
         "return": 0.4721953412709117,
@@ -642,7 +639,7 @@
       "quarterly": {
         "status": "方向切換",
         "tone": "mixed",
-        "bars": 501,
+        "bars": 500,
         "as_of": "2026-08-27",
         "close": 137.39999389648438,
         "return": -0.09390665754734995,
@@ -1206,9 +1203,9 @@
         {
           "name": "恐懼貪婪情緒",
           "cluster_id": "market_sentiment",
-          "value": 73.0,
+          "value": 68.0,
           "state": "supportive",
-          "as_of": "1787875200",
+          "as_of": "1787961600",
           "interpretation": "只描述市場風險偏好；極端恐懼不是自動反向買進訊號。",
           "source": {
             "label": "Alternative.me Fear & Greed",
@@ -1232,9 +1229,9 @@
         {
           "name": "永續資金費率",
           "cluster_id": "derivatives_positioning",
-          "value": 0.09118021200000001,
+          "value": 0.10950000000000001,
           "state": "neutral",
-          "as_of": "2026-08-29T04:10:59+00:00",
+          "as_of": "2026-08-29T05:58:58+00:00",
           "interpretation": "高正資金費率代表多方持有成本與擁擠度升高，不直接代表方向。",
           "source": {
             "label": "OKX＋Hyperliquid",
@@ -1245,7 +1242,7 @@
         {
           "name": "官方政策事件",
           "cluster_id": "policy_activity",
-          "value": 1,
+          "value": 0,
           "state": "context",
           "as_of": "2026-08-21",
           "interpretation": "零事件不代表監管風險消失；事件量不自行判定利多或利空。",
@@ -1261,7 +1258,7 @@
     },
     "monthly": {
       "conclusion": "月線消息與情緒偏支持，但仍需價格結構確認",
-      "supportive_clusters": 3,
+      "supportive_clusters": 2,
       "risk_off_clusters": 1,
       "evidence": [
         {
@@ -1281,9 +1278,9 @@
           "name": "美元流動性三速共振",
           "cluster_id": "macro_liquidity",
           "value": "不同頻率分歧",
-          "state": "risk_off",
+          "state": "neutral",
           "as_of": "2026-08-26",
-          "interpretation": "M2、銀行準備金與 Fed 淨流動性分開計票：正向 1、負向 2。",
+          "interpretation": "M2、銀行準備金與 Fed 淨流動性分開計票：正向 1、負向 1。",
           "source": {
             "label": "Federal Reserve＋U.S. Treasury＋FRED",
             "url": "https://fred.stlouisfed.org/series/WALCL",
@@ -1293,9 +1290,9 @@
         {
           "name": "BTC 活躍地址三十日變化",
           "cluster_id": "network_activity",
-          "value": 0.04504560222980891,
+          "value": 0.08322604646496745,
           "state": "supportive",
-          "as_of": "2026-08-27",
+          "as_of": "2026-08-28",
           "interpretation": "鏈上活動是使用背景與落後驗證，不等同價格領先訊號。",
           "source": {
             "label": "Blockchain.com＋Blockchair",
@@ -1306,9 +1303,9 @@
         {
           "name": "BTC 算力三十日變化",
           "cluster_id": "network_security",
-          "value": 0.14574095629351236,
-          "state": "supportive",
-          "as_of": "2026-08-27",
+          "value": -0.08002675585283825,
+          "state": "risk_off",
+          "as_of": "2026-08-28",
           "interpretation": "算力描述安全活動；短期下降需與難度、礦工經濟及價格分開解讀。",
           "source": {
             "label": "Blockchain.com＋mempool.space",
@@ -1362,7 +1359,7 @@
       "id": "mstr_price_structure_divergence",
       "title": "MSTR 價格強弱與資本結構背離",
       "key_number": "+22.3%",
-      "claim": "MSTR 月線相對 BTC +22.3%；普通股市值／自算普通股淨值 1.25x，STRC 折價 +2.0%。",
+      "claim": "MSTR 月線相對 BTC +22.3%；普通股市值／自算普通股淨值 1.19x，STRC 折價 +2.7%。",
       "evidence": [
         "MSTR 與 BTC 雙來源完成日 K",
         "SEC 資本結構",
@@ -1372,14 +1369,14 @@
       "horizons": [
         "monthly"
       ],
-      "what_changed": "前值 +5.8%，本期 +22.3%。",
+      "what_changed": "核心數字未變。",
       "confidence": "中"
     },
     {
       "id": "spot_leverage_divergence",
       "title": "現貨需求與槓桿定價差",
       "key_number": "ETF $+1,798M",
-      "claim": "BTC 週線 +4.1%、ETF 七日淨流 $+1,798M、永續資金費率年化 +9.1%；未驗證 ETF 不參與方向判讀。",
+      "claim": "BTC 週線 +4.1%、ETF 七日淨流 $+1,798M、永續資金費率年化 +11.0%；未驗證 ETF 不參與方向判讀。",
       "evidence": [
         "BTC 雙來源完成日 K",
         "ETF 多來源＋發行商核對",
@@ -1389,14 +1386,14 @@
       "horizons": [
         "weekly"
       ],
-      "what_changed": "前值 ETF $+2,083M，本期 ETF $+1,798M。",
+      "what_changed": "核心數字未變。",
       "confidence": "中"
     },
     {
       "id": "bmnr_eth_treasury_divergence",
       "title": "BMNR 相對 ETH 與 gross treasury 差",
       "key_number": "+22.5%",
-      "claim": "BMNR 月線相對 ETH +22.5%；市值／gross treasury 資料不足，質押比例 資料不足。",
+      "claim": "BMNR 月線相對 ETH +22.5%；市值／gross treasury 0.97x，質押比例 +86.7%。",
       "evidence": [
         "BMNR 與 ETH 雙來源完成日 K",
         "BMNR SEC 8-K 持倉",
@@ -1407,13 +1404,13 @@
         "monthly",
         "quarterly"
       ],
-      "what_changed": "前值 +10.3%，本期 +22.5%。",
+      "what_changed": "核心數字未變。",
       "confidence": "中"
     }
   ],
   "record_advantage": {
-    "observations": 332,
-    "distinct_dates": 19,
+    "observations": 333,
+    "distinct_dates": 20,
     "first_date": "2026-07-27",
     "statistical_claim_minimum": 20,
     "plain_read": "歷史未達 20 個相異日期前，只顯示變化與基線，不宣稱分位數具有統計意義。"

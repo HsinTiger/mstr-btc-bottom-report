@@ -12902,7 +12902,467 @@
       },
       "source_count": 90,
       "error_count": 12
+    },
+    {
+      "schema": 2,
+      "date": "2026-08-29",
+      "generated_at": "2026-08-29T05:58:41+00:00",
+      "batch_id": "2026-08-29T05:58:41+00:00",
+      "metrics": {
+        "prices": {
+          "btc_usd": 77629.02,
+          "eth_usd": 2438.7,
+          "mstr_usd": 127.31,
+          "bmnr_usd": 23.8,
+          "strc_usd": 97.33
+        },
+        "price_basis": {
+          "btc_usd": {
+            "selected_source": "跨來源中位數",
+            "selected_observations": [
+              "btc_usd_coingecko",
+              "btc_usd_coinbase",
+              "btc_usd_kraken"
+            ],
+            "providers_used": [
+              "CoinGecko simple price",
+              "Coinbase Exchange ticker",
+              "Kraken Spot ticker"
+            ],
+            "source_count": 3,
+            "required_source_count": 2,
+            "cross_source_gap": 0.00015329459717693415,
+            "max_cross_source_gap": 0.015,
+            "policy": "BTC 從可用來源池取至少兩個新鮮報價的中位數；任何指定供應商失敗均可替換，價差超過 1.5% 由 verifier 封鎖"
+          },
+          "eth_usd": {
+            "selected_source": "跨來源中位數",
+            "selected_observations": [
+              "eth_usd_coingecko",
+              "eth_usd_coinbase",
+              "eth_usd_kraken"
+            ],
+            "providers_used": [
+              "CoinGecko simple price",
+              "Coinbase Exchange ticker",
+              "Kraken Spot ticker"
+            ],
+            "source_count": 3,
+            "required_source_count": 2,
+            "cross_source_gap": 7.381042203171021e-05,
+            "max_cross_source_gap": 0.015,
+            "policy": "ETH 從可用來源池取至少兩個新鮮報價的中位數；任何指定供應商失敗均可替換，價差超過 1.5% 由 verifier 封鎖"
+          },
+          "mstr_usd": {
+            "selected_source": "Yahoo Finance chart",
+            "selected_observation": "mstr_usd_yahoo",
+            "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1787947201 timezone=EDT",
+            "policy": "MSTR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+            "fallback_source": "Nasdaq historical API",
+            "fallback_observation": "mstr_usd_nasdaq",
+            "fallback_detail": "quote_basis=regular_market_close source_field=historical_close date=2026-08-28"
+          },
+          "bmnr_usd": {
+            "selected_source": "Yahoo Finance chart",
+            "selected_observation": "bmnr_usd_yahoo",
+            "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1787947202 timezone=EDT",
+            "policy": "BMNR: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+            "fallback_source": "Nasdaq historical API",
+            "fallback_observation": "bmnr_usd_nasdaq",
+            "fallback_detail": "quote_basis=regular_market_close source_field=historical_close date=2026-08-28"
+          },
+          "strc_usd": {
+            "selected_source": "Yahoo Finance chart",
+            "selected_observation": "strc_usd_yahoo",
+            "selected_detail": "quote_basis=regular_market_close source_field=regularMarketPrice regularMarketTime=1787947200 timezone=EDT",
+            "policy": "STRC: 優先使用 Yahoo regular-market close 作為每日收盤基準；Nasdaq 僅作備援與盤前/盤後新鮮度檢查",
+            "fallback_source": "Nasdaq historical API",
+            "fallback_observation": "strc_usd_nasdaq",
+            "fallback_detail": "quote_basis=regular_market_close source_field=historical_close date=2026-08-28"
+          }
+        },
+        "market_radar": {
+          "fear_greed": 68.0,
+          "fear_greed_timestamp": "1787961600",
+          "btc_fee_fastest_sat_vb": 2.0,
+          "btc_fee_hour_sat_vb": 1.0,
+          "btc_hashrate_ths": 825515287.9349201,
+          "treasury_avg_bill_rate_pct": 3.758,
+          "btc_200dma": 69224.5712109375,
+          "btc_50dma": 66429.010625,
+          "btc_200wma": 64285.1096875,
+          "btc_1y_ath": 124752.53125,
+          "btc_1y_ath_date": "2025-10-06",
+          "btc_days_from_1y_ath": 325.0,
+          "btc_drawdown_1y_pct": -0.35666604710675964,
+          "btc_return_7d_pct": 0.09892521474471061,
+          "btc_return_30d_pct": 0.25654964822177684,
+          "btc_return_90d_pct": 0.09383642953025562,
+          "btc_mvrv_current": 1.4651371083208935,
+          "btc_supply_current": 20076438.63410514,
+          "btc_market_cap_coinmetrics_usd": 1560272334888.3955,
+          "etf_flow_status": "sample_cross_source_verified",
+          "etf_flow_as_of": "2026-08-26",
+          "etf_flow_source_count": 4.0,
+          "etf_flow_component_completeness": 1.0,
+          "etf_flow_official_major_fund_gap": 0.0057971869441403485,
+          "etf_flow_official_major_fund_coverage": 0.603003003003003,
+          "etf_flow_backup_component_gap": 0.01475054229934924,
+          "etf_flow_backup_component_coverage": 1.0,
+          "etf_flow_validation_inputs_json": "{\"amount_sanity_errors\": [], \"amount_sanity_pass\": true, \"amount_sanity_thresholds\": {\"maximum_absolute_single_fund_daily_flow_usd\": 50000000000, \"maximum_gross_daily_flow_usd\": 100000000000}, \"backup_sample\": {\"as_of\": \"2026-08-26\", \"backup_values_usd\": {\"TOTAL\": 228800000.0}, \"candidate_count\": 3, \"canonical_values_usd\": {\"TOTAL\": 232200000.0}, \"component_normalized_gaps\": {\"TOTAL\": 0.01475054229934924}, \"direction_match\": true, \"gross_component_coverage\": 1.0, \"matched_tickers\": [\"TOTAL\"], \"maximum_component_gap\": 0.01475054229934924, \"normalized_gap\": 0.01475054229934924, \"provider\": \"CoinMarketCap ETF\", \"validation_type\": \"same_date_aggregate_total\", \"weighted_difference_usd\": 3400000.0, \"weighted_reference_usd\": 230500000.0}, \"canonical_as_of\": \"2026-08-26\", \"canonical_component_sum_usd\": 232200000.0, \"canonical_components_usd\": {\"ARKB\": 0.0, \"BITB\": 6000000.0, \"BRRR\": 0.0, \"BTC\": 46800000.0, \"BTCO\": 0.0, \"BTCW\": 0.0, \"DEFI\": 0.0, \"EZBC\": 0.0, \"FBTC\": 25600000.0, \"GBTC\": -50400000.0, \"HODL\": 0.0, \"IBIT\": 200800000.0, \"MSBT\": 3400000.0}, \"canonical_provider\": \"The Block\", \"canonical_total_difference_usd\": 0.0, \"canonical_total_reconciled\": true, \"canonical_total_tolerance_usd\": 500000, \"canonical_total_usd\": 232200000.0, \"canonical_updated_at\": \"2026-08-29T04:16:19+00:00\", \"canonical_updated_at_basis\": \"provider_update_timestamp\", \"component_completeness\": 1.0, \"component_count\": 13, \"expected_ticker_count\": 13, \"expected_tickers\": [\"ARKB\", \"BITB\", \"BRRR\", \"BTC\", \"BTCO\", \"BTCW\", \"DEFI\", \"EZBC\", \"FBTC\", \"GBTC\", \"HODL\", \"IBIT\", \"MSBT\"], \"gross_component_flow_usd\": 333000000.0, \"latest_published_as_of\": \"2026-08-28\", \"official_component_gross_coverage\": 0.603003003003003, \"official_component_usd\": 200800000.0, \"official_direction_match\": true, \"official_normalized_gap\": 0.0057971869441403485, \"official_proxy_usd\": 199639289.2901033, \"official_ticker\": \"IBIT\", \"roster_completion\": {\"DEFI\": {\"policy\": \"same_date_peer_explicit_near_zero_within_component_rounding_tolerance\", \"providers\": {\"Bitbo\": 0.0}, \"value_usd\": 0.0}}, \"selection_policy\": \"latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates\", \"validation_source_count\": 4}",
+          "etf_flow_validation_scope": "canonical=The Block component sum; component_completeness=100.0%; IBIT official holdings-change proxy normalized_gap=0.58% direction_match=True (5% or USD 5m tolerance); official_component_gross_coverage=60.3%; backup=CoinMarketCap ETF same_date=True direction_match=True sample_gap=1.48% sample_gross_coverage=100.0%; validation_sources=4; market_date=2026-08-26; hard_trigger=false",
+          "etf_flow_1d_usd": 232200000.0,
+          "etf_flow_7d_usd": 1797900000.0,
+          "etf_flow_30d_usd": 3223000000.0,
+          "eth_etf_flow_status": "sample_cross_source_verified",
+          "eth_etf_flow_as_of": "2026-08-27",
+          "eth_etf_flow_source_count": 3.0,
+          "eth_etf_flow_component_completeness": 1.0,
+          "eth_etf_flow_official_major_fund_gap": 0.005301752667022952,
+          "eth_etf_flow_official_major_fund_coverage": 0.6348122866894198,
+          "eth_etf_flow_backup_component_gap": 0.0,
+          "eth_etf_flow_backup_component_coverage": 1.0,
+          "eth_etf_flow_validation_inputs_json": "{\"amount_sanity_errors\": [], \"amount_sanity_pass\": true, \"amount_sanity_thresholds\": {\"maximum_absolute_single_fund_daily_flow_usd\": 50000000000, \"maximum_gross_daily_flow_usd\": 100000000000}, \"backup_sample\": {\"as_of\": \"2026-08-27\", \"backup_values_usd\": {\"TOTAL\": 205100000.0}, \"candidate_count\": 2, \"canonical_values_usd\": {\"TOTAL\": 205100000.0}, \"component_normalized_gaps\": {\"TOTAL\": 0.0}, \"direction_match\": true, \"gross_component_coverage\": 1.0, \"matched_tickers\": [\"TOTAL\"], \"maximum_component_gap\": 0.0, \"normalized_gap\": 0.0, \"provider\": \"CoinMarketCap ETF\", \"validation_type\": \"same_date_aggregate_total\", \"weighted_difference_usd\": 0.0, \"weighted_reference_usd\": 205100000.0}, \"canonical_as_of\": \"2026-08-27\", \"canonical_component_sum_usd\": 205100000.0, \"canonical_components_usd\": {\"ETH\": 14300000.0, \"ETHA\": 130200000.0, \"ETHE\": 3000000.0, \"ETHV\": 0.0, \"ETHW\": 1400000.0, \"EZET\": 0.0, \"FETH\": 56200000.0, \"QETH\": 0.0}, \"canonical_provider\": \"The Block\", \"canonical_total_difference_usd\": 0.0, \"canonical_total_reconciled\": true, \"canonical_total_tolerance_usd\": 500000, \"canonical_total_usd\": 205100000.0, \"canonical_updated_at\": \"2026-08-29T04:16:32+00:00\", \"canonical_updated_at_basis\": \"provider_update_timestamp\", \"component_completeness\": 1.0, \"component_count\": 8, \"expected_ticker_count\": 8, \"expected_tickers\": [\"ETH\", \"ETHA\", \"ETHE\", \"ETHV\", \"ETHW\", \"EZET\", \"FETH\", \"QETH\"], \"gross_component_flow_usd\": 205100000.0, \"latest_published_as_of\": \"2026-08-28\", \"official_component_gross_coverage\": 0.6348122866894198, \"official_component_usd\": 130200000.0, \"official_direction_match\": true, \"official_normalized_gap\": 0.005301752667022952, \"official_proxy_usd\": 130892122.92954019, \"official_ticker\": \"ETHA\", \"roster_completion\": {}, \"selection_policy\": \"latest_date_passing_canonical_roster_official_issuer_same_date_backup_freshness_and_sanity_gates\", \"validation_source_count\": 3}",
+          "eth_etf_flow_validation_scope": "canonical=The Block component sum; component_completeness=100.0%; ETHA official holdings-change proxy normalized_gap=0.53% direction_match=True (5% or USD 5m tolerance); official_component_gross_coverage=63.5%; backup=CoinMarketCap ETF same_date=True direction_match=True sample_gap=0.00% sample_gross_coverage=100.0%; validation_sources=3; market_date=2026-08-27; hard_trigger=false",
+          "eth_etf_flow_1d_usd": 205100000.0,
+          "eth_etf_flow_7d_usd": 850300000.0,
+          "eth_etf_flow_30d_usd": 1512000000.0,
+          "automation_limits": {
+            "mvrv_z_score_limit": "Coin Metrics community API exposes current MVRV ratio, not free MVRV-Z; dashboard uses ratio gate instead of stale Z-score.",
+            "realized_loss": "Glassnode/CheckOnChain realized-loss series is not available as a stable free API; not used as a hard trigger.",
+            "google_trends": "No stable unauthenticated official API; excluded from hard gates.",
+            "macro_calendar": "No stable free official event API wired; regulatory/event gate remains manual review only."
+          }
+        },
+        "mstr_metrics": {
+          "btc_nav_musd": 65243.076971940005,
+          "common_equity_price_to_nav": 1.1948292550732023,
+          "equity_mnav": 1.1948292550732023,
+          "enterprise_value_to_btc_nav": 1.1222331434689976,
+          "enterprise_mnav": 1.1222331434689976,
+          "pref_dilution_flag": false,
+          "usd_reserve_musd": 1711.837,
+          "usd_reserve_basis": "quarter_end",
+          "usd_reserve_confidence": "low",
+          "coverage_months": 10.634729757713812,
+          "weekly_reported_btc_sales_musd": 0.0,
+          "sale_ratio": 0.0,
+          "sale_ratio_basis": "complete_week_two_filing_reported_sales_reconciliation_zero",
+          "sale_ratio_confidence": "medium",
+          "sats_per_share": 218737.8117714968,
+          "strc_discount": 0.026700000000000057,
+          "common_valuation_gate_ok": false,
+          "capital_flywheel_gate_ok": true,
+          "contract_red_light": true
+        },
+        "bmnr_metrics": {
+          "holdings_as_of": "2026-08-23",
+          "eth_holdings": 5847611.0,
+          "btc_holdings": 210.0,
+          "staked_eth": 5067309.0,
+          "staked_eth_ratio": 0.8665605492567819,
+          "cash_marketable_musd": 308.0,
+          "beast_stake_musd": 180.0,
+          "eightco_stake_musd": 89.0,
+          "reported_total_holdings_musd": 14900.0,
+          "bottom_up_gross_treasury_musd": 14853.8710399,
+          "reported_total_crosscheck_gap": 0.0031007031009942705,
+          "sec_reported_shares_m": 603.226394,
+          "share_count_as_of": "2026-07-09",
+          "weekly_buyback_shares_m": 0,
+          "buyback_as_of": null,
+          "buyback_adjusted_shares_estimate_m": 603.226394,
+          "buyback_adjustment_applied": false,
+          "market_cap_estimate_musd": 14356.788177200002,
+          "market_cap_to_gross_treasury": 0.9665351300435591,
+          "gross_treasury_discount": 0.033464869956440935,
+          "gross_treasury_value_per_share": 24.624040306664696,
+          "eth_per_1000_shares": 9.69389114628164,
+          "gross_treasury_price_as_of": "2026-08-29",
+          "reported_total_value_basis": "BMNR rounded management total; underlying price timestamp not disclosed",
+          "quality": "gross_asset_view_not_net_nav",
+          "liability_treatment": "未扣除完整負債、優先股與其他或有項目；不可當作普通股淨 NAV"
+        },
+        "manual_inputs": {
+          "mstr_btc_holdings": 840447.0,
+          "usd_reserve_musd": 1711.837,
+          "cash_other_musd": 0,
+          "deferred_tax_liability_musd": 1.357,
+          "debt_face_musd": 8214,
+          "annual_interest_musd": 34,
+          "other_debt_annual_service_musd": 3.6,
+          "preferred": {
+            "STRF": {
+              "notional_musd": 3700,
+              "rate": 0.1
+            },
+            "STRC": {
+              "notional_musd": 7800,
+              "rate": 0.12
+            },
+            "STRK": {
+              "notional_musd": 2100,
+              "rate": 0.08
+            },
+            "STRD": {
+              "notional_musd": 4200,
+              "rate": 0.1
+            }
+          },
+          "preferred_aggregate_musd": 17800,
+          "common_shares_outstanding_m": 384.225751,
+          "diluted_shares_m": 352.534,
+          "weekly_btc_sales_musd": 0.0,
+          "prev_pref_notional_musd": 17800.0,
+          "prev_mnav_equity": 1.2467305044882449
+        },
+        "manual_seed_inputs": {
+          "mstr_btc_holdings": 843775,
+          "usd_reserve_musd": 2550,
+          "cash_other_musd": 0,
+          "deferred_tax_liability_musd": 0,
+          "debt_face_musd": 8214,
+          "annual_interest_musd": 34,
+          "other_debt_annual_service_musd": 3.6,
+          "preferred": {
+            "STRF": {
+              "notional_musd": 3700,
+              "rate": 0.1
+            },
+            "STRC": {
+              "notional_musd": 7800,
+              "rate": 0.12
+            },
+            "STRK": {
+              "notional_musd": 2100,
+              "rate": 0.08
+            },
+            "STRD": {
+              "notional_musd": 4200,
+              "rate": 0.1
+            }
+          },
+          "preferred_aggregate_musd": 17800,
+          "common_shares_outstanding_m": 350.448,
+          "diluted_shares_m": 285.0,
+          "weekly_btc_sales_musd": 216.0,
+          "prev_pref_notional_musd": 17800,
+          "prev_mnav_equity": 0.62
+        },
+        "manual_input_provenance": {
+          "schema": 1,
+          "updated_at": "2026-08-29",
+          "status": "mixed_automated_manual",
+          "stale_after_days": 30,
+          "fields": {
+            "mstr_btc_holdings": {
+              "source_type": "official_filing_disclosure",
+              "source_ref": "Strategy SEC 8-K BTC update; official purchases page fallback",
+              "detail": "current_accn=0001193125-26-361845 previous_accn=0001193125-26-353240 period=2026-08-17..2026-08-23 contiguous=True complete_week=True previous_holdings=840447 acquired=0 current_holdings=840447 inferred_sold_btc=0 reported_sales_musd=0.0 sale_basis=complete_week_two_filing_reported_sales_reconciliation_zero",
+              "as_of": "2026-08-23",
+              "fetched_at": "2026-08-29T05:58:39+00:00",
+              "basis": "official_weekly_holdings",
+              "source_tier": "official_filing",
+              "confidence": "high"
+            },
+            "usd_reserve_musd": {
+              "source_type": "official_filing_derived",
+              "source_ref": "Strategy SEC 8-K conservative floor; gross disclosed reserve fallback; SEC companyfacts last resort",
+              "detail": "namespace=us-gaap tag=CashAndCashEquivalentsAtCarryingValue unit=USD form=10-Q filed=2026-08-03 end=2026-06-30 accn=0001050446-26-000044",
+              "as_of": "2026-06-30",
+              "fetched_at": "2026-08-29T05:58:27+00:00",
+              "basis": "quarter_end",
+              "source_tier": "official_filing",
+              "confidence": "low"
+            },
+            "cash_other_musd": {
+              "source_type": "policy_assumption",
+              "source_ref": "Conservative valuation policy",
+              "detail": "Unverified other assets receive zero value until a reviewed filing parser is available",
+              "as_of": "2026-08-29",
+              "fetched_at": "2026-08-29T05:58:41+00:00",
+              "basis": "conservative_zero",
+              "confidence": "high"
+            },
+            "deferred_tax_liability_musd": {
+              "source_type": "official_filing_structured",
+              "source_ref": "SEC DeferredIncomeTaxLiabilitiesNet; latest balance-sheet parser fallback",
+              "detail": "namespace=us-gaap tag=DeferredIncomeTaxLiabilitiesNet unit=USD form=10-Q filed=2026-08-03 end=2026-06-30 accn=0001050446-26-000044",
+              "as_of": "2026-06-30",
+              "fetched_at": "2026-08-29T05:58:27+00:00",
+              "basis": "quarter_end",
+              "source_tier": "official_filing",
+              "confidence": "high"
+            },
+            "debt_face_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q debt footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "annual_interest_musd": {
+              "source_type": "manual",
+              "source_ref": "10-Q debt footnote pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "preferred": {
+              "source_type": "manual",
+              "source_ref": "10-Q preferred stock footnote + latest 8-K/424B5 pending automated extraction",
+              "as_of": "2026-07-05",
+              "confidence": "medium"
+            },
+            "common_shares_outstanding_m": {
+              "source_type": "official_filing_derived",
+              "source_ref": "Strategy official point-in-time basic shares plus subsequent SEC ATM issuance; filing cover fallback",
+              "detail": "form=10-Q filed=2026-08-03 accn=0001050446-26-000044 classes=2 contexts=c-7,c-8",
+              "as_of": "2026-07-24",
+              "fetched_at": "2026-08-29T05:58:27+00:00",
+              "basis": "point_in_time_common_shares_outstanding",
+              "source_tier": "official_filing",
+              "confidence": "high"
+            },
+            "diluted_shares_m": {
+              "source_type": "official_filing_structured",
+              "source_ref": "SEC companyfacts WeightedAverageNumberOfDilutedSharesOutstanding",
+              "detail": "namespace=us-gaap tag=WeightedAverageNumberOfDilutedSharesOutstanding unit=shares form=10-Q filed=2026-08-03 end=2026-06-30 accn=0001050446-26-000044",
+              "as_of": "2026-06-30",
+              "fetched_at": "2026-08-29T05:58:27+00:00",
+              "basis": "quarter_weighted_average",
+              "source_tier": "official_filing",
+              "confidence": "medium"
+            },
+            "weekly_btc_sales_musd": {
+              "source_type": "official_filing_derived",
+              "source_ref": "Strategy SEC 8-K complete-week reported-sales reconciliation; official purchases ledger fallback",
+              "detail": "current_accn=0001193125-26-361845 previous_accn=0001193125-26-353240 period=2026-08-17..2026-08-23 contiguous=True complete_week=True previous_holdings=840447 acquired=0 current_holdings=840447 inferred_sold_btc=0 reported_sales_musd=0.0 sale_basis=complete_week_two_filing_reported_sales_reconciliation_zero",
+              "as_of": "2026-08-23",
+              "fetched_at": "2026-08-29T05:58:39+00:00",
+              "basis": "complete_week_two_filing_reported_sales_reconciliation_zero",
+              "source_tier": "official_filing_derived",
+              "confidence": "medium"
+            },
+            "prev_pref_notional_musd": {
+              "source_type": "derived_prior_snapshot",
+              "source_ref": "Prior daily snapshot preferred total",
+              "detail": "",
+              "as_of": "2026-08-28",
+              "fetched_at": "2026-08-29T05:58:42+00:00",
+              "basis": "prior_snapshot",
+              "source_tier": "internal_derived",
+              "confidence": "high"
+            },
+            "prev_mnav_equity": {
+              "source_type": "derived_prior_snapshot",
+              "source_ref": "Prior daily snapshot equity mNAV",
+              "detail": "",
+              "as_of": "2026-08-28",
+              "fetched_at": "2026-08-29T05:58:42+00:00",
+              "basis": "prior_snapshot",
+              "source_tier": "internal_derived",
+              "confidence": "high"
+            }
+          }
+        },
+        "sec_companyfacts": {
+          "cash_musd": 1711.837,
+          "common_shares_outstanding_m": 384.225751,
+          "diluted_shares_m": 352.534,
+          "stockholders_equity_musd": 30886.088,
+          "preferred_dividends_musd": 229.527,
+          "preferred_cash_dividends_musd": 507.666,
+          "deferred_tax_liability_musd": 1.357,
+          "status": "automated_sec_companyfacts_supporting_check"
+        },
+        "btc_standard": {
+          "schema": 1,
+          "model_id": "btc-regime-five-dimension",
+          "model_version": "2.0.0",
+          "formula_version": "weighted-normalized-v1",
+          "calibrated": false,
+          "score_comparable_from": "2026-07-21",
+          "model_status": "heuristic_unbacktested",
+          "intended_horizon": "weekly_to_monthly_regime_context",
+          "score": 2.5,
+          "regime": "中性拉扯區",
+          "tone": "neutral",
+          "action": "保持觀察；避免用單一指標判斷 BTC 底部",
+          "one_line": "BTC：中性拉扯區｜保持觀察；避免用單一指標判斷 BTC 底部",
+          "dimensions": {
+            "估值便宜度": -0.4,
+            "價格趨勢": 1.6,
+            "市場情緒": 1.4,
+            "ETF 邊際買盤": 2.0,
+            "週期回撤": -0.9
+          },
+          "dimension_weights": {
+            "估值便宜度": 1.25,
+            "價格趨勢": 1.0,
+            "市場情緒": 0.75,
+            "ETF 邊際買盤": 0.5,
+            "週期回撤": 1.0
+          },
+          "weighted_score_before_normalization": 2.25,
+          "data_quality": {
+            "coverage_ratio": 1.0,
+            "missing_dimensions": [],
+            "etf_flow_weight_capped": true,
+            "etf_flow_counts_as_confirmation": false,
+            "etf_flow_reason": "多源與官方主要基金持倉已交叉驗證；仍固定為 0.5，避免單一資金流維度直接放行交易"
+          },
+          "signals": {
+            "btc_usd": 77629.02,
+            "btc_vs_200dma_pct": 0.12140846294956309,
+            "btc_vs_50dma_pct": 0.16860117695001442,
+            "btc_1y_drawdown_pct": -0.35666604710675964,
+            "btc_30d_return_pct": 0.25654964822177684,
+            "mvrv_ratio": 1.4651371083208935,
+            "fear_greed": 68.0,
+            "etf_flow_7d_usd": 1797900000.0
+          },
+          "implementation_overlays": {
+            "macro_liquidity": {
+              "status": "neutral",
+              "treasury_rate_pct": 3.758,
+              "read": "利率未觸發額外估值降權"
+            },
+            "mstr_vehicle": {
+              "status": "blocked",
+              "sale_pressure_ratio": 0.0,
+              "cash_coverage_months": 10.634729757713812,
+              "strc_discount": 0.026700000000000057,
+              "read": "BTC 狀態不等於 MSTR 合約放行；載具紅燈獨立判斷"
+            }
+          },
+          "thresholds": {
+            "投降接刀區": "至少 2 個投降條件且標準分 ≤ -6；現貨分批，不自動開 MSTR 合約",
+            "便宜後右側確認區": "至少 4 個右側確認條件且標準分 -4 到 +3；可研究現貨加碼",
+            "偏熱追高區": "標準分 ≥ +6；禁止追價",
+            "偏冷等待區": "總分 ≤ -3 但投降不足；準備但不預設見底"
+          },
+          "limits": [
+            "MVRV-Z、realized loss、Google Trends 無穩定免費官方 API 時不作硬觸發",
+            "ETF flow 已多源驗證，但資金流本身仍不可單獨放行交易",
+            "BTC 判斷標準只決定現貨節奏；MSTR 合約需另過資本結構紅燈"
+          ]
+        }
+      },
+      "decision": {
+        "score": -4,
+        "state": "block_leveraged_add",
+        "state_code": "BLOCK_LEVERAGED_ADD",
+        "reason_codes": [
+          "COMMON_EQUITY_PREMIUM_OR_UNVERIFIED",
+          "COVERAGE_BELOW_12M"
+        ],
+        "reasons": [
+          "Common-equity price/NAV exceeds 1.0, is unavailable, or preferred-financing distortion flag is active",
+          "USD reserve coverage is below the 12-month red line"
+        ]
+      },
+      "source_count": 97,
+      "error_count": 5
     }
   ],
-  "updated_at": "2026-08-28T09:59:33+00:00"
+  "updated_at": "2026-08-29T05:58:42+00:00"
 }
