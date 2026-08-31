@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "date": "2026-08-30",
-  "generated_at": "2026-08-31T00:39:01+00:00",
+  "date": "2026-08-31",
+  "generated_at": "2026-08-31T04:10:15+00:00",
   "input_updated_at": "2026-08-19",
-  "context_generated_at": "2026-08-30T04:03:34+00:00",
-  "context_payload_hash": "75095e578966c68c2054e8f1f156783ff058e520e5a1d2c998425f8e8a664b4a",
-  "market_generated_at": "2026-08-31T00:38:59+00:00",
-  "market_source_batch_id": "2026-08-30T04:03:31+00:00",
+  "context_generated_at": "2026-08-31T04:09:47+00:00",
+  "context_payload_hash": "bb6609352814459e1293af19785aa1dc7cdd34dc052e3a68906f3075c3daee3c",
+  "market_generated_at": "2026-08-31T04:09:47+00:00",
+  "market_source_batch_id": "2026-08-31T04:09:33+00:00",
   "quality": {
     "status": "pass",
     "scope": "author_thesis_tracking_only",
@@ -58,10 +58,10 @@
           "metric": "context.onchain.BTC.valuation.mvrv.value",
           "stated_value": 1.23,
           "stated_as_of": "2026-08-18",
-          "current_value": 1.4749970333791462,
-          "current_as_of": "2026-08-29",
+          "current_value": 1.4644329798692257,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.02,
-          "drift": 0.19918457998304584,
+          "drift": 0.1905959185928665,
           "status": "drifted"
         },
         {
@@ -71,10 +71,10 @@
           "metric": "context.onchain.BTC.valuation.exchange_net_flow_usd",
           "stated_value": -410000000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": -57368768.64291334,
-          "current_as_of": "2026-08-29",
+          "current_value": -205510144.35021782,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.1,
-          "drift": -0.8600761740416748,
+          "drift": -0.49875574548727364,
           "status": "drifted"
         },
         {
@@ -84,10 +84,10 @@
           "metric": "context.onchain.BTC.valuation.issuance_usd.value",
           "stated_value": 30120000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 35698794.01469722,
-          "current_as_of": "2026-08-29",
+          "current_value": 39572931.465414695,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.1,
-          "drift": 0.1852189247907443,
+          "drift": 0.31384234612930606,
           "status": "drifted"
         },
         {
@@ -97,10 +97,10 @@
           "metric": "context.onchain.BTC.valuation.supply.value",
           "stated_value": 20071518.0,
           "stated_as_of": "2026-08-19",
-          "current_value": 20076894.88407684,
-          "current_as_of": "2026-08-29",
+          "current_value": 20077404.25898649,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.001,
-          "drift": 0.0002678862693314965,
+          "drift": 0.0002932642656370277,
           "status": "consistent"
         },
         {
@@ -110,11 +110,11 @@
           "metric": "context.onchain.BTC.hashrate.value",
           "stated_value": 941100000.0,
           "stated_as_of": "2026-08-19",
-          "current_value": 913069939.6855934,
-          "current_as_of": "2026-08-29",
+          "current_value": 1019386302.5256965,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.05,
-          "drift": -0.02978435906323096,
-          "status": "consistent"
+          "drift": 0.08318595529242012,
+          "status": "drifted"
         },
         {
           "id": "btc_price",
@@ -123,10 +123,10 @@
           "metric": "universe.assets.BTC.price_usd",
           "stated_value": 64187.0,
           "stated_as_of": "2026-08-19",
-          "current_value": 78032.667756,
-          "current_as_of": "2026-08-31T00:38:53+00:00",
+          "current_value": 77601.235948,
+          "current_as_of": "2026-08-31T04:09:34.071000+00:00",
           "tolerance": 0.03,
-          "drift": 0.21570828603922898,
+          "drift": 0.2089868033713993,
           "status": "drifted"
         },
         {
@@ -136,10 +136,10 @@
           "metric": "context.onchain.BTC.valuation.market_cap_usd.value",
           "stated_value": 1290000000000.0,
           "stated_as_of": "2026-08-19",
-          "current_value": 1570895199827.6985,
-          "current_as_of": "2026-08-29",
+          "current_value": 1559797286369.173,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.03,
-          "drift": 0.21774821692069657,
+          "drift": 0.2091451832319171,
           "status": "drifted"
         }
       ],
@@ -151,8 +151,8 @@
           "metric": "context.onchain.BTC.valuation.mvrv.value",
           "operator": "lt",
           "threshold": 1.0,
-          "current_value": 1.4749970333791462,
-          "current_as_of": "2026-08-29",
+          "current_value": 1.4644329798692257,
+          "current_as_of": "2026-08-30",
           "status": "not_triggered"
         },
         {
@@ -162,8 +162,8 @@
           "metric": "universe.etf.BTC.flow_30d_usd",
           "operator": "gte",
           "threshold": 1000000000.0,
-          "current_value": 3223000000.0,
-          "current_as_of": "2026-08-26",
+          "current_value": 3515000000.0,
+          "current_as_of": "2026-08-27",
           "status": "triggered"
         },
         {
@@ -193,8 +193,8 @@
         "standing": "falsifier_triggered",
         "claims_total": 7,
         "claims_tracked": 7,
-        "claims_consistent": 2,
-        "claims_drifted": 5,
+        "claims_consistent": 1,
+        "claims_drifted": 6,
         "falsifiers_total": 4,
         "falsifiers_evaluable": 2,
         "falsifiers_triggered": 1,
@@ -248,10 +248,10 @@
           "metric": "universe.assets.BTC.price_usd",
           "stated_value": 64232.0,
           "stated_as_of": "2026-08-19",
-          "current_value": 78032.667756,
-          "current_as_of": "2026-08-31T00:38:53+00:00",
+          "current_value": 77601.235948,
+          "current_as_of": "2026-08-31T04:09:34.071000+00:00",
           "tolerance": 0.03,
-          "drift": 0.21485657859011087,
+          "drift": 0.20813980489475647,
           "status": "drifted"
         },
         {
@@ -261,10 +261,10 @@
           "metric": "context.onchain.BTC.valuation.mvrv.value",
           "stated_value": 1.23,
           "stated_as_of": "2026-08-18",
-          "current_value": 1.4749970333791462,
-          "current_as_of": "2026-08-29",
+          "current_value": 1.4644329798692257,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.02,
-          "drift": 0.19918457998304584,
+          "drift": 0.1905959185928665,
           "status": "drifted"
         },
         {
@@ -274,10 +274,10 @@
           "metric": "context.onchain.BTC.valuation.exchange_inflow_usd.value",
           "stated_value": 1300000000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 716332213.4903296,
-          "current_as_of": "2026-08-29",
+          "current_value": 711609099.3396757,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.05,
-          "drift": -0.4489752203920542,
+          "drift": -0.45260838512332646,
           "status": "drifted"
         },
         {
@@ -287,10 +287,10 @@
           "metric": "context.onchain.BTC.valuation.exchange_outflow_usd.value",
           "stated_value": 1710000000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 773700982.133243,
-          "current_as_of": "2026-08-29",
+          "current_value": 917119243.6898935,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.05,
-          "drift": -0.5475432853021971,
+          "drift": -0.463672956906495,
           "status": "drifted"
         }
       ],
@@ -302,8 +302,8 @@
           "metric": "context.onchain.BTC.valuation.mvrv.value",
           "operator": "lt",
           "threshold": 1.0,
-          "current_value": 1.4749970333791462,
-          "current_as_of": "2026-08-29",
+          "current_value": 1.4644329798692257,
+          "current_as_of": "2026-08-30",
           "status": "not_triggered"
         },
         {
@@ -313,8 +313,8 @@
           "metric": "universe.assets.BTC.price_usd",
           "operator": "lt",
           "threshold": 62000.0,
-          "current_value": 78032.667756,
-          "current_as_of": "2026-08-31T00:38:53+00:00",
+          "current_value": 77601.235948,
+          "current_as_of": "2026-08-31T04:09:34.071000+00:00",
           "status": "not_triggered"
         },
         {
@@ -324,8 +324,8 @@
           "metric": "context.onchain.BTC.valuation.exchange_net_flow_usd",
           "operator": "gt",
           "threshold": 0.0,
-          "current_value": -57368768.64291334,
-          "current_as_of": "2026-08-29",
+          "current_value": -205510144.35021782,
+          "current_as_of": "2026-08-30",
           "status": "not_triggered"
         }
       ],
@@ -382,10 +382,10 @@
           "metric": "context.onchain.ETH.valuation.mvrv.value",
           "stated_value": 0.94,
           "stated_as_of": "2026-08-18",
-          "current_value": 1.0941273937971088,
-          "current_as_of": "2026-08-29",
+          "current_value": 1.0793793757567323,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.02,
-          "drift": 0.1639653125501157,
+          "drift": 0.1482759316560982,
           "status": "drifted"
         },
         {
@@ -395,10 +395,10 @@
           "metric": "universe.assets.ETH.price_usd",
           "stated_value": 1920.0,
           "stated_as_of": "2026-08-19",
-          "current_value": 2433.973948,
-          "current_as_of": "2026-08-31T00:38:53+00:00",
+          "current_value": 2414.83,
+          "current_as_of": "2026-08-31T04:09:34+00:00",
           "tolerance": 0.03,
-          "drift": 0.2676947645833332,
+          "drift": 0.2577239583333333,
           "status": "drifted"
         },
         {
@@ -408,10 +408,10 @@
           "metric": "context.onchain.ETH.valuation.market_cap_usd.value",
           "stated_value": 231550000000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 299714554382.94104,
-          "current_as_of": "2026-08-29",
+          "current_value": 295478547860.7203,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.03,
-          "drift": 0.29438373734805023,
+          "drift": 0.2760896042354579,
           "status": "drifted"
         },
         {
@@ -421,10 +421,10 @@
           "metric": "context.onchain.ETH.valuation.exchange_net_flow_usd",
           "stated_value": -30710000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": -10340324.581908792,
-          "current_as_of": "2026-08-29",
+          "current_value": 35083351.71018678,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.1,
-          "drift": -0.6632912868150833,
+          "drift": -2.142408066108329,
           "status": "drifted"
         },
         {
@@ -434,10 +434,10 @@
           "metric": "context.onchain.ETH.valuation.issuance_usd.value",
           "stated_value": 5610000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 7231810.659628611,
-          "current_as_of": "2026-08-29",
+          "current_value": 7126234.474734408,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.05,
-          "drift": 0.289092809202961,
+          "drift": 0.2702735249080941,
           "status": "drifted"
         },
         {
@@ -447,10 +447,10 @@
           "metric": "context.onchain.ETH.valuation.supply.value",
           "stated_value": 120700000.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 121997879.08371612,
-          "current_as_of": "2026-08-29",
+          "current_value": 122000800.72762242,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.02,
-          "drift": 0.010752933585054913,
+          "drift": 0.010777139416921377,
           "status": "consistent"
         },
         {
@@ -460,10 +460,10 @@
           "metric": "context.onchain.ETH.coinmetrics.active_addresses.value",
           "stated_value": 814843.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 965831.0,
-          "current_as_of": "2026-08-29",
+          "current_value": 849569.0,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.01,
-          "drift": 0.18529704495221777,
+          "drift": 0.04261679857346756,
           "status": "drifted"
         },
         {
@@ -473,10 +473,10 @@
           "metric": "context.onchain.ETH.coinmetrics.transactions.value",
           "stated_value": 2856958.0,
           "stated_as_of": "2026-08-18",
-          "current_value": 2034340.0,
-          "current_as_of": "2026-08-29",
+          "current_value": 1794571.0,
+          "current_as_of": "2026-08-30",
           "tolerance": 0.01,
-          "drift": -0.2879349293899315,
+          "drift": -0.37185950931025236,
           "status": "drifted"
         }
       ],
@@ -488,8 +488,8 @@
           "metric": "context.onchain.ETH.valuation.mvrv.value",
           "operator": "gte",
           "threshold": 1.0,
-          "current_value": 1.0941273937971088,
-          "current_as_of": "2026-08-29",
+          "current_value": 1.0793793757567323,
+          "current_as_of": "2026-08-30",
           "status": "triggered"
         },
         {
@@ -531,5 +531,5 @@
       }
     }
   ],
-  "tracker_hash": "7ec79bc3b482ce929d85ea29e98e821f07f10d648ea8176d192f412fbd48f6ee"
+  "tracker_hash": "f2cd1bf5d00fba63af915cb2c95c125f05405093bd3319a89ac83059ae0341fd"
 }
