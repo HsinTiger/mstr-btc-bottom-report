@@ -120,12 +120,12 @@ curl -sS "$HTTPS_PROXY/__agentproxy/status"
 
 **這一節記錄的是「我自己先前的假設被證偽的部分」，依 R7 必須留檔。**
 
-#### 管線狀態 `[VERIFIED: origin/main commit history + Actions run #83]`
+#### 管線狀態 `[VERIFIED: origin/main commit history + Actions runs #82/#83、market-universe #739–#747]`
 
 | 工作流 | 最後一次成功寫入 main | 落後 |
 |---|---|---:|
 | `daily-data.yml` | `2a001f0` 2026-08-31 04:10Z | **~2 天** |
-| `market-universe.yml` | `5d4d885` 2026-09-01 05:17Z | ~26 小時 |
+| `market-universe.yml` | `5d4d885` 2026-09-01 05:17Z（#739）| ~31 小時，之後 **連 8 次失敗** |
 | `ai-intelligence.yml` | `f2e4fa8` 2026-09-02 05:02Z | 正常 |
 
 main 仍在前進，但**只靠 `ai-intelligence.yml`**。這是局部故障，不是全 repo 停擺。
@@ -133,24 +133,60 @@ main 仍在前進，但**只靠 `ai-intelligence.yml`**。這是局部故障，�
 #### 我先前的假設，以及它錯在哪
 
 8/31→9/1 我曾提出（當時已明確標為未驗證）：9/1 的管線失敗是**月份跨月的日期邊界 bug**，
-並預先寫死了否證條件——「**若 9/2 的 run 也以相同樣態失敗，跨月假說就變弱**，比較像持續性的契約／資料損壞」。
+並預先寫死了否證條件——「若 9/2 的 run 也以相同樣態失敗，跨月假說就變弱」。
 
-9/2 run #83（03:16:24Z）**確實也失敗了**。但結果比我當初設的二分法更細，我的原假說是**部分對、部分錯**：
+**這個假說已經被完整推翻，而且我第一次判讀它時的方法本身就是錯的。**
 
-| 9/1 `market-universe.yml` #740 的 17 項失敗 | 9/2 狀態 |
-|---|---|
-| 12 項 `source ... fetched_at is future, stale, or invalid`（涵蓋全部 BTC/ETH ETF 來源與兩個 SEC 持倉來源） | **已自行清除** ✅ |
-| `evidence thesis.gold source IDs are missing or duplicated` | **仍在** ❌ |
-| `collector quality: BTC 長期結構證據層未通過資料契約` | **仍在** ❌ |
+我當時拿 `daily-data.yml` #83 的失敗清單去跟 `market-universe.yml` #740 的失敗清單相比，
+據此宣稱那 12 個 `fetched_at` 錯誤「已自行清除」。**這個比較不成立**——兩條工作流跑的是
+不同 verifier、不同檢查範圍。同一條工作流內部對帳的結果正好相反：
 
-9/2 run #83 只剩兩項失敗（`sources: 66, execution_errors: 1, structural_errors: 1`），
-外加一項降級 `ETH DAT holdings are not representative cross-source verified`。
+| `market-universe.yml`（同一條工作流內比較） | 失敗數 |
+|---|---:|
+| #739（9/1 05:16Z）**最後一次綠燈** | 0 |
+| #740（9/1 10:14Z） | 17 |
+| **#747（9/2 11:45Z）** | **~25（含全部 12 個 `fetched_at`）** |
 
-**正確的結論是拆成兩件事：**
-1. **暫時性（已解）**：那 12 個 `fetched_at` 時戳錯誤跨月後自行消失——就那一叢而言，日期／時鐘的讀法成立。
-2. **持續性（未解）**：`thesis.gold` 的證據來源 ID 註冊表有缺漏或重複，這是一個**窄而具體的缺陷**，跟跨月無關，不會自己好。
+12 個 `fetched_at is future, stale, or invalid` **從來沒有清除**，而且總失敗數還在增加（17 → 25）。
+#740–#747 連續 8 次失敗。
 
-我當初把兩件事當成同一件，所以「9/2 會不會照樣壞」這個測試本身設計得不夠鋭利。
+#### 真正的起火點 `[VERIFIED: run #82 job log 99731715221]`
+
+翻 `daily-data.yml` #82（9/1）的完整 log，失敗根本不在 thesis.gold，也不在時戳：
+
+```
+verify_market_universe.py → {"status": "degraded", "failures": [], ...}   ← 當天其實通過
+verify_daily_data.py      → {"status": "fail", "failures": 2,
+     "failure_details": ["sale_ratio: 缺值",
+                         "required capital-structure sources missing: weekly_btc_sales_musd"]}
+##[error]Process completed with exit code 1
+```
+
+**第一個硬失敗是 MSTR 的每週 BTC 買賣量 `weekly_btc_sales_musd` 取不到值**，
+連帶 `sale_ratio` 缺值。這是 8-K 解析／申報缺漏，不是日期問題。
+本 repo 過去修過同一類 bug（run #69 的 commit：8-K 措辭從
+`No bitcoin purchases were made this week` 改成 `No bitcoin purchases or sales were made this week`），
+這很可能是**第三種措辭變體，或這週的 8-K 還沒發**。
+
+#### 之後發生的是連鎖，不是三個獨立故障（`[ASSUMPTION]`，但時序吻合）
+
+```
+9/1 daily-data #82 卡在 weekly_btc_sales_musd
+        ↓ 快照沒被寫進 main，凍結在 8/31
+9/1 10:14Z 起 market-universe #740+ 開始失敗，失敗項目包含
+        "daily snapshot or raw observations are future, stale, or invalid"
+        "BTC ETF published 1d flow: 重算 242300000.0 != snapshot None"   ← 重算有值、快照側是 None
+        ↓ market_universe.json 也跟著不一致
+9/2 daily-data #83 改為更早就死在 verify_market_universe（thesis.gold）
+```
+
+「重算 242300000.0 != snapshot **None**」是關鍵證據：**抓取端是好的，對帳的另一邊是空的**。
+同理，今天（9/2）新抓到的來源拿去跟凍結在 8/31 的基準比，時戳自然會被判成 **future** ——
+這解釋了為什麼那 12 個錯誤剛好在快照凍結的同一時間出現。
+
+**所以我先前給你的「先看 thesis.gold」是錯的指路。**
+按時序，該先修的是 `weekly_btc_sales_musd`；它一通，快照解凍，下游多數檢查應會跟著恢復。
+thesis.gold 與 BTC 結構證據層是否為獨立缺陷，要等快照解凍後才判得準。
 
 #### 對本文結論的影響（R1 標記）
 
@@ -166,7 +202,7 @@ main 仍在前進，但**只靠 `ai-intelligence.yml`**。這是局部故障，�
 **§4.2 的結論與失效條件（日收盤跌破 64,111）皆維持不變**。
 
 > **未動作聲明**：我沒有碰 main，也沒有手動觸發任何工作流（`workflow_dispatch` 會寫資料進 main，那是你的決定）。
-> 要修的話，第一個該看的位置是 `thesis.gold` 的 evidence source-ID 註冊表。
+> 要修的話，第一個該看的位置是 MSTR 的 `weekly_btc_sales_musd`（8-K 每週買賣量解析），不是 thesis.gold。
 
 ---
 
