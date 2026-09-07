@@ -1,13 +1,35 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-09-06T05:03:47+00:00",
-  "last_attempt_at": "2026-09-06T05:03:47+00:00",
-  "last_successful_fetch_at": "2026-09-06T05:03:47+00:00",
+  "updated_at": "2026-09-07T05:11:17+00:00",
+  "last_attempt_at": "2026-09-07T05:11:17+00:00",
+  "last_successful_fetch_at": "2026-09-07T05:11:17+00:00",
   "quality": {
     "status": "pass"
   },
   "items": [
+    {
+      "id": "openai-news:3784d7aba9718af9aa19",
+      "url": "https://openai.com/index/research-acceleration-view-inside-openai",
+      "created_at": "2026-09-06T08:00:00+00:00",
+      "title": "Research acceleration: The view inside OpenAI",
+      "text": "Research acceleration: The view inside OpenAI — Inside OpenAI, coding agents are reshaping AI research. Explore early data on agent usage, experiment velocity, task complexity, and research acceleration.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 76.2,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 25.0,
+        "recency": 93.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "119fb5a7249f84050c28500582e0015c3a4877d1d807a109795a2d053d536cd1"
+    },
     {
       "id": "vercel-ai-releases:af85c7284df37de6c69c",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/openai%404.0.60",
@@ -21,11 +43,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 81.9,
+      "ranking_score_0_100": 80.4,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 96.8
+        "recency": 89.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "9c676c95114ce4b553b0d2fe8a92c3dbfce45d758aa54606e8ceb809b993a920"
@@ -43,11 +65,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 81.9,
+      "ranking_score_0_100": 80.4,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 96.8
+        "recency": 89.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "496c6d237f5f48662647db82b8a1044f9df19bc8053348acb92eb566b36f0656"
@@ -65,11 +87,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 81.9,
+      "ranking_score_0_100": 80.4,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 96.8
+        "recency": 89.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "afb4f26d220ed7a11358b5e0fc9c9f9bd4be7f6790bd76bd3d635655e87fff55"
@@ -139,6 +161,72 @@
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ec80874d9de05e9b7d8e315fee01306afede5e6b26eed4908b237c74c8bc5da7"
+    },
+    {
+      "id": "arxiv-ai:efa249640977c0a61c2d",
+      "url": "https://arxiv.org/abs/2609.05404v1",
+      "created_at": "2026-09-04T17:51:48+00:00",
+      "title": "Diffusion TV: Experiencing Diffusion Models through Tangible, Embodied Interaction",
+      "text": "Diffusion TV: Experiencing Diffusion Models through Tangible, Embodied Interaction — Diffusion TV is an interactive AI art installation that offers a tangible and embodied experience of diffusion models through a modified CRT TV. By physically manipulating the TV's antenna, audiences control the clarity of AI-generated images and sounds, metaphorically enacting the denoising process that underlies diffusion-based generation. Using the tuning knob, participants switch between three channels featuring AI-generated animals from the Past (extinct species), Present (endangered species), and Future (spe…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 67.5,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 50.0,
+        "recency": 82.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "b85b779e3d5eaa89551071dd7a947242b6af4fe3d1732f7e2e0043ea7a611a1e"
+    },
+    {
+      "id": "arxiv-ai:7510047a79123414bf1d",
+      "url": "https://arxiv.org/abs/2609.05403v1",
+      "created_at": "2026-09-04T17:50:10+00:00",
+      "title": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments",
+      "text": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments — Retail search systems serve diverse geographic regions with distinct query patterns, vocabularies, and product preferences, creating significant data heterogeneity that challenges both privacy-preserving training and model personalization. Federated learning offers a natural solution for privacy, but standard FL methods produce global models that sacrifice regional performance, while existing personalized FL approaches operate at the parameter level and catastrophically collapse on modern transformers (below 10\\%…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 67.5,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 50.0,
+        "recency": 82.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "4ab4fc832f3c2290866528a9d330677d2b15f93e5d063f86f066556787b90c0e"
+    },
+    {
+      "id": "arxiv-ai:944a0273cf6750aa419d",
+      "url": "https://arxiv.org/abs/2609.05324v1",
+      "created_at": "2026-09-04T16:19:01+00:00",
+      "title": "RoboSPA: Can VLA Models Go Beyond Simple Scenes and Short-Horizon Tasks?",
+      "text": "RoboSPA: Can VLA Models Go Beyond Simple Scenes and Short-Horizon Tasks? — Vision-Language-Action (VLA) models have shown promising progress in language-conditioned robotic manipulation. However, existing datasets and benchmarks mainly evaluate task completion under predefined settings, offering limited insight into model reasoning under increasing spatial and procedural complexity. We introduce \\textbf{RoboSPA} (\\textbf{Robo}t \\textbf{S}patial-\\textbf{P}rocedural \\textbf{A}ssessment), a large-scale robotic manipulation dataset and benchmark for diagnosing embodied reasoning in VLA model…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 74.9,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 81.9
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "64eb9faa0189e3d4e6a304f19f7e996f15880015a98e461b224c2f8e6b0fa6d7"
     },
     {
       "id": "arxiv-ai:c75997e7ff46c271c206",
@@ -285,11 +373,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 73.8,
+      "ranking_score_0_100": 72.4,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 81.5
+        "recency": 74.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "8ffbb7a7f9a28c125367f5ab87ef8c7572dc787f01486bc7547994d0a89e1eb4"
@@ -307,11 +395,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 70.7,
+      "ranking_score_0_100": 69.3,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 81.0
+        "recency": 73.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "a0ef0cbefff04264d8b71c383efc523e698dc2c11d2cd0a46c2f2752ffa8727a"
@@ -329,11 +417,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 77.4,
+      "ranking_score_0_100": 76.0,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 50.0,
-        "recency": 77.1
+        "recency": 69.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "b4ea02549cb88e8746903bf823f3efe8a516946f40b8fce4fbda73ad9445eb60"
@@ -351,11 +439,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 69.9,
+      "ranking_score_0_100": 68.5,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 77.1
+        "recency": 69.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "558de372e65e4faeef8ca5094a00c27a5de9253ae8bb9f3c0ce56fa6088f19b3"
@@ -373,11 +461,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 78.8,
+      "ranking_score_0_100": 77.3,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 50.0,
-        "recency": 76.3
+        "recency": 69.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "c7ef6795b536121e7d094b19aa9fdad80cccbf3e3b0a248838f71a5a3b4f2027"
@@ -527,11 +615,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 71.4,
+      "ranking_score_0_100": 70.0,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 25.0,
-        "recency": 74.6
+        "recency": 67.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "5f5d2641702dd9bda081d5fcc59158a216ac2ef1cec99bb2dbcf9784d335c53c"
@@ -637,11 +725,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 69.5,
+      "ranking_score_0_100": 68.0,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 69.9
+        "recency": 62.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "33e97cef7635b5db5cf80f0cf4c7ce2fd08ac40a38ad4532978952fc9edd50d5"
@@ -681,11 +769,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 84.8,
+      "ranking_score_0_100": 83.4,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 75.0,
-        "recency": 69.1
+        "recency": 61.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ef59a1ade04243ee3ae5d7aa3961158d6bedb13a3b3539da2f8d81768a4c0ee2"
@@ -769,11 +857,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 93.6,
+      "ranking_score_0_100": 92.1,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 100.0,
-        "recency": 67.8
+        "recency": 60.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "8dd0f8b0617ce08b8e54a1a863449998fbf8ce48bf7c1066ed069190008e64dd"
@@ -791,11 +879,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 85.1,
+      "ranking_score_0_100": 83.7,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 63.1
+        "recency": 55.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "6e4d77ab4dfd5b780f3c152b98b9af4e4d222cebbfd36a0a04dd1fd64bca27cf"
@@ -1319,11 +1407,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 60.9,
+      "ranking_score_0_100": 59.5,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 27.1
+        "recency": 19.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "fb6ca3c47061f2df0da94bbbae8056dcda80ab4c05e83e76c307e4dfcb305e63"
@@ -1473,11 +1561,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 67.4,
+      "ranking_score_0_100": 65.9,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 24.3
+        "recency": 17.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "3ccc47c786dc38a2c8e20068d06c16e5f07a522936d9489e0343be0e4977dce7"
@@ -1495,11 +1583,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 67.2,
+      "ranking_score_0_100": 65.8,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 23.7
+        "recency": 16.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "6eaabc2c70638e68783ffda0424085a3b8e1c871c38f9db727d59dfc91bee44f"
@@ -1869,11 +1957,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 80.5,
+      "ranking_score_0_100": 79.1,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 100.0,
-        "recency": 10.2
+        "recency": 3.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "411605a09d811f8b6e85d262170c751634ec273eba3d58ad9425849ea924ec89"
@@ -10672,6 +10760,88 @@
         }
       ],
       "run_hash": "733b9392e591446f45b351c652ae842983547373cb60717975fab556688a5e10"
+    },
+    {
+      "schema": 1,
+      "date": "2026-09-07",
+      "generated_at": "2026-09-07T05:11:17+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "733b9392e591446f45b351c652ae842983547373cb60717975fab556688a5e10",
+      "lead_brief_id": "brief-engineering-methods",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "agent-reliability",
+          "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
+          "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
+          "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
+          "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
+          "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
+          "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
+          "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
+          "evidence_refs": [
+            {
+              "item_id": "openai-news:b0cbef382238cdd5b88d",
+              "item_integrity_hash": "8dd0f8b0617ce08b8e54a1a863449998fbf8ce48bf7c1066ed069190008e64dd"
+            },
+            {
+              "item_id": "cursor-changelog:13d1b5dab0dfabb7b3b8",
+              "item_integrity_hash": "fb6ca3c47061f2df0da94bbbae8056dcda80ab4c05e83e76c307e4dfcb305e63"
+            }
+          ],
+          "brief_hash": "f1565c35075d94d23ca949b2f96cdf519c5acbecd0ea8c01271e76fd4d326d89"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "release-velocity-debt",
+          "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
+          "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
+          "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
+          "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
+          "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
+          "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
+          "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
+          "evidence_refs": [
+            {
+              "item_id": "nvidia-developer:a55484127056e2582739",
+              "item_integrity_hash": "ef59a1ade04243ee3ae5d7aa3961158d6bedb13a3b3539da2f8d81768a4c0ee2"
+            },
+            {
+              "item_id": "vercel-ai-releases:af85c7284df37de6c69c",
+              "item_integrity_hash": "9c676c95114ce4b553b0d2fe8a92c3dbfce45d758aa54606e8ceb809b993a920"
+            },
+            {
+              "item_id": "transformers-releases:d4b5c908f621053b7272",
+              "item_integrity_hash": "3ccc47c786dc38a2c8e20068d06c16e5f07a522936d9489e0343be0e4977dce7"
+            }
+          ],
+          "brief_hash": "c3866a5a93baec501d9080b2447ae7064bfd57cdcff7311bb4e70e148922e3b3"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "efficient-learning",
+          "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
+          "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
+          "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
+          "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
+          "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
+          "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
+          "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
+          "evidence_refs": [
+            {
+              "item_id": "arxiv-ai:7510047a79123414bf1d",
+              "item_integrity_hash": "4ab4fc832f3c2290866528a9d330677d2b15f93e5d063f86f066556787b90c0e"
+            },
+            {
+              "item_id": "huggingface-blog:b5500bc6503561c622e2",
+              "item_integrity_hash": "b4ea02549cb88e8746903bf823f3efe8a516946f40b8fce4fbda73ad9445eb60"
+            }
+          ],
+          "brief_hash": "0e6b9250eb3842d63bde0d2e1dab24ad3882cd35260976e276329fdd52003b00"
+        }
+      ],
+      "run_hash": "c356fd52916ffd58a640b005abca42e6f3cc5fcc523e20f092d7d30f022c4c87"
     }
   ]
 }
