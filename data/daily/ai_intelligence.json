@@ -1,23 +1,26 @@
 {
   "schema": 3,
-  "generated_at": "2026-09-07T05:11:17+00:00",
+  "generated_at": "2026-09-08T05:11:04+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "pass",
+    "status": "degraded",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [],
+    "degradations": [
+      "arXiv cs.AI 最新研究：HTTP 429: Rate exceeded.",
+      "機構觀點跨來源證據不足：模型進展。"
+    ],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 21,
-    "unique_sources": 9,
-    "successful_sources": 10,
-    "failed_sources": 0,
+    "posts": 18,
+    "unique_sources": 8,
+    "successful_sources": 9,
+    "failed_sources": 1,
     "editorial_briefs": 3,
-    "editorial_pass": 3
+    "editorial_pass": 2
   },
   "source_checks": [
     {
@@ -26,10 +29,10 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
-      "raw_items": 1172,
-      "eligible_items": 18
+      "raw_items": 1173,
+      "eligible_items": 17
     },
     {
       "source_key": "google-ai-blog",
@@ -37,7 +40,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 1
@@ -48,7 +51,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 2
@@ -59,7 +62,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -70,10 +73,10 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 100,
-      "eligible_items": 16
+      "eligible_items": 14
     },
     {
       "source_key": "vllm-releases",
@@ -81,7 +84,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -92,7 +95,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 2
@@ -103,7 +106,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 1
@@ -114,7 +117,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-09-07T05:11:17+00:00",
+      "checked_at": "2026-09-08T05:11:04+00:00",
       "status": "pass",
       "raw_items": 859,
       "eligible_items": 7
@@ -125,14 +128,15 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-09-07T05:11:17+00:00",
-      "status": "pass",
-      "raw_items": 20,
-      "eligible_items": 20
+      "checked_at": "2026-09-08T05:11:04+00:00",
+      "status": "fail",
+      "raw_items": 0,
+      "eligible_items": 0,
+      "error": "HTTP 429: Rate exceeded."
     }
   ],
   "editorial_digest": {
-    "status": "pass",
+    "status": "degraded",
     "lead_brief_id": "brief-engineering-methods",
     "briefs": [
       {
@@ -140,16 +144,16 @@
         "category_id": "ai-application-monetization",
         "category_title": "AI 應用與變現",
         "status": "pass",
-        "theme_id": "agent-reliability",
+        "theme_id": "enterprise-proof",
         "kicker": "AI 應用與變現",
-        "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
-        "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
-        "lede": "今日可回查的共同訊號來自 OpenAI News 的「How AI-native companies turn workflows into operating capability」，以及 Cursor Changelog 的「Start from scratch, without a repo」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
-        "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
-        "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
-        "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
-        "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
-        "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
+        "headline": "企業 AI 的瓶頸不是需求，而是把展示轉成可稽核的生產成果",
+        "standfirst": "客戶案例與產品宣布只能證明興趣；能否持續付費，取決於流程成果、治理成本與實際採用深度。",
+        "lede": "今日可回查的共同訊號來自 OpenAI News 的「How AI-native companies turn workflows into operating capability」，以及 Google AI Blog 的「Proactive cyber defense for governments and enterprises」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "common_interpretation": "大型客戶名稱、員工覆蓋數與新方案常被當成商業化已被驗證。",
+        "variant_view": "部署廣度不等於使用深度，節省時間也不等於可認列收入；缺少續約與單位經濟時應把它視為領先訊號。",
+        "second_order_effect": "採用擴大後，真正限制毛利與黏著度的可能是人工覆核、資料治理與例外處理，而非模型推理本身。",
+        "practical_readthrough": "閱讀客戶案例時拆成四欄：使用者數、每週使用頻率、可重現成果、付費或續約證據；缺哪一欄就標未知。",
+        "falsifier": "若後續揭露顯示高續約、使用頻率上升且單位成本下降，部署廣度就可能確實轉成可持續商業化。",
         "evidence_source_count": 2,
         "matched_term_count": 2,
         "evidence": [
@@ -161,34 +165,34 @@
             "source_type": "official_feed",
             "created_at": "2026-09-01T17:00:00+00:00",
             "url": "https://openai.com/index/ai-native-company-workflows",
-            "ranking_score_0_100": 92.1,
+            "ranking_score_0_100": 90.7,
             "source_excerpt": "How AI-native companies turn workflows into operating capability — Basis, Clay, and Exa Labs use AI agents to improve onboarding, account management, and developer integrations. See what enterprise leaders can apply.",
             "matched_terms": [
-              "agent"
+              "enterprise"
             ],
             "item_integrity_hash": "8dd0f8b0617ce08b8e54a1a863449998fbf8ce48bf7c1066ed069190008e64dd",
             "relationship": "topic_context_not_endorsement"
           },
           {
-            "item_id": "cursor-changelog:13d1b5dab0dfabb7b3b8",
-            "title": "Start from scratch, without a repo",
-            "source_key": "cursor-changelog",
-            "source_label": "Cursor Changelog",
+            "item_id": "google-ai-blog:5eb2aa71a90a9c91745c",
+            "title": "Proactive cyber defense for governments and enterprises",
+            "source_key": "google-ai-blog",
+            "source_label": "Google AI Blog",
             "source_type": "official_feed",
-            "created_at": "2026-08-27T00:00:00+00:00",
-            "url": "https://cursor.com/changelog/start-from-scratch",
-            "ranking_score_0_100": 59.5,
-            "source_excerpt": "Start from scratch, without a repo — Cloud Agents now work without a connected repo, plus live preview and Vercel publishing.",
+            "created_at": "2026-09-02T15:40:00+00:00",
+            "url": "https://blog.google/innovation-and-ai/technology/safety-security/fairwind-program/",
+            "ranking_score_0_100": 68.6,
+            "source_excerpt": "Proactive cyber defense for governments and enterprises — Introducing Fairwind Program",
             "matched_terms": [
-              "agent"
+              "enterprise"
             ],
-            "item_integrity_hash": "fb6ca3c47061f2df0da94bbbae8056dcda80ab4c05e83e76c307e4dfcb305e63",
+            "item_integrity_hash": "5f5d2641702dd9bda081d5fcc59158a216ac2ef1cec99bb2dbcf9784d335c53c",
             "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
         "novelty_status": "changed",
-        "what_changed": "主軸由「企業 AI 的瓶頸不是需求，而是把展示轉成可稽核的生產成果」轉為「代理正在成為新介面，但可靠性會比自治程度更早決定價值」。"
+        "what_changed": "主軸由「代理正在成為新介面，但可靠性會比自治程度更早決定價值」轉為「企業 AI 的瓶頸不是需求，而是把展示轉成可稽核的生產成果」。"
       },
       {
         "id": "brief-engineering-methods",
@@ -216,7 +220,7 @@
             "source_type": "official_feed",
             "created_at": "2026-09-01T21:19:54+00:00",
             "url": "https://developer.nvidia.com/blog/run-local-agentic-ai-workflows-with-metas-muse-glimmer-on-nvidia/",
-            "ranking_score_0_100": 83.4,
+            "ranking_score_0_100": 82.0,
             "source_excerpt": "Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA — Meta returns to the open source ecosystem with the release of Muse Glimmer, a 30B open-weight dense model with a 120K+ context window built for local AI...",
             "matched_terms": [
               "release"
@@ -232,7 +236,7 @@
             "source_type": "github_release",
             "created_at": "2026-09-05T18:26:03+00:00",
             "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/openai%404.0.60",
-            "ranking_score_0_100": 80.4,
+            "ranking_score_0_100": 79.0,
             "source_excerpt": "@ai-sdk/openai@4.0.60 — ### Patch Changes - 17e489e: feat(openai): add GPT-6 reasoning configuration updates",
             "matched_terms": [
               "sdk"
@@ -248,7 +252,7 @@
             "source_type": "github_release",
             "created_at": "2026-08-26T14:50:01+00:00",
             "url": "https://github.com/huggingface/transformers/releases/tag/v5.16.1",
-            "ranking_score_0_100": 65.9,
+            "ranking_score_0_100": 64.5,
             "source_excerpt": "Release v5.16.1 — # Release v5.16.1 This is a special release as we include GLM! (and a few small fixes) # GLM-5.3-Flash GLM-5.3-Flash, the first **natively multimodal model** in the GLM-5 series. With 320B total parameters and just 18B active parameters, it outperforms GLM-5.2 across benchmarks and real-world workloads at one-tenth the price, while approac…",
             "matched_terms": [
               "release"
@@ -265,37 +269,20 @@
         "id": "brief-model-progress",
         "category_id": "model-progress",
         "category_title": "模型進展",
-        "status": "pass",
+        "status": "degraded",
         "theme_id": "efficient-learning",
         "kicker": "模型進展",
         "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
         "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
-        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments」，以及 Hugging Face Blog 的「Training a coding model to paint watercolours with TRL and OpenEnv」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日只有 Hugging Face Blog 的「Training a coding model to paint watercolours with TRL and OpenEnv」命中此主題；不宣稱形成跨來源訊號。",
         "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
         "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
         "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
         "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
         "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
-        "evidence_source_count": 2,
-        "matched_term_count": 3,
+        "evidence_source_count": 1,
+        "matched_term_count": 1,
         "evidence": [
-          {
-            "item_id": "arxiv-ai:7510047a79123414bf1d",
-            "title": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments",
-            "source_key": "arxiv-ai",
-            "source_label": "arXiv cs.AI 最新研究",
-            "source_type": "preprint_feed",
-            "created_at": "2026-09-04T17:50:10+00:00",
-            "url": "https://arxiv.org/abs/2609.05403v1",
-            "ranking_score_0_100": 67.5,
-            "source_excerpt": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments — Retail search systems serve diverse geographic regions with distinct query patterns, vocabularies, and product preferences, creating significant data heterogeneity that challenges both privacy-preserving training and model personalization. Federated lea…",
-            "matched_terms": [
-              "training",
-              "data"
-            ],
-            "item_integrity_hash": "4ab4fc832f3c2290866528a9d330677d2b15f93e5d063f86f066556787b90c0e",
-            "relationship": "topic_context_not_endorsement"
-          },
           {
             "item_id": "huggingface-blog:b5500bc6503561c622e2",
             "title": "Training a coding model to paint watercolours with TRL and OpenEnv",
@@ -304,7 +291,7 @@
             "source_type": "official_feed",
             "created_at": "2026-09-03T00:00:00+00:00",
             "url": "https://huggingface.co/blog/train-to-paint-with-code",
-            "ranking_score_0_100": 76.0,
+            "ranking_score_0_100": 74.5,
             "source_excerpt": "Training a coding model to paint watercolours with TRL and OpenEnv",
             "matched_terms": [
               "training"
@@ -314,8 +301,8 @@
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "refreshed",
-        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 arXiv cs.AI 最新研究。"
+        "novelty_status": "weakened",
+        "what_changed": "主軸未變，但少了 1 則先前主題訊號；證據廣度下降。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -330,18 +317,18 @@
       "url": "https://openai.com/index/ai-native-company-workflows"
     },
     {
-      "item_id": "nvidia-developer:7606d2313168061b0199",
-      "title": "NVIDIA Vera Rubin and Blackwell Set a New Standard for Agentic AI Performance per Watt",
+      "item_id": "nvidia-developer:a55484127056e2582739",
+      "title": "Run Local Agentic AI Workflows with Meta’s Muse Glimmer on NVIDIA",
       "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
       "source_label": "NVIDIA Developer Blog",
-      "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-and-blackwell-set-a-new-standard-for-agentic-ai-performance-per-watt/"
+      "url": "https://developer.nvidia.com/blog/run-local-agentic-ai-workflows-with-metas-muse-glimmer-on-nvidia/"
     },
     {
-      "item_id": "arxiv-ai:7510047a79123414bf1d",
-      "title": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments",
-      "action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-      "source_label": "arXiv cs.AI 最新研究",
-      "url": "https://arxiv.org/abs/2609.05403v1"
+      "item_id": "huggingface-blog:b5500bc6503561c622e2",
+      "title": "Training a coding model to paint watercolours with TRL and OpenEnv",
+      "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "source_label": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/train-to-paint-with-code"
     }
   ],
   "categories": [
@@ -369,11 +356,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 92.1,
+          "ranking_score_0_100": 90.7,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 60.7
+            "recency": 53.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "8dd0f8b0617ce08b8e54a1a863449998fbf8ce48bf7c1066ed069190008e64dd"
@@ -391,21 +378,21 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 83.7,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 55.9
+            "recency": 48.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "6e4d77ab4dfd5b780f3c152b98b9af4e4d222cebbfd36a0a04dd1fd64bca27cf"
         },
         {
-          "id": "openai-news:3784d7aba9718af9aa19",
-          "url": "https://openai.com/index/research-acceleration-view-inside-openai",
-          "created_at": "2026-09-06T08:00:00+00:00",
-          "title": "Research acceleration: The view inside OpenAI",
-          "text": "Research acceleration: The view inside OpenAI — Inside OpenAI, coding agents are reshaping AI research. Explore early data on agent usage, experiment velocity, task complexity, and research acceleration.",
+          "id": "openai-news:073b13b14ae0138b1424",
+          "url": "https://openai.com/index/supporting-independent-journalism-in-ukraine",
+          "created_at": "2026-09-07T00:00:00+00:00",
+          "title": "Supporting independent journalism in Ukraine",
+          "text": "Supporting independent journalism in Ukraine — OpenAI, AIRPPU and WAN-IFRA launch an AI program to help Ukrainian news organizations strengthen innovation, resilience, and independent journalism.",
           "source_key": "openai-news",
           "category_id": "ai-application-monetization",
           "source_label": "OpenAI News",
@@ -413,14 +400,14 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 76.2,
+          "ranking_score_0_100": 75.8,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 93.7
+            "recency": 91.3
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "119fb5a7249f84050c28500582e0015c3a4877d1d807a109795a2d053d536cd1"
+          "integrity_hash": "51767850e25cd44027d750b2e2eef00e4b77a2c8e5ae646a6c22f4baa98bc701"
         },
         {
           "id": "google-ai-blog:5eb2aa71a90a9c91745c",
@@ -435,11 +422,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 70.0,
+          "ranking_score_0_100": 68.6,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 67.4
+            "recency": 60.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "5f5d2641702dd9bda081d5fcc59158a216ac2ef1cec99bb2dbcf9784d335c53c"
@@ -457,11 +444,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 68.0,
+          "ranking_score_0_100": 66.6,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 62.7
+            "recency": 55.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "33e97cef7635b5db5cf80f0cf4c7ce2fd08ac40a38ad4532978952fc9edd50d5"
@@ -479,11 +466,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 59.5,
+          "ranking_score_0_100": 58.0,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 19.9
+            "recency": 12.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "fb6ca3c47061f2df0da94bbbae8056dcda80ab4c05e83e76c307e4dfcb305e63"
@@ -515,11 +502,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 83.4,
+          "ranking_score_0_100": 82.0,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 61.9
+            "recency": 54.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "ef59a1ade04243ee3ae5d7aa3961158d6bedb13a3b3539da2f8d81768a4c0ee2"
@@ -537,11 +524,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.4,
+          "ranking_score_0_100": 79.0,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 89.7
+            "recency": 82.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "9c676c95114ce4b553b0d2fe8a92c3dbfce45d758aa54606e8ceb809b993a920"
@@ -559,11 +546,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.4,
+          "ranking_score_0_100": 79.0,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 89.7
+            "recency": 82.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "496c6d237f5f48662647db82b8a1044f9df19bc8053348acb92eb566b36f0656"
@@ -581,36 +568,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.4,
+          "ranking_score_0_100": 79.0,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 89.7
+            "recency": 82.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "afb4f26d220ed7a11358b5e0fc9c9f9bd4be7f6790bd76bd3d635655e87fff55"
-        },
-        {
-          "id": "nvidia-developer:7606d2313168061b0199",
-          "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-and-blackwell-set-a-new-standard-for-agentic-ai-performance-per-watt/",
-          "created_at": "2026-08-24T15:23:55+00:00",
-          "title": "NVIDIA Vera Rubin and Blackwell Set a New Standard for Agentic AI Performance per Watt",
-          "text": "NVIDIA Vera Rubin and Blackwell Set a New Standard for Agentic AI Performance per Watt — AI agents have expanded inference from single-turn interactions into multi-step workflows that reason, invoke tools, coordinate subagents, and carry growing...",
-          "source_key": "nvidia-developer",
-          "category_id": "engineering-methods",
-          "source_label": "NVIDIA Developer Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方工程",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 79.1,
-          "ranking_components_0_100": {
-            "source_quality": 97.0,
-            "keyword_relevance": 100.0,
-            "recency": 3.0
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "411605a09d811f8b6e85d262170c751634ec273eba3d58ad9425849ea924ec89"
         },
         {
           "id": "nvidia-developer:e40805230ff2a543645b",
@@ -625,14 +590,36 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 77.3,
+          "ranking_score_0_100": 75.9,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 69.2
+            "recency": 62.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "c7ef6795b536121e7d094b19aa9fdad80cccbf3e3b0a248838f71a5a3b4f2027"
+        },
+        {
+          "id": "nvidia-developer:4914182f6bf7de24b10a",
+          "url": "https://developer.nvidia.com/blog/maximizing-ai-factory-performance-per-watt-with-nvidia-dsx-maxlps/",
+          "created_at": "2026-08-31T20:56:08+00:00",
+          "title": "Maximizing AI Factory Performance per Watt with NVIDIA DSX MaxLPS",
+          "text": "Maximizing AI Factory Performance per Watt with NVIDIA DSX MaxLPS — AI factories are power-constrained industrial systems. The question is no longer how many GPUs fit in a data center, but how much AI output each available...",
+          "source_key": "nvidia-developer",
+          "category_id": "engineering-methods",
+          "source_label": "NVIDIA Developer Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方工程",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 73.0,
+          "ranking_components_0_100": {
+            "source_quality": 97.0,
+            "keyword_relevance": 50.0,
+            "recency": 47.5
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "0d7541be7dfefa3f2415dea0792c76dbd1a63605d0bc20c234c06cfa8b45a2e5"
         },
         {
           "id": "transformers-releases:d4b5c908f621053b7272",
@@ -647,11 +634,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 65.9,
+          "ranking_score_0_100": 64.5,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 17.2
+            "recency": 10.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3ccc47c786dc38a2c8e20068d06c16e5f07a522936d9489e0343be0e4977dce7"
@@ -669,11 +656,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 65.8,
+          "ranking_score_0_100": 64.4,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 16.5
+            "recency": 9.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "6eaabc2c70638e68783ffda0424085a3b8e1c871c38f9db727d59dfc91bee44f"
@@ -704,36 +691,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 76.0,
+          "ranking_score_0_100": 74.5,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 50.0,
-            "recency": 69.9
+            "recency": 62.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b4ea02549cb88e8746903bf823f3efe8a516946f40b8fce4fbda73ad9445eb60"
-        },
-        {
-          "id": "arxiv-ai:944a0273cf6750aa419d",
-          "url": "https://arxiv.org/abs/2609.05324v1",
-          "created_at": "2026-09-04T16:19:01+00:00",
-          "title": "RoboSPA: Can VLA Models Go Beyond Simple Scenes and Short-Horizon Tasks?",
-          "text": "RoboSPA: Can VLA Models Go Beyond Simple Scenes and Short-Horizon Tasks? — Vision-Language-Action (VLA) models have shown promising progress in language-conditioned robotic manipulation. However, existing datasets and benchmarks mainly evaluate task completion under predefined settings, offering limited insight into model reasoning under increasing spatial and procedural complexity. We introduce \\textbf{RoboSPA} (\\textbf{Robo}t \\textbf{S}patial-\\textbf{P}rocedural \\textbf{A}ssessment), a large-scale robotic manipulation dataset and benchmark for diagnosing embodied reasoning in VLA model…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 74.9,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 75.0,
-            "recency": 81.9
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "64eb9faa0189e3d4e6a304f19f7e996f15880015a98e461b224c2f8e6b0fa6d7"
         },
         {
           "id": "deepmind-blog:2b0379511ea0511400ff",
@@ -748,11 +713,11 @@
           "source_tier": "官方研究",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 72.4,
+          "ranking_score_0_100": 70.9,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 74.4
+            "recency": 67.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "8ffbb7a7f9a28c125367f5ab87ef8c7572dc787f01486bc7547994d0a89e1eb4"
@@ -770,11 +735,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 69.3,
+          "ranking_score_0_100": 67.8,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 73.8
+            "recency": 66.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a0ef0cbefff04264d8b71c383efc523e698dc2c11d2cd0a46c2f2752ffa8727a"
@@ -792,58 +757,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 68.5,
+          "ranking_score_0_100": 67.0,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 69.9
+            "recency": 62.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "558de372e65e4faeef8ca5094a00c27a5de9253ae8bb9f3c0ce56fa6088f19b3"
-        },
-        {
-          "id": "arxiv-ai:efa249640977c0a61c2d",
-          "url": "https://arxiv.org/abs/2609.05404v1",
-          "created_at": "2026-09-04T17:51:48+00:00",
-          "title": "Diffusion TV: Experiencing Diffusion Models through Tangible, Embodied Interaction",
-          "text": "Diffusion TV: Experiencing Diffusion Models through Tangible, Embodied Interaction — Diffusion TV is an interactive AI art installation that offers a tangible and embodied experience of diffusion models through a modified CRT TV. By physically manipulating the TV's antenna, audiences control the clarity of AI-generated images and sounds, metaphorically enacting the denoising process that underlies diffusion-based generation. Using the tuning knob, participants switch between three channels featuring AI-generated animals from the Past (extinct species), Present (endangered species), and Future (spe…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 67.5,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 82.3
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "b85b779e3d5eaa89551071dd7a947242b6af4fe3d1732f7e2e0043ea7a611a1e"
-        },
-        {
-          "id": "arxiv-ai:7510047a79123414bf1d",
-          "url": "https://arxiv.org/abs/2609.05403v1",
-          "created_at": "2026-09-04T17:50:10+00:00",
-          "title": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments",
-          "text": "RegionFed: Federated Learning for Personalized Query Understanding in Heterogeneous Retail Environments — Retail search systems serve diverse geographic regions with distinct query patterns, vocabularies, and product preferences, creating significant data heterogeneity that challenges both privacy-preserving training and model personalization. Federated learning offers a natural solution for privacy, but standard FL methods produce global models that sacrifice regional performance, while existing personalized FL approaches operate at the parameter level and catastrophically collapse on modern transformers (below 10\\%…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 67.5,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 82.3
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "4ab4fc832f3c2290866528a9d330677d2b15f93e5d063f86f066556787b90c0e"
         }
       ]
     }
