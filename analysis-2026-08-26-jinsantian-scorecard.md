@@ -202,7 +202,71 @@ thesis.gold 與 BTC 結構證據層是否為獨立缺陷，要等快照解凍後
 **§4.2 的結論與失效條件（日收盤跌破 64,111）皆維持不變**。
 
 > **未動作聲明**：我沒有碰 main，也沒有手動觸發任何工作流（`workflow_dispatch` 會寫資料進 main，那是你的決定）。
-> 要修的話，第一個該看的位置是 MSTR 的 `weekly_btc_sales_musd`（8-K 每週買賣量解析），不是 thesis.gold。
+> 要修的話，第一個該看的位置是 MSTR 的 `weekly_btc_sales_musd`（8-K 每週買賣量解析）。
+> **（此指路已於 2.6 修正：9/2 起阻塞點前移，執行順序上該先修 thesis.gold。）**
+
+---
+
+### 2.6 2026-09-08 複核：凍結已 8 天，且阻塞點已經移動
+
+#### 管線狀態 `[VERIFIED: origin/main history + daily-data runs #82–#89]`
+
+| 工作流 | 最後成功 | 之後 |
+|---|---|---|
+| `daily-data.yml` | #81，8/31 04:10Z | **#82–#89 連 8 次失敗（9/1–9/8）** |
+| `market-universe.yml` | #739，9/1 05:17Z | 持續失敗 |
+| `ai-intelligence.yml` | **ad1fec3，9/8 05:11Z** | **每日照常提交，健康** |
+
+**先前擔心的「三條管線全倒」沒有發生。** `ai-intelligence.yml` 從 9/3 到 9/8 每天 05:00Z 前後
+都正常寫入 main（fe6e955、958f53f、95701ff、36cd552、c7f1d9d、ad1fec3）。
+這仍然是局部故障，不是全 repo 停擺——這一點先前的判斷成立。
+
+#### 阻塞點已經從 9/1 的位置往前移了
+
+這是本次最重要的發現。比對 daily-data 自己的兩次 run：
+
+| 步驟 | #82（9/1） | #89（9/8） |
+|---|---|---|
+| `daily_data_pipeline.py`（收快照） | ok_sources 96, errors 6 | **ok_sources 95, errors 6 → 成功** |
+| `collect_market_universe.py` | quality **degraded**, structural_errors **0** | quality **fail**, structural_errors **1** |
+| `verify_market_universe.py` | **通過**（`failures: []`） | **失敗** → `##[error] exit 1` |
+| `verify_daily_data.py` | **失敗**：`weekly_btc_sales_musd` | **根本沒跑到** |
+
+#89 的失敗只有兩項：
+```
+{"status": "fail", "failures": ["collector quality: BTC 長期結構證據層未通過資料契約",
+                                "evidence thesis.gold source IDs are missing or duplicated"]}
+```
+
+**所以我在 9/2 給的行動建議需要修正。** 當時我說「先修 `weekly_btc_sales_musd`，不是 thesis.gold」。
+就 9/1 那一天「誰先斷鏈」而言，那個判讀仍然正確；但**作為現在的行動順序它是錯的**：
+從 9/2 起每一次 run 都在 `verify_market_universe` 就中止，`verify_daily_data` 連跑都沒跑到。
+**執行順序上，現在該先修的就是 thesis.gold 的 evidence source-ID 註冊表與 BTC 長期結構證據層契約。**
+
+連帶一個誠實的補充：我原本打算用「8 天過去、週度 8-K 早該發了」來否證
+「8-K 還沒發」那條假說。**這個測試現在做不成**——該檢查根本沒執行，
+`weekly_btc_sales_musd` 目前是**不可觀測**，既不能說它好了，也不能說它還壞著。
+
+#### 一個好消息
+
+`daily_data_pipeline.py` 在 #89 仍然 **ok_sources 95 / errors 6 成功收到快照**。
+資料抓取端是好的；8 天的凍結純粹是 **fail-closed 閘門擋住了提交**，不是抓不到資料。
+閘門一過，快照應該立刻跟上，不需要回補。
+
+#### 對本文結論的影響（R1）
+
+| 內容 | 狀態 |
+|---|---|
+| §2.3 / §2.4 的現價與情緒數字 | `[STALE]` **8 天** — 最新可得仍是 8/31（BTC 77,640、F&G 62） |
+| 本 repo 目前無法提供 9/1–9/8 的任何價格 | 管線沒提交，倉庫裡就是沒有 |
+| §2.1 / §2.2 月線軌跡與三個硬事實 | `[VERIFIED]` 不受影響 |
+| **§4.2 的 20x 進場帶 $67,100–68,500** | **不受影響**（由 200WMA／突破平台頂推導） |
+
+**但要提醒：進場帶本身沒有失效，「現在離它多遠」這件事已經沒有可信數字。**
+8/31 時價格在帶上方約 +14%；8 天後是多少，本 repo 答不出來。
+真要執行 §4.2 的掛單，請先用交易所現價確認一次。
+
+> **未動作聲明**：仍未碰 main，仍未手動觸發任何工作流。
 
 ---
 
