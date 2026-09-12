@@ -270,6 +270,52 @@ thesis.gold 與 BTC 結構證據層是否為獨立缺陷，要等快照解凍後
 
 ---
 
+### 2.7 2026-09-12 複核：第三條管線也倒了，main 完全停止前進
+
+`[VERIFIED: ai-intelligence run #49 / job 103501555757]`
+
+§2.6 我寫「這仍然是局部故障，不是全 repo 停擺」，並把
+「`ai-intelligence.yml` 開始失敗」列為需要回報的升級條件。**今天觸發了。**
+
+| 工作流 | 最後成功 | 現況 |
+|---|---|---|
+| `daily-data.yml` | #81，8/31 04:10Z | #82–#93 連 12 次失敗 |
+| `market-universe.yml` | #739，9/1 05:17Z | 持續失敗 |
+| **`ai-intelligence.yml`** | **#48，9/11 05:13Z** | **#49（9/12 04:59Z）失敗，16 秒** |
+
+**main 的最後一筆提交是 `cb1654a`（9/11 05:13Z），此後完全靜止。**
+
+#### 但這是第三種、不同的故障
+
+```
+scripts/test_ai_verifier_mutations.py line 52
+    assert run_case(root, source, history, None) == 0
+AssertionError
+
+（緊接在 assert 之前印出的 verifier 結果）
+{"status": "fail", "failures": 1, "degradations": 0,
+ "counts": {"ai-application-monetization": 5, "engineering-methods": 8, "model-progress": 7},
+ "sources": 10, "actions": 3}
+```
+
+注意第四個參數是 `None` ——**這是 mutation test 的對照組**，
+也就是「不竄改任何東西、真實資料應該乾淨通過」的那一格。
+
+**失敗的不是某個竄改沒被抓到，而是未經竄改的真實資料自己過不了 verifier。**
+與 daily-data 的病理同型（真實資料撞破自家契約），但發生在完全不同的模組。
+
+#### 三條管線的共同點
+
+三者都停在**測試／驗證步驟**，都在收集資料「之後」、提交「之前」。
+沒有一條是抓不到資料。這是同一種設計姿態（fail-closed）在三個地方各自咬住，
+而不是一次基礎設施故障。
+
+**對本文的影響**：§2.6 說「閘門一過快照會自己跟上」仍然成立，
+但現在**三道閘門都關著**，在有人動手之前不會有任何新資料。
+§4.2 的 $67,100–68,500 仍由結構位推導、不受影響；現價依然要自己去交易所看。
+
+---
+
 ## 3. 金三天記分卡（待字幕，先固定評分尺）
 
 **⬜ 全欄待填 — 字幕到位前不得寫入任何內容。**
