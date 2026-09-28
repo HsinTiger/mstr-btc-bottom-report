@@ -1,15 +1,13 @@
 {
   "schema": 3,
-  "generated_at": "2026-09-27T05:42:00+00:00",
+  "generated_at": "2026-09-28T05:48:59+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "degraded",
+    "status": "pass",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [
-      "機構觀點跨來源證據不足：模型進展。"
-    ],
+    "degradations": [],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
@@ -19,7 +17,7 @@
     "successful_sources": 10,
     "failed_sources": 0,
     "editorial_briefs": 3,
-    "editorial_pass": 2
+    "editorial_pass": 3
   },
   "source_checks": [
     {
@@ -28,7 +26,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 1230,
       "eligible_items": 14
@@ -39,7 +37,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 2
@@ -50,7 +48,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 0
@@ -61,7 +59,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -72,10 +70,10 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 100,
-      "eligible_items": 15
+      "eligible_items": 16
     },
     {
       "source_key": "vllm-releases",
@@ -83,7 +81,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -94,7 +92,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 0
@@ -105,7 +103,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 0
@@ -116,7 +114,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 868,
       "eligible_items": 2
@@ -127,14 +125,14 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-09-27T05:42:00+00:00",
+      "checked_at": "2026-09-28T05:48:59+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
     }
   ],
   "editorial_digest": {
-    "status": "degraded",
+    "status": "pass",
     "lead_brief_id": "brief-engineering-methods",
     "briefs": [
       {
@@ -163,7 +161,7 @@
             "source_type": "official_feed",
             "created_at": "2026-09-16T12:00:00+00:00",
             "url": "https://openai.com/index/how-to-connect-ai-usage-to-business-value",
-            "ranking_score_0_100": 77.2,
+            "ranking_score_0_100": 75.7,
             "source_excerpt": "How to connect AI usage to business value — Learn how ChatGPT Work and Codex analytics help teams understand AI usage and spend, identify training needs, and connect adoption to business outcomes.",
             "matched_terms": [
               "business",
@@ -180,7 +178,7 @@
             "source_type": "official_feed",
             "created_at": "2026-09-23T18:00:00+00:00",
             "url": "https://blog.google/innovation-and-ai/technology/research/google-beam-expansion/",
-            "ranking_score_0_100": 71.5,
+            "ranking_score_0_100": 70.1,
             "source_excerpt": "Google Beam expands with new regions, partners, and customers — Google Beam promotional animation",
             "matched_terms": [
               "customer"
@@ -202,7 +200,7 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow-harness@1.0.127」，以及 NVIDIA Developer Blog 的「CUDA Toolkit 13.4 Adds Windows on Arm Support and Greater Control over Shared GPUs」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow-harness@1.0.128」，以及 NVIDIA Developer Blog 的「CUDA Toolkit 13.4 Adds Windows on Arm Support and Greater Control over Shared GPUs」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
@@ -212,19 +210,19 @@
         "matched_term_count": 3,
         "evidence": [
           {
-            "item_id": "vercel-ai-releases:b047d6d99543339ed943",
-            "title": "@ai-sdk/workflow-harness@1.0.127",
+            "item_id": "vercel-ai-releases:d86226275412f19d34b0",
+            "title": "@ai-sdk/workflow-harness@1.0.128",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-09-27T03:28:58+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.127",
-            "ranking_score_0_100": 82.4,
-            "source_excerpt": "@ai-sdk/workflow-harness@1.0.127 — ### Patch Changes - @ai-sdk/harness@1.0.127",
+            "created_at": "2026-09-27T06:09:24+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.128",
+            "ranking_score_0_100": 81.1,
+            "source_excerpt": "@ai-sdk/workflow-harness@1.0.128 — ### Patch Changes - @ai-sdk/harness@1.0.128",
             "matched_terms": [
               "sdk"
             ],
-            "item_integrity_hash": "14c76c6bf217c66d362290d8b2fd039c6e0e06f5a65f752ea78a4d62b7e262d8",
+            "item_integrity_hash": "f06987d8e44d4647ac99cf875c51ab653fb8eb8f03a158752e6b04e2d01a1e28",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -235,7 +233,7 @@
             "source_type": "official_feed",
             "created_at": "2026-09-17T20:20:33+00:00",
             "url": "https://developer.nvidia.com/blog/cuda-toolkit-13-4-adds-windows-on-arm-support-and-greater-control-over-shared-gpus/",
-            "ranking_score_0_100": 77.6,
+            "ranking_score_0_100": 76.2,
             "source_excerpt": "CUDA Toolkit 13.4 Adds Windows on Arm Support and Greater Control over Shared GPUs — Every NVIDIA CUDA Toolkit release adds functionality and performance improvements that help developers get more from NVIDIA GPUs and the broader NVIDIA software...",
             "matched_terms": [
               "release"
@@ -251,7 +249,7 @@
             "source_type": "github_release",
             "created_at": "2026-09-22T05:20:54+00:00",
             "url": "https://github.com/vllm-project/vllm/releases/tag/v0.30.0",
-            "ranking_score_0_100": 75.3,
+            "ranking_score_0_100": 73.9,
             "source_excerpt": "v0.30.0 — # v0.30.0 ## Highlights This release features 762 commits from 315 contributors (104 new)! * **New models**: DeepSeek-V4.1-Flash (#56214, #56228, #56208) with the whole KV stored in MXFP8 through the FlashMLA V4.1 record on SM100 (#56893), DeepGEMM Mega-mHC (#56962), and async Engram prefetch with Engram DP sharding (#56512); DeepSeek-V4-Flash-Vis…",
             "matched_terms": [
               "release"
@@ -268,41 +266,56 @@
         "id": "brief-model-progress",
         "category_id": "model-progress",
         "category_title": "模型進展",
-        "status": "degraded",
-        "theme_id": "efficient-learning",
+        "status": "pass",
+        "theme_id": "benchmark-to-reliability",
         "kicker": "模型進展",
-        "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
-        "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
-        "lede": "今日只有 arXiv cs.AI 最新研究 的「PoEM: Predicting RL Outcomes from Existing Policies」命中此主題；不宣稱形成跨來源訊號。",
-        "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
-        "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
-        "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
-        "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
-        "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
-        "evidence_source_count": 1,
+        "headline": "榜單上的進步，仍要經過真實任務可靠性這一關",
+        "standfirst": "評測分數能指出能力方向，卻不能自動涵蓋資料污染、工具失敗、長任務漂移與你的工作分布。",
+        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency」，以及 Hugging Face Blog 的「How UK AISI and EvalEval Are Making Benchmark Results Reproducible」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "common_interpretation": "新基準或更高分數常被視為模型能力已全面提升。",
+        "variant_view": "真正可用的進步是失敗分布改變，而不只是平均分上升；尤其要看最差案例與重試成本。",
+        "second_order_effect": "企業會更依賴自有評測集，公開榜單對採購與模型路由的決定力可能下降。",
+        "practical_readthrough": "從研究中只取一個可驗證假說，放進自己的固定任務集；同時保存失敗案例，不用單一平均分做結論。",
+        "falsifier": "若公開基準提升能在多個獨立真實任務集穩定重現，且尾端失敗同步下降，榜單才可作為較強代理指標。",
+        "evidence_source_count": 2,
         "matched_term_count": 2,
         "evidence": [
           {
-            "item_id": "arxiv-ai:14b37bf4e9dc77dc10c6",
-            "title": "PoEM: Predicting RL Outcomes from Existing Policies",
+            "item_id": "arxiv-ai:bbef182b08723e3204e2",
+            "title": "Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency",
             "source_key": "arxiv-ai",
             "source_label": "arXiv cs.AI 最新研究",
             "source_type": "preprint_feed",
-            "created_at": "2026-09-24T17:50:25+00:00",
-            "url": "https://arxiv.org/abs/2609.30226v1",
-            "ranking_score_0_100": 74.9,
-            "source_excerpt": "PoEM: Predicting RL Outcomes from Existing Policies — Foundation models are post-trained with reinforcement learning (RL) to maximize specific rewards, such as human alignment, correctness, or instruction following. This post-training process is computationally intensive, sometimes unstable, and has to be run from scratch every time the reward model changes…",
+            "created_at": "2026-09-25T17:59:52+00:00",
+            "url": "https://arxiv.org/abs/2609.31619v1",
+            "ranking_score_0_100": 82.4,
+            "source_excerpt": "Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency — Reasoning models often generate very long reasoning traces, making inference computationally expensive. Existing approaches typically improve efficiency either through inference-time early-stopping mechanisms or by explicitly encouraging shorter re…",
             "matched_terms": [
-              "training",
-              "post-training"
+              "reasoning"
             ],
-            "item_integrity_hash": "df2e9c70e599e0cb60232482b04c39870536939b8134677c8dfc4a1571a931c0",
+            "item_integrity_hash": "3ae1707d4c0404d2c209d24f69b45cfd1109c80111a215912cd8e96210f55cf2",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "huggingface-blog:e9f63aa1f7aaa02f4024",
+            "title": "How UK AISI and EvalEval Are Making Benchmark Results Reproducible",
+            "source_key": "huggingface-blog",
+            "source_label": "Hugging Face Blog",
+            "source_type": "official_feed",
+            "created_at": "2026-09-22T00:00:00+00:00",
+            "url": "https://huggingface.co/blog/evaleval-aisi",
+            "ranking_score_0_100": 65.6,
+            "source_excerpt": "How UK AISI and EvalEval Are Making Benchmark Results Reproducible",
+            "matched_terms": [
+              "benchmark"
+            ],
+            "item_integrity_hash": "a78089de4a1cac308cde758194f96ccbc2bc8ed5e15be80a8de6a357b303a353",
             "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "unchanged",
-        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
+        "novelty_status": "changed",
+        "what_changed": "主軸由「模型研究正把問題從『更大』改寫成『怎樣學得更有效』」轉為「榜單上的進步，仍要經過真實任務可靠性這一關」。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -324,11 +337,11 @@
       "url": "https://developer.nvidia.com/blog/enabling-private-high-performance-production-ai-inference-with-nvidia-confidential-computing/"
     },
     {
-      "item_id": "arxiv-ai:14b37bf4e9dc77dc10c6",
-      "title": "PoEM: Predicting RL Outcomes from Existing Policies",
+      "item_id": "arxiv-ai:bbef182b08723e3204e2",
+      "title": "Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency",
       "action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
       "source_label": "arXiv cs.AI 最新研究",
-      "url": "https://arxiv.org/abs/2609.30226v1"
+      "url": "https://arxiv.org/abs/2609.31619v1"
     }
   ],
   "categories": [
@@ -356,11 +369,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 79.7,
+          "ranking_score_0_100": 78.2,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 50.0,
-            "recency": 73.3
+            "recency": 66.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "6b0fd815d083a0ba7257e3543179712763b1ef022e45608f1ba53f44b8617407"
@@ -378,11 +391,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 77.2,
+          "ranking_score_0_100": 75.7,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 23.3
+            "recency": 16.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "680466b73e6fdc1b4bd2e7c83c510805b6175ef920cf51d8ee33842afd8e33a8"
@@ -400,11 +413,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 75.4,
+          "ranking_score_0_100": 74.0,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 25.0,
-            "recency": 89.7
+            "recency": 82.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "700bd36347282c5110d795e3630f4d25143655d770befd0935cf164ace30732d"
@@ -422,11 +435,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 71.5,
+          "ranking_score_0_100": 70.1,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 75.1
+            "recency": 67.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "02e1e6822e72efe4a41620cf45a4e78317e9fc6cc5b2698ca45184c23eab9f59"
@@ -444,11 +457,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 58.5,
+          "ranking_score_0_100": 57.1,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 10.2
+            "recency": 3.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "dfc1399ebca801399c0864fac16fecc710d638e421996da6898f87d773791b2b"
@@ -468,11 +481,11 @@
       ],
       "items": [
         {
-          "id": "vercel-ai-releases:b047d6d99543339ed943",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.127",
-          "created_at": "2026-09-27T03:28:58+00:00",
-          "title": "@ai-sdk/workflow-harness@1.0.127",
-          "text": "@ai-sdk/workflow-harness@1.0.127 — ### Patch Changes - @ai-sdk/harness@1.0.127",
+          "id": "vercel-ai-releases:d86226275412f19d34b0",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.128",
+          "created_at": "2026-09-27T06:09:24+00:00",
+          "title": "@ai-sdk/workflow-harness@1.0.128",
+          "text": "@ai-sdk/workflow-harness@1.0.128 — ### Patch Changes - @ai-sdk/harness@1.0.128",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -480,21 +493,21 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.4,
+          "ranking_score_0_100": 81.1,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 99.3
+            "recency": 93.0
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "14c76c6bf217c66d362290d8b2fd039c6e0e06f5a65f752ea78a4d62b7e262d8"
+          "integrity_hash": "f06987d8e44d4647ac99cf875c51ab653fb8eb8f03a158752e6b04e2d01a1e28"
         },
         {
-          "id": "vercel-ai-releases:fc7fa11e2ad30fe03be1",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.48",
-          "created_at": "2026-09-27T03:28:55+00:00",
-          "title": "@ai-sdk/workflow@2.0.48",
-          "text": "@ai-sdk/workflow@2.0.48 — ### Patch Changes - ai@7.0.117",
+          "id": "vercel-ai-releases:17e07fb61dd46ce3f174",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.49",
+          "created_at": "2026-09-27T06:09:21+00:00",
+          "title": "@ai-sdk/workflow@2.0.49",
+          "text": "@ai-sdk/workflow@2.0.49 — ### Patch Changes - ai@7.0.118",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -502,21 +515,21 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.4,
+          "ranking_score_0_100": 81.1,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 99.3
+            "recency": 93.0
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "5b2f8ecf89fd4b24e7a4501ad649ba38dc6df2c0a8f011918dc64d290894d901"
+          "integrity_hash": "e83d03892f48e1c3ce963715adc1b915ba743c15a2168e7b6181267d55108812"
         },
         {
-          "id": "vercel-ai-releases:004452b93627a997ca59",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/vue%404.0.117",
-          "created_at": "2026-09-27T03:28:52+00:00",
-          "title": "@ai-sdk/vue@4.0.117",
-          "text": "@ai-sdk/vue@4.0.117 — ### Patch Changes - ai@7.0.117",
+          "id": "vercel-ai-releases:9b5530fb3b3730206ac3",
+          "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.118",
+          "created_at": "2026-09-27T06:08:00+00:00",
+          "title": "ai@7.0.118",
+          "text": "ai@7.0.118 — ### Patch Changes - Updated dependencies [e6a7996] - Updated dependencies [e19f0fc] - @ai-sdk/gateway@4.0.96",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -524,14 +537,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.4,
+          "ranking_score_0_100": 81.1,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 99.3
+            "recency": 93.0
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "d169233e7f168b5284fff0e5e62579ecb6322bdf01945c5343de14c91f90f85a"
+          "integrity_hash": "7ff0c46c4c655a02343e785bf5f6ba3831f398b43bbf9c7f63bb3de71f319f6b"
         },
         {
           "id": "nvidia-developer:9c7207d69ab9abaf16f5",
@@ -546,11 +559,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 78.4,
+          "ranking_score_0_100": 77.0,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 74.6
+            "recency": 67.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d8c96d0a9ff0fe969549a9ce2949b0f5848bd3999de4c6ad2e3e4572a48fb994"
@@ -568,11 +581,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 78.4,
+          "ranking_score_0_100": 77.0,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 74.5
+            "recency": 67.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d750e45ca352521de51248315a6b135f13d9c7c60625ae798b409a1c741ce392"
@@ -590,11 +603,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 77.6,
+          "ranking_score_0_100": 76.2,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 32.9
+            "recency": 25.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "84e81ef660663ebce7a47deb3df34d25e599d72651ff85819dd62745ff64f7b5"
@@ -612,11 +625,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 75.3,
+          "ranking_score_0_100": 73.9,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 64.2
+            "recency": 57.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3a1a6e100f58c0b802204bc0ddd733685470a99ba8008b87f918fe1103c1d2a1"
@@ -635,11 +648,55 @@
       ],
       "items": [
         {
-          "id": "arxiv-ai:14b37bf4e9dc77dc10c6",
-          "url": "https://arxiv.org/abs/2609.30226v1",
-          "created_at": "2026-09-24T17:50:25+00:00",
-          "title": "PoEM: Predicting RL Outcomes from Existing Policies",
-          "text": "PoEM: Predicting RL Outcomes from Existing Policies — Foundation models are post-trained with reinforcement learning (RL) to maximize specific rewards, such as human alignment, correctness, or instruction following. This post-training process is computationally intensive, sometimes unstable, and has to be run from scratch every time the reward model changes or when we want to combine multiple rewards. We hence ask: given a new reward function, is it possible to predict the RL outcomes without actually running RL on it? We answer this in the affirmative by introducing…",
+          "id": "arxiv-ai:bbef182b08723e3204e2",
+          "url": "https://arxiv.org/abs/2609.31619v1",
+          "created_at": "2026-09-25T17:59:52+00:00",
+          "title": "Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency",
+          "text": "Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency — Reasoning models often generate very long reasoning traces, making inference computationally expensive. Existing approaches typically improve efficiency either through inference-time early-stopping mechanisms or by explicitly encouraging shorter reasoning during training, for example through reinforcement learning with length penalties. We show that substantial efficiency gains can instead emerge from a different kind of supervision: \\textit{confidence}. Using a self-supervised procedure, we fine-tune reasoning mo…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 82.4,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 100.0,
+            "recency": 82.2
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "3ae1707d4c0404d2c209d24f69b45cfd1109c80111a215912cd8e96210f55cf2"
+        },
+        {
+          "id": "arxiv-ai:06fdce84d48171a7732c",
+          "url": "https://arxiv.org/abs/2609.31450v1",
+          "created_at": "2026-09-25T16:06:54+00:00",
+          "title": "From Reward Signal to Visual Utility: A Controlled Audit of Medical VLM Post-Training",
+          "text": "From Reward Signal to Visual Utility: A Controlled Audit of Medical VLM Post-Training — Medical vision-language model (VLM) post-training is commonly evaluated through answer accuracy. We examine how changes in accuracy and training objectives relate to image-conditioned decisions in a controlled Qwen2.5-VL-3B study on PMC-VQA. We compare supervised fine-tuning (SFT) with low-rank adaptation (LoRA) restricted to the language model, expanded multimodal adaptation scopes, standard answer-only Group Relative Policy Optimization (GRPO), and a counterfactual evidence objective. On 2,000 clean-test questio…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 82.3,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 100.0,
+            "recency": 81.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "eda0ac31ebd2625ee6d2ea5201ffb4f1b95426b6ce138b747d5e04fdcb507df6"
+        },
+        {
+          "id": "arxiv-ai:930f8b5db199a26e2ee4",
+          "url": "https://arxiv.org/abs/2609.31505v1",
+          "created_at": "2026-09-25T16:45:28+00:00",
+          "title": "Prompt Minimization: Reducing Input Redundancy Without Sacrificing Output Fidelity",
+          "text": "Prompt Minimization: Reducing Input Redundancy Without Sacrificing Output Fidelity — Despite the growing capabilities of large language models (LLMs), prompt design remains largely heuristic and ad hoc. This project will explore $\\textit{prompt minimization}$, the process of reducing prompts to their smallest, most information-dense form while preserving output fidelity. Practically, shorter prompts reduce computational overhead and inference latency, especially when large contexts, such as entire documents or codebases, are included unnecessarily. Further, longer prompts can damage LLM reasoning…",
           "source_key": "arxiv-ai",
           "category_id": "model-progress",
           "source_label": "arXiv cs.AI 最新研究",
@@ -651,10 +708,10 @@
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 75.0,
-            "recency": 82.2
+            "recency": 81.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "df2e9c70e599e0cb60232482b04c39870536939b8134677c8dfc4a1571a931c0"
+          "integrity_hash": "acc3f779d3a122f1557b0208310283798b3ba86f2bd3ddc396e74274e6d96463"
         },
         {
           "id": "huggingface-blog:280bf64dcca75cee1131",
@@ -669,58 +726,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 70.7,
+          "ranking_score_0_100": 69.3,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 81.1
+            "recency": 73.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4485d2cbfa7879ebd8ed75effe8e523636c3daf7211c8077872f5cce399a9d47"
-        },
-        {
-          "id": "arxiv-ai:b6a9759aa87a64a77c06",
-          "url": "https://arxiv.org/abs/2609.30266v1",
-          "created_at": "2026-09-24T17:59:54+00:00",
-          "title": "LLM Agents Can Easily Tamper With Their Own Traces",
-          "text": "LLM Agents Can Easily Tamper With Their Own Traces — Asynchronous monitoring, incident investigations, and compliance audits primarily rely on agent traces to reconstruct what happened. These analyses assume that LLM agents cannot tamper with their own execution traces. We show that local LLM agents such as Claude Code, Codex, Antigravity, Open Code and Grok Build fail to enforce this boundary. All tested harnesses, except Muse Code, allowed agents to delete their traces when asked, without triggering monitor guardrails. We also validate that external attackers can…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 67.4,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 82.2
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "212c31522df49d8d48aa3aeb6144cff8a02bad16934ac788ddbc44cb3591d762"
-        },
-        {
-          "id": "arxiv-ai:84d70d1a397801ea4c2b",
-          "url": "https://arxiv.org/abs/2609.30264v1",
-          "created_at": "2026-09-24T17:59:41+00:00",
-          "title": "AD-WM: Action-Discriminative World Models for Counterfactual Model Predictive Control",
-          "text": "AD-WM: Action-Discriminative World Models for Counterfactual Model Predictive Control — Latent world models are typically trained to predict factual transitions, whereas model predictive control (MPC) must compare alternative actions from the same state. A model can therefore achieve low factual prediction error yet poorly distinguish candidate actions. We introduce AD-WM, an action-discriminative joint-embedding world model for counterfactual MPC. AD-WM combines residual latent dynamics with predictor-level action-recovery regularization, using inverse dynamics and a normalized recovery objective mo…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 67.4,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 82.2
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "b186741ffedcafdb563143a2c1fd18e70302967cb1df93bb79bc90547b148e55"
         },
         {
           "id": "huggingface-blog:e9f63aa1f7aaa02f4024",
@@ -735,11 +748,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 67.0,
+          "ranking_score_0_100": 65.6,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 62.6
+            "recency": 55.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a78089de4a1cac308cde758194f96ccbc2bc8ed5e15be80a8de6a357b303a353"
