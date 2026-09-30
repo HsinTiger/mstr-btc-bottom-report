@@ -1,13 +1,233 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-09-29T06:09:49+00:00",
-  "last_attempt_at": "2026-09-29T06:09:49+00:00",
-  "last_successful_fetch_at": "2026-09-29T06:09:49+00:00",
+  "updated_at": "2026-09-30T05:56:39+00:00",
+  "last_attempt_at": "2026-09-30T05:56:39+00:00",
+  "last_successful_fetch_at": "2026-09-30T05:56:39+00:00",
   "quality": {
-    "status": "pass"
+    "status": "degraded"
   },
   "items": [
+    {
+      "id": "vercel-ai-releases:1b5aa52eee7ad11f65f8",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.22",
+      "created_at": "2026-09-30T02:25:21+00:00",
+      "title": "@ai-sdk/zai@3.0.22",
+      "text": "@ai-sdk/zai@3.0.22 — ### Patch Changes - ede5b89: chore: migrate package builds from tsup to tsdown - Updated dependencies [ede5b89] - @ai-sdk/openai-compatible@3.0.60 - @ai-sdk/provider@4.0.20 - @ai-sdk/provider-utils@5.0.52",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 82.3,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 99.0
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "ff7e0c36b8a631e2e16a39f17fca80c9444a9f1c51e2c496c3f00bd7f76a7027"
+    },
+    {
+      "id": "vercel-ai-releases:7392e83c37f0c5d166d8",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%405.0.13",
+      "created_at": "2026-09-30T02:25:18+00:00",
+      "title": "@ai-sdk/xai@5.0.13",
+      "text": "@ai-sdk/xai@5.0.13 — ### Patch Changes - ede5b89: chore: migrate package builds from tsup to tsdown - Updated dependencies [ede5b89] - @ai-sdk/provider@4.0.20 - @ai-sdk/provider-utils@5.0.52",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 82.3,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 99.0
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "0b903f10abd00101cf0e2c541e8a819912d4b0c10a0693ff70ee9382b80d15fe"
+    },
+    {
+      "id": "vercel-ai-releases:c8e4a6df551263d5f1ff",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.54",
+      "created_at": "2026-09-30T02:25:15+00:00",
+      "title": "@ai-sdk/workflow@2.0.54",
+      "text": "@ai-sdk/workflow@2.0.54 — ### Patch Changes - 70c051c: fix(workflow): preserve reasoning and provider metadata across agent steps - ede5b89: chore: migrate package builds from tsup to tsdown - Updated dependencies [05cdac6] - Updated dependencies [4514fc1] - Updated dependencies [ede5b89] - Updated dependencies [2a625cf] - Updated dependencies [50a26d5] - ai@7.0.123 - @ai-sdk/provider@4.0.20 - @ai-sdk/provider-utils@5.0.52",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 89.8,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 75.0,
+        "recency": 99.0
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "7a06bd4a9c078e87c81c1b8dd6cd1c62d5c11e95bda04eececde01f639c75849"
+    },
+    {
+      "id": "nvidia-developer:2a6a5a4d0a360f9bbafe",
+      "url": "https://developer.nvidia.com/blog/ai-native-by-design-lessons-learned-from-building-nvidia-tensorrt-model-connect/",
+      "created_at": "2026-09-29T19:10:59+00:00",
+      "title": "AI Native by Design: Lessons Learned from Building NVIDIA TensorRT Model Connect",
+      "text": "AI Native by Design: Lessons Learned from Building NVIDIA TensorRT Model Connect — Parallel work, model-family isolation, reversible changes, and GPU-backed validation shaped an open source project designed around coding agents NVIDIA TensorRT...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 90.4,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "5e7032fd2dddeb4517d5f226818bae33ee3a9dc5520aec63ea680a8732c9c9c6"
+    },
+    {
+      "id": "nvidia-developer:0c67139805da21447479",
+      "url": "https://developer.nvidia.com/blog/lower-the-cost-of-building-and-running-visual-ai-agents-with-nvidia-vss-blueprint-3-3/",
+      "created_at": "2026-09-29T18:56:05+00:00",
+      "title": "Lower the Cost of Building and Running Visual AI Agents with NVIDIA VSS Blueprint 3.3",
+      "text": "Lower the Cost of Building and Running Visual AI Agents with NVIDIA VSS Blueprint 3.3 — Vision-language models have made it possible to build visual AI agents that understand video at production scale. The harder problem is turning that capability...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 75.3,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 25.0,
+        "recency": 96.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "dddb62a6e07bf8555eacdb830bcadf98f11aa749d545e5703c0bb1963fce889d"
+    },
+    {
+      "id": "arxiv-ai:1afe69dfed86f9a69208",
+      "url": "https://arxiv.org/abs/2609.38143v1",
+      "created_at": "2026-09-29T17:55:56+00:00",
+      "title": "Learning Meta-Skills for Agent Harness Design in Test-Time AI4AI",
+      "text": "Learning Meta-Skills for Agent Harness Design in Test-Time AI4AI — Agent performance depends on both reasoning ability and the environment in which it acts. We study test-time AI-for-AI, asking how a Builder can learn to construct better execution environments for a Target while both models' weights remain fixed. To make the Builder's experience reusable, we introduce Meta-Skill: principles specifying when support is needed and what resources to provide. The Builder learns these principles from Target's execution feedback on the development set, then uses the frozen skill bank to…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 77.8,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.4
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "e33f704a465d78ddc7d565911b39b54e31695025ebacefe676f4208194e5e14b"
+    },
+    {
+      "id": "arxiv-ai:98bc0550db1bc7692231",
+      "url": "https://arxiv.org/abs/2609.38107v1",
+      "created_at": "2026-09-29T17:46:55+00:00",
+      "title": "Correct Answers, Invalid Traces: What Verifiable Grade-School Math Reveals About Chain-of-Thought Traces",
+      "text": "Correct Answers, Invalid Traces: What Verifiable Grade-School Math Reveals About Chain-of-Thought Traces — Chain-of-thought traces are widely read as records of how models reach their answers, informing debugging, agent auditing, and claims about reasoning. Testing this interpretation is difficult because natural-language thinking traces are rarely mechanically verifiable. We revisit it in iGSM, a synthetic grade-school mathematics benchmark designed to study thinking traces and used to support claims of learned reasoning and planning. Crucially, iGSM exposes the exact quantities and dependencies that a correct solutio…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 77.8,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.4
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "51bbe62f28eb6860d2dc14a1a9a649fbd966ae90094670fec63d8169b2a5ee65"
+    },
+    {
+      "id": "arxiv-ai:0c41b636aba670ea0ac1",
+      "url": "https://arxiv.org/abs/2609.38043v1",
+      "created_at": "2026-09-29T17:17:24+00:00",
+      "title": "UserProxyBench: Evaluating LLM User Simulators for Agent Benchmarks and Training",
+      "text": "UserProxyBench: Evaluating LLM User Simulators for Agent Benchmarks and Training — Interactive agent benchmarks and multi-turn reinforcement learning increasingly place a second language model in the role of the user. This simulated user controls what information the agent receives and when, yet current benchmarks score only the agent and do not directly measure whether the user correctly executed its assigned role. We introduce UserProxyBench, an evaluation layer over the tau-bench family, and the User Fidelity Score (UFS), which measures adherence to the benchmark's private user instructions u…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 77.7,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "f5af0ca0f4c7441774fca46460a526ef707961e5b3d169b60a98c9cffac80ec0"
+    },
+    {
+      "id": "openai-news:6071f63e21f6425413eb",
+      "url": "https://openai.com/index/devday-2026-recap",
+      "created_at": "2026-09-29T10:00:00+00:00",
+      "title": "DevDay 2026 Recap",
+      "text": "DevDay 2026 Recap — Explore more than 20 announcements from OpenAI DevDay 2026, including GPT-6 Astra, ChatGPT, Codex, APIs, security, and new tools for builders.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 98.8,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 100.0,
+        "recency": 94.1
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "0b95cc108e205918a9a78d8bf129d8c769038ee1db8b5dc501919a6665964bf3"
+    },
+    {
+      "id": "openai-news:d6b9f5e651b1891e950e",
+      "url": "https://openai.com/index/introducing-gpt-6-1-sol",
+      "created_at": "2026-09-29T10:00:00+00:00",
+      "title": "Introducing GPT-6.1 Sol",
+      "text": "Introducing GPT-6.1 Sol — Meet GPT-6.1 Sol: near-Astra intelligence for coding, computer use, and professional work at one-fifth of Astra’s standard API input and output token prices.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 76.3,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 25.0,
+        "recency": 94.1
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "0cfffd65f3c8f098719c5b171e777b2f7f4eee346a5d60dcff50c107c37f5aa9"
+    },
     {
       "id": "vercel-ai-releases:3f9ac34c5ea9f8e1b1e9",
       "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.122",
@@ -153,11 +373,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 82.6,
+      "ranking_score_0_100": 81.2,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 50.0,
-        "recency": 95.5
+        "recency": 88.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "3e288c8d72a46d711a1aa2138c337b392d5ebdcaae14e3bf9fd9d9ba8440c986"
@@ -615,11 +835,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 67.8,
+      "ranking_score_0_100": 66.4,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 66.7
+        "recency": 59.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "4485d2cbfa7879ebd8ed75effe8e523636c3daf7211c8077872f5cce399a9d47"
@@ -703,11 +923,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 68.6,
+      "ranking_score_0_100": 67.2,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 25.0,
-        "recency": 60.7
+        "recency": 53.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "02e1e6822e72efe4a41620cf45a4e78317e9fc6cc5b2698ca45184c23eab9f59"
@@ -835,11 +1055,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 76.8,
+      "ranking_score_0_100": 75.4,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 50.0,
-        "recency": 58.9
+        "recency": 51.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "6b0fd815d083a0ba7257e3543179712763b1ef022e45608f1ba53f44b8617407"
@@ -1055,11 +1275,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 72.5,
+      "ranking_score_0_100": 71.0,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 49.8
+        "recency": 42.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "3a1a6e100f58c0b802204bc0ddd733685470a99ba8008b87f918fe1103c1d2a1"
@@ -1077,11 +1297,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
       "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-      "ranking_score_0_100": 64.1,
+      "ranking_score_0_100": 62.7,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 48.2
+        "recency": 41.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "a78089de4a1cac308cde758194f96ccbc2bc8ed5e15be80a8de6a357b303a353"
@@ -15120,6 +15340,84 @@
         }
       ],
       "run_hash": "e0153238978e422d508917ecad810454a84fe8383b279b5a7d54bf33e8343f25"
+    },
+    {
+      "schema": 1,
+      "date": "2026-09-30",
+      "generated_at": "2026-09-30T05:56:39+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "e0153238978e422d508917ecad810454a84fe8383b279b5a7d54bf33e8343f25",
+      "lead_brief_id": "brief-model-progress",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "enterprise-proof",
+          "headline": "企業 AI 的瓶頸不是需求，而是把展示轉成可稽核的生產成果",
+          "standfirst": "客戶案例與產品宣布只能證明興趣；能否持續付費，取決於流程成果、治理成本與實際採用深度。",
+          "common_interpretation": "大型客戶名稱、員工覆蓋數與新方案常被當成商業化已被驗證。",
+          "variant_view": "部署廣度不等於使用深度，節省時間也不等於可認列收入；缺少續約與單位經濟時應把它視為領先訊號。",
+          "second_order_effect": "採用擴大後，真正限制毛利與黏著度的可能是人工覆核、資料治理與例外處理，而非模型推理本身。",
+          "practical_readthrough": "閱讀客戶案例時拆成四欄：使用者數、每週使用頻率、可重現成果、付費或續約證據；缺哪一欄就標未知。",
+          "falsifier": "若後續揭露顯示高續約、使用頻率上升且單位成本下降，部署廣度就可能確實轉成可持續商業化。",
+          "evidence_refs": [
+            {
+              "item_id": "openai-news:4e56c7312349a760a0ed",
+              "item_integrity_hash": "6b0fd815d083a0ba7257e3543179712763b1ef022e45608f1ba53f44b8617407"
+            },
+            {
+              "item_id": "google-ai-blog:1ccf342131e2aeec4f4f",
+              "item_integrity_hash": "02e1e6822e72efe4a41620cf45a4e78317e9fc6cc5b2698ca45184c23eab9f59"
+            }
+          ],
+          "brief_hash": "49c3bebcd5a93b038781f2924918001666277af0aeb3e1ab3ff841608cdcdc30"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "agent-verifiability",
+          "headline": "代理工程正在從功能競賽，轉向可驗證性競賽",
+          "standfirst": "能否重現、定位失敗並量測端到端完成率，會比增加更多工具呼叫更快改善正式環境可靠性。",
+          "common_interpretation": "新框架常以更多代理能力、工具與基準分數作為進步證據。",
+          "variant_view": "沒有可重播軌跡、失敗分類與固定評測集，功能越多只會讓不可預測面積變大。",
+          "second_order_effect": "可觀測性與評測資料會逐漸成為代理系統的護城河，因為它們保存了組織自己的失敗分布。",
+          "practical_readthrough": "先建立十個固定真實任務與失敗分類，再比較框架；沒有同一組回歸證據就不升級。",
+          "falsifier": "若增加工具與自治步驟後，固定任務完成率上升且人工接手與事故率沒有惡化，功能擴張才算被驗證。",
+          "evidence_refs": [
+            {
+              "item_id": "vercel-ai-releases:c8e4a6df551263d5f1ff",
+              "item_integrity_hash": "7a06bd4a9c078e87c81c1b8dd6cd1c62d5c11e95bda04eececde01f639c75849"
+            },
+            {
+              "item_id": "nvidia-developer:2a6a5a4d0a360f9bbafe",
+              "item_integrity_hash": "5e7032fd2dddeb4517d5f226818bae33ee3a9dc5520aec63ea680a8732c9c9c6"
+            }
+          ],
+          "brief_hash": "b37955e1fbde2b539a463530117af3f2d639193d146ca2ee18a6656366eef287"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "benchmark-to-reliability",
+          "headline": "榜單上的進步，仍要經過真實任務可靠性這一關",
+          "standfirst": "評測分數能指出能力方向，卻不能自動涵蓋資料污染、工具失敗、長任務漂移與你的工作分布。",
+          "common_interpretation": "新基準或更高分數常被視為模型能力已全面提升。",
+          "variant_view": "真正可用的進步是失敗分布改變，而不只是平均分上升；尤其要看最差案例與重試成本。",
+          "second_order_effect": "企業會更依賴自有評測集，公開榜單對採購與模型路由的決定力可能下降。",
+          "practical_readthrough": "從研究中只取一個可驗證假說，放進自己的固定任務集；同時保存失敗案例，不用單一平均分做結論。",
+          "falsifier": "若公開基準提升能在多個獨立真實任務集穩定重現，且尾端失敗同步下降，榜單才可作為較強代理指標。",
+          "evidence_refs": [
+            {
+              "item_id": "arxiv-ai:0c41b636aba670ea0ac1",
+              "item_integrity_hash": "f5af0ca0f4c7441774fca46460a526ef707961e5b3d169b60a98c9cffac80ec0"
+            },
+            {
+              "item_id": "huggingface-blog:e9f63aa1f7aaa02f4024",
+              "item_integrity_hash": "a78089de4a1cac308cde758194f96ccbc2bc8ed5e15be80a8de6a357b303a353"
+            }
+          ],
+          "brief_hash": "3d64434082fbd2f175312b1bf1b469b420e155dee940c397e85108ba808aa482"
+        }
+      ],
+      "run_hash": "d32142081983d5651e979238eeb82c4473c5ed855fab06f33828f248a55e070d"
     }
   ]
 }
