@@ -1,21 +1,23 @@
 {
   "schema": 3,
-  "generated_at": "2026-10-15T05:07:48+00:00",
+  "generated_at": "2026-10-16T04:57:48+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "pass",
+    "status": "degraded",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [],
+    "degradations": [
+      "Google DeepMind Blog：not well-formed (invalid token): line 1, column 0"
+    ],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 21,
-    "unique_sources": 9,
-    "successful_sources": 10,
-    "failed_sources": 0,
+    "posts": 19,
+    "unique_sources": 7,
+    "successful_sources": 9,
+    "failed_sources": 1,
     "editorial_briefs": 3,
     "editorial_pass": 3
   },
@@ -26,9 +28,9 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
-      "raw_items": 1293,
+      "raw_items": 1296,
       "eligible_items": 16
     },
     {
@@ -37,7 +39,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 0
@@ -48,7 +50,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 2
@@ -59,7 +61,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -70,10 +72,10 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 100,
-      "eligible_items": 32
+      "eligible_items": 22
     },
     {
       "source_key": "vllm-releases",
@@ -81,7 +83,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -92,10 +94,10 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 8,
-      "eligible_items": 1
+      "eligible_items": 2
     },
     {
       "source_key": "deepmind-blog",
@@ -103,10 +105,11 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-10-15T05:07:48+00:00",
-      "status": "pass",
-      "raw_items": 100,
-      "eligible_items": 2
+      "checked_at": "2026-10-16T04:57:48+00:00",
+      "status": "fail",
+      "raw_items": 0,
+      "eligible_items": 0,
+      "error": "not well-formed (invalid token): line 1, column 0"
     },
     {
       "source_key": "huggingface-blog",
@@ -114,9 +117,9 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
-      "raw_items": 876,
+      "raw_items": 879,
       "eligible_items": 3
     },
     {
@@ -125,7 +128,7 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-10-15T05:07:48+00:00",
+      "checked_at": "2026-10-16T04:57:48+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
@@ -133,7 +136,7 @@
   ],
   "editorial_digest": {
     "status": "pass",
-    "lead_brief_id": "brief-model-progress",
+    "lead_brief_id": "brief-engineering-methods",
     "briefs": [
       {
         "id": "brief-ai-application-monetization",
@@ -161,7 +164,7 @@
             "source_type": "official_feed",
             "created_at": "2026-10-09T07:00:00+00:00",
             "url": "https://openai.com/index/asana-browser-agent",
-            "ranking_score_0_100": 84.0,
+            "ranking_score_0_100": 82.6,
             "source_excerpt": "Asana cuts model costs 76x in browser tests with GPT-6.1 Sol — Using GPT-6 Astra in Codex, Asana made its browser agent 76x cheaper and 5x faster in tests to offer customers more capable models.",
             "matched_terms": [
               "agent",
@@ -178,7 +181,7 @@
             "source_type": "official_feed",
             "created_at": "2026-10-06T00:00:00+00:00",
             "url": "https://cursor.com/changelog/remote-control-local-agents",
-            "ranking_score_0_100": 69.8,
+            "ranking_score_0_100": 68.4,
             "source_excerpt": "Remote control for local agents — See and reply to the local agents running on your computer from the Cursor iOS app.",
             "matched_terms": [
               "agent"
@@ -188,8 +191,8 @@
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "changed",
-        "what_changed": "主軸由「AI 正從獨立目的地，變成既有工作流裡的隱形功能」轉為「代理正在成為新介面，但可靠性會比自治程度更早決定價值」。"
+        "novelty_status": "unchanged",
+        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
       },
       {
         "id": "brief-engineering-methods",
@@ -200,67 +203,52 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow@2.0.73」，以及 Transformers Releases 的「Release v5.19.0」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「ai@6.0.308」，以及 Transformers Releases 的「Release v5.20.0」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
         "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
         "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
-        "evidence_source_count": 3,
+        "evidence_source_count": 2,
         "matched_term_count": 3,
         "evidence": [
           {
-            "item_id": "vercel-ai-releases:7cec3aa87a20924a90ba",
-            "title": "@ai-sdk/workflow@2.0.73",
+            "item_id": "vercel-ai-releases:6d0d29f4edaf1dcccdfe",
+            "title": "ai@6.0.308",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-10-15T02:27:02+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.73",
-            "ranking_score_0_100": 89.8,
-            "source_excerpt": "@ai-sdk/workflow@2.0.73 — ### Patch Changes - 88ea0d7: fix(workflow): pass runtime context allowed by 'telemetry.includeRuntimeContext' - 6ac1ee1: fix(workflow): validate and normalize tool inputs with the original tool schema in `WorkflowAgent`, matching `streamText`. Defaults, transforms, coercion, refinements, unknown-key handling, custom validators, `re…",
+            "created_at": "2026-10-15T18:15:25+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.308",
+            "ranking_score_0_100": 81.9,
+            "source_excerpt": "ai@6.0.308 — ### Patch Changes - 739e9f6: Restore raw OpenAI custom-tool input deltas for consumers that forward them to Responses API clients. Mark streamed input with `inputEncoding: 'text'` so UI clients can display it progressively without JSON parsing. Preserve the encoding when partial UI messages are saved and resumed. Final provider tool-call inputs…",
             "matched_terms": [
-              "sdk"
+              "sdk",
+              "api"
             ],
-            "item_integrity_hash": "23a44e798999a3f3ed7e4ea1bdde37149b0c4560b2898fd94b2f321681c8a836",
+            "item_integrity_hash": "d2adf63e8b30de01492ab31fa3fd6c71377fe3f762a4e8d8fcc00d971dc3d6d6",
             "relationship": "topic_context_not_endorsement"
           },
           {
-            "item_id": "transformers-releases:beb274ef00cc9345c9b0",
-            "title": "Release v5.19.0",
+            "item_id": "transformers-releases:75bb450ac9abb666c3e6",
+            "title": "Release v5.20.0",
             "source_key": "transformers-releases",
             "source_label": "Transformers Releases",
             "source_type": "github_release",
-            "created_at": "2026-10-06T16:39:23+00:00",
-            "url": "https://github.com/huggingface/transformers/releases/tag/v5.19.0",
-            "ranking_score_0_100": 70.3,
-            "source_excerpt": "Release v5.19.0 — # Release v5.19.0 ## New Model additions ### EmbeddingGemma2 EmbeddingGemma 2 is a multimodal embedding model from Google built on the Gemma 4 architecture. It encodes text, images, audio, and video, individually or combined in one input, into a shared 768-dimensional vector space for cross-modal retrieval, semantic similarity, clustering,…",
+            "created_at": "2026-10-15T18:05:36+00:00",
+            "url": "https://github.com/huggingface/transformers/releases/tag/v5.20.0",
+            "ranking_score_0_100": 81.9,
+            "source_excerpt": "Release v5.20.0 — # Release v5.20.0 ## New Model additions ### Muse Spark Open Muse Spark Open is a multimodal mixture-of-experts model from Meta that takes text, images, audio, and video as input and generates text. It has 816B total parameters (42B active per token) and a context window of up to 1,048,576 tokens shared across modalities. It is trained for…",
             "matched_terms": [
               "release"
             ],
-            "item_integrity_hash": "0c19ae40ba970c9e62955040b479fd2b23b55c6a60d4e501fdc58a8c18e97049",
-            "relationship": "topic_context_not_endorsement"
-          },
-          {
-            "item_id": "vllm-releases:9668af85ed2e1acf35b7",
-            "title": "v0.31.0",
-            "source_key": "vllm-releases",
-            "source_label": "vLLM Releases",
-            "source_type": "github_release",
-            "created_at": "2026-10-05T06:44:55+00:00",
-            "url": "https://github.com/vllm-project/vllm/releases/tag/v0.31.0",
-            "ranking_score_0_100": 68.3,
-            "source_excerpt": "v0.31.0 — # v0.31.0 ## Highlights This release features 717 commits from 307 contributors (96 new)! * **DeepSeek-V4.1-Flash performance**: FlashMLA mega attention with the V4.1 NVFP4 compressed KV cache is now the SM100 default (#56935); DeepGEMM sparse MQA logits for the indexer (#56254) and Mega-Gate fusing the gate GEMM with expert selection (#56266); de…",
-            "matched_terms": [
-              "release"
-            ],
-            "item_integrity_hash": "258f789b4480d795bdb6d5b8d731bb9d0c30e7dfa71e88f52504dc5a79883e8c",
+            "item_integrity_hash": "b7f33701a10446b7468b744c8a3e331de7205bb618104e31accd0d3aba3424b2",
             "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
         "novelty_status": "refreshed",
-        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 Vercel AI SDK Releases。"
+        "what_changed": "主軸未變；替換 3 則、加入 2 則主題訊號，新增來源為 Vercel AI SDK Releases、Transformers Releases。"
       },
       {
         "id": "brief-model-progress",
@@ -271,70 +259,52 @@
         "kicker": "模型進展",
         "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
         "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
-        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「PrismaCoder: Pushing the Boundaries of Open Multimodal Code Intelligence through Decomposed Rubric Synthesis」，以及 Hugging Face Blog 的「AutoSynthData: Generating Training Data for Enterprise Agents」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Hugging Face Blog 的「Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline」，以及 arXiv cs.AI 最新研究 的「ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
         "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
         "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
         "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
         "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
-        "evidence_source_count": 3,
-        "matched_term_count": 6,
+        "evidence_source_count": 2,
+        "matched_term_count": 3,
         "evidence": [
           {
-            "item_id": "arxiv-ai:501c754e17953ea336a8",
-            "title": "PrismaCoder: Pushing the Boundaries of Open Multimodal Code Intelligence through Decomposed Rubric Synthesis",
-            "source_key": "arxiv-ai",
-            "source_label": "arXiv cs.AI 最新研究",
-            "source_type": "preprint_feed",
-            "created_at": "2026-10-14T17:32:54+00:00",
-            "url": "https://arxiv.org/abs/2610.20538v1",
-            "ranking_score_0_100": 77.8,
-            "source_excerpt": "PrismaCoder: Pushing the Boundaries of Open Multimodal Code Intelligence through Decomposed Rubric Synthesis — Multimodal code intelligence connects the symbolic world of programs with the visual world their execution creates. Interest in this capability is burgeoning, as models are increasingly asked to produce charts, webpages, animations, and semi-struct…",
-            "matched_terms": [
-              "training",
-              "multimodal",
-              "data"
-            ],
-            "item_integrity_hash": "b9b7fc270a5bfe57620646e76c60d5c987a89fcec9b094b958dbb24672a4593a",
-            "relationship": "topic_context_not_endorsement"
-          },
-          {
-            "item_id": "huggingface-blog:56c490db040147f1def4",
-            "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
+            "item_id": "huggingface-blog:138e9b7e7d9747243aa5",
+            "title": "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
             "source_key": "huggingface-blog",
             "source_label": "Hugging Face Blog",
             "source_type": "official_feed",
-            "created_at": "2026-10-02T04:01:31+00:00",
-            "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
-            "ranking_score_0_100": 55.9,
-            "source_excerpt": "AutoSynthData: Generating Training Data for Enterprise Agents",
+            "created_at": "2026-10-16T01:44:47+00:00",
+            "url": "https://huggingface.co/blog/nvidia/scaling-indic-pretraining",
+            "ranking_score_0_100": 74.3,
+            "source_excerpt": "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
             "matched_terms": [
-              "training",
+              "pretraining",
               "data"
             ],
-            "item_integrity_hash": "138373c46e1263055fb9d2a89afbc5b91bfe2c5813ba3ec2137585abe9f71d2f",
+            "item_integrity_hash": "9a80e70a96fc278c8c052fd5941e4d24763c30585d2f17d1a7e7598593f4deeb",
             "relationship": "topic_context_not_endorsement"
           },
           {
-            "item_id": "deepmind-blog:36a7e1c23fbbe3b1fdc0",
-            "title": "Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection",
-            "source_key": "deepmind-blog",
-            "source_label": "Google DeepMind Blog",
-            "source_type": "official_feed",
-            "created_at": "2026-10-14T02:00:14+00:00",
-            "url": "https://deepmind.google/blog/on-device-ai-scam-detection-mddi/",
-            "ranking_score_0_100": 75.9,
-            "source_excerpt": "Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection — Learn how Google DeepMind and GovTech Singapore uses lightweight on-device Gemma models to intercept conversational scams in private chats with zero cloud data egress.",
+            "item_id": "arxiv-ai:3fc1a8997af442ebfc9f",
+            "title": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning",
+            "source_key": "arxiv-ai",
+            "source_label": "arXiv cs.AI 最新研究",
+            "source_type": "preprint_feed",
+            "created_at": "2026-10-15T17:52:24+00:00",
+            "url": "https://arxiv.org/abs/2610.22328v1",
+            "ranking_score_0_100": 77.8,
+            "source_excerpt": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning — Image editing models produce impressive results for individual edits, but their quality often deteriorates over multiple editing turns. Each editing turn introduces small distribution shifts that accumulate over successive edits, creating a gap between the input distributions encountered…",
             "matched_terms": [
-              "data"
+              "training"
             ],
-            "item_integrity_hash": "9d06e277192822ee40bb649060e369fdcb27b59f3cd00bd5f67b8ee0352f7949",
+            "item_integrity_hash": "0076d7b7895e2d9bb734c118c667401089054d724201071323fb382ce2f40d3d",
             "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
         "novelty_status": "refreshed",
-        "what_changed": "主軸未變；替換 1 則、加入 2 則主題訊號，新增來源為 arXiv cs.AI 最新研究、Google DeepMind Blog。"
+        "what_changed": "主軸未變；替換 3 則、加入 2 則主題訊號，新增來源為 Hugging Face Blog、arXiv cs.AI 最新研究。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -356,11 +326,11 @@
       "url": "https://developer.nvidia.com/blog/optimizing-agent-reliability-and-tool-calling-efficiency-for-chip-design-using-nvidia-nemo-gym/"
     },
     {
-      "item_id": "huggingface-blog:56c490db040147f1def4",
-      "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
-      "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "source_label": "Hugging Face Blog",
-      "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata"
+      "item_id": "arxiv-ai:3fc1a8997af442ebfc9f",
+      "title": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning",
+      "action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "source_label": "arXiv cs.AI 最新研究",
+      "url": "https://arxiv.org/abs/2610.22328v1"
     }
   ],
   "categories": [
@@ -388,11 +358,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 84.0,
+          "ranking_score_0_100": 82.6,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 50.0,
-            "recency": 94.9
+            "recency": 87.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "09f12e1d323b9e741b51781491132f15c269591840b3598f5f9649bcb487358c"
@@ -410,11 +380,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 84.0,
+          "ranking_score_0_100": 82.6,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 57.7
+            "recency": 50.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a64f1f607af25b3094cc82e073ed1b6bfb52a966a47ec3a0e3e756bee2acbe46"
@@ -432,11 +402,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 83.7,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 50.0,
-            "recency": 93.4
+            "recency": 86.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "cb905dd5e1ff1ec1f4880dfffbf78d6e83de22735591e906cd4739352481738b"
@@ -454,11 +424,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 72.3,
+          "ranking_score_0_100": 70.9,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 84.2
+            "recency": 77.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d8cf017a5c15dbbe0a0a47dcaebac3fee06fa740b32409548f693da302c5b377"
@@ -476,11 +446,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 69.8,
+          "ranking_score_0_100": 68.4,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 50.0,
-            "recency": 34.2
+            "recency": 27.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "5ff653275bd10da682f611d21815f1bb30e793f4c6b59bba6e4f80c708e674a8"
@@ -500,9 +470,31 @@
       ],
       "items": [
         {
+          "id": "nvidia-developer:2a6a5a4d0a360f9bbafe",
+          "url": "https://developer.nvidia.com/blog/ai-native-by-design-lessons-learned-from-building-nvidia-tensorrt-model-connect/",
+          "created_at": "2026-10-15T18:13:26+00:00",
+          "title": "AI Native by Design: Lessons Learned from Building NVIDIA TensorRT Model Connect",
+          "text": "AI Native by Design: Lessons Learned from Building NVIDIA TensorRT Model Connect — Parallel work, model-family isolation, reversible changes, and GPU-backed validation shaped an open source project designed around coding agents NVIDIA TensorRT...",
+          "source_key": "nvidia-developer",
+          "category_id": "engineering-methods",
+          "source_label": "NVIDIA Developer Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方工程",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 90.4,
+          "ranking_components_0_100": {
+            "source_quality": 97.0,
+            "keyword_relevance": 75.0,
+            "recency": 96.8
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "a2080b0b8e909971871090655d5bc0f2bea6b0f3dbdd4d1ab41555bdaa0a2c18"
+        },
+        {
           "id": "nvidia-developer:aa4e18d41776f95406eb",
           "url": "https://developer.nvidia.com/blog/optimizing-agent-reliability-and-tool-calling-efficiency-for-chip-design-using-nvidia-nemo-gym/",
-          "created_at": "2026-10-14T16:10:48+00:00",
+          "created_at": "2026-10-15T18:13:14+00:00",
           "title": "Optimizing Agent Reliability and Tool Calling Efficiency for Chip Design Using NVIDIA NeMo Gym",
           "text": "Optimizing Agent Reliability and Tool Calling Efficiency for Chip Design Using NVIDIA NeMo Gym — AI agents offer remarkable productivity gains in complex chip design workflows, but their tendency to generate plausible yet incorrect artifacts makes...",
           "source_key": "nvidia-developer",
@@ -512,124 +504,124 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 90.2,
+          "ranking_score_0_100": 90.4,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 96.1
+            "recency": 96.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "9d7e46c61e033c851b4db542853590b9bbad2d16a1662619e5330b0953c00006"
+          "integrity_hash": "077753410365c813f43e97b87c6cc6adab914f79efcfd0b3149ea698ff64e24e"
         },
         {
-          "id": "vercel-ai-releases:7cec3aa87a20924a90ba",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.73",
-          "created_at": "2026-10-15T02:27:02+00:00",
-          "title": "@ai-sdk/workflow@2.0.73",
-          "text": "@ai-sdk/workflow@2.0.73 — ### Patch Changes - 88ea0d7: fix(workflow): pass runtime context allowed by 'telemetry.includeRuntimeContext' - 6ac1ee1: fix(workflow): validate and normalize tool inputs with the original tool schema in `WorkflowAgent`, matching `streamText`. Defaults, transforms, coercion, refinements, unknown-key handling, custom validators, `repairToolCall`, and lifecycle callbacks now behave the same in durable runs, and approval requests retain the pre-transform input so transforms do not run twice on resume. - Updated depen…",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 89.8,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 75.0,
-            "recency": 99.2
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "23a44e798999a3f3ed7e4ea1bdde37149b0c4560b2898fd94b2f321681c8a836"
-        },
-        {
-          "id": "vercel-ai-releases:8dcebb2d799ea18952f1",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%402.0.11",
-          "created_at": "2026-10-15T03:21:41+00:00",
-          "title": "@ai-sdk/zai@2.0.11",
-          "text": "@ai-sdk/zai@2.0.11 — ### Patch Changes - Updated dependencies [d5e7d82] - @ai-sdk/provider-utils@4.0.59 - @ai-sdk/openai-compatible@2.0.83",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.4,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 99.5
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "9a0b56045d940406172c2cb3f3b56a4484e0bbcbc76cd7b7b6f792f5c73239b8"
-        },
-        {
-          "id": "vercel-ai-releases:c96e81922ec498c68096",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%403.0.141",
-          "created_at": "2026-10-15T03:21:38+00:00",
-          "title": "@ai-sdk/xai@3.0.141",
-          "text": "@ai-sdk/xai@3.0.141 — ### Patch Changes - Updated dependencies [d5e7d82] - @ai-sdk/provider-utils@4.0.59 - @ai-sdk/openai-compatible@2.0.83",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 82.4,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 99.5
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "3ec5f10394c62fdcc624c07d97ef93227a7b2aaf2f5afd0293a73043905b7fbf"
-        },
-        {
-          "id": "nvidia-developer:769f877f10eac4a81d7b",
-          "url": "https://developer.nvidia.com/blog/rewrite-apache-spark-udfs-gpu-acceleration-ai-agents/",
-          "created_at": "2026-10-13T21:33:24+00:00",
-          "title": "How to Rewrite Apache Spark UDFs for GPU Acceleration with AI Agents",
-          "text": "How to Rewrite Apache Spark UDFs for GPU Acceleration with AI Agents — Enterprise applications have become increasingly demanding. Agentic AI has compounded the need for vast amounts of enterprise data with frequent, complex...",
+          "id": "nvidia-developer:bc3eb8977fc1d5b5926a",
+          "url": "https://developer.nvidia.com/blog/nvidia-nemotron-3-5-super-vl-powers-specialized-agents-with-multimodal-reasoning/",
+          "created_at": "2026-10-15T19:23:24+00:00",
+          "title": "NVIDIA Nemotron 3.5 Super VL Powers Specialized Agents with Multimodal Reasoning",
+          "text": "NVIDIA Nemotron 3.5 Super VL Powers Specialized Agents with Multimodal Reasoning — Always-on agents are taking on longer, more complex enterprise workflows. A single request can involve reading a document, checking information across sources,...",
           "source_key": "nvidia-developer",
           "category_id": "engineering-methods",
           "source_label": "NVIDIA Developer Blog",
           "source_type": "official_feed",
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 81.6,
+          "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
+          "ranking_score_0_100": 82.9,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 90.6
+            "recency": 97.2
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "99a8bfa5b1edecfde130c9a33c52cff4b90a7f94452ca1a729dd640bd9f24db5"
+          "integrity_hash": "2f0924cbf00d01462b9ccabafaac6522cdb7a4b2b26474726c464a1ac3196e52"
         },
         {
-          "id": "nvidia-developer:f04246d246e07c4f7087",
-          "url": "https://developer.nvidia.com/blog/nvidia-open-agent-safety-platform-a-reference-for-continuous-in-silicon-agent-monitoring/",
-          "created_at": "2026-10-14T23:10:12+00:00",
-          "title": "NVIDIA Open Agent Safety Platform: A Reference for Continuous In-Silicon Agent Monitoring",
-          "text": "NVIDIA Open Agent Safety Platform: A Reference for Continuous In-Silicon Agent Monitoring — To understand where agentic AI stands today, consider the last seismic shift in technology: the rise of the internet in the 90s. It was new and full of...",
-          "source_key": "nvidia-developer",
+          "id": "vercel-ai-releases:bd236739002b0f611471",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%402.0.12",
+          "created_at": "2026-10-15T18:18:19+00:00",
+          "title": "@ai-sdk/zai@2.0.12",
+          "text": "@ai-sdk/zai@2.0.12 — ### Patch Changes - Updated dependencies [739e9f6] - @ai-sdk/provider@3.0.19 - @ai-sdk/openai-compatible@2.0.84 - @ai-sdk/provider-utils@4.0.60",
+          "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
-          "source_label": "NVIDIA Developer Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方工程",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 75.6,
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 81.9,
           "ranking_components_0_100": {
-            "source_quality": 97.0,
-            "keyword_relevance": 25.0,
-            "recency": 98.2
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 96.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "e8ccbec5469b7a2d21dec3394d59dd650277bd82a6c564fb1c35a042cf474738"
+          "integrity_hash": "e4f56465851989065e99b54b5992f9c02a103abef8b91e1806ca96df2346ee83"
+        },
+        {
+          "id": "vercel-ai-releases:6d0d29f4edaf1dcccdfe",
+          "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.308",
+          "created_at": "2026-10-15T18:15:25+00:00",
+          "title": "ai@6.0.308",
+          "text": "ai@6.0.308 — ### Patch Changes - 739e9f6: Restore raw OpenAI custom-tool input deltas for consumers that forward them to Responses API clients. Mark streamed input with `inputEncoding: 'text'` so UI clients can display it progressively without JSON parsing. Preserve the encoding when partial UI messages are saved and resumed. Final provider tool-call inputs remain JSON-encoded. - Updated dependencies [739e9f6] - @ai-sdk/provider@3.0.19 - @ai-sdk/gateway@3.0.216 - @ai-sdk/provider-utils@4.0.60",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 81.9,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 96.8
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "d2adf63e8b30de01492ab31fa3fd6c71377fe3f762a4e8d8fcc00d971dc3d6d6"
+        },
+        {
+          "id": "vercel-ai-releases:9f8ee352173d38c959cd",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.32",
+          "created_at": "2026-10-15T18:15:06+00:00",
+          "title": "@ai-sdk/zai@3.0.32",
+          "text": "@ai-sdk/zai@3.0.32 — ### Patch Changes - Updated dependencies [130e871] - Updated dependencies [d6ed4b9] - @ai-sdk/provider@4.0.28 - @ai-sdk/openai-compatible@3.0.70 - @ai-sdk/provider-utils@5.0.61",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 81.9,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 96.8
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "07f4028a54cf6af9be120c49d116118ed091045ebffb20be4e212b6f6fc71e03"
+        },
+        {
+          "id": "transformers-releases:75bb450ac9abb666c3e6",
+          "url": "https://github.com/huggingface/transformers/releases/tag/v5.20.0",
+          "created_at": "2026-10-15T18:05:36+00:00",
+          "title": "Release v5.20.0",
+          "text": "Release v5.20.0 — # Release v5.20.0 ## New Model additions ### Muse Spark Open Muse Spark Open is a multimodal mixture-of-experts model from Meta that takes text, images, audio, and video as input and generates text. It has 816B total parameters (42B active per token) and a context window of up to 1,048,576 tokens shared across modalities. It is trained for agentic coding tasks such as multi-file editing, debugging, and tool use. Checkpoints are available in BF16 and NVFP4 formats. **Links:** [Documentation](https://huggingface.co/…",
+          "source_key": "transformers-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Transformers Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 81.9,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 96.8
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "b7f33701a10446b7468b744c8a3e331de7205bb618104e31accd0d3aba3424b2"
         },
         {
           "id": "transformers-releases:beb274ef00cc9345c9b0",
@@ -644,36 +636,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 70.3,
+          "ranking_score_0_100": 68.9,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 39.1
+            "recency": 32.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "0c19ae40ba970c9e62955040b479fd2b23b55c6a60d4e501fdc58a8c18e97049"
-        },
-        {
-          "id": "vllm-releases:9668af85ed2e1acf35b7",
-          "url": "https://github.com/vllm-project/vllm/releases/tag/v0.31.0",
-          "created_at": "2026-10-05T06:44:55+00:00",
-          "title": "v0.31.0",
-          "text": "v0.31.0 — # v0.31.0 ## Highlights This release features 717 commits from 307 contributors (96 new)! * **DeepSeek-V4.1-Flash performance**: FlashMLA mega attention with the V4.1 NVFP4 compressed KV cache is now the SM100 default (#56935); DeepGEMM sparse MQA logits for the indexer (#56254) and Mega-Gate fusing the gate GEMM with expert selection (#56266); decoder boundaries fuse the TP all-reduce, mHC input preparation (#57643) and the MoE finalize (#58586); a fused small-batch WO-A with inverse RoPE and MXFP8 quant on SM100…",
-          "source_key": "vllm-releases",
-          "category_id": "engineering-methods",
-          "source_label": "vLLM Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 68.3,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 29.1
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "258f789b4480d795bdb6d5b8d731bb9d0c30e7dfa71e88f52504dc5a79883e8c"
         }
       ]
     },
@@ -689,11 +659,33 @@
       ],
       "items": [
         {
-          "id": "arxiv-ai:501c754e17953ea336a8",
-          "url": "https://arxiv.org/abs/2610.20538v1",
-          "created_at": "2026-10-14T17:32:54+00:00",
-          "title": "PrismaCoder: Pushing the Boundaries of Open Multimodal Code Intelligence through Decomposed Rubric Synthesis",
-          "text": "PrismaCoder: Pushing the Boundaries of Open Multimodal Code Intelligence through Decomposed Rubric Synthesis — Multimodal code intelligence connects the symbolic world of programs with the visual world their execution creates. Interest in this capability is burgeoning, as models are increasingly asked to produce charts, webpages, animations, and semi-structured documents. Recently, proprietary models have pushed far ahead, producing interactive artifacts even from a text description or a screenshot alone. Yet their data and training remain closed, and open progress is held back by the quantity and quality of available data…",
+          "id": "huggingface-blog:ff0cf28c5d7530571030",
+          "url": "https://huggingface.co/blog/meta-muse-spark-open",
+          "created_at": "2026-10-15T00:00:00+00:00",
+          "title": "Welcome Muse Spark Open: open-weight frontier multimodal mixture-of-experts model from Meta",
+          "text": "Welcome Muse Spark Open: open-weight frontier multimodal mixture-of-experts model from Meta",
+          "source_key": "huggingface-blog",
+          "category_id": "model-progress",
+          "source_label": "Hugging Face Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方平台",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 80.3,
+          "ranking_components_0_100": {
+            "source_quality": 94.0,
+            "keyword_relevance": 50.0,
+            "recency": 91.4
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "fe87cb64c8e8f6d4eb8daff6f2b3e6ee1833f49f7d517c4557ff152e1478dabd"
+        },
+        {
+          "id": "arxiv-ai:3fc1a8997af442ebfc9f",
+          "url": "https://arxiv.org/abs/2610.22328v1",
+          "created_at": "2026-10-15T17:52:24+00:00",
+          "title": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning",
+          "text": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning — Image editing models produce impressive results for individual edits, but their quality often deteriorates over multiple editing turns. Each editing turn introduces small distribution shifts that accumulate over successive edits, creating a gap between the input distributions encountered during the editor's original training and multi-turn inference. We introduce a training scheme that makes multi-turn image editing stable under this accumulating distribution shift. A key is to force the editor to operate on its o…",
           "source_key": "arxiv-ai",
           "category_id": "model-progress",
           "source_label": "arXiv cs.AI 最新研究",
@@ -705,61 +697,39 @@
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 75.0,
-            "recency": 96.6
+            "recency": 96.7
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "b9b7fc270a5bfe57620646e76c60d5c987a89fcec9b094b958dbb24672a4593a"
+          "integrity_hash": "0076d7b7895e2d9bb734c118c667401089054d724201071323fb382ce2f40d3d"
         },
         {
-          "id": "deepmind-blog:36a7e1c23fbbe3b1fdc0",
-          "url": "https://deepmind.google/blog/on-device-ai-scam-detection-mddi/",
-          "created_at": "2026-10-14T02:00:14+00:00",
-          "title": "Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection",
-          "text": "Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection — Learn how Google DeepMind and GovTech Singapore uses lightweight on-device Gemma models to intercept conversational scams in private chats with zero cloud data egress.",
-          "source_key": "deepmind-blog",
+          "id": "huggingface-blog:138e9b7e7d9747243aa5",
+          "url": "https://huggingface.co/blog/nvidia/scaling-indic-pretraining",
+          "created_at": "2026-10-16T01:44:47+00:00",
+          "title": "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
+          "text": "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
+          "source_key": "huggingface-blog",
           "category_id": "model-progress",
-          "source_label": "Google DeepMind Blog",
+          "source_label": "Hugging Face Blog",
           "source_type": "official_feed",
-          "source_tier": "官方研究",
+          "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 75.9,
+          "ranking_score_0_100": 74.3,
           "ranking_components_0_100": {
-            "source_quality": 100.0,
+            "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 91.9
+            "recency": 99.0
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "9d06e277192822ee40bb649060e369fdcb27b59f3cd00bd5f67b8ee0352f7949"
+          "integrity_hash": "9a80e70a96fc278c8c052fd5941e4d24763c30585d2f17d1a7e7598593f4deeb"
         },
         {
-          "id": "deepmind-blog:c11a83f73b42d7563944",
-          "url": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/",
-          "created_at": "2026-10-06T19:57:04+00:00",
-          "title": "EmbeddingGemma 2: an open, lightweight multimodal embedding model",
-          "text": "EmbeddingGemma 2: an open, lightweight multimodal embedding model",
-          "source_key": "deepmind-blog",
-          "category_id": "model-progress",
-          "source_label": "Google DeepMind Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方研究",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 73.0,
-          "ranking_components_0_100": {
-            "source_quality": 100.0,
-            "keyword_relevance": 50.0,
-            "recency": 40.1
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "9e8a1a2d60b1d67e83abdc9131bf32b771771e66e536ffd416a1e03aa12c07c4"
-        },
-        {
-          "id": "arxiv-ai:73481db31e444341626e",
-          "url": "https://arxiv.org/abs/2610.20606v1",
-          "created_at": "2026-10-14T17:59:52+00:00",
-          "title": "Modeling and Understanding Neural Weights of Humanoid Policies with Diffusion",
-          "text": "Modeling and Understanding Neural Weights of Humanoid Policies with Diffusion — Recent advances in robot learning have driven rapid progress in humanoid control, enabling increasingly agile behaviors in the real world. However, humanoid control networks are typically obtained through conventional training procedures, while comparatively little attention has been given to directly modeling the distribution of their learned weights and generating functional networks in weight space. In this work, we investigate whether high-performing humanoid control networks can be generatively modeled direct…",
+          "id": "arxiv-ai:0c5495ad3c140a4809a8",
+          "url": "https://arxiv.org/abs/2610.22372v1",
+          "created_at": "2026-10-15T17:59:59+00:00",
+          "title": "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation",
+          "text": "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation — Personalization is essential for general-purpose robots to transition into household environments and achieve true practicality. While general robotic manipulation has been extensively studied, personalized robotic manipulation (PeRM) lacks a controlled benchmark for separating task completion from preference satisfaction. We introduce LIBERO-PeRM, a benchmark for preference learning in embodied agents. LIBERO-PeRM studies five questions: 1) how policies follow preferences in zero-shot settings; 2) how they learn…",
           "source_key": "arxiv-ai",
           "category_id": "model-progress",
           "source_label": "arXiv cs.AI 最新研究",
@@ -774,14 +744,14 @@
             "recency": 96.7
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "0b8f3dbb317868d406345eb615d5696c248baa864821e456dbd859d4e994da48"
+          "integrity_hash": "b08c9480139c4f9256c4fbf7b33d22d08682c55fcca577c5708b2efb07cd7e86"
         },
         {
-          "id": "arxiv-ai:4ec29a45b117b25bb58a",
-          "url": "https://arxiv.org/abs/2610.20607v1",
-          "created_at": "2026-10-14T17:59:52+00:00",
-          "title": "Hierarchical Residual Policy Learning for Real-World Mobile Manipulation with Sparse Human Guidance",
-          "text": "Hierarchical Residual Policy Learning for Real-World Mobile Manipulation with Sparse Human Guidance — Mobile Manipulation (MoMa) is a cornerstone of autonomous robotic systems, yet real-world fine-tuning remains a formidable challenge because of high-dimensional action spaces and intricate coupling between heterogeneous modules. In this paper, we propose HiRe-MoMa (Hierarchical Residual Mobile Manipulation), a systematic framework for stable and sample-efficient real-world fine-tuning of complex MoMa systems. At its core, HiRe-MoMa adopts a Hierarchical Residual Architecture that fine-tunes a frozen base policy. A…",
+          "id": "arxiv-ai:c1cb20c8436197ccb303",
+          "url": "https://arxiv.org/abs/2610.22367v1",
+          "created_at": "2026-10-15T17:59:20+00:00",
+          "title": "Discovering state-of-the-art quantum circuits with large language models",
+          "text": "Discovering state-of-the-art quantum circuits with large language models — Significant efforts are currently being directed toward the implementation of large-scale quantum information processors, but realizing useful quantum advantage also requires the development of efficient quantum algorithms. While for many practical problems the dominant resource costs are associated with a small set of computational primitives, optimizing them in the quantum setting presents unique challenges, including a reversibility constraint absent from ordinary classical computation. Here we introduce an evo…",
           "source_key": "arxiv-ai",
           "category_id": "model-progress",
           "source_label": "arXiv cs.AI 最新研究",
@@ -796,7 +766,7 @@
             "recency": 96.7
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "ea15b57df5015844a31a147cb993a6d2080cb9b2d74c72be774c5d9cd7555d43"
+          "integrity_hash": "026175b7161381ae24a7fdd2f28c36e44495ddec9c95b042d10421101946e074"
         },
         {
           "id": "huggingface-blog:ffd2818196374b7e8d98",
@@ -811,58 +781,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 64.2,
+          "ranking_score_0_100": 62.8,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 48.5
+            "recency": 41.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "455cd7f94eb3bc5042e805d6a097084f8cc1dc83658b992bc1b66ce5ce50f710"
-        },
-        {
-          "id": "huggingface-blog:67f5f61696a2949df273",
-          "url": "https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026",
-          "created_at": "2026-10-07T12:45:31+00:00",
-          "title": "One Model Family, Two Gold-Level Results: Fine-Tuning Nemotron for IOI and IMO",
-          "text": "One Model Family, Two Gold-Level Results: Fine-Tuning Nemotron for IOI and IMO",
-          "source_key": "huggingface-blog",
-          "category_id": "model-progress",
-          "source_label": "Hugging Face Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方平台",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 63.5,
-          "ranking_components_0_100": {
-            "source_quality": 94.0,
-            "keyword_relevance": 25.0,
-            "recency": 45.1
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "b541a5d0df72e25191cc13ec93f3a9bea1178fa5d43c0fd6487700befb77a34b"
-        },
-        {
-          "id": "huggingface-blog:56c490db040147f1def4",
-          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
-          "created_at": "2026-10-02T04:01:31+00:00",
-          "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
-          "text": "AutoSynthData: Generating Training Data for Enterprise Agents",
-          "source_key": "huggingface-blog",
-          "category_id": "model-progress",
-          "source_label": "Hugging Face Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方平台",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 55.9,
-          "ranking_components_0_100": {
-            "source_quality": 94.0,
-            "keyword_relevance": 25.0,
-            "recency": 6.8
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "138373c46e1263055fb9d2a89afbc5b91bfe2c5813ba3ec2137585abe9f71d2f"
         }
       ]
     }

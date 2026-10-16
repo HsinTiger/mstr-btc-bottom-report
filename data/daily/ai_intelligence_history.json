@@ -1,13 +1,255 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-10-15T05:07:48+00:00",
-  "last_attempt_at": "2026-10-15T05:07:48+00:00",
-  "last_successful_fetch_at": "2026-10-15T05:07:48+00:00",
+  "updated_at": "2026-10-16T04:57:48+00:00",
+  "last_attempt_at": "2026-10-16T04:57:48+00:00",
+  "last_successful_fetch_at": "2026-10-16T04:57:48+00:00",
   "quality": {
-    "status": "pass"
+    "status": "degraded"
   },
   "items": [
+    {
+      "id": "huggingface-blog:138e9b7e7d9747243aa5",
+      "url": "https://huggingface.co/blog/nvidia/scaling-indic-pretraining",
+      "created_at": "2026-10-16T01:44:47+00:00",
+      "title": "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
+      "text": "Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open Data Generation Pipeline",
+      "source_key": "huggingface-blog",
+      "category_id": "model-progress",
+      "source_label": "Hugging Face Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方平台",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 74.3,
+      "ranking_components_0_100": {
+        "source_quality": 94.0,
+        "keyword_relevance": 25.0,
+        "recency": 99.0
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "9a80e70a96fc278c8c052fd5941e4d24763c30585d2f17d1a7e7598593f4deeb"
+    },
+    {
+      "id": "nvidia-developer:bc3eb8977fc1d5b5926a",
+      "url": "https://developer.nvidia.com/blog/nvidia-nemotron-3-5-super-vl-powers-specialized-agents-with-multimodal-reasoning/",
+      "created_at": "2026-10-15T19:23:24+00:00",
+      "title": "NVIDIA Nemotron 3.5 Super VL Powers Specialized Agents with Multimodal Reasoning",
+      "text": "NVIDIA Nemotron 3.5 Super VL Powers Specialized Agents with Multimodal Reasoning — Always-on agents are taking on longer, more complex enterprise workflows. A single request can involve reading a document, checking information across sources,...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
+      "ranking_score_0_100": 82.9,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "2f0924cbf00d01462b9ccabafaac6522cdb7a4b2b26474726c464a1ac3196e52"
+    },
+    {
+      "id": "vercel-ai-releases:bd236739002b0f611471",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%402.0.12",
+      "created_at": "2026-10-15T18:18:19+00:00",
+      "title": "@ai-sdk/zai@2.0.12",
+      "text": "@ai-sdk/zai@2.0.12 — ### Patch Changes - Updated dependencies [739e9f6] - @ai-sdk/provider@3.0.19 - @ai-sdk/openai-compatible@2.0.84 - @ai-sdk/provider-utils@4.0.60",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.9,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "e4f56465851989065e99b54b5992f9c02a103abef8b91e1806ca96df2346ee83"
+    },
+    {
+      "id": "vercel-ai-releases:6d0d29f4edaf1dcccdfe",
+      "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.308",
+      "created_at": "2026-10-15T18:15:25+00:00",
+      "title": "ai@6.0.308",
+      "text": "ai@6.0.308 — ### Patch Changes - 739e9f6: Restore raw OpenAI custom-tool input deltas for consumers that forward them to Responses API clients. Mark streamed input with `inputEncoding: 'text'` so UI clients can display it progressively without JSON parsing. Preserve the encoding when partial UI messages are saved and resumed. Final provider tool-call inputs remain JSON-encoded. - Updated dependencies [739e9f6] - @ai-sdk/provider@3.0.19 - @ai-sdk/gateway@3.0.216 - @ai-sdk/provider-utils@4.0.60",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.9,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "d2adf63e8b30de01492ab31fa3fd6c71377fe3f762a4e8d8fcc00d971dc3d6d6"
+    },
+    {
+      "id": "vercel-ai-releases:9f8ee352173d38c959cd",
+      "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.32",
+      "created_at": "2026-10-15T18:15:06+00:00",
+      "title": "@ai-sdk/zai@3.0.32",
+      "text": "@ai-sdk/zai@3.0.32 — ### Patch Changes - Updated dependencies [130e871] - Updated dependencies [d6ed4b9] - @ai-sdk/provider@4.0.28 - @ai-sdk/openai-compatible@3.0.70 - @ai-sdk/provider-utils@5.0.61",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.9,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "07f4028a54cf6af9be120c49d116118ed091045ebffb20be4e212b6f6fc71e03"
+    },
+    {
+      "id": "nvidia-developer:2a6a5a4d0a360f9bbafe",
+      "url": "https://developer.nvidia.com/blog/ai-native-by-design-lessons-learned-from-building-nvidia-tensorrt-model-connect/",
+      "created_at": "2026-10-15T18:13:26+00:00",
+      "title": "AI Native by Design: Lessons Learned from Building NVIDIA TensorRT Model Connect",
+      "text": "AI Native by Design: Lessons Learned from Building NVIDIA TensorRT Model Connect — Parallel work, model-family isolation, reversible changes, and GPU-backed validation shaped an open source project designed around coding agents NVIDIA TensorRT...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 90.4,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "a2080b0b8e909971871090655d5bc0f2bea6b0f3dbdd4d1ab41555bdaa0a2c18"
+    },
+    {
+      "id": "nvidia-developer:aa4e18d41776f95406eb",
+      "url": "https://developer.nvidia.com/blog/optimizing-agent-reliability-and-tool-calling-efficiency-for-chip-design-using-nvidia-nemo-gym/",
+      "created_at": "2026-10-15T18:13:14+00:00",
+      "title": "Optimizing Agent Reliability and Tool Calling Efficiency for Chip Design Using NVIDIA NeMo Gym",
+      "text": "Optimizing Agent Reliability and Tool Calling Efficiency for Chip Design Using NVIDIA NeMo Gym — AI agents offer remarkable productivity gains in complex chip design workflows, but their tendency to generate plausible yet incorrect artifacts makes...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 90.4,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "077753410365c813f43e97b87c6cc6adab914f79efcfd0b3149ea698ff64e24e"
+    },
+    {
+      "id": "transformers-releases:75bb450ac9abb666c3e6",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.20.0",
+      "created_at": "2026-10-15T18:05:36+00:00",
+      "title": "Release v5.20.0",
+      "text": "Release v5.20.0 — # Release v5.20.0 ## New Model additions ### Muse Spark Open Muse Spark Open is a multimodal mixture-of-experts model from Meta that takes text, images, audio, and video as input and generates text. It has 816B total parameters (42B active per token) and a context window of up to 1,048,576 tokens shared across modalities. It is trained for agentic coding tasks such as multi-file editing, debugging, and tool use. Checkpoints are available in BF16 and NVFP4 formats. **Links:** [Documentation](https://huggingface.co/…",
+      "source_key": "transformers-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Transformers Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.9,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "b7f33701a10446b7468b744c8a3e331de7205bb618104e31accd0d3aba3424b2"
+    },
+    {
+      "id": "arxiv-ai:0c5495ad3c140a4809a8",
+      "url": "https://arxiv.org/abs/2610.22372v1",
+      "created_at": "2026-10-15T17:59:59+00:00",
+      "title": "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation",
+      "text": "LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation — Personalization is essential for general-purpose robots to transition into household environments and achieve true practicality. While general robotic manipulation has been extensively studied, personalized robotic manipulation (PeRM) lacks a controlled benchmark for separating task completion from preference satisfaction. We introduce LIBERO-PeRM, a benchmark for preference learning in embodied agents. LIBERO-PeRM studies five questions: 1) how policies follow preferences in zero-shot settings; 2) how they learn…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 70.3,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "b08c9480139c4f9256c4fbf7b33d22d08682c55fcca577c5708b2efb07cd7e86"
+    },
+    {
+      "id": "arxiv-ai:c1cb20c8436197ccb303",
+      "url": "https://arxiv.org/abs/2610.22367v1",
+      "created_at": "2026-10-15T17:59:20+00:00",
+      "title": "Discovering state-of-the-art quantum circuits with large language models",
+      "text": "Discovering state-of-the-art quantum circuits with large language models — Significant efforts are currently being directed toward the implementation of large-scale quantum information processors, but realizing useful quantum advantage also requires the development of efficient quantum algorithms. While for many practical problems the dominant resource costs are associated with a small set of computational primitives, optimizing them in the quantum setting presents unique challenges, including a reversibility constraint absent from ordinary classical computation. Here we introduce an evo…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 70.3,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 50.0,
+        "recency": 96.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "026175b7161381ae24a7fdd2f28c36e44495ddec9c95b042d10421101946e074"
+    },
+    {
+      "id": "arxiv-ai:3fc1a8997af442ebfc9f",
+      "url": "https://arxiv.org/abs/2610.22328v1",
+      "created_at": "2026-10-15T17:52:24+00:00",
+      "title": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning",
+      "text": "ACEdit: Stable Multi-Turn Image Editing via Asymmetric Conditioning — Image editing models produce impressive results for individual edits, but their quality often deteriorates over multiple editing turns. Each editing turn introduces small distribution shifts that accumulate over successive edits, creating a gap between the input distributions encountered during the editor's original training and multi-turn inference. We introduce a training scheme that makes multi-turn image editing stable under this accumulating distribution shift. A key is to force the editor to operate on its o…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 77.8,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.7
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "0076d7b7895e2d9bb734c118c667401089054d724201071323fb382ce2f40d3d"
+    },
     {
       "id": "vercel-ai-releases:8dcebb2d799ea18952f1",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%402.0.11",
@@ -73,6 +315,28 @@
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "23a44e798999a3f3ed7e4ea1bdde37149b0c4560b2898fd94b2f321681c8a836"
+    },
+    {
+      "id": "huggingface-blog:ff0cf28c5d7530571030",
+      "url": "https://huggingface.co/blog/meta-muse-spark-open",
+      "created_at": "2026-10-15T00:00:00+00:00",
+      "title": "Welcome Muse Spark Open: open-weight frontier multimodal mixture-of-experts model from Meta",
+      "text": "Welcome Muse Spark Open: open-weight frontier multimodal mixture-of-experts model from Meta",
+      "source_key": "huggingface-blog",
+      "category_id": "model-progress",
+      "source_label": "Hugging Face Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方平台",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 80.3,
+      "ranking_components_0_100": {
+        "source_quality": 94.0,
+        "keyword_relevance": 50.0,
+        "recency": 91.4
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "fe87cb64c8e8f6d4eb8daff6f2b3e6ee1833f49f7d517c4557ff152e1478dabd"
     },
     {
       "id": "nvidia-developer:f04246d246e07c4f7087",
@@ -197,11 +461,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 84.0,
+      "ranking_score_0_100": 82.6,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 50.0,
-        "recency": 94.9
+        "recency": 87.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "09f12e1d323b9e741b51781491132f15c269591840b3598f5f9649bcb487358c"
@@ -219,11 +483,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 83.7,
+      "ranking_score_0_100": 82.3,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 50.0,
-        "recency": 93.4
+        "recency": 86.3
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "cb905dd5e1ff1ec1f4880dfffbf78d6e83de22735591e906cd4739352481738b"
@@ -439,11 +703,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 72.3,
+      "ranking_score_0_100": 70.9,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 84.2
+        "recency": 77.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "d8cf017a5c15dbbe0a0a47dcaebac3fee06fa740b32409548f693da302c5b377"
@@ -659,11 +923,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 84.0,
+      "ranking_score_0_100": 82.6,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 57.7
+        "recency": 50.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "a64f1f607af25b3094cc82e073ed1b6bfb52a966a47ec3a0e3e756bee2acbe46"
@@ -901,11 +1165,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 64.2,
+      "ranking_score_0_100": 62.8,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 48.5
+        "recency": 41.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "455cd7f94eb3bc5042e805d6a097084f8cc1dc83658b992bc1b66ce5ce50f710"
@@ -1187,11 +1451,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 70.3,
+      "ranking_score_0_100": 68.9,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 39.1
+        "recency": 32.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "0c19ae40ba970c9e62955040b479fd2b23b55c6a60d4e501fdc58a8c18e97049"
@@ -1253,11 +1517,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 69.8,
+      "ranking_score_0_100": 68.4,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 50.0,
-        "recency": 34.2
+        "recency": 27.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "5ff653275bd10da682f611d21815f1bb30e793f4c6b59bba6e4f80c708e674a8"
@@ -18704,6 +18968,84 @@
         }
       ],
       "run_hash": "9fb4ab354cf00aceca301c4c00f9f8f8264c8f4f79ab566e3ed608e3fb52b296"
+    },
+    {
+      "schema": 1,
+      "date": "2026-10-16",
+      "generated_at": "2026-10-16T04:57:48+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "9fb4ab354cf00aceca301c4c00f9f8f8264c8f4f79ab566e3ed608e3fb52b296",
+      "lead_brief_id": "brief-engineering-methods",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "agent-reliability",
+          "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
+          "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
+          "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
+          "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
+          "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
+          "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
+          "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
+          "evidence_refs": [
+            {
+              "item_id": "openai-news:9bf93d58cc35db9987f8",
+              "item_integrity_hash": "a64f1f607af25b3094cc82e073ed1b6bfb52a966a47ec3a0e3e756bee2acbe46"
+            },
+            {
+              "item_id": "cursor-changelog:320c088cf61127c85623",
+              "item_integrity_hash": "5ff653275bd10da682f611d21815f1bb30e793f4c6b59bba6e4f80c708e674a8"
+            }
+          ],
+          "brief_hash": "a19b6b56c421daf3dea6a3dfb2ec9ac11c73ddc0ba982e1dec95181c6139fb0d"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "release-velocity-debt",
+          "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
+          "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
+          "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
+          "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
+          "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
+          "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
+          "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
+          "evidence_refs": [
+            {
+              "item_id": "vercel-ai-releases:6d0d29f4edaf1dcccdfe",
+              "item_integrity_hash": "d2adf63e8b30de01492ab31fa3fd6c71377fe3f762a4e8d8fcc00d971dc3d6d6"
+            },
+            {
+              "item_id": "transformers-releases:75bb450ac9abb666c3e6",
+              "item_integrity_hash": "b7f33701a10446b7468b744c8a3e331de7205bb618104e31accd0d3aba3424b2"
+            }
+          ],
+          "brief_hash": "600c335d3d21f352bf2e73832204cd3d217fd7f1586f55e2be1c77f73c21ee7d"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "efficient-learning",
+          "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
+          "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
+          "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
+          "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
+          "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
+          "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
+          "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
+          "evidence_refs": [
+            {
+              "item_id": "huggingface-blog:138e9b7e7d9747243aa5",
+              "item_integrity_hash": "9a80e70a96fc278c8c052fd5941e4d24763c30585d2f17d1a7e7598593f4deeb"
+            },
+            {
+              "item_id": "arxiv-ai:3fc1a8997af442ebfc9f",
+              "item_integrity_hash": "0076d7b7895e2d9bb734c118c667401089054d724201071323fb382ce2f40d3d"
+            }
+          ],
+          "brief_hash": "1e1ebd645adff7dcf122c11e03d26cf559d51f8098d2d2f7e6bf4e3f614fb3f3"
+        }
+      ],
+      "run_hash": "de049eef5f47836a3f381e41cd398d3b23ea0c2f7309377ffaa928722457bc91"
     }
   ]
 }
