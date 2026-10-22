@@ -1,13 +1,211 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-10-21T05:16:18+00:00",
-  "last_attempt_at": "2026-10-21T05:16:18+00:00",
-  "last_successful_fetch_at": "2026-10-21T05:16:18+00:00",
+  "updated_at": "2026-10-22T05:19:18+00:00",
+  "last_attempt_at": "2026-10-22T05:19:18+00:00",
+  "last_successful_fetch_at": "2026-10-22T05:19:18+00:00",
   "quality": {
     "status": "pass"
   },
   "items": [
+    {
+      "id": "nvidia-developer:bc3eb8977fc1d5b5926a",
+      "url": "https://developer.nvidia.com/blog/nvidia-nemotron-3-5-super-vl-powers-specialized-agents-with-multimodal-reasoning/",
+      "created_at": "2026-10-21T19:51:28+00:00",
+      "title": "NVIDIA Nemotron 3.5 Super VL Powers Specialized Agents with Multimodal Reasoning",
+      "text": "NVIDIA Nemotron 3.5 Super VL Powers Specialized Agents with Multimodal Reasoning — Always-on agents are taking on longer, more complex enterprise workflows. A single request can involve reading a document, checking information across sources,...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
+      "ranking_score_0_100": 82.9,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "4c76a16225fd1e5cde0b634e3a5c04d54c19f384b29c42af0e88262f18eb61a0"
+    },
+    {
+      "id": "nvidia-developer:1642ad325f565486dd6c",
+      "url": "https://developer.nvidia.com/blog/developing-an-ai-factory-digital-twin-with-an-agent-assisted-workflow/",
+      "created_at": "2026-10-21T19:49:30+00:00",
+      "title": "Developing an AI Factory Digital Twin with an Agent-Assisted Workflow",
+      "text": "Developing an AI Factory Digital Twin with an Agent-Assisted Workflow — Building an AI factory digital twin requires developers to bring site plans, equipment assets, and engineering requirements into a consistent model that teams...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 82.9,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "26c198237645b4d6093611f80232a3b111ce13238718888efb671ece154b4f08"
+    },
+    {
+      "id": "huggingface-blog:94a5f6526eada9bc0f52",
+      "url": "https://huggingface.co/blog/nvidia/kumo-relational",
+      "created_at": "2026-10-21T18:26:30+00:00",
+      "title": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
+      "text": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
+      "source_key": "huggingface-blog",
+      "category_id": "model-progress",
+      "source_label": "Hugging Face Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方平台",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 73.9,
+      "ranking_components_0_100": {
+        "source_quality": 94.0,
+        "keyword_relevance": 25.0,
+        "recency": 96.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "7b7a69863a9a477ad298b88a390ad125a4f6ca000907c603681f10ab42d9d470"
+    },
+    {
+      "id": "arxiv-ai:0372742febd17fbf89f5",
+      "url": "https://arxiv.org/abs/2610.30116v1",
+      "created_at": "2026-10-21T17:55:31+00:00",
+      "title": "Environment Duels: A Microcosm of LLM Co-Evolution",
+      "text": "Environment Duels: A Microcosm of LLM Co-Evolution — Through a tangle of real-world interactions, from synthetic training pipelines to data shared on the open web, frontier LLMs absorb what their predecessors and competitors create. How well does each model play its role in this ecosystem, as a creator and as a solver? We introduce Environment Duels, a dynamic agentic benchmark that evaluates both capabilities on interactive environments. Each model writes environments, each with a privileged hint, aiming for tasks that capable solvers fail without the hint and pass…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 77.8,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.6
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "4c6104834eb2887345e3e3d9b7a3e328e4c05ff64de15f486862853dae89316d"
+    },
+    {
+      "id": "arxiv-ai:a3d6ca4e4487a27386c9",
+      "url": "https://arxiv.org/abs/2610.30113v1",
+      "created_at": "2026-10-21T17:54:01+00:00",
+      "title": "Quant-Arena: Benchmarking LLM Agents for Quantitative Trading Research",
+      "text": "Quant-Arena: Benchmarking LLM Agents for Quantitative Trading Research — Quantitative research is an iterative loop: a researcher proposes a market hypothesis, implements it as an executable signal, tests it on historical data, and decides what to keep. Existing benchmarks score formulas, code, or individual trading decisions, leaving open whether large language models (LLMs) can complete this loop and produce strategies that work beyond the research period. We introduce Quant-Arena, a benchmark and public leaderboard for end-to-end quantitative research on real A-share market data. A…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 77.8,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 96.6
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "549d48bbb3688ca71e2a1e1ac79d033d9eda205de18f1a0711789b05011f450a"
+    },
+    {
+      "id": "huggingface-blog:40a01666d562060bfdf9",
+      "url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization",
+      "created_at": "2026-10-21T17:35:36+00:00",
+      "title": "How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications",
+      "text": "How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications",
+      "source_key": "huggingface-blog",
+      "category_id": "model-progress",
+      "source_label": "Hugging Face Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方平台",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 73.8,
+      "ranking_components_0_100": {
+        "source_quality": 94.0,
+        "keyword_relevance": 25.0,
+        "recency": 96.5
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "b7e9f08050d0ef455fc8ca7868696dfc2741be5764e605f8889e66d156a773c8"
+    },
+    {
+      "id": "arxiv-ai:8541433f95e82ea3912a",
+      "url": "https://arxiv.org/abs/2610.30051v1",
+      "created_at": "2026-10-21T17:11:52+00:00",
+      "title": "From Reasoning to Action: Benchmarking Frontier AI Models on LIBERO-10 Robot Manipulation Tasks",
+      "text": "From Reasoning to Action: Benchmarking Frontier AI Models on LIBERO-10 Robot Manipulation Tasks — Recent advances in frontier AI models have demonstrated remarkable capabilities in visual understanding, reasoning, planning, and tool use, raising the possibility of using general-purpose AI models for robot manipulation without task-specific training. However, their manipulation capabilities have not been systematically evaluated on standardized robotics benchmarks. In this report, we present a unified closed-loop manipulation framework for evaluating frontier AI models on the LIBERO-10 benchmark. Our framework…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 85.3,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 100.0,
+        "recency": 96.4
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "02fc10cc277a9264f24127d02341a75c28e90c146f4f9df15382cfc414dbc2c5"
+    },
+    {
+      "id": "openai-news:95dedf578de78f3ec264",
+      "url": "https://openai.com/index/openai-models-google-cloud",
+      "created_at": "2026-10-21T12:00:00+00:00",
+      "title": "OpenAI models are coming to Google Cloud",
+      "text": "OpenAI models are coming to Google Cloud — OpenAI and Google Cloud are bringing frontier models and Codex workflows to Gemini’s Model Garden, available through Google Cloud Marketplace.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 84.0,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 50.0,
+        "recency": 94.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "9191a78b3122b50169585a21ceca099f6cfba2fccb30ff7138c9543861cd6166"
+    },
+    {
+      "id": "nvidia-developer:88a80623a9615ed23f60",
+      "url": "https://developer.nvidia.com/blog/how-nvidia-openshell-reference-architecture-secures-and-governs-ai-agent-workloads-at-scale/",
+      "created_at": "2026-10-21T09:50:18+00:00",
+      "title": "How NVIDIA OpenShell Reference Architecture Secures and Governs AI Agent Workloads at Scale",
+      "text": "How NVIDIA OpenShell Reference Architecture Secures and Governs AI Agent Workloads at Scale — Autonomous agents can work for hours on complex tasks, accessing files, tools, the internet, and spawning other agents to collaborate with. Executing complex...",
+      "source_key": "nvidia-developer",
+      "category_id": "engineering-methods",
+      "source_label": "NVIDIA Developer Blog",
+      "source_type": "official_feed",
+      "source_tier": "官方工程",
+      "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+      "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "ranking_score_0_100": 82.3,
+      "ranking_components_0_100": {
+        "source_quality": 97.0,
+        "keyword_relevance": 50.0,
+        "recency": 94.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "ca35280cb5694b542e00750736f515aa036df6739d51674d4ad5acb1b5ab38cd"
+    },
     {
       "id": "vercel-ai-releases:c01d62c136287b9ad846",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%401.0.8",
@@ -21,11 +219,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 82.4,
+      "ranking_score_0_100": 81.0,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 99.4
+        "recency": 92.3
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "78de4e688758509b1b7f52adbc3cc70429d8453dd784ade07fba92add9b7d9f3"
@@ -43,11 +241,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 82.4,
+      "ranking_score_0_100": 80.9,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 99.4
+        "recency": 92.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "600af73024e0f34aca7c9ff78ac2bb3cbe9ded1ee80246e03b27820366b06033"
@@ -65,14 +263,36 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 82.3,
+      "ranking_score_0_100": 80.9,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 99.1
+        "recency": 92.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "61917b1f5b48f5e9bead69fa41417ffd755d1cccf3ac99904fbc8d3f31161818"
+    },
+    {
+      "id": "openai-news:3fe372fb2e8166f0e814",
+      "url": "https://openai.com/index/cloudflare-cyber",
+      "created_at": "2026-10-21T00:00:00+00:00",
+      "title": "Cloudflare links vulnerability discovery to defense with OpenAI",
+      "text": "Cloudflare links vulnerability discovery to defense with OpenAI — Cloudflare uses OpenAI Daybreak to investigate vulnerabilities and propose fixes for review. Its developers use Codex to build faster and improve code quality.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 83.3,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 50.0,
+        "recency": 91.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "4e82fd85955cb7748800f67a4f56dae217b0257ad05b6ffb6eb272c4d377d557"
     },
     {
       "id": "arxiv-ai:f6d34145757a87992c82",
@@ -175,11 +395,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 73.7,
+      "ranking_score_0_100": 72.2,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 95.9
+        "recency": 88.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "c74d7a0e3543395322dab2ad8e4c2d2c232ee32f806e30d999d216e4b47902a5"
@@ -395,11 +615,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 80.4,
+      "ranking_score_0_100": 79.0,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 89.4
+        "recency": 82.3
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "a1d1398b6300dd01a4805bb811b5c5e002f97e4ba025eb9a558776b01ff2e736"
@@ -439,11 +659,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 78.3,
+      "ranking_score_0_100": 76.9,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 79.0
+        "recency": 71.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "b9dab446cf99375f1d9ed671d930c7275e1100fe7653618205cc831a75187295"
@@ -659,11 +879,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 85.0,
+      "ranking_score_0_100": 83.6,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 62.7
+        "recency": 55.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "1703743a952b7aa5fc2e73f12eec450d3d78a42b093395849727b1fc2400d3ae"
@@ -681,11 +901,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 75.5,
+      "ranking_score_0_100": 74.1,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 50.0,
-        "recency": 62.7
+        "recency": 55.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ff79af0382f8ffc9d02db40a9f8d196ea4d7844f78a9fe3ba947ffd74fa24451"
@@ -1275,11 +1495,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 67.3,
+      "ranking_score_0_100": 65.9,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 49.0
+        "recency": 41.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "9d06e277192822ee40bb649060e369fdcb27b59f3cd00bd5f67b8ee0352f7949"
@@ -1407,11 +1627,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 63.8,
+      "ranking_score_0_100": 62.3,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 41.3
+        "recency": 34.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "d8cf017a5c15dbbe0a0a47dcaebac3fee06fa740b32409548f693da302c5b377"
@@ -20168,6 +20388,92 @@
         }
       ],
       "run_hash": "6225a3cbc87d3658c6a25e0019675b2cc279d69dbd66cc6b9edd9ad195ae2180"
+    },
+    {
+      "schema": 1,
+      "date": "2026-10-22",
+      "generated_at": "2026-10-22T05:19:18+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "6225a3cbc87d3658c6a25e0019675b2cc279d69dbd66cc6b9edd9ad195ae2180",
+      "lead_brief_id": "brief-model-progress",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "agent-reliability",
+          "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
+          "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
+          "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
+          "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
+          "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
+          "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
+          "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
+          "evidence_refs": [
+            {
+              "item_id": "openai-news:9e63539289a31c8631b6",
+              "item_integrity_hash": "1703743a952b7aa5fc2e73f12eec450d3d78a42b093395849727b1fc2400d3ae"
+            },
+            {
+              "item_id": "cursor-changelog:a39e7daa0f724775f4e4",
+              "item_integrity_hash": "ff79af0382f8ffc9d02db40a9f8d196ea4d7844f78a9fe3ba947ffd74fa24451"
+            }
+          ],
+          "brief_hash": "31b8b0313a2ec11075ea1024e7e125d0f897d824302f48761c13ec15744c2726"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "release-velocity-debt",
+          "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
+          "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
+          "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
+          "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
+          "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
+          "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
+          "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
+          "evidence_refs": [
+            {
+              "item_id": "vercel-ai-releases:c01d62c136287b9ad846",
+              "item_integrity_hash": "78de4e688758509b1b7f52adbc3cc70429d8453dd784ade07fba92add9b7d9f3"
+            },
+            {
+              "item_id": "transformers-releases:7613bbebfcfc0377de3b",
+              "item_integrity_hash": "a1d1398b6300dd01a4805bb811b5c5e002f97e4ba025eb9a558776b01ff2e736"
+            },
+            {
+              "item_id": "vllm-releases:83a753b4160cba93855a",
+              "item_integrity_hash": "b9dab446cf99375f1d9ed671d930c7275e1100fe7653618205cc831a75187295"
+            }
+          ],
+          "brief_hash": "73e30698b55fefb605785e1a102bfb734bab85aa422ec4943555b5bd0b827056"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "efficient-learning",
+          "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
+          "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
+          "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
+          "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
+          "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
+          "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
+          "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
+          "evidence_refs": [
+            {
+              "item_id": "arxiv-ai:0372742febd17fbf89f5",
+              "item_integrity_hash": "4c6104834eb2887345e3e3d9b7a3e328e4c05ff64de15f486862853dae89316d"
+            },
+            {
+              "item_id": "huggingface-blog:94a5f6526eada9bc0f52",
+              "item_integrity_hash": "7b7a69863a9a477ad298b88a390ad125a4f6ca000907c603681f10ab42d9d470"
+            },
+            {
+              "item_id": "deepmind-blog:36a7e1c23fbbe3b1fdc0",
+              "item_integrity_hash": "9d06e277192822ee40bb649060e369fdcb27b59f3cd00bd5f67b8ee0352f7949"
+            }
+          ],
+          "brief_hash": "d3af3e9d7c0e40c1073ec0076942564fb3c34bf15e19e8d09d691c683d5b78aa"
+        }
+      ],
+      "run_hash": "eceb1e77083f3222e1f74aeef6d1ba6ded958f67d21bf7ad5dfc9ae40fc21d29"
     }
   ]
 }
