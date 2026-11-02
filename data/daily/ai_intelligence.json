@@ -1,23 +1,21 @@
 {
   "schema": 3,
-  "generated_at": "2026-11-01T06:48:11+00:00",
+  "generated_at": "2026-11-02T06:46:39+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "degraded",
+    "status": "pass",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [
-      "Google DeepMind Blog：not well-formed (invalid token): line 1, column 0"
-    ],
+    "degradations": [],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 18,
-    "unique_sources": 7,
-    "successful_sources": 9,
-    "failed_sources": 1,
+    "posts": 20,
+    "unique_sources": 8,
+    "successful_sources": 10,
+    "failed_sources": 0,
     "editorial_briefs": 3,
     "editorial_pass": 3
   },
@@ -28,7 +26,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 1341,
       "eligible_items": 25
@@ -39,7 +37,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 0
@@ -50,7 +48,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 1
@@ -61,7 +59,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -72,7 +70,7 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 23
@@ -83,10 +81,10 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 8,
-      "eligible_items": 1
+      "eligible_items": 0
     },
     {
       "source_key": "transformers-releases",
@@ -94,7 +92,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 5
@@ -105,11 +103,10 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-11-01T06:48:11+00:00",
-      "status": "fail",
-      "raw_items": 0,
-      "eligible_items": 0,
-      "error": "not well-formed (invalid token): line 1, column 0"
+      "checked_at": "2026-11-02T06:46:39+00:00",
+      "status": "pass",
+      "raw_items": 100,
+      "eligible_items": 2
     },
     {
       "source_key": "huggingface-blog",
@@ -117,10 +114,10 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 894,
-      "eligible_items": 10
+      "eligible_items": 9
     },
     {
       "source_key": "arxiv-ai",
@@ -128,7 +125,7 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-11-01T06:48:11+00:00",
+      "checked_at": "2026-11-02T06:46:39+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
@@ -164,7 +161,7 @@
             "source_type": "official_feed",
             "created_at": "2026-10-28T13:15:00+00:00",
             "url": "https://openai.com/index/openai-servicenow-partnership-expansion",
-            "ranking_score_0_100": 94.7,
+            "ranking_score_0_100": 93.2,
             "source_excerpt": "OpenAI and ServiceNow expand partnership across enterprise workflows — OpenAI and ServiceNow expand their partnership to bring OpenAI models and agents into ServiceNow and ServiceNow workflows into ChatGPT and Codex.",
             "matched_terms": [
               "agent",
@@ -181,7 +178,7 @@
             "source_type": "official_feed",
             "created_at": "2026-10-20T00:00:00+00:00",
             "url": "https://cursor.com/changelog/agent-sdk",
-            "ranking_score_0_100": 58.0,
+            "ranking_score_0_100": 56.5,
             "source_excerpt": "Agent SDK — Define an agent as a folder of code, test it with evals, and deploy it to Cursor or your own infrastructure.",
             "matched_terms": [
               "agent"
@@ -220,7 +217,7 @@
             "source_type": "official_feed",
             "created_at": "2026-10-29T19:58:59+00:00",
             "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-and-blackwell-set-a-new-standard-for-agentic-ai-performance-per-watt/",
-            "ranking_score_0_100": 95.0,
+            "ranking_score_0_100": 93.6,
             "source_excerpt": "NVIDIA Vera Rubin and Blackwell Set a New Standard for Agentic AI Performance per Watt — AI agents have expanded inference from single-turn interactions into multi-step workflows that reason, invoke tools, coordinate subagents, and carry growing...",
             "matched_terms": [
               "agent",
@@ -237,7 +234,7 @@
             "source_type": "github_release",
             "created_at": "2026-10-29T14:15:39+00:00",
             "url": "https://github.com/huggingface/transformers/releases/tag/v5.22.0",
-            "ranking_score_0_100": 78.7,
+            "ranking_score_0_100": 77.2,
             "source_excerpt": "v5.22.0: Mistral Large 4 (Le Chonk) — ## New Models ### Mistral Large 4 (Le Chonk) Mistral Large 4 is Mistral's largest and most capable model to date: a 1 trillion-parameter natively multimodal Mixture-of-Experts model with 49 billion active parameters per token (52 billion including embeddings and output layers), trained from scratch on 3,800 NVIDIA Grace…",
             "matched_terms": [
               "workflow"
@@ -259,7 +256,7 @@
         "kicker": "模型進展",
         "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
         "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
-        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「BURGER: Benchmarking and Understanding Robotic Generalization via Embodied Drawing」，以及 Hugging Face Blog 的「Build specialized multimodal models with LFM3」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「There Is No Free Loop: When Does Looping a Trained Model Pay for Its Inference Compute?」，以及 Hugging Face Blog 的「Build specialized multimodal models with LFM3」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
         "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
         "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
@@ -269,20 +266,20 @@
         "matched_term_count": 3,
         "evidence": [
           {
-            "item_id": "arxiv-ai:e2f84991ef24370be909",
-            "title": "BURGER: Benchmarking and Understanding Robotic Generalization via Embodied Drawing",
+            "item_id": "arxiv-ai:173819e1d635664f2c98",
+            "title": "There Is No Free Loop: When Does Looping a Trained Model Pay for Its Inference Compute?",
             "source_key": "arxiv-ai",
             "source_label": "arXiv cs.AI 最新研究",
             "source_type": "preprint_feed",
-            "created_at": "2026-10-29T17:34:04+00:00",
-            "url": "https://arxiv.org/abs/2610.40532v1",
-            "ranking_score_0_100": 74.9,
-            "source_excerpt": "BURGER: Benchmarking and Understanding Robotic Generalization via Embodied Drawing — How effectively can vision-language-action (VLA) models learn diverse language-conditioned behaviors as training data scales? Investigating this question requires large and varied robot datasets, whose collection on physical robots remains costly. We introduce BURGER, a lan…",
+            "created_at": "2026-10-30T16:56:29+00:00",
+            "url": "https://arxiv.org/abs/2610.42030v1",
+            "ranking_score_0_100": 82.3,
+            "source_excerpt": "There Is No Free Loop: When Does Looping a Trained Model Pay for Its Inference Compute? — Looping re-applies a block of layers so that each token passes through the block more than once. Adding a loop to a trained model is attractive because it leaves the parameter count, and hence the disk size, the memory footprint and the training cost unchanged. Unfortu…",
             "matched_terms": [
               "training",
-              "data"
+              "pretraining"
             ],
-            "item_integrity_hash": "49172147adc42ad033a3dd29850669d0395e935c0059d986108a58bdb187c6fb",
+            "item_integrity_hash": "7b3ac991b7a4791d8d9ff4c3bc22d9248b90ca1cf4f79e58c5ce19c79dc6f38c",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -293,7 +290,7 @@
             "source_type": "official_feed",
             "created_at": "2026-10-27T17:16:52+00:00",
             "url": "https://huggingface.co/blog/LiquidAI/lfm3",
-            "ranking_score_0_100": 75.5,
+            "ranking_score_0_100": 74.1,
             "source_excerpt": "Build specialized multimodal models with LFM3",
             "matched_terms": [
               "multimodal"
@@ -303,8 +300,8 @@
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "unchanged",
-        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
+        "novelty_status": "refreshed",
+        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 arXiv cs.AI 最新研究。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -326,11 +323,11 @@
       "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-and-blackwell-set-a-new-standard-for-agentic-ai-performance-per-watt/"
     },
     {
-      "item_id": "arxiv-ai:e2f84991ef24370be909",
-      "title": "BURGER: Benchmarking and Understanding Robotic Generalization via Embodied Drawing",
+      "item_id": "arxiv-ai:173819e1d635664f2c98",
+      "title": "There Is No Free Loop: When Does Looping a Trained Model Pay for Its Inference Compute?",
       "action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
       "source_label": "arXiv cs.AI 最新研究",
-      "url": "https://arxiv.org/abs/2610.40532v1"
+      "url": "https://arxiv.org/abs/2610.42030v1"
     }
   ],
   "categories": [
@@ -358,11 +355,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 94.7,
+          "ranking_score_0_100": 93.2,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 73.3
+            "recency": 66.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a2b914fed3fdd11bf45b6aba34c7323545527ac8dd53cd885c6dbacffc4c3a00"
@@ -380,11 +377,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 92.9,
+          "ranking_score_0_100": 91.4,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 64.3
+            "recency": 57.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "53f0912ab4f2782ab79927bcb23b480344970f41e12ce4b949b286c85afc122e"
@@ -402,11 +399,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 86.9,
+          "ranking_score_0_100": 85.5,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 72.2
+            "recency": 65.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "35a2d2c26772d46b8ad651b851e2b2ef1d5f0a5f34bcdeec4c5b9c533487f3a7"
@@ -424,11 +421,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 58.0,
+          "ranking_score_0_100": 56.5,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 12.3
+            "recency": 5.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "f1463b91670e58d3a9aac926f0e1744f8e1714a69814857c8610bdb91421e44b"
@@ -460,11 +457,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 95.0,
+          "ranking_score_0_100": 93.6,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 82.5
+            "recency": 75.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3d7a01075413d2fae602504d19a9f31df7606c4e62f261fa61fbb49c8b372158"
@@ -482,11 +479,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 81.1,
+          "ranking_score_0_100": 79.7,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 88.2
+            "recency": 81.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a03dbbb506666bc4c15c16ed47a6b2b862de6d738b78fa37f6c57420f2831837"
@@ -504,11 +501,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.6,
+          "ranking_score_0_100": 79.1,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 90.3
+            "recency": 83.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4eb0a3a2f08daa8c24f4b4f590d827cbca6918f102f2fa92de7c3e9a32ca385d"
@@ -526,11 +523,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.6,
+          "ranking_score_0_100": 79.1,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 90.3
+            "recency": 83.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "57d6a4f08aa3373509205d677a02b2644c65a1a21456b84a2b109e786bda4733"
@@ -548,11 +545,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.4,
+          "ranking_score_0_100": 79.0,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 89.5
+            "recency": 82.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "f2cd1908f36cb7b6dd4c23ff0a6c76ae27bb40804a4e27828ac40a406d6ec998"
@@ -570,11 +567,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 79.8,
+          "ranking_score_0_100": 78.4,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 86.5
+            "recency": 79.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "229d09f1640dfae6dd382ee59dce26a2e3c3f2bc69428675cca9c8dae48c7815"
@@ -592,11 +589,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 78.7,
+          "ranking_score_0_100": 77.2,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 80.8
+            "recency": 73.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "404afd388715d84848beec500aa73ff02dae2271683668b841e29d09afe65622"
@@ -614,11 +611,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 78.6,
+          "ranking_score_0_100": 77.2,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 75.7
+            "recency": 68.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "72efd73be619acd22584e199911ad97851655e181766f0d36fdb048698d802c9"
@@ -637,6 +634,72 @@
       ],
       "items": [
         {
+          "id": "arxiv-ai:173819e1d635664f2c98",
+          "url": "https://arxiv.org/abs/2610.42030v1",
+          "created_at": "2026-10-30T16:56:29+00:00",
+          "title": "There Is No Free Loop: When Does Looping a Trained Model Pay for Its Inference Compute?",
+          "text": "There Is No Free Loop: When Does Looping a Trained Model Pay for Its Inference Compute? — Looping re-applies a block of layers so that each token passes through the block more than once. Adding a loop to a trained model is attractive because it leaves the parameter count, and hence the disk size, the memory footprint and the training cost unchanged. Unfortunately, every generated token pays for the loop. Re-applying m of N layers makes each token about (N+m)/N times as expensive. Loops that a model learns during large-scale pretraining justify this price, but whether loops added after pretraining justi…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 82.3,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 100.0,
+            "recency": 81.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "7b3ac991b7a4791d8d9ff4c3bc22d9248b90ca1cf4f79e58c5ce19c79dc6f38c"
+        },
+        {
+          "id": "arxiv-ai:3184c5b023b704165c88",
+          "url": "https://arxiv.org/abs/2610.42066v1",
+          "created_at": "2026-10-30T17:26:18+00:00",
+          "title": "The Knowledge Layer Model (KLM): Evidence-Visible AI Output, Routing Diagnostics, and Negative Results",
+          "text": "The Knowledge Layer Model (KLM): Evidence-Visible AI Output, Routing Diagnostics, and Negative Results — AI answers require more than apparent correctness: reviewers need to inspect their recorded basis. We introduce the Knowledge Layer Model (KLM), an open, implementation-neutral specification for inference records with versioned epistemic assessments, evidence relations, and explicit unknowns. SEDIM, the knowledge and evidence architecture of Nage AI OS, is a reference implementation. We reference KLM v0.3 (repository tag v0.3.0). Empirical material consists of separate internal experiments, not end-to-end validati…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 74.8,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 75.0,
+            "recency": 81.7
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "18dff2c548934330de8bb0649525a9726931ef76ee3e623bb856c0b850f33e51"
+        },
+        {
+          "id": "arxiv-ai:cb5660d49cbe224ec14b",
+          "url": "https://arxiv.org/abs/2610.42054v1",
+          "created_at": "2026-10-30T17:18:35+00:00",
+          "title": "CRoS: Causality Reward on Scrambled CoTs Improves Accuracy and Reasoning Faithfulness",
+          "text": "CRoS: Causality Reward on Scrambled CoTs Improves Accuracy and Reasoning Faithfulness — Reinforcement learning with verifiable rewards (RLVR) has become the standard method for training language models to reason. However, RLVR typically relies solely on outcome correctness, which does not guarantee that the CoT causally contributes to the final answer. Without this connection, outcome rewards may fail to reinforce high-quality reasoning. Existing causality metrics assess CoT causality by perturbing the CoT, such as deleting reasoning steps or injecting errors, and measuring changes in the final answe…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 74.8,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 75.0,
+            "recency": 81.7
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "99d881a8120ce8394406e01ba09f51a495647924724a2da43164c0a37fac77b1"
+        },
+        {
           "id": "huggingface-blog:1c5b51464767c2ad2949",
           "url": "https://huggingface.co/blog/LiquidAI/lfm3",
           "created_at": "2026-10-27T17:16:52+00:00",
@@ -649,58 +712,58 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 75.5,
+          "ranking_score_0_100": 74.1,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 50.0,
-            "recency": 67.4
+            "recency": 60.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "94f7450072de4b0ba5b79888e968cda26f8e732b666516bf847b8a9c3f13d135"
         },
         {
-          "id": "arxiv-ai:65010c73046ecfbcd4eb",
-          "url": "https://arxiv.org/abs/2610.40541v1",
-          "created_at": "2026-10-29T17:36:01+00:00",
-          "title": "On the Fundamental Limits of Prefill-Based Decoding Length Prediction",
-          "text": "On the Fundamental Limits of Prefill-Based Decoding Length Prediction — Predicting how many tokens a large language model (LLM) will decode, using only prefill-phase hidden states, is a key primitive for inference scheduling. We show that current benchmarks conflate predictor quality with task hardness: when the target model, dataset, or sampling configuration changes, reported accuracy collapses even though the predictor is unchanged. We trace this instability to an overlooked error source---the inherent stochasticity of autoregressive decoding---and derive bounds that every prefill-…",
-          "source_key": "arxiv-ai",
+          "id": "deepmind-blog:e8e0cb1d0e685ced8c0e",
+          "url": "https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/",
+          "created_at": "2026-10-28T17:00:58+00:00",
+          "title": "Gemini 4 Carbon: Our next frontier model",
+          "text": "Gemini 4 Carbon: Our next frontier model",
+          "source_key": "deepmind-blog",
           "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 74.9,
+          "source_label": "Google DeepMind Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方研究",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 71.0,
           "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 75.0,
-            "recency": 81.8
+            "source_quality": 100.0,
+            "keyword_relevance": 25.0,
+            "recency": 67.3
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "964c5b776e317f718bfcb996ac8c6efb73e9725b4bd5b7453946da5711755b3d"
+          "integrity_hash": "3c7cf05e201ffbd2c4b783d9098113a6f02970dfe5ebb654eb406bf38f6e4bc4"
         },
         {
-          "id": "arxiv-ai:e2f84991ef24370be909",
-          "url": "https://arxiv.org/abs/2610.40532v1",
-          "created_at": "2026-10-29T17:34:04+00:00",
-          "title": "BURGER: Benchmarking and Understanding Robotic Generalization via Embodied Drawing",
-          "text": "BURGER: Benchmarking and Understanding Robotic Generalization via Embodied Drawing — How effectively can vision-language-action (VLA) models learn diverse language-conditioned behaviors as training data scales? Investigating this question requires large and varied robot datasets, whose collection on physical robots remains costly. We introduce BURGER, a language-conditioned robotic drawing benchmark with a scalable, prompt-driven pipeline for generating continuous drawing trajectories, both in simulation and the real world. In BURGER, an agent starts from the same blank canvas and controls a robot…",
-          "source_key": "arxiv-ai",
+          "id": "deepmind-blog:393575ee7d83ff0a65d3",
+          "url": "https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/",
+          "created_at": "2026-10-27T16:01:38+00:00",
+          "title": "Genie 4: A new generation of world simulation",
+          "text": "Genie 4: A new generation of world simulation — Genie 4: our new world model unlocking unprecedented realism in real-time simulation.",
+          "source_key": "deepmind-blog",
           "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 74.9,
+          "source_label": "Google DeepMind Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方研究",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 69.5,
           "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 75.0,
-            "recency": 81.8
+            "source_quality": 100.0,
+            "keyword_relevance": 25.0,
+            "recency": 59.9
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "49172147adc42ad033a3dd29850669d0395e935c0059d986108a58bdb187c6fb"
+          "integrity_hash": "efc8e89665e6d6e975103f7116f94043e5e3fb734e236f3ae8b057bd08c84324"
         },
         {
           "id": "huggingface-blog:e508e29ae812fe586e8d",
@@ -715,11 +778,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 70.6,
+          "ranking_score_0_100": 69.2,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 80.6
+            "recency": 73.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "74cab1d4630a28051d1874b770b8ab9ee6050969a96590818fc1599e8227141f"
@@ -737,36 +800,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 69.8,
+          "ranking_score_0_100": 68.4,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 76.5
+            "recency": 69.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a28f41ab040ccab3ce15b72222ee57d84228601e02505ba024c76a5d4233a6ea"
-        },
-        {
-          "id": "arxiv-ai:20f2814dcfa23f12b719",
-          "url": "https://arxiv.org/abs/2610.40649v1",
-          "created_at": "2026-10-29T17:59:29+00:00",
-          "title": "Rethinking Neural Thickets Without Weight Perturbations",
-          "text": "Rethinking Neural Thickets Without Weight Perturbations — The Neural Thickets hypothesis posits that pretrained language models lie in dense neighborhoods of task-specific experts in weight space, which random Gaussian perturbations can uncover. We reproduce the reported gains, but show that they do not require this geometric explanation. Perturbing a single decoder block already recovers much of the improvement, while keeping the model entirely frozen and adding a random bias to its output logits matches or exceeds full-weight perturbations on most reasoning tasks. This…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 67.4,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 81.9
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "7771c0164bcc0eba9371fbdabce20d76c3c1f9b138ece54af00b9414d80cef94"
         }
       ]
     }
