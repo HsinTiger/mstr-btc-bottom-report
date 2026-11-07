@@ -1,23 +1,21 @@
 {
   "schema": 3,
-  "generated_at": "2026-11-06T07:21:42+00:00",
+  "generated_at": "2026-11-07T06:33:23+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "degraded",
+    "status": "pass",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [
-      "Google DeepMind Blog：not well-formed (invalid token): line 1, column 0"
-    ],
+    "degradations": [],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 18,
-    "unique_sources": 8,
-    "successful_sources": 9,
-    "failed_sources": 1,
+    "posts": 21,
+    "unique_sources": 9,
+    "successful_sources": 10,
+    "failed_sources": 0,
     "editorial_briefs": 3,
     "editorial_pass": 3
   },
@@ -28,9 +26,9 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
-      "raw_items": 1366,
+      "raw_items": 1368,
       "eligible_items": 30
     },
     {
@@ -39,7 +37,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 0
@@ -50,10 +48,10 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 50,
-      "eligible_items": 1
+      "eligible_items": 2
     },
     {
       "source_key": "vercel-ai-releases",
@@ -61,7 +59,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -72,10 +70,10 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 100,
-      "eligible_items": 26
+      "eligible_items": 24
     },
     {
       "source_key": "vllm-releases",
@@ -83,7 +81,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -94,10 +92,10 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 8,
-      "eligible_items": 4
+      "eligible_items": 5
     },
     {
       "source_key": "deepmind-blog",
@@ -105,11 +103,10 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-11-06T07:21:42+00:00",
-      "status": "fail",
-      "raw_items": 0,
-      "eligible_items": 0,
-      "error": "not well-formed (invalid token): line 1, column 0"
+      "checked_at": "2026-11-07T06:33:23+00:00",
+      "status": "pass",
+      "raw_items": 100,
+      "eligible_items": 2
     },
     {
       "source_key": "huggingface-blog",
@@ -117,10 +114,10 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
-      "raw_items": 898,
-      "eligible_items": 8
+      "raw_items": 899,
+      "eligible_items": 7
     },
     {
       "source_key": "arxiv-ai",
@@ -128,7 +125,7 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-11-06T07:21:42+00:00",
+      "checked_at": "2026-11-07T06:33:23+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
@@ -147,15 +144,33 @@
         "kicker": "AI 應用與變現",
         "headline": "代理正在成為新介面，但可靠性會比自治程度更早決定價值",
         "standfirst": "代理能做更多事不代表使用者敢放手；可預覽計畫、限制權限與保留稽核軌跡才是進入正式流程的門票。",
-        "lede": "今日可回查的共同訊號來自 OpenAI News 的「Merge builds product and business tools with OpenAI technology」，以及 Cursor Changelog 的「Build Live Apps in Cursor」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Cursor Changelog 的「Voice Chat with Agents」，以及 OpenAI News 的「Merge builds product and business tools with OpenAI technology」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "產品競爭正聚焦在代理可跨工具、跨資料與長時間自主執行。",
         "variant_view": "短期勝負更可能由失敗可見性與人工接管成本決定，而不是誰宣稱的自治程度最高。",
         "second_order_effect": "治理與可觀測性若成為採用門檻，評測市場會從單題能力轉向端到端任務完成率與事故成本。",
         "practical_readthrough": "測代理時保留完整計畫、工具呼叫、失敗點與人工接手時間；只看成功展示會系統性高估價值。",
         "falsifier": "若無監督代理在真實長任務的錯誤率、回復成本與權限事故持續下降，自治程度才可能重新成為主要差異。",
         "evidence_source_count": 2,
-        "matched_term_count": 2,
+        "matched_term_count": 4,
         "evidence": [
+          {
+            "item_id": "cursor-changelog:c9e260814e66b368a0bc",
+            "title": "Voice Chat with Agents",
+            "source_key": "cursor-changelog",
+            "source_label": "Cursor Changelog",
+            "source_type": "official_feed",
+            "created_at": "2026-11-06T00:00:00+00:00",
+            "url": "https://cursor.com/changelog/voice-chat",
+            "ranking_score_0_100": 73.7,
+            "source_excerpt": "Voice Chat with Agents — Talk with your agents in a realtime voice call on desktop, web, and iOS.",
+            "matched_terms": [
+              "agent",
+              "voice",
+              "chat"
+            ],
+            "item_integrity_hash": "ef5c91d81b6c3401c48aa46935481e69ee994cba1994865c072a4a834500319c",
+            "relationship": "topic_context_not_endorsement"
+          },
           {
             "item_id": "openai-news:db9792e954d447010915",
             "title": "Merge builds product and business tools with OpenAI technology",
@@ -164,34 +179,18 @@
             "source_type": "official_feed",
             "created_at": "2026-11-05T08:00:00+00:00",
             "url": "https://openai.com/index/merge-builds-with-openai",
-            "ranking_score_0_100": 98.6,
+            "ranking_score_0_100": 97.2,
             "source_excerpt": "Merge builds product and business tools with OpenAI technology — Merge uses GPT-6 Astra, ChatGPT, and Codex to review product code and support marketing. Its teams also use AI to plan executive dinners and prepare sales updates.",
             "matched_terms": [
               "codex"
             ],
             "item_integrity_hash": "dff18e479cf7f510e58c1422d90c3500460abe4b58e20f397aa0a0b79f2a41b8",
             "relationship": "topic_context_not_endorsement"
-          },
-          {
-            "item_id": "cursor-changelog:c30b322513faf4e64f8b",
-            "title": "Build Live Apps in Cursor",
-            "source_key": "cursor-changelog",
-            "source_label": "Cursor Changelog",
-            "source_type": "official_feed",
-            "created_at": "2026-11-05T00:00:00+00:00",
-            "url": "https://cursor.com/changelog/build-live-apps",
-            "ranking_score_0_100": 81.1,
-            "source_excerpt": "Build Live Apps in Cursor — Build and deploy web apps directly in Cursor with cloud agents handling hosting, database, auth, and deployment.",
-            "matched_terms": [
-              "agent"
-            ],
-            "item_integrity_hash": "a761bacc4fc7aaed4293851664223aacb3c86f9302a2e0c6834ae9cfa075ac72",
-            "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
         "novelty_status": "refreshed",
-        "what_changed": "主軸未變；替換 1 則、加入 2 則主題訊號，新增來源為 OpenAI News、Cursor Changelog。"
+        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 Cursor Changelog。"
       },
       {
         "id": "brief-engineering-methods",
@@ -202,29 +201,46 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/zai@3.0.47」，以及 vLLM Releases 的「v0.33.0」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「ai@6.0.324」，以及 Transformers Releases 的「Patch release v5.22.2」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
         "practical_readthrough": "把升級分成破壞性變更、效能、品質與安全四張檢查表；隔離 canary 通過後才更新鎖檔。",
         "falsifier": "若新版在固定回歸集全面改善且沒有遷移、回滾與行為漂移成本，追新造成的維運負債才被證偽。",
         "evidence_source_count": 3,
-        "matched_term_count": 3,
+        "matched_term_count": 4,
         "evidence": [
           {
-            "item_id": "vercel-ai-releases:41c18057cca87b7613c5",
-            "title": "@ai-sdk/zai@3.0.47",
+            "item_id": "vercel-ai-releases:46de90c9712e0c30882a",
+            "title": "ai@6.0.324",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-11-05T01:16:32+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.47",
-            "ranking_score_0_100": 80.7,
-            "source_excerpt": "@ai-sdk/zai@3.0.47 — ### Patch Changes - Updated dependencies [36802d4] - Updated dependencies [e0143b0] - Updated dependencies [934100c] - Updated dependencies [add01ab] - Updated dependencies [5f19ea5] - Updated dependencies [892af4d] - Updated dependencies [89aff56] - Updated dependencies [41465fd] - Updated dependencies [9754014] - Updated dependencies…",
+            "created_at": "2026-11-06T22:21:33+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.324",
+            "ranking_score_0_100": 82.0,
+            "source_excerpt": "ai@6.0.324 — ### Patch Changes - ba3743f: Preserve `toolChoice: 'none'` when SDK tools are omitted or empty so providers can disable native tools configured through provider options. For Perplexity native tools, also update `@ai-sdk/perplexity` to `3.1.10` or a later compatible version, which includes the provider-side guard. - Updated dependencies [fbb8489…",
             "matched_terms": [
-              "sdk"
+              "sdk",
+              "version"
             ],
-            "item_integrity_hash": "04b364ce3d3beee1f0f5081c423b4d4cfecb553e717ac933916f7a5913db992e",
+            "item_integrity_hash": "c39116667f4ee1946d6b625ff785d2f18e8517ee182be3b1c14c5fe38c2e725b",
+            "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "transformers-releases:878fd3793321c4bbb74a",
+            "title": "Patch release v5.22.2",
+            "source_key": "transformers-releases",
+            "source_label": "Transformers Releases",
+            "source_type": "github_release",
+            "created_at": "2026-11-06T15:43:27+00:00",
+            "url": "https://github.com/huggingface/transformers/releases/tag/v5.22.2",
+            "ranking_score_0_100": 81.6,
+            "source_excerpt": "Patch release v5.22.2 — # Patch release v5.22.2 Some in between patch for security and distributed fixes. See the included commits :hugs: - [Distributed] Set device_id only for NCCL (#50281) by @michaelbenayoun and @3outeille - Harden our Jinja sandboxing (#50431) by @Rocketknight1 **Full Changelog**: https://github.com/huggingface/transformers/compare/v5.2…",
+            "matched_terms": [
+              "release"
+            ],
+            "item_integrity_hash": "87527be50cb9530458659ae365349e1754c344d88240f883aa02efba67c0b3c1",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -235,34 +251,18 @@
             "source_type": "github_release",
             "created_at": "2026-11-02T10:10:05+00:00",
             "url": "https://github.com/vllm-project/vllm/releases/tag/v0.33.0rc3",
-            "ranking_score_0_100": 77.0,
+            "ranking_score_0_100": 75.6,
             "source_excerpt": "v0.33.0 — # v0.33.0 ## Highlights This release features 927 commits from 389 contributors (122 new)! * **New models**: Reflection Beam-1.0 (501B MoE, 23B active) with its DFlash2 drafter (#62074), Yandex AliceAI-Foundation-80B-A3B (#57963), Recursive Flint (40B MoE, 2.5B active) (#62938), Muse Spark Open (#61879), Step-5 Preview (#61727, #63147), NVIDIA Alp…",
             "matched_terms": [
               "release"
             ],
             "item_integrity_hash": "238d504b0b556242b7d9e31face9eabdefb251ccd657b44243f511b3eb68e151",
             "relationship": "topic_context_not_endorsement"
-          },
-          {
-            "item_id": "transformers-releases:75a20b079e3b9559a8e8",
-            "title": "Patch release v5.22.1",
-            "source_key": "transformers-releases",
-            "source_label": "Transformers Releases",
-            "source_type": "github_release",
-            "created_at": "2026-10-30T09:36:03+00:00",
-            "url": "https://github.com/huggingface/transformers/releases/tag/v5.22.1",
-            "ranking_score_0_100": 72.6,
-            "source_excerpt": "Patch release v5.22.1 — # Patch release v5.22.1 We just had to fix the documentation! ** [Fix] Remove WIP doc for Ml4 (https://github.com/huggingface/transformers/pull/50124) from @remi-or",
-            "matched_terms": [
-              "release"
-            ],
-            "item_integrity_hash": "229d09f1640dfae6dd382ee59dce26a2e3c3f2bc69428675cca9c8dae48c7815",
-            "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "unchanged",
-        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
+        "novelty_status": "refreshed",
+        "what_changed": "主軸未變；替換 2 則、加入 2 則主題訊號，新增來源為 Vercel AI SDK Releases、Transformers Releases。"
       },
       {
         "id": "brief-model-progress",
@@ -290,7 +290,7 @@
             "source_type": "preprint_feed",
             "created_at": "2026-11-05T17:48:55+00:00",
             "url": "https://arxiv.org/abs/2611.08369v1",
-            "ranking_score_0_100": 85.2,
+            "ranking_score_0_100": 83.8,
             "source_excerpt": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma — Current medical benchmarks typically break down clinical competence into isolated factual questions, single-image tasks, or static case vignettes. These tests score individual answers, but reveal less about whether a model can integrate subspeci…",
             "matched_terms": [
               "benchmark",
@@ -308,7 +308,7 @@
             "source_type": "official_feed",
             "created_at": "2026-11-05T00:00:00+00:00",
             "url": "https://huggingface.co/blog/phonon-tts",
-            "ranking_score_0_100": 72.6,
+            "ranking_score_0_100": 71.3,
             "source_excerpt": "A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.",
             "matched_terms": [
               "benchmark"
@@ -318,8 +318,8 @@
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "changed",
-        "what_changed": "主軸由「開放模型的競爭焦點，正從能否下載轉向能否治理與部署」轉為「榜單上的進步，仍要經過真實任務可靠性這一關」。"
+        "novelty_status": "unchanged",
+        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -334,11 +334,11 @@
       "url": "https://openai.com/index/merge-builds-with-openai"
     },
     {
-      "item_id": "nvidia-developer:8db6db70c49ae8ff3ffe",
-      "title": "Use NVIDIA NeMo to Turn Agent Failures into Tests and Harness Fixes",
+      "item_id": "nvidia-developer:a6bcd182b2895683681b",
+      "title": "Speed Up Image Generation with FLUX 3 Image Klein on NVIDIA Blackwell GPUs",
       "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
       "source_label": "NVIDIA Developer Blog",
-      "url": "https://developer.nvidia.com/blog/use-nvidia-nemo-to-turn-agent-failures-into-tests-and-harness-fixes/"
+      "url": "https://developer.nvidia.com/blog/speed-up-image-generation-with-flux-3-image-klein-on-nvidia-blackwell-gpus/"
     },
     {
       "item_id": "arxiv-ai:e0af75a38d8b0e71a8b9",
@@ -373,11 +373,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 98.6,
+          "ranking_score_0_100": 97.2,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 93.0
+            "recency": 86.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "dff18e479cf7f510e58c1422d90c3500460abe4b58e20f397aa0a0b79f2a41b8"
@@ -395,11 +395,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 89.2,
+          "ranking_score_0_100": 87.8,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 83.5
+            "recency": 76.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b6c9958e363b4a270df6d348d05977131dc8291caf170e6a50a6f463d568dbf7"
@@ -417,11 +417,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 88.5,
+          "ranking_score_0_100": 87.1,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 80.0
+            "recency": 73.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "42238474d7807c979aa5b6f810f6b3d877abd980fb09712a748b01b22e8cdccb"
@@ -439,14 +439,36 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 81.1,
+          "ranking_score_0_100": 79.8,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 50.0,
-            "recency": 90.7
+            "recency": 83.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a761bacc4fc7aaed4293851664223aacb3c86f9302a2e0c6834ae9cfa075ac72"
+        },
+        {
+          "id": "cursor-changelog:c9e260814e66b368a0bc",
+          "url": "https://cursor.com/changelog/voice-chat",
+          "created_at": "2026-11-06T00:00:00+00:00",
+          "title": "Voice Chat with Agents",
+          "text": "Voice Chat with Agents — Talk with your agents in a realtime voice call on desktop, web, and iOS.",
+          "source_key": "cursor-changelog",
+          "category_id": "ai-application-monetization",
+          "source_label": "Cursor Changelog",
+          "source_type": "official_feed",
+          "source_tier": "官方產品",
+          "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+          "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+          "ranking_score_0_100": 73.7,
+          "ranking_components_0_100": {
+            "source_quality": 96.0,
+            "keyword_relevance": 25.0,
+            "recency": 90.9
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "ef5c91d81b6c3401c48aa46935481e69ee994cba1994865c072a4a834500319c"
         }
       ]
     },
@@ -463,6 +485,116 @@
       ],
       "items": [
         {
+          "id": "nvidia-developer:a6bcd182b2895683681b",
+          "url": "https://developer.nvidia.com/blog/speed-up-image-generation-with-flux-3-image-klein-on-nvidia-blackwell-gpus/",
+          "created_at": "2026-11-06T22:20:31+00:00",
+          "title": "Speed Up Image Generation with FLUX 3 Image Klein on NVIDIA Blackwell GPUs",
+          "text": "Speed Up Image Generation with FLUX 3 Image Klein on NVIDIA Blackwell GPUs — When deploying diffusion models in design tools, image editors, and visual production workflows, developers must account for inference latency. Generating an...",
+          "source_key": "nvidia-developer",
+          "category_id": "engineering-methods",
+          "source_label": "NVIDIA Developer Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方工程",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 98.0,
+          "ranking_components_0_100": {
+            "source_quality": 97.0,
+            "keyword_relevance": 100.0,
+            "recency": 97.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "b2ed692de1c4abd7733c53efb2c3a1c09110d00b345de4526db700794f1fe870"
+        },
+        {
+          "id": "vercel-ai-releases:802f3e41df25804c6984",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%402.0.19",
+          "created_at": "2026-11-06T22:23:12+00:00",
+          "title": "@ai-sdk/zai@2.0.19",
+          "text": "@ai-sdk/zai@2.0.19 — ### Patch Changes - Updated dependencies [14c196a] - Updated dependencies [98eb47b] - @ai-sdk/openai-compatible@2.0.91",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "621d1e0e131498bccdf016b0bb8fd10c3467c83b5e167dadc13ebe4577e493ec"
+        },
+        {
+          "id": "vercel-ai-releases:48485fdc0fff8df0bedc",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%403.0.150",
+          "created_at": "2026-11-06T22:23:09+00:00",
+          "title": "@ai-sdk/xai@3.0.150",
+          "text": "@ai-sdk/xai@3.0.150 — ### Patch Changes - Updated dependencies [14c196a] - Updated dependencies [98eb47b] - @ai-sdk/openai-compatible@2.0.91",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "d8654431e199dcbc6e8365aabf42fc81613f98edd232e18063ca138cb1937e65"
+        },
+        {
+          "id": "vercel-ai-releases:46de90c9712e0c30882a",
+          "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.324",
+          "created_at": "2026-11-06T22:21:33+00:00",
+          "title": "ai@6.0.324",
+          "text": "ai@6.0.324 — ### Patch Changes - ba3743f: Preserve `toolChoice: 'none'` when SDK tools are omitted or empty so providers can disable native tools configured through provider options. For Perplexity native tools, also update `@ai-sdk/perplexity` to `3.1.10` or a later compatible version, which includes the provider-side guard. - Updated dependencies [fbb8489] - Updated dependencies [26b7351] - @ai-sdk/gateway@3.0.230",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "c39116667f4ee1946d6b625ff785d2f18e8517ee182be3b1c14c5fe38c2e725b"
+        },
+        {
+          "id": "transformers-releases:878fd3793321c4bbb74a",
+          "url": "https://github.com/huggingface/transformers/releases/tag/v5.22.2",
+          "created_at": "2026-11-06T15:43:27+00:00",
+          "title": "Patch release v5.22.2",
+          "text": "Patch release v5.22.2 — # Patch release v5.22.2 Some in between patch for security and distributed fixes. See the included commits :hugs: - [Distributed] Set device_id only for NCCL (#50281) by @michaelbenayoun and @3outeille - Harden our Jinja sandboxing (#50431) by @Rocketknight1 **Full Changelog**: https://github.com/huggingface/transformers/compare/v5.22.1...v5.22.2",
+          "source_key": "transformers-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Transformers Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 81.6,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 95.6
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "87527be50cb9530458659ae365349e1754c344d88240f883aa02efba67c0b3c1"
+        },
+        {
           "id": "nvidia-developer:88a80623a9615ed23f60",
           "url": "https://developer.nvidia.com/blog/how-nvidia-openshell-reference-architecture-secures-and-governs-ai-agent-workloads-at-scale/",
           "created_at": "2026-11-05T21:29:16+00:00",
@@ -475,11 +607,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 82.9,
+          "ranking_score_0_100": 81.5,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 97.1
+            "recency": 90.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "fea3cd6db0cab18b3bdbb10da6f97c1e8149f193ff88dd43cb635b67b4f1e890"
@@ -497,102 +629,14 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 81.5,
+          "ranking_score_0_100": 80.1,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 90.1
+            "recency": 83.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d7a55dae251c905b6e9ffac9ece95d11f713816145f620f1a6316cae668ef9f0"
-        },
-        {
-          "id": "nvidia-developer:8db6db70c49ae8ff3ffe",
-          "url": "https://developer.nvidia.com/blog/use-nvidia-nemo-to-turn-agent-failures-into-tests-and-harness-fixes/",
-          "created_at": "2026-11-04T20:26:19+00:00",
-          "title": "Use NVIDIA NeMo to Turn Agent Failures into Tests and Harness Fixes",
-          "text": "Use NVIDIA NeMo to Turn Agent Failures into Tests and Harness Fixes — Turn production evidence into prioritized issues and custom evaluations that help you improve prompts, tools, models, memory, skills, and harness code. When you...",
-          "source_key": "nvidia-developer",
-          "category_id": "engineering-methods",
-          "source_label": "NVIDIA Developer Blog",
-          "source_type": "official_feed",
-          "source_tier": "官方工程",
-          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
-          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 81.4,
-          "ranking_components_0_100": {
-            "source_quality": 97.0,
-            "keyword_relevance": 50.0,
-            "recency": 89.6
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "3d34a40b1fef6b7780d5524f7e65c06e34abc8f28e84cea2a1dc824077ef22a9"
-        },
-        {
-          "id": "vercel-ai-releases:41c18057cca87b7613c5",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.47",
-          "created_at": "2026-11-05T01:16:32+00:00",
-          "title": "@ai-sdk/zai@3.0.47",
-          "text": "@ai-sdk/zai@3.0.47 — ### Patch Changes - Updated dependencies [36802d4] - Updated dependencies [e0143b0] - Updated dependencies [934100c] - Updated dependencies [add01ab] - Updated dependencies [5f19ea5] - Updated dependencies [892af4d] - Updated dependencies [89aff56] - Updated dependencies [41465fd] - Updated dependencies [9754014] - Updated dependencies [4bb73b0] - Updated dependencies [2e44144] - @ai-sdk/provider@4.0.36 - @ai-sdk/openai-compatible@3.0.85 - @ai-sdk/provider-utils@5.0.75",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.7,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 91.0
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "04b364ce3d3beee1f0f5081c423b4d4cfecb553e717ac933916f7a5913db992e"
-        },
-        {
-          "id": "vercel-ai-releases:392f3d80e0a1f3d42006",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%405.0.39",
-          "created_at": "2026-11-05T01:16:29+00:00",
-          "title": "@ai-sdk/xai@5.0.39",
-          "text": "@ai-sdk/xai@5.0.39 — ### Patch Changes - 892af4d: feat (provider/xai): implement server-side realtime extensions `XaiRealtimeModel` now implements `getServerWebSocketConfig()`, returning the upstream voice realtime WebSocket URL (with the `model` query param) plus header auth derived from the model's configured credentials. Unsupported endpoint intents are rejected. The event mapper now populates normalized `usage` on `response-done` and `input-transcription-completed` using xAI's OpenAI-compatible realtime wire shape. - 41465fd: Expo…",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.7,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 91.0
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "533712e331a6f660bbd47e8e52b737ceb776b0f387aa255ad8b2c4d0fd044194"
-        },
-        {
-          "id": "vercel-ai-releases:1fc57f1c22464e1ebabb",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.174",
-          "created_at": "2026-11-05T01:16:26+00:00",
-          "title": "@ai-sdk/workflow-harness@1.0.174",
-          "text": "@ai-sdk/workflow-harness@1.0.174 — ### Patch Changes - Updated dependencies [3bf70f8] - @ai-sdk/harness@1.0.174",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.7,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 91.0
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "6cf6691793029677cc869e628f4eab9d82ea9a0c789bef93115b75854d572b6d"
         },
         {
           "id": "vllm-releases:109261365670d3352ab7",
@@ -607,36 +651,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 77.0,
+          "ranking_score_0_100": 75.6,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 72.3
+            "recency": 65.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "238d504b0b556242b7d9e31face9eabdefb251ccd657b44243f511b3eb68e151"
-        },
-        {
-          "id": "transformers-releases:75a20b079e3b9559a8e8",
-          "url": "https://github.com/huggingface/transformers/releases/tag/v5.22.1",
-          "created_at": "2026-10-30T09:36:03+00:00",
-          "title": "Patch release v5.22.1",
-          "text": "Patch release v5.22.1 — # Patch release v5.22.1 We just had to fix the documentation! ** [Fix] Remove WIP doc for Ml4 (https://github.com/huggingface/transformers/pull/50124) from @remi-or",
-          "source_key": "transformers-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Transformers Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 72.6,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 50.7
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "229d09f1640dfae6dd382ee59dce26a2e3c3f2bc69428675cca9c8dae48c7815"
         }
       ]
     },
@@ -664,11 +686,11 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 85.2,
+          "ranking_score_0_100": 83.8,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 100.0,
-            "recency": 96.0
+            "recency": 89.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "ad4defdb1b294bbbb7477fa781473177bbbbbe3c39d3961f26575d7c00d5f2c7"
@@ -686,11 +708,11 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 77.7,
+          "ranking_score_0_100": 76.3,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 75.0,
-            "recency": 96.0
+            "recency": 89.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b423181789217958cf0f778651bb77e7a116aa1548af0418cd5eb21f37a9c1ac"
@@ -708,11 +730,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 73.8,
+          "ranking_score_0_100": 72.4,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 96.5
+            "recency": 89.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3faac2fcb30597b1a77a35a920098c11c0209c30f72032e0136d08619144ce87"
@@ -730,21 +752,21 @@
           "source_tier": "官方平台",
           "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 72.6,
+          "ranking_score_0_100": 71.3,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 90.7
+            "recency": 83.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "96b58d2b4d29c89caeb17cc81ec22d970df456252e25d892919ba0e0c29e9fe5"
         },
         {
-          "id": "huggingface-blog:8d86676710497099b109",
-          "url": "https://huggingface.co/blog/allenai/statebench",
-          "created_at": "2026-11-03T17:15:21+00:00",
-          "title": "StateBench: Testing how language models track state changes over long documents",
-          "text": "StateBench: Testing how language models track state changes over long documents",
+          "id": "huggingface-blog:4d3938441f216409a8f1",
+          "url": "https://huggingface.co/blog/ibm-research/palette-deck-building",
+          "created_at": "2026-11-03T16:35:36+00:00",
+          "title": "Palette: teaching a small model to build decks in your design language",
+          "text": "Palette: teaching a small model to build decks in your design language",
           "source_key": "huggingface-blog",
           "category_id": "model-progress",
           "source_label": "Hugging Face Blog",
@@ -752,14 +774,14 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 70.8,
+          "ranking_score_0_100": 69.4,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 81.5
+            "recency": 74.4
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "d9bbf95a31a750617cd1fb38b27a9a6a0887d5efd70990424cd61793f8108ba2"
+          "integrity_hash": "c2365162364706bf3e2e1cc9cef6763d5d7fb62d65791002066d680338dc9eda"
         },
         {
           "id": "arxiv-ai:e68c75837c28ac1bea29",
@@ -774,14 +796,58 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 70.3,
+          "ranking_score_0_100": 68.9,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 50.0,
-            "recency": 96.3
+            "recency": 89.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d365c3f600ae0d2ff8c0de01814c14b15537df1a90455f14c8be084acc36ac84"
+        },
+        {
+          "id": "deepmind-blog:e8e0cb1d0e685ced8c0e",
+          "url": "https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/",
+          "created_at": "2026-10-28T17:00:58+00:00",
+          "title": "Gemini 4 Carbon: Our next frontier model",
+          "text": "Gemini 4 Carbon: Our next frontier model",
+          "source_key": "deepmind-blog",
+          "category_id": "model-progress",
+          "source_label": "Google DeepMind Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方研究",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 63.8,
+          "ranking_components_0_100": {
+            "source_quality": 100.0,
+            "keyword_relevance": 25.0,
+            "recency": 31.7
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "3c7cf05e201ffbd2c4b783d9098113a6f02970dfe5ebb654eb406bf38f6e4bc4"
+        },
+        {
+          "id": "deepmind-blog:393575ee7d83ff0a65d3",
+          "url": "https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/",
+          "created_at": "2026-10-27T16:01:38+00:00",
+          "title": "Genie 4: A new generation of world simulation",
+          "text": "Genie 4: A new generation of world simulation — Genie 4: our new world model unlocking unprecedented realism in real-time simulation.",
+          "source_key": "deepmind-blog",
+          "category_id": "model-progress",
+          "source_label": "Google DeepMind Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方研究",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 62.3,
+          "ranking_components_0_100": {
+            "source_quality": 100.0,
+            "keyword_relevance": 25.0,
+            "recency": 24.2
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "efc8e89665e6d6e975103f7116f94043e5e3fb734e236f3ae8b057bd08c84324"
         }
       ]
     }
