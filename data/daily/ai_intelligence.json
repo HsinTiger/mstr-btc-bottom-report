@@ -1,23 +1,21 @@
 {
   "schema": 3,
-  "generated_at": "2026-11-08T06:40:35+00:00",
+  "generated_at": "2026-11-09T07:08:19+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "degraded",
+    "status": "pass",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [
-      "Google DeepMind Blog：not well-formed (invalid token): line 1, column 0"
-    ],
+    "degradations": [],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
-    "posts": 19,
-    "unique_sources": 8,
-    "successful_sources": 9,
-    "failed_sources": 1,
+    "posts": 21,
+    "unique_sources": 9,
+    "successful_sources": 10,
+    "failed_sources": 0,
     "editorial_briefs": 3,
     "editorial_pass": 3
   },
@@ -28,10 +26,10 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 1368,
-      "eligible_items": 30
+      "eligible_items": 28
     },
     {
       "source_key": "google-ai-blog",
@@ -39,7 +37,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 0
@@ -50,7 +48,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 2
@@ -61,7 +59,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -72,7 +70,7 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 100,
       "eligible_items": 24
@@ -83,7 +81,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -94,7 +92,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 5
@@ -105,11 +103,10 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-11-08T06:40:35+00:00",
-      "status": "fail",
-      "raw_items": 0,
-      "eligible_items": 0,
-      "error": "not well-formed (invalid token): line 1, column 0"
+      "checked_at": "2026-11-09T07:08:19+00:00",
+      "status": "pass",
+      "raw_items": 100,
+      "eligible_items": 2
     },
     {
       "source_key": "huggingface-blog",
@@ -117,7 +114,7 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 899,
       "eligible_items": 7
@@ -128,7 +125,7 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-11-08T06:40:35+00:00",
+      "checked_at": "2026-11-09T07:08:19+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
@@ -164,7 +161,7 @@
             "source_type": "official_feed",
             "created_at": "2026-11-06T00:00:00+00:00",
             "url": "https://cursor.com/changelog/voice-chat",
-            "ranking_score_0_100": 72.2,
+            "ranking_score_0_100": 70.8,
             "source_excerpt": "Voice Chat with Agents — Talk with your agents in a realtime voice call on desktop, web, and iOS.",
             "matched_terms": [
               "agent",
@@ -182,7 +179,7 @@
             "source_type": "official_feed",
             "created_at": "2026-11-05T08:00:00+00:00",
             "url": "https://openai.com/index/merge-builds-with-openai",
-            "ranking_score_0_100": 95.8,
+            "ranking_score_0_100": 94.3,
             "source_excerpt": "Merge builds product and business tools with OpenAI technology — Merge uses GPT-6 Astra, ChatGPT, and Codex to review product code and support marketing. Its teams also use AI to plan executive dinners and prepare sales updates.",
             "matched_terms": [
               "codex"
@@ -204,7 +201,7 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/zai@3.0.49」，以及 Transformers Releases 的「Patch release v5.22.2」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/vue@3.0.326」，以及 Transformers Releases 的「Patch release v5.22.2」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
@@ -214,19 +211,19 @@
         "matched_term_count": 3,
         "evidence": [
           {
-            "item_id": "vercel-ai-releases:897c288c1f5f79ab7796",
-            "title": "@ai-sdk/zai@3.0.49",
+            "item_id": "vercel-ai-releases:d51ffd7e4e071c2d0d15",
+            "title": "@ai-sdk/vue@3.0.326",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-11-07T19:31:54+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.49",
-            "ranking_score_0_100": 81.8,
-            "source_excerpt": "@ai-sdk/zai@3.0.49 — ### Patch Changes - Updated dependencies [6400cf8] - Updated dependencies [f608c05] - Updated dependencies [cab9c1f] - Updated dependencies [c70adf6] - @ai-sdk/provider-utils@5.0.76 - @ai-sdk/openai-compatible@3.0.87 - @ai-sdk/provider@4.0.37",
+            "created_at": "2026-11-09T02:57:49+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/vue%403.0.326",
+            "ranking_score_0_100": 82.3,
+            "source_excerpt": "@ai-sdk/vue@3.0.326 — ### Patch Changes - ai@6.0.326",
             "matched_terms": [
               "sdk"
             ],
-            "item_integrity_hash": "9a0e4c315b62db5f402e84a77d12f0797030093f4aa346073e2dc405fb839474",
+            "item_integrity_hash": "42fa174bb38c6c3c0349dc3a7b06431289173ff265a15cdb013ed31ea68f2168",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -237,7 +234,7 @@
             "source_type": "github_release",
             "created_at": "2026-11-06T15:43:27+00:00",
             "url": "https://github.com/huggingface/transformers/releases/tag/v5.22.2",
-            "ranking_score_0_100": 80.2,
+            "ranking_score_0_100": 78.7,
             "source_excerpt": "Patch release v5.22.2 — # Patch release v5.22.2 Some in between patch for security and distributed fixes. See the included commits :hugs: - [Distributed] Set device_id only for NCCL (#50281) by @michaelbenayoun and @3outeille - Harden our Jinja sandboxing (#50431) by @Rocketknight1 **Full Changelog**: https://github.com/huggingface/transformers/compare/v5.2…",
             "matched_terms": [
               "release"
@@ -253,7 +250,7 @@
             "source_type": "github_release",
             "created_at": "2026-11-02T10:10:05+00:00",
             "url": "https://github.com/vllm-project/vllm/releases/tag/v0.33.0rc3",
-            "ranking_score_0_100": 74.1,
+            "ranking_score_0_100": 72.7,
             "source_excerpt": "v0.33.0 — # v0.33.0 ## Highlights This release features 927 commits from 389 contributors (122 new)! * **New models**: Reflection Beam-1.0 (501B MoE, 23B active) with its DFlash2 drafter (#62074), Yandex AliceAI-Foundation-80B-A3B (#57963), Recursive Flint (40B MoE, 2.5B active) (#62938), Muse Spark Open (#61879), Step-5 Preview (#61727, #63147), NVIDIA Alp…",
             "matched_terms": [
               "release"
@@ -275,33 +272,15 @@
         "kicker": "模型進展",
         "headline": "榜單上的進步，仍要經過真實任務可靠性這一關",
         "standfirst": "評測分數能指出能力方向，卻不能自動涵蓋資料污染、工具失敗、長任務漂移與你的工作分布。",
-        "lede": "今日可回查的共同訊號來自 arXiv cs.AI 最新研究 的「NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma」，以及 Hugging Face Blog 的「A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Hugging Face Blog 的「A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.」，以及 arXiv cs.AI 最新研究 的「CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "新基準或更高分數常被視為模型能力已全面提升。",
         "variant_view": "真正可用的進步是失敗分布改變，而不只是平均分上升；尤其要看最差案例與重試成本。",
         "second_order_effect": "企業會更依賴自有評測集，公開榜單對採購與模型路由的決定力可能下降。",
         "practical_readthrough": "從研究中只取一個可驗證假說，放進自己的固定任務集；同時保存失敗案例，不用單一平均分做結論。",
         "falsifier": "若公開基準提升能在多個獨立真實任務集穩定重現，且尾端失敗同步下降，榜單才可作為較強代理指標。",
         "evidence_source_count": 2,
-        "matched_term_count": 4,
+        "matched_term_count": 2,
         "evidence": [
-          {
-            "item_id": "arxiv-ai:e0af75a38d8b0e71a8b9",
-            "title": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma",
-            "source_key": "arxiv-ai",
-            "source_label": "arXiv cs.AI 最新研究",
-            "source_type": "preprint_feed",
-            "created_at": "2026-11-05T17:48:55+00:00",
-            "url": "https://arxiv.org/abs/2611.08369v1",
-            "ranking_score_0_100": 82.4,
-            "source_excerpt": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma — Current medical benchmarks typically break down clinical competence into isolated factual questions, single-image tasks, or static case vignettes. These tests score individual answers, but reveal less about whether a model can integrate subspeci…",
-            "matched_terms": [
-              "benchmark",
-              "reasoning",
-              "score"
-            ],
-            "item_integrity_hash": "ad4defdb1b294bbbb7477fa781473177bbbbbe3c39d3961f26575d7c00d5f2c7",
-            "relationship": "topic_context_not_endorsement"
-          },
           {
             "item_id": "huggingface-blog:c65c7708e93995ca4541",
             "title": "A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.",
@@ -310,18 +289,34 @@
             "source_type": "official_feed",
             "created_at": "2026-11-05T00:00:00+00:00",
             "url": "https://huggingface.co/blog/phonon-tts",
-            "ranking_score_0_100": 69.8,
+            "ranking_score_0_100": 68.4,
             "source_excerpt": "A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.",
             "matched_terms": [
               "benchmark"
             ],
             "item_integrity_hash": "96b58d2b4d29c89caeb17cc81ec22d970df456252e25d892919ba0e0c29e9fe5",
             "relationship": "topic_context_not_endorsement"
+          },
+          {
+            "item_id": "arxiv-ai:2b95767c13ca5c97af79",
+            "title": "CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse",
+            "source_key": "arxiv-ai",
+            "source_label": "arXiv cs.AI 最新研究",
+            "source_type": "preprint_feed",
+            "created_at": "2026-11-06T18:58:50+00:00",
+            "url": "https://arxiv.org/abs/2611.09891v1",
+            "ranking_score_0_100": 67.4,
+            "source_excerpt": "CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse — Large language models reinvent the wheel all the time. They conflate task-solving with the execution of the solutions, which forces them to solve every problem from scratch. We show that once a task has been reasoned through, the application of its solution to a new problem instance can be done…",
+            "matched_terms": [
+              "reasoning"
+            ],
+            "item_integrity_hash": "8a621d322d0c10e99aa04b0feeba7a0512bf9309644a9b88f0ff0a7fbda6ee9e",
+            "relationship": "topic_context_not_endorsement"
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "unchanged",
-        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
+        "novelty_status": "refreshed",
+        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 arXiv cs.AI 最新研究。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -343,11 +338,11 @@
       "url": "https://developer.nvidia.com/blog/speed-up-image-generation-with-flux-3-image-klein-on-nvidia-blackwell-gpus/"
     },
     {
-      "item_id": "arxiv-ai:e0af75a38d8b0e71a8b9",
-      "title": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma",
-      "action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-      "source_label": "arXiv cs.AI 最新研究",
-      "url": "https://arxiv.org/abs/2611.08369v1"
+      "item_id": "huggingface-blog:f25b9201ad6bdcc6fc96",
+      "title": "New NVIDIA Cosmos 3 Open Models for Interactive World Simulation",
+      "action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+      "source_label": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/nvidia/cosmos-interactive-world-simulation"
     }
   ],
   "categories": [
@@ -375,11 +370,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 95.8,
+          "ranking_score_0_100": 94.3,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 79.0
+            "recency": 71.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "dff18e479cf7f510e58c1422d90c3500460abe4b58e20f397aa0a0b79f2a41b8"
@@ -397,11 +392,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 86.4,
+          "ranking_score_0_100": 84.9,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 69.4
+            "recency": 62.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b6c9958e363b4a270df6d348d05977131dc8291caf170e6a50a6f463d568dbf7"
@@ -419,11 +414,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 85.7,
+          "ranking_score_0_100": 84.2,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 65.9
+            "recency": 58.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "42238474d7807c979aa5b6f810f6b3d877abd980fb09712a748b01b22e8cdccb"
@@ -441,11 +436,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 78.3,
+          "ranking_score_0_100": 76.9,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 50.0,
-            "recency": 76.6
+            "recency": 69.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "a761bacc4fc7aaed4293851664223aacb3c86f9302a2e0c6834ae9cfa075ac72"
@@ -463,11 +458,11 @@
           "source_tier": "官方產品",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 72.2,
+          "ranking_score_0_100": 70.8,
           "ranking_components_0_100": {
             "source_quality": 96.0,
             "keyword_relevance": 25.0,
-            "recency": 83.7
+            "recency": 76.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "ef5c91d81b6c3401c48aa46935481e69ee994cba1994865c072a4a834500319c"
@@ -499,21 +494,21 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 96.6,
+          "ranking_score_0_100": 95.1,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 90.4
+            "recency": 83.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "b2ed692de1c4abd7733c53efb2c3a1c09110d00b345de4526db700794f1fe870"
         },
         {
-          "id": "vercel-ai-releases:897c288c1f5f79ab7796",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.49",
-          "created_at": "2026-11-07T19:31:54+00:00",
-          "title": "@ai-sdk/zai@3.0.49",
-          "text": "@ai-sdk/zai@3.0.49 — ### Patch Changes - Updated dependencies [6400cf8] - Updated dependencies [f608c05] - Updated dependencies [cab9c1f] - Updated dependencies [c70adf6] - @ai-sdk/provider-utils@5.0.76 - @ai-sdk/openai-compatible@3.0.87 - @ai-sdk/provider@4.0.37",
+          "id": "vercel-ai-releases:d51ffd7e4e071c2d0d15",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/vue%403.0.326",
+          "created_at": "2026-11-09T02:57:49+00:00",
+          "title": "@ai-sdk/vue@3.0.326",
+          "text": "@ai-sdk/vue@3.0.326 — ### Patch Changes - ai@6.0.326",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -521,21 +516,21 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 81.8,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 96.7
+            "recency": 98.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "9a0e4c315b62db5f402e84a77d12f0797030093f4aa346073e2dc405fb839474"
+          "integrity_hash": "42fa174bb38c6c3c0349dc3a7b06431289173ff265a15cdb013ed31ea68f2168"
         },
         {
-          "id": "vercel-ai-releases:59a671f384233614b57c",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%405.0.40",
-          "created_at": "2026-11-07T19:31:51+00:00",
-          "title": "@ai-sdk/xai@5.0.40",
-          "text": "@ai-sdk/xai@5.0.40 — ### Patch Changes - Updated dependencies [6400cf8] - Updated dependencies [f608c05] - Updated dependencies [cab9c1f] - Updated dependencies [c70adf6] - @ai-sdk/provider-utils@5.0.76 - @ai-sdk/provider@4.0.37",
+          "id": "vercel-ai-releases:7b4cbc931f455b870075",
+          "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.326",
+          "created_at": "2026-11-09T02:57:25+00:00",
+          "title": "ai@6.0.326",
+          "text": "ai@6.0.326 — ### Patch Changes - Updated dependencies [706b42a] - @ai-sdk/gateway@3.0.232",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -543,21 +538,21 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 81.8,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 96.7
+            "recency": 98.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "8967b50e5fb7fb51588f88095fb71325b17e9d0b7ae27a69015d3a74688fe8c5"
+          "integrity_hash": "1b7b10ff38119c5420c2fbcc81734f2d8f6f2d93db1d91dd6c9b24888a113df2"
         },
         {
-          "id": "vercel-ai-releases:001b7932715866b78892",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%402.0.20",
-          "created_at": "2026-11-07T19:28:35+00:00",
-          "title": "@ai-sdk/zai@2.0.20",
-          "text": "@ai-sdk/zai@2.0.20 — ### Patch Changes - Updated dependencies [f0dee4b] - @ai-sdk/provider-utils@4.0.65 - @ai-sdk/openai-compatible@2.0.92",
+          "id": "vercel-ai-releases:c7505765c7fbd3a7826e",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.177",
+          "created_at": "2026-11-09T02:56:31+00:00",
+          "title": "@ai-sdk/workflow-harness@1.0.177",
+          "text": "@ai-sdk/workflow-harness@1.0.177 — ### Patch Changes - @ai-sdk/harness@1.0.177",
           "source_key": "vercel-ai-releases",
           "category_id": "engineering-methods",
           "source_label": "Vercel AI SDK Releases",
@@ -565,14 +560,14 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 81.8,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 96.7
+            "recency": 98.8
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "4e49f60742012a38aff5425d6f24857b6edf0c7cdf25a82614553ea1895e0646"
+          "integrity_hash": "f316024e2bccb0c89b10b36625a4ed19795f1a46210dcf1ed5465bf14be1d825"
         },
         {
           "id": "transformers-releases:878fd3793321c4bbb74a",
@@ -587,11 +582,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.2,
+          "ranking_score_0_100": 78.7,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 88.4
+            "recency": 81.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "87527be50cb9530458659ae365349e1754c344d88240f883aa02efba67c0b3c1"
@@ -609,11 +604,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 80.1,
+          "ranking_score_0_100": 78.6,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 83.0
+            "recency": 75.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "fea3cd6db0cab18b3bdbb10da6f97c1e8149f193ff88dd43cb635b67b4f1e890"
@@ -631,11 +626,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 78.7,
+          "ranking_score_0_100": 77.3,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 50.0,
-            "recency": 76.1
+            "recency": 68.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "d7a55dae251c905b6e9ffac9ece95d11f713816145f620f1a6316cae668ef9f0"
@@ -653,11 +648,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 74.1,
+          "ranking_score_0_100": 72.7,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 58.2
+            "recency": 50.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "238d504b0b556242b7d9e31face9eabdefb251ccd657b44243f511b3eb68e151"
@@ -676,50 +671,6 @@
       ],
       "items": [
         {
-          "id": "arxiv-ai:e0af75a38d8b0e71a8b9",
-          "url": "https://arxiv.org/abs/2611.08369v1",
-          "created_at": "2026-11-05T17:48:55+00:00",
-          "title": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma",
-          "text": "NPCBench: A Clinical Apprenticeship Benchmark for Multimodal Care-Pathway Reasoning in Nasopharyngeal Carcinoma — Current medical benchmarks typically break down clinical competence into isolated factual questions, single-image tasks, or static case vignettes. These tests score individual answers, but reveal less about whether a model can integrate subspecialty knowledge with multimodal evidence and track a patient's condition throughout a course of care. To close this gap, we introduce NPCBench, a clinical apprenticeship benchmark for nasopharyngeal carcinoma (NPC). NPCBench mirrors specialist training, from guideline and fo…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 82.4,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 100.0,
-            "recency": 81.9
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "ad4defdb1b294bbbb7477fa781473177bbbbbe3c39d3961f26575d7c00d5f2c7"
-        },
-        {
-          "id": "arxiv-ai:b202297b529dc1203f67",
-          "url": "https://arxiv.org/abs/2611.08383v1",
-          "created_at": "2026-11-05T18:00:58+00:00",
-          "title": "FedReason: Large Language Models as Weight-Space Meta-Aggregators for Heterogeneous Federated Learning",
-          "text": "FedReason: Large Language Models as Weight-Space Meta-Aggregators for Heterogeneous Federated Learning — Federated learning servers combine client models with a fixed aggregation rule, and each rule in common use is designed for one kind of heterogeneity. We study whether a large language model (LLM) that inspects the client models can choose the rule itself, without any training on the server. In FedReason, the LLM is called every ten rounds. It analyses the weights by running code in a restricted server-side sandbox, sees only the printed results, may score a few candidates on a 500-image proxy set, and submits a s…",
-          "source_key": "arxiv-ai",
-          "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 74.9,
-          "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 75.0,
-            "recency": 81.9
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "b423181789217958cf0f778651bb77e7a116aa1548af0418cd5eb21f37a9c1ac"
-        },
-        {
           "id": "huggingface-blog:f25b9201ad6bdcc6fc96",
           "url": "https://huggingface.co/blog/nvidia/cosmos-interactive-world-simulation",
           "created_at": "2026-11-05T19:35:16+00:00",
@@ -732,11 +683,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 71.0,
+          "ranking_score_0_100": 69.5,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 82.4
+            "recency": 75.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "3faac2fcb30597b1a77a35a920098c11c0209c30f72032e0136d08619144ce87"
@@ -754,14 +705,80 @@
           "source_tier": "官方平台",
           "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 69.8,
+          "ranking_score_0_100": 68.4,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 76.6
+            "recency": 69.3
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "96b58d2b4d29c89caeb17cc81ec22d970df456252e25d892919ba0e0c29e9fe5"
+        },
+        {
+          "id": "arxiv-ai:f90a81bc16775efb389e",
+          "url": "https://arxiv.org/abs/2611.09892v1",
+          "created_at": "2026-11-06T18:59:34+00:00",
+          "title": "On Agentic Manipulation Policies",
+          "text": "On Agentic Manipulation Policies — Recent work on robot manipulation has focused on specialist policies trained on demonstrations. We show that generalist AI models can control manipulators more reliably than specialist policies such as vision-language-action models (VLAs) and world-action models (WAMs). We systematically analyze agentic manipulation policies (AMPs), in which a generalist AI model commands the manipulator directly, adapting its actions as the task unfolds. We present AMP1, a reference harness that runs unchanged across single-arm,…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 67.4,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 50.0,
+            "recency": 82.1
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "548402dc95622cb311d5a88ba7bee366c64762368442e094319a2655353f2a0e"
+        },
+        {
+          "id": "arxiv-ai:2b95767c13ca5c97af79",
+          "url": "https://arxiv.org/abs/2611.09891v1",
+          "created_at": "2026-11-06T18:58:50+00:00",
+          "title": "CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse",
+          "text": "CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse — Large language models reinvent the wheel all the time. They conflate task-solving with the execution of the solutions, which forces them to solve every problem from scratch. We show that once a task has been reasoned through, the application of its solution to a new problem instance can be done very efficiently and with little involvement from language models. We introduce agentic reasoning caching, a method for constructing robust CPU-executable agentic reasoning caches (ARCs) from LLM reasoning traces. ARCs show…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 67.4,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 50.0,
+            "recency": 82.1
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "8a621d322d0c10e99aa04b0feeba7a0512bf9309644a9b88f0ff0a7fbda6ee9e"
+        },
+        {
+          "id": "arxiv-ai:c2fb5aeea36779d64ac8",
+          "url": "https://arxiv.org/abs/2611.09872v1",
+          "created_at": "2026-11-06T18:49:02+00:00",
+          "title": "On the Reliability of Majority-Vote Pseudo-Labels in Test-Time Reinforcement Learning",
+          "text": "On the Reliability of Majority-Vote Pseudo-Labels in Test-Time Reinforcement Learning — Test-time reinforcement learning (TTRL) adapts pretrained language models to unlabeled target-domain data using self-generated pseudo-labels, whose reliability remains poorly understood. We analyze majority-vote supervision for TTRL with online Direct Preference Optimization (DPO) and decompose its error into population-majority bias and prompt-dependent finite-rollout variation. Because population-majority bias is generally unidentifiable without external supervision, we focus on mitigating the downstream effects…",
+          "source_key": "arxiv-ai",
+          "category_id": "model-progress",
+          "source_label": "arXiv cs.AI 最新研究",
+          "source_type": "preprint_feed",
+          "source_tier": "未同儕審查研究",
+          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+          "ranking_score_0_100": 67.4,
+          "ranking_components_0_100": {
+            "source_quality": 72.0,
+            "keyword_relevance": 50.0,
+            "recency": 82.0
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "674f8711c2cdc4e4db75dc499f299bfe5ccfe57e012ed8d69b09168de81b2a78"
         },
         {
           "id": "huggingface-blog:4d3938441f216409a8f1",
@@ -776,36 +793,58 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 67.9,
+          "ranking_score_0_100": 66.5,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 67.2
+            "recency": 60.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "c2365162364706bf3e2e1cc9cef6763d5d7fb62d65791002066d680338dc9eda"
         },
         {
-          "id": "arxiv-ai:e68c75837c28ac1bea29",
-          "url": "https://arxiv.org/abs/2611.08483v1",
-          "created_at": "2026-11-05T18:59:29+00:00",
-          "title": "SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization",
-          "text": "SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization — LLM-guided evolutionary search uses AI agents to improve programs for mathematical and computational problems by iteratively refining solutions and combining high-scoring methods. However, the process is often slow because the LLM generates a long textual chain of thought for each round and must repeat this generation many times to maintain population diversity. We present SwarmEvolve, a framework in which hundreds of low-cost agents per round work in swarms, reason in latent space without decoding to text, and sh…",
-          "source_key": "arxiv-ai",
+          "id": "deepmind-blog:e8e0cb1d0e685ced8c0e",
+          "url": "https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/",
+          "created_at": "2026-10-28T17:00:58+00:00",
+          "title": "Gemini 4 Carbon: Our next frontier model",
+          "text": "Gemini 4 Carbon: Our next frontier model",
+          "source_key": "deepmind-blog",
           "category_id": "model-progress",
-          "source_label": "arXiv cs.AI 最新研究",
-          "source_type": "preprint_feed",
-          "source_tier": "未同儕審查研究",
-          "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
-          "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 67.4,
+          "source_label": "Google DeepMind Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方研究",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 60.9,
           "ranking_components_0_100": {
-            "source_quality": 72.0,
-            "keyword_relevance": 50.0,
-            "recency": 82.2
+            "source_quality": 100.0,
+            "keyword_relevance": 25.0,
+            "recency": 17.2
           },
           "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "d365c3f600ae0d2ff8c0de01814c14b15537df1a90455f14c8be084acc36ac84"
+          "integrity_hash": "3c7cf05e201ffbd2c4b783d9098113a6f02970dfe5ebb654eb406bf38f6e4bc4"
+        },
+        {
+          "id": "deepmind-blog:393575ee7d83ff0a65d3",
+          "url": "https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/",
+          "created_at": "2026-10-27T16:01:38+00:00",
+          "title": "Genie 4: A new generation of world simulation",
+          "text": "Genie 4: A new generation of world simulation — Genie 4: our new world model unlocking unprecedented realism in real-time simulation.",
+          "source_key": "deepmind-blog",
+          "category_id": "model-progress",
+          "source_label": "Google DeepMind Blog",
+          "source_type": "official_feed",
+          "source_tier": "官方研究",
+          "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
+          "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
+          "ranking_score_0_100": 59.5,
+          "ranking_components_0_100": {
+            "source_quality": 100.0,
+            "keyword_relevance": 25.0,
+            "recency": 9.8
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "efc8e89665e6d6e975103f7116f94043e5e3fb734e236f3ae8b057bd08c84324"
         }
       ]
     }
