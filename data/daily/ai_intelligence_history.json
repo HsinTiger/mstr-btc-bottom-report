@@ -1,13 +1,123 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-11-13T07:13:49+00:00",
-  "last_attempt_at": "2026-11-13T07:13:49+00:00",
-  "last_successful_fetch_at": "2026-11-13T07:13:49+00:00",
+  "updated_at": "2026-11-14T06:59:17+00:00",
+  "last_attempt_at": "2026-11-14T06:59:17+00:00",
+  "last_successful_fetch_at": "2026-11-14T06:59:17+00:00",
   "quality": {
-    "status": "pass"
+    "status": "degraded"
   },
   "items": [
+    {
+      "id": "vercel-ai-releases:746681c5fbea4de2a189",
+      "url": "https://github.com/vercel/ai/releases/tag/ai%406.0.332",
+      "created_at": "2026-11-13T23:44:02+00:00",
+      "title": "ai@6.0.332",
+      "text": "ai@6.0.332 — ### Patch Changes - Updated dependencies [23ff635] - @ai-sdk/gateway@3.0.237",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 82.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "fb34a6fa8bcdccbbf3ffb88850c4f7ba3829a9499d7553a144a92c85d58ce187"
+    },
+    {
+      "id": "vercel-ai-releases:a3c763dc5fedb4813239",
+      "url": "https://github.com/vercel/ai/releases/tag/ai%405.0.290",
+      "created_at": "2026-11-13T23:43:05+00:00",
+      "title": "ai@5.0.290",
+      "text": "ai@5.0.290 — ### Patch Changes - 4107bc6: Keep failed tool call error text consistent with the model's message history by default. Set `redactToolErrors: true` to replace it with the result of `onError`. - ec9c246: Prevent excessive memory and CPU usage when validating malformed UI messages. `validateUIMessages` and `safeValidateUIMessages` reported the issues of every part schema for every invalid part, so a small request with many malformed parts could exhaust memory. Each part is now validated against the schemas for its ty…",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 82.1,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 97.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "e11b0d141c1145c561ef946c480971612fcb86988b65ec5c3845a912206e6b8a"
+    },
+    {
+      "id": "vercel-ai-releases:5430b86e034e71804754",
+      "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.173",
+      "created_at": "2026-11-13T22:34:02+00:00",
+      "title": "ai@7.0.173",
+      "text": "ai@7.0.173 — ### Patch Changes - 3c09e00: Prevent in-place schema validation or input refinement from changing approved tool arguments during approval replay. - f43ee39: fix(workflow): log the default step limit warning when `WorkflowAgent.generate()` stops at the default limit. - 7ce7ffc: fix(workflow): log provider warnings in `WorkflowAgent` `WorkflowAgent.generate()` and `WorkflowAgent.stream()` now log the warnings of every model call through the AI SDK warning logger, like `ToolLoopAgent`. The `AI_SDK_LOG_WARNINGS` globa…",
+      "source_key": "vercel-ai-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Vercel AI SDK Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 89.5,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 75.0,
+        "recency": 97.5
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "d71bda4f0cbcfa66f9872e475c066bfa8e52b95aaa9df918a1ac25395cc9cac8"
+    },
+    {
+      "id": "openai-news:7d4d71d056da02862d0b",
+      "url": "https://openai.com/index/introducing-chatgpt-wallet",
+      "created_at": "2026-11-13T15:00:00+00:00",
+      "title": "Introducing ChatGPT Wallet",
+      "text": "Introducing ChatGPT Wallet — Introducing ChatGPT Wallet, a secure way for agents in ChatGPT Work, Codex, and dots to complete purchases with user approval and existing card protections.",
+      "source_key": "openai-news",
+      "category_id": "ai-application-monetization",
+      "source_label": "OpenAI News",
+      "source_type": "official_feed",
+      "source_tier": "官方公司",
+      "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
+      "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
+      "ranking_score_0_100": 91.5,
+      "ranking_components_0_100": {
+        "source_quality": 100.0,
+        "keyword_relevance": 75.0,
+        "recency": 95.2
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "29dbe3449102b6b8cc628f942f1728db50728d6479a6ec7ff510646145e30dda"
+    },
+    {
+      "id": "transformers-releases:a1c4ce12170e4f18f3a7",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.23.0",
+      "created_at": "2026-11-13T14:10:57+00:00",
+      "title": "Release v5.23.0",
+      "text": "Release v5.23.0 — # Release v5.23.0 ## New Model additions ### Inkling2 Inkling 2 Small is a multimodal model from Thinking Machines Lab that accepts text and image inputs and generates text outputs, and it is intended for use in English and other languages and across multiple coding languages. Its language backbone has 48 mixture-of-experts decoder layers, each routing tokens to 8 of 384 experts, for 594B total and 17B active parameters. It keeps the Inkling decoder (learned relative attention, short causal convolutions, mixture-o…",
+      "source_key": "transformers-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Transformers Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.5,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 95.0
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "2d6ab7b9f440e869e567a6e787471a5cc67d9d21a593d8ba56fb961af3e44124"
+    },
     {
       "id": "vercel-ai-releases:9cae05c32672e3293a35",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.54",
@@ -97,6 +207,72 @@
       "integrity_hash": "7b5b9b9b007833e735cfaa0b85be7c4332eb698241bf472a25523debf0317493"
     },
     {
+      "id": "arxiv-ai:5c9f9b82031a71937fd3",
+      "url": "https://arxiv.org/abs/2611.17309v1",
+      "created_at": "2026-11-12T18:56:56+00:00",
+      "title": "Classical Energies Learn to Reason 1,000x Faster than Looped Models",
+      "text": "Classical Energies Learn to Reason 1,000x Faster than Looped Models — Looped models have emerged as a prominent paradigm for reasoning, with successes on simple reasoning puzzles such as Sudoku-Extreme and Maze-Unique. However, these models can be unstable, slow to train, and use many parameters and FLOPs to solve simple puzzles. Descent on an energy not only mitigates these issues but also offers advantages: built-in early stopping, compute that adapts to problem difficulty, fast training without differentiating through a solver, and interpretable weights that learn the constraints…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 83.9,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 100.0,
+        "recency": 89.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "7931eb4ae2536ecaec17908afca78ec1fa223e917f26aeb8f5bf4b5325c6287c"
+    },
+    {
+      "id": "arxiv-ai:51220045230d60ec81b0",
+      "url": "https://arxiv.org/abs/2611.17294v1",
+      "created_at": "2026-11-12T18:54:42+00:00",
+      "title": "Metal Sandbox: Isolated Execution and Command Scheduling for GPU Coding Agents on Apple Silicon",
+      "text": "Metal Sandbox: Isolated Execution and Command Scheduling for GPU Coding Agents on Apple Silicon — On-device inference requires kernels that make effective use of local accelerators. Efficient training and evaluation of models that generate Apple Metal kernels benefit from native macOS tools and concurrent agent sessions. These sessions alternate between model requests, development commands, and GPU execution, leaving GPU capacity idle for much of a rollout. We present Metal Sandbox, infrastructure that combines restricted per-instance file access, native command execution, and command-level scheduling across i…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 76.4,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 89.3
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "aaa2ab04e2a7e1f69839cd8e882e4bd415bbebfc8aa78bf2a9e5f01369cf270e"
+    },
+    {
+      "id": "arxiv-ai:3bbb1c4fa2627c4fcef3",
+      "url": "https://arxiv.org/abs/2611.17128v1",
+      "created_at": "2026-11-12T17:21:12+00:00",
+      "title": "Parameter-Efficient Conciseness Adaptation: Differentiable Length Control for Concise Clinical Reasoning in Smaller Language Models",
+      "text": "Parameter-Efficient Conciseness Adaptation: Differentiable Length Control for Concise Clinical Reasoning in Smaller Language Models — Smaller language models (SLMs) make it feasible to deploy clinical natural language processing where large proprietary models are too costly, and parameter-efficient fine-tuning allows them to be specialised on commodity hardware. One obstacle persists after training: on medical tasks these models answer at far greater length than the clinical question requires. In clinical decision support and point-of-care use, where time is short, such verbosity is hard to act on even when the underlying reasoning is sound. Exi…",
+      "source_key": "arxiv-ai",
+      "category_id": "model-progress",
+      "source_label": "arXiv cs.AI 最新研究",
+      "source_type": "preprint_feed",
+      "source_tier": "未同儕審查研究",
+      "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
+      "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
+      "ranking_score_0_100": 76.3,
+      "ranking_components_0_100": {
+        "source_quality": 72.0,
+        "keyword_relevance": 75.0,
+        "recency": 88.8
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "53a1c17b9729d216583b6d357a9c300f7bd54eff58299c57a2b103d8a707633b"
+    },
+    {
       "id": "arxiv-ai:c9b37e9dac89f743eb57",
       "url": "https://arxiv.org/abs/2611.16662v1",
       "created_at": "2026-11-12T11:38:52+00:00",
@@ -175,11 +351,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 91.2,
+      "ranking_score_0_100": 89.8,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 93.5
+        "recency": 86.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "fb0d0e7ca622f70ba50f88d543bd380c3ff455cff77aef892731cc1e3b9ba606"
@@ -197,11 +373,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 72.6,
+      "ranking_score_0_100": 71.2,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 90.7
+        "recency": 83.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "8fad107f55116f828037ad3294af5be7ff84b181670ff0f12898f2adb53b3872"
@@ -285,11 +461,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 74.3,
+      "ranking_score_0_100": 72.9,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 25.0,
-        "recency": 88.9
+        "recency": 81.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "f9acf2a88b6a0a8dbccefa2cdb0bcb8260b7e884c7c1d56bd327aeb742f6fdd9"
@@ -373,11 +549,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 71.5,
+      "ranking_score_0_100": 70.1,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 85.1
+        "recency": 78.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "c705670f43e42caaa51f6133d4247e57f7bb418066f7b2ef3e302c958f36389b"
@@ -395,11 +571,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 78.7,
+      "ranking_score_0_100": 77.3,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 50.0,
-        "recency": 83.6
+        "recency": 76.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "bf4375884d04235fdfdf71537bfeffc3de648739e280023e8ba44e09c0bd1533"
@@ -483,11 +659,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 87.3,
+      "ranking_score_0_100": 85.9,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 75.0,
-        "recency": 81.6
+        "recency": 74.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "35a4eaa56d6d40d5d19bf6f958f0296bbba7303c4b6565c828cad4a7c565a78d"
@@ -505,11 +681,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 79.7,
+      "ranking_score_0_100": 78.3,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 50.0,
-        "recency": 80.9
+        "recency": 73.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "55540c7fcb4ba515c76f134697050b86e92723b3a10670372ac73f4e101d8155"
@@ -527,11 +703,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 80.1,
+      "ranking_score_0_100": 78.7,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 50.0,
-        "recency": 80.6
+        "recency": 73.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "e807950112bcfee50fc9eae493d3d4d702b18d46f268043acba537ebdb976897"
@@ -549,11 +725,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 72.6,
+      "ranking_score_0_100": 71.1,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 25.0,
-        "recency": 80.3
+        "recency": 73.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "344a309ccf799f0ea814dfd2598c8799a4dd85f50a73cdfbbae2877745013c1c"
@@ -1011,11 +1187,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 89.4,
+      "ranking_score_0_100": 88.0,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 100.0,
-        "recency": 54.5
+        "recency": 47.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "b2ed692de1c4abd7733c53efb2c3a1c09110d00b345de4526db700794f1fe870"
@@ -1099,11 +1275,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 73.0,
+      "ranking_score_0_100": 71.6,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 52.5
+        "recency": 45.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "87527be50cb9530458659ae365349e1754c344d88240f883aa02efba67c0b3c1"
@@ -1121,11 +1297,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 65.1,
+      "ranking_score_0_100": 63.7,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 25.0,
-        "recency": 47.8
+        "recency": 40.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ef5c91d81b6c3401c48aa46935481e69ee994cba1994865c072a4a834500319c"
@@ -1253,11 +1429,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 88.6,
+      "ranking_score_0_100": 87.2,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 100.0,
-        "recency": 43.1
+        "recency": 36.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "dff18e479cf7f510e58c1422d90c3500460abe4b58e20f397aa0a0b79f2a41b8"
@@ -1341,11 +1517,11 @@
       "source_tier": "官方產品",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 71.1,
+      "ranking_score_0_100": 69.7,
       "ranking_components_0_100": {
         "source_quality": 96.0,
         "keyword_relevance": 50.0,
-        "recency": 40.7
+        "recency": 33.6
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "a761bacc4fc7aaed4293851664223aacb3c86f9302a2e0c6834ae9cfa075ac72"
@@ -25708,6 +25884,88 @@
         }
       ],
       "run_hash": "3cb6ca2863e4222bfbe89674875b6a4c7ad3e9ec5325bf88828df02ee2b2d860"
+    },
+    {
+      "schema": 1,
+      "date": "2026-11-14",
+      "generated_at": "2026-11-14T06:59:17+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "3cb6ca2863e4222bfbe89674875b6a4c7ad3e9ec5325bf88828df02ee2b2d860",
+      "lead_brief_id": "brief-ai-application-monetization",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "workflow-distribution",
+          "headline": "AI 正從獨立目的地，變成既有工作流裡的隱形功能",
+          "standfirst": "產品價值不再只看模型多聰明，而要看它能否在不增加切換成本的情況下完成原本就存在的工作。",
+          "common_interpretation": "市場容易把更多入口、整合與代理功能解讀成採用加速。",
+          "variant_view": "真正稀缺的不是再多一個 AI 入口，而是能被量測、被治理、被持續使用的流程結果。",
+          "second_order_effect": "若 AI 被嵌進搜尋、通訊與開發環境，競爭優勢會從單次回答品質，轉向權限、上下文與工作紀錄的累積。",
+          "practical_readthrough": "只挑一條高頻工作流測試，固定記錄完成率、人工接手次數、時間與成本；沒有流程改善就不因新功能而遷移。",
+          "falsifier": "若四週內仍只有功能發布、沒有可重現的使用頻率、完成率或付費證據，這個整合趨勢仍只是分發敘事。",
+          "evidence_refs": [
+            {
+              "item_id": "google-ai-blog:59a8a5dd3afc5312ddae",
+              "item_integrity_hash": "e807950112bcfee50fc9eae493d3d4d702b18d46f268043acba537ebdb976897"
+            },
+            {
+              "item_id": "openai-news:4922ca6fb0dd92994c34",
+              "item_integrity_hash": "fb0d0e7ca622f70ba50f88d543bd380c3ff455cff77aef892731cc1e3b9ba606"
+            },
+            {
+              "item_id": "cursor-changelog:c30b322513faf4e64f8b",
+              "item_integrity_hash": "a761bacc4fc7aaed4293851664223aacb3c86f9302a2e0c6834ae9cfa075ac72"
+            }
+          ],
+          "brief_hash": "2f8fcdf66a091b343eb06be5720cfd3138b40082d51df0df9d0559fac118d324"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "inference-economics",
+          "headline": "下一輪 AI 工程優勢，可能來自每一美元交付更多可靠推理",
+          "standfirst": "模型能力差距縮小後，吞吐、延遲、記憶體與失敗重試會直接決定產品能否承擔真實流量。",
+          "common_interpretation": "更快的硬體與推論框架通常被直接解讀為更低成本與更高產能。",
+          "variant_view": "峰值吞吐不是單位經濟；只有把併發、尾延遲、品質損失與維運成本一起算，效能才會變成商業優勢。",
+          "second_order_effect": "推論效率提高可能反而釋放更多代理步驟與更長上下文，使總運算需求上升而非下降。",
+          "practical_readthrough": "用自己的提示長度與併發做 A/B，至少同時記錄成功率、P95 延遲、每項任務成本與品質回歸。",
+          "falsifier": "若新方法只在單一基準提高峰值吞吐，卻沒有真實負載、品質與總成本資料，不應宣稱已改善生產經濟性。",
+          "evidence_refs": [
+            {
+              "item_id": "nvidia-developer:a6bcd182b2895683681b",
+              "item_integrity_hash": "b2ed692de1c4abd7733c53efb2c3a1c09110d00b345de4526db700794f1fe870"
+            },
+            {
+              "item_id": "vercel-ai-releases:a3c763dc5fedb4813239",
+              "item_integrity_hash": "e11b0d141c1145c561ef946c480971612fcb86988b65ec5c3845a912206e6b8a"
+            }
+          ],
+          "brief_hash": "201f7be03955f945533c825847c7b25341cd52b6607c239cd3d799d3902c1c0d"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "efficient-learning",
+          "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
+          "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
+          "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
+          "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
+          "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
+          "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
+          "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
+          "evidence_refs": [
+            {
+              "item_id": "arxiv-ai:5c9f9b82031a71937fd3",
+              "item_integrity_hash": "7931eb4ae2536ecaec17908afca78ec1fa223e917f26aeb8f5bf4b5325c6287c"
+            },
+            {
+              "item_id": "huggingface-blog:11568aa8dfcf9a3c0750",
+              "item_integrity_hash": "bf4375884d04235fdfdf71537bfeffc3de648739e280023e8ba44e09c0bd1533"
+            }
+          ],
+          "brief_hash": "b1bf12dad9dfd3f315063d85f45aa9bb11f36b75c9eca74596eb499c968bd5e6"
+        }
+      ],
+      "run_hash": "1e2429c5f32d865aa15e7379468ad5a83fb64b0bb03c24b675e24b9a4026576e"
     }
   ]
 }
