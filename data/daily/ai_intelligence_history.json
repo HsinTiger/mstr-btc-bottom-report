@@ -1,13 +1,35 @@
 {
   "schema": 2,
   "integrity_contract": "source_content_v1",
-  "updated_at": "2026-11-21T07:40:14+00:00",
-  "last_attempt_at": "2026-11-21T07:40:14+00:00",
-  "last_successful_fetch_at": "2026-11-21T07:40:14+00:00",
+  "updated_at": "2026-11-22T07:25:08+00:00",
+  "last_attempt_at": "2026-11-22T07:25:08+00:00",
+  "last_successful_fetch_at": "2026-11-22T07:25:08+00:00",
   "quality": {
     "status": "degraded"
   },
   "items": [
+    {
+      "id": "transformers-releases:4bdb6d39f683fd871529",
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.24.0",
+      "created_at": "2026-11-21T12:28:26+00:00",
+      "title": "Release v5.24.0",
+      "text": "Release v5.24.0 — # Release v5.24.0 ## New Model additions ### Inkling 2 Mini Inkling 2 Mini is a multimodal model from Thinking Machines Lab that accepts text and image inputs and generates text outputs. It is a smaller sibling of Inkling 2 Small, added in v5.23.0. It has 24 decoder layers instead of 48, and compensates with a looping mechanism in which layers 6 to 17 run three times. A learned message-passing mechanism mixes the residuals of the previous pass into the attention and mixture-of-experts inputs of each loop layer. Th…",
+      "source_key": "transformers-releases",
+      "category_id": "engineering-methods",
+      "source_label": "Transformers Releases",
+      "source_type": "github_release",
+      "source_tier": "官方開源專案",
+      "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+      "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+      "ranking_score_0_100": 81.4,
+      "ranking_components_0_100": {
+        "source_quality": 95.0,
+        "keyword_relevance": 50.0,
+        "recency": 94.4
+      },
+      "decision_use": "learning_context_not_execution_gate",
+      "integrity_hash": "15423c3621c67df358e850b72a32e9a21d0f53470e90bef8e22dc33c057ef2a0"
+    },
     {
       "id": "vercel-ai-releases:6848962d67d362822dfa",
       "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.190",
@@ -21,11 +43,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 82.0,
+      "ranking_score_0_100": 80.6,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 97.5
+        "recency": 90.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "d2032ddd87d5aebcad8607bd4515e823af8b38fdbc911b21c44230c6938cb0a7"
@@ -43,11 +65,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 82.0,
+      "ranking_score_0_100": 80.6,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 97.5
+        "recency": 90.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "796a31b3eeef37fd094e3b506b084290c50955e2c33c54eb2ad167dd34eda2b3"
@@ -65,11 +87,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 82.0,
+      "ranking_score_0_100": 80.6,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 97.5
+        "recency": 90.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ad1ed9b8b10dad3459392b7f08e7c9f9641310c86b228f9d0483523b6b56f861"
@@ -87,11 +109,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 72.6,
+      "ranking_score_0_100": 71.2,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 90.6
+        "recency": 83.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "af284ea9a631f13a0ee3fed96ae45fb25924f5b305ce749f13d912a8366047ef"
@@ -109,11 +131,11 @@
       "source_tier": "未同儕審查研究",
       "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
       "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-      "ranking_score_0_100": 68.8,
+      "ranking_score_0_100": 67.4,
       "ranking_components_0_100": {
         "source_quality": 72.0,
         "keyword_relevance": 50.0,
-        "recency": 89.1
+        "recency": 82.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "69d13ce818f53bfd1844ce8f333fd5bc123b1e1551f3b070334888026052ffc3"
@@ -131,11 +153,11 @@
       "source_tier": "未同儕審查研究",
       "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
       "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-      "ranking_score_0_100": 68.8,
+      "ranking_score_0_100": 67.4,
       "ranking_components_0_100": {
         "source_quality": 72.0,
         "keyword_relevance": 50.0,
-        "recency": 89.1
+        "recency": 82.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "f42fba31304fbdf0df830bf4b4d00d831246eadd61fb75397fdb6313d17cfc54"
@@ -153,11 +175,11 @@
       "source_tier": "未同儕審查研究",
       "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
       "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-      "ranking_score_0_100": 68.8,
+      "ranking_score_0_100": 67.4,
       "ranking_components_0_100": {
         "source_quality": 72.0,
         "keyword_relevance": 50.0,
-        "recency": 89.1
+        "recency": 82.0
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "ce2f1c337f1ea449978eacd3d9ff56d3829092a1b2e4cf3889fe4e06330f6263"
@@ -175,11 +197,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 81.8,
+      "ranking_score_0_100": 80.3,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 50.0,
-        "recency": 88.8
+        "recency": 81.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "56a29fd1cc56dd29040c228967ed28ba5303beb25c029750664627b3c1c641dd"
@@ -197,11 +219,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 81.2,
+      "ranking_score_0_100": 79.8,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 50.0,
-        "recency": 88.3
+        "recency": 81.3
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "879a47e5a62ec75f03c34eb34a6f3807eb6fd7022b942c8a1ad79870cbe0c2d3"
@@ -219,11 +241,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 89.7,
+      "ranking_score_0_100": 88.2,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 85.8
+        "recency": 78.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "30c3a44a567c9e2e02510df8c49cfe91b23284db39a0649668a750b3582b3562"
@@ -241,11 +263,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 78.4,
+      "ranking_score_0_100": 77.0,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 50.0,
-        "recency": 82.2
+        "recency": 75.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "55a5240d8748354d9ffb659ab0b671e2a02e071eec1484a88308a5eac1c08fa1"
@@ -395,11 +417,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 72.8,
+      "ranking_score_0_100": 71.4,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 25.0,
-        "recency": 81.3
+        "recency": 74.3
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "f80af618a6727f35ef787121cbe4877fb203c46b729d6b181a98a859530a2cce"
@@ -417,11 +439,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 87.2,
+      "ranking_score_0_100": 85.8,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 75.0,
-        "recency": 81.1
+        "recency": 74.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "bca3346cb70c649ad0d19fb355b6484a4da9048405ea3aa3efd26eefd9dbadcf"
@@ -439,11 +461,11 @@
       "source_tier": "官方平台",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 70.7,
+      "ranking_score_0_100": 69.2,
       "ranking_components_0_100": {
         "source_quality": 94.0,
         "keyword_relevance": 25.0,
-        "recency": 80.8
+        "recency": 73.7
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "24c62e8d070d5cc4695c0237cba08de06c00fa2aaf8f0961450b2cd37a5f0e48"
@@ -615,11 +637,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 87.4,
+      "ranking_score_0_100": 86.0,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 75.0,
-        "recency": 74.4
+        "recency": 67.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "345c387304ffc28eeec4896055192609fca7fcff01b63a610a5ad58bf51ff9e7"
@@ -637,11 +659,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 93.8,
+      "ranking_score_0_100": 92.4,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 100.0,
-        "recency": 69.1
+        "recency": 62.1
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "4808a689eac1a76e572a234b68ab3488403e058c53b583b94c4316635485acbd"
@@ -681,11 +703,11 @@
       "source_tier": "官方開源專案",
       "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
       "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-      "ranking_score_0_100": 76.3,
+      "ranking_score_0_100": 74.9,
       "ranking_components_0_100": {
         "source_quality": 95.0,
         "keyword_relevance": 50.0,
-        "recency": 69.0
+        "recency": 61.9
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "8903467af17a516d9383aaca77d23689442a466aaefd3e009a43e3226f945f82"
@@ -791,11 +813,11 @@
       "source_tier": "官方工程",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-      "ranking_score_0_100": 91.8,
+      "ranking_score_0_100": 90.4,
       "ranking_components_0_100": {
         "source_quality": 97.0,
         "keyword_relevance": 100.0,
-        "recency": 66.6
+        "recency": 59.5
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "f24f9aee314256617a7e5b6e9ea52e3592ea61ad653fd30b75d9ce1802fdd69a"
@@ -1605,11 +1627,11 @@
       "source_tier": "官方公司",
       "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
       "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-      "ranking_score_0_100": 68.7,
+      "ranking_score_0_100": 67.2,
       "ranking_components_0_100": {
         "source_quality": 98.0,
         "keyword_relevance": 50.0,
-        "recency": 23.3
+        "recency": 16.2
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "e807950112bcfee50fc9eae493d3d4d702b18d46f268043acba537ebdb976897"
@@ -1649,11 +1671,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 63.4,
+      "ranking_score_0_100": 60.6,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 29.6
+        "recency": 15.4
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "134cc2b11344f5ad24d84b9d84eb0ff62ad50de75d506fa575faa1634b812913"
@@ -1737,11 +1759,11 @@
       "source_tier": "官方研究",
       "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
       "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-      "ranking_score_0_100": 62.5,
+      "ranking_score_0_100": 59.7,
       "ranking_components_0_100": {
         "source_quality": 100.0,
         "keyword_relevance": 25.0,
-        "recency": 25.0
+        "recency": 10.8
       },
       "decision_use": "learning_context_not_execution_gate",
       "integrity_hash": "bfc986a30bd9c8a9dccf2208b148e8f52c4d1b312088547ca216aaf7ab44f3f3"
@@ -27470,6 +27492,80 @@
         }
       ],
       "run_hash": "78a43c479971d36589244da83b0bfab85d88c3a0bea59a4827372765360a9014"
+    },
+    {
+      "schema": 1,
+      "date": "2026-11-22",
+      "generated_at": "2026-11-22T07:25:08+00:00",
+      "revision": 1,
+      "supersedes_generated_at": null,
+      "previous_run_hash": "78a43c479971d36589244da83b0bfab85d88c3a0bea59a4827372765360a9014",
+      "lead_brief_id": "brief-engineering-methods",
+      "briefs": [
+        {
+          "category_id": "ai-application-monetization",
+          "theme_id": "workflow-distribution",
+          "headline": "AI 正從獨立目的地，變成既有工作流裡的隱形功能",
+          "standfirst": "產品價值不再只看模型多聰明，而要看它能否在不增加切換成本的情況下完成原本就存在的工作。",
+          "common_interpretation": "市場容易把更多入口、整合與代理功能解讀成採用加速。",
+          "variant_view": "真正稀缺的不是再多一個 AI 入口，而是能被量測、被治理、被持續使用的流程結果。",
+          "second_order_effect": "若 AI 被嵌進搜尋、通訊與開發環境，競爭優勢會從單次回答品質，轉向權限、上下文與工作紀錄的累積。",
+          "practical_readthrough": "只挑一條高頻工作流測試，固定記錄完成率、人工接手次數、時間與成本；沒有流程改善就不因新功能而遷移。",
+          "falsifier": "若四週內仍只有功能發布、沒有可重現的使用頻率、完成率或付費證據，這個整合趨勢仍只是分發敘事。",
+          "evidence_refs": [
+            {
+              "item_id": "google-ai-blog:59a8a5dd3afc5312ddae",
+              "item_integrity_hash": "e807950112bcfee50fc9eae493d3d4d702b18d46f268043acba537ebdb976897"
+            },
+            {
+              "item_id": "openai-news:9342dbf934e428aa00c1",
+              "item_integrity_hash": "30c3a44a567c9e2e02510df8c49cfe91b23284db39a0649668a750b3582b3562"
+            }
+          ],
+          "brief_hash": "37ea5aeb9b9b4cd4568c145834758466af72e865c83f22ecc35684ffe077425e"
+        },
+        {
+          "category_id": "engineering-methods",
+          "theme_id": "agent-verifiability",
+          "headline": "代理工程正在從功能競賽，轉向可驗證性競賽",
+          "standfirst": "能否重現、定位失敗並量測端到端完成率，會比增加更多工具呼叫更快改善正式環境可靠性。",
+          "common_interpretation": "新框架常以更多代理能力、工具與基準分數作為進步證據。",
+          "variant_view": "沒有可重播軌跡、失敗分類與固定評測集，功能越多只會讓不可預測面積變大。",
+          "second_order_effect": "可觀測性與評測資料會逐漸成為代理系統的護城河，因為它們保存了組織自己的失敗分布。",
+          "practical_readthrough": "先建立十個固定真實任務與失敗分類，再比較框架；沒有同一組回歸證據就不升級。",
+          "falsifier": "若增加工具與自治步驟後，固定任務完成率上升且人工接手與事故率沒有惡化，功能擴張才算被驗證。",
+          "evidence_refs": [
+            {
+              "item_id": "nvidia-developer:c639d63a1f698545191c",
+              "item_integrity_hash": "bca3346cb70c649ad0d19fb355b6484a4da9048405ea3aa3efd26eefd9dbadcf"
+            },
+            {
+              "item_id": "vercel-ai-releases:6848962d67d362822dfa",
+              "item_integrity_hash": "d2032ddd87d5aebcad8607bd4515e823af8b38fdbc911b21c44230c6938cb0a7"
+            }
+          ],
+          "brief_hash": "55f51dcad85f5bed7d9957b389aaab9be8197d204cd489e45396d41e68983d7a"
+        },
+        {
+          "category_id": "model-progress",
+          "theme_id": "efficient-learning",
+          "headline": "模型研究正把問題從『更大』改寫成『怎樣學得更有效』",
+          "standfirst": "資料設計、訓練方法與推理結構若能提高樣本效率，可能比單純擴大參數更影響下一階段成本與能力。",
+          "common_interpretation": "新架構或訓練方法常以更高能力或更低計算量作為主要賣點。",
+          "variant_view": "研究價值要看是否跨資料集、跨規模與跨實作重現；單篇預印本只能提供假說，不能提供結論。",
+          "second_order_effect": "若效率方法可重現，中型團隊會得到更多客製化空間，模型差異也可能從規模轉向資料與後訓練。",
+          "practical_readthrough": "先確認程式碼、資料與消融實驗，再決定是否值得最小重現；缺任一項就維持研究觀察。",
+          "falsifier": "若獨立團隊無法重現，或改善只存在於單一設定，效率優勢就不能外推到實際模型開發。",
+          "evidence_refs": [
+            {
+              "item_id": "huggingface-blog:f0b81ce3c14612880642",
+              "item_integrity_hash": "55a5240d8748354d9ffb659ab0b671e2a02e071eec1484a88308a5eac1c08fa1"
+            }
+          ],
+          "brief_hash": "85543c32f91983eaaa18c3ba5a504222c21cfbc671a9ed6d11069cafad27da01"
+        }
+      ],
+      "run_hash": "b8141c8e2f7e0d154967c039e953a77521fd1b8c563e1c9d679c2f373f0390bc"
     }
   ]
 }
