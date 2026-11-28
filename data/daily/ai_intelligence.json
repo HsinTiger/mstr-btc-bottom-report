@@ -1,21 +1,23 @@
 {
   "schema": 3,
-  "generated_at": "2026-11-27T09:02:11+00:00",
+  "generated_at": "2026-11-28T08:24:32+00:00",
   "window_hours": 336,
   "quality": {
-    "status": "pass",
+    "status": "degraded",
     "provider": "official_feeds_github_releases_arxiv",
     "execution_gate_eligible": false,
     "failures": [],
-    "degradations": [],
+    "degradations": [
+      "Google DeepMind Blog：not well-formed (invalid token): line 1, column 0"
+    ],
     "method": "official RSS/Atom + official GitHub releases + arXiv preprints; source diversity cap; deterministic topic-context synthesis with explicit editorial-hypothesis boundary"
   },
   "summary": {
     "categories": 3,
     "posts": 20,
     "unique_sources": 7,
-    "successful_sources": 10,
-    "failed_sources": 0,
+    "successful_sources": 9,
+    "failed_sources": 1,
     "editorial_briefs": 3,
     "editorial_pass": 3
   },
@@ -26,10 +28,10 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://openai.com/news/rss.xml",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 1430,
-      "eligible_items": 26
+      "eligible_items": 25
     },
     {
       "source_key": "google-ai-blog",
@@ -37,7 +39,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://blog.google/technology/ai/rss/",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 3
@@ -48,7 +50,7 @@
       "source_type": "official_feed",
       "category_id": "ai-application-monetization",
       "url": "https://www.cursor.com/changelog/rss.xml",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 50,
       "eligible_items": 0
@@ -59,7 +61,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vercel/ai/releases?per_page=8",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 8
@@ -70,10 +72,10 @@
       "source_type": "official_feed",
       "category_id": "engineering-methods",
       "url": "https://developer.nvidia.com/blog/feed/",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 100,
-      "eligible_items": 16
+      "eligible_items": 13
     },
     {
       "source_key": "vllm-releases",
@@ -81,7 +83,7 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/vllm-project/vllm/releases?per_page=8",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 8,
       "eligible_items": 1
@@ -92,10 +94,10 @@
       "source_type": "github_release",
       "category_id": "engineering-methods",
       "url": "https://api.github.com/repos/huggingface/transformers/releases?per_page=8",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 8,
-      "eligible_items": 3
+      "eligible_items": 2
     },
     {
       "source_key": "deepmind-blog",
@@ -103,10 +105,11 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://deepmind.google/blog/rss.xml",
-      "checked_at": "2026-11-27T09:02:11+00:00",
-      "status": "pass",
-      "raw_items": 100,
-      "eligible_items": 0
+      "checked_at": "2026-11-28T08:24:32+00:00",
+      "status": "fail",
+      "raw_items": 0,
+      "eligible_items": 0,
+      "error": "not well-formed (invalid token): line 1, column 0"
     },
     {
       "source_key": "huggingface-blog",
@@ -114,9 +117,9 @@
       "source_type": "official_feed",
       "category_id": "model-progress",
       "url": "https://huggingface.co/blog/feed.xml",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
-      "raw_items": 918,
+      "raw_items": 919,
       "eligible_items": 8
     },
     {
@@ -125,7 +128,7 @@
       "source_type": "preprint_feed",
       "category_id": "model-progress",
       "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending",
-      "checked_at": "2026-11-27T09:02:11+00:00",
+      "checked_at": "2026-11-28T08:24:32+00:00",
       "status": "pass",
       "raw_items": 20,
       "eligible_items": 20
@@ -161,7 +164,7 @@
             "source_type": "official_feed",
             "created_at": "2026-11-19T08:00:00+00:00",
             "url": "https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast",
-            "ranking_score_0_100": 81.0,
+            "ranking_score_0_100": 79.6,
             "source_excerpt": "How OpenAI’s Performance Factory keeps ChatGPT fast — Learn how OpenAI built the Performance Factory, a system of Codex-powered workflows that finds and fixes performance issues to help keep ChatGPT fast.",
             "matched_terms": [
               "workflow"
@@ -177,7 +180,7 @@
             "source_type": "official_feed",
             "created_at": "2026-11-19T18:00:00+00:00",
             "url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-api-tool-retrieval/",
-            "ranking_score_0_100": 73.1,
+            "ranking_score_0_100": 71.7,
             "source_excerpt": "Introducing Tool Retrieval in the Gemini API — Gemini spark on a space background",
             "matched_terms": [
               "tool"
@@ -199,7 +202,7 @@
         "kicker": "工程方法",
         "headline": "AI 框架更新越快，版本選擇本身越像一項風險管理工作",
         "standfirst": "發布頻率帶來能力，也帶來相容性、行為漂移與維運負債；最新版本不必然是正式環境的最佳版本。",
-        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/zai@3.0.59」，以及 Transformers Releases 的「Patch release v5.24.1」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
+        "lede": "今日可回查的共同訊號來自 Vercel AI SDK Releases 的「@ai-sdk/workflow-harness@1.0.196」，以及 Transformers Releases 的「Patch release v5.24.1」。它們只證明相關主題同時出現，不代表來源認同本站假說。",
         "common_interpretation": "密集發布通常被視為生態活力與產品成熟速度。",
         "variant_view": "對正式工作流而言，可重現與可回滾可能比追上最新功能更有價值。",
         "second_order_effect": "穩定介面、版本釘選與遷移工具會成為框架競爭的重要部分，而不只是附屬文件。",
@@ -209,19 +212,19 @@
         "matched_term_count": 2,
         "evidence": [
           {
-            "item_id": "vercel-ai-releases:fe4a8de3878f137cf4bf",
-            "title": "@ai-sdk/zai@3.0.59",
+            "item_id": "vercel-ai-releases:e572e4b2c93560b1e351",
+            "title": "@ai-sdk/workflow-harness@1.0.196",
             "source_key": "vercel-ai-releases",
             "source_label": "Vercel AI SDK Releases",
             "source_type": "github_release",
-            "created_at": "2026-11-26T04:37:59+00:00",
-            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.59",
-            "ranking_score_0_100": 80.8,
-            "source_excerpt": "@ai-sdk/zai@3.0.59 — ### Patch Changes - Updated dependencies [80d778a] - @ai-sdk/provider-utils@5.0.85 - @ai-sdk/openai-compatible@3.0.96",
+            "created_at": "2026-11-27T23:27:10+00:00",
+            "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.196",
+            "ranking_score_0_100": 82.0,
+            "source_excerpt": "@ai-sdk/workflow-harness@1.0.196 — ### Patch Changes - Updated dependencies [974e80e] - @ai-sdk/harness@1.0.196",
             "matched_terms": [
               "sdk"
             ],
-            "item_integrity_hash": "ed4f167f01d891b4b0c0821c1653eeffd00d3105baf05cbdf57caf2581ef4c42",
+            "item_integrity_hash": "5f1c3d1c2d775630b1d00425002130b9dbf387be8181950c6b0b9f629d60c737",
             "relationship": "topic_context_not_endorsement"
           },
           {
@@ -232,7 +235,7 @@
             "source_type": "github_release",
             "created_at": "2026-11-24T16:13:08+00:00",
             "url": "https://github.com/huggingface/transformers/releases/tag/v5.24.1",
-            "ranking_score_0_100": 78.6,
+            "ranking_score_0_100": 77.3,
             "source_excerpt": "Patch release v5.24.1 — # Patch release v5.24.1 A patch to fix a bunch of stuff for vLLM, a few distributed issues, and some model fixes (llama4, dory); see the full list ### vLLM related - Fix backward compatibility of the cache rename for remote code (#51085) by @hmellor - Restore modeling_attn_mask_utils for remote code (one-off to unblock vLLM) (#51124)…",
             "matched_terms": [
               "release"
@@ -242,8 +245,8 @@
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "unchanged",
-        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
+        "novelty_status": "refreshed",
+        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 Vercel AI SDK Releases。"
       },
       {
         "id": "brief-model-progress",
@@ -271,7 +274,7 @@
             "source_type": "preprint_feed",
             "created_at": "2026-11-25T18:59:11+00:00",
             "url": "https://arxiv.org/abs/2611.34928v1",
-            "ranking_score_0_100": 83.7,
+            "ranking_score_0_100": 82.3,
             "source_excerpt": "Diverse Alternative Reasoning Traces for Hard Math Problems — Post-training large language models (LLMs) for mathematical reasoning often relies on accepted traces whose final answers pass a verifier. For hard math problems, however, such traces can be rare under independent Monte Carlo (MC) sampling. To address this, we propose Diverse Alternative Reasonin…",
             "matched_terms": [
               "training",
@@ -288,7 +291,7 @@
             "source_type": "official_feed",
             "created_at": "2026-11-26T05:05:36+00:00",
             "url": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
-            "ranking_score_0_100": 72.8,
+            "ranking_score_0_100": 71.4,
             "source_excerpt": "Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference",
             "matched_terms": [
               "data"
@@ -298,8 +301,8 @@
           }
         ],
         "editorial_scope": "editorial_hypothesis_not_source_claim",
-        "novelty_status": "refreshed",
-        "what_changed": "主軸未變；替換 1 則、加入 1 則主題訊號，新增來源為 Hugging Face Blog。"
+        "novelty_status": "unchanged",
+        "what_changed": "主軸與核心證據未變；今日不製造新故事，保留上一個不同日期的判斷。"
       }
     ],
     "policy_hash": "5db2848411307593482a8173e92b8ab1fb3b537a6dccb00938ccb0982ce5f63c",
@@ -353,11 +356,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 85.2,
+          "ranking_score_0_100": 83.8,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 100.0,
-            "recency": 25.9
+            "recency": 18.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "4808a689eac1a76e572a234b68ab3488403e058c53b583b94c4316635485acbd"
@@ -375,11 +378,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 81.0,
+          "ranking_score_0_100": 79.6,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 75.0,
-            "recency": 42.5
+            "recency": 35.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "30c3a44a567c9e2e02510df8c49cfe91b23284db39a0649668a750b3582b3562"
@@ -397,11 +400,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 80.2,
+          "ranking_score_0_100": 78.8,
           "ranking_components_0_100": {
             "source_quality": 100.0,
             "keyword_relevance": 50.0,
-            "recency": 75.9
+            "recency": 68.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "5921e4b03d538f118717757322d0d24dc215e6dafb8f4c08c154a16b86492415"
@@ -419,11 +422,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 73.1,
+          "ranking_score_0_100": 71.7,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 50.0,
-            "recency": 45.5
+            "recency": 38.6
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "56a29fd1cc56dd29040c228967ed28ba5303beb25c029750664627b3c1c641dd"
@@ -441,11 +444,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這是採用或付費線索；仍要區分產品宣布、客戶案例與已認列收入。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 72.6,
+          "ranking_score_0_100": 71.2,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 80.6
+            "recency": 73.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "6d821ba4619da6a2ffeae0e311c1c0ee608eb5db392fde9e81b159340ae5de75"
@@ -463,11 +466,11 @@
           "source_tier": "官方公司",
           "why_it_matters": "這可能改變日常 AI 工作流；先用真實任務比較品質、時間與成本，再決定是否採用。",
           "next_action": "挑一個既有任務做 30 分鐘 A/B 測試，記錄品質、耗時與成本；三項至少改善一項才保留。",
-          "ranking_score_0_100": 64.1,
+          "ranking_score_0_100": 62.7,
           "ranking_components_0_100": {
             "source_quality": 98.0,
             "keyword_relevance": 25.0,
-            "recency": 38.1
+            "recency": 31.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "f80af618a6727f35ef787121cbe4877fb203c46b729d6b181a98a859530a2cce"
@@ -487,6 +490,72 @@
       ],
       "items": [
         {
+          "id": "vercel-ai-releases:e572e4b2c93560b1e351",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow-harness%401.0.196",
+          "created_at": "2026-11-27T23:27:10+00:00",
+          "title": "@ai-sdk/workflow-harness@1.0.196",
+          "text": "@ai-sdk/workflow-harness@1.0.196 — ### Patch Changes - Updated dependencies [974e80e] - @ai-sdk/harness@1.0.196",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.3
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "5f1c3d1c2d775630b1d00425002130b9dbf387be8181950c6b0b9f629d60c737"
+        },
+        {
+          "id": "vercel-ai-releases:e5c6b45819f538d5d1b6",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/workflow%402.0.116",
+          "created_at": "2026-11-27T23:27:07+00:00",
+          "title": "@ai-sdk/workflow@2.0.116",
+          "text": "@ai-sdk/workflow@2.0.116 — ### Patch Changes - ai@7.0.184",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.3
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "6cd52cfa0481bea70195365dd11d0a6ae5eb958bc0b50d5ca24b7dfd43ed2c6b"
+        },
+        {
+          "id": "vercel-ai-releases:a38066d9fb5f744f9ea0",
+          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/vue%404.0.184",
+          "created_at": "2026-11-27T23:27:04+00:00",
+          "title": "@ai-sdk/vue@4.0.184",
+          "text": "@ai-sdk/vue@4.0.184 — ### Patch Changes - ai@7.0.184",
+          "source_key": "vercel-ai-releases",
+          "category_id": "engineering-methods",
+          "source_label": "Vercel AI SDK Releases",
+          "source_type": "github_release",
+          "source_tier": "官方開源專案",
+          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
+          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
+          "ranking_score_0_100": 82.0,
+          "ranking_components_0_100": {
+            "source_quality": 95.0,
+            "keyword_relevance": 50.0,
+            "recency": 97.3
+          },
+          "decision_use": "learning_context_not_execution_gate",
+          "integrity_hash": "4c6498ca6ecad979cccb7db21848a468538d7aff85d3ba11b5e5ab6bf8b00d81"
+        },
+        {
           "id": "nvidia-developer:9c1e9b470a847724b90e",
           "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-nvl72-leads-agentic-inference-performance-on-mlperf-endpoints-v1-0/",
           "created_at": "2026-11-16T15:23:36+00:00",
@@ -499,80 +568,14 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 83.2,
+          "ranking_score_0_100": 81.8,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 100.0,
-            "recency": 23.3
+            "recency": 16.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "f24f9aee314256617a7e5b6e9ea52e3592ea61ad653fd30b75d9ce1802fdd69a"
-        },
-        {
-          "id": "vercel-ai-releases:fe4a8de3878f137cf4bf",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/zai%403.0.59",
-          "created_at": "2026-11-26T04:37:59+00:00",
-          "title": "@ai-sdk/zai@3.0.59",
-          "text": "@ai-sdk/zai@3.0.59 — ### Patch Changes - Updated dependencies [80d778a] - @ai-sdk/provider-utils@5.0.85 - @ai-sdk/openai-compatible@3.0.96",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.8,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 91.5
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "ed4f167f01d891b4b0c0821c1653eeffd00d3105baf05cbdf57caf2581ef4c42"
-        },
-        {
-          "id": "vercel-ai-releases:51f1066788b634a803f0",
-          "url": "https://github.com/vercel/ai/releases/tag/%40ai-sdk/xai%405.0.52",
-          "created_at": "2026-11-26T04:37:56+00:00",
-          "title": "@ai-sdk/xai@5.0.52",
-          "text": "@ai-sdk/xai@5.0.52 — ### Patch Changes - 80d778a: fix(openai, xai): accept Responses stream events larger than 64 MiB `createEventSourceResponseHandler` has a new `maxEventSize` option. The OpenAI and xAI Responses language models use it to accept events of up to 512 MiB, because `response.completed` repeats every output item, including base64 image generation results. Streams with several large generated images exceeded the default limit and failed after all images were delivered. - Updated dependencies [80d778a] - @ai-sdk/provider-u…",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.8,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 91.5
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "51102e126798feafb9af7ead266a29d8e68c8f9d1e8cd572116024574ef0012c"
-        },
-        {
-          "id": "vercel-ai-releases:d562b0d08ae773ac7d5c",
-          "url": "https://github.com/vercel/ai/releases/tag/ai%407.0.183",
-          "created_at": "2026-11-26T04:33:47+00:00",
-          "title": "ai@7.0.183",
-          "text": "ai@7.0.183 — ### Patch Changes - Updated dependencies [80d778a] - @ai-sdk/provider-utils@5.0.85 - @ai-sdk/gateway@4.0.156",
-          "source_key": "vercel-ai-releases",
-          "category_id": "engineering-methods",
-          "source_label": "Vercel AI SDK Releases",
-          "source_type": "github_release",
-          "source_tier": "官方開源專案",
-          "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
-          "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 80.8,
-          "ranking_components_0_100": {
-            "source_quality": 95.0,
-            "keyword_relevance": 50.0,
-            "recency": 91.5
-          },
-          "decision_use": "learning_context_not_execution_gate",
-          "integrity_hash": "4ef9b4f7d8e378fcbfd928e1dc4a600b4dfae34e1381c2c92ef3283f6b402bb2"
         },
         {
           "id": "transformers-releases:417be228cec59f8a2ed9",
@@ -587,11 +590,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 78.6,
+          "ranking_score_0_100": 77.3,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 80.7
+            "recency": 73.8
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "5b4ded08f645f486652e6243e578c340ab05f059545662a8008054e78163e639"
@@ -609,11 +612,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 78.6,
+          "ranking_score_0_100": 77.2,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 75.0,
-            "recency": 37.9
+            "recency": 30.9
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "bca3346cb70c649ad0d19fb355b6484a4da9048405ea3aa3efd26eefd9dbadcf"
@@ -631,11 +634,11 @@
           "source_tier": "官方開源專案",
           "why_it_matters": "這是可實際測試的正式版本變更；價值在功能、相容性、速度與成本，不在發布聲量。",
           "next_action": "先讀 breaking changes，在隔離分支跑最小回歸；不要直接升級正式工作流。",
-          "ranking_score_0_100": 74.1,
+          "ranking_score_0_100": 72.7,
           "ranking_components_0_100": {
             "source_quality": 95.0,
             "keyword_relevance": 50.0,
-            "recency": 58.2
+            "recency": 51.2
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "15423c3621c67df358e850b72a32e9a21d0f53470e90bef8e22dc33c057ef2a0"
@@ -653,11 +656,11 @@
           "source_tier": "官方工程",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 73.8,
+          "ranking_score_0_100": 72.4,
           "ranking_components_0_100": {
             "source_quality": 97.0,
             "keyword_relevance": 25.0,
-            "recency": 89.0
+            "recency": 82.0
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "6cf29035cd886f8373621c68e54c14fc349bdb77aa56de058276965126f114de"
@@ -688,11 +691,11 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 83.7,
+          "ranking_score_0_100": 82.3,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 100.0,
-            "recency": 88.7
+            "recency": 81.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "c777e746c36c5487bd947a74e66bcb195c2434738b76d7947b79117807c42b2b"
@@ -710,11 +713,11 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 76.2,
+          "ranking_score_0_100": 74.8,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 75.0,
-            "recency": 88.4
+            "recency": 81.5
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "932c9ad89e2247dd7290df79d7763653ccf2448b18cde9be15aa6b5bfd2747d7"
@@ -732,11 +735,11 @@
           "source_tier": "未同儕審查研究",
           "why_it_matters": "這是前沿研究線索，不代表已被同儕審查或可直接部署；先找程式碼與獨立重現。",
           "next_action": "只摘一個可驗證方法；找到程式碼或獨立重現前，先列入觀察清單。",
-          "ranking_score_0_100": 76.2,
+          "ranking_score_0_100": 74.8,
           "ranking_components_0_100": {
             "source_quality": 72.0,
             "keyword_relevance": 75.0,
-            "recency": 88.4
+            "recency": 81.4
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "2cae946dd05073fc9d95b84414744f548c34a96aa9cdffd37550715e842e320b"
@@ -754,11 +757,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "先核對評測集、基準線與限制；單一榜單分數不能代表全面能力。",
           "next_action": "讀方法與限制段，確認基準、樣本與失敗案例，再決定是否納入你的評測集。",
-          "ranking_score_0_100": 73.2,
+          "ranking_score_0_100": 71.8,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 93.6
+            "recency": 86.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "8b4ac4ec43e430840fd76abf4b4e654f8a11d7f60670b60408ee633d47fd9407"
@@ -776,11 +779,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 72.8,
+          "ranking_score_0_100": 71.4,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 91.7
+            "recency": 84.7
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "ae6ef727a917c9de22a6819603e74bac341025f9a9f8319525f4d83f3ab23f57"
@@ -798,11 +801,11 @@
           "source_tier": "官方平台",
           "why_it_matters": "這是模型或工程進展；只有在方法公開、可重現且改善實際瓶頸時才提高權重。",
           "next_action": "用 10 個你自己的真實案例做最小測試，保留失敗紀錄，不只看官方示範。",
-          "ranking_score_0_100": 71.1,
+          "ranking_score_0_100": 69.7,
           "ranking_components_0_100": {
             "source_quality": 94.0,
             "keyword_relevance": 25.0,
-            "recency": 83.0
+            "recency": 76.1
           },
           "decision_use": "learning_context_not_execution_gate",
           "integrity_hash": "2c4aa032d1d4c08a43282c29b7f9f4d06506014d5e0295513fca7c432feb77c0"
